@@ -3,8 +3,14 @@ $ModuleManifestPath = "$PSScriptRoot\..\$ModuleManifestName"
 
 Describe 'Module Manifest Tests' {
     It 'Passes Test-ModuleManifest' {
-        Test-ModuleManifest -Path $ModuleManifestPath | Should Not BeNullOrEmpty
-        $? | Should Be $true
+        Test-ModuleManifest -Path $ModuleManifestPath | Should -Not -BeNullOrEmpty
+        $? | Should -Be $true
+    }
+}
+
+Describe 'New-CosmosDbAuthorizationToken' {
+    It 'Should exist' {
+        { Get-Command -Name New-CosmosDbAuthorizationToken -Module CosmosDB } | Should -Not -Throw
     }
 }
 
