@@ -7,6 +7,8 @@
 
 ## Introduction
 
+This PowerShell module provides cmdlets for working with Azure Cosmos DB databases, collections, users and permissions.
+
 ## Requirements
 
 ## Contributing
