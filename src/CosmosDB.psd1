@@ -21,13 +21,13 @@ ModuleVersion = '0.0.1.5'
 GUID = '7d7aeb42-8ed9-4555-b5fd-020795a5aa01'
 
 # Author of this module
-Author = 'Dan'
+Author = 'Daniel Scott-Raynsford'
 
 # Company or vendor of this module
 CompanyName = 'Unknown'
 
 # Copyright statement for this module
-Copyright = '(c) 2017 Dan. All rights reserved.'
+Copyright = '(c) 2017 Daniel Scott-Raynsford. All rights reserved.'
 
 # Description of the functionality provided by this module
 # Description = ''

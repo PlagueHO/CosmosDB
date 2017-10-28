@@ -1,11 +1,34 @@
 $ModuleManifestName = 'CosmosDB.psd1'
-$ModuleManifestPath = "$PSScriptRoot\..\$ModuleManifestName"
+$ModuleManifestPath = "$PSScriptRoot\..\src\$ModuleManifestName"
 
 Describe 'Module Manifest Tests' {
     It 'Passes Test-ModuleManifest' {
-        Test-ModuleManifest -Path $ModuleManifestPath | Should Not BeNullOrEmpty
-        $? | Should Be $true
+        Test-ModuleManifest -Path $ModuleManifestPath | Should -Not -BeNullOrEmpty
+        $? | Should -Be $true
     }
+}
+
+Import-Module -Name $ModuleManifestPath -Force
+
+Describe 'New-CosmosDbAuthorizationToken' {
+    It 'Should exist' {
+        { Get-Command -Name New-CosmosDbAuthorizationToken -Module CosmosDB } | Should -Not -Throw
+    }
+
+    It 'Should return expected result when called with all parameters' {
+        $newAuthorizationTokenParameters = @{
+            Verb = 'Get'
+            ResourceType = 'users'
+            ResourceId = 'dbs/testdb'
+            Date = 'Sat, 28 Oct 2017 09:53:53 GMT'
+            Key = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
+            KeyType = 'master'
+        }
+
+        { $script:result = New-CosmosDbAuthorizationToken @newAuthorizationTokenParameters } | Should -Not -Throw
+        $script:result | Should -Be 'type%3dmaster%26ver%3d1.0%26sig%3dncOwWD5uH52KSvkQXkcILSIcPwWAt5F%2bmMEKS0LSuD8%3d'
+    }
+
 }
 
 # SIG # Begin signature block
