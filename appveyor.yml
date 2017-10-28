@@ -104,12 +104,12 @@ deploy_script:
         $null = New-Item -Path $VersionFolder -Type directory
 
         # Populate Version Folder
-        $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'CosmosDB\CosmosDB.psd1') -Destination $VersionFolder
-        $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'CosmosDB\CosmosDB.psm1') -Destination $VersionFolder
+        $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'CosmosDB.psd1') -Destination $VersionFolder
+        $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'CosmosDB.psm1') -Destination $VersionFolder
         $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'LICENSE') -Destination $VersionFolder
         $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'README.md') -Destination $VersionFolder
-        $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'CosmosDB\lib') -Destination $VersionFolder -Recurse
-        $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'CosmosDB\en-us') -Destination $VersionFolder -Recurse
+        $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'lib') -Destination $VersionFolder -Recurse
+        $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'en-us') -Destination $VersionFolder -Recurse
 
         # Copy the module to the PSModulePath
         $PSModulePath = ($ENV:PSModulePath -split ';')[0]
