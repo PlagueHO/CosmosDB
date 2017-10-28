@@ -2,6 +2,10 @@
 .SYNOPSIS
     Create a new Authorization Token to be used with in a
     Rest API request to CosmosDB.
+
+.DESCRIPTION
+    This cmdlet is used to create an Authorization Token to
+    pass in the header of a Rest API request to an Azure CosmosDB.
 #>
 function New-CosmosDbAuthorizationToken
 {
