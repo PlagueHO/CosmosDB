@@ -13,7 +13,7 @@ if (Test-Path -Path (Join-Path -Path $moduleRoot -ChildPath $PSUICulture))
 
 Import-LocalizedData `
     -BindingVariable LocalizedData `
-    -Filename 'CosmosDB.strings.LocalizedData.psd1' `
+    -Filename 'CosmosDB.strings.psd1' `
     -BaseDirectory $moduleRoot `
     -UICulture $culture
 #endregion

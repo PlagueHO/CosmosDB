@@ -8,6 +8,8 @@ Describe 'Module Manifest Tests' {
     }
 }
 
+Import-Module -Name $ModuleManifestPath -Force
+
 Describe 'New-CosmosDbAuthorizationToken' {
     It 'Should exist' {
         { Get-Command -Name New-CosmosDbAuthorizationToken -Module CosmosDB } | Should -Not -Throw
