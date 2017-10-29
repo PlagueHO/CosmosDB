@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Improved unit test coverage.
+
 ## 1.0.1.40
 
 - Minor bugfixes.
