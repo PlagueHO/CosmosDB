@@ -29,12 +29,7 @@ InModuleScope CosmosDB {
     "_rid": "2MFbAA==",
     "Users": [
         {
-            "id": "daniel",
-            "_rid": "2MFbAGQYZQA=",
-            "_self": "dbs/2MFbAA==/users/2MFbAGQYZQA=/",
-            "_etag": "\"00001e00-0000-0000-0000-59f196770000\"",
-            "_permissions": "permissions/",
-            "_ts": 1509004919
+            "id": "testUser"
         }
     ],
     "_count": 1

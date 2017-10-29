@@ -29,7 +29,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbPermissionResourcePath } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and Get method' {
+        Context 'Called with all parameters' {
             It 'Should not throw exception' {
                 $getCosmosDbPermissionResourcePathParameters = @{
                     Database = $script:testDatabase
