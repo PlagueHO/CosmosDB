@@ -115,7 +115,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-This is the Id of the collection to delete.
+This is the Id of the user to delete.
 
 ```yaml
 Type: String

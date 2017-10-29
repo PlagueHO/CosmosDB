@@ -44,7 +44,7 @@ $primaryKey = ConvertTo-SecureString -String 'GFJqJesi2Rq910E0G7P4WoZkzowzbj23Sm
 Use the key secure string, Azure CosmosDB account name and database to create a connection variable:
 
 ```powershell
-$cosmosDbConnection = New-CosmosDbConnection -Acccount MyAzureCosmosDB -Database mydatabse -Key $primaryKey
+$cosmosDbConnection = New-CosmosDbConnection -Acccount 'MyAzureCosmosDB' -Database 'MyDatabse' -Key $primaryKey
 ```
 
 ### Working with Collections
@@ -85,6 +85,26 @@ Delete a user from the database:
 
 ```powershell
 Remove-CosmosDbUser -Connection $cosmosDbConnection -Id 'MyApplication'
+```
+
+### Working with Permissions
+
+Get a list of permissions for a user in the database:
+
+```powershell
+Get-CosmosDbPermission -Connection $cosmosDbConnection -UserId 'MyApplication'
+```
+
+Create a permission for a user in the database:
+
+```powershell
+New-CosmosDbPermission -Connection $cosmosDbConnection -UserId 'MyApplication' -Id 'r_mynewcollection' -Resource 'dbs/MyDatabse/colls/MyNewCollection' -PermissionMode Read
+```
+
+Remove a permission for a user from the database:
+
+```powershell
+Remove-CosmosDbPermission -Connection $cosmosDbConnection -UserId 'MyApplication' -Id 'r_mynewcollection'
 ```
 
 ## Contributing

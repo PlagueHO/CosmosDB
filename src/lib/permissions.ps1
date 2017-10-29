@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
-    Return the users in a CosmosDB database.
+    Return the permissions for a CosmosDB database user.
 
 .DESCRIPTION
-    This cmdlet will return the users in a CosmosDB database.
-    If the Id is specified then only the user matching this
-    Id will be returned, otherwise all users will be returned.
+    This cmdlet will return the permissions for a specified user
+    in a CosmosDB database. If an Id is specified then only the
+    specified permission will be returned.
 
 .PARAMETER Connection
     This is an object containing the connection information of
@@ -24,11 +24,13 @@
 .PARAMETER KeyType
     The type of key that will be used to access ths CosmosDB.
 
+.PARAMETER UserId
+    This is the id of the user to get the permissions for.
+
 .PARAMETER Id
-    This is the id of the collection to get. If not specified
-    all collections in the database will be returned.
+    This is the id of the permission to return.
 #>
-function Get-CosmosDbUser
+function Get-CosmosDbPermission
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
     [OutputType([System.String])]
@@ -58,10 +60,18 @@ function Get-CosmosDbUser
         [System.String]
         $KeyType = 'master',
 
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $UserId,
+
         [Parameter()]
         [System.String]
         $Id
     )
+
+    $null = $PSBoundParameters.Remove('UserId')
+
+    $resourcePath = ('users/{0}/permissions' -f $UserId)
 
     if ($PSBoundParameters.ContainsKey('Id'))
     {
@@ -69,23 +79,24 @@ function Get-CosmosDbUser
 
         return Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
-            -ResourceType 'users' `
-            -ResourcePath ('users/{0}' -f $Id)
+            -ResourceType 'permissions' `
+            -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
     }
     else
     {
         return Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
-            -ResourceType 'users'
+            -ResourceType 'permissions' `
+            -ResourcePath $resourcePath
     }
 }
 
 <#
 .SYNOPSIS
-    Create a new user in a CosmosDB database.
+    Create a new permission for a user in a CosmosDB database.
 
 .DESCRIPTION
-    This cmdlet will create a user in a CosmosDB.
+    This cmdlet will create a permission for a user in a CosmosDB.
 
 .PARAMETER Connection
     This is an object containing the connection information of
@@ -104,10 +115,20 @@ function Get-CosmosDbUser
 .PARAMETER KeyType
     The type of key that will be used to access ths CosmosDB.
 
+.PARAMETER UserId
+    This is the id of the user to create the permissions for.
+
 .PARAMETER Id
-    This is the Id of the user to create.
+    This is the Id of the permission to create.
+
+.PARAMETER Resource
+    This is the full path to the resource to grant permission
+    to the user.
+
+.PARAMETER PermissionsMode
+    The permission to grant to the user: All or Read.
 #>
-function New-CosmosDbUser
+function New-CosmosDbPermission
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
     [OutputType([Object])]
@@ -139,23 +160,42 @@ function New-CosmosDbUser
 
         [Parameter(Mandatory = $true)]
         [System.String]
-        $Id
+        $UserId,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Id,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Resource,
+
+        [Parameter()]
+        [ValidateSet('All', 'Read')]
+        [System.String]
+        $PermissionMode = 'All'
     )
 
+    $null = $PSBoundParameters.Remove('UserId')
     $null = $PSBoundParameters.Remove('Id')
+    $null = $PSBoundParameters.Remove('Resource')
+    $null = $PSBoundParameters.Remove('PermissionMode')
+
+    $resourcePath = ('users/{0}/permissions' -f $UserId)
 
     return Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
-        -ResourceType 'users' `
-        -Body "{ `"id`": `"$id`" }"
+        -ResourceType 'permissions' `
+        -ResourcePath $resourcePath `
+        -Body "{ `"id`": `"$id`", `"permissionMode`" : `"$PermissionMode`", `"resource`" : `"$Resource`" }"
 }
 
 <#
 .SYNOPSIS
-    Delete a user from a CosmosDB database.
+    Delete a permission from a CosmosDB user.
 
 .DESCRIPTION
-    This cmdlet will delete a user in a CosmosDB.
+    This cmdlet will delete a permission in a CosmosDB from a user.
 
 .PARAMETER Connection
     This is an object containing the connection information of
@@ -174,10 +214,13 @@ function New-CosmosDbUser
 .PARAMETER KeyType
     The type of key that will be used to access ths CosmosDB.
 
+.PARAMETER UserId
+    This is the id of the user to delete the permissions from.
+
 .PARAMETER Id
-    This is the Id of the user to delete.
+    This is the Id of the permission to delete.
 #>
-function Remove-CosmosDbUser
+function Remove-CosmosDbPermission
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
     [OutputType([Object])]
@@ -209,12 +252,20 @@ function Remove-CosmosDbUser
 
         [Parameter(Mandatory = $true)]
         [System.String]
+        $UserId,
+
+        [Parameter()]
+        [System.String]
         $Id
     )
 
+    $null = $PSBoundParameters.Remove('UserId')
     $null = $PSBoundParameters.Remove('Id')
+
+    $resourcePath = ('users/{0}/permissions/{1}' -f $UserId,$Id)
+
     return Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
-        -ResourceType 'users' `
-        -ResourcePath ('users/{0}' -f $Id)
+        -ResourceType 'permissions' `
+        -ResourcePath $resourcePath
 }

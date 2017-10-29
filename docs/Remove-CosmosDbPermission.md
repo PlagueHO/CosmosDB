@@ -5,25 +5,26 @@ online version:
 schema: 2.0.0
 ---
 
-# New-CosmosDbUser
+# Remove-CosmosDbPermission
 
 ## SYNOPSIS
-Create a new user in a CosmosDB database.
+Delete a permission from a CosmosDB user.
 
 ## SYNTAX
 
 ### Connection (Default)
 ```
-New-CosmosDbUser -Connection <PSObject> -Id <String>
+Remove-CosmosDbPermission -Connection <PSObject> -UserId <String> [-Id <String>]
 ```
 
 ### Account
 ```
-New-CosmosDbUser -Account <String> -Database <String> -Key <SecureString> [-KeyType <String>] -Id <String>
+Remove-CosmosDbPermission -Account <String> -Database <String> -Key <SecureString> [-KeyType <String>]
+ -UserId <String> [-Id <String>]
 ```
 
 ## DESCRIPTION
-This cmdlet will create a user in a CosmosDB.
+This cmdlet will delete a permission in a CosmosDB from a user.
 
 ## EXAMPLES
 
@@ -114,8 +115,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-This is the Id of the user to create.
+### -UserId
+This is the id of the user to delete the permissions from.
 
 ```yaml
 Type: String
@@ -123,6 +124,21 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+This is the Id of the permission to delete.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

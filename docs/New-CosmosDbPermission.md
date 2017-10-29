@@ -5,25 +5,27 @@ online version:
 schema: 2.0.0
 ---
 
-# New-CosmosDbUser
+# New-CosmosDbPermission
 
 ## SYNOPSIS
-Create a new user in a CosmosDB database.
+Create a new permission for a user in a CosmosDB database.
 
 ## SYNTAX
 
 ### Connection (Default)
 ```
-New-CosmosDbUser -Connection <PSObject> -Id <String>
+New-CosmosDbPermission -Connection <PSObject> -UserId <String> -Id <String> -Resource <String>
+ [-PermissionMode <String>]
 ```
 
 ### Account
 ```
-New-CosmosDbUser -Account <String> -Database <String> -Key <SecureString> [-KeyType <String>] -Id <String>
+New-CosmosDbPermission -Account <String> -Database <String> -Key <SecureString> [-KeyType <String>]
+ -UserId <String> -Id <String> -Resource <String> [-PermissionMode <String>]
 ```
 
 ## DESCRIPTION
-This cmdlet will create a user in a CosmosDB.
+This cmdlet will create a permission for a user in a CosmosDB.
 
 ## EXAMPLES
 
@@ -114,8 +116,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-This is the Id of the user to create.
+### -UserId
+This is the id of the user to create the permissions for.
 
 ```yaml
 Type: String
@@ -125,6 +127,52 @@ Aliases:
 Required: True
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+This is the Id of the permission to create.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Resource
+This is the full path to the resource to grant permission
+to the user.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PermissionMode
+{{Fill PermissionMode Description}}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: All
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

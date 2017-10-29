@@ -5,25 +5,29 @@ online version:
 schema: 2.0.0
 ---
 
-# New-CosmosDbUser
+# Get-CosmosDbPermission
 
 ## SYNOPSIS
-Create a new user in a CosmosDB database.
+Return the permissions for a CosmosDB database user.
 
 ## SYNTAX
 
 ### Connection (Default)
 ```
-New-CosmosDbUser -Connection <PSObject> -Id <String>
+Get-CosmosDbPermission -Connection <PSObject> -UserId <String> [-Id <String>]
 ```
 
 ### Account
 ```
-New-CosmosDbUser -Account <String> -Database <String> -Key <SecureString> [-KeyType <String>] -Id <String>
+Get-CosmosDbPermission -Account <String> -Database <String> -Key <SecureString> [-KeyType <String>]
+ -UserId <String> [-Id <String>]
 ```
 
 ## DESCRIPTION
-This cmdlet will create a user in a CosmosDB.
+This cmdlet will return the permissions for a specified user
+in a CosmosDB database.
+If an Id is specified then only the
+specified permission will be returned.
 
 ## EXAMPLES
 
@@ -38,7 +42,7 @@ PS C:\> {{ Add example code here }}
 
 ### -Connection
 This is an object containing the connection information of
-the CosmosDB database that will be deleted.
+the CosmosDB database that will be accessed.
 It should be created
 by \`New-CosmosDbConnection\`.
 
@@ -114,8 +118,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-This is the Id of the user to create.
+### -UserId
+This is the id of the user to get the permissions for.
 
 ```yaml
 Type: String
@@ -129,11 +133,26 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Id
+This is the id of the permission to return.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ## INPUTS
 
 ## OUTPUTS
 
-### System.Object
+### System.String
 
 ## NOTES
 
