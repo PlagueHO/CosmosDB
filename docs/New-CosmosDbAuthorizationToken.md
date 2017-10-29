@@ -14,13 +14,15 @@ Rest API request to CosmosDB.
 ## SYNTAX
 
 ```
-New-CosmosDbAuthorizationToken [[-Verb] <String>] [[-ResourceType] <String>] [[-ResourceId] <String>]
- [-Date] <String> [-Key] <String> [[-KeyType] <String>] [[-TokenVersion] <String>]
+New-CosmosDbAuthorizationToken [-Connection] <PSObject> [[-Method] <String>] [[-ResourceType] <String>]
+ [[-ResourceId] <String>] [-Date] <DateTime> [[-TokenVersion] <String>]
 ```
 
 ## DESCRIPTION
 This cmdlet is used to create an Authorization Token to
 pass in the header of a Rest API request to an Azure CosmosDB.
+The Authorization token that is generated must match the
+other parameters in the header of the request that is passed.
 
 ## EXAMPLES
 
@@ -33,23 +35,27 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Verb
-{{Fill Verb Description}}
+### -Connection
+This is an object containing the connection information of
+the CosmosDB database that will be accessed.
+It should be created
+by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: String
+Type: PSObject
 Parameter Sets: (All)
 Aliases: 
 
-Required: False
+Required: True
 Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ResourceType
-{{Fill ResourceType Description}}
+### -Method
+This is the Rest API method that will be made in the request
+this token is being generated for.
 
 ```yaml
 Type: String
@@ -63,8 +69,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ResourceId
-{{Fill ResourceId Description}}
+### -ResourceType
+This is type of resource being accessed in the CosmosDB.
+For example: users, colls
 
 ```yaml
 Type: String
@@ -78,38 +85,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Date
-{{Fill Date Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: True
-Position: 4
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Key
-{{Fill Key Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: True
-Position: 5
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -KeyType
-{{Fill KeyType Description}}
+### -ResourceId
+This is the resource Id of the CosmosDB being accessed.
+This is in the format 'dbs/{database}' and must match the
+the value in the path of the URI that the request is made
+to.
 
 ```yaml
 Type: String
@@ -117,8 +97,26 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 6
-Default value: Master
+Position: 4
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Date
+This is the DateTime of the request being made.
+This must
+be included in the 'x-ms-date' parameter in the request
+header and match what was provided to this cmdlet.
+
+```yaml
+Type: DateTime
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: 5
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -132,7 +130,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 7
+Position: 6
 Default value: 1.0
 Accept pipeline input: False
 Accept wildcard characters: False

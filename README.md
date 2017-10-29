@@ -7,17 +7,95 @@
 
 ## Introduction
 
-This PowerShell module provides cmdlets for working with Azure Cosmos DB databases, collections, users and permissions.
+This PowerShell module provides cmdlets for working with Azure Cosmos DB
+databases, collections, users and permissions.
+
+The module uses the CosmosDB (DocumentDB) Rest APIs.
+
+For more information on the CosmosDB Rest APIs, see [this link](https://docs.microsoft.com/en-us/rest/api/documentdb/restful-interactions-with-documentdb-resources).
 
 ## Requirements
 
+This module requires:
+
+- PowerShell 5.0
+
+It may work on PowerShell 6.0, but is currently untested.
+
+## Installation
+
+To install the module from PowerShell Gallery, use the PowerShell Cmdlet:
+
+```powershell
+Install-Module -Name CosmosDB
+```
+
+## Quick Start
+
+To use this module you will require either the primary or secondary
+keys from your CosmosDB account.
+
+First convert your key into a secure string:
+
+```powershell
+$primaryKey = ConvertTo-SecureString -String 'GFJqJesi2Rq910E0G7P4WoZkzowzbj23Sm9DUWFX0l0P8o16mYyuaZBN00Nbtj9F1QQnumzZKSGZwknXGERrlA==' -AsPlainText -Force
+```
+
+Use the key secure string, Azure CosmosDB account name and database to create a connection variable:
+
+```powershell
+$cosmosDbConnection = New-CosmosDbConnection -Acccount MyAzureCosmosDB -Database mydatabse -Key $primaryKey
+```
+
+### Working with Collections
+
+Get a list of collections in the database:
+
+```powershell
+Get-CosmosDbCollection -Connection $cosmosDbConnection
+```
+
+Create a collection in the database:
+
+```powershell
+New-CosmosDbCollection -Connection $cosmosDbConnection -Id 'MyNewCollection'
+```
+
+Delete a collection from the database:
+
+```powershell
+Remove-CosmosDbCollection -Connection $cosmosDbConnection -Id 'MyNewCollection'
+```
+
+### Working with Users
+
+Get a list of users in the database:
+
+```powershell
+Get-CosmosDbUser -Connection $cosmosDbConnection
+```
+
+Create a user in the database:
+
+```powershell
+New-CosmosDbUser -Connection $cosmosDbConnection -Id 'MyApplication'
+```
+
+Delete a user from the database:
+
+```powershell
+Remove-CosmosDbUser -Connection $cosmosDbConnection -Id 'MyApplication'
+```
+
 ## Contributing
 
-If you wish to contribute to this project, please read the [Contributing.md](/.github/CONTRIBUTING.md) document first. We would be very grateful of any contributions.
+If you wish to contribute to this project, please read the [Contributing.md](/.github/CONTRIBUTING.md)
+document first. We would be very grateful of any contributions.
 
 ## Cmdlets
 
-A list of Cmdlets in the CosmosDB module can be found by running the following PowerShell commands:
+A list of Cmdlets in the CosmosDB module can be found by running the
+following PowerShell commands:
 
 ```PowerShell
 Import-Module CosmosDB
