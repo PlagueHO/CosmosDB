@@ -1,6 +1,6 @@
 # Release Notes
 
-## What is New in CosmosDB 1.0.0
+## What is New in CosmosDB 1.0.1
 
 October 29, 2017
 
