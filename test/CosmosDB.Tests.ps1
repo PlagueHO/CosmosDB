@@ -127,7 +127,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result | Should -Be $script:testUniversalDate
+                $script:result | Should -Be $script:testDate.ToUniversalTime().ToString("r", [System.Globalization.CultureInfo]::InvariantCulture)
             }
         }
     }
