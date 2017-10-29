@@ -86,7 +86,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with connection parameter and no id' {
+        Context 'Called with connection parameter and an id' {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser) } `
@@ -109,6 +109,72 @@ InModuleScope CosmosDB {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
                     -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser) } `
+                    -Exactly -Times 1
+            }
+        }
+    }
+
+    Describe 'New-CosmosDbUser' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name New-CosmosDbUser } | Should -Not -Throw
+        }
+
+        Context 'Called with connection parameter and an id' {
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'users' } `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+
+            It 'Should not throw exception' {
+                $newCosmosDbUserParameters = @{
+                    Connection = $script:testConnection
+                    Id         = $script:testUser
+                }
+
+                { $script:result = New-CosmosDbUser @newCosmosDbUserParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result._count | Should -Be 1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'users' } `
+                    -Exactly -Times 1
+            }
+        }
+    }
+
+    Describe 'Remove-CosmosDbUser' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Remove-CosmosDbUser } | Should -Not -Throw
+        }
+
+        Context 'Called with connection parameter and an id' {
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser) } `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+
+            It 'Should not throw exception' {
+                $removeCosmosDbUserParameters = @{
+                    Connection = $script:testConnection
+                    Id         = $script:testUser
+                }
+
+                { $script:result = Remove-CosmosDbUser @removeCosmosDbUserParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result._count | Should -Be 1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser) } `
                     -Exactly -Times 1
             }
         }

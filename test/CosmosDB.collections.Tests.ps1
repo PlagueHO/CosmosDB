@@ -60,7 +60,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbCollection } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and no id' {
+        Context 'Called with connection parameter and an id' {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'colls' } `
@@ -109,6 +109,72 @@ InModuleScope CosmosDB {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
                     -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'colls' -and $ResourcePath -eq ('colls/{0}' -f $script:testCollection) } `
+                    -Exactly -Times 1
+            }
+        }
+    }
+
+    Describe 'New-CosmosDbCollection' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name New-CosmosDbCollection } | Should -Not -Throw
+        }
+
+        Context 'Called with connection parameter and an id' {
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'colls' } `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+
+            It 'Should not throw exception' {
+                $newCosmosDbCollectionParameters = @{
+                    Connection = $script:testConnection
+                    Id         = $script:testCollection
+                }
+
+                { $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result._count | Should -Be 1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'colls' } `
+                    -Exactly -Times 1
+            }
+        }
+    }
+
+    Describe 'Remove-CosmosDbCollection' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Remove-CosmosDbCollection } | Should -Not -Throw
+        }
+
+        Context 'Called with connection parameter and an id' {
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'colls' -and $ResourcePath -eq ('colls/{0}' -f $script:testCollection) } `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+
+            It 'Should not throw exception' {
+                $removeCosmosDbCollectionParameters = @{
+                    Connection = $script:testConnection
+                    Id         = $script:testCollection
+                }
+
+                { $script:result = Remove-CosmosDbCollection @removeCosmosDbCollectionParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result._count | Should -Be 1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'colls' -and $ResourcePath -eq ('colls/{0}' -f $script:testCollection) } `
                     -Exactly -Times 1
             }
         }
