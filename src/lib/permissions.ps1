@@ -1,5 +1,47 @@
 <#
 .SYNOPSIS
+    Return the resource path for a permission object.
+
+.DESCRIPTION
+    This cmdlet returns the resource identifier for a
+    permission object.
+
+.PARAMETER Database
+    This is the database containing the permission.
+
+.PARAMETER UserId
+    This is the Id of the user containing the permission.
+
+.PARAMETER PermissionId
+    This is the Id of the permission.
+#>
+function Get-CosmosDbPermissionResourcePath
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Database,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $UserId,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Id
+    )
+
+    return ('dbs/{0}/users/{1}/permissions/{2}' -f $Database, $UserId, $Id)
+}
+
+<#
+.SYNOPSIS
     Return the permissions for a CosmosDB database user.
 
 .DESCRIPTION
@@ -46,25 +88,28 @@ function Get-CosmosDbPermission
         [System.String]
         $Account,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [System.String]
-        $Database,
-
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [System.Security.SecureString]
         $Key,
 
-        [Parameter(ParameterSetName = 'Account')]
+        [Parameter()]
         [ValidateSet('master', 'resource')]
         [System.String]
         $KeyType = 'master',
 
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Database,
+
         [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [System.String]
         $UserId,
 
         [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String]
         $Id
     )
@@ -144,29 +189,33 @@ function New-CosmosDbPermission
         [System.String]
         $Account,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
-        [ValidateNotNullOrEmpty()]
-        [System.String]
-        $Database,
-
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
-        [System.Security.SecureString]
-        $Key,
-
-        [Parameter(ParameterSetName = 'Account')]
+        [Parameter()]
         [ValidateSet('master', 'resource')]
         [System.String]
         $KeyType = 'master',
 
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.Security.SecureString]
+        $Key,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Database,
+
         [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [System.String]
         $UserId,
 
         [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [System.String]
         $Id,
 
         [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [System.String]
         $Resource,
 
@@ -236,25 +285,28 @@ function Remove-CosmosDbPermission
         [System.String]
         $Account,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String]
         $Database,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.Security.SecureString]
         $Key,
 
-        [Parameter(ParameterSetName = 'Account')]
+        [Parameter()]
         [ValidateSet('master', 'resource')]
         [System.String]
         $KeyType = 'master',
 
         [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [System.String]
         $UserId,
 
         [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String]
         $Id
     )

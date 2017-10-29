@@ -44,7 +44,7 @@ $primaryKey = ConvertTo-SecureString -String 'GFJqJesi2Rq910E0G7P4WoZkzowzbj23Sm
 Use the key secure string, Azure CosmosDB account name and database to create a connection variable:
 
 ```powershell
-$cosmosDbConnection = New-CosmosDbConnection -Acccount 'MyAzureCosmosDB' -Database 'MyDatabse' -Key $primaryKey
+$cosmosDbConnection = New-CosmosDbConnection -Acccount 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey
 ```
 
 ### Working with Collections
@@ -95,10 +95,11 @@ Get a list of permissions for a user in the database:
 Get-CosmosDbPermission -Connection $cosmosDbConnection -UserId 'MyApplication'
 ```
 
-Create a permission for a user in the database:
+Create a permission for a user in the database with read access to a collection:
 
 ```powershell
-New-CosmosDbPermission -Connection $cosmosDbConnection -UserId 'MyApplication' -Id 'r_mynewcollection' -Resource 'dbs/MyDatabse/colls/MyNewCollection' -PermissionMode Read
+$collectionId = Get-CosmosDbCollectionResourcePath -Database 'MyDatabase' -Id 'MyNewCollection'
+New-CosmosDbPermission -Connection $cosmosDbConnection -UserId 'MyApplication' -Id 'r_mynewcollection' -Resource $$collectionId -PermissionMode Read
 ```
 
 Remove a permission for a user from the database:
@@ -113,6 +114,9 @@ If you wish to contribute to this project, please read the [Contributing.md](/.g
 document first. We would be very grateful of any contributions.
 
 ## Cmdlets
+
+Full details of the cmdlets contained in this module can be found in
+the `docs` folder.
 
 A list of Cmdlets in the CosmosDB module can be found by running the
 following PowerShell commands:

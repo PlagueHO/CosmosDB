@@ -14,12 +14,13 @@ Delete a permission from a CosmosDB user.
 
 ### Connection (Default)
 ```
-Remove-CosmosDbPermission -Connection <PSObject> -UserId <String> [-Id <String>]
+Remove-CosmosDbPermission -Connection <PSObject> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
+ -UserId <String> [-Id <String>]
 ```
 
 ### Account
 ```
-Remove-CosmosDbPermission -Account <String> -Database <String> -Key <SecureString> [-KeyType <String>]
+Remove-CosmosDbPermission -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  -UserId <String> [-Id <String>]
 ```
 
@@ -75,10 +76,10 @@ The name of the database to access in the CosmosDB account.
 
 ```yaml
 Type: String
-Parameter Sets: Account
+Parameter Sets: (All)
 Aliases: 
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -90,10 +91,10 @@ The key to be used to access this CosmosDB.
 
 ```yaml
 Type: SecureString
-Parameter Sets: Account
+Parameter Sets: (All)
 Aliases: 
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -105,7 +106,7 @@ The type of key that will be used to access ths CosmosDB.
 
 ```yaml
 Type: String
-Parameter Sets: Account
+Parameter Sets: (All)
 Aliases: 
 
 Required: False

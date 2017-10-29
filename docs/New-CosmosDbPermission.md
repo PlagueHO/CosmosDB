@@ -14,13 +14,13 @@ Create a new permission for a user in a CosmosDB database.
 
 ### Connection (Default)
 ```
-New-CosmosDbPermission -Connection <PSObject> -UserId <String> -Id <String> -Resource <String>
- [-PermissionMode <String>]
+New-CosmosDbPermission -Connection <PSObject> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
+ -UserId <String> -Id <String> -Resource <String> [-PermissionMode <String>]
 ```
 
 ### Account
 ```
-New-CosmosDbPermission -Account <String> -Database <String> -Key <SecureString> [-KeyType <String>]
+New-CosmosDbPermission -Account <String> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
  -UserId <String> -Id <String> -Resource <String> [-PermissionMode <String>]
 ```
 
@@ -71,17 +71,17 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Database
-The name of the database to access in the CosmosDB account.
+### -KeyType
+The type of key that will be used to access ths CosmosDB.
 
 ```yaml
 Type: String
-Parameter Sets: Account
+Parameter Sets: (All)
 Aliases: 
 
-Required: True
+Required: False
 Position: Named
-Default value: None
+Default value: Master
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -91,27 +91,27 @@ The key to be used to access this CosmosDB.
 
 ```yaml
 Type: SecureString
-Parameter Sets: Account
+Parameter Sets: (All)
 Aliases: 
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -KeyType
-The type of key that will be used to access ths CosmosDB.
+### -Database
+The name of the database to access in the CosmosDB account.
 
 ```yaml
 Type: String
-Parameter Sets: Account
+Parameter Sets: (All)
 Aliases: 
 
 Required: False
 Position: Named
-Default value: Master
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -14,7 +14,7 @@ to connect to a CosmosDB.
 ## SYNTAX
 
 ```
-New-CosmosDbConnection [-Account] <String> [-Database] <String> [-Key] <SecureString> [[-KeyType] <String>]
+New-CosmosDbConnection [-Account] <String> [[-Database] <String>] [-Key] <SecureString> [[-KeyType] <String>]
 ```
 
 ## DESCRIPTION
@@ -56,7 +56,7 @@ Type: String
 Parameter Sets: (All)
 Aliases: 
 
-Required: True
+Required: False
 Position: 2
 Default value: None
 Accept pipeline input: False

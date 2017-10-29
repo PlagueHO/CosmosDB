@@ -1,5 +1,37 @@
 <#
 .SYNOPSIS
+    Return the resource path for a user object.
+
+.DESCRIPTION
+    This cmdlet returns the resource identifier for a user
+    object.
+
+.PARAMETER Database
+    This is the database containing the user.
+
+.PARAMETER Id
+    This is the Id of the user.
+#>
+function Get-CosmosDbUserResourcePath
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Database,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Id
+    )
+
+    return ('dbs/{0}/users/{1}' -f $Database, $Id)
+}
+
+<#
+.SYNOPSIS
     Return the users in a CosmosDB database.
 
 .DESCRIPTION
@@ -44,12 +76,13 @@ function Get-CosmosDbUser
         [System.String]
         $Account,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String]
         $Database,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.Security.SecureString]
         $Key,
 
@@ -59,6 +92,7 @@ function Get-CosmosDbUser
         $KeyType = 'master',
 
         [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String]
         $Id
     )
@@ -123,21 +157,23 @@ function New-CosmosDbUser
         [System.String]
         $Account,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String]
         $Database,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.Security.SecureString]
         $Key,
 
-        [Parameter(ParameterSetName = 'Account')]
+        [Parameter()]
         [ValidateSet('master', 'resource')]
         [System.String]
         $KeyType = 'master',
 
         [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [System.String]
         $Id
     )
@@ -193,12 +229,13 @@ function Remove-CosmosDbUser
         [System.String]
         $Account,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String]
         $Database,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.Security.SecureString]
         $Key,
 
@@ -208,6 +245,7 @@ function Remove-CosmosDbUser
         $KeyType = 'master',
 
         [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [System.String]
         $Id
     )

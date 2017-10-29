@@ -14,12 +14,13 @@ Delete a user from a CosmosDB database.
 
 ### Connection (Default)
 ```
-Remove-CosmosDbUser -Connection <PSObject> -Id <String>
+Remove-CosmosDbUser -Connection <PSObject> [-Database <String>] [-Key <SecureString>] -Id <String>
 ```
 
 ### Account
 ```
-Remove-CosmosDbUser -Account <String> -Database <String> -Key <SecureString> [-KeyType <String>] -Id <String>
+Remove-CosmosDbUser -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
+ -Id <String>
 ```
 
 ## DESCRIPTION
@@ -74,10 +75,10 @@ The name of the database to access in the CosmosDB account.
 
 ```yaml
 Type: String
-Parameter Sets: Account
+Parameter Sets: (All)
 Aliases: 
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -89,10 +90,10 @@ The key to be used to access this CosmosDB.
 
 ```yaml
 Type: SecureString
-Parameter Sets: Account
+Parameter Sets: (All)
 Aliases: 
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

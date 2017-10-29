@@ -31,7 +31,7 @@ function New-CosmosDbConnection
         [System.String]
         $Account,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String]
         $Database,
@@ -217,14 +217,14 @@ function New-CosmosDbAuthorizationToken
 .PARAMETER Account
     The account name of the CosmosDB to access.
 
-.PARAMETER Database
-    The name of the database to access in the CosmosDB account.
-
 .PARAMETER Key
     The key to be used to access this CosmosDB.
 
 .PARAMETER KeyType
     The type of key that will be used to access ths CosmosDB.
+
+.PARAMETER Database
+    If specified will override the value in the connection.
 
 .PARAMETER Method
     This is the Rest API method that will be made to the CosmosDB.
@@ -261,16 +261,17 @@ function Invoke-CosmosDbRequest
         [System.String]
         $Account,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String]
         $Database,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.Security.SecureString]
         $Key,
 
-        [Parameter(ParameterSetName = 'Account')]
+        [Parameter()]
         [ValidateSet('master', 'resource')]
         [System.String]
         $KeyType = 'master',
@@ -281,10 +282,12 @@ function Invoke-CosmosDbRequest
         $Method = 'Get',
 
         [Parameter(Mandatory = $True)]
+        [ValidateNotNullOrEmpty()]
         [System.String]
         $ResourceType,
 
         [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String]
         $ResourcePath,
 
@@ -302,19 +305,41 @@ function Invoke-CosmosDbRequest
     {
         $Connection = New-CosmosDbConnection -Account $Account -Database $Database -Key $Key -KeyType $KeyType
     }
+
+    if ($PSBoundParameters.ContainsKey('Database'))
+    {
+        $Connection.Database = $Database
+    }
+
+    if ($PSBoundParameters.ContainsKey('Key'))
+    {
+        $Connection.Key = $Key
+    }
+
+    if ($PSBoundParameters.ContainsKey('KeyType'))
+    {
+        $Connection.KeyType = $KeyType
+    }
+
     $date = Get-Date
     $dateString = ConvertTo-CosmosDbTokenDateString -Date $date
 
     # Generate the resource link value that will be used in the URI and to generate the resource id
-    $resourceLink = ('dbs/{0}' -f $Connection.Database)
-
-    if ($PSBoundParameters.ContainsKey('ResourcePath'))
+    if ([String]::IsNullOrEmpty($Connection.Database))
     {
-        $resourceLink = ('{0}/{1}' -f $resourceLink, $ResourcePath)
+        $resourceLink = $resourceType
     }
     else
     {
-        $resourceLink = ('{0}/{1}' -f $resourceLink, $ResourceType)
+        $resourceLink = ('dbs/{0}' -f $Connection.Database)
+        if ($PSBoundParameters.ContainsKey('ResourcePath'))
+        {
+            $resourceLink = ('{0}/{1}' -f $resourceLink, $ResourcePath)
+        }
+        else
+        {
+            $resourceLink = ('{0}/{1}' -f $resourceLink, $ResourceType)
+        }
     }
 
     # Generate the resource Id from the resource link value
@@ -368,4 +393,3 @@ function Invoke-CosmosDbRequest
 
     return $restResult
 }
-

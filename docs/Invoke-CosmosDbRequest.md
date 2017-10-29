@@ -15,13 +15,13 @@ Rest API request to CosmosDB.
 
 ### Connection (Default)
 ```
-Invoke-CosmosDbRequest -Connection <PSObject> [-Method <String>] -ResourceType <String>
- [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
+Invoke-CosmosDbRequest -Connection <PSObject> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
+ [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
 ```
 
 ### Account
 ```
-Invoke-CosmosDbRequest -Account <String> -Database <String> -Key <SecureString> [-KeyType <String>]
+Invoke-CosmosDbRequest -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
 ```
 
@@ -73,14 +73,14 @@ Accept wildcard characters: False
 ```
 
 ### -Database
-The name of the database to access in the CosmosDB account.
+If specified will override the value in the connection.
 
 ```yaml
 Type: String
-Parameter Sets: Account
+Parameter Sets: (All)
 Aliases: 
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -92,10 +92,10 @@ The key to be used to access this CosmosDB.
 
 ```yaml
 Type: SecureString
-Parameter Sets: Account
+Parameter Sets: (All)
 Aliases: 
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -107,7 +107,7 @@ The type of key that will be used to access ths CosmosDB.
 
 ```yaml
 Type: String
-Parameter Sets: Account
+Parameter Sets: (All)
 Aliases: 
 
 Required: False

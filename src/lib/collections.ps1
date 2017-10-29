@@ -1,5 +1,39 @@
 <#
 .SYNOPSIS
+    Return the resource path for a collection object.
+
+.DESCRIPTION
+    This cmdlet returns the resource identifier for a collection
+    object.
+
+.PARAMETER Database
+    This is the database containing the collection.
+
+.PARAMETER Id
+    This is the Id of the collection.
+#>
+function Get-CosmosDbCollectionResourcePath
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Database,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Id
+    )
+
+    return ('dbs/{0}/colls/{1}' -f $Database, $Id)
+}
+
+<#
+.SYNOPSIS
     Return the collections in a CosmosDB database.
 
 .DESCRIPTION
@@ -44,21 +78,23 @@ function Get-CosmosDbCollection
         [System.String]
         $Account,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [System.String]
-        $Database,
-
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [System.Security.SecureString]
         $Key,
 
-        [Parameter(ParameterSetName = 'Account')]
+        [Parameter()]
         [ValidateSet('master', 'resource')]
         [System.String]
         $KeyType = 'master',
 
         [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Database,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String]
         $Id
     )
@@ -123,21 +159,23 @@ function New-CosmosDbCollection
         [System.String]
         $Account,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [System.String]
-        $Database,
-
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [System.Security.SecureString]
         $Key,
 
-        [Parameter(ParameterSetName = 'Account')]
+        [Parameter()]
         [ValidateSet('master', 'resource')]
         [System.String]
         $KeyType = 'master',
 
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Database,
+
         [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [System.String]
         $Id
     )
@@ -193,21 +231,23 @@ function Remove-CosmosDbCollection
         [System.String]
         $Account,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [System.String]
-        $Database,
-
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [System.Security.SecureString]
         $Key,
 
-        [Parameter(ParameterSetName = 'Account')]
+        [Parameter()]
         [ValidateSet('master', 'resource')]
         [System.String]
         $KeyType = 'master',
 
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Database,
+
         [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [System.String]
         $Id
     )

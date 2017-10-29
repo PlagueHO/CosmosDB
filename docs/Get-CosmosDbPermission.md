@@ -14,12 +14,13 @@ Return the permissions for a CosmosDB database user.
 
 ### Connection (Default)
 ```
-Get-CosmosDbPermission -Connection <PSObject> -UserId <String> [-Id <String>]
+Get-CosmosDbPermission -Connection <PSObject> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
+ -UserId <String> [-Id <String>]
 ```
 
 ### Account
 ```
-Get-CosmosDbPermission -Account <String> -Database <String> -Key <SecureString> [-KeyType <String>]
+Get-CosmosDbPermission -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -UserId <String> [-Id <String>]
 ```
 
@@ -73,30 +74,15 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Database
-The name of the database to access in the CosmosDB account.
-
-```yaml
-Type: String
-Parameter Sets: Account
-Aliases: 
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Key
 The key to be used to access this CosmosDB.
 
 ```yaml
 Type: SecureString
-Parameter Sets: Account
+Parameter Sets: (All)
 Aliases: 
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -108,12 +94,27 @@ The type of key that will be used to access ths CosmosDB.
 
 ```yaml
 Type: String
-Parameter Sets: Account
+Parameter Sets: (All)
 Aliases: 
 
 Required: False
 Position: Named
 Default value: Master
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Database
+The name of the database to access in the CosmosDB account.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
