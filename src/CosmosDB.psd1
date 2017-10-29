@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.0.0.20'
+    ModuleVersion     = '1.0.0.30'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -106,4 +106,5 @@
     # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
     # DefaultCommandPrefix = ''
 }
+
 
