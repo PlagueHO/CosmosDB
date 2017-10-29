@@ -1,4 +1,4 @@
-# CosmosDB
+# CosmosDB PowerShell Module
 
 | Branch | Build Status | Code Coverage |
 | --- | --- | --- |
