@@ -5,24 +5,30 @@ online version:
 schema: 2.0.0
 ---
 
-# New-CosmosDbAuthorizationToken
+# Get-CosmosDbPermission
 
 ## SYNOPSIS
-Create a new Authorization Token to be used with in a
-Rest API request to CosmosDB.
+Return the permissions for a CosmosDB database user.
 
 ## SYNTAX
 
+### Connection (Default)
 ```
-New-CosmosDbAuthorizationToken [-Connection] <PSObject> [[-Method] <String>] [[-ResourceType] <String>]
- [[-ResourceId] <String>] [-Date] <DateTime> [[-TokenVersion] <String>]
+Get-CosmosDbPermission -Connection <PSObject> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
+ -UserId <String> [-Id <String>]
+```
+
+### Account
+```
+Get-CosmosDbPermission -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
+ -UserId <String> [-Id <String>]
 ```
 
 ## DESCRIPTION
-This cmdlet is used to create an Authorization Token to
-pass in the header of a Rest API request to an Azure CosmosDB.
-The Authorization token that is generated must match the
-other parameters in the header of the request that is passed.
+This cmdlet will return the permissions for a specified user
+in a CosmosDB database.
+If an Id is specified then only the
+specified permission will be returned.
 
 ## EXAMPLES
 
@@ -43,19 +49,93 @@ by \`New-CosmosDbConnection\`.
 
 ```yaml
 Type: PSObject
+Parameter Sets: Connection
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Account
+The account name of the CosmosDB to access.
+
+```yaml
+Type: String
+Parameter Sets: Account
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Key
+The key to be used to access this CosmosDB.
+
+```yaml
+Type: SecureString
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -KeyType
+The type of key that will be used to access ths CosmosDB.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: Master
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Database
+The name of the database to access in the CosmosDB account.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UserId
+This is the id of the user to get the permissions for.
+
+```yaml
+Type: String
 Parameter Sets: (All)
 Aliases: 
 
 Required: True
-Position: 1
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Method
-This is the Rest API method that will be made in the request
-this token is being generated for.
+### -Id
+This is the id of the permission to return.
 
 ```yaml
 Type: String
@@ -63,75 +143,8 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 2
+Position: Named
 Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ResourceType
-This is type of resource being accessed in the CosmosDB.
-For example: users, colls
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ResourceId
-This is the resource Id of the CosmosDB being accessed.
-This is in the format 'dbs/{database}' and must match the
-the value in the path of the URI that the request is made
-to.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: False
-Position: 4
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Date
-This is the DateTime of the request being made.
-This must
-be included in the 'x-ms-date' parameter in the request
-header and match what was provided to this cmdlet.
-
-```yaml
-Type: DateTime
-Parameter Sets: (All)
-Aliases: 
-
-Required: True
-Position: 5
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TokenVersion
-{{Fill TokenVersion Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: False
-Position: 6
-Default value: 1.0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
