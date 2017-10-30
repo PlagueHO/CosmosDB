@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Updated manifest to show all cmdlets.
+
 ## 1.0.2.47
 
 - Improved unit test coverage.
