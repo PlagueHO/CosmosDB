@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.0.1.40'
+    ModuleVersion     = '1.0.2.40'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()

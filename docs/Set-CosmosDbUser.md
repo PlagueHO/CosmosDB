@@ -5,27 +5,28 @@ online version:
 schema: 2.0.0
 ---
 
-# Remove-CosmosDbUser
+# Set-CosmosDbUser
 
 ## SYNOPSIS
-Delete a user from a CosmosDB database.
+Set the user Id of an existing user in a CosmosDB database.
 
 ## SYNTAX
 
 ### Connection (Default)
 ```
-Remove-CosmosDbUser -Connection <PSObject> [-Database <String>] [-Key <SecureString>] -Id <String>
+Set-CosmosDbUser -Connection <PSObject> [-Database <String>] [-Key <SecureString>] -Id <String> -NewId <String>
  [<CommonParameters>]
 ```
 
 ### Account
 ```
-Remove-CosmosDbUser -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -Id <String> [<CommonParameters>]
+Set-CosmosDbUser -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>] -Id <String>
+ -NewId <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-This cmdlet will delete a user in a CosmosDB.
+This cmdlet will set the user Id of an existing  user in
+a CosmosDB.
 
 ## EXAMPLES
 
@@ -117,7 +118,22 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-This is the Id of the user to delete.
+The user Id of the user to set.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -NewId
+This is the new Id of rhe user.
 
 ```yaml
 Type: String

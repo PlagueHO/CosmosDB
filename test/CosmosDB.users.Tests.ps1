@@ -122,7 +122,7 @@ InModuleScope CosmosDB {
         Context 'Called with connection parameter and an id' {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'users' } `
+                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'users' -and $Body -eq "{ `"id`": `"$($script:testUser)`" }" } `
                 -MockWith { ConvertFrom-Json -InputObject $script:testJson }
 
             It 'Should not throw exception' {
@@ -141,7 +141,7 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'users' } `
+                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'users' -and $Body -eq "{ `"id`": `"$($script:testUser)`" }" } `
                     -Exactly -Times 1
             }
         }
@@ -175,6 +175,40 @@ InModuleScope CosmosDB {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
                     -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser) } `
+                    -Exactly -Times 1
+            }
+        }
+    }
+
+    Describe 'Set-CosmosDbUser' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Set-CosmosDbUser } | Should -Not -Throw
+        }
+
+        Context 'Called with connection parameter and Id and NewId' {
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser) -and $Body -eq "{ `"id`": `"NewId`" }"} `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+
+            It 'Should not throw exception' {
+                $setCosmosDbUserParameters = @{
+                    Connection = $script:testConnection
+                    Id         = $script:testUser
+                    NewId      = 'NewId'
+                }
+
+                { $script:result = Set-CosmosDbUser @setCosmosDbUserParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result._count | Should -Be 1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser) -and $Body -eq "{ `"id`": `"NewId`" }"} `
                     -Exactly -Times 1
             }
         }

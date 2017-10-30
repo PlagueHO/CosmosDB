@@ -15,7 +15,7 @@ Rest API request to CosmosDB.
 
 ```
 New-CosmosDbAuthorizationToken [-Connection] <PSObject> [[-Method] <String>] [[-ResourceType] <String>]
- [[-ResourceId] <String>] [-Date] <DateTime> [[-TokenVersion] <String>]
+ [[-ResourceId] <String>] [-Date] <DateTime> [[-TokenVersion] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -135,6 +135,9 @@ Default value: 1.0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
