@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 1.0.2.47
 
 - Improved unit test coverage.
 - Added cmdlet `Set-CosmosDBUser` for setting the user Id of an
@@ -14,4 +14,5 @@
 ## 1.0.0.30
 
 - Initial Release.
+
 
