@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 1.0.2.53
 
 - Updated manifest to show all cmdlets.
 
@@ -18,5 +18,6 @@
 ## 1.0.0.30
 
 - Initial Release.
+
 
 
