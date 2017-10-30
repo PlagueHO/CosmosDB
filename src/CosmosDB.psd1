@@ -77,6 +77,7 @@
         'Remove-CosmosDbCollection'
         'Remove-CosmosDbPermission'
         'Remove-CosmosDbUser'
+        'Set-CosmosDbUser'
     )
 
     # Variables to export from this module
