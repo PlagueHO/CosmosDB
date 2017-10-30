@@ -183,7 +183,7 @@ function New-CosmosDbUser
     return Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'users' `
-        -Body "{ `"id`": `"$id`" }"
+        -Body "{ `"id`": `"$Id`" }"
 }
 
 <#
@@ -255,4 +255,87 @@ function Remove-CosmosDbUser
         -Method 'Delete' `
         -ResourceType 'users' `
         -ResourcePath ('users/{0}' -f $Id)
+}
+
+<#
+.SYNOPSIS
+    Set the user Id of an existing user in a CosmosDB database.
+
+.DESCRIPTION
+    This cmdlet will set the user Id of an existing  user in
+    a CosmosDB.
+
+.PARAMETER Connection
+    This is an object containing the connection information of
+    the CosmosDB database that will be deleted. It should be created
+    by `New-CosmosDbConnection`.
+
+.PARAMETER Account
+    The account name of the CosmosDB to access.
+
+.PARAMETER Database
+    The name of the database to access in the CosmosDB account.
+
+.PARAMETER Key
+    The key to be used to access this CosmosDB.
+
+.PARAMETER KeyType
+    The type of key that will be used to access ths CosmosDB.
+
+.PARAMETER Id
+    The user Id of the user to set.
+
+.PARAMETER NewId
+    This is the new Id of rhe user.
+#>
+function Set-CosmosDbUser
+{
+    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [OutputType([Object])]
+    param
+    (
+        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [ValidateNotNullOrEmpty()]
+        [PSCustomObject]
+        $Connection,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Account,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Database,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.Security.SecureString]
+        $Key,
+
+        [Parameter(ParameterSetName = 'Account')]
+        [ValidateSet('master', 'resource')]
+        [System.String]
+        $KeyType = 'master',
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Id,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $NewId
+    )
+
+    $null = $PSBoundParameters.Remove('Id')
+    $null = $PSBoundParameters.Remove('NewId')
+
+    return Invoke-CosmosDbRequest @PSBoundParameters `
+        -Method 'Put' `
+        -ResourceType 'users' `
+        -ResourcePath ('users/{0}' -f $Id) `
+        -Body "{ `"id`": `"$NewId`" }"
 }
