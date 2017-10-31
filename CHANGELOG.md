@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 1.0.2.59
 
 - Added `PartitionKey`, `OfferThroughput` and `OfferType` parameters to
   cmdlet `New-CosmosDBCollection`.
@@ -24,3 +24,4 @@
 ## 1.0.0.30
 
 - Initial Release.
+
