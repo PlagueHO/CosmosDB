@@ -142,6 +142,21 @@ function Get-CosmosDbCollection
 
 .PARAMETER Id
     This is the Id of the collection to create.
+
+.PARAMETER OfferThroughput
+    The user specified throughput for the collection expressed
+    in units of 100 request units per second. This can be between
+    400 and 250,000 (or higher by requesting a limit increase).
+    If specified OfferType should not be specified.
+
+.PARAMETER OfferType
+    The user specified performance level for pre-defined performance
+    levels S1, S2 and S3. If specified OfferThroughput should not be
+    specified.
+
+.PARAMETER PartitionKey
+    This value is used to configure the partition key to be used
+    for partitioning data into multiple partitions.
 #>
 function New-CosmosDbCollection
 {
@@ -177,15 +192,65 @@ function New-CosmosDbCollection
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [System.String]
-        $Id
+        $Id,
+
+        [Parameter()]
+        [ValidateRange(400,250000)]
+        [System.Int32]
+        $OfferThroughput,
+
+        [Parameter()]
+        [ValidateSet('S1','S2','S3')]
+        [System.String]
+        $OfferType,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $PartitionKey
     )
 
+    $headers = @{}
+
+    if ($PSBoundParameters.ContainsKey('OfferThroughput') -and `
+        $PSBoundParameters.ContainsKey('OfferType'))
+    {
+        New-InvalidOperationException -Message $($LocalizedData.ErrorNewCollectionOfferParameterConflict)
+    }
+
+    if ($PSBoundParameters.ContainsKey('OfferThroughput'))
+    {
+        $headers += @{
+            'x-ms-offer-throughput' = $OfferThroughput
+        }
+        $null = $PSBoundParameters.Remove('OfferThroughput')
+    }
+
+    if ($PSBoundParameters.ContainsKey('OfferType'))
+    {
+        $headers += @{
+            'x-ms-offer-type' = $OfferType
+        }
+        $null = $PSBoundParameters.Remove('OfferType')
+    }
+
     $null = $PSBoundParameters.Remove('Id')
+
+    if ($PSBoundParameters.ContainsKey('PartitionKey'))
+    {
+        $body = "{ `"id`": `"$id`", `"partitionKey`": { `"paths`": [ `"/$PartitionKey`" ], `"kind`": `"Hash`" } }"
+        $null = $PSBoundParameters.Remove('PartitionKey')
+    }
+    else
+    {
+        $body = "{ `"id`": `"$id`" }"
+    }
 
     return Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'colls' `
-        -Body "{ `"id`": `"$id`" }"
+        -Headers $headers `
+        -Body $body
 }
 
 <#
@@ -253,6 +318,7 @@ function Remove-CosmosDbCollection
     )
 
     $null = $PSBoundParameters.Remove('Id')
+
     return Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
         -ResourceType 'colls' `

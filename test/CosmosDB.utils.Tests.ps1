@@ -35,13 +35,14 @@ InModuleScope CosmosDB {
     "_count": 1
 }
 '@
+    $script:testResourceGroup = 'testResourceGroup'
 
     Describe 'New-CosmosDbConnection' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name New-CosmosDbConnection } | Should -Not -Throw
         }
 
-        Context 'Called with all parameters' {
+        Context 'Called with Connection parameters' {
             It 'Should not throw exception' {
                 $newCosmosDbConnectionParameters = @{
                     Account  = $script:testAccount
@@ -59,6 +60,38 @@ InModuleScope CosmosDB {
                 $script:result.Key | Should -Be $script:testKeySecureString
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
+            }
+        }
+
+        Context 'Called with Azure parameters' {
+            Mock `
+                -CommandName Invoke-AzureRmResourceAction `
+                -MockWith { @{
+                    primaryMasterKey           = 'primaryMasterKey'
+                    secondaryMasterKey         = 'secondaryMasterKey'
+                    primaryReadonlyMasterKey   = 'primaryReadonlyMasterKey'
+                    secondaryReadonlyMasterKey = 'secondaryReadonlyMasterKey'
+                } }
+
+            It 'Should not throw exception' {
+                $newCosmosDbConnectionParameters = @{
+                    Account       = $script:testAccount
+                    Database      = $script:testDatabase
+                    ResourceGroup = $script:testResourceGroup
+                }
+
+                { $script:result = New-CosmosDbConnection @newCosmosDbConnectionParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be $script:testAccount
+                $script:result.Database | Should -Be $script:testDatabase
+                $script:result.KeyType | Should -Be 'master'
+                $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled -CommandName Invoke-AzureRmResourceAction
             }
         }
     }

@@ -1,8 +1,8 @@
 # Release Notes
 
-## What is New in CosmosDB 1.0.2
+## What is New in CosmosDB 1.0.3
 
-October 29, 2017
+October 31, 2017
 
 - First release containing support for Collections, Users and Permissions.
 
