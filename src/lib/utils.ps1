@@ -8,6 +8,9 @@
     cmdlets by providing all the connection information in an
     object that can be passed to the CosmosDB cmdlets.
 
+    It can also retrieve the CosmosDB primary or secondary key
+    from Azure Resource Manager.
+
 .PARAMETER Account
     The account name of the CosmosDB to access.
 
@@ -19,10 +22,18 @@
 
 .PARAMETER KeyType
     The type of key that will be used to access ths CosmosDB.
+
+.PARAMETER ResourceGroup
+    This is the name of the Azure Resouce Group containing the
+    CosmosDB.
+
+.PARAMETER MasterKeyType
+    This is the master key type to use retrieve from Azure for
+    the CosmosDB.
 #>
 function New-CosmosDbConnection
 {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Connection')]
     [OutputType([System.Management.Automation.PSCustomObject])]
     param
     (
@@ -36,15 +47,44 @@ function New-CosmosDbConnection
         [System.String]
         $Database,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [ValidateNotNullOrEmpty()]
         [System.Security.SecureString]
         $Key,
 
         [Parameter()]
         [ValidateSet('master', 'resource')]
         [System.String]
-        $KeyType = 'master'
+        $KeyType = 'master',
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'Azure')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $ResourceGroup,
+
+        [Parameter(ParameterSetName = 'Azure')]
+        [ValidateSet('PrimaryMasterKey', 'SecondaryMasterKey', 'PrimaryReadonlyMasterKey', 'SecondaryReadonlyMasterKey')]
+        [System.String]
+        $MasterKeyType = 'PrimaryMasterKey'
     )
+
+    if (-not (Get-AzureRmContext -ErrorAction SilentlyContinue))
+    {
+        Add-AzureRMAccount
+    }
+
+    if ($PSCmdlet.ParameterSetName -eq 'Azure')
+    {
+        $resource = Invoke-AzureRmResourceAction `
+            -ResourceGroupName $ResourceGroup `
+            -Name $Account `
+            -ResourceType "Microsoft.DocumentDb/databaseAccounts" `
+            -ApiVersion "2015-04-08" `
+            -Action listKeys `
+            -Force `
+            -ErrorAction Stop
+        $Key = ConvertTo-SecureString -String ($resource.$MasterKeyType) -AsPlainText -Force
+    }
 
     return [PSCustomObject] @{
         Account  = $Account
@@ -244,6 +284,10 @@ function New-CosmosDbAuthorizationToken
 
 .PARAMETER ApiVersion
     This is the version of the Rest API that will be called.
+
+.PARAMETER Headers
+    This parameter can be used to provide any additional headers
+    to the Rest API.
 #>
 function Invoke-CosmosDbRequest
 {
@@ -298,7 +342,11 @@ function Invoke-CosmosDbRequest
         [Parameter()]
         [ValidateSet('2014-08-21', '2015-04-08', '2015-06-03', '2015-08-06', '2015-12-16', '2016-07-11', '2017-01-19', '2017-02-22')]
         [System.String]
-        $ApiVersion = '2017-02-22'
+        $ApiVersion = '2017-02-22',
+
+        [Parameter()]
+        [Hashtable]
+        $Headers = @{}
     )
 
     if ($PSCmdlet.ParameterSetName -eq 'Account')
@@ -364,7 +412,7 @@ function Invoke-CosmosDbRequest
         -ResourceId $resourceId `
         -Date $date
 
-    $headers = @{
+    $Headers += @{
         'authorization' = $token
         'x-ms-date'     = $dateString
         'x-ms-version'  = $ApiVersion
@@ -372,7 +420,7 @@ function Invoke-CosmosDbRequest
 
     $invokeRestMethodParameters = @{
         Uri         = $uri
-        Headers     = $headers
+        Headers     = $Headers
         Method      = $method
         ContentType = 'application/json'
     }
@@ -392,4 +440,90 @@ function Invoke-CosmosDbRequest
     $restResult = Invoke-RestMethod @invokeRestMethodParameters
 
     return $restResult
+}
+
+<#
+    .SYNOPSIS
+        Creates and throws an invalid argument exception
+
+    .PARAMETER Message
+        The message explaining why this error is being thrown
+
+    .PARAMETER ArgumentName
+        The name of the invalid argument that is causing this error to be thrown
+#>
+function New-InvalidArgumentException
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [String]
+        $Message,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [String]
+        $ArgumentName
+    )
+
+    $argumentException = New-Object -TypeName 'ArgumentException' -ArgumentList @( $Message,
+        $ArgumentName )
+    $newObjectParams = @{
+        TypeName = 'System.Management.Automation.ErrorRecord'
+        ArgumentList = @( $argumentException, $ArgumentName, 'InvalidArgument', $null )
+    }
+    $errorRecord = New-Object @newObjectParams
+
+    throw $errorRecord
+}
+
+<#
+    .SYNOPSIS
+        Creates and throws an invalid operation exception
+
+    .PARAMETER Message
+        The message explaining why this error is being thrown
+
+    .PARAMETER ErrorRecord
+        The error record containing the exception that is causing this terminating error
+#>
+function New-InvalidOperationException
+{
+    [CmdletBinding()]
+    param
+    (
+        [ValidateNotNullOrEmpty()]
+        [String]
+        $Message,
+
+        [ValidateNotNull()]
+        [System.Management.Automation.ErrorRecord]
+        $ErrorRecord
+    )
+
+    if ($null -eq $Message)
+    {
+        $invalidOperationException = New-Object -TypeName 'InvalidOperationException'
+    }
+    elseif ($null -eq $ErrorRecord)
+    {
+        $invalidOperationException =
+            New-Object -TypeName 'InvalidOperationException' -ArgumentList @( $Message )
+    }
+    else
+    {
+        $invalidOperationException =
+            New-Object -TypeName 'InvalidOperationException' -ArgumentList @( $Message,
+                $ErrorRecord.Exception )
+    }
+
+    $newObjectParams = @{
+        TypeName = 'System.Management.Automation.ErrorRecord'
+        ArgumentList = @( $invalidOperationException.ToString(), 'MachineStateIncorrect',
+            'InvalidOperation', $null )
+    }
+    $errorRecordToThrow = New-Object @newObjectParams
+    throw $errorRecordToThrow
 }

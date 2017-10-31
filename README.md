@@ -32,8 +32,17 @@ Install-Module -Name CosmosDB
 
 ## Quick Start
 
-To use this module you will require either the primary or secondary
-keys from your CosmosDB account.
+The easiest way to use this module is to first create a connection
+object using the `New-CosmosDbConnection` cmdlet which you can then
+use to pass to the other CosmosDB cmdlets in the module.
+
+To create the connection object you will either need access to the
+primary primary or secondary keys from your CosmosDB account or allow
+the CosmosDB module to retrieve the keys directly from the Azure
+management portal for you.
+
+### Create a Connection specifying the Key Manually
+
 
 First convert your key into a secure string:
 
@@ -44,8 +53,23 @@ $primaryKey = ConvertTo-SecureString -String 'GFJqJesi2Rq910E0G7P4WoZkzowzbj23Sm
 Use the key secure string, Azure CosmosDB account name and database to create a connection variable:
 
 ```powershell
-$cosmosDbConnection = New-CosmosDbConnection -Acccount 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey
+$cosmosDbConnection = New-CosmosDbConnection -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey
 ```
+
+### Use CosmosDB Module to Retrieve Key from Azure Management Portal
+
+To create a connection object so that CosmosDB retrieves the primary or
+secondary key from the Azure Management Portal, use the following command:
+
+```powershell
+$cosmosDbConnection = New-CosmosDbConnection -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -ResourceGroup 'MyCosmosDbResourceGroup' -MasterKeyType 'Secondary'
+```
+
+_Note: if PowerShell is not connected to Azure then an interactive
+Azure login will be initiated. If PowerShell is already connected to
+an account that doesn't contain the CosmosDB you wish to connect to then
+you will first need to connect to the correct account using the
+`Add-AzureRmAccount` cmdlet._
 
 ### Working with Collections
 
@@ -55,10 +79,10 @@ Get a list of collections in the database:
 Get-CosmosDbCollection -Connection $cosmosDbConnection
 ```
 
-Create a collection in the database:
+Create a collection in the database with the partition key 'account' and the offer throughput of 50000 RU/s:
 
 ```powershell
-New-CosmosDbCollection -Connection $cosmosDbConnection -Id 'MyNewCollection'
+New-CosmosDbCollection -Connection $cosmosDbConnection -Id 'MyNewCollection' -PartitionKey 'account' -OfferThroughput 50000
 ```
 
 Delete a collection from the database:

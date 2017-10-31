@@ -17,14 +17,14 @@ Rest API request to CosmosDB.
 ```
 Invoke-CosmosDbRequest -Connection <PSObject> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
- [<CommonParameters>]
+ [-Headers <Hashtable>] [<CommonParameters>]
 ```
 
 ### Account
 ```
 Invoke-CosmosDbRequest -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
- [<CommonParameters>]
+ [-Headers <Hashtable>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -195,6 +195,20 @@ Aliases:
 Required: False
 Position: Named
 Default value: 2017-02-22
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Headers
+This parameter can be used to provide any additional headers
+to the Rest API.```yaml
+Type: Hashtable
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: @{}
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

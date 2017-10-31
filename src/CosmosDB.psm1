@@ -18,7 +18,6 @@ Import-LocalizedData `
     -UICulture $culture
 #endregion
 
-
 #region ImportFunctions
 # Dot source any functions in the libs folder
 $libs = Get-ChildItem `
@@ -32,8 +31,3 @@ Foreach ($lib in $libs)
     . $lib.Fullname
 }
 #endregion
-
-# Export only the functions using PowerShell standard verb-noun naming.
-# Be sure to list each exported functions in the FunctionsToExport field of the module manifest file.
-# This improves performance of command discovery in PowerShell.
-#Export-ModuleMember -Function *-*

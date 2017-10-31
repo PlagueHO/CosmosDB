@@ -1,5 +1,11 @@
 # Change Log
 
+## Unreleased
+
+- Added `PartitionKey`, `OfferThroughput` and `OfferType` parameters to
+  cmdlet `New-CosmosDBCollection`.
+- Added support for retrieving key from Azure Management Portal.
+
 ## 1.0.2.53
 
 - Updated manifest to show all cmdlets.
@@ -18,6 +24,3 @@
 ## 1.0.0.30
 
 - Initial Release.
-
-
-
