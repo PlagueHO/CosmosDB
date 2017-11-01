@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 1.0.4.63
 
 - Fixed bug in `New-CosmosDbConnection` connecting to Azure and
   improved tests.
@@ -33,4 +33,5 @@
 ## 1.0.0.30
 
 - Initial Release.
+
 
