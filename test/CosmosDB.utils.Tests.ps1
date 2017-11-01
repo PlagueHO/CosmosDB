@@ -64,7 +64,7 @@ InModuleScope CosmosDB {
         }
 
         Context 'Called with Azure parameters and not connected to Azure' {
-            Mock -CommandName Get-AzureRmContext
+            Mock -CommandName Get-AzureRmContext -MockWith { throw }
             Mock -CommandName Add-AzureRmAccount
             Mock `
                 -CommandName Invoke-AzureRmResourceAction `

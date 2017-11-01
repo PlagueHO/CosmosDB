@@ -70,9 +70,13 @@ function New-CosmosDbConnection
 
     if ($PSCmdlet.ParameterSetName -eq 'Azure')
     {
-        if (-not (Get-AzureRmContext -ErrorAction SilentlyContinue))
+        try
         {
-            Add-AzureRmAccount
+            $null = Get-AzureRmContext -ErrorAction SilentlyContinue
+        }
+        catch
+        {
+            $null = Add-AzureRmAccount
         }
 
         $resource = Invoke-AzureRmResourceAction `
