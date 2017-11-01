@@ -71,9 +71,23 @@ an account that doesn't contain the CosmosDB you wish to connect to then
 you will first need to connect to the correct account using the
 `Add-AzureRmAccount` cmdlet._
 
+### Working with Databases
+
+Get a list of databases in the CosmosDB account:
+
+```powershell
+Get-CosmosDbDatabase -Connection $cosmosDbConnection
+```
+
+Get the specified database from the CosmosDB account:
+
+```powershell
+Get-CosmosDbDatabase -Connection $cosmosDbConnection -Id 'MyDatabase'
+```
+
 ### Working with Collections
 
-Get a list of collections in the database:
+Get a list of collections in a database:
 
 ```powershell
 Get-CosmosDbCollection -Connection $cosmosDbConnection
@@ -83,6 +97,12 @@ Create a collection in the database with the partition key 'account' and the off
 
 ```powershell
 New-CosmosDbCollection -Connection $cosmosDbConnection -Id 'MyNewCollection' -PartitionKey 'account' -OfferThroughput 50000
+```
+
+Get a specified collection from a database:
+
+```powershell
+Get-CosmosDbCollection -Connection $cosmosDbConnection -Id 'MyNewCollection'
 ```
 
 Delete a collection from the database:
@@ -140,7 +160,7 @@ document first. We would be very grateful of any contributions.
 ## Cmdlets
 
 Full details of the cmdlets contained in this module can be found in
-the `docs` folder.
+the [docs](/docs/) folder.
 
 A list of Cmdlets in the CosmosDB module can be found by running the
 following PowerShell commands:

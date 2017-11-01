@@ -1,10 +1,11 @@
 # Release Notes
 
-## What is New in CosmosDB 1.0.4
+## What is New in CosmosDB 1.0.5
 
 November 1, 2017
 
-- First release containing support for Collections, Users and Permissions.
+- First release containing support for managing
+  Databases, Collections, Users and Permissions.
 
 ## Feedback
 

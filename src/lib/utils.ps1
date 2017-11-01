@@ -275,6 +275,9 @@ function New-CosmosDbAuthorizationToken
 
 .PARAMETER Database
     If specified will override the value in the connection.
+    If an empty database is specified then no dbs will be specified
+    in the Rest API URI which will allow working with database
+    objects.
 
 .PARAMETER Method
     This is the Rest API method that will be made to the CosmosDB.
@@ -316,7 +319,6 @@ function Invoke-CosmosDbRequest
         $Account,
 
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
         [System.String]
         $Database,
 
@@ -336,7 +338,7 @@ function Invoke-CosmosDbRequest
         $Method = 'Get',
 
         [Parameter(Mandatory = $True)]
-        [ValidateNotNullOrEmpty()]
+        [ValidateSet('dbs','colls','users','permissions')]
         [System.String]
         $ResourceType,
 
@@ -384,13 +386,23 @@ function Invoke-CosmosDbRequest
     $dateString = ConvertTo-CosmosDbTokenDateString -Date $date
 
     # Generate the resource link value that will be used in the URI and to generate the resource id
-    if ([String]::IsNullOrEmpty($Database))
+    if ($resourceType -eq 'dbs')
     {
-        $resourceLink = $resourceType
+        # Request for a database object
+        if ([String]::IsNullOrEmpty($ResourcePath))
+        {
+            $ResourceLink = 'dbs'
+        }
+        else
+        {
+            $resourceLink = $ResourcePath
+            $resourceId = $resourceLink
+        }
     }
     else
     {
         $resourceLink = ('dbs/{0}' -f $Database)
+
         if ($PSBoundParameters.ContainsKey('ResourcePath'))
         {
             $resourceLink = ('{0}/{1}' -f $resourceLink, $ResourcePath)
@@ -399,18 +411,19 @@ function Invoke-CosmosDbRequest
         {
             $resourceLink = ('{0}/{1}' -f $resourceLink, $ResourceType)
         }
-    }
 
-    # Generate the resource Id from the resource link value
-    $resourceElements = [System.Collections.ArrayList] ($resourceLink -split '/')
-    if (($resourceElements.Count % 2) -eq 0)
-    {
-        $resourceId = $resourceLink
-    }
-    else
-    {
-        $resourceElements.RemoveAt($resourceElements.Count-1)
-        $resourceId = $resourceElements -Join '/'
+        # Generate the resource Id from the resource link value
+        $resourceElements = [System.Collections.ArrayList] ($resourceLink -split '/')
+
+        if (($resourceElements.Count % 2) -eq 0)
+        {
+            $resourceId = $resourceLink
+        }
+        else
+        {
+            $resourceElements.RemoveAt($resourceElements.Count-1)
+            $resourceId = $resourceElements -Join '/'
+        }
     }
 
     # Generate the URI from the base connection URI and the resource link

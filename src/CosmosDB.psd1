@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.0.4.67'
+    ModuleVersion     = '1.0.5.67'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -66,6 +66,8 @@
     CmdletsToExport   = @(
         'Get-CosmosDbCollection'
         'Get-CosmosDbCollectionResourcePath'
+        'Get-CosmosDBDatabase'
+        'Get-CosmosDBDatabaseResourcePath'
         'Get-CosmosDbPermission'
         'Get-CosmosDbPermissionResourcePath'
         'Get-CosmosDbUser'

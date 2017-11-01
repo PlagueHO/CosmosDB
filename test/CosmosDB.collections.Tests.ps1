@@ -60,7 +60,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbCollection } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an Id' {
+        Context 'Called with connection parameter and no Id' {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'colls' } `
@@ -86,7 +86,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with connection parameter and no Id' {
+        Context 'Called with connection parameter and an Id' {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'colls' -and $ResourcePath -eq ('colls/{0}' -f $script:testCollection) } `
