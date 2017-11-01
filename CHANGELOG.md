@@ -1,5 +1,10 @@
 # Change Log
 
+## Unreleased
+
+- Added `Get-CosmosDbDatabase` and `Get-CosmosDbDatabaseResourcePath`
+  cmdlets.
+
 ## 1.0.4.67
 
 - Fixed bug in `New-CosmosDbConnection` detecting Azure connection.

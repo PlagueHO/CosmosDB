@@ -76,6 +76,9 @@ Accept wildcard characters: False
 
 ### -Database
 If specified will override the value in the connection.
+If an empty database is specified then no dbs will be specified
+in the Rest API URI which will allow working with database
+objects.
 
 ```yaml
 Type: String
