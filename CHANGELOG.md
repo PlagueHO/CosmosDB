@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 1.0.5.73
 
 - Added `Get-CosmosDbDatabase` and `Get-CosmosDbDatabaseResourcePath`
   cmdlets.
@@ -42,6 +42,7 @@
 ## 1.0.0.30
 
 - Initial Release.
+
 
 
 
