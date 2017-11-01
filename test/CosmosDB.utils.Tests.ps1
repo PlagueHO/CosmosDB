@@ -63,7 +63,9 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with Azure parameters' {
+        Context 'Called with Azure parameters and not connected to Azure' {
+            Mock -CommandName Get-AzureRmContext
+            Mock -CommandName Add-AzureRmAccount
             Mock `
                 -CommandName Invoke-AzureRmResourceAction `
                 -MockWith { @{
@@ -91,7 +93,46 @@ InModuleScope CosmosDB {
             }
 
             It 'Should call expected mocks' {
-                Assert-MockCalled -CommandName Invoke-AzureRmResourceAction
+                Assert-MockCalled -CommandName Invoke-AzureRmResourceAction -Exactly -Times 1
+                Assert-MockCalled -CommandName Get-AzureRmContext -Exactly -Times 1
+                Assert-MockCalled -CommandName Add-AzureRmAccount -Exactly -Times 1
+            }
+        }
+
+        Context 'Called with Azure parameters and connected to Azure' {
+            Mock `
+                -CommandName Invoke-AzureRmResourceAction `
+                -MockWith { @{
+                    primaryMasterKey           = 'primaryMasterKey'
+                    secondaryMasterKey         = 'secondaryMasterKey'
+                    primaryReadonlyMasterKey   = 'primaryReadonlyMasterKey'
+                    secondaryReadonlyMasterKey = 'secondaryReadonlyMasterKey'
+                } }
+
+            Mock -CommandName Get-AzureRmContext -MockWith { $true  }
+            Mock -CommandName Add-AzureRmAccount
+
+            It 'Should not throw exception' {
+                $newCosmosDbConnectionParameters = @{
+                    Account       = $script:testAccount
+                    Database      = $script:testDatabase
+                    ResourceGroup = $script:testResourceGroup
+                }
+
+                { $script:result = New-CosmosDbConnection @newCosmosDbConnectionParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be $script:testAccount
+                $script:result.Database | Should -Be $script:testDatabase
+                $script:result.KeyType | Should -Be 'master'
+                $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled -CommandName Invoke-AzureRmResourceAction -Exactly -Times 1
+                Assert-MockCalled -CommandName Get-AzureRmContext -Exactly -Times 1
+                Assert-MockCalled -CommandName Add-AzureRmAccount -Exactly -Times 0
             }
         }
     }
@@ -161,7 +202,8 @@ InModuleScope CosmosDB {
         Context 'Called with all parameters' {
             It 'Should not throw exception' {
                 $newCosmosDbAuthorizationTokenParameters = @{
-                    Connection   = $script:testConnection
+                    Key          = $script:testKeySecureString
+                    KeyType      = 'master'
                     Method       = 'Get'
                     ResourceType = 'users'
                     ResourceId   = 'dbs/testdb'

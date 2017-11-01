@@ -1,5 +1,14 @@
 # Change Log
 
+## Unreleased
+
+- Fixed bug in `New-CosmosDbConnection` connecting to Azure and
+  improved tests.
+- Changed `New-CosmosDbAuthorizationToken` to replaced `Connection`
+  parameter with `Key` and `KeyType` parameter.
+- Fixed bug in `Invoke-CosmosDbRequest` that can cause connection
+  object to be changed.
+
 ## 1.0.2.59
 
 - Added `PartitionKey`, `OfferThroughput` and `OfferType` parameters to

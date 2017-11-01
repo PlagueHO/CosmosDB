@@ -16,19 +16,21 @@ to connect to a CosmosDB.
 ### Connection (Default)
 ```
 New-CosmosDbConnection -Account <String> [-Database <String>] -Key <SecureString> [-KeyType <String>]
- [<CommonParameters>]
 ```
 
 ### Azure
 ```
 New-CosmosDbConnection -Account <String> [-Database <String>] [-KeyType <String>] -ResourceGroup <String>
- [-MasterKeyType <String>] [<CommonParameters>]
+ [-MasterKeyType <String>]
 ```
 
 ## DESCRIPTION
 This cmdlet is used to simplify the calling of the CosmosDB
 cmdlets by providing all the connection information in an
 object that can be passed to the CosmosDB cmdlets.
+
+It can also retrieve the CosmosDB primary or secondary key
+from Azure Resource Manager.
 
 ## EXAMPLES
 
@@ -103,7 +105,9 @@ Accept wildcard characters: False
 
 ### -ResourceGroup
 This is the name of the Azure Resouce Group containing the
-CosmosDB.```yaml
+CosmosDB.
+
+```yaml
 Type: String
 Parameter Sets: Azure
 Aliases: 
@@ -117,20 +121,19 @@ Accept wildcard characters: False
 
 ### -MasterKeyType
 This is the master key type to use retrieve from Azure for
-the CosmosDB.```yaml
+the CosmosDB.
+
+```yaml
 Type: String
 Parameter Sets: Azure
 Aliases: 
 
 Required: False
 Position: Named
-Default value: Primary
+Default value: PrimaryMasterKey
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

@@ -17,14 +17,14 @@ Rest API request to CosmosDB.
 ```
 Invoke-CosmosDbRequest -Connection <PSObject> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
- [-Headers <Hashtable>] [<CommonParameters>]
+ [-Headers <Hashtable>]
 ```
 
 ### Account
 ```
 Invoke-CosmosDbRequest -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
- [-Headers <Hashtable>] [<CommonParameters>]
+ [-Headers <Hashtable>]
 ```
 
 ## DESCRIPTION
@@ -201,7 +201,9 @@ Accept wildcard characters: False
 
 ### -Headers
 This parameter can be used to provide any additional headers
-to the Rest API.```yaml
+to the Rest API.
+
+```yaml
 Type: Hashtable
 Parameter Sets: (All)
 Aliases: 
@@ -212,9 +214,6 @@ Default value: @{}
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

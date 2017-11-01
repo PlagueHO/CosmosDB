@@ -15,13 +15,13 @@ Create a new permission for a user in a CosmosDB database.
 ### Connection (Default)
 ```
 New-CosmosDbPermission -Connection <PSObject> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -UserId <String> -Id <String> -Resource <String> [-PermissionMode <String>] [<CommonParameters>]
+ -UserId <String> -Id <String> -Resource <String> [-PermissionMode <String>]
 ```
 
 ### Account
 ```
 New-CosmosDbPermission -Account <String> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -UserId <String> -Id <String> -Resource <String> [-PermissionMode <String>] [<CommonParameters>]
+ -UserId <String> -Id <String> -Resource <String> [-PermissionMode <String>]
 ```
 
 ## DESCRIPTION
@@ -176,9 +176,6 @@ Default value: All
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

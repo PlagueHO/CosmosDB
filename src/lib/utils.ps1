@@ -68,13 +68,13 @@ function New-CosmosDbConnection
         $MasterKeyType = 'PrimaryMasterKey'
     )
 
-    if (-not (Get-AzureRmContext -ErrorAction SilentlyContinue))
-    {
-        Add-AzureRMAccount
-    }
-
     if ($PSCmdlet.ParameterSetName -eq 'Azure')
     {
+        if (-not (Get-AzureRmContext -ErrorAction SilentlyContinue))
+        {
+            Add-AzureRmAccount
+        }
+
         $resource = Invoke-AzureRmResourceAction `
             -ResourceGroupName $ResourceGroup `
             -Name $Account `
@@ -162,10 +162,11 @@ function ConvertTo-CosmosDbTokenDateString
     The Authorization token that is generated must match the
     other parameters in the header of the request that is passed.
 
-.PARAMETER Connection
-    This is an object containing the connection information of
-    the CosmosDB database that will be accessed. It should be created
-    by `New-CosmosDbConnection`.
+.PARAMETER Key
+    The key to be used to access this CosmosDB.
+
+.PARAMETER KeyType
+    The type of key that will be used to access ths CosmosDB.
 
 .PARAMETER Method
     This is the Rest API method that will be made in the request
@@ -194,8 +195,13 @@ function New-CosmosDbAuthorizationToken
     (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
-        $Connection,
+        [System.Security.SecureString]
+        $Key,
+
+        [Parameter()]
+        [ValidateSet('master','resource')]
+        [System.String]
+        $KeyType = 'master',
 
         [Parameter()]
         [ValidateSet('', 'Delete', 'Get', 'Head', 'Merge', 'Options', 'Patch', 'Post', 'Put', 'Trace')]
@@ -220,7 +226,7 @@ function New-CosmosDbAuthorizationToken
         $TokenVersion = '1.0'
     )
 
-    $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Connection.Key)
+    $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Key)
     $decryptedKey = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
     $base64Key = [System.Convert]::FromBase64String($decryptedKey)
     $hmacSha256 = New-Object -TypeName System.Security.Cryptography.HMACSHA256 -ArgumentList (, $base64Key)
@@ -238,7 +244,7 @@ function New-CosmosDbAuthorizationToken
     $signature = [Convert]::ToBase64String($hashPayLoad)
 
     Add-Type -AssemblyName 'System.Web'
-    $token = [System.Web.HttpUtility]::UrlEncode(('type={0}&ver={1}&sig={2}' -f $Connection.KeyType, $TokenVersion, $signature))
+    $token = [System.Web.HttpUtility]::UrlEncode(('type={0}&ver={1}&sig={2}' -f $KeyType, $TokenVersion, $signature))
     return $token
 }
 
@@ -354,32 +360,33 @@ function Invoke-CosmosDbRequest
         $Connection = New-CosmosDbConnection -Account $Account -Database $Database -Key $Key -KeyType $KeyType
     }
 
-    if ($PSBoundParameters.ContainsKey('Database'))
+    if (-not ($PSBoundParameters.ContainsKey('Database')))
     {
-        $Connection.Database = $Database
+        $Database = $Connection.Database
     }
 
-    if ($PSBoundParameters.ContainsKey('Key'))
+    if (-not ($PSBoundParameters.ContainsKey('Key')))
     {
-        $Connection.Key = $Key
+        $Key = $Connection.Key
     }
 
-    if ($PSBoundParameters.ContainsKey('KeyType'))
+    if (-not ($PSBoundParameters.ContainsKey('KeyType')))
     {
-        $Connection.KeyType = $KeyType
+        $KeyType = $Connection.KeyType
     }
 
+    $baseUri = $Connection.BaseUri.ToString()
     $date = Get-Date
     $dateString = ConvertTo-CosmosDbTokenDateString -Date $date
 
     # Generate the resource link value that will be used in the URI and to generate the resource id
-    if ([String]::IsNullOrEmpty($Connection.Database))
+    if ([String]::IsNullOrEmpty($Database))
     {
         $resourceLink = $resourceType
     }
     else
     {
-        $resourceLink = ('dbs/{0}' -f $Connection.Database)
+        $resourceLink = ('dbs/{0}' -f $Database)
         if ($PSBoundParameters.ContainsKey('ResourcePath'))
         {
             $resourceLink = ('{0}/{1}' -f $resourceLink, $ResourcePath)
@@ -403,10 +410,11 @@ function Invoke-CosmosDbRequest
     }
 
     # Generate the URI from the base connection URI and the resource link
-    $uri = [uri]::New(('{0}{1}' -f $Connection.BaseUri.ToString(), $resourceLink))
+    $uri = [uri]::New(('{0}{1}' -f $baseUri, $resourceLink))
 
     $token = New-CosmosDbAuthorizationToken `
-        -Connection $Connection `
+        -Key $Key `
+        -KeyType $KeyType `
         -Method $Method `
         -ResourceType $ResourceType `
         -ResourceId $resourceId `

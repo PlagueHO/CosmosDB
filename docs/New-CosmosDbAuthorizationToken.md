@@ -14,8 +14,8 @@ Rest API request to CosmosDB.
 ## SYNTAX
 
 ```
-New-CosmosDbAuthorizationToken [-Connection] <PSObject> [[-Method] <String>] [[-ResourceType] <String>]
- [[-ResourceId] <String>] [-Date] <DateTime> [[-TokenVersion] <String>] [<CommonParameters>]
+New-CosmosDbAuthorizationToken [-Key] <SecureString> [[-KeyType] <String>] [[-Method] <String>]
+ [[-ResourceType] <String>] [[-ResourceId] <String>] [-Date] <DateTime> [[-TokenVersion] <String>]
 ```
 
 ## DESCRIPTION
@@ -35,20 +35,32 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Connection
-This is an object containing the connection information of
-the CosmosDB database that will be accessed.
-It should be created
-by \`New-CosmosDbConnection\`.
+### -Key
+The key to be used to access this CosmosDB.
 
 ```yaml
-Type: PSObject
+Type: SecureString
 Parameter Sets: (All)
 Aliases: 
 
 Required: True
 Position: 1
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -KeyType
+The type of key that will be used to access ths CosmosDB.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: 2
+Default value: Master
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -63,7 +75,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 2
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -79,7 +91,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 3
+Position: 4
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -97,7 +109,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 4
+Position: 5
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -115,7 +127,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: True
-Position: 5
+Position: 6
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -130,14 +142,11 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 6
+Position: 7
 Default value: 1.0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
