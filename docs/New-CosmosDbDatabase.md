@@ -5,27 +5,25 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-CosmosDbDatabase
+# New-CosmosDbDatabase
 
 ## SYNOPSIS
-Return the databases in a CosmosDB account.
+Create a new database in a CosmosDB account.
 
 ## SYNTAX
 
 ### Connection (Default)
 ```
-Get-CosmosDbDatabase -Connection <PSObject> [-Key <SecureString>] [-KeyType <String>] [-Id <String>]
+New-CosmosDbDatabase -Connection <PSObject> [-Key <SecureString>] [-KeyType <String>] -Id <String>
 ```
 
 ### Account
 ```
-Get-CosmosDbDatabase -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Id <String>]
+New-CosmosDbDatabase -Account <String> [-Key <SecureString>] [-KeyType <String>] -Id <String>
 ```
 
 ## DESCRIPTION
-This cmdlet will return the databases in a CosmosDB account.
-If the Id is specified then only the database matching this
-Id will be returned, otherwise all databases will be returned.
+This cmdlet will create a database in CosmosDB.
 
 ## EXAMPLES
 
@@ -40,11 +38,9 @@ PS C:\> {{ Add example code here }}
 
 ### -Connection
 This is an object containing the connection information of
-the CosmosDB database that will be accessed.
+the CosmosDB database that will be deleted.
 It should be created
 by \`New-CosmosDbConnection\`.
-
-If the connection contains a database it will be ignored.
 
 ```yaml
 Type: PSObject
@@ -104,14 +100,14 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-This is the Id of the database to get.
+This is the Id of the database to create.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases: 
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -122,7 +118,7 @@ Accept wildcard characters: False
 
 ## OUTPUTS
 
-### System.String
+### System.Object
 
 ## NOTES
 
