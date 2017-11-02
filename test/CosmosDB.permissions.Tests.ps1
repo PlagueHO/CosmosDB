@@ -43,10 +43,12 @@ InModuleScope CosmosDB {
 
     Describe 'Get-CosmosDbPermissionResourcePath' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Get-CosmosDbPermissionResourcePath } | Should -Not -Throw
+            { Get-Command -Name Get-CosmosDbPermissionResourcePath -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with all parameters' {
+            $script:result = $null
+
             It 'Should not throw exception' {
                 $getCosmosDbPermissionResourcePathParameters = @{
                     Database = $script:testDatabase
@@ -65,10 +67,12 @@ InModuleScope CosmosDB {
 
     Describe 'Get-CosmosDbPermission' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Get-CosmosDbPermission } | Should -Not -Throw
+            { Get-Command -Name Get-CosmosDbPermission -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with connection parameter and no id' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' } `
@@ -96,6 +100,8 @@ InModuleScope CosmosDB {
         }
 
         Context 'Called with connection parameter and an id' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission) } `
@@ -126,10 +132,12 @@ InModuleScope CosmosDB {
 
     Describe 'New-CosmosDbPermission' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name New-CosmosDbPermission } | Should -Not -Throw
+            { Get-Command -Name New-CosmosDbPermission -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with connection parameter and an id' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'permissions' } `
@@ -161,10 +169,12 @@ InModuleScope CosmosDB {
 
     Describe 'Remove-CosmosDbPermission' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Remove-CosmosDbPermission } | Should -Not -Throw
+            { Get-Command -Name Remove-CosmosDbPermission -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with connection parameter and an id' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission) } `

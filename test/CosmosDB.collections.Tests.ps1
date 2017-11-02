@@ -36,10 +36,12 @@ InModuleScope CosmosDB {
 
     Describe 'Get-CosmosDbCollectionResourcePath' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Get-CosmosDbCollectionResourcePath } | Should -Not -Throw
+            { Get-Command -Name Get-CosmosDbCollectionResourcePath  -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with all parameters' {
+            $script:result = $null
+
             It 'Should not throw exception' {
                 $getCosmosDbCollectionResourcePathParameters = @{
                     Database = $script:testDatabase
@@ -57,10 +59,12 @@ InModuleScope CosmosDB {
 
     Describe 'Get-CosmosDbCollection' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Get-CosmosDbCollection } | Should -Not -Throw
+            { Get-Command -Name Get-CosmosDbCollection -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with connection parameter and no Id' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'colls' } `
@@ -87,6 +91,8 @@ InModuleScope CosmosDB {
         }
 
         Context 'Called with connection parameter and an Id' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'colls' -and $ResourcePath -eq ('colls/{0}' -f $script:testCollection) } `
@@ -116,10 +122,12 @@ InModuleScope CosmosDB {
 
     Describe 'New-CosmosDbCollection' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name New-CosmosDbCollection } | Should -Not -Throw
+            { Get-Command -Name New-CosmosDbCollection -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with connection parameter and an Id' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'colls' -and $Body -eq "{ `"id`": `"$($script:testCollection)`" }" } `
@@ -147,6 +155,8 @@ InModuleScope CosmosDB {
         }
 
         Context 'Called with connection parameter and an Id and OfferThroughput parameter' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'colls' -and $Body -eq "{ `"id`": `"$($script:testCollection)`" }" -and $Headers['x-ms-offer-throughput'] -eq 400 } `
@@ -175,6 +185,8 @@ InModuleScope CosmosDB {
         }
 
         Context 'Called with connection parameter and an Id and OfferType parameter' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'colls' -and $Body -eq "{ `"id`": `"$($script:testCollection)`" }" -and $Headers['x-ms-offer-type'] -eq 'S2' } `
@@ -203,6 +215,8 @@ InModuleScope CosmosDB {
         }
 
         Context 'Called with connection parameter and an Id and PartitionKey parameter' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'colls' -and $Body -eq "{ `"id`": `"$($script:testCollection)`", `"partitionKey`": { `"paths`": [ `"/partitionkey`" ], `"kind`": `"Hash`" } }" } `
@@ -231,6 +245,8 @@ InModuleScope CosmosDB {
         }
 
         Context 'Called with connection parameter and an Id and OfferType and OfferThrougput' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -MockWith { ConvertFrom-Json -InputObject $script:testJson }
@@ -257,10 +273,12 @@ InModuleScope CosmosDB {
 
     Describe 'Remove-CosmosDbCollection' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Remove-CosmosDbCollection } | Should -Not -Throw
+            { Get-Command -Name Remove-CosmosDbCollection -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with connection parameter and an Id' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'colls' -and $ResourcePath -eq ('colls/{0}' -f $script:testCollection) } `

@@ -100,3 +100,131 @@ function Get-CosmosDbDatabase
             -ResourceType 'dbs'
     }
 }
+
+<#
+.SYNOPSIS
+    Create a new database in a CosmosDB account.
+
+.DESCRIPTION
+    This cmdlet will create a database in CosmosDB.
+
+.PARAMETER Connection
+    This is an object containing the connection information of
+    the CosmosDB database that will be deleted. It should be created
+    by `New-CosmosDbConnection`.
+
+.PARAMETER Account
+    The account name of the CosmosDB to access.
+
+.PARAMETER Key
+    The key to be used to access this CosmosDB.
+
+.PARAMETER KeyType
+    The type of key that will be used to access ths CosmosDB.
+
+.PARAMETER Id
+    This is the Id of the database to create.
+#>
+function New-CosmosDbDatabase
+{
+    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [OutputType([Object])]
+    param
+    (
+        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [ValidateNotNullOrEmpty()]
+        [PSCustomObject]
+        $Connection,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Account,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.Security.SecureString]
+        $Key,
+
+        [Parameter()]
+        [ValidateSet('master', 'resource')]
+        [System.String]
+        $KeyType = 'master',
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Id
+    )
+
+    $null = $PSBoundParameters.Remove('Id')
+
+    return Invoke-CosmosDbRequest @PSBoundParameters `
+        -Method 'Post' `
+        -ResourceType 'dbs' `
+        -Body "{ `"id`": `"$id`" }"
+}
+
+<#
+.SYNOPSIS
+    Delete a datanase from a CosmosDB account.
+
+.DESCRIPTION
+    This cmdlet will delete a database in CosmosDB.
+
+.PARAMETER Connection
+    This is an object containing the connection information of
+    the CosmosDB database that will be deleted. It should be created
+    by `New-CosmosDbConnection`.
+
+.PARAMETER Account
+    The account name of the CosmosDB to access.
+
+.PARAMETER Key
+    The key to be used to access this CosmosDB.
+
+.PARAMETER KeyType
+    The type of key that will be used to access ths CosmosDB.
+
+.PARAMETER Id
+    This is the Id of the database to delete.
+#>
+function Remove-CosmosDbDatabase
+{
+    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [OutputType([Object])]
+    param
+    (
+        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [ValidateNotNullOrEmpty()]
+        [PSCustomObject]
+        $Connection,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Account,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.Security.SecureString]
+        $Key,
+
+        [Parameter()]
+        [ValidateSet('master', 'resource')]
+        [System.String]
+        $KeyType = 'master',
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Id
+    )
+
+    $null = $PSBoundParameters.Remove('Id')
+
+    return Invoke-CosmosDbRequest @PSBoundParameters `
+        -Method 'Delete' `
+        -ResourceType 'dbs' `
+        -ResourcePath ('dbs/{0}' -f $Id)
+}
