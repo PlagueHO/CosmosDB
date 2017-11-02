@@ -39,10 +39,12 @@ InModuleScope CosmosDB {
 
     Describe 'New-CosmosDbConnection' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name New-CosmosDbConnection } | Should -Not -Throw
+            { Get-Command -Name New-CosmosDbConnection -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with Connection parameters' {
+            $script:result = $null
+
             It 'Should not throw exception' {
                 $newCosmosDbConnectionParameters = @{
                     Account  = $script:testAccount
@@ -64,6 +66,8 @@ InModuleScope CosmosDB {
         }
 
         Context 'Called with Azure parameters and not connected to Azure' {
+            $script:result = $null
+
             Mock -CommandName Get-AzureRmContext -MockWith { throw }
             Mock -CommandName Add-AzureRmAccount
             Mock `
@@ -100,6 +104,8 @@ InModuleScope CosmosDB {
         }
 
         Context 'Called with Azure parameters and connected to Azure' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-AzureRmResourceAction `
                 -MockWith { @{
@@ -139,10 +145,12 @@ InModuleScope CosmosDB {
 
     Describe 'Get-CosmosDbUri' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Get-CosmosDbUri } | Should -Not -Throw
+            { Get-Command -Name Get-CosmosDbUri -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with Account parameter only' {
+            $script:result = $null
+
             It 'Should not throw exception' {
                 $GetCosmosDbUriParameters = @{
                     Account = $script:testAccount
@@ -158,6 +166,8 @@ InModuleScope CosmosDB {
         }
 
         Context 'Called with Account and BaseUri parameters' {
+            $script:result = $null
+
             It 'Should not throw exception' {
                 $GetCosmosDbUriParameters = @{
                     Account = $script:testAccount
@@ -176,10 +186,12 @@ InModuleScope CosmosDB {
 
     Describe 'ConvertTo-CosmosDbTokenDateString' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name ConvertTo-CosmosDbTokenDateString } | Should -Not -Throw
+            { Get-Command -Name ConvertTo-CosmosDbTokenDateString -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with all parameters' {
+            $script:result = $null
+
             It 'Should not throw exception' {
                 $convertToCosmosDBTokenDateStringParameters = @{
                     Date = $script:testDate
@@ -200,6 +212,8 @@ InModuleScope CosmosDB {
         }
 
         Context 'Called with all parameters' {
+            $script:result = $null
+
             It 'Should not throw exception' {
                 $newCosmosDbAuthorizationTokenParameters = @{
                     Key          = $script:testKeySecureString
@@ -221,7 +235,7 @@ InModuleScope CosmosDB {
 
     Describe 'Invoke-CosmosDbRequest' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Invoke-CosmosDbRequest } | Should -Not -Throw
+            { Get-Command -Name Invoke-CosmosDbRequest -ErrorAction Stop } | Should -Not -Throw
         }
 
         BeforeEach {
@@ -230,6 +244,8 @@ InModuleScope CosmosDB {
         }
 
         Context 'Called with connection parameter and Get method' {
+            $script:result = $null
+
             It 'Should not throw exception' {
                 $invokeCosmosDbRequestparameters = @{
                     Connection   = $script:testConnection
@@ -251,6 +267,8 @@ InModuleScope CosmosDB {
         }
 
         Context 'Called with connection parameter and Post method' {
+            $script:result = $null
+
             It 'Should not throw exception' {
                 $invokeCosmosDbRequestparameters = @{
                     Connection   = $script:testConnection

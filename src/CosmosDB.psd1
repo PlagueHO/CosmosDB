@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.0.5.73'
+    ModuleVersion     = '1.0.6.73'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -73,10 +73,12 @@
         'Get-CosmosDbUser'
         'Get-CosmosDbUserResourcePath'
         'New-CosmosDbCollection'
+        'New-CosmosDbDatabase'
         'New-CosmosDbConnection'
         'New-CosmosDbPermission'
         'New-CosmosDbUser'
         'Remove-CosmosDbCollection'
+        'Remove-CosmosDbDatabase'
         'Remove-CosmosDbPermission'
         'Remove-CosmosDbUser'
         'Set-CosmosDbUser'

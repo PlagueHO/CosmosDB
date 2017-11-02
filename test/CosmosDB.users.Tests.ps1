@@ -36,10 +36,12 @@ InModuleScope CosmosDB {
 
     Describe 'Get-CosmosDbUserResourcePath' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Get-CosmosDbUserResourcePath } | Should -Not -Throw
+            { Get-Command -Name Get-CosmosDbUserResourcePath -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with all parameters' {
+            $script:result = $null
+
             It 'Should not throw exception' {
                 $getCosmosDbUserResourcePathParameters = @{
                     Database = $script:testDatabase
@@ -57,10 +59,12 @@ InModuleScope CosmosDB {
 
     Describe 'Get-CosmosDbUser' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Get-CosmosDbUser } | Should -Not -Throw
+            { Get-Command -Name Get-CosmosDbUser -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with connection parameter and an id' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'users' } `
@@ -87,6 +91,8 @@ InModuleScope CosmosDB {
         }
 
         Context 'Called with connection parameter and no id' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser) } `
@@ -116,10 +122,12 @@ InModuleScope CosmosDB {
 
     Describe 'New-CosmosDbUser' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name New-CosmosDbUser } | Should -Not -Throw
+            { Get-Command -Name New-CosmosDbUser -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with connection parameter and an id' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'users' -and $Body -eq "{ `"id`": `"$($script:testUser)`" }" } `
@@ -149,10 +157,12 @@ InModuleScope CosmosDB {
 
     Describe 'Remove-CosmosDbUser' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Remove-CosmosDbUser } | Should -Not -Throw
+            { Get-Command -Name Remove-CosmosDbUser -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with connection parameter and an id' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser) } `
@@ -182,10 +192,12 @@ InModuleScope CosmosDB {
 
     Describe 'Set-CosmosDbUser' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Set-CosmosDbUser } | Should -Not -Throw
+            { Get-Command -Name Set-CosmosDbUser -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with connection parameter and Id and NewId' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser) -and $Body -eq "{ `"id`": `"NewId`" }"} `

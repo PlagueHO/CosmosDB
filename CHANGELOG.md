@@ -1,5 +1,10 @@
 # Change Log
 
+## Unreleased
+
+- Added `New-CosmosDbDatabase` and `Remove-CosmosDbDatabase` cmdlets.
+- Improved unit tests.
+
 ## 1.0.5.73
 
 - Added `Get-CosmosDbDatabase` and `Get-CosmosDbDatabaseResourcePath`

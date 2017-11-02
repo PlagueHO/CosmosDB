@@ -39,10 +39,12 @@ InModuleScope CosmosDB {
 
     Describe 'Get-CosmosDbDatabaseResourcePath' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Get-CosmosDbDatabaseResourcePath } | Should -Not -Throw
+            { Get-Command -Name Get-CosmosDbDatabaseResourcePath -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with all parameters' {
+            $script:result = $null
+
             It 'Should not throw exception' {
                 $getCosmosDbDatabaseResourcePathParameters = @{
                     Id = $script:testDatabase
@@ -59,10 +61,12 @@ InModuleScope CosmosDB {
 
     Describe 'Get-CosmosDbDatabase' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Get-CosmosDbDatabase } | Should -Not -Throw
+            { Get-Command -Name Get-CosmosDbDatabase -ErrorAction Stop } | Should -Not -Throw
         }
 
         Context 'Called with connection parameter and no Id' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'dbs' } `
@@ -89,6 +93,8 @@ InModuleScope CosmosDB {
         }
 
         Context 'Called with connection parameter and an Id' {
+            $script:result = $null
+
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'dbs' -and $ResourcePath -eq ('dbs/{0}' -f $script:testDatabase) } `
@@ -111,6 +117,75 @@ InModuleScope CosmosDB {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
                     -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'dbs' -and $ResourcePath -eq ('dbs/{0}' -f $script:testDatabase) } `
+                    -Exactly -Times 1
+            }
+        }
+    }
+    Describe 'New-CosmosDbDatabase' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name New-CosmosDbDatabase -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'Called with connection parameter and an Id' {
+            $script:result = $null
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'dbs' -and $Body -eq "{ `"id`": `"$($script:testDatabase)`" }" } `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+
+            It 'Should not throw exception' {
+                $newCosmosDbDatabaseParameters = @{
+                    Connection = $script:testConnection
+                    Id         = $script:testDatabase
+                }
+
+                { $script:result = New-CosmosDbDatabase @newCosmosDbDatabaseParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result._count | Should -Be 1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'dbs' -and $Body -eq "{ `"id`": `"$($script:testDatabase)`" }" } `
+                    -Exactly -Times 1
+            }
+        }
+    }
+
+    Describe 'Remove-CosmosDbDatabase' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Remove-CosmosDbDatabase -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'Called with connection parameter and an Id' {
+            $script:result = $null
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'dbs' -and $ResourcePath -eq ('dbs/{0}' -f $script:testDatabase) } `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+
+            It 'Should not throw exception' {
+                $removeCosmosDbDatabaseParameters = @{
+                    Connection = $script:testConnection
+                    Id         = $script:testDatabase
+                }
+
+                { $script:result = Remove-CosmosDbDatabase @removeCosmosDbDatabaseParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result._count | Should -Be 1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'dbs' -and $ResourcePath -eq ('dbs/{0}' -f $script:testDatabase) } `
                     -Exactly -Times 1
             }
         }
