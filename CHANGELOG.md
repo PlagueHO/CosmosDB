@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 1.0.6.79
 
 - Added `New-CosmosDbDatabase` and `Remove-CosmosDbDatabase` cmdlets.
 - Improved unit tests.
@@ -47,6 +47,7 @@
 ## 1.0.0.30
 
 - Initial Release.
+
 
 
 
