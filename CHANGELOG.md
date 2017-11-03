@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 1.0.7.85
 
 - Added `*-CosmosDBTriggers` cmdlets.
 
@@ -51,6 +51,7 @@
 ## 1.0.0.30
 
 - Initial Release.
+
 
 
 
