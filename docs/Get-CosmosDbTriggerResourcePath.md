@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-CosmosDbPermissionResourcePath
+# Get-CosmosDbTriggerResourcePath
 
 ## SYNOPSIS
 Return the resource path for a permission object.
@@ -13,7 +13,7 @@ Return the resource path for a permission object.
 ## SYNTAX
 
 ```
-Get-CosmosDbPermissionResourcePath [-Database] <String> [-UserId] <String> [-Id] <String>
+Get-CosmosDbTriggerResourcePath [-Database] <String> [-CollectionId] <String> [-Id] <String>
 ```
 
 ## DESCRIPTION
@@ -32,7 +32,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Database
-This is the database containing the permission.
+This is the database containing the trigger.
 
 ```yaml
 Type: String
@@ -46,8 +46,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -UserId
-This is the Id of the user containing the permission.
+### -CollectionId
+This is the Id of the collection containing the trigger.
 
 ```yaml
 Type: String
@@ -62,7 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-This is the Id of the permission.
+This is the Id of the trigger.
 
 ```yaml
 Type: String

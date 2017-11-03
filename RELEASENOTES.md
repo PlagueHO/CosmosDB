@@ -1,5 +1,11 @@
 # Release Notes
 
+## What is New in CosmosDB 1.0.7
+
+November 3, 2017
+
+- Added support for managing Triggers.
+
 ## What is New in CosmosDB 1.0.6
 
 November 1, 2017
