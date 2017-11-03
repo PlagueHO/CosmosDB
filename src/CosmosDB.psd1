@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.0.6.79'
+    ModuleVersion     = '1.0.7.79'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -70,17 +70,22 @@
         'Get-CosmosDBDatabaseResourcePath'
         'Get-CosmosDbPermission'
         'Get-CosmosDbPermissionResourcePath'
+        'Get-CosmosDbTrigger'
+        'Get-CosmosDbTriggerResourcePath'
         'Get-CosmosDbUser'
         'Get-CosmosDbUserResourcePath'
         'New-CosmosDbCollection'
         'New-CosmosDbDatabase'
         'New-CosmosDbConnection'
         'New-CosmosDbPermission'
+        'New-CosmosDbTrigger'
         'New-CosmosDbUser'
         'Remove-CosmosDbCollection'
         'Remove-CosmosDbDatabase'
         'Remove-CosmosDbPermission'
+        'Remove-CosmosDbTrigger'
         'Remove-CosmosDbUser'
+        'Set-CosmosDbTrigger'
         'Set-CosmosDbUser'
     )
 
@@ -115,7 +120,20 @@
             # IconUri = ''
 
             # ReleaseNotes of this module
-            ReleaseNotes = 'https://github.com/PlagueHO/CosmosDB/blob/master/RELEASENOTES.md'
+            ReleaseNotes = '
+            ## What is New in CosmosDB 1.0.7
+
+            November 3, 2017
+
+            - Added support for managing Triggers.
+
+            ## What is New in CosmosDB 1.0.6
+
+            November 1, 2017
+
+            - First release containing support for managing
+              Databases, Collections, Users and Permissions.
+            '
         } # End of PSData hashtable
     } # End of PrivateData hashtable
 

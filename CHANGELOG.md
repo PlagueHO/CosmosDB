@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Added `*-CosmosDBTriggers` cmdlets.
+
 ## 1.0.6.79
 
 - Added `New-CosmosDbDatabase` and `Remove-CosmosDbDatabase` cmdlets.

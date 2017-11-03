@@ -8,7 +8,7 @@
 ## Introduction
 
 This PowerShell module provides cmdlets for working with Azure Cosmos DB
-databases, collections, users and permissions.
+databases, collections, users, permissions and triggers.
 
 The module uses the CosmosDB (DocumentDB) Rest APIs.
 
@@ -150,6 +150,95 @@ Remove a permission for a user from the database:
 
 ```powershell
 Remove-CosmosDbPermission -Connection $cosmosDbConnection -UserId 'MyApplication' -Id 'r_mynewcollection'
+```
+
+### Working with Triggers
+
+Get a list of triggers for a collection in the database:
+
+```powershell
+Get-CosmosDbTrigger -Connection $cosmosDbConnection -CollectionId 'MyNewCollection'
+```
+
+Create a trigger for a collection in the database that executes after all operations:
+
+```powershell
+$Body = @'
+function updateMetadata() {
+    var context = getContext();
+    var collection = context.getCollection();
+    var response = context.getResponse();
+    var createdDocument = response.getBody();
+
+    // query for metadata document
+    var filterQuery = 'SELECT * FROM root r WHERE r.id = "_metadata"';
+    var accept = collection.queryDocuments(collection.getSelfLink(), filterQuery, updateMetadataCallback);
+    if(!accept) throw "Unable to update metadata, abort";
+
+    function updateMetadataCallback(err, documents, responseOptions) {
+        if(err) throw new Error("Error" + err.message);
+
+        if(documents.length != 1) throw 'Unable to find metadata document';
+        var metadataDocument = documents[0];
+
+        // update metadata
+        metadataDocument.createdDocuments += 1;
+        metadataDocument.createdNames += " " + createdDocument.id;
+
+        var accept = collection.replaceDocument(metadataDocument._self, metadataDocument, function(err, docReplaced) {
+            if(err) throw "Unable to update metadata, abort";
+        });
+
+        if(!accept) throw "Unable to update metadata, abort";
+        return;
+    }
+}
+'@
+New-CosmosDbTrigger -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'MyTrigger' -Body $Body -TriggerOperation All -TriggerType Post
+```
+
+Update an existing trigger for a collection in the database to execute before
+all operations:
+
+```powershell
+$Body = @'
+function updateMetadata() {
+    var context = getContext();
+    var collection = context.getCollection();
+    var response = context.getResponse();
+    var createdDocument = response.getBody();
+
+    // query for metadata document
+    var filterQuery = 'SELECT * FROM root r WHERE r.id = "_metadata"';
+    var accept = collection.queryDocuments(collection.getSelfLink(), filterQuery, updateMetadataCallback);
+    if(!accept) throw "Unable to update metadata, abort";
+
+    function updateMetadataCallback(err, documents, responseOptions) {
+        if(err) throw new Error("Error" + err.message);
+
+        if(documents.length != 1) throw 'Unable to find metadata document';
+        var metadataDocument = documents[0];
+
+        // update metadata
+        metadataDocument.createdDocuments += 1;
+        metadataDocument.createdNames += " " + createdDocument.id;
+
+        var accept = collection.replaceDocument(metadataDocument._self, metadataDocument, function(err, docReplaced) {
+            if(err) throw "Unable to update metadata, abort";
+        });
+
+        if(!accept) throw "Unable to update metadata, abort";
+        return;
+    }
+}
+'@
+New-CosmosDbTrigger -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'MyTrigger' -Body $Body -TriggerOperation All -TriggerType Pre
+```
+
+Remove a trigger for a collection from the database:
+
+```powershell
+Remove-CosmosDbTrigger -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'MyTrigger'
 ```
 
 ## Contributing
