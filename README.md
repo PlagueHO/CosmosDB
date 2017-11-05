@@ -9,13 +9,15 @@
 
 This PowerShell module provides cmdlets for working with Azure Cosmos DB.
 
-It supports management of:
+The CosmosDB PowerShell module enables management of:
+
 - Databases
 - Collections
 - Users
 - Permissions
 - Stored procedures
 - Triggers
+- User Defined Functions
 
 The module uses the CosmosDB (DocumentDB) Rest APIs.
 
@@ -267,21 +269,21 @@ function () {
     response.setBody("Hello, World");
 }
 '@
-New-CosmosDbStoredProcedure -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -Body $Body
+New-CosmosDbStoredProcedure -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureBody $Body
 ```
 
 Update an existing stored procedure for a collection in the database:
 
 ```powershell
-    $Body = @'
-    function (personToGreet) {
-        var context = getContext();
-        var response = context.getResponse();
+$Body = @'
+function (personToGreet) {
+    var context = getContext();
+    var response = context.getResponse();
 
-        response.setBody("Hello, " + personToGreet);
-    }
-    '@
-New-CosmosDbStoredProcedure -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -Body $Body
+    response.setBody("Hello, " + personToGreet);
+}
+'@
+New-CosmosDbStoredProcedure -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureBody $Body
 ```
 
 Execute a stored procedure for a collection from the database:
@@ -294,6 +296,54 @@ Remove a stored procedure for a collection from the database:
 
 ```powershell
 Remove-CosmosDbStoredProcedure -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'spHelloWorld'
+```
+
+### Working with User Defined Functions
+
+Get a list of user defined functions for a collection in the database:
+
+```powershell
+Get-CosmosDbUserDefinedFunction -Connection $cosmosDbConnection -CollectionId 'MyNewCollection'
+```
+
+Create a user defined function for a collection in the database:
+
+```powershell
+$Body = @'
+function tax(income) {
+    if(income == undefined) throw 'no input';
+    if (income < 1000)
+        return income * 0.1;
+    else if (income < 10000)
+        return income * 0.2;
+    else
+        return income * 0.4;
+}
+'@
+New-CosmosDbUserDefinedFunction -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'udfTax' -Body $Body
+```
+
+Update an existing user defined function for a collection in the database:
+
+```powershell
+$Body = @'
+function tax(income) {
+    if(income == undefined) throw 'no input';
+    if (income < 1000)
+        return income * 0.2;
+    else if (income < 10000)
+        return income * 0.3;
+    else
+        return income * 0.4;
+}
+'@
+New-CosmosDbUserDefinedFunction -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'udfTax' -Body $Body
+```
+
+Remove a user defined function for a collection from the database:
+
+```powershell
+Remove-CosmosDbUserDefinedFunction -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'udfTax'
 ```
 
 ## Contributing
