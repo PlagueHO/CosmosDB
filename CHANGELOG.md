@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Added `*-CosmosDBUserDefinedFunction` cmdlets.
+
 ## 1.0.8.91
 
 - Added `*-CosmosDBStoredProcedure` cmdlets.

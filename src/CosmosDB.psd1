@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.0.8.91'
+    ModuleVersion     = '1.0.9.91'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -76,6 +76,8 @@
         'Get-CosmosDbTriggerResourcePath'
         'Get-CosmosDbUser'
         'Get-CosmosDbUserResourcePath'
+        'Get-CosmosDbUserDefinedFunction'
+        'Get-CosmosDbUserDefinedFunctionResourcePath'
         'Invoke-CosmosDbStoredProcedure'
         'New-CosmosDbCollection'
         'New-CosmosDbDatabase'
@@ -84,15 +86,18 @@
         'New-CosmosDbStoredProcedure'
         'New-CosmosDbTrigger'
         'New-CosmosDbUser'
+        'New-CosmosDbUserDefinedFunction'
         'Remove-CosmosDbCollection'
         'Remove-CosmosDbDatabase'
         'Remove-CosmosDbPermission'
         'Remove-CosmosDbStoredProcedure'
         'Remove-CosmosDbTrigger'
         'Remove-CosmosDbUser'
+        'Remove-CosmosDbUserDefinedFunction'
         'Set-CosmosDbStoredProcedure'
         'Set-CosmosDbTrigger'
         'Set-CosmosDbUser'
+        'Set-CosmosDbUserDefinedFunction'
     )
 
     # Variables to export from this module
@@ -127,6 +132,12 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+            ## What is New in CosmosDB 1.0.9
+
+            November 5, 2017
+
+            - Added support for managing User Defined Functions.
+
             ## What is New in CosmosDB 1.0.8
 
             November 5, 2017
