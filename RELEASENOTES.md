@@ -1,5 +1,11 @@
 # Release Notes
 
+## What is New in CosmosDB 1.0.9
+
+November 5, 2017
+
+- Added support for managing User Defined Functions.
+
 ## What is New in CosmosDB 1.0.8
 
 November 5, 2017
