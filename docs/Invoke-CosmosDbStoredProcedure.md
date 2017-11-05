@@ -5,27 +5,28 @@ online version:
 schema: 2.0.0
 ---
 
-# New-CosmosDbTrigger
+# Invoke-CosmosDbStoredProcedure
 
 ## SYNOPSIS
-Create a new trigger for a collection in a CosmosDB database.
+Execute a new stored procedure for a collection in a CosmosDB database.
 
 ## SYNTAX
 
 ### Connection (Default)
 ```
-New-CosmosDbTrigger -Connection <PSObject> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -CollectionId <String> -Id <String> -TriggerBody <String> -TriggerOperation <String> -TriggerType <String>
+Invoke-CosmosDbStoredProcedure -Connection <PSObject> [-KeyType <String>] [-Key <SecureString>]
+ [-Database <String>] -CollectionId <String> -Id <String> [-StoredProcedureParameter <String[]>]
 ```
 
 ### Account
 ```
-New-CosmosDbTrigger -Account <String> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -CollectionId <String> -Id <String> -TriggerBody <String> -TriggerOperation <String> -TriggerType <String>
+Invoke-CosmosDbStoredProcedure -Account <String> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
+ -CollectionId <String> -Id <String> [-StoredProcedureParameter <String[]>]
 ```
 
 ## DESCRIPTION
-This cmdlet will create a trigger for a collection in a CosmosDB.
+This cmdlet will execute a stored procedure contained in a collection
+in a CosmosDB.
 
 ## EXAMPLES
 
@@ -117,7 +118,8 @@ Accept wildcard characters: False
 ```
 
 ### -CollectionId
-This is the Id of the collection to create the trigger for.
+This is the Id of the collection that contains the stored procedure
+to execute.
 
 ```yaml
 Type: String
@@ -132,7 +134,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-This is the Id of the trigger to create.
+This is the Id of the stored procedure to execute.
 
 ```yaml
 Type: String
@@ -146,45 +148,15 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -TriggerBody
-This is the body of the trigger.
+### -StoredProcedureParameter
+{{Fill StoredProcedureParameter Description}}
 
 ```yaml
-Type: String
+Type: String[]
 Parameter Sets: (All)
 Aliases: 
 
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TriggerOperation
-This is the type of operation that will invoke the trigger.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TriggerType
-This specifies when the trigger will be fired.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

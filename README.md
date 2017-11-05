@@ -7,8 +7,15 @@
 
 ## Introduction
 
-This PowerShell module provides cmdlets for working with Azure Cosmos DB
-databases, collections, users, permissions and triggers.
+This PowerShell module provides cmdlets for working with Azure Cosmos DB.
+
+It supports management of:
+- Databases
+- Collections
+- Users
+- Permissions
+- Stored procedures
+- Triggers
 
 The module uses the CosmosDB (DocumentDB) Rest APIs.
 
@@ -239,6 +246,54 @@ Remove a trigger for a collection from the database:
 
 ```powershell
 Remove-CosmosDbTrigger -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'MyTrigger'
+```
+
+### Working with Stored procedures
+
+Get a list of stored procedures for a collection in the database:
+
+```powershell
+Get-CosmosDbStoredProcedure -Connection $cosmosDbConnection -CollectionId 'MyNewCollection'
+```
+
+Create a stored procedure for a collection in the database:
+
+```powershell
+$Body = @'
+function () {
+    var context = getContext();
+    var response = context.getResponse();
+
+    response.setBody("Hello, World");
+}
+'@
+New-CosmosDbStoredProcedure -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -Body $Body
+```
+
+Update an existing stored procedure for a collection in the database:
+
+```powershell
+    $Body = @'
+    function (personToGreet) {
+        var context = getContext();
+        var response = context.getResponse();
+
+        response.setBody("Hello, " + personToGreet);
+    }
+    '@
+New-CosmosDbStoredProcedure -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -Body $Body
+```
+
+Execute a stored procedure for a collection from the database:
+
+```powershell
+Invoke-CosmosDbStoredProcedure -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureParameters @('PowerShell')
+```
+
+Remove a stored procedure for a collection from the database:
+
+```powershell
+Remove-CosmosDbStoredProcedure -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'spHelloWorld'
 ```
 
 ## Contributing

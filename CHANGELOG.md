@@ -1,8 +1,12 @@
 # Change Log
 
+## Unreleased
+
+- Added `*-CosmosDBStoredProcedure` cmdlets.
+
 ## 1.0.7.85
 
-- Added `*-CosmosDBTriggers` cmdlets.
+- Added `*-CosmosDBTrigger` cmdlets.
 
 ## 1.0.6.79
 

@@ -5,27 +5,30 @@ online version:
 schema: 2.0.0
 ---
 
-# New-CosmosDbTrigger
+# Get-CosmosDbStoredProcedure
 
 ## SYNOPSIS
-Create a new trigger for a collection in a CosmosDB database.
+Return the stored procedures for a CosmosDB database collection.
 
 ## SYNTAX
 
 ### Connection (Default)
 ```
-New-CosmosDbTrigger -Connection <PSObject> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -CollectionId <String> -Id <String> -TriggerBody <String> -TriggerOperation <String> -TriggerType <String>
+Get-CosmosDbStoredProcedure -Connection <PSObject> [-Key <SecureString>] [-KeyType <String>]
+ [-Database <String>] -CollectionId <String> [-Id <String>]
 ```
 
 ### Account
 ```
-New-CosmosDbTrigger -Account <String> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -CollectionId <String> -Id <String> -TriggerBody <String> -TriggerOperation <String> -TriggerType <String>
+Get-CosmosDbStoredProcedure -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
+ -CollectionId <String> [-Id <String>]
 ```
 
 ## DESCRIPTION
-This cmdlet will create a trigger for a collection in a CosmosDB.
+This cmdlet will return the stored procedures for a specified
+collection in a CosmosDB database.
+If an Id is specified then only
+the specified stored procedures will be returned.
 
 ## EXAMPLES
 
@@ -40,7 +43,7 @@ PS C:\> {{ Add example code here }}
 
 ### -Connection
 This is an object containing the connection information of
-the CosmosDB database that will be deleted.
+the CosmosDB database that will be accessed.
 It should be created
 by \`New-CosmosDbConnection\`.
 
@@ -71,21 +74,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -KeyType
-The type of key that will be used to access ths CosmosDB.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: False
-Position: Named
-Default value: Master
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Key
 The key to be used to access this CosmosDB.
 
@@ -97,6 +85,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -KeyType
+The type of key that will be used to access ths CosmosDB.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: Master
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -117,7 +120,7 @@ Accept wildcard characters: False
 ```
 
 ### -CollectionId
-This is the Id of the collection to create the trigger for.
+This is the id of the collection to get the stored procedure for.
 
 ```yaml
 Type: String
@@ -132,59 +135,14 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-This is the Id of the trigger to create.
+This is the id of the stored procedures to return.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases: 
 
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TriggerBody
-This is the body of the trigger.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TriggerOperation
-This is the type of operation that will invoke the trigger.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TriggerType
-This specifies when the trigger will be fired.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -195,7 +153,7 @@ Accept wildcard characters: False
 
 ## OUTPUTS
 
-### System.Object
+### System.String
 
 ## NOTES
 
