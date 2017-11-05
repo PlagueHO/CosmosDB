@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 1.0.8.91
 
 - Added `*-CosmosDBStoredProcedure` cmdlets.
 
@@ -55,6 +55,7 @@
 ## 1.0.0.30
 
 - Initial Release.
+
 
 
 
