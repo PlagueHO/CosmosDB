@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 1.0.9.100
 
 - Added `*-CosmosDBUserDefinedFunction` cmdlets.
 
@@ -59,6 +59,7 @@
 ## 1.0.0.30
 
 - Initial Release.
+
 
 
 
