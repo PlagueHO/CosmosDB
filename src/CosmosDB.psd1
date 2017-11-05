@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.0.7.85'
+    ModuleVersion     = '1.0.8.85'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -70,21 +70,27 @@
         'Get-CosmosDBDatabaseResourcePath'
         'Get-CosmosDbPermission'
         'Get-CosmosDbPermissionResourcePath'
+        'Get-CosmosDbStoredProcedure'
+        'Get-CosmosDbStoredProcedureResourcePath'
         'Get-CosmosDbTrigger'
         'Get-CosmosDbTriggerResourcePath'
         'Get-CosmosDbUser'
         'Get-CosmosDbUserResourcePath'
+        'Invoke-CosmosDbStoredProcedure'
         'New-CosmosDbCollection'
         'New-CosmosDbDatabase'
         'New-CosmosDbConnection'
         'New-CosmosDbPermission'
+        'New-CosmosDbStoredProcedure'
         'New-CosmosDbTrigger'
         'New-CosmosDbUser'
         'Remove-CosmosDbCollection'
         'Remove-CosmosDbDatabase'
         'Remove-CosmosDbPermission'
+        'Remove-CosmosDbStoredProcedure'
         'Remove-CosmosDbTrigger'
         'Remove-CosmosDbUser'
+        'Set-CosmosDbStoredProcedure'
         'Set-CosmosDbTrigger'
         'Set-CosmosDbUser'
     )
@@ -121,6 +127,12 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+            ## What is New in CosmosDB 1.0.8
+
+            November 5, 2017
+
+            - Added support for managing Stored Procedures.
+
             ## What is New in CosmosDB 1.0.7
 
             November 3, 2017

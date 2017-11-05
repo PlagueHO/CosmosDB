@@ -148,7 +148,7 @@ Accept wildcard characters: False
 ```
 
 ### -TriggerBody
-{{Fill TriggerBody Description}}
+This is the body of the trigger.
 
 ```yaml
 Type: String

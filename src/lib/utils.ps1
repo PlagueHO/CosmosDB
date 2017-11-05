@@ -338,7 +338,7 @@ function Invoke-CosmosDbRequest
         $Method = 'Get',
 
         [Parameter(Mandatory = $True)]
-        [ValidateSet('dbs','colls','users','permissions','triggers')]
+        [ValidateSet('dbs','colls','users','permissions','triggers','sprocs')]
         [System.String]
         $ResourceType,
 

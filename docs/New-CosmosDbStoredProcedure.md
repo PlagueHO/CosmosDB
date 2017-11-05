@@ -5,27 +5,27 @@ online version:
 schema: 2.0.0
 ---
 
-# New-CosmosDbTrigger
+# New-CosmosDbStoredProcedure
 
 ## SYNOPSIS
-Create a new trigger for a collection in a CosmosDB database.
+Create a new stored procedure for a collection in a CosmosDB database.
 
 ## SYNTAX
 
 ### Connection (Default)
 ```
-New-CosmosDbTrigger -Connection <PSObject> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -CollectionId <String> -Id <String> -TriggerBody <String> -TriggerOperation <String> -TriggerType <String>
+New-CosmosDbStoredProcedure -Connection <PSObject> [-KeyType <String>] [-Key <SecureString>]
+ [-Database <String>] -CollectionId <String> -Id <String> -StoredProcedureBody <String>
 ```
 
 ### Account
 ```
-New-CosmosDbTrigger -Account <String> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -CollectionId <String> -Id <String> -TriggerBody <String> -TriggerOperation <String> -TriggerType <String>
+New-CosmosDbStoredProcedure -Account <String> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
+ -CollectionId <String> -Id <String> -StoredProcedureBody <String>
 ```
 
 ## DESCRIPTION
-This cmdlet will create a trigger for a collection in a CosmosDB.
+This cmdlet will create a stored procedure for a collection in a CosmosDB.
 
 ## EXAMPLES
 
@@ -117,7 +117,7 @@ Accept wildcard characters: False
 ```
 
 ### -CollectionId
-This is the Id of the collection to create the trigger for.
+This is the Id of the collection to create the stored procedure for.
 
 ```yaml
 Type: String
@@ -132,7 +132,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-This is the Id of the trigger to create.
+This is the Id of the stored procedure to create.
 
 ```yaml
 Type: String
@@ -146,38 +146,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -TriggerBody
-This is the body of the trigger.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TriggerOperation
-This is the type of operation that will invoke the trigger.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TriggerType
-This specifies when the trigger will be fired.
+### -StoredProcedureBody
+This is the body of the stored procedure.
 
 ```yaml
 Type: String

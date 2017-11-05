@@ -5,20 +5,20 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-CosmosDbTriggerResourcePath
+# Get-CosmosDbStoredProcedureResourcePath
 
 ## SYNOPSIS
-Return the resource path for a trigger object.
+Return the resource path for a stored procedure object.
 
 ## SYNTAX
 
 ```
-Get-CosmosDbTriggerResourcePath [-Database] <String> [-CollectionId] <String> [-Id] <String>
+Get-CosmosDbStoredProcedureResourcePath [-Database] <String> [-CollectionId] <String> [-Id] <String>
 ```
 
 ## DESCRIPTION
 This cmdlet returns the resource identifier for a
-trigger object.
+stored procedure object.
 
 ## EXAMPLES
 
@@ -32,7 +32,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Database
-This is the database containing the trigger.
+This is the database containing the stored procedure.
 
 ```yaml
 Type: String
@@ -47,7 +47,7 @@ Accept wildcard characters: False
 ```
 
 ### -CollectionId
-This is the Id of the collection containing the trigger.
+This is the Id of the collection containing the stored procedure.
 
 ```yaml
 Type: String
@@ -62,7 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-This is the Id of the trigger.
+This is the Id of the stored procedure.
 
 ```yaml
 Type: String

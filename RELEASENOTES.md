@@ -1,5 +1,11 @@
 # Release Notes
 
+## What is New in CosmosDB 1.0.8
+
+November 5, 2017
+
+- Added support for managing Stored Procedures.
+
 ## What is New in CosmosDB 1.0.7
 
 November 3, 2017

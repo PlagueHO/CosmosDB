@@ -1,21 +1,21 @@
 <#
 .SYNOPSIS
-    Return the resource path for a trigger object.
+    Return the resource path for a stored procedure object.
 
 .DESCRIPTION
     This cmdlet returns the resource identifier for a
-    trigger object.
+    stored procedure object.
 
 .PARAMETER Database
-    This is the database containing the trigger.
+    This is the database containing the stored procedure.
 
 .PARAMETER CollectionId
-    This is the Id of the collection containing the trigger.
+    This is the Id of the collection containing the stored procedure.
 
 .PARAMETER Id
-    This is the Id of the trigger.
+    This is the Id of the stored procedure.
 #>
-function Get-CosmosDbTriggerResourcePath
+function Get-CosmosDbStoredProcedureResourcePath
 {
     [CmdletBinding()]
     [OutputType([System.String])]
@@ -37,17 +37,17 @@ function Get-CosmosDbTriggerResourcePath
         $Id
     )
 
-    return ('dbs/{0}/colls/{1}/triggers/{2}' -f $Database, $CollectionId, $Id)
+    return ('dbs/{0}/colls/{1}/sprocs/{2}' -f $Database, $CollectionId, $Id)
 }
 
 <#
 .SYNOPSIS
-    Return the triggers for a CosmosDB database collection.
+    Return the stored procedures for a CosmosDB database collection.
 
 .DESCRIPTION
-    This cmdlet will return the triggers for a specified collection
-    in a CosmosDB database. If an Id is specified then only the
-    specified trigger will be returned.
+    This cmdlet will return the stored procedures for a specified
+    collection in a CosmosDB database. If an Id is specified then only
+    the specified stored procedures will be returned.
 
 .PARAMETER Connection
     This is an object containing the connection information of
@@ -67,12 +67,12 @@ function Get-CosmosDbTriggerResourcePath
     The type of key that will be used to access ths CosmosDB.
 
 .PARAMETER CollectionId
-    This is the id of the collection to get the triggers for.
+    This is the id of the collection to get the stored procedure for.
 
 .PARAMETER Id
-    This is the id of the trigger to return.
+    This is the id of the stored procedures to return.
 #>
-function Get-CosmosDbTrigger
+function Get-CosmosDbStoredProcedure
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
     [OutputType([System.String])]
@@ -116,7 +116,7 @@ function Get-CosmosDbTrigger
 
     $null = $PSBoundParameters.Remove('CollectionId')
 
-    $resourcePath = ('colls/{0}/triggers' -f $CollectionId)
+    $resourcePath = ('colls/{0}/sprocs' -f $CollectionId)
 
     if ($PSBoundParameters.ContainsKey('Id'))
     {
@@ -124,24 +124,25 @@ function Get-CosmosDbTrigger
 
         return Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
-            -ResourceType 'triggers' `
+            -ResourceType 'sprocs' `
             -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
     }
     else
     {
         return Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
-            -ResourceType 'triggers' `
+            -ResourceType 'sprocs' `
             -ResourcePath $resourcePath
     }
 }
 
 <#
 .SYNOPSIS
-    Create a new trigger for a collection in a CosmosDB database.
+    Execute a new stored procedure for a collection in a CosmosDB database.
 
 .DESCRIPTION
-    This cmdlet will create a trigger for a collection in a CosmosDB.
+    This cmdlet will execute a stored procedure contained in a collection
+    in a CosmosDB.
 
 .PARAMETER Connection
     This is an object containing the connection information of
@@ -161,21 +162,120 @@ function Get-CosmosDbTrigger
     The type of key that will be used to access ths CosmosDB.
 
 .PARAMETER CollectionId
-    This is the Id of the collection to create the trigger for.
+    This is the Id of the collection that contains the stored procedure
+    to execute.
 
 .PARAMETER Id
-    This is the Id of the trigger to create.
+    This is the Id of the stored procedure to execute.
 
-.PARAMETER TriggerBody
-    This is the body of the trigger.
-
-.PARAMETER TriggerOperation
-    This is the type of operation that will invoke the trigger.
-
-.PARAMETER TriggerType
-    This specifies when the trigger will be fired.
+.PARAMETER StoredProcedureParameters
+    This is an array of strings containing the parameters to pass to
+    the stored procedure.
 #>
-function New-CosmosDbTrigger
+function Invoke-CosmosDbStoredProcedure
+{
+    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [OutputType([Object])]
+    param
+    (
+        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [ValidateNotNullOrEmpty()]
+        [PSCustomObject]
+        $Connection,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Account,
+
+        [Parameter()]
+        [ValidateSet('master', 'resource')]
+        [System.String]
+        $KeyType = 'master',
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.Security.SecureString]
+        $Key,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Database,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $CollectionId,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Id,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String[]]
+        $StoredProcedureParameter
+    )
+
+    $null = $PSBoundParameters.Remove('CollectionId')
+    $null = $PSBoundParameters.Remove('Id')
+
+    $resourcePath = ('colls/{0}/sprocs/{1}' -f $CollectionId, $Id)
+
+    if ($PSBoundParameters.ContainsKey('StoredProcedureParameter'))
+    {
+        $body = ( $StoredProcedureParameter | ForEach-Object { "`"$_`"" } ) -join ','
+        $body = "[$body]"
+        $null = $PSBoundParameters.Remove('StoredProcedureParameter')
+    }
+    else
+    {
+        $body = '[]'
+    }
+
+    return Invoke-CosmosDbRequest @PSBoundParameters `
+        -Method 'Post' `
+        -ResourceType 'sprocs' `
+        -ResourcePath $resourcePath `
+        -Body $body
+}
+
+<#
+.SYNOPSIS
+    Create a new stored procedure for a collection in a CosmosDB database.
+
+.DESCRIPTION
+    This cmdlet will create a stored procedure for a collection in a CosmosDB.
+
+.PARAMETER Connection
+    This is an object containing the connection information of
+    the CosmosDB database that will be deleted. It should be created
+    by `New-CosmosDbConnection`.
+
+.PARAMETER Account
+    The account name of the CosmosDB to access.
+
+.PARAMETER Database
+    The name of the database to access in the CosmosDB account.
+
+.PARAMETER Key
+    The key to be used to access this CosmosDB.
+
+.PARAMETER KeyType
+    The type of key that will be used to access ths CosmosDB.
+
+.PARAMETER CollectionId
+    This is the Id of the collection to create the stored procedure for.
+
+.PARAMETER Id
+    This is the Id of the stored procedure to create.
+
+.PARAMETER StoredProcedureBody
+    This is the body of the stored procedure.
+#>
+function New-CosmosDbStoredProcedure
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
     [OutputType([Object])]
@@ -219,42 +319,30 @@ function New-CosmosDbTrigger
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [System.String]
-        $TriggerBody,
-
-        [Parameter(Mandatory = $true)]
-        [ValidateSet('All', 'Insert', 'Replace', 'Delete')]
-        [System.String]
-        $TriggerOperation,
-
-        [Parameter(Mandatory = $true)]
-        [ValidateSet('Pre', 'Post')]
-        [System.String]
-        $TriggerType
+        $StoredProcedureBody
     )
 
     $null = $PSBoundParameters.Remove('CollectionId')
     $null = $PSBoundParameters.Remove('Id')
-    $null = $PSBoundParameters.Remove('TriggerBody')
-    $null = $PSBoundParameters.Remove('TriggerOperation')
-    $null = $PSBoundParameters.Remove('TriggerType')
+    $null = $PSBoundParameters.Remove('StoredProcedureBody')
 
-    $resourcePath = ('colls/{0}/triggers' -f $CollectionId)
+    $resourcePath = ('colls/{0}/sprocs' -f $CollectionId)
 
-    $TriggerBody = ((($TriggerBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
+    $StoredProcedureBody = ((($StoredProcedureBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
 
     return Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
-        -ResourceType 'triggers' `
+        -ResourceType 'sprocs' `
         -ResourcePath $resourcePath `
-        -Body "{ `"id`": `"$id`", `"body`" : `"$TriggerBody`", `"triggerOperation`" : `"$triggerOperation`", `"triggerType`" : `"$triggerType`" }"
+        -Body "{ `"id`": `"$id`", `"body`" : `"$StoredProcedureBody`" }"
 }
 
 <#
 .SYNOPSIS
-    Delete a trigger from a CosmosDB collection.
+    Delete a stored procedure from a CosmosDB collection.
 
 .DESCRIPTION
-    This cmdlet will delete a trigger in a CosmosDB from a collection.
+    This cmdlet will delete a stored procedure in a CosmosDB from a collection.
 
 .PARAMETER Connection
     This is an object containing the connection information of
@@ -274,12 +362,12 @@ function New-CosmosDbTrigger
     The type of key that will be used to access ths CosmosDB.
 
 .PARAMETER CollectionId
-    This is the Id of the collection to delete the trigger from.
+    This is the Id of the collection to delete the stored procedure from.
 
 .PARAMETER Id
-    This is the Id of the trigger to delete.
+    This is the Id of the stored procedure to delete.
 #>
-function Remove-CosmosDbTrigger
+function Remove-CosmosDbStoredProcedure
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
     [OutputType([Object])]
@@ -324,20 +412,20 @@ function Remove-CosmosDbTrigger
     $null = $PSBoundParameters.Remove('CollectionId')
     $null = $PSBoundParameters.Remove('Id')
 
-    $resourcePath = ('colls/{0}/triggers/{1}' -f $CollectionId, $Id)
+    $resourcePath = ('colls/{0}/sprocs/{1}' -f $CollectionId, $Id)
 
     return Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
-        -ResourceType 'triggers' `
+        -ResourceType 'sprocs' `
         -ResourcePath $resourcePath
 }
 
 <#
 .SYNOPSIS
-    Update a trigger from a CosmosDB collection.
+    Update a stored procedure from a CosmosDB collection.
 
 .DESCRIPTION
-    This cmdlet will update an existing trigger in a CosmosDB
+    This cmdlet will update an existing stored procedure in a CosmosDB
     collection.
 
 .PARAMETER Connection
@@ -358,21 +446,15 @@ function Remove-CosmosDbTrigger
     The type of key that will be used to access ths CosmosDB.
 
 .PARAMETER CollectionId
-    This is the Id of the collection to update the trigger for.
+    This is the Id of the collection to update the stored procedure for.
 
 .PARAMETER Id
-    This is the Id of the trigger to update.
+    This is the Id of the stored procedure to update.
 
-.PARAMETER TriggerBody
-    This is the body of the trigger.
-
-.PARAMETER TriggerOperation
-    This is the type of operation that will invoke the trigger.
-
-.PARAMETER TriggerType
-    This specifies when the trigger will be fired.
+.PARAMETER StoredProcedureBody
+    This is the body of the stored procedure.
 #>
-function Set-CosmosDbTrigger
+function Set-CosmosDbStoredProcedure
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
     [OutputType([Object])]
@@ -416,32 +498,20 @@ function Set-CosmosDbTrigger
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [System.String]
-        $TriggerBody,
-
-        [Parameter(Mandatory = $true)]
-        [ValidateSet('All', 'Insert', 'Replace', 'Delete')]
-        [System.String]
-        $TriggerOperation,
-
-        [Parameter(Mandatory = $true)]
-        [ValidateSet('Pre', 'Post')]
-        [System.String]
-        $TriggerType
+        $StoredProcedureBody
     )
 
     $null = $PSBoundParameters.Remove('CollectionId')
     $null = $PSBoundParameters.Remove('Id')
-    $null = $PSBoundParameters.Remove('TriggerBody')
-    $null = $PSBoundParameters.Remove('TriggerOperation')
-    $null = $PSBoundParameters.Remove('TriggerType')
+    $null = $PSBoundParameters.Remove('StoredProcedureBody')
 
-    $resourcePath = ('colls/{0}/triggers/{1}' -f $CollectionId, $Id)
+    $resourcePath = ('colls/{0}/sprocs/{1}' -f $CollectionId, $Id)
 
-    $TriggerBody = ((($TriggerBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
+    $StoredProcedureBody = ((($StoredProcedureBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
 
     return Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Put' `
-        -ResourceType 'triggers' `
+        -ResourceType 'sprocs' `
         -ResourcePath $resourcePath `
-        -Body "{ `"id`": `"$id`", `"body`" : `"$TriggerBody`", `"triggerOperation`" : `"$triggerOperation`", `"triggerType`" : `"$triggerType`" }"
+        -Body "{ `"id`": `"$id`", `"body`" : `"$StoredProcedureBody`" }"
 }

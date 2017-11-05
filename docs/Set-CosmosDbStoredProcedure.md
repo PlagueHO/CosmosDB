@@ -5,27 +5,28 @@ online version:
 schema: 2.0.0
 ---
 
-# New-CosmosDbTrigger
+# Set-CosmosDbStoredProcedure
 
 ## SYNOPSIS
-Create a new trigger for a collection in a CosmosDB database.
+Update a stored procedure from a CosmosDB collection.
 
 ## SYNTAX
 
 ### Connection (Default)
 ```
-New-CosmosDbTrigger -Connection <PSObject> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -CollectionId <String> -Id <String> -TriggerBody <String> -TriggerOperation <String> -TriggerType <String>
+Set-CosmosDbStoredProcedure -Connection <PSObject> [-Database <String>] [-Key <SecureString>]
+ -CollectionId <String> -Id <String> -StoredProcedureBody <String>
 ```
 
 ### Account
 ```
-New-CosmosDbTrigger -Account <String> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -CollectionId <String> -Id <String> -TriggerBody <String> -TriggerOperation <String> -TriggerType <String>
+Set-CosmosDbStoredProcedure -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
+ -CollectionId <String> -Id <String> -StoredProcedureBody <String>
 ```
 
 ## DESCRIPTION
-This cmdlet will create a trigger for a collection in a CosmosDB.
+This cmdlet will update an existing stored procedure in a CosmosDB
+collection.
 
 ## EXAMPLES
 
@@ -71,8 +72,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -KeyType
-The type of key that will be used to access ths CosmosDB.
+### -Database
+The name of the database to access in the CosmosDB account.
 
 ```yaml
 Type: String
@@ -81,7 +82,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: Master
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -101,23 +102,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Database
-The name of the database to access in the CosmosDB account.
+### -KeyType
+The type of key that will be used to access ths CosmosDB.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Account
 Aliases: 
 
 Required: False
 Position: Named
-Default value: None
+Default value: Master
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -CollectionId
-This is the Id of the collection to create the trigger for.
+This is the Id of the collection to update the stored procedure for.
 
 ```yaml
 Type: String
@@ -132,7 +133,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-This is the Id of the trigger to create.
+This is the Id of the stored procedure to update.
 
 ```yaml
 Type: String
@@ -146,38 +147,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -TriggerBody
-This is the body of the trigger.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TriggerOperation
-This is the type of operation that will invoke the trigger.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TriggerType
-This specifies when the trigger will be fired.
+### -StoredProcedureBody
+This is the body of the stored procedure.
 
 ```yaml
 Type: String
