@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.0.9.100'
+    ModuleVersion     = '1.0.10.100'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -68,6 +68,8 @@
         'Get-CosmosDbCollectionResourcePath'
         'Get-CosmosDBDatabase'
         'Get-CosmosDBDatabaseResourcePath'
+        'Get-CosmosDBDocument'
+        'Get-CosmosDBDocumentResourcePath'
         'Get-CosmosDbPermission'
         'Get-CosmosDbPermissionResourcePath'
         'Get-CosmosDbStoredProcedure'
@@ -81,6 +83,7 @@
         'Invoke-CosmosDbStoredProcedure'
         'New-CosmosDbCollection'
         'New-CosmosDbDatabase'
+        'New-CosmosDbDocument'
         'New-CosmosDbConnection'
         'New-CosmosDbPermission'
         'New-CosmosDbStoredProcedure'
@@ -89,11 +92,13 @@
         'New-CosmosDbUserDefinedFunction'
         'Remove-CosmosDbCollection'
         'Remove-CosmosDbDatabase'
+        'Remove-CosmosDbDocument'
         'Remove-CosmosDbPermission'
         'Remove-CosmosDbStoredProcedure'
         'Remove-CosmosDbTrigger'
         'Remove-CosmosDbUser'
         'Remove-CosmosDbUserDefinedFunction'
+        'Set-CosmosDbDocument'
         'Set-CosmosDbStoredProcedure'
         'Set-CosmosDbTrigger'
         'Set-CosmosDbUser'
@@ -132,30 +137,36 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
-            ## What is New in CosmosDB 1.0.9
+## What is New in CosmosDB 1.10.0
 
-            November 5, 2017
+November 12, 2017
 
-            - Added support for managing User Defined Functions.
+- Added support for managing Documents.
 
-            ## What is New in CosmosDB 1.0.8
+## What is New in CosmosDB 1.0.9
 
-            November 5, 2017
+November 5, 2017
 
-            - Added support for managing Stored Procedures.
+- Added support for managing User Defined Functions.
 
-            ## What is New in CosmosDB 1.0.7
+## What is New in CosmosDB 1.0.8
 
-            November 3, 2017
+November 5, 2017
 
-            - Added support for managing Triggers.
+- Added support for managing Stored Procedures.
 
-            ## What is New in CosmosDB 1.0.6
+## What is New in CosmosDB 1.0.7
 
-            November 1, 2017
+November 3, 2017
 
-            - First release containing support for managing
-              Databases, Collections, Users and Permissions.
+- Added support for managing Triggers.
+
+## What is New in CosmosDB 1.0.6
+
+November 1, 2017
+
+- First release containing support for managing
+    Databases, Collections, Users and Permissions.
             '
         } # End of PSData hashtable
     } # End of PrivateData hashtable

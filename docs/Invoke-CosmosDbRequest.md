@@ -17,14 +17,14 @@ Rest API request to CosmosDB.
 ```
 Invoke-CosmosDbRequest -Connection <PSObject> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
- [-Headers <Hashtable>]
+ [-Headers <Hashtable>] [-UseWebRequest]
 ```
 
 ### Account
 ```
 Invoke-CosmosDbRequest -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
- [-Headers <Hashtable>]
+ [-Headers <Hashtable>] [-UseWebRequest]
 ```
 
 ## DESCRIPTION
@@ -214,6 +214,25 @@ Aliases:
 Required: False
 Position: Named
 Default value: @{}
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UseWebRequest
+This parameter forces the request to be made using
+the Invoke-WebRequest cmdlet and to return the object that
+it returns.
+This will enable extraction of the headers
+from the result, which is required for some requests.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

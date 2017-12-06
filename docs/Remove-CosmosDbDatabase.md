@@ -118,8 +118,6 @@ Accept wildcard characters: False
 
 ## OUTPUTS
 
-### System.Object
-
 ## NOTES
 
 ## RELATED LINKS

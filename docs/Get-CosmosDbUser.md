@@ -138,7 +138,7 @@ Accept wildcard characters: False
 
 ## OUTPUTS
 
-### System.String
+### System.Object
 
 ## NOTES
 

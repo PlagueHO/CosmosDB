@@ -301,6 +301,12 @@ function New-CosmosDbAuthorizationToken
 .PARAMETER Headers
     This parameter can be used to provide any additional headers
     to the Rest API.
+
+.PARAMETER UseWebRequest
+    This parameter forces the request to be made using
+    the Invoke-WebRequest cmdlet and to return the object that
+    it returns. This will enable extraction of the headers
+    from the result, which is required for some requests.
 #>
 function Invoke-CosmosDbRequest
 {
@@ -338,7 +344,7 @@ function Invoke-CosmosDbRequest
         $Method = 'Get',
 
         [Parameter(Mandatory = $True)]
-        [ValidateSet('dbs','colls','users','permissions','triggers','sprocs','udfs')]
+        [ValidateSet('colls','dbs','docs','users','permissions','triggers','sprocs','udfs')]
         [System.String]
         $ResourceType,
 
@@ -358,7 +364,11 @@ function Invoke-CosmosDbRequest
 
         [Parameter()]
         [Hashtable]
-        $Headers = @{}
+        $Headers = @{},
+
+        [Parameter()]
+        [Switch]
+        $UseWebRequest
     )
 
     if ($PSCmdlet.ParameterSetName -eq 'Account')
@@ -462,7 +472,14 @@ function Invoke-CosmosDbRequest
         }
     }
 
-    $restResult = Invoke-RestMethod @invokeRestMethodParameters
+    if ($UseWebRequest)
+    {
+        $restResult = Invoke-WebRequest -UseBasicParsing @invokeRestMethodParameters
+    }
+    else
+    {
+        $restResult = Invoke-RestMethod @invokeRestMethodParameters
+    }
 
     return $restResult
 }

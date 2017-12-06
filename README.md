@@ -11,13 +11,14 @@ This PowerShell module provides cmdlets for working with Azure Cosmos DB.
 
 The CosmosDB PowerShell module enables management of:
 
-- Databases
 - Collections
-- Users
+- Databases
+- Documents
 - Permissions
 - Stored procedures
 - Triggers
 - User Defined Functions
+- Users
 
 The module uses the CosmosDB (DocumentDB) Rest APIs.
 
@@ -51,7 +52,6 @@ the CosmosDB module to retrieve the keys directly from the Azure
 management portal for you.
 
 ### Create a Connection specifying the Key Manually
-
 
 First convert your key into a secure string:
 
@@ -118,6 +118,64 @@ Delete a collection from the database:
 
 ```powershell
 Remove-CosmosDbCollection -Connection $cosmosDbConnection -Id 'MyNewCollection'
+```
+
+### Working with Documents
+
+Create 10 new documents in a collection in the database:
+
+```powershell
+0..9 | Foreach-Object {
+    $document = @"
+{
+    `"id`": `"$([Guid]::NewGuid().ToString())`",
+    `"content`": `"Some string`",
+    `"more`": `"Some other string`"
+}
+"@
+    New-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -DocumentBody $document
+}
+```
+
+Get the first 5 documents from the collection in the database:
+
+```powershell
+$documents = Get-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -MaxItemCount 5
+$continuationToken = $document.Headers.'x-ms-continuation'
+```
+
+Get the next document from a collection in the database using
+the continuation token found in the headers from the previous
+request:
+
+```powershell
+$documents = Get-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -MaxItemCount 5 -ContinuationToken $continuationToken
+```
+
+Replace the content of a document in a collection in the database:
+
+```powershell
+$newDocument = @"
+{
+    `"id`": `"$($documents.Documents[0].id)`",
+    `"content`": `"New string`",
+    `"more`": `"Another new string`"
+}
+"@
+Set-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id $documents.Documents[0].id -DocumentBody $newDocument
+```
+
+Return a document with a specific Id from a collection in
+the database:
+
+```powershell
+Get-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id $documents.Documents[0].id
+```
+
+Delete a document from a collection in the database:
+
+```powershell
+Remove-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id $documents.Documents[0].id
 ```
 
 ### Working with Users

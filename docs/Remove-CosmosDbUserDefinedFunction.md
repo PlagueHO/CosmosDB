@@ -5,27 +5,27 @@ online version:
 schema: 2.0.0
 ---
 
-# Remove-CosmosDbStoredProcedure
+# Remove-CosmosDbUserDefinedFunction
 
 ## SYNOPSIS
-Delete a stored procedure from a CosmosDB collection.
+Delete a user defined function from a CosmosDB collection.
 
 ## SYNTAX
 
 ### Connection (Default)
 ```
-Remove-CosmosDbStoredProcedure -Connection <PSObject> [-Database <String>] [-Key <SecureString>]
+Remove-CosmosDbUserDefinedFunction -Connection <PSObject> [-Database <String>] [-Key <SecureString>]
  [-KeyType <String>] -CollectionId <String> [-Id <String>]
 ```
 
 ### Account
 ```
-Remove-CosmosDbStoredProcedure -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -CollectionId <String> [-Id <String>]
+Remove-CosmosDbUserDefinedFunction -Account <String> [-Database <String>] [-Key <SecureString>]
+ [-KeyType <String>] -CollectionId <String> [-Id <String>]
 ```
 
 ## DESCRIPTION
-This cmdlet will delete a stored procedure in a CosmosDB from a collection.
+This cmdlet will delete a user defined function in a CosmosDB from a collection.
 
 ## EXAMPLES
 
@@ -117,7 +117,7 @@ Accept wildcard characters: False
 ```
 
 ### -CollectionId
-This is the Id of the collection to delete the stored procedure from.
+This is the Id of the collection to delete the user defined function from.
 
 ```yaml
 Type: String
@@ -132,7 +132,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-This is the Id of the stored procedure to delete.
+This is the Id of the user defined function to delete.
 
 ```yaml
 Type: String

@@ -1,16 +1,20 @@
 # Change Log
 
+## Unreleased
+
+- Added `*-CosmosDbDocument` cmdlets.
+
 ## 1.0.9.100
 
-- Added `*-CosmosDBUserDefinedFunction` cmdlets.
+- Added `*-CosmosDbUserDefinedFunction` cmdlets.
 
 ## 1.0.8.91
 
-- Added `*-CosmosDBStoredProcedure` cmdlets.
+- Added `*-CosmosDbStoredProcedure` cmdlets.
 
 ## 1.0.7.85
 
-- Added `*-CosmosDBTrigger` cmdlets.
+- Added `*-CosmosDbTrigger` cmdlets.
 
 ## 1.0.6.79
 

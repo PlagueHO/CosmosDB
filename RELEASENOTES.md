@@ -1,5 +1,11 @@
 # Release Notes
 
+## What is New in CosmosDB 1.10.0
+
+December 6, 2017
+
+- Added support for managing Documents.
+
 ## What is New in CosmosDB 1.0.9
 
 November 5, 2017
