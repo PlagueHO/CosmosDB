@@ -5,27 +5,27 @@ online version:
 schema: 2.0.0
 ---
 
-# Remove-CosmosDbStoredProcedure
+# Remove-CosmosDbDocument
 
 ## SYNOPSIS
-Delete a stored procedure from a CosmosDB collection.
+Delete a document from a CosmosDB collection.
 
 ## SYNTAX
 
 ### Connection (Default)
 ```
-Remove-CosmosDbStoredProcedure -Connection <PSObject> [-Database <String>] [-Key <SecureString>]
- [-KeyType <String>] -CollectionId <String> [-Id <String>]
+Remove-CosmosDbDocument -Connection <PSObject> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
+ -CollectionId <String> [-Id <String>] [-PartitionKey <String>]
 ```
 
 ### Account
 ```
-Remove-CosmosDbStoredProcedure -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -CollectionId <String> [-Id <String>]
+Remove-CosmosDbDocument -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
+ -CollectionId <String> [-Id <String>] [-PartitionKey <String>]
 ```
 
 ## DESCRIPTION
-This cmdlet will delete a stored procedure in a CosmosDB from a collection.
+This cmdlet will delete a document in a CosmosDB from a collection.
 
 ## EXAMPLES
 
@@ -117,7 +117,7 @@ Accept wildcard characters: False
 ```
 
 ### -CollectionId
-This is the Id of the collection to delete the stored procedure from.
+This is the Id of the collection to delete the document from.
 
 ```yaml
 Type: String
@@ -132,7 +132,24 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-This is the Id of the stored procedure to delete.
+This is the Id of the document to delete.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PartitionKey
+The partition key value for the document to be deleted.
+Must be included if and only if the collection is created
+with a partitionKey definition.
 
 ```yaml
 Type: String

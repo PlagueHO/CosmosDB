@@ -75,7 +75,7 @@ function Get-CosmosDbUserDefinedFunctionResourcePath
 function Get-CosmosDbUserDefinedFunction
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
-    [OutputType([System.String])]
+    [OutputType([Object])]
     param
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
@@ -264,7 +264,6 @@ function New-CosmosDbUserDefinedFunction
 function Remove-CosmosDbUserDefinedFunction
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
-    [OutputType([Object])]
     param
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]

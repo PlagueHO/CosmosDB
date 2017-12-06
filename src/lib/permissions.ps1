@@ -75,7 +75,7 @@ function Get-CosmosDbPermissionResourcePath
 function Get-CosmosDbPermission
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
-    [OutputType([System.String])]
+    [OutputType([Object])]
     param
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
@@ -272,7 +272,6 @@ function New-CosmosDbPermission
 function Remove-CosmosDbPermission
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
-    [OutputType([Object])]
     param
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]

@@ -75,7 +75,7 @@ function Get-CosmosDbTriggerResourcePath
 function Get-CosmosDbTrigger
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
-    [OutputType([System.String])]
+    [OutputType([Object])]
     param
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
@@ -282,7 +282,6 @@ function New-CosmosDbTrigger
 function Remove-CosmosDbTrigger
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
-    [OutputType([Object])]
     param
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]

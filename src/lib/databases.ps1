@@ -55,7 +55,7 @@ function Get-CosmosDbDatabaseResourcePath
 function Get-CosmosDbDatabase
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
-    [OutputType([System.String])]
+    [OutputType([Object])]
     param
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
@@ -192,7 +192,6 @@ function New-CosmosDbDatabase
 function Remove-CosmosDbDatabase
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
-    [OutputType([Object])]
     param
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]

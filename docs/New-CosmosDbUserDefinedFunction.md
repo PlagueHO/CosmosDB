@@ -5,27 +5,27 @@ online version:
 schema: 2.0.0
 ---
 
-# Remove-CosmosDbStoredProcedure
+# New-CosmosDbUserDefinedFunction
 
 ## SYNOPSIS
-Delete a stored procedure from a CosmosDB collection.
+Create a new user defined function for a collection in a CosmosDB database.
 
 ## SYNTAX
 
 ### Connection (Default)
 ```
-Remove-CosmosDbStoredProcedure -Connection <PSObject> [-Database <String>] [-Key <SecureString>]
- [-KeyType <String>] -CollectionId <String> [-Id <String>]
+New-CosmosDbUserDefinedFunction -Connection <PSObject> [-KeyType <String>] [-Key <SecureString>]
+ [-Database <String>] -CollectionId <String> -Id <String> -UserDefinedFunctionBody <String>
 ```
 
 ### Account
 ```
-Remove-CosmosDbStoredProcedure -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -CollectionId <String> [-Id <String>]
+New-CosmosDbUserDefinedFunction -Account <String> [-KeyType <String>] [-Key <SecureString>]
+ [-Database <String>] -CollectionId <String> -Id <String> -UserDefinedFunctionBody <String>
 ```
 
 ## DESCRIPTION
-This cmdlet will delete a stored procedure in a CosmosDB from a collection.
+This cmdlet will create a user defined function for a collection in a CosmosDB.
 
 ## EXAMPLES
 
@@ -71,8 +71,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Database
-The name of the database to access in the CosmosDB account.
+### -KeyType
+The type of key that will be used to access ths CosmosDB.
 
 ```yaml
 Type: String
@@ -81,7 +81,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: Master
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -101,8 +101,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -KeyType
-The type of key that will be used to access ths CosmosDB.
+### -Database
+The name of the database to access in the CosmosDB account.
 
 ```yaml
 Type: String
@@ -111,13 +111,13 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: Master
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -CollectionId
-This is the Id of the collection to delete the stored procedure from.
+This is the Id of the collection to create the user defined function for.
 
 ```yaml
 Type: String
@@ -132,14 +132,29 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-This is the Id of the stored procedure to delete.
+This is the Id of the user defined function to create.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases: 
 
-Required: False
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UserDefinedFunctionBody
+This is the body of the user defined function.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -149,6 +164,8 @@ Accept wildcard characters: False
 ## INPUTS
 
 ## OUTPUTS
+
+### System.Object
 
 ## NOTES
 
