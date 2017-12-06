@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 1.0.10.108
 
 - Added `*-CosmosDbDocument` cmdlets.
 
@@ -63,6 +63,7 @@
 ## 1.0.0.30
 
 - Initial Release.
+
 
 
 
