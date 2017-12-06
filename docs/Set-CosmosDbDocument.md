@@ -5,27 +5,29 @@ online version:
 schema: 2.0.0
 ---
 
-# Remove-CosmosDbStoredProcedure
+# Set-CosmosDbDocument
 
 ## SYNOPSIS
-Delete a stored procedure from a CosmosDB collection.
+Update a document from a CosmosDB collection.
 
 ## SYNTAX
 
 ### Connection (Default)
 ```
-Remove-CosmosDbStoredProcedure -Connection <PSObject> [-Database <String>] [-Key <SecureString>]
- [-KeyType <String>] -CollectionId <String> [-Id <String>]
+Set-CosmosDbDocument -Connection <PSObject> [-Database <String>] [-Key <SecureString>] -CollectionId <String>
+ -Id <String> -DocumentBody <String> [-IndexingDirective <String>] [-PartitionKey <String>]
 ```
 
 ### Account
 ```
-Remove-CosmosDbStoredProcedure -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -CollectionId <String> [-Id <String>]
+Set-CosmosDbDocument -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
+ -CollectionId <String> -Id <String> -DocumentBody <String> [-IndexingDirective <String>]
+ [-PartitionKey <String>]
 ```
 
 ## DESCRIPTION
-This cmdlet will delete a stored procedure in a CosmosDB from a collection.
+This cmdlet will update an existing document in a CosmosDB
+collection.
 
 ## EXAMPLES
 
@@ -106,7 +108,7 @@ The type of key that will be used to access ths CosmosDB.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Account
 Aliases: 
 
 Required: False
@@ -117,7 +119,7 @@ Accept wildcard characters: False
 ```
 
 ### -CollectionId
-This is the Id of the collection to delete the stored procedure from.
+This is the Id of the collection to update the document for.
 
 ```yaml
 Type: String
@@ -132,7 +134,58 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-This is the Id of the stored procedure to delete.
+This is the Id of the document to update.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DocumentBody
+This is the body of the document to update.
+It must be
+formatted as a JSON string and contain the Id value of the
+document to create.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IndexingDirective
+Include includes the document in the indexing path while
+Exclude omits the document from indexing.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PartitionKey
+The partition key value for the document to be deleted.
+Required if and must be specified only if the collection is
+created with a partitionKey definition.
 
 ```yaml
 Type: String
@@ -149,6 +202,8 @@ Accept wildcard characters: False
 ## INPUTS
 
 ## OUTPUTS
+
+### System.Object
 
 ## NOTES
 

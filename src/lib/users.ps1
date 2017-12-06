@@ -63,7 +63,7 @@ function Get-CosmosDbUserResourcePath
 function Get-CosmosDbUser
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
-    [OutputType([System.String])]
+    [OutputType([Object])]
     param
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
@@ -216,7 +216,6 @@ function New-CosmosDbUser
 function Remove-CosmosDbUser
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
-    [OutputType([Object])]
     param
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]

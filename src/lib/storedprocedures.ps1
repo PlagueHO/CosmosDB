@@ -75,7 +75,7 @@ function Get-CosmosDbStoredProcedureResourcePath
 function Get-CosmosDbStoredProcedure
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
-    [OutputType([System.String])]
+    [OutputType([Object])]
     param
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
@@ -370,7 +370,6 @@ function New-CosmosDbStoredProcedure
 function Remove-CosmosDbStoredProcedure
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
-    [OutputType([Object])]
     param
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
