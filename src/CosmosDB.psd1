@@ -142,19 +142,19 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
-## What is New in CosmosDB 1.12.0
+## What is New in CosmosDB 1.0.12
 
 December 9, 2017
 
 - Added support for managing Attachments.
 
-## What is New in CosmosDB 1.11.0
+## What is New in CosmosDB 1.0.11
 
 December 8, 2017
 
 - Fix bug in querying documents.
 
-## What is New in CosmosDB 1.10.0
+## What is New in CosmosDB 1.0.10
 
 November 12, 2017
 
