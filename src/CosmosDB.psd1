@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.0.10.108'
+    ModuleVersion     = '1.0.11.108'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -137,6 +137,12 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB 1.11.0
+
+December 8, 2017
+
+- Fix bug in querying documents.
+
 ## What is New in CosmosDB 1.10.0
 
 November 12, 2017
@@ -154,19 +160,6 @@ November 5, 2017
 November 5, 2017
 
 - Added support for managing Stored Procedures.
-
-## What is New in CosmosDB 1.0.7
-
-November 3, 2017
-
-- Added support for managing Triggers.
-
-## What is New in CosmosDB 1.0.6
-
-November 1, 2017
-
-- First release containing support for managing
-    Databases, Collections, Users and Permissions.
             '
         } # End of PSData hashtable
     } # End of PrivateData hashtable

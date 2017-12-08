@@ -15,13 +15,13 @@ Delete a document from a CosmosDB collection.
 ### Connection (Default)
 ```
 Remove-CosmosDbDocument -Connection <PSObject> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -CollectionId <String> [-Id <String>] [-PartitionKey <String>]
+ -CollectionId <String> [-Id <String>] [-PartitionKey <String>] [<CommonParameters>]
 ```
 
 ### Account
 ```
 Remove-CosmosDbDocument -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -CollectionId <String> [-Id <String>] [-PartitionKey <String>]
+ -CollectionId <String> [-Id <String>] [-PartitionKey <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -162,6 +162,9 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

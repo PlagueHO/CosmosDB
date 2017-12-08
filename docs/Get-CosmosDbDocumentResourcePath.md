@@ -14,6 +14,7 @@ Return the resource path for a document object.
 
 ```
 Get-CosmosDbDocumentResourcePath [-Database] <String> [-CollectionId] <String> [-Id] <String>
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -76,6 +77,9 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
