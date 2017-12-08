@@ -1,5 +1,11 @@
 # Release Notes
 
+## What is New in CosmosDB 1.12.0
+
+December 9, 2017
+
+- Added support for managing Attachments.
+
 ## What is New in CosmosDB 1.11.0
 
 December 8, 2017

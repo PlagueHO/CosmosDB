@@ -11,6 +11,7 @@ This PowerShell module provides cmdlets for working with Azure Cosmos DB.
 
 The CosmosDB PowerShell module enables management of:
 
+- Attachments
 - Collections
 - Databases
 - Documents
@@ -193,6 +194,38 @@ Delete a document from a collection in the database:
 
 ```powershell
 Remove-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id $documents.Documents[0].id
+```
+
+### Working with Attachments
+
+Create an attachment on a document in a collection:
+
+```powershell
+New-CosmosDbAttachment -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -DocumentId $documents.Documents[0].id -Id 'image_1' -ContentType 'image/jpg' -Media 'www.bing.com'
+```
+
+Get _all_ attachments for a document in a collection:
+
+```powershell
+Get-CosmosDbAttachment -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -DocumentId $documents.Documents[0].id
+```
+
+Get an attachment by Id for a document in a collection:
+
+```powershell
+Get-CosmosDbAttachment -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -DocumentId $documents.Documents[0].id -Id 'image_1'
+```
+
+Rename an attachment for a document in a collection:
+
+```powershell
+Set-CosmosDbAttachment -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -DocumentId $documents.Documents[0].id -Id 'image_1' -NewId 'Image_2'
+```
+
+Delete an attachment from a document in collection:
+
+```powershell
+Remove-CosmosDbAttachment -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id $documents.Documents[0].id -Id 'Image_2'
 ```
 
 ### Working with Users
