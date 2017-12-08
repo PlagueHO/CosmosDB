@@ -15,13 +15,13 @@ Return the triggers for a CosmosDB database collection.
 ### Connection (Default)
 ```
 Get-CosmosDbTrigger -Connection <PSObject> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -CollectionId <String> [-Id <String>]
+ -CollectionId <String> [-Id <String>] [<CommonParameters>]
 ```
 
 ### Account
 ```
 Get-CosmosDbTrigger -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -CollectionId <String> [-Id <String>]
+ -CollectionId <String> [-Id <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -148,6 +148,9 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

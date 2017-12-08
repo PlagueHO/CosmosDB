@@ -1,5 +1,10 @@
 # Change Log
 
+## Unreleased
+
+- Fixed `Get-CosmosDbDocument` returning (400) Bad Request error
+  when executed with Query - See [Issue #22](https://github.com/PlagueHO/CosmosDB/issues/22).
+
 ## 1.0.10.108
 
 - Added `*-CosmosDbDocument` cmdlets.

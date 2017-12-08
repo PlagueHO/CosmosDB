@@ -15,13 +15,13 @@ Create a new document for a collection in a CosmosDB database.
 ### Connection (Default)
 ```
 New-CosmosDbDocument -Connection <PSObject> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -CollectionId <String> -DocumentBody <String> [-IndexingDirective <String>]
+ -CollectionId <String> -DocumentBody <String> [-IndexingDirective <String>] [<CommonParameters>]
 ```
 
 ### Account
 ```
 New-CosmosDbDocument -Account <String> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -CollectionId <String> -DocumentBody <String> [-IndexingDirective <String>]
+ -CollectionId <String> -DocumentBody <String> [-IndexingDirective <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -170,6 +170,9 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

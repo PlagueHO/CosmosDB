@@ -307,6 +307,10 @@ function New-CosmosDbAuthorizationToken
     the Invoke-WebRequest cmdlet and to return the object that
     it returns. This will enable extraction of the headers
     from the result, which is required for some requests.
+
+.PARAMETER ContentType
+    This parameter allows the ContentType to be overridden
+    which can be required for some types of requests.
 #>
 function Invoke-CosmosDbRequest
 {
@@ -368,7 +372,11 @@ function Invoke-CosmosDbRequest
 
         [Parameter()]
         [Switch]
-        $UseWebRequest
+        $UseWebRequest,
+
+        [Parameter()]
+        [System.String]
+        $ContentType = 'application/json'
     )
 
     if ($PSCmdlet.ParameterSetName -eq 'Account')
@@ -457,7 +465,7 @@ function Invoke-CosmosDbRequest
         Uri         = $uri
         Headers     = $Headers
         Method      = $method
-        ContentType = 'application/json'
+        ContentType = $ContentType
     }
 
     if ($Method -in ('Put', 'Post', 'Patch'))
