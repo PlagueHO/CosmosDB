@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 1.0.11.117
 
 - Fixed `Get-CosmosDbDocument` returning (400) Bad Request error
   when executed with Query - See [Issue #22](https://github.com/PlagueHO/CosmosDB/issues/22).
@@ -68,6 +68,7 @@
 ## 1.0.0.30
 
 - Initial Release.
+
 
 
 
