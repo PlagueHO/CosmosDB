@@ -203,7 +203,7 @@ function New-CosmosDbAuthorizationToken
         $Key,
 
         [Parameter()]
-        [ValidateSet('master','resource')]
+        [ValidateSet('master', 'resource')]
         [System.String]
         $KeyType = 'master',
 
@@ -348,7 +348,7 @@ function Invoke-CosmosDbRequest
         $Method = 'Get',
 
         [Parameter(Mandatory = $True)]
-        [ValidateSet('colls','dbs','docs','users','permissions','triggers','sprocs','udfs')]
+        [ValidateSet('attachments', 'colls', 'dbs', 'docs', 'users', 'permissions', 'triggers', 'sprocs', 'udfs')]
         [System.String]
         $ResourceType,
 
@@ -439,7 +439,7 @@ function Invoke-CosmosDbRequest
         }
         else
         {
-            $resourceElements.RemoveAt($resourceElements.Count-1)
+            $resourceElements.RemoveAt($resourceElements.Count - 1)
             $resourceId = $resourceElements -Join '/'
         }
     }
@@ -521,7 +521,7 @@ function New-InvalidArgumentException
     $argumentException = New-Object -TypeName 'ArgumentException' -ArgumentList @( $Message,
         $ArgumentName )
     $newObjectParams = @{
-        TypeName = 'System.Management.Automation.ErrorRecord'
+        TypeName     = 'System.Management.Automation.ErrorRecord'
         ArgumentList = @( $argumentException, $ArgumentName, 'InvalidArgument', $null )
     }
     $errorRecord = New-Object @newObjectParams
@@ -560,17 +560,17 @@ function New-InvalidOperationException
     elseif ($null -eq $ErrorRecord)
     {
         $invalidOperationException =
-            New-Object -TypeName 'InvalidOperationException' -ArgumentList @( $Message )
+        New-Object -TypeName 'InvalidOperationException' -ArgumentList @( $Message )
     }
     else
     {
         $invalidOperationException =
-            New-Object -TypeName 'InvalidOperationException' -ArgumentList @( $Message,
-                $ErrorRecord.Exception )
+        New-Object -TypeName 'InvalidOperationException' -ArgumentList @( $Message,
+            $ErrorRecord.Exception )
     }
 
     $newObjectParams = @{
-        TypeName = 'System.Management.Automation.ErrorRecord'
+        TypeName     = 'System.Management.Automation.ErrorRecord'
         ArgumentList = @( $invalidOperationException.ToString(), 'MachineStateIncorrect',
             'InvalidOperation', $null )
     }

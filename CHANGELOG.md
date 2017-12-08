@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Added `*-CosmosDbAttachment` cmdlets.
+
 ## 1.0.11.117
 
 - Fixed `Get-CosmosDbDocument` returning (400) Bad Request error
