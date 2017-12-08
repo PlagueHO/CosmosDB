@@ -16,12 +16,13 @@ to connect to a CosmosDB.
 ### Connection (Default)
 ```
 New-CosmosDbConnection -Account <String> [-Database <String>] -Key <SecureString> [-KeyType <String>]
+ [<CommonParameters>]
 ```
 
 ### Azure
 ```
 New-CosmosDbConnection -Account <String> [-Database <String>] [-KeyType <String>] -ResourceGroup <String>
- [-MasterKeyType <String>]
+ [-MasterKeyType <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -134,6 +135,9 @@ Default value: PrimaryMasterKey
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

@@ -17,14 +17,14 @@ Rest API request to CosmosDB.
 ```
 Invoke-CosmosDbRequest -Connection <PSObject> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
- [-Headers <Hashtable>] [-UseWebRequest]
+ [-Headers <Hashtable>] [-UseWebRequest] [-ContentType <String>] [<CommonParameters>]
 ```
 
 ### Account
 ```
 Invoke-CosmosDbRequest -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
- [-Headers <Hashtable>] [-UseWebRequest]
+ [-Headers <Hashtable>] [-UseWebRequest] [-ContentType <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -236,6 +236,23 @@ Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### -ContentType
+This parameter allows the ContentType to be overridden
+which can be required for some types of requests.```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: Application/json
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

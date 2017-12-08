@@ -1,5 +1,11 @@
 # Release Notes
 
+## What is New in CosmosDB 1.11.0
+
+December 8, 2017
+
+- Fix bug in querying documents.
+
 ## What is New in CosmosDB 1.10.0
 
 December 6, 2017

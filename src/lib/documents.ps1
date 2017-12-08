@@ -227,7 +227,6 @@ function Get-CosmosDbDocument
 
             $headers += @{
                 'x-ms-documentdb-isquery' = $True
-                'Content-Type'            = 'application/query+json'
             }
 
             if ($QueryEnableCrossPartition -eq $True)
@@ -236,6 +235,9 @@ function Get-CosmosDbDocument
                     'x-ms-documentdb-query-enablecrosspartition' = $True
                 }
             }
+
+            # Set the content type to application/query+json for querying
+            $null = $PSBoundParameters.Add('ContentType', 'application/query+json')
 
             # Create the body JSON for the query
             $bodyObject = @{ query = $Query }

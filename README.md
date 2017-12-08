@@ -71,7 +71,7 @@ To create a connection object so that CosmosDB retrieves the primary or
 secondary key from the Azure Management Portal, use the following command:
 
 ```powershell
-$cosmosDbConnection = New-CosmosDbConnection -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -ResourceGroup 'MyCosmosDbResourceGroup' -MasterKeyType 'Secondary'
+$cosmosDbConnection = New-CosmosDbConnection -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -ResourceGroup 'MyCosmosDbResourceGroup' -MasterKeyType 'SecondaryMasterKey'
 ```
 
 _Note: if PowerShell is not connected to Azure then an interactive
@@ -170,6 +170,23 @@ the database:
 
 ```powershell
 Get-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id $documents.Documents[0].id
+```
+
+Querying a collection in a database:
+
+```powershell
+$query = "SELECT * FROM customers c WHERE (c.id = 'user@contoso.com')"
+Get-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Query $query
+```
+
+Querying a collection in a database using a parameterized query:
+
+```powershell
+$query = "SELECT * FROM customers c WHERE (c.id = @id)"
+$queryParameters = @(
+    @{ name = "@id"; value="user@contoso.com"; }
+)
+Get-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Query $query -QueryParameters $queryParameters
 ```
 
 Delete a document from a collection in the database:
