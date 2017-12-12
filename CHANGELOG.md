@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Added format and type support to collection objects.
+
 ## 1.0.12.126
 
 - Added `*-CosmosDbAttachment` cmdlets.

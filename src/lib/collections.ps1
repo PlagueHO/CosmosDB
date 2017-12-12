@@ -1,5 +1,61 @@
 <#
 .SYNOPSIS
+    Set the custom Cosmos DB Collection types to the collection
+    returned by an API call.
+
+.DESCRIPTION
+    This function applies the custom types to the collection retunred
+    by an API call.
+
+.PARAMETER Collection
+    This is the collection that is retunred by a collection API call.
+#>
+function Set-CosmosDbCollectionType
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        $Collection
+    )
+
+    foreach ($item in $Collection)
+    {
+        $item.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection')
+        $item.Id.PSObject.TypeNames.Insert(0, 'CosmosDB.Id')
+        $item.indexingPolicy.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection.IndexingPolicy')
+        foreach ($includedPath in $item.indexingPolicy.includedPaths)
+        {
+            $includedPath.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection.IndexingPolicy.IncludedPath')
+            foreach ($index in $includedPath.indexes)
+            {
+                $index.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection.IndexingPolicy.IncludedPath.Index')
+            }
+        }
+        foreach ($excludedPath in $item.indexingPolicy.excludedPaths)
+        {
+            $excludedPath.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection.IndexingPolicy.ExcludedPath')
+            foreach ($index in $excludedPath.indexes)
+            {
+                $index.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection.IndexingPolicy.ExcludedPath.Index')
+            }
+        }
+        $item._rid.PSObject.TypeNames.Insert(0, 'CosmosDB.RId')
+        $item._ts.PSObject.TypeNames.Insert(0, 'CosmosDB.Ts')
+        $item._self.PSObject.TypeNames.Insert(0, 'CosmosDB.Self')
+        $item._etag.PSObject.TypeNames.Insert(0, 'CosmosDB.Etag')
+        $item._docs.PSObject.TypeNames.Insert(0, 'CosmosDB.Docs')
+        $item._sprocs.PSObject.TypeNames.Insert(0, 'CosmosDB.Sprocs')
+        $item._triggers.PSObject.TypeNames.Insert(0, 'CosmosDB.Triggers')
+        $item._udfs.PSObject.TypeNames.Insert(0, 'CosmosDB.Udfs')
+        $item._conflicts.PSObject.TypeNames.Insert(0, 'CosmosDB.Conflicts')
+    }
+
+    return $Collection
+}
+
+<#
+.SYNOPSIS
     Return the resource path for a collection object.
 
 .DESCRIPTION
@@ -103,17 +159,21 @@ function Get-CosmosDbCollection
     {
         $null = $PSBoundParameters.Remove('Id')
 
-        return Invoke-CosmosDbRequest @PSBoundParameters `
+        $collection = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'colls' `
             -ResourcePath ('colls/{0}' -f $Id)
-    }
+        }
     else
     {
-        return Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'colls'
+
+        $collection = $result.DocumentCollections
     }
+
+    return (Set-CosmosDbCollectionType -Collection $collection)
 }
 
 <#
@@ -195,12 +255,12 @@ function New-CosmosDbCollection
         $Id,
 
         [Parameter()]
-        [ValidateRange(400,250000)]
+        [ValidateRange(400, 250000)]
         [System.Int32]
         $OfferThroughput,
 
         [Parameter()]
-        [ValidateSet('S1','S2','S3')]
+        [ValidateSet('S1', 'S2', 'S3')]
         [System.String]
         $OfferType,
 
@@ -213,7 +273,7 @@ function New-CosmosDbCollection
     $headers = @{}
 
     if ($PSBoundParameters.ContainsKey('OfferThroughput') -and `
-        $PSBoundParameters.ContainsKey('OfferType'))
+            $PSBoundParameters.ContainsKey('OfferType'))
     {
         New-InvalidOperationException -Message $($LocalizedData.ErrorNewCollectionOfferParameterConflict)
     }
@@ -246,11 +306,13 @@ function New-CosmosDbCollection
         $body = "{ `"id`": `"$id`" }"
     }
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $collection = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'colls' `
         -Headers $headers `
         -Body $body
+
+    return (Set-CosmosDbCollectionType -Collection $collection)
 }
 
 <#
