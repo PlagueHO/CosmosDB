@@ -4,7 +4,7 @@
     returned by an API call.
 
 .DESCRIPTION
-    This function applies the custom types to the collection retunred
+    This function applies the custom types to the collection returned
     by an API call.
 
 .PARAMETER Collection
@@ -370,7 +370,7 @@ function Remove-CosmosDbCollection
 
     $null = $PSBoundParameters.Remove('Id')
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $null = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
         -ResourceType 'colls' `
         -ResourcePath ('colls/{0}' -f $Id)

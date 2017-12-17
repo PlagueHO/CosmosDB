@@ -53,11 +53,13 @@
     # Type files (.ps1xml) to be loaded when importing this module
     TypesToProcess = @(
         'types\collections.types.ps1xml'
+        'types\users.types.ps1xml'
     )
 
     # Format files (.ps1xml) to be loaded when importing this module
     FormatsToProcess  = @(
         'formats\collections.formats.ps1xml'
+        'formats\users.formats.ps1xml'
     )
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess

@@ -311,10 +311,6 @@ InModuleScope CosmosDB {
                 { $script:result = Remove-CosmosDbCollection @removeCosmosDbCollectionParameters } | Should -Not -Throw
             }
 
-            It 'Should return expected result' {
-                $script:result._count | Should -Be 1
-            }
-
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
