@@ -299,8 +299,7 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'colls' -and $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
+                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'colls' -and $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) }
 
             It 'Should not throw exception' {
                 $removeCosmosDbCollectionParameters = @{

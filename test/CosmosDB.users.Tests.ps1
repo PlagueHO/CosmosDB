@@ -176,8 +176,7 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser1) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser1) }
 
             It 'Should not throw exception' {
                 $removeCosmosDbUserParameters = @{

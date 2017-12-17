@@ -1,5 +1,34 @@
 <#
 .SYNOPSIS
+    Set the custom Cosmos DB User types to the permission
+    returned by an API call.
+
+.DESCRIPTION
+    This function applies the custom types to the permission returned
+    by an API call.
+
+.PARAMETER Permission
+    This is the permission that is retunred by a user API call.
+#>
+function Set-CosmosDbPermissionType
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        $Permission
+    )
+
+    foreach ($item in $Permission)
+    {
+        $item.PSObject.TypeNames.Insert(0, 'CosmosDB.Permission')
+    }
+
+    return $Permission
+}
+
+<#
+.SYNOPSIS
     Return the resource path for a permission object.
 
 .DESCRIPTION
@@ -122,18 +151,22 @@ function Get-CosmosDbPermission
     {
         $null = $PSBoundParameters.Remove('Id')
 
-        return Invoke-CosmosDbRequest @PSBoundParameters `
+        $permission = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'permissions' `
             -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
     }
     else
     {
-        return Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'permissions' `
             -ResourcePath $resourcePath
+
+        $permission = $result.Permissions
     }
+
+    return (Set-CosmosDbPermissionType -Permission $permission)
 }
 
 <#
@@ -232,11 +265,16 @@ function New-CosmosDbPermission
 
     $resourcePath = ('users/{0}/permissions' -f $UserId)
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $permission = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'permissions' `
         -ResourcePath $resourcePath `
         -Body "{ `"id`": `"$id`", `"permissionMode`" : `"$PermissionMode`", `"resource`" : `"$Resource`" }"
+
+    if ($permission)
+    {
+        return (Set-CosmosDbPermissionType -Permission $permission)
+    }
 }
 
 <#
@@ -315,7 +353,7 @@ function Remove-CosmosDbPermission
 
     $resourcePath = ('users/{0}/permissions/{1}' -f $UserId,$Id)
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $null = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
         -ResourceType 'permissions' `
         -ResourcePath $resourcePath
