@@ -22,14 +22,13 @@ function Set-CosmosDbCollectionType
     foreach ($item in $Collection)
     {
         $item.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection')
-        $item.Id.PSObject.TypeNames.Insert(0, 'CosmosDB.Id')
         $item.indexingPolicy.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection.IndexingPolicy')
         foreach ($includedPath in $item.indexingPolicy.includedPaths)
         {
             $includedPath.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection.IndexingPolicy.IncludedPath')
             foreach ($index in $includedPath.indexes)
             {
-                $index.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection.IndexingPolicy.IncludedPath.Index')
+                $index.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection.IndexingPolicy.Index')
             }
         }
         foreach ($excludedPath in $item.indexingPolicy.excludedPaths)
@@ -37,18 +36,9 @@ function Set-CosmosDbCollectionType
             $excludedPath.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection.IndexingPolicy.ExcludedPath')
             foreach ($index in $excludedPath.indexes)
             {
-                $index.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection.IndexingPolicy.ExcludedPath.Index')
+                $index.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection.IndexingPolicy.Index')
             }
         }
-        $item._rid.PSObject.TypeNames.Insert(0, 'CosmosDB.RId')
-        $item._ts.PSObject.TypeNames.Insert(0, 'CosmosDB.Ts')
-        $item._self.PSObject.TypeNames.Insert(0, 'CosmosDB.Self')
-        $item._etag.PSObject.TypeNames.Insert(0, 'CosmosDB.Etag')
-        $item._docs.PSObject.TypeNames.Insert(0, 'CosmosDB.Docs')
-        $item._sprocs.PSObject.TypeNames.Insert(0, 'CosmosDB.Sprocs')
-        $item._triggers.PSObject.TypeNames.Insert(0, 'CosmosDB.Triggers')
-        $item._udfs.PSObject.TypeNames.Insert(0, 'CosmosDB.Udfs')
-        $item._conflicts.PSObject.TypeNames.Insert(0, 'CosmosDB.Conflicts')
     }
 
     return $Collection
