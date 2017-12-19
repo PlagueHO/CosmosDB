@@ -166,7 +166,10 @@ function Get-CosmosDbPermission
         $permission = $result.Permissions
     }
 
-    return (Set-CosmosDbPermissionType -Permission $permission)
+    if ($permission)
+    {
+        return (Set-CosmosDbPermissionType -Permission $permission)
+    }
 }
 
 <#

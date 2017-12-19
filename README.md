@@ -428,7 +428,7 @@ function tax(income) {
         return income * 0.4;
 }
 '@
-New-CosmosDbUserDefinedFunction -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'udfTax' -Body $Body
+New-CosmosDbUserDefinedFunction -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'udfTax' -UserDefinedFunctionBody $Body
 ```
 
 Update an existing user defined function for a collection in the database:

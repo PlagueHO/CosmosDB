@@ -144,7 +144,10 @@ function Get-CosmosDbUser
         $user = $result.Users
     }
 
-    return (Set-CosmosDbUserType -User $user)
+    if ($user)
+    {
+        return (Set-CosmosDbUserType -User $user)
+    }
 }
 
 <#

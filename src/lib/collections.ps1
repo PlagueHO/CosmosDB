@@ -163,7 +163,10 @@ function Get-CosmosDbCollection
         $collection = $result.DocumentCollections
     }
 
-    return (Set-CosmosDbCollectionType -Collection $collection)
+    if ($collection)
+    {
+        return (Set-CosmosDbCollectionType -Collection $collection)
+    }
 }
 
 <#

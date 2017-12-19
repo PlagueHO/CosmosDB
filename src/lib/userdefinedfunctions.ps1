@@ -1,5 +1,35 @@
 <#
 .SYNOPSIS
+    Set the custom Cosmos DB User Defined Function types to the user
+    defined function returned by an API call.
+
+.DESCRIPTION
+    This function applies the custom types to the user defined function
+    returned by an API call.
+
+.PARAMETER UserDefinedFunction
+    This is the user defined function that is retunred by a user
+    defined function API call.
+#>
+function Set-CosmosDbUserDefinedFunctionType
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        $UserDefinedFunction
+    )
+
+    foreach ($item in $UserDefinedFunction)
+    {
+        $item.PSObject.TypeNames.Insert(0, 'CosmosDB.UserDefinedFunction')
+    }
+
+    return $UserDefinedFunction
+}
+
+<#
+.SYNOPSIS
     Return the resource path for a user defined function object.
 
 .DESCRIPTION
@@ -122,17 +152,24 @@ function Get-CosmosDbUserDefinedFunction
     {
         $null = $PSBoundParameters.Remove('Id')
 
-        return Invoke-CosmosDbRequest @PSBoundParameters `
+        $userDefinedFunction = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'udfs' `
             -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
     }
     else
     {
-        return Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'udfs' `
             -ResourcePath $resourcePath
+
+        $userDefinedFunction = $result.UserDefinedFunctions
+    }
+
+    if ($userDefinedFunction)
+    {
+        return (Set-CosmosDbUserDefinedFunctionType -UserDefinedFunction $userDefinedFunction)
     }
 }
 
@@ -224,11 +261,16 @@ function New-CosmosDbUserDefinedFunction
 
     $UserDefinedFunctionBody = ((($UserDefinedFunctionBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $userDefinedFunction = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'udfs' `
         -ResourcePath $resourcePath `
         -Body "{ `"id`": `"$id`", `"body`" : `"$UserDefinedFunctionBody`" }"
+
+    if ($userDefinedFunction)
+    {
+        return (Set-CosmosDbUserDefinedFunctionType -UserDefinedFunction $userDefinedFunction)
+    }
 }
 
 <#
@@ -307,7 +349,7 @@ function Remove-CosmosDbUserDefinedFunction
 
     $resourcePath = ('colls/{0}/udfs/{1}' -f $CollectionId, $Id)
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $null = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
         -ResourceType 'udfs' `
         -ResourcePath $resourcePath
@@ -402,9 +444,14 @@ function Set-CosmosDbUserDefinedFunction
 
     $UserDefinedFunctionBody = ((($UserDefinedFunctionBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $userDefinedFunction = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Put' `
         -ResourceType 'udfs' `
         -ResourcePath $resourcePath `
         -Body "{ `"id`": `"$id`", `"body`" : `"$UserDefinedFunctionBody`" }"
+
+    if ($userDefinedFunction)
+    {
+        return (Set-CosmosDbUserDefinedFunctionType -UserDefinedFunction $userDefinedFunction)
+    }
 }
