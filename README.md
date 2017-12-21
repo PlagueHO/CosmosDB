@@ -311,7 +311,7 @@ function updateMetadata() {
     }
 }
 '@
-New-CosmosDbTrigger -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'MyTrigger' -Body $Body -TriggerOperation All -TriggerType Post
+New-CosmosDbTrigger -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'MyTrigger' -TriggerBody $Body -TriggerOperation All -TriggerType Post
 ```
 
 Update an existing trigger for a collection in the database to execute before
