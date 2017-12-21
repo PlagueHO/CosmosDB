@@ -8,7 +8,7 @@
     by an API call.
 
 .PARAMETER Permission
-    This is the permission that is retunred by a user API call.
+    This is the permission that is returned by a user API call.
 #>
 function Set-CosmosDbPermissionType
 {

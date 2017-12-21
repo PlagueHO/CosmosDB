@@ -15,9 +15,9 @@ OR RESULTS IN CONNECTION WITH THE USE OF THIS CODE AND INFORMATION
 REMAINS WITH THE USER.
 ******************************************************************** -->
 <Types>
-<!--CosmosDb.Trigger-->
+<!--CosmosDb.StoredProcedure-->
    <Type>
-      <Name>CosmosDb.Trigger</Name>
+      <Name>CosmosDb.StoredProcedure</Name>
       <Members>
          <MemberSet>
             <Name>PSStandardMembers</Name>
@@ -26,8 +26,6 @@ REMAINS WITH THE USER.
                   <Name>DefaultDisplayPropertySet</Name>
                   <ReferencedProperties>
                     <Name>id</Name>
-                    <Name>triggerOperation</Name>
-                    <Name>triggerType</Name>
                     <Name>_etag</Name>
                     <Name>_rid</Name>
                     <Name>_ts</Name>

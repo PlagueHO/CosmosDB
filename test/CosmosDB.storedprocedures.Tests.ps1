@@ -22,21 +22,43 @@ InModuleScope CosmosDB {
         BaseUri  = ('https://{0}.documents.azure.com/' -f $script:testAccount)
     }
     $script:testCollection = 'testCollection'
-    $script:testStoredProcedure = 'testStoredProcedure'
+    $script:testStoredProcedure1 = 'testStoredProcedure1'
+    $script:testStoredProcedure2 = 'testStoredProcedure2'
     $script:testStoredProcedureBody = 'testStoredProcedureBody'
-    $script:testJson = @'
+    $script:testJsonMulti = @'
     {
         "_rid": "Sl8fALN4sw4=",
-        "StoredProcedures": [{
-            "body": "testStoredProcedureBody",
-            "id": "testStoredProcedure",
-            "_rid": "Sl8fALN4sw4CAAAAAAAAgA==",
-            "_ts": 1449681197,
-            "_self": "dbs\/Sl8fAA==\/colls\/Sl8fALN4sw4=\/sprocs\/Sl8fALN4sw4CAAAAAAAAgA==\/",
-            "_etag": "\"06003ce1-0000-0000-0000-5668612d0000\""
-        }],
-        "_count": 1
+        "StoredProcedures": [
+            {
+                "body": "testStoredProcedureBody",
+                "id": "testStoredProcedure1",
+                "_rid": "Sl8fALN4sw4CAAAAAAAAgA==",
+                "_ts": 1449681197,
+                "_self": "dbs\/Sl8fAA==\/colls\/Sl8fALN4sw4=\/sprocs\/Sl8fALN4sw4CAAAAAAAAgA==\/",
+                "_etag": "\"06003ce1-0000-0000-0000-5668612d0000\""
+            },
+            {
+                "body": "testStoredProcedureBody",
+                "id": "testStoredProcedure2",
+                "_rid": "Sl8fALN4sw4CAAAAAAAAgA==",
+                "_ts": 1449681197,
+                "_self": "dbs\/Sl8fAA==\/colls\/Sl8fALN4sw4=\/sprocs\/Sl8fALN4sw4CAAAAAAAAgA==\/",
+                "_etag": "\"06003ce1-0000-0000-0000-5668612d0000\""
+            }
+        ],
+        "_count": 2
     }
+'@
+
+$script:testJsonSingle = @'
+{
+    "body": "testStoredProcedureBody",
+    "id": "testStoredProcedure1",
+    "_rid": "Sl8fALN4sw4CAAAAAAAAgA==",
+    "_ts": 1449681197,
+    "_self": "dbs\/Sl8fAA==\/colls\/Sl8fALN4sw4=\/sprocs\/Sl8fALN4sw4CAAAAAAAAgA==\/",
+    "_etag": "\"06003ce1-0000-0000-0000-5668612d0000\""
+}
 '@
 
     Describe 'Get-CosmosDbStoredProcedureResourcePath' -Tag 'Unit' {
@@ -51,14 +73,14 @@ InModuleScope CosmosDB {
                 $getCosmosDbStoredProcedureResourcePathParameters = @{
                     Database     = $script:testDatabase
                     CollectionId = $script:testCollection
-                    Id           = $script:testStoredProcedure
+                    Id           = $script:testStoredProcedure1
                 }
 
                 { $script:result = Get-CosmosDbStoredProcedureResourcePath @getCosmosDbStoredProcedureResourcePathParameters } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
-                $script:result | Should -Be ('dbs/{0}/colls/{1}/sprocs/{2}' -f $script:testDatabase, $script:testCollection, $script:testStoredProcedure)
+                $script:result | Should -Be ('dbs/{0}/colls/{1}/sprocs/{2}' -f $script:testDatabase, $script:testCollection, $script:testStoredProcedure1)
             }
         }
     }
@@ -74,7 +96,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'sprocs' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
 
             It 'Should not throw exception' {
                 $getCosmosDbStoredProcedureParameters = @{
@@ -86,7 +108,9 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.Count | Should -Be 2
+                $script:result[0].id | Should -Be $script:testStoredProcedure1
+                $script:result[1].id | Should -Be $script:testStoredProcedure2
             }
 
             It 'Should call expected mocks' {
@@ -102,27 +126,27 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'sprocs' -and $ResourcePath -eq ('colls/{0}/sprocs/{1}' -f $script:testCollection, $script:testStoredProcedure) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'sprocs' -and $ResourcePath -eq ('colls/{0}/sprocs/{1}' -f $script:testCollection, $script:testStoredProcedure1) } `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $getCosmosDbStoredProcedureParameters = @{
                     Connection   = $script:testConnection
                     CollectionId = $script:testCollection
-                    Id           = $script:testStoredProcedure
+                    Id           = $script:testStoredProcedure1
                 }
 
                 { $script:result = Get-CosmosDbStoredProcedure @getCosmosDbStoredProcedureParameters } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.id | Should -Be $script:testStoredProcedure1
             }
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'sprocs' -and $ResourcePath -eq ('colls/{0}/sprocs/{1}' -f $script:testCollection, $script:testStoredProcedure) } `
+                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'sprocs' -and $ResourcePath -eq ('colls/{0}/sprocs/{1}' -f $script:testCollection, $script:testStoredProcedure1) } `
                     -Exactly -Times 1
             }
         }
@@ -139,13 +163,13 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'sprocs' -and $body -eq '["testParameter1","testParameter2"]'} `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $invokeCosmosDbStoredProcedureParameters = @{
                     Connection               = $script:testConnection
                     CollectionId             = $script:testCollection
-                    Id                       = $script:testStoredProcedure
+                    Id                       = $script:testStoredProcedure1
                     StoredProcedureParameter = @('testParameter1', 'testParameter2')
                 }
 
@@ -153,7 +177,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.id | Should -Be $script:testStoredProcedure1
             }
 
             It 'Should call expected mocks' {
@@ -176,13 +200,13 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'sprocs' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbStoredProcedureParameters = @{
                     Connection          = $script:testConnection
                     CollectionId        = $script:testCollection
-                    Id                  = $script:testStoredProcedure
+                    Id                  = $script:testStoredProcedure1
                     StoredProcedureBody = $script:testStoredProcedureBody
                 }
 
@@ -190,7 +214,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.id | Should -Be $script:testStoredProcedure1
             }
 
             It 'Should call expected mocks' {
@@ -212,27 +236,23 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'sprocs' -and $ResourcePath -eq ('colls/{0}/sprocs/{1}' -f $script:testCollection, $script:testStoredProcedure) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'sprocs' -and $ResourcePath -eq ('colls/{0}/sprocs/{1}' -f $script:testCollection, $script:testStoredProcedure1) } `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
 
             It 'Should not throw exception' {
                 $removeCosmosDbStoredProcedureParameters = @{
                     Connection   = $script:testConnection
                     CollectionId = $script:testCollection
-                    Id           = $script:testStoredProcedure
+                    Id           = $script:testStoredProcedure1
                 }
 
                 { $script:result = Remove-CosmosDbStoredProcedure @removeCosmosDbStoredProcedureParameters } | Should -Not -Throw
             }
 
-            It 'Should return expected result' {
-                $script:result._count | Should -Be 1
-            }
-
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'sprocs' -and $ResourcePath -eq ('colls/{0}/sprocs/{1}' -f $script:testCollection, $script:testStoredProcedure) } `
+                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'sprocs' -and $ResourcePath -eq ('colls/{0}/sprocs/{1}' -f $script:testCollection, $script:testStoredProcedure1) } `
                     -Exactly -Times 1
             }
         }
@@ -249,13 +269,13 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'sprocs' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $setCosmosDbStoredProcedureParameters = @{
                     Connection          = $script:testConnection
                     CollectionId        = $script:testCollection
-                    Id                  = $script:testStoredProcedure
+                    Id                  = $script:testStoredProcedure1
                     StoredProcedureBody = $script:testStoredProcedureBody
                 }
 
@@ -263,7 +283,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.id | Should -Be $script:testStoredProcedure1
             }
 
             It 'Should call expected mocks' {

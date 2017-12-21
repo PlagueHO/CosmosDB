@@ -8,7 +8,7 @@
     returned by an API call.
 
 .PARAMETER UserDefinedFunction
-    This is the user defined function that is retunred by a user
+    This is the user defined function that is returned by a user
     defined function API call.
 #>
 function Set-CosmosDbUserDefinedFunctionType

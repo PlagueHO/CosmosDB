@@ -54,6 +54,7 @@
     TypesToProcess = @(
         'types\collections.types.ps1xml'
         'types\permissions.types.ps1xml'
+        'types\storedprocedures.types.ps1xml'
         'types\triggers.types.ps1xml'
         'types\userdefinedfunctions.types.ps1xml'
         'types\users.types.ps1xml'
@@ -63,6 +64,7 @@
     FormatsToProcess  = @(
         'formats\collections.formats.ps1xml'
         'formats\permissions.formats.ps1xml'
+        'formats\storedprocedures.formats.ps1xml'
         'formats\triggers.formats.ps1xml'
         'formats\userdefinedfunctions.formats.ps1xml'
         'formats\users.formats.ps1xml'

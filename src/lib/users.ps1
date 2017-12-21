@@ -8,7 +8,7 @@
     by an API call.
 
 .PARAMETER User
-    This is the user that is retunred by a user API call.
+    This is the user that is returned by a user API call.
 #>
 function Set-CosmosDbUserType
 {

@@ -8,7 +8,7 @@
     by an API call.
 
 .PARAMETER Trigger
-    This is the trigger that is retunred by a trigger API call.
+    This is the trigger that is returned by a trigger API call.
 #>
 function Set-CosmosDbTriggerType
 {

@@ -8,7 +8,7 @@
     by an API call.
 
 .PARAMETER Collection
-    This is the collection that is retunred by a collection API call.
+    This is the collection that is returned by a collection API call.
 #>
 function Set-CosmosDbCollectionType
 {
