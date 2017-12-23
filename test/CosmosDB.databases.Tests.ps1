@@ -21,19 +21,43 @@ InModuleScope CosmosDB {
         KeyType  = 'master'
         BaseUri  = ('https://{0}.documents.azure.com/' -f $script:testAccount)
     }
-    $script:testJson = @'
+    $script:testDatabase1 = 'testDatabase1'
+    $script:testDatabase2 = 'testDatabase2'
+    $script:testJsonMulti = @'
 {
     "_rid": "",
-    "Databases": [{
-        "id": "testdatabase",
-        "_rid": "vdoeAA==",
-        "_ts": 1442511602,
-        "_self": "dbs\/vdoeAA==\/",
-        "_etag": "\"00000100-0000-0000-0000-55fafaf20000\"",
-        "_colls": "colls\/",
-        "_users": "users\/"
-    }],
-    "_count": 1
+    "Databases": [
+        {
+            "id": "testdatabase1",
+            "_rid": "vdoeAA==",
+            "_ts": 1442511602,
+            "_self": "dbs\/vdoeAA==\/",
+            "_etag": "\"00000100-0000-0000-0000-55fafaf20000\"",
+            "_colls": "colls\/",
+            "_users": "users\/"
+        },
+        {
+            "id": "testdatabase2",
+            "_rid": "vdoeAA==",
+            "_ts": 1442511602,
+            "_self": "dbs\/vdoeAA==\/",
+            "_etag": "\"00000100-0000-0000-0000-55fafaf20000\"",
+            "_colls": "colls\/",
+            "_users": "users\/"
+        }
+    ],
+    "_count": 2
+}
+'@
+$script:testJsonSingle = @'
+{
+    "id": "testdatabase1",
+    "_rid": "vdoeAA==",
+    "_ts": 1442511602,
+    "_self": "dbs\/vdoeAA==\/",
+    "_etag": "\"00000100-0000-0000-0000-55fafaf20000\"",
+    "_colls": "colls\/",
+    "_users": "users\/"
 }
 '@
 
@@ -70,7 +94,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'dbs' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
 
             It 'Should not throw exception' {
                 $getCosmosDbDatabaseParameters = @{
@@ -81,7 +105,9 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.Count | Should -Be 2
+                $script:result[0].id | Should -Be $script:testDatabase1
+                $script:result[1].id | Should -Be $script:testDatabase2
             }
 
             It 'Should call expected mocks' {
@@ -98,7 +124,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'dbs' -and $ResourcePath -eq ('dbs/{0}' -f $script:testDatabase) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $getCosmosDbDatabaseParameters = @{
@@ -110,7 +136,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.id | Should -Be $script:testDatabase1
             }
 
             It 'Should call expected mocks' {
@@ -132,7 +158,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'dbs' -and $Body -eq "{ `"id`": `"$($script:testDatabase)`" }" } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbDatabaseParameters = @{
@@ -144,7 +170,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.id | Should -Be $script:testDatabase1
             }
 
             It 'Should call expected mocks' {
@@ -166,8 +192,7 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'dbs' -and $ResourcePath -eq ('dbs/{0}' -f $script:testDatabase) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'dbs' -and $ResourcePath -eq ('dbs/{0}' -f $script:testDatabase) }
 
             It 'Should not throw exception' {
                 $removeCosmosDbDatabaseParameters = @{
@@ -176,10 +201,6 @@ InModuleScope CosmosDB {
                 }
 
                 { $script:result = Remove-CosmosDbDatabase @removeCosmosDbDatabaseParameters } | Should -Not -Throw
-            }
-
-            It 'Should return expected result' {
-                $script:result._count | Should -Be 1
             }
 
             It 'Should call expected mocks' {

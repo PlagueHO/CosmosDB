@@ -54,6 +54,7 @@
     TypesToProcess = @(
         'types\attachments.types.ps1xml'
         'types\collections.types.ps1xml'
+        'types\databases.types.ps1xml'
         'types\documents.types.ps1xml'
         'types\permissions.types.ps1xml'
         'types\storedprocedures.types.ps1xml'
@@ -66,6 +67,7 @@
     FormatsToProcess  = @(
         'formats\attachments.formats.ps1xml'
         'formats\collections.formats.ps1xml'
+        'formats\databases.formats.ps1xml'
         'formats\documents.formats.ps1xml'
         'formats\permissions.formats.ps1xml'
         'formats\storedprocedures.formats.ps1xml'
