@@ -14,7 +14,7 @@ Delete a datanase from a CosmosDB account.
 
 ### Connection (Default)
 ```
-Remove-CosmosDbDatabase -Connection <PSObject> [-Key <SecureString>] [-KeyType <String>] -Id <String>
+Remove-CosmosDbDatabase -Connection <Connection> [-Key <SecureString>] [-KeyType <String>] -Id <String>
  [<CommonParameters>]
 ```
 
@@ -45,7 +45,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

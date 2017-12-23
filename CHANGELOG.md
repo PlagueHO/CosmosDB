@@ -2,7 +2,8 @@
 
 ## Unreleased
 
-- Added format and type support to collection objects.
+- BREAKING CHANGE: Converted all cmdlets to return custom types
+  and added support for custom formats.
 
 ## 1.0.12.126
 
@@ -76,14 +77,3 @@
 ## 1.0.0.30
 
 - Initial Release.
-
-
-
-
-
-
-
-
-
-
-

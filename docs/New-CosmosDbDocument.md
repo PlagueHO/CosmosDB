@@ -14,7 +14,7 @@ Create a new document for a collection in a CosmosDB database.
 
 ### Connection (Default)
 ```
-New-CosmosDbDocument -Connection <PSObject> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
+New-CosmosDbDocument -Connection <Connection> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
  -CollectionId <String> -DocumentBody <String> [-IndexingDirective <String>] [<CommonParameters>]
 ```
 
@@ -45,7 +45,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

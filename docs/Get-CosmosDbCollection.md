@@ -14,7 +14,7 @@ Return the collections in a CosmosDB database.
 
 ### Connection (Default)
 ```
-Get-CosmosDbCollection -Connection <PSObject> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
+Get-CosmosDbCollection -Connection <Connection> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  [-Id <String>] [<CommonParameters>]
 ```
 
@@ -47,7 +47,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

@@ -14,7 +14,7 @@ Update a document from a CosmosDB collection.
 
 ### Connection (Default)
 ```
-Set-CosmosDbDocument -Connection <PSObject> [-Database <String>] [-Key <SecureString>] -CollectionId <String>
+Set-CosmosDbDocument -Connection <Connection> [-Database <String>] [-Key <SecureString>] -CollectionId <String>
  -Id <String> -DocumentBody <String> [-IndexingDirective <String>] [-PartitionKey <String>]
  [<CommonParameters>]
 ```
@@ -48,7 +48,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

@@ -14,8 +14,8 @@ Delete a collection from a CosmosDB database.
 
 ### Connection (Default)
 ```
-Remove-CosmosDbCollection -Connection <PSObject> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -Id <String> [<CommonParameters>]
+Remove-CosmosDbCollection -Connection <Connection> [-Key <SecureString>] [-KeyType <String>]
+ [-Database <String>] -Id <String> [<CommonParameters>]
 ```
 
 ### Account
@@ -45,7 +45,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

@@ -14,7 +14,7 @@ Create a new collection in a CosmosDB database.
 
 ### Connection (Default)
 ```
-New-CosmosDbCollection -Connection <PSObject> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
+New-CosmosDbCollection -Connection <Connection> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>] [<CommonParameters>]
 ```
 
@@ -45,7 +45,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

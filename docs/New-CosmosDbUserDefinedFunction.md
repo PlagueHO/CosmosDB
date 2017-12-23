@@ -14,7 +14,7 @@ Create a new user defined function for a collection in a CosmosDB database.
 
 ### Connection (Default)
 ```
-New-CosmosDbUserDefinedFunction -Connection <PSObject> [-KeyType <String>] [-Key <SecureString>]
+New-CosmosDbUserDefinedFunction -Connection <Connection> [-KeyType <String>] [-Key <SecureString>]
  [-Database <String>] -CollectionId <String> -Id <String> -UserDefinedFunctionBody <String>
  [<CommonParameters>]
 ```
@@ -47,7 +47,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

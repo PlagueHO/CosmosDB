@@ -14,7 +14,7 @@ Return the databases in a CosmosDB account.
 
 ### Connection (Default)
 ```
-Get-CosmosDbDatabase -Connection <PSObject> [-Key <SecureString>] [-KeyType <String>] [-Id <String>]
+Get-CosmosDbDatabase -Connection <Connection> [-Key <SecureString>] [-KeyType <String>] [-Id <String>]
  [<CommonParameters>]
 ```
 
@@ -49,7 +49,7 @@ by \`New-CosmosDbConnection\`.
 If the connection contains a database it will be ignored.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

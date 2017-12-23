@@ -14,7 +14,7 @@ Execute a new stored procedure for a collection in a CosmosDB database.
 
 ### Connection (Default)
 ```
-Invoke-CosmosDbStoredProcedure -Connection <PSObject> [-KeyType <String>] [-Key <SecureString>]
+Invoke-CosmosDbStoredProcedure -Connection <Connection> [-KeyType <String>] [-Key <SecureString>]
  [-Database <String>] -CollectionId <String> -Id <String> [-StoredProcedureParameter <String[]>]
  [<CommonParameters>]
 ```
@@ -47,7 +47,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

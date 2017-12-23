@@ -14,7 +14,7 @@ Delete a stored procedure from a CosmosDB collection.
 
 ### Connection (Default)
 ```
-Remove-CosmosDbStoredProcedure -Connection <PSObject> [-Database <String>] [-Key <SecureString>]
+Remove-CosmosDbStoredProcedure -Connection <Connection> [-Database <String>] [-Key <SecureString>]
  [-KeyType <String>] -CollectionId <String> [-Id <String>] [<CommonParameters>]
 ```
 
@@ -45,7 +45,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

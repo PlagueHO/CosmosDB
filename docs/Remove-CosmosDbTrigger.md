@@ -14,7 +14,7 @@ Delete a trigger from a CosmosDB collection.
 
 ### Connection (Default)
 ```
-Remove-CosmosDbTrigger -Connection <PSObject> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
+Remove-CosmosDbTrigger -Connection <Connection> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  -CollectionId <String> [-Id <String>] [<CommonParameters>]
 ```
 
@@ -45,7 +45,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

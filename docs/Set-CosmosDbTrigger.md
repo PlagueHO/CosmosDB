@@ -14,7 +14,7 @@ Update a trigger from a CosmosDB collection.
 
 ### Connection (Default)
 ```
-Set-CosmosDbTrigger -Connection <PSObject> [-Database <String>] [-Key <SecureString>] -CollectionId <String>
+Set-CosmosDbTrigger -Connection <Connection> [-Database <String>] [-Key <SecureString>] -CollectionId <String>
  -Id <String> -TriggerBody <String> -TriggerOperation <String> -TriggerType <String> [<CommonParameters>]
 ```
 
@@ -47,7 +47,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 
