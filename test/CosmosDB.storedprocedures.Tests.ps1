@@ -236,8 +236,7 @@ $script:testJsonSingle = @'
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'sprocs' -and $ResourcePath -eq ('colls/{0}/sprocs/{1}' -f $script:testCollection, $script:testStoredProcedure1) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
+                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'sprocs' -and $ResourcePath -eq ('colls/{0}/sprocs/{1}' -f $script:testCollection, $script:testStoredProcedure1) }
 
             It 'Should not throw exception' {
                 $removeCosmosDbStoredProcedureParameters = @{

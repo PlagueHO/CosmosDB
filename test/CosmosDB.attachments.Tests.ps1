@@ -23,22 +23,45 @@ InModuleScope CosmosDB {
     }
     $script:testCollection = 'testCollection'
     $script:testDocument = 'testDocument'
-    $script:testId = 'testAttachment'
+    $script:testAttachment1 = 'testAttachment1'
+    $script:testAttachment2 = 'testAttachment2'
     $script:testContentType = 'image/jpg'
     $script:testMedia = 'www.bing.com'
-    $script:testJson = @'
+    $script:testJsonMulti = @'
 {
     "_rid": "Sl8fALN4sw4CAAAAAAAAAA==",
-    "Attachments": [{
-        "contentType": "image/jpg",
-        "id": "testAttachment",
-        "media": "'www.bing.com",
-        "_rid": "Sl8fALN4sw4CAAAAAAAAAOo3S2U=",
-        "_ts": 1449679020,
-        "_self": "dbs\/Sl8fAA==\/colls\/Sl8fALN4sw4=\/docs\/Sl8fALN4sw4CAAAAAAAAAA==\/attachments\/Sl8fALN4sw4CAAAAAAAAAOo3S2U=",
-        "_etag": "\"06007fe0-0000-0000-0000-566858ac0000\""
-    }],
-    "_count": 1
+    "Attachments": [
+        {
+            "contentType": "image/jpg",
+            "id": "testAttachment1",
+            "media": "'www.bing.com",
+            "_rid": "Sl8fALN4sw4CAAAAAAAAAOo3S2U=",
+            "_ts": 1449679020,
+            "_self": "dbs\/Sl8fAA==\/colls\/Sl8fALN4sw4=\/docs\/Sl8fALN4sw4CAAAAAAAAAA==\/attachments\/Sl8fALN4sw4CAAAAAAAAAOo3S2U=",
+            "_etag": "\"06007fe0-0000-0000-0000-566858ac0000\""
+        },
+        {
+            "contentType": "image/jpg",
+            "id": "testAttachment2",
+            "media": "'www.bing.com",
+            "_rid": "Sl8fALN4sw4CAAAAAAAAAOo3S2U=",
+            "_ts": 1449679020,
+            "_self": "dbs\/Sl8fAA==\/colls\/Sl8fALN4sw4=\/docs\/Sl8fALN4sw4CAAAAAAAAAA==\/attachments\/Sl8fALN4sw4CAAAAAAAAAOo3S2U=",
+            "_etag": "\"06007fe0-0000-0000-0000-566858ac0000\""
+        }
+    ],
+    "_count": 2
+}
+'@
+    $script:testJsonSingle = @'
+{
+    "contentType": "image/jpg",
+    "id": "testAttachment1",
+    "media": "'www.bing.com",
+    "_rid": "Sl8fALN4sw4CAAAAAAAAAOo3S2U=",
+    "_ts": 1449679020,
+    "_self": "dbs\/Sl8fAA==\/colls\/Sl8fALN4sw4=\/docs\/Sl8fALN4sw4CAAAAAAAAAA==\/attachments\/Sl8fALN4sw4CAAAAAAAAAOo3S2U=",
+    "_etag": "\"06007fe0-0000-0000-0000-566858ac0000\""
 }
 '@
     $script:testResource = 'dbs/testDatabase/colls/testCollection/docs/testDocument/attachment/'
@@ -56,14 +79,14 @@ InModuleScope CosmosDB {
                     Database     = $script:testDatabase
                     CollectionId = $script:testCollection
                     DocumentId   = $script:testDocument
-                    Id           = $script:testId
+                    Id           = $script:testAttachment1
                 }
 
                 { $script:result = Get-CosmosDbAttachmentResourcePath @getCosmosDbAttachmentResourcePathParameters } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
-                $script:result | Should -Be ('dbs/{0}/colls/{1}/docs/{2}/attachments/{3}' -f $script:testDatabase, $script:testCollection, $script:testDocument, $script:testId)
+                $script:result | Should -Be ('dbs/{0}/colls/{1}/docs/{2}/attachments/{3}' -f $script:testDatabase, $script:testCollection, $script:testDocument, $script:testAttachment1)
             }
         }
     }
@@ -79,7 +102,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'Attachments' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
 
             It 'Should not throw exception' {
                 $getCosmosDbAttachmentParameters = @{
@@ -92,7 +115,9 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.Count | Should -Be 2
+                $script:result[0].id | Should -Be $script:testAttachment1
+                $script:result[1].id | Should -Be $script:testAttachment2
             }
 
             It 'Should call expected mocks' {
@@ -108,28 +133,28 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'Attachments' -and $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testId) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'Attachments' -and $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testAttachment1) } `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $getCosmosDbAttachmentParameters = @{
                     Connection   = $script:testConnection
                     CollectionId = $script:testCollection
                     DocumentId   = $script:testDocument
-                    Id           = $script:testId
+                    Id           = $script:testAttachment1
                 }
 
                 { $script:result = Get-CosmosDbAttachment @getCosmosDbAttachmentParameters } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.id | Should -Be $script:testAttachment1
             }
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'Attachments' -and $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testId) } `
+                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'Attachments' -and $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testAttachment1) } `
                     -Exactly -Times 1
             }
         }
@@ -146,14 +171,14 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'Attachments' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbAttachmentParameters = @{
                     Connection   = $script:testConnection
                     CollectionId = $script:testCollection
                     DocumentId   = $script:testDocument
-                    Id           = $script:testId
+                    Id           = $script:testAttachment1
                     ContentType  = $script:testContentType
                     Media        = $script:testMedia
                 }
@@ -162,7 +187,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.id | Should -Be $script:testAttachment1
             }
 
             It 'Should call expected mocks' {
@@ -184,28 +209,23 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'Attachments' -and $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testId) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'Attachments' -and $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testAttachment1) }
 
             It 'Should not throw exception' {
                 $removeCosmosDbAttachmentParameters = @{
-                    Connection = $script:testConnection
+                    Connection   = $script:testConnection
                     CollectionId = $script:testCollection
                     DocumentId   = $script:testDocument
-                    Id           = $script:testId
+                    Id           = $script:testAttachment1
                 }
 
                 { $script:result = Remove-CosmosDbAttachment @removeCosmosDbAttachmentParameters } | Should -Not -Throw
             }
 
-            It 'Should return expected result' {
-                $script:result._count | Should -Be 1
-            }
-
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'Attachments' -and $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testId) } `
+                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'Attachments' -and $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testAttachment1) } `
                     -Exactly -Times 1
             }
         }
@@ -222,14 +242,14 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'attachments' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $setCosmosDbAttachmentParameters = @{
                     Connection   = $script:testConnection
                     CollectionId = $script:testCollection
                     DocumentId   = $script:testDocument
-                    Id           = $script:testId
+                    Id           = $script:testAttachment1
                     ContentType  = $script:testContentType
                     Media        = $script:testMedia
                 }
@@ -238,7 +258,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.id | Should -Be $script:testAttachment1
             }
 
             It 'Should call expected mocks' {

@@ -54,7 +54,7 @@ InModuleScope CosmosDB {
     }
 '@
 
-$script:testJsonSingle = @'
+    $script:testJsonSingle = @'
 {
     "body": "testTriggerBody",
     "id": "testTrigger1",
@@ -207,8 +207,7 @@ $script:testJsonSingle = @'
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'triggers' -and $ResourcePath -eq ('colls/{0}/triggers/{1}' -f $script:testCollection, $script:testTrigger1) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'triggers' -and $ResourcePath -eq ('colls/{0}/triggers/{1}' -f $script:testCollection, $script:testTrigger1) }
 
             It 'Should not throw exception' {
                 $removeCosmosDbTriggerParameters = @{
