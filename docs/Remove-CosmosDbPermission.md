@@ -14,8 +14,8 @@ Delete a permission from a CosmosDB user.
 
 ### Connection (Default)
 ```
-Remove-CosmosDbPermission -Connection <PSObject> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -UserId <String> [-Id <String>] [<CommonParameters>]
+Remove-CosmosDbPermission -Connection <Connection> [-Database <String>] [-Key <SecureString>]
+ [-KeyType <String>] -UserId <String> [-Id <String>] [<CommonParameters>]
 ```
 
 ### Account
@@ -45,7 +45,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

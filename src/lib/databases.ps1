@@ -1,5 +1,34 @@
 <#
 .SYNOPSIS
+    Set the custom Cosmos DB Database types to the database
+    returned by an API call.
+
+.DESCRIPTION
+    This function applies the custom types to the database returned
+    by an API call.
+
+.PARAMETER Database
+    This is the database that is returned by a user API call.
+#>
+function Set-CosmosDbDatabaseType
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        $Database
+    )
+
+    foreach ($item in $Database)
+    {
+        $item.PSObject.TypeNames.Insert(0, 'CosmosDB.Database')
+    }
+
+    return $Database
+}
+
+<#
+.SYNOPSIS
     Return the resource path for a database object.
 
 .DESCRIPTION
@@ -60,7 +89,7 @@ function Get-CosmosDbDatabase
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -88,16 +117,23 @@ function Get-CosmosDbDatabase
     {
         $null = $PSBoundParameters.Remove('Id')
 
-        return Invoke-CosmosDbRequest @PSBoundParameters `
+        $database = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'dbs' `
             -ResourcePath ('dbs/{0}' -f $Id)
     }
     else
     {
-        return Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'dbs'
+
+        $database = $result.Databases
+    }
+
+    if ($database)
+    {
+        return (Set-CosmosDbDatabaseType -Database $database)
     }
 }
 
@@ -133,7 +169,7 @@ function New-CosmosDbDatabase
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -159,10 +195,15 @@ function New-CosmosDbDatabase
 
     $null = $PSBoundParameters.Remove('Id')
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $database = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'dbs' `
         -Body "{ `"id`": `"$id`" }"
+
+    if ($database)
+    {
+        return (Set-CosmosDbDatabaseType -Database $database)
+    }
 }
 
 <#
@@ -196,7 +237,7 @@ function Remove-CosmosDbDatabase
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -222,7 +263,7 @@ function Remove-CosmosDbDatabase
 
     $null = $PSBoundParameters.Remove('Id')
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $null = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
         -ResourceType 'dbs' `
         -ResourcePath ('dbs/{0}' -f $Id)

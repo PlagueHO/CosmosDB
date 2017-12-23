@@ -1,5 +1,34 @@
 <#
 .SYNOPSIS
+    Set the custom Cosmos DB trigger types to the trigger returned
+    by an API call.
+
+.DESCRIPTION
+    This function applies the custom types to the trigger returned
+    by an API call.
+
+.PARAMETER Trigger
+    This is the trigger that is returned by a trigger API call.
+#>
+function Set-CosmosDbTriggerType
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        $Trigger
+    )
+
+    foreach ($item in $Trigger)
+    {
+        $item.PSObject.TypeNames.Insert(0, 'CosmosDB.Trigger')
+    }
+
+    return $Trigger
+}
+
+<#
+.SYNOPSIS
     Return the resource path for a trigger object.
 
 .DESCRIPTION
@@ -80,7 +109,7 @@ function Get-CosmosDbTrigger
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -122,17 +151,24 @@ function Get-CosmosDbTrigger
     {
         $null = $PSBoundParameters.Remove('Id')
 
-        return Invoke-CosmosDbRequest @PSBoundParameters `
+        $trigger = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'triggers' `
             -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
     }
     else
     {
-        return Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'triggers' `
             -ResourcePath $resourcePath
+
+        $trigger = $result.Triggers
+    }
+
+    if ($trigger)
+    {
+        return (Set-CosmosDbTriggerType -Trigger $trigger)
     }
 }
 
@@ -183,7 +219,7 @@ function New-CosmosDbTrigger
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -242,11 +278,16 @@ function New-CosmosDbTrigger
 
     $TriggerBody = ((($TriggerBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $trigger = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'triggers' `
         -ResourcePath $resourcePath `
         -Body "{ `"id`": `"$id`", `"body`" : `"$TriggerBody`", `"triggerOperation`" : `"$triggerOperation`", `"triggerType`" : `"$triggerType`" }"
+
+    if ($trigger)
+    {
+        return (Set-CosmosDbTriggerType -Trigger $trigger)
+    }
 }
 
 <#
@@ -286,7 +327,7 @@ function Remove-CosmosDbTrigger
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -325,7 +366,7 @@ function Remove-CosmosDbTrigger
 
     $resourcePath = ('colls/{0}/triggers/{1}' -f $CollectionId, $Id)
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $null = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
         -ResourceType 'triggers' `
         -ResourcePath $resourcePath
@@ -379,7 +420,7 @@ function Set-CosmosDbTrigger
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -438,9 +479,14 @@ function Set-CosmosDbTrigger
 
     $TriggerBody = ((($TriggerBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $trigger = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Put' `
         -ResourceType 'triggers' `
         -ResourcePath $resourcePath `
         -Body "{ `"id`": `"$id`", `"body`" : `"$TriggerBody`", `"triggerOperation`" : `"$triggerOperation`", `"triggerType`" : `"$triggerType`" }"
+
+    if ($trigger)
+    {
+        return (Set-CosmosDbTriggerType -Trigger $trigger)
+    }
 }

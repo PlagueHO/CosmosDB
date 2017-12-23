@@ -14,7 +14,7 @@ Delete a document from a CosmosDB collection.
 
 ### Connection (Default)
 ```
-Remove-CosmosDbDocument -Connection <PSObject> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
+Remove-CosmosDbDocument -Connection <Connection> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  -CollectionId <String> [-Id <String>] [-PartitionKey <String>] [<CommonParameters>]
 ```
 
@@ -45,7 +45,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

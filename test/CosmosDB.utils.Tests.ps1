@@ -17,7 +17,7 @@ InModuleScope CosmosDB {
     $script:testBaseUri = 'documents.contoso.com'
     $script:testDate = (Get-Date -Year 2017 -Month 11 -Day 29 -Hour 10 -Minute 45 -Second 10)
     $script:testUniversalDate = 'Tue, 28 Nov 2017 21:45:10 GMT'
-    $script:testConnection = [PSCustomObject] @{
+    $script:testConnection = [CosmosDb.Connection] @{
         Account  = $script:testAccount
         Database = $script:testDatabase
         Key      = $script:testKeySecureString

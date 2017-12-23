@@ -1,5 +1,34 @@
 <#
 .SYNOPSIS
+    Set the custom Cosmos DB Attachment types to the attachment
+    returned by an API call.
+
+.DESCRIPTION
+    This function applies the custom types to the attachment
+    returned by an API call.
+
+.PARAMETER UserDefinedFunction
+    This is the attachment that is returned by an attachment API call.
+#>
+function Set-CosmosDbAttachmentType
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        $Attachment
+    )
+
+    foreach ($item in $Attachment)
+    {
+        $item.PSObject.TypeNames.Insert(0, 'CosmosDB.Attachment')
+    }
+
+    return $Attachment
+}
+
+<#
+.SYNOPSIS
     Return the resource path for an attachment object.
 
 .DESCRIPTION
@@ -91,7 +120,7 @@ function Get-CosmosDbAttachment
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -137,15 +166,26 @@ function Get-CosmosDbAttachment
 
     if (-not [String]::IsNullOrEmpty($Id))
     {
-        # An attachment Id has been specified
-        $resourcePath = ('{0}/{1}' -f $resourcePath, $Id)
         $null = $PSBoundParameters.Remove('Id')
+
+        $attachment = Invoke-CosmosDbRequest @PSBoundParameters `
+            -Method 'Get' `
+            -ResourceType 'attachments' `
+            -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
+    }
+    else {
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
+            -Method 'Get' `
+            -ResourceType 'attachments' `
+            -ResourcePath $resourcePath
+
+        $attachment = $result.Attachments
     }
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
-        -Method 'Get' `
-        -ResourceType 'attachments' `
-        -ResourcePath $resourcePath
+    if ($attachment)
+    {
+        return (Set-CosmosDbAttachmentType -Attachment $attachment)
+    }
 }
 
 <#
@@ -204,7 +244,7 @@ function New-CosmosDbAttachment
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -294,12 +334,17 @@ function New-CosmosDbAttachment
 
     $body = ConvertTo-Json -InputObject $bodyObject
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $attachment = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'attachments' `
         -ResourcePath $resourcePath `
         -Body $body `
         -Headers $headers
+
+    if ($attachment)
+    {
+        return (Set-CosmosDbAttachmentType -Attachment $attachment)
+    }
 }
 
 <#
@@ -342,7 +387,7 @@ function Remove-CosmosDbAttachment
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -387,7 +432,7 @@ function Remove-CosmosDbAttachment
 
     $resourcePath = ('colls/{0}/docs/{1}/attachments/{2}' -f $CollectionId, $DocumentId, $Id)
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $null = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
         -ResourceType 'attachments' `
         -ResourcePath $resourcePath
@@ -450,7 +495,7 @@ function Set-CosmosDbAttachment
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -550,10 +595,15 @@ function Set-CosmosDbAttachment
 
     $body = ConvertTo-Json -InputObject $bodyObject
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $attachment = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Put' `
         -ResourceType 'attachments' `
         -ResourcePath $resourcePath `
         -Body $body `
         -Headers $headers
+
+    if ($attachment)
+    {
+        return (Set-CosmosDbAttachmentType -Attachment $attachment)
+    }
 }

@@ -14,7 +14,7 @@ Return the users in a CosmosDB database.
 
 ### Connection (Default)
 ```
-Get-CosmosDbUser -Connection <PSObject> [-Database <String>] [-Key <SecureString>] [-Id <String>]
+Get-CosmosDbUser -Connection <Connection> [-Database <String>] [-Key <SecureString>] [-Id <String>]
  [<CommonParameters>]
 ```
 
@@ -47,7 +47,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

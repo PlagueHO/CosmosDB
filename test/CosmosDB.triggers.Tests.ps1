@@ -14,7 +14,7 @@ InModuleScope CosmosDB {
     $script:testDatabase = 'testDatabase'
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
-    $script:testConnection = [PSCustomObject] @{
+    $script:testConnection = [CosmosDb.Connection] @{
         Account  = $script:testAccount
         Database = $script:testDatabase
         Key      = $script:testKeySecureString
@@ -22,23 +22,49 @@ InModuleScope CosmosDB {
         BaseUri  = ('https://{0}.documents.azure.com/' -f $script:testAccount)
     }
     $script:testCollection = 'testCollection'
-    $script:testTrigger = 'testTrigger'
+    $script:testTrigger1 = 'testTrigger1'
+    $script:testTrigger2 = 'testTrigger2'
     $script:testTriggerBody = 'testTriggerBody'
-    $script:testJson = @'
+    $script:testJsonMulti = @'
     {
         "_rid": "Sl8fALN4sw4=",
-        "Triggers": [{
-            "body": "testTriggerBody",
-            "id": "testTrigger",
-            "triggerOperation": "All",
-            "triggerType": "Post",
-            "_rid": "Sl8fALN4sw4BAAAAAAAAcA==",
-            "_ts": 1449689654,
-            "_self": "dbs\/Sl8fAA==\/colls\/Sl8fALN4sw4=\/triggers\/Sl8fALN4sw4BAAAAAAAAcA==\/",
-            "_etag": "\"060022e5-0000-0000-0000-566882360000\""
-        }],
-        "_count": 1
+        "Triggers": [
+            {
+                "body": "testTriggerBody",
+                "id": "testTrigger1",
+                "triggerOperation": "All",
+                "triggerType": "Post",
+                "_rid": "Sl8fALN4sw4BAAAAAAAAcA==",
+                "_ts": 1449689654,
+                "_self": "dbs\/Sl8fAA==\/colls\/Sl8fALN4sw4=\/triggers\/Sl8fALN4sw4BAAAAAAAAcA==\/",
+                "_etag": "\"060022e5-0000-0000-0000-566882360000\""
+            },
+            {
+                "body": "testTriggerBody",
+                "id": "testTrigger2",
+                "triggerOperation": "All",
+                "triggerType": "Post",
+                "_rid": "Sl8fALN4sw4BAAAAAAAAcA==",
+                "_ts": 1449689654,
+                "_self": "dbs\/Sl8fAA==\/colls\/Sl8fALN4sw4=\/triggers\/Sl8fALN4sw4BAAAAAAAAcA==\/",
+                "_etag": "\"060022e5-0000-0000-0000-566882360000\""
+            }
+        ],
+        "_count": 2
     }
+'@
+
+    $script:testJsonSingle = @'
+{
+    "body": "testTriggerBody",
+    "id": "testTrigger1",
+    "triggerOperation": "All",
+    "triggerType": "Post",
+    "_rid": "Sl8fALN4sw4BAAAAAAAAcA==",
+    "_ts": 1449689654,
+    "_self": "dbs\/Sl8fAA==\/colls\/Sl8fALN4sw4=\/triggers\/Sl8fALN4sw4BAAAAAAAAcA==\/",
+    "_etag": "\"060022e5-0000-0000-0000-566882360000\""
+}
 '@
 
     Describe 'Get-CosmosDbTriggerResourcePath' -Tag 'Unit' {
@@ -53,14 +79,14 @@ InModuleScope CosmosDB {
                 $getCosmosDbTriggerResourcePathParameters = @{
                     Database     = $script:testDatabase
                     CollectionId = $script:testCollection
-                    Id           = $script:testTrigger
+                    Id           = $script:testTrigger1
                 }
 
                 { $script:result = Get-CosmosDbTriggerResourcePath @getCosmosDbTriggerResourcePathParameters } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
-                $script:result | Should -Be ('dbs/{0}/colls/{1}/triggers/{2}' -f $script:testDatabase, $script:testCollection, $script:testTrigger)
+                $script:result | Should -Be ('dbs/{0}/colls/{1}/triggers/{2}' -f $script:testDatabase, $script:testCollection, $script:testTrigger1)
             }
         }
     }
@@ -76,7 +102,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'triggers' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
 
             It 'Should not throw exception' {
                 $getCosmosDbTriggerParameters = @{
@@ -88,7 +114,9 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.Count | Should -Be 2
+                $script:result[0].id | Should -Be $script:testTrigger1
+                $script:result[1].id | Should -Be $script:testTrigger2
             }
 
             It 'Should call expected mocks' {
@@ -104,27 +132,27 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'triggers' -and $ResourcePath -eq ('colls/{0}/triggers/{1}' -f $script:testCollection, $script:testTrigger) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'triggers' -and $ResourcePath -eq ('colls/{0}/triggers/{1}' -f $script:testCollection, $script:testTrigger1) } `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $getCosmosDbTriggerParameters = @{
                     Connection   = $script:testConnection
                     CollectionId = $script:testCollection
-                    Id           = $script:testTrigger
+                    Id           = $script:testTrigger1
                 }
 
                 { $script:result = Get-CosmosDbTrigger @getCosmosDbTriggerParameters } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.id | Should -Be $script:testTrigger1
             }
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'triggers' -and $ResourcePath -eq ('colls/{0}/triggers/{1}' -f $script:testCollection, $script:testTrigger) } `
+                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'triggers' -and $ResourcePath -eq ('colls/{0}/triggers/{1}' -f $script:testCollection, $script:testTrigger1) } `
                     -Exactly -Times 1
             }
         }
@@ -141,13 +169,13 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'triggers' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbTriggerParameters = @{
                     Connection       = $script:testConnection
                     CollectionId     = $script:testCollection
-                    Id               = $script:testTrigger
+                    Id               = $script:testTrigger1
                     TriggerBody      = $script:testTriggerBody
                     TriggerOperation = 'All'
                     TriggerType      = 'Post'
@@ -157,7 +185,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.id | Should -Be $script:testTrigger1
             }
 
             It 'Should call expected mocks' {
@@ -179,27 +207,22 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'triggers' -and $ResourcePath -eq ('colls/{0}/triggers/{1}' -f $script:testCollection, $script:testTrigger) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'triggers' -and $ResourcePath -eq ('colls/{0}/triggers/{1}' -f $script:testCollection, $script:testTrigger1) }
 
             It 'Should not throw exception' {
                 $removeCosmosDbTriggerParameters = @{
                     Connection   = $script:testConnection
                     CollectionId = $script:testCollection
-                    Id           = $script:testTrigger
+                    Id           = $script:testTrigger1
                 }
 
                 { $script:result = Remove-CosmosDbTrigger @removeCosmosDbTriggerParameters } | Should -Not -Throw
             }
 
-            It 'Should return expected result' {
-                $script:result._count | Should -Be 1
-            }
-
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'triggers' -and $ResourcePath -eq ('colls/{0}/triggers/{1}' -f $script:testCollection, $script:testTrigger) } `
+                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'triggers' -and $ResourcePath -eq ('colls/{0}/triggers/{1}' -f $script:testCollection, $script:testTrigger1) } `
                     -Exactly -Times 1
             }
         }
@@ -216,13 +239,13 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'triggers' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $setCosmosDbTriggerParameters = @{
                     Connection       = $script:testConnection
                     CollectionId     = $script:testCollection
-                    Id               = $script:testTrigger
+                    Id               = $script:testTrigger1
                     TriggerBody      = $script:testTriggerBody
                     TriggerOperation = 'All'
                     TriggerType      = 'Post'
@@ -232,7 +255,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.id | Should -Be $script:testTrigger1
             }
 
             It 'Should call expected mocks' {

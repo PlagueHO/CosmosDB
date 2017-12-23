@@ -1,5 +1,35 @@
 <#
 .SYNOPSIS
+    Set the custom Cosmos DB stored procedure types to the
+    stored procedure returned by an API call.
+
+.DESCRIPTION
+    This function applies the custom types to the stored
+    procedure returned by an API call.
+
+.PARAMETER StoredProcedure
+    This is the stored procedure that is returned by a
+    stored procedure API call.
+#>
+function Set-CosmosDbStoredProcedureType
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        $StoredProcedure
+    )
+
+    foreach ($item in $StoredProcedure)
+    {
+        $item.PSObject.TypeNames.Insert(0, 'CosmosDB.StoredProcedure')
+    }
+
+    return $StoredProcedure
+}
+
+<#
+.SYNOPSIS
     Return the resource path for a stored procedure object.
 
 .DESCRIPTION
@@ -80,7 +110,7 @@ function Get-CosmosDbStoredProcedure
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -122,17 +152,24 @@ function Get-CosmosDbStoredProcedure
     {
         $null = $PSBoundParameters.Remove('Id')
 
-        return Invoke-CosmosDbRequest @PSBoundParameters `
+        $storedProcedure = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'sprocs' `
             -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
     }
     else
     {
-        return Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'sprocs' `
             -ResourcePath $resourcePath
+
+        $storedProcedure = $result.StoredProcedures
+    }
+
+    if ($storedProcedure)
+    {
+        return (Set-CosmosDbStoredProcedureType -StoredProcedure $storedProcedure)
     }
 }
 
@@ -180,7 +217,7 @@ function Invoke-CosmosDbStoredProcedure
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -283,7 +320,7 @@ function New-CosmosDbStoredProcedure
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -330,11 +367,16 @@ function New-CosmosDbStoredProcedure
 
     $StoredProcedureBody = ((($StoredProcedureBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $storedProcedure = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'sprocs' `
         -ResourcePath $resourcePath `
         -Body "{ `"id`": `"$id`", `"body`" : `"$StoredProcedureBody`" }"
+
+    if ($storedProcedure)
+    {
+        return (Set-CosmosDbStoredProcedureType -StoredProcedure $storedProcedure)
+    }
 }
 
 <#
@@ -374,7 +416,7 @@ function Remove-CosmosDbStoredProcedure
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -413,7 +455,7 @@ function Remove-CosmosDbStoredProcedure
 
     $resourcePath = ('colls/{0}/sprocs/{1}' -f $CollectionId, $Id)
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $null = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
         -ResourceType 'sprocs' `
         -ResourcePath $resourcePath
@@ -461,7 +503,7 @@ function Set-CosmosDbStoredProcedure
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -508,9 +550,14 @@ function Set-CosmosDbStoredProcedure
 
     $StoredProcedureBody = ((($StoredProcedureBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $storedProcedure = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Put' `
         -ResourceType 'sprocs' `
         -ResourcePath $resourcePath `
         -Body "{ `"id`": `"$id`", `"body`" : `"$StoredProcedureBody`" }"
+
+    if ($storedProcedure)
+    {
+        return (Set-CosmosDbStoredProcedureType -StoredProcedure $storedProcedure)
+    }
 }

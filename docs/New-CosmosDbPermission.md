@@ -14,7 +14,7 @@ Create a new permission for a user in a CosmosDB database.
 
 ### Connection (Default)
 ```
-New-CosmosDbPermission -Connection <PSObject> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
+New-CosmosDbPermission -Connection <Connection> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
  -UserId <String> -Id <String> -Resource <String> [-PermissionMode <String>] [<CommonParameters>]
 ```
 
@@ -45,7 +45,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

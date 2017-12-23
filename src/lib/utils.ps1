@@ -90,13 +90,17 @@ function New-CosmosDbConnection
         $Key = ConvertTo-SecureString -String ($resource.$MasterKeyType) -AsPlainText -Force
     }
 
-    return [PSCustomObject] @{
+    $connection = New-Object -TypeName 'CosmosDB.Connection' -Property @{
         Account  = $Account
         Database = $Database
         Key      = $Key
         KeyType  = $KeyType
         BaseUri  = (Get-CosmosDbUri -Account $Account)
     }
+
+#    $connection.PSObject.TypeNames.Insert(0, 'CosmosDB.Connection')
+
+    return $connection
 }
 
 <#
@@ -320,7 +324,7 @@ function Invoke-CosmosDbRequest
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDB.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]

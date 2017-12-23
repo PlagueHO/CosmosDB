@@ -14,7 +14,7 @@ Return the triggers for a CosmosDB database collection.
 
 ### Connection (Default)
 ```
-Get-CosmosDbTrigger -Connection <PSObject> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
+Get-CosmosDbTrigger -Connection <Connection> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -CollectionId <String> [-Id <String>] [<CommonParameters>]
 ```
 
@@ -48,7 +48,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 
