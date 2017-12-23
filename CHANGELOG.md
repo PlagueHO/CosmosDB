@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.0.0.146
 
 - BREAKING CHANGE: Converted all cmdlets to return custom types
   and added support for custom formats.
@@ -77,3 +77,4 @@
 ## 1.0.0.30
 
 - Initial Release.
+
