@@ -141,8 +141,9 @@ Create 10 new documents in a collection in the database:
 Get the first 5 documents from the collection in the database:
 
 ```powershell
-$documents = Get-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -MaxItemCount 5
-$continuationToken = $document.Headers.'x-ms-continuation'
+$resultHeaders = ''
+$documents = Get-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -MaxItemCount 5 -ResultHeaders $resultHeaders
+$continuationToken = $resultHeaders.value.'x-ms-continuation'
 ```
 
 Get the next document from a collection in the database using
@@ -158,19 +159,19 @@ Replace the content of a document in a collection in the database:
 ```powershell
 $newDocument = @"
 {
-    `"id`": `"$($documents.Documents[0].id)`",
+    `"id`": `"$($documents[0].id)`",
     `"content`": `"New string`",
     `"more`": `"Another new string`"
 }
 "@
-Set-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id $documents.Documents[0].id -DocumentBody $newDocument
+Set-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id $documents[0].id -DocumentBody $newDocument
 ```
 
 Return a document with a specific Id from a collection in
 the database:
 
 ```powershell
-Get-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id $documents.Documents[0].id
+Get-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id $documents[0].id
 ```
 
 Querying a collection in a database:
@@ -193,7 +194,7 @@ Get-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollect
 Delete a document from a collection in the database:
 
 ```powershell
-Remove-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id $documents.Documents[0].id
+Remove-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id $documents[0].id
 ```
 
 ### Working with Attachments
@@ -201,31 +202,31 @@ Remove-CosmosDbDocument -Connection $cosmosDbConnection -CollectionId 'MyNewColl
 Create an attachment on a document in a collection:
 
 ```powershell
-New-CosmosDbAttachment -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -DocumentId $documents.Documents[0].id -Id 'image_1' -ContentType 'image/jpg' -Media 'www.bing.com'
+New-CosmosDbAttachment -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -DocumentId $documents[0].id -Id 'image_1' -ContentType 'image/jpg' -Media 'www.bing.com'
 ```
 
 Get _all_ attachments for a document in a collection:
 
 ```powershell
-Get-CosmosDbAttachment -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -DocumentId $documents.Documents[0].id
+Get-CosmosDbAttachment -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -DocumentId $documents[0].id
 ```
 
 Get an attachment by Id for a document in a collection:
 
 ```powershell
-Get-CosmosDbAttachment -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -DocumentId $documents.Documents[0].id -Id 'image_1'
+Get-CosmosDbAttachment -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -DocumentId $documents[0].id -Id 'image_1'
 ```
 
 Rename an attachment for a document in a collection:
 
 ```powershell
-Set-CosmosDbAttachment -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -DocumentId $documents.Documents[0].id -Id 'image_1' -NewId 'Image_2'
+Set-CosmosDbAttachment -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -DocumentId $documents[0].id -Id 'image_1' -NewId 'Image_2'
 ```
 
 Delete an attachment from a document in collection:
 
 ```powershell
-Remove-CosmosDbAttachment -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id $documents.Documents[0].id -Id 'Image_2'
+Remove-CosmosDbAttachment -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id $documents[0].id -Id 'Image_2'
 ```
 
 ### Working with Users
@@ -311,7 +312,7 @@ function updateMetadata() {
     }
 }
 '@
-New-CosmosDbTrigger -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'MyTrigger' -Body $Body -TriggerOperation All -TriggerType Post
+New-CosmosDbTrigger -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'MyTrigger' -TriggerBody $Body -TriggerOperation All -TriggerType Post
 ```
 
 Update an existing trigger for a collection in the database to execute before
@@ -428,7 +429,7 @@ function tax(income) {
         return income * 0.4;
 }
 '@
-New-CosmosDbUserDefinedFunction -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'udfTax' -Body $Body
+New-CosmosDbUserDefinedFunction -Connection $cosmosDbConnection -CollectionId 'MyNewCollection' -Id 'udfTax' -UserDefinedFunctionBody $Body
 ```
 
 Update an existing user defined function for a collection in the database:

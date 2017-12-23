@@ -14,8 +14,8 @@ Set the user Id of an existing user in a CosmosDB database.
 
 ### Connection (Default)
 ```
-Set-CosmosDbUser -Connection <PSObject> [-Database <String>] [-Key <SecureString>] -Id <String> -NewId <String>
- [<CommonParameters>]
+Set-CosmosDbUser -Connection <Connection> [-Database <String>] [-Key <SecureString>] -Id <String>
+ -NewId <String> [<CommonParameters>]
 ```
 
 ### Account
@@ -46,7 +46,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

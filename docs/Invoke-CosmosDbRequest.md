@@ -15,7 +15,7 @@ Rest API request to CosmosDB.
 
 ### Connection (Default)
 ```
-Invoke-CosmosDbRequest -Connection <PSObject> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
+Invoke-CosmosDbRequest -Connection <Connection> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
  [-Headers <Hashtable>] [-UseWebRequest] [-ContentType <String>] [<CommonParameters>]
 ```
@@ -48,7 +48,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

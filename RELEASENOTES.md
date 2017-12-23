@@ -1,5 +1,12 @@
 # Release Notes
 
+## What is New in CosmosDB 2.0.0
+
+December 23, 2017
+
+- BREAKING CHANGE: Converted all cmdlets to return custom types
+  and added support for custom formats.
+
 ## What is New in CosmosDB 1.0.12
 
 December 9, 2017

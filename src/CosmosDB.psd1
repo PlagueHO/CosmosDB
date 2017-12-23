@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.0.12.126'
+    ModuleVersion     = '2.0.0.0'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -51,10 +51,30 @@
     # ScriptsToProcess = @()
 
     # Type files (.ps1xml) to be loaded when importing this module
-    # TypesToProcess = @()
+    TypesToProcess = @(
+        'types\attachments.types.ps1xml'
+        'types\collections.types.ps1xml'
+        'types\databases.types.ps1xml'
+        'types\documents.types.ps1xml'
+        'types\permissions.types.ps1xml'
+        'types\storedprocedures.types.ps1xml'
+        'types\triggers.types.ps1xml'
+        'types\userdefinedfunctions.types.ps1xml'
+        'types\users.types.ps1xml'
+    )
 
     # Format files (.ps1xml) to be loaded when importing this module
-    # FormatsToProcess = @()
+    FormatsToProcess  = @(
+        'formats\attachments.formats.ps1xml'
+        'formats\collections.formats.ps1xml'
+        'formats\databases.formats.ps1xml'
+        'formats\documents.formats.ps1xml'
+        'formats\permissions.formats.ps1xml'
+        'formats\storedprocedures.formats.ps1xml'
+        'formats\triggers.formats.ps1xml'
+        'formats\userdefinedfunctions.formats.ps1xml'
+        'formats\users.formats.ps1xml'
+    )
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
     # NestedModules = @()
@@ -142,6 +162,13 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB 2.0.0
+
+December 23, 2017
+
+- BREAKING CHANGE: Converted all cmdlets to return custom types
+  and added support for custom formats.
+
 ## What is New in CosmosDB 1.0.12
 
 December 9, 2017
@@ -181,19 +208,3 @@ November 5, 2017
     # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
     # DefaultCommandPrefix = ''
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

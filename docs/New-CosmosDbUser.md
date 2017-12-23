@@ -14,7 +14,7 @@ Create a new user in a CosmosDB database.
 
 ### Connection (Default)
 ```
-New-CosmosDbUser -Connection <PSObject> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
+New-CosmosDbUser -Connection <Connection> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  -Id <String> [<CommonParameters>]
 ```
 
@@ -45,7 +45,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

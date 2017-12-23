@@ -4,6 +4,25 @@ $moduleRoot = Split-Path `
     -Path $MyInvocation.MyCommand.Path `
     -Parent
 
+#region Types
+if (-not ([System.Management.Automation.PSTypeName]'CosmosDB.Connection').Type)
+{
+    $typeDefinition = @'
+namespace CosmosDB {
+    public class Connection
+    {
+        public System.String Account;
+        public System.String Database;
+        public System.Security.SecureString Key;
+        public System.String KeyType;
+        public System.String BaseUri;
+    }
+}
+'@
+    Add-Type -TypeDefinition $typeDefinition
+}
+#endregion
+
 #region LocalizedData
 $culture = 'en-us'
 if (Test-Path -Path (Join-Path -Path $moduleRoot -ChildPath $PSUICulture))

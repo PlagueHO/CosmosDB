@@ -1,5 +1,10 @@
 # Change Log
 
+## Unreleased
+
+- BREAKING CHANGE: Converted all cmdlets to return custom types
+  and added support for custom formats.
+
 ## 1.0.12.126
 
 - Added `*-CosmosDbAttachment` cmdlets.
@@ -72,14 +77,3 @@
 ## 1.0.0.30
 
 - Initial Release.
-
-
-
-
-
-
-
-
-
-
-

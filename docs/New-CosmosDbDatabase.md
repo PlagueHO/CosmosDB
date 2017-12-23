@@ -14,7 +14,7 @@ Create a new database in a CosmosDB account.
 
 ### Connection (Default)
 ```
-New-CosmosDbDatabase -Connection <PSObject> [-Key <SecureString>] [-KeyType <String>] -Id <String>
+New-CosmosDbDatabase -Connection <Connection> [-Key <SecureString>] [-KeyType <String>] -Id <String>
  [<CommonParameters>]
 ```
 
@@ -45,7 +45,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

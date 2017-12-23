@@ -1,5 +1,34 @@
 <#
 .SYNOPSIS
+    Set the custom Cosmos DB User types to the user
+    returned by an API call.
+
+.DESCRIPTION
+    This function applies the custom types to the user returned
+    by an API call.
+
+.PARAMETER User
+    This is the user that is returned by a user API call.
+#>
+function Set-CosmosDbUserType
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        $User
+    )
+
+    foreach ($item in $User)
+    {
+        $item.PSObject.TypeNames.Insert(0, 'CosmosDB.User')
+    }
+
+    return $User
+}
+
+<#
+.SYNOPSIS
     Return the resource path for a user object.
 
 .DESCRIPTION
@@ -68,7 +97,7 @@ function Get-CosmosDbUser
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -101,16 +130,23 @@ function Get-CosmosDbUser
     {
         $null = $PSBoundParameters.Remove('Id')
 
-        return Invoke-CosmosDbRequest @PSBoundParameters `
+        $user = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'users' `
             -ResourcePath ('users/{0}' -f $Id)
     }
     else
     {
-        return Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'users'
+
+        $user = $result.Users
+    }
+
+    if ($user)
+    {
+        return (Set-CosmosDbUserType -User $user)
     }
 }
 
@@ -149,7 +185,7 @@ function New-CosmosDbUser
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -180,10 +216,15 @@ function New-CosmosDbUser
 
     $null = $PSBoundParameters.Remove('Id')
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $user = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'users' `
         -Body "{ `"id`": `"$Id`" }"
+
+    if ($user)
+    {
+        return (Set-CosmosDbUserType -User $user)
+    }
 }
 
 <#
@@ -220,7 +261,7 @@ function Remove-CosmosDbUser
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -250,7 +291,8 @@ function Remove-CosmosDbUser
     )
 
     $null = $PSBoundParameters.Remove('Id')
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+
+    $null = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
         -ResourceType 'users' `
         -ResourcePath ('users/{0}' -f $Id)
@@ -295,7 +337,7 @@ function Set-CosmosDbUser
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -332,9 +374,14 @@ function Set-CosmosDbUser
     $null = $PSBoundParameters.Remove('Id')
     $null = $PSBoundParameters.Remove('NewId')
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $user = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Put' `
         -ResourceType 'users' `
         -ResourcePath ('users/{0}' -f $Id) `
         -Body "{ `"id`": `"$NewId`" }"
+
+    if ($user)
+    {
+        return (Set-CosmosDbUserType -User $user)
+    }
 }

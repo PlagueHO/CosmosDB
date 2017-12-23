@@ -14,10 +14,11 @@ Return the documents for a CosmosDB database collection.
 
 ### Connection (Default)
 ```
-Get-CosmosDbDocument -Connection <PSObject> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
+Get-CosmosDbDocument -Connection <Connection> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -CollectionId <String> [-Id <String>] [-MaxItemCount <Int32>] [-ContinuationToken <String>]
  [-ConsistencyLevel <String>] [-SessionToken <String>] [-PartitionKeyRangeId <String>] [-Query <String>]
- [-QueryParameters <Hashtable[]>] [-QueryEnableCrossPartition <Boolean>] [<CommonParameters>]
+ [-QueryParameters <Hashtable[]>] [-QueryEnableCrossPartition <Boolean>] [-ResultHeaders <PSReference>]
+ [<CommonParameters>]
 ```
 
 ### Account
@@ -25,7 +26,8 @@ Get-CosmosDbDocument -Connection <PSObject> [-Key <SecureString>] [-KeyType <Str
 Get-CosmosDbDocument -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -CollectionId <String> [-Id <String>] [-MaxItemCount <Int32>] [-ContinuationToken <String>]
  [-ConsistencyLevel <String>] [-SessionToken <String>] [-PartitionKeyRangeId <String>] [-Query <String>]
- [-QueryParameters <Hashtable[]>] [-QueryEnableCrossPartition <Boolean>] [<CommonParameters>]
+ [-QueryParameters <Hashtable[]>] [-QueryEnableCrossPartition <Boolean>] [-ResultHeaders <PSReference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -52,7 +54,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 
@@ -293,6 +295,20 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ResultHeaders
+This is a reference variable that will be used to return the
+hashtable that contains any headers returned by the request.```yaml
+Type: PSReference
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

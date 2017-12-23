@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- *******************************************************************
+These sample files contain formatting information used by the Windows
+PowerShell engine. Do not edit or change the contents of this file
+directly. Please see the Windows PowerShell documentation or type
+Get-Help Update-TypeData for more information.
+
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+THIS SAMPLE CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY
+OF ANY KIND,WHETHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
+PURPOSE. IF THIS CODE AND INFORMATION IS MODIFIED, THE ENTIRE RISK OF USE
+OR RESULTS IN CONNECTION WITH THE USE OF THIS CODE AND INFORMATION
+REMAINS WITH THE USER.
+******************************************************************** -->
+<Types>
+<!--CosmosDb.Collection-->
+   <Type>
+      <Name>CosmosDb.Collection</Name>
+      <Members>
+         <MemberSet>
+            <Name>PSStandardMembers</Name>
+            <Members>
+               <PropertySet>
+                  <Name>DefaultDisplayPropertySet</Name>
+                  <ReferencedProperties>
+                    <Name>id</Name>
+                    <Name>indexingPolicy</Name>
+                    <Name>_conflicts</Name>
+                    <Name>_docs</Name>
+                    <Name>_etag</Name>
+                    <Name>_rid</Name>
+                    <Name>_sprocs</Name>
+                    <Name>_triggers</Name>
+                    <Name>_ts</Name>
+                    <Name>_udfs</Name>
+                  </ReferencedProperties>
+               </PropertySet>
+            </Members>
+        </MemberSet>
+        <ScriptProperty>
+            <Name>Etag</Name>
+            <GetScriptBlock>
+                $this._etag.Replace( '"', '' )
+            </GetScriptBlock>
+        </ScriptProperty>
+        <AliasProperty>
+            <Name>ResourceId</Name>
+            <ReferencedMemberName>_rid</ReferencedMemberName>
+        </AliasProperty>
+        <ScriptProperty>
+            <Name>Timestamp</Name>
+            <GetScriptBlock>
+                [System.DateTime]::new( 1970, 1, 1, 0, 0, 0, 0, [System.DateTimeKind]::Utc).AddSeconds( $this._ts ).ToLocalTime()
+            </GetScriptBlock>
+        </ScriptProperty>
+        <AliasProperty>
+            <Name>Uri</Name>
+            <ReferencedMemberName>_self</ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>Conflicts</Name>
+            <ReferencedMemberName>_conflicts</ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>Documents</Name>
+            <ReferencedMemberName>_docs</ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>StoredProcedures</Name>
+            <ReferencedMemberName>_sprocs</ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>Triggers</Name>
+            <ReferencedMemberName>_triggers</ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>UserDefinedFunctions</Name>
+            <ReferencedMemberName>_udfs</ReferencedMemberName>
+        </AliasProperty>
+      </Members>
+   </Type>
+<!--CosmosDB.Collection.IndexingPolicy-->
+   <Type>
+      <Name>CosmosDB.Collection.IndexingPolicy</Name>
+      <Members>
+         <MemberSet>
+            <Name>PSStandardMembers</Name>
+            <Members>
+               <PropertySet>
+                  <Name>DefaultDisplayPropertySet</Name>
+                  <ReferencedProperties>
+                    <Name>indexingMode</Name>
+                    <Name>automatic</Name>
+                    <Name>includedPaths</Name>
+                    <Name>excludedPaths</Name>
+                  </ReferencedProperties>
+               </PropertySet>
+            </Members>
+         </MemberSet>
+      </Members>
+   </Type>
+<!--CosmosDB.Collection.IndexingPolicy.IncludedPath-->
+   <Type>
+      <Name>CosmosDB.Collection.IndexingPolicy.IncludedPath</Name>
+      <Members>
+         <MemberSet>
+            <Name>PSStandardMembers</Name>
+            <Members>
+               <PropertySet>
+                  <Name>DefaultDisplayPropertySet</Name>
+                  <ReferencedProperties>
+                    <Name>indexes</Name>
+                    <Name>path</Name>
+                  </ReferencedProperties>
+               </PropertySet>
+            </Members>
+         </MemberSet>
+      </Members>
+   </Type>
+<!--CosmosDB.Collection.IndexingPolicy.ExcludedPath-->
+   <Type>
+      <Name>CosmosDB.Collection.IndexingPolicy.ExcludedPath</Name>
+      <Members>
+         <MemberSet>
+            <Name>PSStandardMembers</Name>
+            <Members>
+               <PropertySet>
+                  <Name>DefaultDisplayPropertySet</Name>
+                  <ReferencedProperties>
+                    <Name>indexes</Name>
+                    <Name>path</Name>
+                  </ReferencedProperties>
+               </PropertySet>
+            </Members>
+         </MemberSet>
+      </Members>
+   </Type>
+<!--CosmosDB.Collection.IndexingPolicy.Index-->
+   <Type>
+      <Name>CosmosDB.Collection.IndexingPolicy.Index</Name>
+      <Members>
+         <MemberSet>
+            <Name>PSStandardMembers</Name>
+            <Members>
+               <PropertySet>
+                  <Name>DefaultDisplayPropertySet</Name>
+                  <ReferencedProperties>
+                    <Name>dataType</Name>
+                    <Name>kind</Name>
+                    <Name>precision</Name>
+                  </ReferencedProperties>
+               </PropertySet>
+            </Members>
+         </MemberSet>
+      </Members>
+   </Type>
+</Types>

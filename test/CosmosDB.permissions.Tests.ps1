@@ -14,7 +14,7 @@ InModuleScope CosmosDB {
     $script:testDatabase = 'testDatabase'
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
-    $script:testConnection = [PSCustomObject] @{
+    $script:testConnection = [CosmosDb.Connection] @{
         Account  = $script:testAccount
         Database = $script:testDatabase
         Key      = $script:testKeySecureString
@@ -22,21 +22,46 @@ InModuleScope CosmosDB {
         BaseUri  = ('https://{0}.documents.azure.com/' -f $script:testAccount)
     }
     $script:testUser = 'testUser'
-    $script:testPermission = 'testPermission'
-    $script:testJson = @'
+    $script:testPermission1 = 'testPermission1'
+    $script:testPermission2 = 'testPermission2'
+    $script:testJsonMulti = @'
 {
     "_rid": "Sl8fAG8cXgA=",
-    "Permissions": [{
-        "id": "a_permission",
-        "permissionMode": "Read",
-        "resource": "dbs/testDatabase/colls/testCollection",
-        "_rid": "Sl8fAG8cXgBn6Ju2GqNsAA==",
-        "_ts": 1449604760,
-        "_self": "dbs\/Sl8fAA==\/users\/Sl8fAG8cXgA=\/permissions\/Sl8fAG8cXgBn6Ju2GqNsAA==\/",
-        "_etag": "\"00000e00-0000-0000-0000-566736980000\"",
-        "_token": "type=resource&ver=1&sig=lxKlPHeqlIx2\/J02rFs3jw==;20MwFhNUO9xNOuglK9gyL18Mt5xIhbN48pzSq6FaR\/7sKFtGd6GaxCooIoPP6rYxRHUeCabHOFkbIeT4ercXk\/F1FG70QkQTD9CxDqNJx3NImgZJWErK1NlEjxkpFDV5uslhpJ4Y3JBnc72\/vlmR95TibFS0rC\/cdND0uRvoOOWXZYvVAJFKEUKyy3GTlYOxY1nKT313ZCOSUQF7kldjo9DE3XEBf8cct1uNKMILImo=;"
-    }],
-    "_count": 1
+    "Permissions": [
+        {
+            "id": "testPermission1",
+            "permissionMode": "Read",
+            "resource": "dbs/testDatabase/colls/testCollection",
+            "_rid": "Sl8fAG8cXgBn6Ju2GqNsAA==",
+            "_ts": 1449604760,
+            "_self": "dbs\/Sl8fAA==\/users\/Sl8fAG8cXgA=\/permissions\/Sl8fAG8cXgBn6Ju2GqNsAA==\/",
+            "_etag": "\"00000e00-0000-0000-0000-566736980000\"",
+            "_token": "type=resource&ver=1&sig=lxKlPHeqlIx2\/J02rFs3jw==;20MwFhNUO9xNOuglK9gyL18Mt5xIhbN48pzSq6FaR\/7sKFtGd6GaxCooIoPP6rYxRHUeCabHOFkbIeT4ercXk\/F1FG70QkQTD9CxDqNJx3NImgZJWErK1NlEjxkpFDV5uslhpJ4Y3JBnc72\/vlmR95TibFS0rC\/cdND0uRvoOOWXZYvVAJFKEUKyy3GTlYOxY1nKT313ZCOSUQF7kldjo9DE3XEBf8cct1uNKMILImo=;"
+        },
+        {
+            "id": "testPermission2",
+            "permissionMode": "All",
+            "resource": "dbs/testDatabase/colls/testCollection",
+            "_rid": "Sl8fAG8cXgBn6Ju2GqNsAA==",
+            "_ts": 1449604760,
+            "_self": "dbs\/Sl8fAA==\/users\/Sl8fAG8cXgA=\/permissions\/Sl8fAG8cXgBn6Ju2GqNsAA==\/",
+            "_etag": "\"00000e00-0000-0000-0000-566736980000\"",
+            "_token": "type=resource&ver=1&sig=lxKlPHeqlIx2\/J02rFs3jw==;20MwFhNUO9xNOuglK9gyL18Mt5xIhbN48pzSq6FaR\/7sKFtGd6GaxCooIoPP6rYxRHUeCabHOFkbIeT4ercXk\/F1FG70QkQTD9CxDqNJx3NImgZJWErK1NlEjxkpFDV5uslhpJ4Y3JBnc72\/vlmR95TibFS0rC\/cdND0uRvoOOWXZYvVAJFKEUKyy3GTlYOxY1nKT313ZCOSUQF7kldjo9DE3XEBf8cct1uNKMILImo=;"
+        }
+        ],
+    "_count": 2
+}
+'@
+    $script:testJsonSingle = @'
+{
+    "id": "testPermission1",
+    "permissionMode": "Read",
+    "resource": "dbs/testDatabase/colls/testCollection",
+    "_rid": "Sl8fAG8cXgBn6Ju2GqNsAA==",
+    "_ts": 1449604760,
+    "_self": "dbs\/Sl8fAA==\/users\/Sl8fAG8cXgA=\/permissions\/Sl8fAG8cXgBn6Ju2GqNsAA==\/",
+    "_etag": "\"00000e00-0000-0000-0000-566736980000\"",
+    "_token": "type=resource&ver=1&sig=lxKlPHeqlIx2\/J02rFs3jw==;20MwFhNUO9xNOuglK9gyL18Mt5xIhbN48pzSq6FaR\/7sKFtGd6GaxCooIoPP6rYxRHUeCabHOFkbIeT4ercXk\/F1FG70QkQTD9CxDqNJx3NImgZJWErK1NlEjxkpFDV5uslhpJ4Y3JBnc72\/vlmR95TibFS0rC\/cdND0uRvoOOWXZYvVAJFKEUKyy3GTlYOxY1nKT313ZCOSUQF7kldjo9DE3XEBf8cct1uNKMILImo=;"
 }
 '@
     $script:testResource = 'dbs/testDatabase/colls/testCollection'
@@ -53,14 +78,14 @@ InModuleScope CosmosDB {
                 $getCosmosDbPermissionResourcePathParameters = @{
                     Database = $script:testDatabase
                     UserId   = $script:testUser
-                    Id       = $script:testPermission
+                    Id       = $script:testPermission1
                 }
 
                 { $script:result = Get-CosmosDbPermissionResourcePath @getCosmosDbPermissionResourcePathParameters } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
-                $script:result | Should -Be ('dbs/{0}/users/{1}/permissions/{2}' -f $script:testDatabase, $script:testUser, $script:testPermission)
+                $script:result | Should -Be ('dbs/{0}/users/{1}/permissions/{2}' -f $script:testDatabase, $script:testUser, $script:testPermission1)
             }
         }
     }
@@ -76,7 +101,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
 
             It 'Should not throw exception' {
                 $getCosmosDbPermissionParameters = @{
@@ -88,7 +113,9 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.Count | Should -Be 2
+                $script:result[0].id | Should -Be $script:testPermission1
+                $script:result[1].id | Should -Be $script:testPermission2
             }
 
             It 'Should call expected mocks' {
@@ -104,27 +131,27 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission1) } `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $getCosmosDbPermissionParameters = @{
                     Connection = $script:testConnection
                     UserId     = $script:testUser
-                    Id         = $script:testPermission
+                    Id         = $script:testPermission1
                 }
 
                 { $script:result = Get-CosmosDbPermission @getCosmosDbPermissionParameters } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.id | Should -Be $script:testPermission1
             }
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission) } `
+                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission1) } `
                     -Exactly -Times 1
             }
         }
@@ -141,13 +168,13 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'permissions' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbPermissionParameters = @{
                     Connection = $script:testConnection
                     UserId     = $script:testUser
-                    Id         = $script:testPermission
+                    Id         = $script:testPermission1
                     Resource   = $script:testResource
                 }
 
@@ -155,7 +182,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result._count | Should -Be 1
+                $script:result.id | Should -Be $script:testPermission1
             }
 
             It 'Should call expected mocks' {
@@ -177,27 +204,22 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJson }
+                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission1) }
 
             It 'Should not throw exception' {
                 $removeCosmosDbPermissionParameters = @{
                     Connection = $script:testConnection
                     UserId     = $script:testUser
-                    Id         = $script:testPermission
+                    Id         = $script:testPermission1
                 }
 
                 { $script:result = Remove-CosmosDbPermission @removeCosmosDbPermissionParameters } | Should -Not -Throw
             }
 
-            It 'Should return expected result' {
-                $script:result._count | Should -Be 1
-            }
-
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission) } `
+                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission1) } `
                     -Exactly -Times 1
             }
         }

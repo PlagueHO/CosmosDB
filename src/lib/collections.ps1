@@ -1,5 +1,51 @@
 <#
 .SYNOPSIS
+    Set the custom Cosmos DB Collection types to the collection
+    returned by an API call.
+
+.DESCRIPTION
+    This function applies the custom types to the collection returned
+    by an API call.
+
+.PARAMETER Collection
+    This is the collection that is returned by a collection API call.
+#>
+function Set-CosmosDbCollectionType
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        $Collection
+    )
+
+    foreach ($item in $Collection)
+    {
+        $item.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection')
+        $item.indexingPolicy.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection.IndexingPolicy')
+        foreach ($includedPath in $item.indexingPolicy.includedPaths)
+        {
+            $includedPath.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection.IndexingPolicy.IncludedPath')
+            foreach ($index in $includedPath.indexes)
+            {
+                $index.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection.IndexingPolicy.Index')
+            }
+        }
+        foreach ($excludedPath in $item.indexingPolicy.excludedPaths)
+        {
+            $excludedPath.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection.IndexingPolicy.ExcludedPath')
+            foreach ($index in $excludedPath.indexes)
+            {
+                $index.PSObject.TypeNames.Insert(0, 'CosmosDB.Collection.IndexingPolicy.Index')
+            }
+        }
+    }
+
+    return $Collection
+}
+
+<#
+.SYNOPSIS
     Return the resource path for a collection object.
 
 .DESCRIPTION
@@ -70,7 +116,7 @@ function Get-CosmosDbCollection
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -103,16 +149,23 @@ function Get-CosmosDbCollection
     {
         $null = $PSBoundParameters.Remove('Id')
 
-        return Invoke-CosmosDbRequest @PSBoundParameters `
+        $collection = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'colls' `
             -ResourcePath ('colls/{0}' -f $Id)
-    }
+        }
     else
     {
-        return Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'colls'
+
+        $collection = $result.DocumentCollections
+    }
+
+    if ($collection)
+    {
+        return (Set-CosmosDbCollectionType -Collection $collection)
     }
 }
 
@@ -166,7 +219,7 @@ function New-CosmosDbCollection
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -195,12 +248,12 @@ function New-CosmosDbCollection
         $Id,
 
         [Parameter()]
-        [ValidateRange(400,250000)]
+        [ValidateRange(400, 250000)]
         [System.Int32]
         $OfferThroughput,
 
         [Parameter()]
-        [ValidateSet('S1','S2','S3')]
+        [ValidateSet('S1', 'S2', 'S3')]
         [System.String]
         $OfferType,
 
@@ -213,7 +266,7 @@ function New-CosmosDbCollection
     $headers = @{}
 
     if ($PSBoundParameters.ContainsKey('OfferThroughput') -and `
-        $PSBoundParameters.ContainsKey('OfferType'))
+            $PSBoundParameters.ContainsKey('OfferType'))
     {
         New-InvalidOperationException -Message $($LocalizedData.ErrorNewCollectionOfferParameterConflict)
     }
@@ -246,11 +299,13 @@ function New-CosmosDbCollection
         $body = "{ `"id`": `"$id`" }"
     }
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $collection = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'colls' `
         -Headers $headers `
         -Body $body
+
+    return (Set-CosmosDbCollectionType -Collection $collection)
 }
 
 <#
@@ -287,7 +342,7 @@ function Remove-CosmosDbCollection
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -318,7 +373,7 @@ function Remove-CosmosDbCollection
 
     $null = $PSBoundParameters.Remove('Id')
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $null = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
         -ResourceType 'colls' `
         -ResourcePath ('colls/{0}' -f $Id)

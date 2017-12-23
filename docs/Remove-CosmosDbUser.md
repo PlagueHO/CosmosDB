@@ -14,7 +14,7 @@ Delete a user from a CosmosDB database.
 
 ### Connection (Default)
 ```
-Remove-CosmosDbUser -Connection <PSObject> [-Database <String>] [-Key <SecureString>] -Id <String>
+Remove-CosmosDbUser -Connection <Connection> [-Database <String>] [-Key <SecureString>] -Id <String>
  [<CommonParameters>]
 ```
 
@@ -45,7 +45,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 

@@ -14,7 +14,7 @@ Return the permissions for a CosmosDB database user.
 
 ### Connection (Default)
 ```
-Get-CosmosDbPermission -Connection <PSObject> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
+Get-CosmosDbPermission -Connection <Connection> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -UserId <String> [-Id <String>] [<CommonParameters>]
 ```
 
@@ -48,7 +48,7 @@ It should be created
 by \`New-CosmosDbConnection\`.
 
 ```yaml
-Type: PSObject
+Type: Connection
 Parameter Sets: Connection
 Aliases: 
 
