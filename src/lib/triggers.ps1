@@ -109,7 +109,7 @@ function Get-CosmosDbTrigger
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -219,7 +219,7 @@ function New-CosmosDbTrigger
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -327,7 +327,7 @@ function Remove-CosmosDbTrigger
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -420,7 +420,7 @@ function Set-CosmosDbTrigger
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]

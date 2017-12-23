@@ -116,7 +116,7 @@ function Get-CosmosDbCollection
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -219,7 +219,7 @@ function New-CosmosDbCollection
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -342,7 +342,7 @@ function Remove-CosmosDbCollection
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]

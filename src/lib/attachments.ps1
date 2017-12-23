@@ -120,7 +120,7 @@ function Get-CosmosDbAttachment
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -244,7 +244,7 @@ function New-CosmosDbAttachment
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -387,7 +387,7 @@ function Remove-CosmosDbAttachment
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
@@ -495,7 +495,7 @@ function Set-CosmosDbAttachment
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
         [ValidateNotNullOrEmpty()]
-        [PSCustomObject]
+        [CosmosDb.Connection]
         $Connection,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
