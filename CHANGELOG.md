@@ -4,6 +4,8 @@
 
 - Fixed `New-CosmosDbConnection` error message when
   creating connection but not connected to Azure.
+- Added support for specifying token expiry length to
+  `Get-cosmosDbPermission`.
 
 ## 2.0.0.146
 
