@@ -1,5 +1,34 @@
 <#
 .SYNOPSIS
+    Set the custom Cosmos DB document types to the document returned
+    by an API call.
+
+.DESCRIPTION
+    This function applies the custom types to the document returned
+    by an API call.
+
+.PARAMETER Document
+    This is the document that is returned by a document API call.
+#>
+function Set-CosmosDbDocumentType
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        $Document
+    )
+
+    foreach ($item in $Document)
+    {
+        $item.PSObject.TypeNames.Insert(0, 'CosmosDB.Document')
+    }
+
+    return $Document
+}
+
+<#
+.SYNOPSIS
     Return the resource path for a document object.
 
 .DESCRIPTION
@@ -110,6 +139,10 @@ function Get-CosmosDbDocumentResourcePath
     If the collection is partitioned, this must be set to True to
     allow execution across multiple partitions. This should only
     be specified if Query is specified.
+
+.PARAMETER ResultHeaders
+    This is a reference variable that will be used to return the
+    hashtable that contains any headers returned by the request.
 #>
 function Get-CosmosDbDocument
 {
@@ -190,7 +223,11 @@ function Get-CosmosDbDocument
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.Boolean]
-        $QueryEnableCrossPartition = $False
+        $QueryEnableCrossPartition = $False,
+
+        [Parameter()]
+        [ref]
+        $ResultHeaders
     )
 
     $null = $PSBoundParameters.Remove('Id')
@@ -204,13 +241,19 @@ function Get-CosmosDbDocument
     $null = $PSBoundParameters.Remove('QueryParameters')
     $null = $PSBoundParameters.Remove('QueryEnableCrossPartition')
 
+    if ($PSBoundParameters.ContainsKey('ResultHeaders'))
+    {
+        $resultHeadersPassed = $true
+        $null = $PSBoundParameters.Remove('ResultHeaders')
+    }
+
     $resourcePath = ('colls/{0}/docs' -f $CollectionId)
     $method = 'Get'
 
     if (-not [String]::IsNullOrEmpty($Id))
     {
         # A document Id has been specified
-        return Invoke-CosmosDbRequest @PSBoundParameters `
+        $document = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method $method `
             -ResourceType 'docs' `
             -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
@@ -295,12 +338,18 @@ function Get-CosmosDbDocument
 
         $tempObject = (ConvertFrom-JSON -InputObject $result.Content)
 
-        return [PSCustomObject] @{
-            _rid      = $tempObject._rid
-            Documents = $tempObject.Documents
-            _count    = $tempObject._count
-            Headers   = $result.Headers
+        $document = $tempObject.Documents
+
+        if ($resultHeadersPassed)
+        {
+            # Return the result headers
+            $ResultHeaders.value = $result.Headers
         }
+    }
+
+    if ($document)
+    {
+        return (Set-CosmosDbDocumentType -Document $document)
     }
 }
 
@@ -407,12 +456,17 @@ function New-CosmosDbDocument
         $null = $PSBoundParameters.Remove('IndexingDirective')
     }
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $document = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'docs' `
         -ResourcePath $resourcePath `
         -Body $DocumentBody `
         -Headers $headers
+
+    if ($document)
+    {
+        return (Set-CosmosDbDocumentType -Document $document)
+    }
 }
 
 <#
@@ -511,7 +565,7 @@ function Remove-CosmosDbDocument
         $null = $PSBoundParameters.Remove('PartitionKeyRangeId')
     }
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $null = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
         -ResourceType 'docs' `
         -ResourcePath $resourcePath `
@@ -644,10 +698,15 @@ function Set-CosmosDbDocument
         $null = $PSBoundParameters.Remove('PartitionKeyRangeId')
     }
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    $document = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Put' `
         -ResourceType 'docs' `
         -ResourcePath $resourcePath `
         -Body $DocumentBody `
         -Headers $headers
+
+    if ($document)
+    {
+        return (Set-CosmosDbDocumentType -Document $document)
+    }
 }
