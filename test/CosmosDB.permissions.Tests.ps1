@@ -155,6 +155,37 @@ InModuleScope CosmosDB {
                     -Exactly -Times 1
             }
         }
+
+        Context 'Called with connection parameter and an id and token expiry' {
+            $script:result = $null
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission1) -and $Headers.'x-ms-documentdb-expiry-seconds' -eq 18000 } `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+
+            It 'Should not throw exception' {
+                $getCosmosDbPermissionParameters = @{
+                    Connection  = $script:testConnection
+                    UserId      = $script:testUser
+                    Id          = $script:testPermission1
+                    TokenExpiry = 18000
+                }
+
+                { $script:result = Get-CosmosDbPermission @getCosmosDbPermissionParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testPermission1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission1) -and $Headers.'x-ms-documentdb-expiry-seconds' -eq 18000 } `
+                    -Exactly -Times 1
+            }
+        }
     }
 
     Describe 'New-CosmosDbPermission' -Tag 'Unit' {

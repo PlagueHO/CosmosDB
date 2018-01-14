@@ -100,6 +100,14 @@ function Get-CosmosDbPermissionResourcePath
 
 .PARAMETER Id
     This is the id of the permission to return.
+
+.PARAMETER TokenExpiry
+    This is the number of seconds that the resource token for each
+    permission will expire in. If not specified the default value
+    of 3600 seconds (1 hour) is used.
+
+    The minimum token expiry is 600 seconds and the maximum token
+    expiry is 18000 seconds.
 #>
 function Get-CosmosDbPermission
 {
@@ -140,12 +148,28 @@ function Get-CosmosDbPermission
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String]
-        $Id
+        $Id,
+
+        [Parameter()]
+        [ValidateRange(600,18000)]
+        [System.Int32]
+        $TokenExpiry
     )
 
     $null = $PSBoundParameters.Remove('UserId')
 
     $resourcePath = ('users/{0}/permissions' -f $UserId)
+
+    $headers = @{}
+
+    if ($PSBoundParameters.ContainsKey('TokenExpiry'))
+    {
+        $null = $PSBoundParameters.Remove('TokenExpiry')
+
+        $headers += @{
+            'x-ms-documentdb-expiry-seconds' = $TokenExpiry
+        }
+    }
 
     if ($PSBoundParameters.ContainsKey('Id'))
     {
@@ -154,14 +178,16 @@ function Get-CosmosDbPermission
         $permission = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'permissions' `
-            -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
+            -ResourcePath ('{0}/{1}' -f $resourcePath, $Id) `
+            -Headers $headers
     }
     else
     {
         $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'permissions' `
-            -ResourcePath $resourcePath
+            -ResourcePath $resourcePath `
+            -Headers $headers
 
         $permission = $result.Permissions
     }

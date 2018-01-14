@@ -87,7 +87,15 @@ function New-CosmosDbConnection
             -Action listKeys `
             -Force `
             -ErrorAction Stop
-        $Key = ConvertTo-SecureString -String ($resource.$MasterKeyType) -AsPlainText -Force
+
+        if ($resource)
+        {
+            $Key = ConvertTo-SecureString -String ($resource.$MasterKeyType) -AsPlainText -Force
+        }
+        else
+        {
+            return
+        }
     }
 
     $connection = New-Object -TypeName 'CosmosDB.Connection' -Property @{
@@ -97,8 +105,6 @@ function New-CosmosDbConnection
         KeyType  = $KeyType
         BaseUri  = (Get-CosmosDbUri -Account $Account)
     }
-
-#    $connection.PSObject.TypeNames.Insert(0, 'CosmosDB.Connection')
 
     return $connection
 }
