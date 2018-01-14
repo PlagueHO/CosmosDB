@@ -27,11 +27,17 @@ For more information on the CosmosDB Rest APIs, see [this link](https://docs.mic
 
 ## Requirements
 
-This module requires:
+This module supports the following:
 
-- PowerShell 5.0
+- Windows PowerShell 5.x:
+  - **AzureRM.Profile** and **AzureRM.Resources** PowerShell modules
+    are required if using `New-CosmosDbConnection -ResourceGroup $resourceGroup`
 
-It may work on PowerShell 6.0, but is currently untested.
+or:
+
+- PowerShell Core 6.x:
+  - **AzureRM.NetCore.Profile** and **AzureRM.NetCore.Resources** PowerShell
+    modules are required if using `New-CosmosDbConnection -ResourceGroup $resourceGroup`
 
 ## Installation
 
