@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.0.0.163
 
 - Fixed `New-CosmosDbConnection` error message when
   creating connection but not connected to Azure.
@@ -84,5 +84,6 @@
 ## 1.0.0.30
 
 - Initial Release.
+
 
 
