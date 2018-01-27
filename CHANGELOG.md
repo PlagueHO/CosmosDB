@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.0.1.173
 
 - Added support for CosmosDB Emulator.
 
@@ -88,6 +88,7 @@
 ## 1.0.0.30
 
 - Initial Release.
+
 
 
 
