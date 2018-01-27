@@ -30,14 +30,24 @@
 .PARAMETER MasterKeyType
     This is the master key type to use retrieve from Azure for
     the CosmosDB.
+
+.PARAMETER Emulator
+    Using this switch creates a connection to a CosmosDB
+    emulator installed onto the local host.
+
+.PARAMETER Port
+    This is the port the CosmosDB emulator is installed onto.
+    If not specified it will use the default port of 8081.
 #>
 function New-CosmosDbConnection
 {
     [CmdletBinding(DefaultParameterSetName = 'Connection')]
     [OutputType([System.Management.Automation.PSCustomObject])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Scope = 'Function')]
     param
     (
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Azure')]
         [ValidateNotNullOrEmpty()]
         [System.String]
         $Account,
@@ -52,7 +62,7 @@ function New-CosmosDbConnection
         [System.Security.SecureString]
         $Key,
 
-        [Parameter()]
+        [Parameter(ParameterSetName = 'Connection')]
         [ValidateSet('master', 'resource')]
         [System.String]
         $KeyType = 'master',
@@ -65,36 +75,70 @@ function New-CosmosDbConnection
         [Parameter(ParameterSetName = 'Azure')]
         [ValidateSet('PrimaryMasterKey', 'SecondaryMasterKey', 'PrimaryReadonlyMasterKey', 'SecondaryReadonlyMasterKey')]
         [System.String]
-        $MasterKeyType = 'PrimaryMasterKey'
+        $MasterKeyType = 'PrimaryMasterKey',
+
+        [Parameter(ParameterSetName = 'Emulator')]
+        [Switch]
+        $Emulator,
+
+        [Parameter(ParameterSetName = 'Emulator')]
+        [System.Int16]
+        $Port = 8081
     )
 
-    if ($PSCmdlet.ParameterSetName -eq 'Azure')
+    switch ($PSCmdlet.ParameterSetName)
     {
-        try
+        'Emulator'
         {
-            $null = Get-AzureRmContext -ErrorAction SilentlyContinue
-        }
-        catch
-        {
-            $null = Add-AzureRmAccount
+            $Account = 'localhost'
+
+            # This is a publically known fixed master key (see https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator#authenticating-requests)
+            $Key = ConvertTo-SecureString `
+                -String 'C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==' `
+                -AsPlainText `
+                -Force
+
+            $BaseUri = [uri]::new('https://localhost:{0}' -f $Port)
         }
 
-        $resource = Invoke-AzureRmResourceAction `
-            -ResourceGroupName $ResourceGroup `
-            -Name $Account `
-            -ResourceType "Microsoft.DocumentDb/databaseAccounts" `
-            -ApiVersion "2015-04-08" `
-            -Action listKeys `
-            -Force `
-            -ErrorAction Stop
+        'Azure'
+        {
+            try
+            {
+                $null = Get-AzureRmContext -ErrorAction SilentlyContinue
+            }
+            catch
+            {
+                $null = Add-AzureRmAccount
+            }
 
-        if ($resource)
-        {
-            $Key = ConvertTo-SecureString -String ($resource.$MasterKeyType) -AsPlainText -Force
+            $resource = Invoke-AzureRmResourceAction `
+                -ResourceGroupName $ResourceGroup `
+                -Name $Account `
+                -ResourceType "Microsoft.DocumentDb/databaseAccounts" `
+                -ApiVersion "2015-04-08" `
+                -Action listKeys `
+                -Force `
+                -ErrorAction Stop
+
+            if ($resource)
+            {
+                $Key = ConvertTo-SecureString `
+                    -String ($resource.$MasterKeyType) `
+                    -AsPlainText `
+                    -Force
+            }
+            else
+            {
+                return
+            }
+
+            $BaseUri = (Get-CosmosDbUri -Account $Account)
         }
-        else
+
+        'Connection'
         {
-            return
+            $BaseUri = (Get-CosmosDbUri -Account $Account)
         }
     }
 
@@ -103,7 +147,7 @@ function New-CosmosDbConnection
         Database = $Database
         Key      = $Key
         KeyType  = $KeyType
-        BaseUri  = (Get-CosmosDbUri -Account $Account)
+        BaseUri  = $BaseUri
     }
 
     return $connection

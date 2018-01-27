@@ -14,6 +14,7 @@ InModuleScope CosmosDB {
     $script:testDatabase = 'testDatabase'
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
+    $script:testEmulatorKey = 'C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=='
     $script:testBaseUri = 'documents.contoso.com'
     $script:testDate = (Get-Date -Year 2017 -Month 11 -Day 29 -Hour 10 -Minute 45 -Second 10)
     $script:testUniversalDate = 'Tue, 28 Nov 2017 21:45:10 GMT'
@@ -139,6 +140,28 @@ InModuleScope CosmosDB {
                 Assert-MockCalled -CommandName Invoke-AzureRmResourceAction -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-AzureRmContext -Exactly -Times 1
                 Assert-MockCalled -CommandName Add-AzureRmAccount -Exactly -Times 0
+            }
+        }
+
+        Context 'Called with Emulator parameters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbConnectionParameters = @{
+                    Database = $script:testDatabase
+                    Emulator = $true
+                }
+
+                { $script:result = New-CosmosDbConnection @newCosmosDbConnectionParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be 'localhost'
+                $script:result.Database | Should -Be $script:testDatabase
+                $tempCredential = New-Object System.Net.NetworkCredential("TestUsername", $result.Key, "TestDomain")
+                $tempCredential.Password | Should -Be $script:testEmulatorKey
+                $script:result.KeyType | Should -Be 'master'
+                $script:result.BaseUri | Should -Be ('https://localhost:8081/')
             }
         }
     }

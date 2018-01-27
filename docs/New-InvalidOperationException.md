@@ -1,7 +1,7 @@
 ---
 external help file: CosmosDB-help.xml
 Module Name: CosmosDB
-online version: 
+online version:
 schema: 2.0.0
 ---
 
@@ -36,7 +36,7 @@ The message explaining why this error is being thrown
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: 1
@@ -51,7 +51,7 @@ The error record containing the exception that is causing this terminating error
 ```yaml
 Type: ErrorRecord
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: 2
@@ -70,4 +70,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
-

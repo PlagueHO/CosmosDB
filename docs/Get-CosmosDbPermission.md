@@ -1,7 +1,7 @@
 ---
 external help file: CosmosDB-help.xml
 Module Name: CosmosDB
-online version: 
+online version:
 schema: 2.0.0
 ---
 
@@ -15,13 +15,13 @@ Return the permissions for a CosmosDB database user.
 ### Connection (Default)
 ```
 Get-CosmosDbPermission -Connection <Connection> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -UserId <String> [-Id <String>] [<CommonParameters>]
+ -UserId <String> [-Id <String>] [-TokenExpiry <Int32>] [<CommonParameters>]
 ```
 
 ### Account
 ```
 Get-CosmosDbPermission -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -UserId <String> [-Id <String>] [<CommonParameters>]
+ -UserId <String> [-Id <String>] [-TokenExpiry <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -50,7 +50,7 @@ by \`New-CosmosDbConnection\`.
 ```yaml
 Type: Connection
 Parameter Sets: Connection
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -65,7 +65,7 @@ The account name of the CosmosDB to access.
 ```yaml
 Type: String
 Parameter Sets: Account
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -80,7 +80,7 @@ The key to be used to access this CosmosDB.
 ```yaml
 Type: SecureString
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -95,7 +95,7 @@ The type of key that will be used to access ths CosmosDB.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -110,7 +110,7 @@ The name of the database to access in the CosmosDB account.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -125,7 +125,7 @@ This is the id of the user to get the permissions for.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -140,11 +140,29 @@ This is the id of the permission to return.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TokenExpiry
+This is the number of seconds that the resource token for each
+permission will expire in. If not specified the default value
+of 3600 seconds (1 hour) is used.
+
+The minimum token expiry is 600 seconds and the maximum token
+expiry is 18000 seconds.```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -161,4 +179,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
-

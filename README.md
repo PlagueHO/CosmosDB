@@ -27,11 +27,17 @@ For more information on the CosmosDB Rest APIs, see [this link](https://docs.mic
 
 ## Requirements
 
-This module requires:
+This module supports the following:
 
-- PowerShell 5.0
+- Windows PowerShell 5.x:
+  - **AzureRM.Profile** and **AzureRM.Resources** PowerShell modules
+    are required if using `New-CosmosDbConnection -ResourceGroup $resourceGroup`
 
-It may work on PowerShell 6.0, but is currently untested.
+or:
+
+- PowerShell Core 6.x:
+  - **AzureRM.NetCore.Profile** and **AzureRM.NetCore.Resources** PowerShell
+    modules are required if using `New-CosmosDbConnection -ResourceGroup $resourceGroup`
 
 ## Installation
 
@@ -80,6 +86,17 @@ Azure login will be initiated. If PowerShell is already connected to
 an account that doesn't contain the CosmosDB you wish to connect to then
 you will first need to connect to the correct account using the
 `Add-AzureRmAccount` cmdlet._
+
+### Create a Connection to a CosmosDB Emulator
+
+Microsoft provides a [CosmosDB emulator](https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator) that
+you can run locally to enable testing and debugging scenarios. To create
+a connection to a CosmosDB emulator installed on the localhost use the
+following command:
+
+```powershell
+$cosmosDbConnection = New-CosmosDbConnection -Emulator -Database 'MyDatabase'
+```
 
 ### Working with Databases
 
