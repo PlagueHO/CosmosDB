@@ -1,5 +1,11 @@
 # Release Notes
 
+## What is New in CosmosDB 2.0.1
+
+January 27, 2018
+
+- Added support for CosmosDB Emulator.
+
 ## What is New in CosmosDB 2.0.0
 
 December 23, 2017

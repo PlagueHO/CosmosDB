@@ -1,7 +1,7 @@
 ---
 external help file: CosmosDB-help.xml
 Module Name: CosmosDB
-online version: 
+online version:
 schema: 2.0.0
 ---
 
@@ -56,7 +56,7 @@ by \`New-CosmosDbConnection\`.
 ```yaml
 Type: Connection
 Parameter Sets: Connection
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -71,7 +71,7 @@ The account name of the CosmosDB to access.
 ```yaml
 Type: String
 Parameter Sets: Account
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -86,7 +86,7 @@ The key to be used to access this CosmosDB.
 ```yaml
 Type: SecureString
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -101,7 +101,7 @@ The type of key that will be used to access ths CosmosDB.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -116,7 +116,7 @@ The name of the database to access in the CosmosDB account.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -131,7 +131,7 @@ This is the id of the collection to get the documents for.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -146,7 +146,7 @@ This is the id of the document to return.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -163,7 +163,7 @@ Should not be set if Id is set.
 ```yaml
 Type: Int32
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -181,7 +181,7 @@ Id is set.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -200,7 +200,7 @@ Should not be set if Id is set.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -220,7 +220,7 @@ set.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -237,7 +237,7 @@ if Id is set.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -254,7 +254,7 @@ should not be specified if Id is specified.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -272,7 +272,7 @@ Query is specified.
 ```yaml
 Type: Hashtable[]
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -290,7 +290,7 @@ be specified if Query is specified.
 ```yaml
 Type: Boolean
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -304,7 +304,7 @@ This is a reference variable that will be used to return the
 hashtable that contains any headers returned by the request.```yaml
 Type: PSReference
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -325,4 +325,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
-

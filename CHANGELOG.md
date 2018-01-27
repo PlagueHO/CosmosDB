@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Added support for CosmosDB Emulator.
+
 ## 2.0.0.163
 
 - Fixed `New-CosmosDbConnection` error message when

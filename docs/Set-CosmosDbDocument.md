@@ -1,7 +1,7 @@
 ---
 external help file: CosmosDB-help.xml
 Module Name: CosmosDB
-online version: 
+online version:
 schema: 2.0.0
 ---
 
@@ -50,7 +50,7 @@ by \`New-CosmosDbConnection\`.
 ```yaml
 Type: Connection
 Parameter Sets: Connection
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -65,7 +65,7 @@ The account name of the CosmosDB to access.
 ```yaml
 Type: String
 Parameter Sets: Account
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -80,7 +80,7 @@ The name of the database to access in the CosmosDB account.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -95,7 +95,7 @@ The key to be used to access this CosmosDB.
 ```yaml
 Type: SecureString
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -110,7 +110,7 @@ The type of key that will be used to access ths CosmosDB.
 ```yaml
 Type: String
 Parameter Sets: Account
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -125,7 +125,7 @@ This is the Id of the collection to update the document for.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -140,7 +140,7 @@ This is the Id of the document to update.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -158,7 +158,7 @@ document to create.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -174,7 +174,7 @@ Exclude omits the document from indexing.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -191,7 +191,7 @@ created with a partitionKey definition.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -212,4 +212,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
-
