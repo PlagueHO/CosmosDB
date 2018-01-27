@@ -1,7 +1,7 @@
 ---
 external help file: CosmosDB-help.xml
 Module Name: CosmosDB
-online version: 
+online version:
 schema: 2.0.0
 ---
 
@@ -21,8 +21,13 @@ New-CosmosDbConnection -Account <String> [-Database <String>] -Key <SecureString
 
 ### Azure
 ```
-New-CosmosDbConnection -Account <String> [-Database <String>] [-KeyType <String>] -ResourceGroup <String>
- [-MasterKeyType <String>] [<CommonParameters>]
+New-CosmosDbConnection -Account <String> [-Database <String>] -ResourceGroup <String> [-MasterKeyType <String>]
+ [<CommonParameters>]
+```
+
+### Emulator
+```
+New-CosmosDbConnection [-Database <String>] [-Emulator] [-Port <Int16>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -49,8 +54,8 @@ The account name of the CosmosDB to access.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
-Aliases: 
+Parameter Sets: Connection, Azure
+Aliases:
 
 Required: True
 Position: Named
@@ -65,7 +70,7 @@ The name of the database to access in the CosmosDB account.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -80,7 +85,7 @@ The key to be used to access this CosmosDB.
 ```yaml
 Type: SecureString
 Parameter Sets: Connection
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -94,8 +99,8 @@ The type of key that will be used to access ths CosmosDB.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
-Aliases: 
+Parameter Sets: Connection
+Aliases:
 
 Required: False
 Position: Named
@@ -111,7 +116,7 @@ CosmosDB.
 ```yaml
 Type: String
 Parameter Sets: Azure
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -127,11 +132,39 @@ the CosmosDB.
 ```yaml
 Type: String
 Parameter Sets: Azure
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
 Default value: PrimaryMasterKey
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Emulator
+Using this switch creates a connection to a CosmosDB
+emulator installed onto the local host.```yaml
+Type: SwitchParameter
+Parameter Sets: Emulator
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Port
+This is the port the CosmosDB emulator is installed onto.
+If not specified it will use the default port of 8081.```yaml
+Type: Int16
+Parameter Sets: Emulator
+Aliases:
+
+Required: False
+Position: Named
+Default value: 8081
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -148,4 +181,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
-
