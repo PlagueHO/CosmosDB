@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.0.1.173'
+    ModuleVersion     = '2.0.2.173'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -18,7 +18,7 @@
     CompanyName       = ''
 
     # Copyright statement for this module
-    Copyright         = '(c) 2017 Daniel Scott-Raynsford. All rights reserved.'
+    Copyright         = '(c) 2018 Daniel Scott-Raynsford. All rights reserved.'
 
     # Description of the functionality provided by this module
     Description       = 'This module provides cmdlets for working with Azure Cosmos DB databases, collections, users and permissions.'
@@ -107,7 +107,7 @@
         'New-CosmosDbCollection'
         'New-CosmosDbDatabase'
         'New-CosmosDbDocument'
-        'New-CosmosDbConnection'
+        'New-CosmosDbContext'
         'New-CosmosDbPermission'
         'New-CosmosDbStoredProcedure'
         'New-CosmosDbTrigger'
@@ -131,7 +131,9 @@
     )
 
     # Variables to export from this module
-    VariablesToExport = '*'
+    VariablesToExport = @(
+        'New-CosmosDbConnection'
+    )
 
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
     AliasesToExport   = '*'
@@ -162,6 +164,14 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+February 24, 2018
+
+- Converted all `connection` function names and parameter names
+  over to `context`. Aliases were implemented for old `connection`
+  function and parameter names to reduce possibility of breakage.
+
 ## What is New in CosmosDB 2.0.1
 
 January 27, 2018

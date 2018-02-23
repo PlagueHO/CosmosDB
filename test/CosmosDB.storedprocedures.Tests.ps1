@@ -14,7 +14,7 @@ InModuleScope CosmosDB {
     $script:testDatabase = 'testDatabase'
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
-    $script:testConnection = [CosmosDb.Connection] @{
+    $script:testContext = [CosmosDb.Context] @{
         Account  = $script:testAccount
         Database = $script:testDatabase
         Key      = $script:testKeySecureString
@@ -50,7 +50,7 @@ InModuleScope CosmosDB {
     }
 '@
 
-$script:testJsonSingle = @'
+    $script:testJsonSingle = @'
 {
     "body": "testStoredProcedureBody",
     "id": "testStoredProcedure1",
@@ -90,7 +90,7 @@ $script:testJsonSingle = @'
             { Get-Command -Name Get-CosmosDbStoredProcedure -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and no id' {
+        Context 'Called with context parameter and no id' {
             $script:result = $null
 
             Mock `
@@ -100,7 +100,7 @@ $script:testJsonSingle = @'
 
             It 'Should not throw exception' {
                 $getCosmosDbStoredProcedureParameters = @{
-                    Connection   = $script:testConnection
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                 }
 
@@ -121,7 +121,7 @@ $script:testJsonSingle = @'
             }
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -131,7 +131,7 @@ $script:testJsonSingle = @'
 
             It 'Should not throw exception' {
                 $getCosmosDbStoredProcedureParameters = @{
-                    Connection   = $script:testConnection
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                     Id           = $script:testStoredProcedure1
                 }
@@ -157,7 +157,7 @@ $script:testJsonSingle = @'
             { Get-Command -Name Invoke-CosmosDbStoredProcedure -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -167,7 +167,7 @@ $script:testJsonSingle = @'
 
             It 'Should not throw exception' {
                 $invokeCosmosDbStoredProcedureParameters = @{
-                    Connection               = $script:testConnection
+                    Context                  = $script:testContext
                     CollectionId             = $script:testCollection
                     Id                       = $script:testStoredProcedure1
                     StoredProcedureParameter = @('testParameter1', 'testParameter2')
@@ -194,7 +194,7 @@ $script:testJsonSingle = @'
             { Get-Command -Name New-CosmosDbStoredProcedure -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -204,7 +204,7 @@ $script:testJsonSingle = @'
 
             It 'Should not throw exception' {
                 $newCosmosDbStoredProcedureParameters = @{
-                    Connection          = $script:testConnection
+                    Context             = $script:testContext
                     CollectionId        = $script:testCollection
                     Id                  = $script:testStoredProcedure1
                     StoredProcedureBody = $script:testStoredProcedureBody
@@ -231,7 +231,7 @@ $script:testJsonSingle = @'
             { Get-Command -Name Remove-CosmosDbStoredProcedure -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -240,7 +240,7 @@ $script:testJsonSingle = @'
 
             It 'Should not throw exception' {
                 $removeCosmosDbStoredProcedureParameters = @{
-                    Connection   = $script:testConnection
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                     Id           = $script:testStoredProcedure1
                 }
@@ -262,7 +262,7 @@ $script:testJsonSingle = @'
             { Get-Command -Name Set-CosmosDbStoredProcedure -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -272,7 +272,7 @@ $script:testJsonSingle = @'
 
             It 'Should not throw exception' {
                 $setCosmosDbStoredProcedureParameters = @{
-                    Connection          = $script:testConnection
+                    Context             = $script:testContext
                     CollectionId        = $script:testCollection
                     Id                  = $script:testStoredProcedure1
                     StoredProcedureBody = $script:testStoredProcedureBody

@@ -87,10 +87,10 @@ function Get-CosmosDbCollectionResourcePath
     If the Id is specified then only the collection matching this
     Id will be returned, otherwise all collections will be returned.
 
-.PARAMETER Connection
-    This is an object containing the connection information of
+.PARAMETER Context
+    This is an object containing the context information of
     the CosmosDB database that will be accessed. It should be created
-    by `New-CosmosDbConnection`.
+    by `New-CosmosDbContext`.
 
 .PARAMETER Account
     The account name of the CosmosDB to access.
@@ -110,14 +110,15 @@ function Get-CosmosDbCollectionResourcePath
 #>
 function Get-CosmosDbCollection
 {
-    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
     [OutputType([Object])]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
-        [CosmosDb.Connection]
-        $Connection,
+        [CosmosDb.Context]
+        $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [ValidateNotNullOrEmpty()]
@@ -176,10 +177,10 @@ function Get-CosmosDbCollection
 .DESCRIPTION
     This cmdlet will create a collection in a CosmosDB.
 
-.PARAMETER Connection
-    This is an object containing the connection information of
+.PARAMETER Context
+    This is an object containing the context information of
     the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbConnection`.
+    by `New-CosmosDbContext`.
 
 .PARAMETER Account
     The account name of the CosmosDB to access.
@@ -213,14 +214,15 @@ function Get-CosmosDbCollection
 #>
 function New-CosmosDbCollection
 {
-    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
     [OutputType([Object])]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
-        [CosmosDb.Connection]
-        $Connection,
+        [CosmosDb.Context]
+        $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [ValidateNotNullOrEmpty()]
@@ -315,10 +317,10 @@ function New-CosmosDbCollection
 .DESCRIPTION
     This cmdlet will delete a collection in a CosmosDB.
 
-.PARAMETER Connection
-    This is an object containing the connection information of
+.PARAMETER Context
+    This is an object containing the context information of
     the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbConnection`.
+    by `New-CosmosDbContext`.
 
 .PARAMETER Account
     The account name of the CosmosDB to access.
@@ -337,13 +339,14 @@ function New-CosmosDbCollection
 #>
 function Remove-CosmosDbCollection
 {
-    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
-        [CosmosDb.Connection]
-        $Connection,
+        [CosmosDb.Context]
+        $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [ValidateNotNullOrEmpty()]

@@ -5,30 +5,30 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-CosmosDbDocument
+# Set-CosmosDbAttachment
 
 ## SYNOPSIS
-Update a document from a CosmosDB collection.
+Update am attachment for a CosmosDB document.
 
 ## SYNTAX
 
 ### Context (Default)
 ```
-Set-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString>] -CollectionId <String>
- -Id <String> -DocumentBody <String> [-IndexingDirective <String>] [-PartitionKey <String>]
+Set-CosmosDbAttachment -Context <Context> [-Database <String>] [-Key <SecureString>] -CollectionId <String>
+ -DocumentId <String> -Id <String> [-NewId <String>] [-ContentType <String>] [-Media <String>] [-Slug <String>]
  [<CommonParameters>]
 ```
 
 ### Account
 ```
-Set-CosmosDbDocument -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -CollectionId <String> -Id <String> -DocumentBody <String> [-IndexingDirective <String>]
- [-PartitionKey <String>] [<CommonParameters>]
+Set-CosmosDbAttachment -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
+ -CollectionId <String> -DocumentId <String> -Id <String> [-NewId <String>] [-ContentType <String>]
+ [-Media <String>] [-Slug <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-This cmdlet will update an existing document in a CosmosDB
-collection.
+This cmdlet will update an existing attachment in a CosmosDB
+document.
 
 ## EXAMPLES
 
@@ -120,7 +120,22 @@ Accept wildcard characters: False
 ```
 
 ### -CollectionId
-This is the Id of the collection to update the document for.
+This is the Id of the collection to update the attachment for.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DocumentId
+This is the Id of the collection to update the attachment for.
 
 ```yaml
 Type: String
@@ -135,7 +150,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-This is the Id of the document to update.
+This is the Id of the attachment to update.
 
 ```yaml
 Type: String
@@ -149,27 +164,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DocumentBody
-This is the body of the document to update.
-It must be
-formatted as a JSON string and contain the Id value of the
-document to create.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IndexingDirective
-Include includes the document in the indexing path while
-Exclude omits the document from indexing.
+### -NewId
+This is the new Id of the attachment if renaming the attachment.
 
 ```yaml
 Type: String
@@ -183,10 +179,45 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -PartitionKey
-The partition key value for the document to be deleted.
-Required if and must be specified only if the collection is
-created with a partitionKey definition.
+### -ContentType
+Not Required to be set when attaching raw media.
+This is a user
+settable property.
+It notes the content type of the attachment.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Media
+Not Required to be set when attaching raw media.
+This is the
+URL link or file path where the attachment resides.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Slug
+The name of the attachment.
+This is only required when raw media
+is submitted to the Azure Cosmos DB attachment storage.
 
 ```yaml
 Type: String

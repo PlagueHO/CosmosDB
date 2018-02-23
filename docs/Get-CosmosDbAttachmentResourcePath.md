@@ -5,20 +5,21 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-CosmosDbPermissionResourcePath
+# Get-CosmosDbAttachmentResourcePath
 
 ## SYNOPSIS
-Return the resource path for a permission object.
+Return the resource path for an attachment object.
 
 ## SYNTAX
 
 ```
-Get-CosmosDbPermissionResourcePath [-Database] <String> [-UserId] <String> [-Id] <String> [<CommonParameters>]
+Get-CosmosDbAttachmentResourcePath [-Database] <String> [-CollectionId] <String> [-DocumentId] <String>
+ [-Id] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-This cmdlet returns the resource identifier for a
-permission object.
+This cmdlet returns the resource identifier for an
+attachment object.
 
 ## EXAMPLES
 
@@ -32,7 +33,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Database
-This is the database containing the permission.
+This is the database containing the attachment.
 
 ```yaml
 Type: String
@@ -46,8 +47,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -UserId
-This is the Id of the user containing the permission.
+### -CollectionId
+This is the Id of the collection containing the attachment.
 
 ```yaml
 Type: String
@@ -61,8 +62,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-This is the Id of the permission.
+### -DocumentId
+This is the Id of the document containing the attachment.
 
 ```yaml
 Type: String
@@ -71,6 +72,21 @@ Aliases:
 
 Required: True
 Position: 3
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+This is the Id of the attachment.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 4
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

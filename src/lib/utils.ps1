@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
-    Create a connection object containing the information required
+    Create a context object containing the information required
     to connect to a CosmosDB.
 
 .DESCRIPTION
     This cmdlet is used to simplify the calling of the CosmosDB
-    cmdlets by providing all the connection information in an
+    cmdlets by providing all the context information in an
     object that can be passed to the CosmosDB cmdlets.
 
     It can also retrieve the CosmosDB primary or secondary key
@@ -32,21 +32,21 @@
     the CosmosDB.
 
 .PARAMETER Emulator
-    Using this switch creates a connection to a CosmosDB
-    emulator installed onto the local host.
+    Using this switch creates a context for a CosmosDB emulator
+    installed onto the local host.
 
 .PARAMETER Port
     This is the port the CosmosDB emulator is installed onto.
     If not specified it will use the default port of 8081.
 #>
-function New-CosmosDbConnection
+function New-CosmosDbContext
 {
-    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
     [OutputType([System.Management.Automation.PSCustomObject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Scope = 'Function')]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Azure')]
         [ValidateNotNullOrEmpty()]
         [System.String]
@@ -57,12 +57,12 @@ function New-CosmosDbConnection
         [System.String]
         $Database,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
         [System.Security.SecureString]
         $Key,
 
-        [Parameter(ParameterSetName = 'Connection')]
+        [Parameter(ParameterSetName = 'Context')]
         [ValidateSet('master', 'resource')]
         [System.String]
         $KeyType = 'master',
@@ -136,13 +136,13 @@ function New-CosmosDbConnection
             $BaseUri = (Get-CosmosDbUri -Account $Account)
         }
 
-        'Connection'
+        'Context'
         {
             $BaseUri = (Get-CosmosDbUri -Account $Account)
         }
     }
 
-    $connection = New-Object -TypeName 'CosmosDB.Connection' -Property @{
+    $context = New-Object -TypeName 'CosmosDB.Context' -Property @{
         Account  = $Account
         Database = $Database
         Key      = $Key
@@ -150,7 +150,7 @@ function New-CosmosDbConnection
         BaseUri  = $BaseUri
     }
 
-    return $connection
+    return $context
 }
 
 <#
@@ -313,10 +313,10 @@ function New-CosmosDbAuthorizationToken
 
 .DESCRIPTION
 
-.PARAMETER Connection
-    This is an object containing the connection information of
+.PARAMETER Context
+    This is an object containing the context information of
     the CosmosDB database that will be accessed. It should be created
-    by `New-CosmosDbConnection`.
+    by `New-CosmosDbContext`.
 
 .PARAMETER Account
     The account name of the CosmosDB to access.
@@ -328,7 +328,7 @@ function New-CosmosDbAuthorizationToken
     The type of key that will be used to access ths CosmosDB.
 
 .PARAMETER Database
-    If specified will override the value in the connection.
+    If specified will override the value in the context.
     If an empty database is specified then no dbs will be specified
     in the Rest API URI which will allow working with database
     objects.
@@ -368,14 +368,15 @@ function New-CosmosDbAuthorizationToken
 #>
 function Invoke-CosmosDbRequest
 {
-    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
     [OutputType([System.String])]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
-        [CosmosDB.Connection]
-        $Connection,
+        [CosmosDB.Context]
+        $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [ValidateNotNullOrEmpty()]
@@ -435,25 +436,25 @@ function Invoke-CosmosDbRequest
 
     if ($PSCmdlet.ParameterSetName -eq 'Account')
     {
-        $Connection = New-CosmosDbConnection -Account $Account -Database $Database -Key $Key -KeyType $KeyType
+        $Context = New-CosmosDbContext -Account $Account -Database $Database -Key $Key -KeyType $KeyType
     }
 
     if (-not ($PSBoundParameters.ContainsKey('Database')))
     {
-        $Database = $Connection.Database
+        $Database = $Context.Database
     }
 
     if (-not ($PSBoundParameters.ContainsKey('Key')))
     {
-        $Key = $Connection.Key
+        $Key = $Context.Key
     }
 
     if (-not ($PSBoundParameters.ContainsKey('KeyType')))
     {
-        $KeyType = $Connection.KeyType
+        $KeyType = $Context.KeyType
     }
 
-    $baseUri = $Connection.BaseUri.ToString()
+    $baseUri = $Context.BaseUri.ToString()
     $date = Get-Date
     $dateString = ConvertTo-CosmosDbTokenDateString -Date $date
 

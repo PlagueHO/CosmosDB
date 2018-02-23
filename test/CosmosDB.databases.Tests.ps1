@@ -14,7 +14,7 @@ InModuleScope CosmosDB {
     $script:testDatabase = 'testDatabase'
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
-    $script:testConnection = [CosmosDb.Connection] @{
+    $script:testContext = [CosmosDb.Context] @{
         Account  = $script:testAccount
         Database = $script:testDatabase
         Key      = $script:testKeySecureString
@@ -49,7 +49,7 @@ InModuleScope CosmosDB {
     "_count": 2
 }
 '@
-$script:testJsonSingle = @'
+    $script:testJsonSingle = @'
 {
     "id": "testdatabase1",
     "_rid": "vdoeAA==",
@@ -88,7 +88,7 @@ $script:testJsonSingle = @'
             { Get-Command -Name Get-CosmosDbDatabase -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and no Id' {
+        Context 'Called with context parameter and no Id' {
             $script:result = $null
 
             Mock `
@@ -98,7 +98,7 @@ $script:testJsonSingle = @'
 
             It 'Should not throw exception' {
                 $getCosmosDbDatabaseParameters = @{
-                    Connection = $script:testConnection
+                    Context = $script:testContext
                 }
 
                 { $script:result = Get-CosmosDbDatabase @getCosmosDbDatabaseParameters } | Should -Not -Throw
@@ -118,7 +118,7 @@ $script:testJsonSingle = @'
             }
         }
 
-        Context 'Called with connection parameter and an Id' {
+        Context 'Called with context parameter and an Id' {
             $script:result = $null
 
             Mock `
@@ -128,8 +128,8 @@ $script:testJsonSingle = @'
 
             It 'Should not throw exception' {
                 $getCosmosDbDatabaseParameters = @{
-                    Connection = $script:testConnection
-                    Id         = $script:testDatabase
+                    Context = $script:testContext
+                    Id      = $script:testDatabase
                 }
 
                 { $script:result = Get-CosmosDbDatabase @getCosmosDbDatabaseParameters } | Should -Not -Throw
@@ -152,7 +152,7 @@ $script:testJsonSingle = @'
             { Get-Command -Name New-CosmosDbDatabase -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an Id' {
+        Context 'Called with context parameter and an Id' {
             $script:result = $null
 
             Mock `
@@ -162,8 +162,8 @@ $script:testJsonSingle = @'
 
             It 'Should not throw exception' {
                 $newCosmosDbDatabaseParameters = @{
-                    Connection = $script:testConnection
-                    Id         = $script:testDatabase
+                    Context = $script:testContext
+                    Id      = $script:testDatabase
                 }
 
                 { $script:result = New-CosmosDbDatabase @newCosmosDbDatabaseParameters } | Should -Not -Throw
@@ -187,7 +187,7 @@ $script:testJsonSingle = @'
             { Get-Command -Name Remove-CosmosDbDatabase -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an Id' {
+        Context 'Called with context parameter and an Id' {
             $script:result = $null
 
             Mock `
@@ -196,8 +196,8 @@ $script:testJsonSingle = @'
 
             It 'Should not throw exception' {
                 $removeCosmosDbDatabaseParameters = @{
-                    Connection = $script:testConnection
-                    Id         = $script:testDatabase
+                    Context = $script:testContext
+                    Id      = $script:testDatabase
                 }
 
                 { $script:result = Remove-CosmosDbDatabase @removeCosmosDbDatabaseParameters } | Should -Not -Throw

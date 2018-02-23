@@ -14,7 +14,7 @@ InModuleScope CosmosDB {
     $script:testDatabase = 'testDatabase'
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
-    $script:testConnection = [CosmosDb.Connection] @{
+    $script:testContext = [CosmosDb.Context] @{
         Account  = $script:testAccount
         Database = $script:testDatabase
         Key      = $script:testKeySecureString
@@ -71,7 +71,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbUser -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and no id' {
+        Context 'Called with context parameter and no id' {
             $script:result = $null
 
             Mock `
@@ -81,7 +81,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $getCosmosDbUserParameters = @{
-                    Connection = $script:testConnection
+                    Context = $script:testContext
                 }
 
                 { $script:result = Get-CosmosDbUser @getCosmosDbUserParameters } | Should -Not -Throw
@@ -101,7 +101,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -111,8 +111,8 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $getCosmosDbUserParameters = @{
-                    Connection = $script:testConnection
-                    Id         = $script:testUser1
+                    Context = $script:testContext
+                    Id      = $script:testUser1
                 }
 
                 { $script:result = Get-CosmosDbUser @getCosmosDbUserParameters } | Should -Not -Throw
@@ -136,7 +136,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbUser -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -146,8 +146,8 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $newCosmosDbUserParameters = @{
-                    Connection = $script:testConnection
-                    Id         = $script:testUser1
+                    Context = $script:testContext
+                    Id      = $script:testUser1
                 }
 
                 { $script:result = New-CosmosDbUser @newCosmosDbUserParameters } | Should -Not -Throw
@@ -171,7 +171,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Remove-CosmosDbUser -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -180,8 +180,8 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $removeCosmosDbUserParameters = @{
-                    Connection = $script:testConnection
-                    Id         = $script:testUser1
+                    Context = $script:testContext
+                    Id      = $script:testUser1
                 }
 
                 { $script:result = Remove-CosmosDbUser @removeCosmosDbUserParameters } | Should -Not -Throw
@@ -201,7 +201,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Set-CosmosDbUser -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and Id and NewId' {
+        Context 'Called with context parameter and Id and NewId' {
             $script:result = $null
 
             Mock `
@@ -211,9 +211,9 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $setCosmosDbUserParameters = @{
-                    Connection = $script:testConnection
-                    Id         = $script:testUser1
-                    NewId      = 'NewId'
+                    Context = $script:testContext
+                    Id      = $script:testUser1
+                    NewId   = 'NewId'
                 }
 
                 { $script:result = Set-CosmosDbUser @setCosmosDbUserParameters } | Should -Not -Throw

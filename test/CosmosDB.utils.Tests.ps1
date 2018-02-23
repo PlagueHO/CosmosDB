@@ -18,7 +18,7 @@ InModuleScope CosmosDB {
     $script:testBaseUri = 'documents.contoso.com'
     $script:testDate = (Get-Date -Year 2017 -Month 11 -Day 29 -Hour 10 -Minute 45 -Second 10)
     $script:testUniversalDate = 'Tue, 28 Nov 2017 21:45:10 GMT'
-    $script:testConnection = [CosmosDb.Connection] @{
+    $script:testContext = [CosmosDb.Context] @{
         Account  = $script:testAccount
         Database = $script:testDatabase
         Key      = $script:testKeySecureString
@@ -38,23 +38,23 @@ InModuleScope CosmosDB {
 '@
     $script:testResourceGroup = 'testResourceGroup'
 
-    Describe 'New-CosmosDbConnection' -Tag 'Unit' {
+    Describe 'New-CosmosDbContext' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name New-CosmosDbConnection -ErrorAction Stop } | Should -Not -Throw
+            { Get-Command -Name New-CosmosDbContext -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with Connection parameters' {
+        Context 'Called with Context parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
-                $newCosmosDbConnectionParameters = @{
+                $newCosmosDbContextParameters = @{
                     Account  = $script:testAccount
                     Database = $script:testDatabase
                     Key      = $script:testKeySecureString
                     KeyType  = 'master'
                 }
 
-                { $script:result = New-CosmosDbConnection @newCosmosDbConnectionParameters } | Should -Not -Throw
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -81,13 +81,13 @@ InModuleScope CosmosDB {
                 } }
 
             It 'Should not throw exception' {
-                $newCosmosDbConnectionParameters = @{
+                $newCosmosDbContextParameters = @{
                     Account       = $script:testAccount
                     Database      = $script:testDatabase
                     ResourceGroup = $script:testResourceGroup
                 }
 
-                { $script:result = New-CosmosDbConnection @newCosmosDbConnectionParameters } | Should -Not -Throw
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -120,13 +120,13 @@ InModuleScope CosmosDB {
             Mock -CommandName Add-AzureRmAccount
 
             It 'Should not throw exception' {
-                $newCosmosDbConnectionParameters = @{
+                $newCosmosDbContextParameters = @{
                     Account       = $script:testAccount
                     Database      = $script:testDatabase
                     ResourceGroup = $script:testResourceGroup
                 }
 
-                { $script:result = New-CosmosDbConnection @newCosmosDbConnectionParameters } | Should -Not -Throw
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -147,12 +147,12 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             It 'Should not throw exception' {
-                $newCosmosDbConnectionParameters = @{
+                $newCosmosDbContextParameters = @{
                     Database = $script:testDatabase
                     Emulator = $true
                 }
 
-                { $script:result = New-CosmosDbConnection @newCosmosDbConnectionParameters } | Should -Not -Throw
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -266,12 +266,12 @@ InModuleScope CosmosDB {
             Mock -CommandName Get-Date -MockWith { $script:testDate }
         }
 
-        Context 'Called with connection parameter and Get method' {
+        Context 'Called with context parameter and Get method' {
             $script:result = $null
 
             It 'Should not throw exception' {
                 $invokeCosmosDbRequestparameters = @{
-                    Connection   = $script:testConnection
+                    Context      = $script:testContext
                     Method       = 'Get'
                     ResourceType = 'users'
                 }
@@ -289,12 +289,12 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with connection parameter and Post method' {
+        Context 'Called with context parameter and Post method' {
             $script:result = $null
 
             It 'Should not throw exception' {
                 $invokeCosmosDbRequestparameters = @{
-                    Connection   = $script:testConnection
+                    Context      = $script:testContext
                     Method       = 'Post'
                     ResourceType = 'users'
                     Body         = '{ "id": "daniel" }'

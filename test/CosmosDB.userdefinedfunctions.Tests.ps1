@@ -14,7 +14,7 @@ InModuleScope CosmosDB {
     $script:testDatabase = 'testDatabase'
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
-    $script:testConnection = [CosmosDb.Connection] @{
+    $script:testContext = [CosmosDb.Context] @{
         Account  = $script:testAccount
         Database = $script:testDatabase
         Key      = $script:testKeySecureString
@@ -49,7 +49,7 @@ InModuleScope CosmosDB {
         "_count": 2
     }
 '@
-$script:testJsonSingle = @'
+    $script:testJsonSingle = @'
 {
     "body": "testUserDefinedFunctionBody",
     "id": "testUserDefinedFunction1",
@@ -89,7 +89,7 @@ $script:testJsonSingle = @'
             { Get-Command -Name Get-CosmosDbUserDefinedFunction -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and no id' {
+        Context 'Called with context parameter and no id' {
             $script:result = $null
 
             Mock `
@@ -99,7 +99,7 @@ $script:testJsonSingle = @'
 
             It 'Should not throw exception' {
                 $getCosmosDbUserDefinedFunctionParameters = @{
-                    Connection   = $script:testConnection
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                 }
 
@@ -120,7 +120,7 @@ $script:testJsonSingle = @'
             }
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -130,7 +130,7 @@ $script:testJsonSingle = @'
 
             It 'Should not throw exception' {
                 $getCosmosDbUserDefinedFunctionParameters = @{
-                    Connection   = $script:testConnection
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                     Id           = $script:testUserDefinedFunction1
                 }
@@ -156,7 +156,7 @@ $script:testJsonSingle = @'
             { Get-Command -Name New-CosmosDbUserDefinedFunction -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -166,7 +166,7 @@ $script:testJsonSingle = @'
 
             It 'Should not throw exception' {
                 $newCosmosDbUserDefinedFunctionParameters = @{
-                    Connection              = $script:testConnection
+                    Context                 = $script:testContext
                     CollectionId            = $script:testCollection
                     Id                      = $script:testUserDefinedFunction1
                     UserDefinedFunctionBody = $script:testUserDefinedFunction1Body
@@ -193,7 +193,7 @@ $script:testJsonSingle = @'
             { Get-Command -Name Remove-CosmosDbUserDefinedFunction -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -202,7 +202,7 @@ $script:testJsonSingle = @'
 
             It 'Should not throw exception' {
                 $removeCosmosDbUserDefinedFunctionParameters = @{
-                    Connection   = $script:testConnection
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                     Id           = $script:testUserDefinedFunction1
                 }
@@ -224,7 +224,7 @@ $script:testJsonSingle = @'
             { Get-Command -Name Set-CosmosDbUserDefinedFunction -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -234,7 +234,7 @@ $script:testJsonSingle = @'
 
             It 'Should not throw exception' {
                 $setCosmosDbUserDefinedFunctionParameters = @{
-                    Connection              = $script:testConnection
+                    Context                 = $script:testContext
                     CollectionId            = $script:testCollection
                     Id                      = $script:testUserDefinedFunction1
                     UserDefinedFunctionBody = $script:testUserDefinedFunction1Body

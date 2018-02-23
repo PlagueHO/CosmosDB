@@ -5,30 +5,29 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-CosmosDbDocument
+# New-CosmosDbAttachment
 
 ## SYNOPSIS
-Update a document from a CosmosDB collection.
+Create a new attachment for a document in a CosmosDB database.
 
 ## SYNTAX
 
 ### Context (Default)
 ```
-Set-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString>] -CollectionId <String>
- -Id <String> -DocumentBody <String> [-IndexingDirective <String>] [-PartitionKey <String>]
- [<CommonParameters>]
+New-CosmosDbAttachment -Context <Context> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
+ -CollectionId <String> -DocumentId <String> [-Id <String>] [-ContentType <String>] [-Media <String>]
+ [-Slug <String>] [<CommonParameters>]
 ```
 
 ### Account
 ```
-Set-CosmosDbDocument -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -CollectionId <String> -Id <String> -DocumentBody <String> [-IndexingDirective <String>]
- [-PartitionKey <String>] [<CommonParameters>]
+New-CosmosDbAttachment -Account <String> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
+ -CollectionId <String> -DocumentId <String> [-Id <String>] [-ContentType <String>] [-Media <String>]
+ [-Slug <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-This cmdlet will update an existing document in a CosmosDB
-collection.
+This cmdlet will create a attachment for a document in a CosmosDB.
 
 ## EXAMPLES
 
@@ -74,8 +73,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Database
-The name of the database to access in the CosmosDB account.
+### -KeyType
+The type of key that will be used to access ths CosmosDB.
 
 ```yaml
 Type: String
@@ -84,7 +83,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: Master
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -104,23 +103,38 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -KeyType
-The type of key that will be used to access ths CosmosDB.
+### -Database
+The name of the database to access in the CosmosDB account.
 
 ```yaml
 Type: String
-Parameter Sets: Account
+Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
-Default value: Master
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -CollectionId
-This is the Id of the collection to update the document for.
+This is the Id of the collection to create the attachment in.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DocumentId
+This is the Id of the document to create the attachment on.
 
 ```yaml
 Type: String
@@ -135,41 +149,13 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-This is the Id of the document to update.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DocumentBody
-This is the body of the document to update.
-It must be
-formatted as a JSON string and contain the Id value of the
-document to create.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IndexingDirective
-Include includes the document in the indexing path while
-Exclude omits the document from indexing.
+Not Required to be set when attaching raw media.
+This is a user
+settable property.
+It is the unique name that identifies the
+attachment, i.e.
+no two attachments will share the same id.
+The id must not exceed 255 characters.
 
 ```yaml
 Type: String
@@ -183,10 +169,45 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -PartitionKey
-The partition key value for the document to be deleted.
-Required if and must be specified only if the collection is
-created with a partitionKey definition.
+### -ContentType
+Not Required to be set when attaching raw media.
+This is a user
+settable property.
+It notes the content type of the attachment.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Media
+Not Required to be set when attaching raw media.
+This is the
+URL link or file path where the attachment resides.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Slug
+The name of the attachment.
+This is only required when raw media
+is submitted to the Azure Cosmos DB attachment storage.
 
 ```yaml
 Type: String
