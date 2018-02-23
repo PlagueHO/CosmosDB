@@ -78,10 +78,10 @@ function Get-CosmosDbTriggerResourcePath
     in a CosmosDB database. If an Id is specified then only the
     specified trigger will be returned.
 
-.PARAMETER Connection
-    This is an object containing the connection information of
+.PARAMETER Context
+    This is an object containing the context information of
     the CosmosDB database that will be accessed. It should be created
-    by `New-CosmosDbConnection`.
+    by `New-CosmosDbContext`.
 
 .PARAMETER Account
     The account name of the CosmosDB to access.
@@ -103,14 +103,15 @@ function Get-CosmosDbTriggerResourcePath
 #>
 function Get-CosmosDbTrigger
 {
-    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
     [OutputType([Object])]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
-        [CosmosDb.Connection]
-        $Connection,
+        [CosmosDb.Context]
+        $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [ValidateNotNullOrEmpty()]
@@ -179,10 +180,10 @@ function Get-CosmosDbTrigger
 .DESCRIPTION
     This cmdlet will create a trigger for a collection in a CosmosDB.
 
-.PARAMETER Connection
-    This is an object containing the connection information of
+.PARAMETER Context
+    This is an object containing the context information of
     the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbConnection`.
+    by `New-CosmosDbContext`.
 
 .PARAMETER Account
     The account name of the CosmosDB to access.
@@ -213,14 +214,15 @@ function Get-CosmosDbTrigger
 #>
 function New-CosmosDbTrigger
 {
-    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
     [OutputType([Object])]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
-        [CosmosDb.Connection]
-        $Connection,
+        [CosmosDb.Context]
+        $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [ValidateNotNullOrEmpty()]
@@ -297,10 +299,10 @@ function New-CosmosDbTrigger
 .DESCRIPTION
     This cmdlet will delete a trigger in a CosmosDB from a collection.
 
-.PARAMETER Connection
-    This is an object containing the connection information of
+.PARAMETER Context
+    This is an object containing the context information of
     the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbConnection`.
+    by `New-CosmosDbContext`.
 
 .PARAMETER Account
     The account name of the CosmosDB to access.
@@ -322,13 +324,14 @@ function New-CosmosDbTrigger
 #>
 function Remove-CosmosDbTrigger
 {
-    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
-        [CosmosDb.Connection]
-        $Connection,
+        [CosmosDb.Context]
+        $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [ValidateNotNullOrEmpty()]
@@ -380,10 +383,10 @@ function Remove-CosmosDbTrigger
     This cmdlet will update an existing trigger in a CosmosDB
     collection.
 
-.PARAMETER Connection
-    This is an object containing the connection information of
+.PARAMETER Context
+    This is an object containing the context information of
     the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbConnection`.
+    by `New-CosmosDbContext`.
 
 .PARAMETER Account
     The account name of the CosmosDB to access.
@@ -414,14 +417,15 @@ function Remove-CosmosDbTrigger
 #>
 function Set-CosmosDbTrigger
 {
-    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
     [OutputType([Object])]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
-        [CosmosDb.Connection]
-        $Connection,
+        [CosmosDb.Context]
+        $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [ValidateNotNullOrEmpty()]

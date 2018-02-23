@@ -5,20 +5,21 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-CosmosDbPermissionResourcePath
+# Set-CosmosDbTriggerType
 
 ## SYNOPSIS
-Return the resource path for a permission object.
+Set the custom Cosmos DB trigger types to the trigger returned
+by an API call.
 
 ## SYNTAX
 
 ```
-Get-CosmosDbPermissionResourcePath [-Database] <String> [-UserId] <String> [-Id] <String> [<CommonParameters>]
+Set-CosmosDbTriggerType [-Trigger] <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-This cmdlet returns the resource identifier for a
-permission object.
+This function applies the custom types to the trigger returned
+by an API call.
 
 ## EXAMPLES
 
@@ -31,46 +32,16 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Database
-This is the database containing the permission.
+### -Trigger
+This is the trigger that is returned by a trigger API call.
 
 ```yaml
-Type: String
+Type: Object
 Parameter Sets: (All)
 Aliases:
 
 Required: True
 Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UserId
-This is the Id of the user containing the permission.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 2
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-This is the Id of the permission.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -83,8 +54,6 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 ## INPUTS
 
 ## OUTPUTS
-
-### System.String
 
 ## NOTES
 

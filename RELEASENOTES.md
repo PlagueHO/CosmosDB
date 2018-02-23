@@ -1,5 +1,13 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+February 24, 2018
+
+- Converted all `connection` function names and parameter names
+  over to `context`. Aliases were implemented for old `connection`
+  function and parameter names to reduce possibility of breakage.
+
 ## What is New in CosmosDB 2.0.1
 
 January 27, 2018

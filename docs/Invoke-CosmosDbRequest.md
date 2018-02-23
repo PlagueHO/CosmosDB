@@ -13,9 +13,9 @@ Rest API request to CosmosDB.
 
 ## SYNTAX
 
-### Connection (Default)
+### Context (Default)
 ```
-Invoke-CosmosDbRequest -Connection <Connection> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
+Invoke-CosmosDbRequest -Context <Context> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
  [-Headers <Hashtable>] [-UseWebRequest] [-ContentType <String>] [<CommonParameters>]
 ```
@@ -33,7 +33,7 @@ Invoke-CosmosDbRequest -Account <String> [-Database <String>] [-Key <SecureStrin
 ## EXAMPLES
 
 ### Example 1
-```
+```powershell
 PS C:\> {{ Add example code here }}
 ```
 
@@ -41,16 +41,16 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Connection
-This is an object containing the connection information of
+### -Context
+This is an object containing the context information of
 the CosmosDB database that will be accessed.
 It should be created
-by \`New-CosmosDbConnection\`.
+by \`New-CosmosDbContext\`.
 
 ```yaml
-Type: Connection
-Parameter Sets: Connection
-Aliases:
+Type: Context
+Parameter Sets: Context
+Aliases: Connection
 
 Required: True
 Position: Named
@@ -75,7 +75,7 @@ Accept wildcard characters: False
 ```
 
 ### -Database
-If specified will override the value in the connection.
+If specified will override the value in the context.
 If an empty database is specified then no dbs will be specified
 in the Rest API URI which will allow working with database
 objects.
@@ -239,7 +239,9 @@ Accept wildcard characters: False
 
 ### -ContentType
 This parameter allows the ContentType to be overridden
-which can be required for some types of requests.```yaml
+which can be required for some types of requests.
+
+```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
@@ -252,7 +254,8 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

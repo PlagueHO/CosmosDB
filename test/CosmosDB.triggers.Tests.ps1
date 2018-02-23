@@ -14,7 +14,7 @@ InModuleScope CosmosDB {
     $script:testDatabase = 'testDatabase'
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
-    $script:testConnection = [CosmosDb.Connection] @{
+    $script:testContext = [CosmosDb.Context] @{
         Account  = $script:testAccount
         Database = $script:testDatabase
         Key      = $script:testKeySecureString
@@ -96,7 +96,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbTrigger -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and no id' {
+        Context 'Called with context parameter and no id' {
             $script:result = $null
 
             Mock `
@@ -106,7 +106,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $getCosmosDbTriggerParameters = @{
-                    Connection   = $script:testConnection
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                 }
 
@@ -127,7 +127,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -137,7 +137,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $getCosmosDbTriggerParameters = @{
-                    Connection   = $script:testConnection
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                     Id           = $script:testTrigger1
                 }
@@ -163,7 +163,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbTrigger -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -173,7 +173,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $newCosmosDbTriggerParameters = @{
-                    Connection       = $script:testConnection
+                    Context          = $script:testContext
                     CollectionId     = $script:testCollection
                     Id               = $script:testTrigger1
                     TriggerBody      = $script:testTriggerBody
@@ -202,7 +202,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Remove-CosmosDbTrigger -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -211,7 +211,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $removeCosmosDbTriggerParameters = @{
-                    Connection   = $script:testConnection
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                     Id           = $script:testTrigger1
                 }
@@ -233,7 +233,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Set-CosmosDbTrigger -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -243,7 +243,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $setCosmosDbTriggerParameters = @{
-                    Connection       = $script:testConnection
+                    Context          = $script:testContext
                     CollectionId     = $script:testCollection
                     Id               = $script:testTrigger1
                     TriggerBody      = $script:testTriggerBody

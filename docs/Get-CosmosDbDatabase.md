@@ -12,9 +12,9 @@ Return the databases in a CosmosDB account.
 
 ## SYNTAX
 
-### Connection (Default)
+### Context (Default)
 ```
-Get-CosmosDbDatabase -Connection <Connection> [-Key <SecureString>] [-KeyType <String>] [-Id <String>]
+Get-CosmosDbDatabase -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Id <String>]
  [<CommonParameters>]
 ```
 
@@ -32,7 +32,7 @@ Id will be returned, otherwise all databases will be returned.
 ## EXAMPLES
 
 ### Example 1
-```
+```powershell
 PS C:\> {{ Add example code here }}
 ```
 
@@ -40,18 +40,18 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Connection
-This is an object containing the connection information of
+### -Context
+This is an object containing the context information of
 the CosmosDB database that will be accessed.
 It should be created
-by \`New-CosmosDbConnection\`.
+by \`New-CosmosDbContext\`.
 
-If the connection contains a database it will be ignored.
+If the context contains a database it will be ignored.
 
 ```yaml
-Type: Connection
-Parameter Sets: Connection
-Aliases:
+Type: Context
+Parameter Sets: Context
+Aliases: Connection
 
 Required: True
 Position: Named
@@ -121,7 +121,8 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

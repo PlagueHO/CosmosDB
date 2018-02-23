@@ -79,10 +79,10 @@ function Get-CosmosDbUserDefinedFunctionResourcePath
     collection in a CosmosDB database. If an Id is specified then only
     the specified user defined functions will be returned.
 
-.PARAMETER Connection
-    This is an object containing the connection information of
+.PARAMETER Context
+    This is an object containing the context information of
     the CosmosDB database that will be accessed. It should be created
-    by `New-CosmosDbConnection`.
+    by `New-CosmosDbContext`.
 
 .PARAMETER Account
     The account name of the CosmosDB to access.
@@ -104,14 +104,15 @@ function Get-CosmosDbUserDefinedFunctionResourcePath
 #>
 function Get-CosmosDbUserDefinedFunction
 {
-    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
     [OutputType([Object])]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
-        [CosmosDb.Connection]
-        $Connection,
+        [CosmosDb.Context]
+        $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [ValidateNotNullOrEmpty()]
@@ -180,10 +181,10 @@ function Get-CosmosDbUserDefinedFunction
 .DESCRIPTION
     This cmdlet will create a user defined function for a collection in a CosmosDB.
 
-.PARAMETER Connection
-    This is an object containing the connection information of
+.PARAMETER Context
+    This is an object containing the context information of
     the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbConnection`.
+    by `New-CosmosDbContext`.
 
 .PARAMETER Account
     The account name of the CosmosDB to access.
@@ -208,14 +209,15 @@ function Get-CosmosDbUserDefinedFunction
 #>
 function New-CosmosDbUserDefinedFunction
 {
-    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
     [OutputType([Object])]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
-        [CosmosDb.Connection]
-        $Connection,
+        [CosmosDb.Context]
+        $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [ValidateNotNullOrEmpty()]
@@ -280,10 +282,10 @@ function New-CosmosDbUserDefinedFunction
 .DESCRIPTION
     This cmdlet will delete a user defined function in a CosmosDB from a collection.
 
-.PARAMETER Connection
-    This is an object containing the connection information of
+.PARAMETER Context
+    This is an object containing the context information of
     the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbConnection`.
+    by `New-CosmosDbContext`.
 
 .PARAMETER Account
     The account name of the CosmosDB to access.
@@ -305,13 +307,14 @@ function New-CosmosDbUserDefinedFunction
 #>
 function Remove-CosmosDbUserDefinedFunction
 {
-    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
-        [CosmosDb.Connection]
-        $Connection,
+        [CosmosDb.Context]
+        $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [ValidateNotNullOrEmpty()]
@@ -363,10 +366,10 @@ function Remove-CosmosDbUserDefinedFunction
     This cmdlet will update an existing user defined function in a CosmosDB
     collection.
 
-.PARAMETER Connection
-    This is an object containing the connection information of
+.PARAMETER Context
+    This is an object containing the context information of
     the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbConnection`.
+    by `New-CosmosDbContext`.
 
 .PARAMETER Account
     The account name of the CosmosDB to access.
@@ -391,14 +394,15 @@ function Remove-CosmosDbUserDefinedFunction
 #>
 function Set-CosmosDbUserDefinedFunction
 {
-    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
     [OutputType([Object])]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
-        [CosmosDb.Connection]
-        $Connection,
+        [CosmosDb.Context]
+        $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [ValidateNotNullOrEmpty()]

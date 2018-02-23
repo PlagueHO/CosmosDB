@@ -14,7 +14,7 @@ InModuleScope CosmosDB {
     $script:testDatabase = 'testDatabase'
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
-    $script:testConnection = [CosmosDb.Connection] @{
+    $script:testContext = [CosmosDb.Context] @{
         Account  = $script:testAccount
         Database = $script:testDatabase
         Key      = $script:testKeySecureString
@@ -95,7 +95,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbDocument -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and no Id but with header parameters' {
+        Context 'Called with context parameter and no Id but with header parameters' {
             $script:result = $null
 
             Mock `
@@ -109,7 +109,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $getCosmosDbDocumentParameters = @{
-                    Connection          = $script:testConnection
+                    Context          = $script:testContext
                     CollectionId        = $script:testCollection
                     MaxItemCount        = 5
                     ContinuationToken   = 'token'
@@ -135,7 +135,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with connection parameter and no Id with headers returned' {
+        Context 'Called with context parameter and no Id with headers returned' {
             $script:result = $null
 
             Mock `
@@ -151,7 +151,7 @@ InModuleScope CosmosDB {
             It 'Should not throw exception' {
                 [ref] $script:resultHeaders = @{}
                 $getCosmosDbDocumentParameters = @{
-                    Connection    = $script:testConnection
+                    Context    = $script:testContext
                     CollectionId  = $script:testCollection
                     ResultHeaders = $script:resultHeaders
                 }
@@ -174,7 +174,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with connection parameter and an Id' {
+        Context 'Called with context parameter and an Id' {
             $script:result = $null
 
             Mock `
@@ -184,7 +184,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $getCosmosDbDocumentParameters = @{
-                    Connection   = $script:testConnection
+                    Context   = $script:testContext
                     CollectionId = $script:testCollection
                     Id           = $script:testDocument1
                 }
@@ -210,7 +210,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbDocument -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an Id' {
+        Context 'Called with context parameter and an Id' {
             $script:result = $null
 
             Mock `
@@ -220,7 +220,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $newCosmosDbDocumentParameters = @{
-                    Connection   = $script:testConnection
+                    Context   = $script:testContext
                     CollectionId = $script:testCollection
                     DocumentBody = $script:testDocumentBody
                 }
@@ -246,7 +246,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Remove-CosmosDbDocument -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an Id' {
+        Context 'Called with context parameter and an Id' {
             $script:result = $null
 
             Mock `
@@ -255,7 +255,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $removeCosmosDbDocumentParameters = @{
-                    Connection   = $script:testConnection
+                    Context   = $script:testContext
                     CollectionId = $script:testCollection
                     Id           = $script:testDocument1
                 }
@@ -277,7 +277,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Set-CosmosDbDocument -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an Id' {
+        Context 'Called with context parameter and an Id' {
             $script:result = $null
 
             Mock `
@@ -287,7 +287,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $setCosmosDbDocumentParameters = @{
-                    Connection   = $script:testConnection
+                    Context   = $script:testContext
                     CollectionId = $script:testCollection
                     Id           = $script:testDocument1
                     DocumentBody = $script:testDocumentBody

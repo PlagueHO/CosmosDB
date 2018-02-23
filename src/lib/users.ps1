@@ -68,10 +68,10 @@ function Get-CosmosDbUserResourcePath
     If the Id is specified then only the user matching this
     Id will be returned, otherwise all users will be returned.
 
-.PARAMETER Connection
-    This is an object containing the connection information of
+.PARAMETER Context
+    This is an object containing the context information of
     the CosmosDB database that will be accessed. It should be created
-    by `New-CosmosDbConnection`.
+    by `New-CosmosDbContext`.
 
 .PARAMETER Account
     The account name of the CosmosDB to access.
@@ -91,14 +91,15 @@ function Get-CosmosDbUserResourcePath
 #>
 function Get-CosmosDbUser
 {
-    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
     [OutputType([Object])]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
-        [CosmosDb.Connection]
-        $Connection,
+        [CosmosDb.Context]
+        $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [ValidateNotNullOrEmpty()]
@@ -157,10 +158,10 @@ function Get-CosmosDbUser
 .DESCRIPTION
     This cmdlet will create a user in a CosmosDB.
 
-.PARAMETER Connection
-    This is an object containing the connection information of
+.PARAMETER Context
+    This is an object containing the context information of
     the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbConnection`.
+    by `New-CosmosDbContext`.
 
 .PARAMETER Account
     The account name of the CosmosDB to access.
@@ -179,14 +180,15 @@ function Get-CosmosDbUser
 #>
 function New-CosmosDbUser
 {
-    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
     [OutputType([Object])]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
-        [CosmosDb.Connection]
-        $Connection,
+        [CosmosDb.Context]
+        $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [ValidateNotNullOrEmpty()]
@@ -234,10 +236,10 @@ function New-CosmosDbUser
 .DESCRIPTION
     This cmdlet will delete a user in a CosmosDB.
 
-.PARAMETER Connection
-    This is an object containing the connection information of
+.PARAMETER Context
+    This is an object containing the context information of
     the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbConnection`.
+    by `New-CosmosDbContext`.
 
 .PARAMETER Account
     The account name of the CosmosDB to access.
@@ -256,13 +258,14 @@ function New-CosmosDbUser
 #>
 function Remove-CosmosDbUser
 {
-    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
-        [CosmosDb.Connection]
-        $Connection,
+        [CosmosDb.Context]
+        $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [ValidateNotNullOrEmpty()]
@@ -306,10 +309,10 @@ function Remove-CosmosDbUser
     This cmdlet will set the user Id of an existing  user in
     a CosmosDB.
 
-.PARAMETER Connection
-    This is an object containing the connection information of
+.PARAMETER Context
+    This is an object containing the context information of
     the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbConnection`.
+    by `New-CosmosDbContext`.
 
 .PARAMETER Account
     The account name of the CosmosDB to access.
@@ -331,14 +334,15 @@ function Remove-CosmosDbUser
 #>
 function Set-CosmosDbUser
 {
-    [CmdletBinding(DefaultParameterSetName = 'Connection')]
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
     [OutputType([Object])]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Connection')]
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
-        [CosmosDb.Connection]
-        $Connection,
+        [CosmosDb.Context]
+        $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [ValidateNotNullOrEmpty()]

@@ -14,7 +14,7 @@ InModuleScope CosmosDB {
     $script:testDatabase = 'testDatabase'
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
-    $script:testConnection = [CosmosDb.Connection] @{
+    $script:testContext = [CosmosDb.Context] @{
         Account  = $script:testAccount
         Database = $script:testDatabase
         Key      = $script:testKeySecureString
@@ -95,7 +95,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbPermission -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and no id' {
+        Context 'Called with context parameter and no id' {
             $script:result = $null
 
             Mock `
@@ -105,8 +105,8 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $getCosmosDbPermissionParameters = @{
-                    Connection = $script:testConnection
-                    UserId     = $script:testUser
+                    Context = $script:testContext
+                    UserId  = $script:testUser
                 }
 
                 { $script:result = Get-CosmosDbPermission @getCosmosDbPermissionParameters } | Should -Not -Throw
@@ -126,7 +126,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -136,9 +136,9 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $getCosmosDbPermissionParameters = @{
-                    Connection = $script:testConnection
-                    UserId     = $script:testUser
-                    Id         = $script:testPermission1
+                    Context = $script:testContext
+                    UserId  = $script:testUser
+                    Id      = $script:testPermission1
                 }
 
                 { $script:result = Get-CosmosDbPermission @getCosmosDbPermissionParameters } | Should -Not -Throw
@@ -156,7 +156,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with connection parameter and an id and token expiry' {
+        Context 'Called with context parameter and an id and token expiry' {
             $script:result = $null
 
             Mock `
@@ -166,7 +166,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $getCosmosDbPermissionParameters = @{
-                    Connection  = $script:testConnection
+                    Context     = $script:testContext
                     UserId      = $script:testUser
                     Id          = $script:testPermission1
                     TokenExpiry = 18000
@@ -193,7 +193,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbPermission -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -203,10 +203,10 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $newCosmosDbPermissionParameters = @{
-                    Connection = $script:testConnection
-                    UserId     = $script:testUser
-                    Id         = $script:testPermission1
-                    Resource   = $script:testResource
+                    Context  = $script:testContext
+                    UserId   = $script:testUser
+                    Id       = $script:testPermission1
+                    Resource = $script:testResource
                 }
 
                 { $script:result = New-CosmosDbPermission @newCosmosDbPermissionParameters } | Should -Not -Throw
@@ -230,7 +230,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Remove-CosmosDbPermission -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -239,9 +239,9 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $removeCosmosDbPermissionParameters = @{
-                    Connection = $script:testConnection
-                    UserId     = $script:testUser
-                    Id         = $script:testPermission1
+                    Context = $script:testContext
+                    UserId  = $script:testUser
+                    Id      = $script:testPermission1
                 }
 
                 { $script:result = Remove-CosmosDbPermission @removeCosmosDbPermissionParameters } | Should -Not -Throw

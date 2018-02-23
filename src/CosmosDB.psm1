@@ -5,11 +5,11 @@ $moduleRoot = Split-Path `
     -Parent
 
 #region Types
-if (-not ([System.Management.Automation.PSTypeName]'CosmosDB.Connection').Type)
+if (-not ([System.Management.Automation.PSTypeName]'CosmosDB.Context').Type)
 {
     $typeDefinition = @'
 namespace CosmosDB {
-    public class Connection
+    public class Context
     {
         public System.String Account;
         public System.String Database;
@@ -50,3 +50,6 @@ Foreach ($lib in $libs)
     . $lib.Fullname
 }
 #endregion
+
+# Add Aliases
+New-Alias -Name 'New-CosmosDbConnection' -Value 'New-CosmosDbContext' -Force

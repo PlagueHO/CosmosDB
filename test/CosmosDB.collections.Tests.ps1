@@ -14,7 +14,7 @@ InModuleScope CosmosDB {
     $script:testDatabase = 'testDatabase'
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
-    $script:testConnection = [CosmosDb.Connection] @{
+    $script:testContext = [CosmosDb.Context] @{
         Account  = $script:testAccount
         Database = $script:testDatabase
         Key      = $script:testKeySecureString
@@ -75,7 +75,7 @@ InModuleScope CosmosDB {
             Mock -CommandName Set-CosmosDbCollectionType -MockWith { $Collection }
         }
 
-        Context 'Called with connection parameter and no Id' {
+        Context 'Called with context parameter and no Id' {
             $script:result = $null
 
             Mock `
@@ -85,7 +85,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $getCosmosDbCollectionParameters = @{
-                    Connection = $script:testConnection
+                    Context = $script:testContext
                 }
 
                 { $script:result = Get-CosmosDbCollection @getCosmosDbCollectionParameters } | Should -Not -Throw
@@ -105,7 +105,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with connection parameter and an Id' {
+        Context 'Called with context parameter and an Id' {
             $script:result = $null
 
             Mock `
@@ -115,7 +115,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $getCosmosDbCollectionParameters = @{
-                    Connection = $script:testConnection
+                    Context = $script:testContext
                     Id         = $script:testCollection1
                 }
 
@@ -144,7 +144,7 @@ InModuleScope CosmosDB {
             Mock -CommandName Set-CosmosDbCollectionType -MockWith { $Collection }
         }
 
-        Context 'Called with connection parameter and an Id' {
+        Context 'Called with context parameter and an Id' {
             $script:result = $null
 
             Mock `
@@ -154,7 +154,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $newCosmosDbCollectionParameters = @{
-                    Connection = $script:testConnection
+                    Context = $script:testContext
                     Id         = $script:testCollection1
                 }
 
@@ -173,7 +173,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with connection parameter and an Id and OfferThroughput parameter' {
+        Context 'Called with context parameter and an Id and OfferThroughput parameter' {
             $script:result = $null
 
             Mock `
@@ -183,7 +183,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $newCosmosDbCollectionParameters = @{
-                    Connection      = $script:testConnection
+                    Context      = $script:testContext
                     Id              = $script:testCollection1
                     OfferThroughput = 400
                 }
@@ -202,7 +202,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with connection parameter and an Id and OfferType parameter' {
+        Context 'Called with context parameter and an Id and OfferType parameter' {
             $script:result = $null
 
             Mock `
@@ -212,7 +212,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $newCosmosDbCollectionParameters = @{
-                    Connection = $script:testConnection
+                    Context = $script:testContext
                     Id         = $script:testCollection1
                     OfferType  = 'S2'
                 }
@@ -232,7 +232,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with connection parameter and an Id and PartitionKey parameter' {
+        Context 'Called with context parameter and an Id and PartitionKey parameter' {
             $script:result = $null
 
             Mock `
@@ -242,7 +242,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $newCosmosDbCollectionParameters = @{
-                    Connection   = $script:testConnection
+                    Context   = $script:testContext
                     Id           = $script:testCollection1
                     PartitionKey = 'partitionkey'
                 }
@@ -262,7 +262,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with connection parameter and an Id and OfferType and OfferThrougput' {
+        Context 'Called with context parameter and an Id and OfferType and OfferThrougput' {
             $script:result = $null
 
             Mock `
@@ -271,7 +271,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $newCosmosDbCollectionParameters = @{
-                    Connection      = $script:testConnection
+                    Context      = $script:testContext
                     Id              = $script:testCollection1
                     OfferThroughput = 400
                     OfferType       = 'S1'
@@ -294,7 +294,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Remove-CosmosDbCollection -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an Id' {
+        Context 'Called with context parameter and an Id' {
             $script:result = $null
 
             Mock `
@@ -303,7 +303,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $removeCosmosDbCollectionParameters = @{
-                    Connection = $script:testConnection
+                    Context = $script:testContext
                     Id         = $script:testCollection1
                 }
 

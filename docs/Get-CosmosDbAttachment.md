@@ -5,30 +5,30 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-CosmosDbDocument
+# Get-CosmosDbAttachment
 
 ## SYNOPSIS
-Update a document from a CosmosDB collection.
+Return the attachments for a CosmosDB document.
 
 ## SYNTAX
 
 ### Context (Default)
 ```
-Set-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString>] -CollectionId <String>
- -Id <String> -DocumentBody <String> [-IndexingDirective <String>] [-PartitionKey <String>]
- [<CommonParameters>]
+Get-CosmosDbAttachment -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
+ -CollectionId <String> -DocumentId <String> [-Id <String>] [<CommonParameters>]
 ```
 
 ### Account
 ```
-Set-CosmosDbDocument -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -CollectionId <String> -Id <String> -DocumentBody <String> [-IndexingDirective <String>]
- [-PartitionKey <String>] [<CommonParameters>]
+Get-CosmosDbAttachment -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
+ -CollectionId <String> -DocumentId <String> [-Id <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-This cmdlet will update an existing document in a CosmosDB
-collection.
+This cmdlet will return the attachments for a specified document
+in a CosmosDB database.
+If an Id is specified then only the
+specified permission will be returned.
 
 ## EXAMPLES
 
@@ -43,7 +43,7 @@ PS C:\> {{ Add example code here }}
 
 ### -Context
 This is an object containing the context information of
-the CosmosDB database that will be deleted.
+the CosmosDB database that will be accessed.
 It should be created
 by \`New-CosmosDbContext\`.
 
@@ -74,21 +74,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Database
-The name of the database to access in the CosmosDB account.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Key
 The key to be used to access this CosmosDB.
 
@@ -109,7 +94,7 @@ The type of key that will be used to access ths CosmosDB.
 
 ```yaml
 Type: String
-Parameter Sets: Account
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -119,8 +104,38 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Database
+The name of the database to access in the CosmosDB account.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -CollectionId
-This is the Id of the collection to update the document for.
+This is the Id of the collection to get the attachments for.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DocumentId
+This is the Id of the document to get the attachments for.
 
 ```yaml
 Type: String
@@ -135,58 +150,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-This is the Id of the document to update.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DocumentBody
-This is the body of the document to update.
-It must be
-formatted as a JSON string and contain the Id value of the
-document to create.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IndexingDirective
-Include includes the document in the indexing path while
-Exclude omits the document from indexing.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PartitionKey
-The partition key value for the document to be deleted.
-Required if and must be specified only if the collection is
-created with a partitionKey definition.
+This is the Id of the attachment to retrieve.
 
 ```yaml
 Type: String

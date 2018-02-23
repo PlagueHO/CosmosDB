@@ -12,9 +12,9 @@ Create a new permission for a user in a CosmosDB database.
 
 ## SYNTAX
 
-### Connection (Default)
+### Context (Default)
 ```
-New-CosmosDbPermission -Connection <Connection> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
+New-CosmosDbPermission -Context <Context> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
  -UserId <String> -Id <String> -Resource <String> [-PermissionMode <String>] [<CommonParameters>]
 ```
 
@@ -30,7 +30,7 @@ This cmdlet will create a permission for a user in a CosmosDB.
 ## EXAMPLES
 
 ### Example 1
-```
+```powershell
 PS C:\> {{ Add example code here }}
 ```
 
@@ -38,16 +38,16 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Connection
-This is an object containing the connection information of
+### -Context
+This is an object containing the context information of
 the CosmosDB database that will be deleted.
 It should be created
-by \`New-CosmosDbConnection\`.
+by \`New-CosmosDbContext\`.
 
 ```yaml
-Type: Connection
-Parameter Sets: Connection
-Aliases:
+Type: Context
+Parameter Sets: Context
+Aliases: Connection
 
 Required: True
 Position: Named
@@ -178,7 +178,8 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
