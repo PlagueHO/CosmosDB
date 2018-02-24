@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.0.2.184
 
 - Converted all `connection` function names and parameter names
   over to `context`. Aliases were implemented for old `connection`
@@ -96,6 +96,7 @@
 ## 1.0.0.30
 
 - Initial Release.
+
 
 
 
