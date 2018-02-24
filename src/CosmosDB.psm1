@@ -17,6 +17,35 @@ namespace CosmosDB {
         public System.String KeyType;
         public System.String BaseUri;
     }
+
+    namespace IndexingPolicy {
+        namespace Path {
+            public class Index {
+                public System.String dataType;
+                public System.String kind;
+                public System.Int32 precision;
+            }
+
+            public class IncludedPath
+            {
+                public System.String path;
+                public CosmosDB.IndexingPolicy.Path.Index[] indexes;
+            }
+
+            public class ExcludedPath
+            {
+                public System.String path;
+            }
+        }
+
+        public class Policy
+        {
+            public System.Boolean automatic;
+            public System.String indexingMode;
+            public CosmosDB.IndexingPolicy.Path.IncludedPath[] includedPaths;
+            public CosmosDB.IndexingPolicy.Path.ExcludedPath[] excludedPaths;
+        }
+    }
 }
 '@
     Add-Type -TypeDefinition $typeDefinition

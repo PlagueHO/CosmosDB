@@ -15,13 +15,15 @@ Create a new collection in a CosmosDB database.
 ### Context (Default)
 ```
 New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>] [<CommonParameters>]
+ -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>]
+ [-IndexingPolicy <Policy>] [<CommonParameters>]
 ```
 
 ### Account
 ```
 New-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>] [<CommonParameters>]
+ -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>]
+ [-IndexingPolicy <Policy>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -174,6 +176,22 @@ for partitioning data into multiple partitions.
 
 ```yaml
 Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IndexingPolicy
+This is an Indexing Policy object that was created by the
+New-CosmosDbCollectionIndexingPolicy function.
+
+```yaml
+Type: Policy
 Parameter Sets: (All)
 Aliases:
 

@@ -141,6 +141,29 @@ Delete a collection from the database:
 Remove-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection'
 ```
 
+#### Creating a Collection with a custom Indexing Policy
+
+You can create a collection with a custom indexing policy by assembling
+an Indexing Policy object using the functions:
+
+- New-CosmosDbCollectionIncludedPathIndex
+- New-CosmosDbCollectionIncludedPath
+- New-CosmosDbCollectionExcludedPath
+- New-CosmosDbCollectionIndexingPolicy
+
+For example, to create a string range and number range index on the '/*'
+path using consistent indexing mode with no excluded paths:
+
+```powershell
+$indexStringRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType String -Precision -1
+$indexNumberRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType Number -Precision -1
+$indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $indexStringRange, $indexNumberRange
+$indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $indexIncludedPath
+New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'account' -IndexingPolicy $indexingPolicy
+```
+
+For more information on how CosmosDB indexes documents, see [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/indexing-policies).
+
 ### Working with Documents
 
 Create 10 new documents in a collection in the database:

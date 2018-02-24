@@ -80,6 +80,207 @@ function Get-CosmosDbCollectionResourcePath
 
 <#
 .SYNOPSIS
+    Creates an indexing policy included path index object that
+    can be added to an Included Path of an Indexing Policy.
+
+.DESCRIPTION
+    This function will return an indexing policy included path index
+    object that can be added to an included path Indexing Policy.
+
+.PARAMETER Kind
+    The type of index. Hash indexes are useful for equality
+    comparisons while Range indexes are useful for equality,
+    range comparisons and sorting. Spatial indexes are useful
+    for spatial queries.
+
+.PARAMETER DataType
+    This is the datatype for which the indexing behavior is
+    applied to. Can be String, Number, Point, Polygon, or LineString.
+    Note that Booleans and nulls are automatically indexed
+
+.PARAMETER Precision
+    The precision of the index. Can be either set to -1 for maximum
+    precision or between 1-8 for Number, and 1-100 for String. Not
+    applicable for Point, Polygon, and LineString data types.
+#>
+function New-CosmosDbCollectionIncludedPathIndex
+{
+    [CmdletBinding()]
+    [OutputType([CosmosDB.IndexingPolicy.Path.Index])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [ValidateSet('Hash', 'Range', 'Spacial')]
+        [System.String]
+        $Kind,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateSet('String', 'Number', 'Point', 'Polygon', 'LineString')]
+        [System.String]
+        $DataType,
+
+        [Parameter()]
+        [Int32]
+        $Precision
+    )
+
+    $index = [CosmosDB.IndexingPolicy.Path.Index]::new()
+    $index.Kind = $Kind
+    $index.DataType = $DataType
+    if ($PSBoundParameters.ContainsKey('Precision'))
+    {
+        $index.Precision = $Precision
+    }
+
+    return $index
+}
+
+<#
+.SYNOPSIS
+    Creates an indexing policy included path object that can be
+    added to an Indexing Policy.
+
+.DESCRIPTION
+    This function will return an indexing policy included path
+    object that can be added to an Indexing Policy.
+
+.PARAMETER Path
+    Path for which the indexing behavior applies to. Index paths
+    start with the root (/) and typically end with the ? wildcard
+    operator, denoting that there are multiple possible values for
+    the prefix. For example, to serve
+    SELECT * FROM Families F WHEREF.familyName = "Andersen", you
+    must include an index path for /familyName/? in the collection’s
+    index policy.
+
+    Index paths can also use the * wildcard operator to specify the
+    behavior for paths recursively under the prefix. For example, /payload/*
+    can be used to include everything under the payload property
+    from indexing.
+
+.PARAMETER Index
+    This is an array of included path index objects that were
+    created by New-CosmosDbCollectionIncludedPath.
+#>
+function New-CosmosDbCollectionIncludedPath
+{
+    [CmdletBinding()]
+    [OutputType([CosmosDB.IndexingPolicy.Path.IncludedPath])]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $Path = '/*',
+
+        [Parameter()]
+        [CosmosDB.IndexingPolicy.Path.Index[]]
+        $Index
+    )
+
+    $includedPath = [CosmosDB.IndexingPolicy.Path.IncludedPath]::new()
+    $includedPath.Path = $Path
+    $includedPath.Indexes = $Index
+
+    return $includedPath
+}
+
+<#
+.SYNOPSIS
+    Creates an indexing policy excluded path object that can be
+    added to an Indexing Policy.
+
+.DESCRIPTION
+    This function will return an indexing policy excluded path
+    object that can be added to an Indexing Policy.
+
+.PARAMETER Path
+    Path that is excluded from indexing. Index paths start with the
+    root (/) and typically end with the * wildcard operator..
+    For example, /payload/* can be used to exclude everything under
+    the payload property from indexing.
+#>
+function New-CosmosDbCollectionExcludedPath
+{
+    [CmdletBinding()]
+    [OutputType([CosmosDB.IndexingPolicy.Path.ExcludedPath])]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $Path = '/*'
+    )
+
+    $excludedPath = [CosmosDB.IndexingPolicy.Path.ExcludedPath]::new()
+    $excludedPath.Path = $Path
+
+    return $excludedPath
+}
+
+<#
+.SYNOPSIS
+    Creates an indexing policy object that can be passed to the
+    New-CosmosDbCollection function.
+
+.DESCRIPTION
+    This function will return an indexing policy object that can
+    be passed to the New-CosmosDbCollection function to configure
+    custom indexing policies on a collection.
+
+.PARAMETER Automatic
+    Indicates whether automatic indexing is on or off. The default
+    value is True, thus all documents are indexed. Setting the value
+    to False would allow manual configuration of indexing paths.
+
+.PARAMETER IndexingMode
+    By default, the indexing mode is Consistent. This means that
+    indexing occurs synchronously during insertion, replacment or
+    deletion of documents. To have indexing occur asynchronously,
+    set the indexing mode to lazy.
+
+.PARAMETER IncludedPath
+    The array containing document paths to be indexed. By default, two
+    paths are included: the / path which specifies that all document
+    paths be indexed, and the _ts path, which indexes for a timestamp
+    range comparison.
+
+.PARAMETER ExcludedPath
+    The array containing document paths to be excluded from indexing.
+#>
+function New-CosmosDbCollectionIndexingPolicy
+{
+    [CmdletBinding()]
+    [OutputType([CosmosDB.IndexingPolicy.Policy])]
+    param
+    (
+        [Parameter()]
+        [System.Boolean]
+        $Automatic = $true,
+
+        [Parameter()]
+        [ValidateSet('Consistent', 'Lazy')]
+        [System.String]
+        $IndexingMode = 'Consistent',
+
+        [Parameter()]
+        [CosmosDB.IndexingPolicy.Path.IncludedPath[]]
+        $IncludedPath = @(),
+
+        [Parameter()]
+        [CosmosDB.IndexingPolicy.Path.ExcludedPath[]]
+        $ExcludedPath = @()
+    )
+
+    $indexingPolicy = [CosmosDB.IndexingPolicy.Policy]::new()
+    $indexingPolicy.Automatic = $Automatic
+    $indexingPolicy.IndexingMode = $IndexingMode
+    $indexingPolicy.IncludedPaths = $IncludedPath
+    $indexingPolicy.ExcludedPaths = $ExcludedPath
+
+    return $indexingPolicy
+}
+
+<#
+.SYNOPSIS
     Return the collections in a CosmosDB database.
 
 .DESCRIPTION
@@ -211,6 +412,10 @@ function Get-CosmosDbCollection
 .PARAMETER PartitionKey
     This value is used to configure the partition key to be used
     for partitioning data into multiple partitions.
+
+.PARAMETER IndexingPolicy
+    This is an Indexing Policy object that was created by the
+    New-CosmosDbCollectionIndexingPolicy function.
 #>
 function New-CosmosDbCollection
 {
@@ -262,7 +467,12 @@ function New-CosmosDbCollection
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String]
-        $PartitionKey
+        $PartitionKey,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [CosmosDB.IndexingPolicy.Policy]
+        $IndexingPolicy
     )
 
     $headers = @{}
@@ -291,15 +501,30 @@ function New-CosmosDbCollection
 
     $null = $PSBoundParameters.Remove('Id')
 
+    $bodyObject = @{
+        id  = $id
+    }
+
     if ($PSBoundParameters.ContainsKey('PartitionKey'))
     {
-        $body = "{ `"id`": `"$id`", `"partitionKey`": { `"paths`": [ `"/$PartitionKey`" ], `"kind`": `"Hash`" } }"
+        $bodyObject += @{
+                partitionKey = @{
+                    paths = @("/$PartitionKey")
+                    kind = 'Hash'
+                }
+            }
         $null = $PSBoundParameters.Remove('PartitionKey')
     }
-    else
+
+    if ($PSBoundParameters.ContainsKey('IndexingPolicy'))
     {
-        $body = "{ `"id`": `"$id`" }"
+        $bodyObject += @{
+                indexingPolicy = $IndexingPolicy
+            }
+        $null = $PSBoundParameters.Remove('IndexingPolicy')
     }
+
+    $body = ConvertTo-Json -InputObject $bodyObject -Depth 10
 
     $collection = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `

@@ -38,6 +38,34 @@ InModuleScope CosmosDB {
 '@
     $script:testResourceGroup = 'testResourceGroup'
 
+    Describe 'Custom types' -Tag 'Unit' {
+        Context 'CosmosDB.Context' {
+            It 'Should exist' {
+                ([System.Management.Automation.PSTypeName]'CosmosDB.Context').Type | Should -Be $True
+            }
+        }
+        Context 'CosmosDB.IndexingPolicy.Policy' {
+            It 'Should exist' {
+                ([System.Management.Automation.PSTypeName]'CosmosDB.IndexingPolicy.Policy').Type | Should -Be $True
+            }
+        }
+        Context 'CosmosDB.IndexingPolicy.Path.Index' {
+            It 'Should exist' {
+                ([System.Management.Automation.PSTypeName]'CosmosDB.IndexingPolicy.Path.Index').Type | Should -Be $True
+            }
+        }
+        Context 'CosmosDB.IndexingPolicy.Path.IncludedPath' {
+            It 'Should exist' {
+                ([System.Management.Automation.PSTypeName]'CosmosDB.IndexingPolicy.Path.IncludedPath').Type | Should -Be $True
+            }
+        }
+        Context 'CosmosDB.IndexingPolicy.Path.ExcludedPath' {
+            It 'Should exist' {
+                ([System.Management.Automation.PSTypeName]'CosmosDB.IndexingPolicy.Path.ExcludedPath').Type | Should -Be $True
+            }
+        }
+    }
+
     Describe 'New-CosmosDbContext' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name New-CosmosDbContext -ErrorAction Stop } | Should -Not -Throw
