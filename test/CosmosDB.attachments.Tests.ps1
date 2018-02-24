@@ -14,7 +14,7 @@ InModuleScope CosmosDB {
     $script:testDatabase = 'testDatabase'
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
-    $script:testConnection = [CosmosDb.Connection] @{
+    $script:testContext = [CosmosDb.Context] @{
         Account  = $script:testAccount
         Database = $script:testDatabase
         Key      = $script:testKeySecureString
@@ -96,7 +96,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbAttachment -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and no id' {
+        Context 'Called with context parameter and no id' {
             $script:result = $null
 
             Mock `
@@ -106,7 +106,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $getCosmosDbAttachmentParameters = @{
-                    Connection   = $script:testConnection
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                     DocumentId   = $script:testDocument
                 }
@@ -128,7 +128,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -138,7 +138,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $getCosmosDbAttachmentParameters = @{
-                    Connection   = $script:testConnection
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                     DocumentId   = $script:testDocument
                     Id           = $script:testAttachment1
@@ -165,7 +165,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbAttachment -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -175,7 +175,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $newCosmosDbAttachmentParameters = @{
-                    Connection   = $script:testConnection
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                     DocumentId   = $script:testDocument
                     Id           = $script:testAttachment1
@@ -204,7 +204,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Remove-CosmosDbAttachment -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an id' {
+        Context 'Called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -213,7 +213,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $removeCosmosDbAttachmentParameters = @{
-                    Connection   = $script:testConnection
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                     DocumentId   = $script:testDocument
                     Id           = $script:testAttachment1
@@ -236,7 +236,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Set-CosmosDbAttachment -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with connection parameter and an Id' {
+        Context 'Called with context parameter and an Id' {
             $script:result = $null
 
             Mock `
@@ -246,7 +246,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $setCosmosDbAttachmentParameters = @{
-                    Connection   = $script:testConnection
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                     DocumentId   = $script:testDocument
                     Id           = $script:testAttachment1

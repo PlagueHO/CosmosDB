@@ -22,14 +22,14 @@ install:
 build_script:
     - ps: |
         # Update AppVeyor Build Version by pulling from Manifest
-        $ManifestPath = Join-Path -Path $ENV:APPVEYOR_BUILD_FOLDER -ChildPath 'src/CosmosDB.psd1'
-        $ManifestContent = Get-Content -Path $ManifestPath -Raw
-        $Regex = '(?<=ModuleVersion\s+=\s+'')(?<ModuleVersion>.*)(?='')'
-        $Matches = @([regex]::matches($ManifestContent, $Regex, 'IgnoreCase'))
+        $manifestPath = Join-Path -Path $ENV:APPVEYOR_BUILD_FOLDER -ChildPath 'src/CosmosDB.psd1'
+        $manifestContent = Get-Content -Path $manifestPath -Raw
+        $regex = '(?<=ModuleVersion\s+=\s+'')(?<ModuleVersion>.*)(?='')'
+        $matches = @([regex]::matches($manifestContent, $regex, 'IgnoreCase'))
         $version = $null
-        if ($Matches)
+        if ($matches)
         {
-            $version = $Matches[0].Value
+            $version = $matches[0].Value
         }
 
         # Determine the new version number
@@ -48,14 +48,21 @@ build_script:
         Update-AppveyorBuild -Version $newVersion
 
         # Set the new version number in the Module Manifest
-        $manifestContent = $ManifestContent -replace '(?<=ModuleVersion\s+=\s+'')(?<ModuleVersion>.*)(?='')', $newVersion
-        Set-Content -Path $ManifestPath -Value $ManifestContent -NoNewLine
+        $manifestContent = $manifestContent -replace '(?<=ModuleVersion\s+=\s+'')(?<ModuleVersion>.*)(?='')', $newVersion
+        $manifestContent = $manifestContent -replace '## What is New in CosmosDB Unreleased', "## What is New in CosmosDB $newVersion"
+        Set-Content -Path $manifestPath -Value $manifestContent -NoNewLine
 
         # Set the new version number in the CHANGELOG.md
         $changeLogPath = Join-Path -Path $ENV:APPVEYOR_BUILD_FOLDER -ChildPath 'CHANGELOG.md'
         $changeLogContent = Get-Content -Path $changeLogPath -Raw
         $changeLogContent = $changeLogContent -replace '# Unreleased', "# $newVersion"
         Set-Content -Path $changeLogPath -Value $changeLogContent -NoNewLine
+
+        # Set the new version number in the RELEASENOTES.md
+        $releaseNotesPath = Join-Path -Path $ENV:APPVEYOR_BUILD_FOLDER -ChildPath 'RELEASENOTES.md'
+        $releaseNotesContent = Get-Content -Path $releaseNotesPath -Raw
+        $releaseNotesContent = $releaseNotesContent -replace '## What is New in CosmosDB Unreleased', "## What is New in CosmosDB $newVersion"
+        Set-Content -Path $releaseNotesPath -Value $releaseNotesContent -NoNewLine
 
 #---------------------------------#
 #      test configuration         #

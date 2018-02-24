@@ -5,17 +5,46 @@ $moduleRoot = Split-Path `
     -Parent
 
 #region Types
-if (-not ([System.Management.Automation.PSTypeName]'CosmosDB.Connection').Type)
+if (-not ([System.Management.Automation.PSTypeName]'CosmosDB.Context').Type)
 {
     $typeDefinition = @'
 namespace CosmosDB {
-    public class Connection
+    public class Context
     {
         public System.String Account;
         public System.String Database;
         public System.Security.SecureString Key;
         public System.String KeyType;
         public System.String BaseUri;
+    }
+
+    namespace IndexingPolicy {
+        namespace Path {
+            public class Index {
+                public System.String dataType;
+                public System.String kind;
+                public System.Int32 precision;
+            }
+
+            public class IncludedPath
+            {
+                public System.String path;
+                public CosmosDB.IndexingPolicy.Path.Index[] indexes;
+            }
+
+            public class ExcludedPath
+            {
+                public System.String path;
+            }
+        }
+
+        public class Policy
+        {
+            public System.Boolean automatic;
+            public System.String indexingMode;
+            public CosmosDB.IndexingPolicy.Path.IncludedPath[] includedPaths;
+            public CosmosDB.IndexingPolicy.Path.ExcludedPath[] excludedPaths;
+        }
     }
 }
 '@
@@ -50,3 +79,6 @@ Foreach ($lib in $libs)
     . $lib.Fullname
 }
 #endregion
+
+# Add Aliases
+New-Alias -Name 'New-CosmosDbConnection' -Value 'New-CosmosDbContext' -Force

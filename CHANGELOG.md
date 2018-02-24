@@ -1,5 +1,13 @@
 # Change Log
 
+## Unreleased
+
+- Converted all `connection` function names and parameter names
+  over to `context`. Aliases were implemented for old `connection`
+  function and parameter names to reduce possibility of breakage.
+- Added support for configuring custom indexing policies when
+  creating a new collection.
+
 ## 2.0.1.173
 
 - Added support for CosmosDB Emulator.
