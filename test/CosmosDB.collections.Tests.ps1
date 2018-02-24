@@ -66,6 +66,112 @@ InModuleScope CosmosDB {
         }
     }
 
+    Describe 'New-CosmosDbCollectionIncludedPathIndex' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name New-CosmosDbCollectionIncludedPathIndex  -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'Called with all parameters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbCollectionIncludedPathIndexParameters = @{
+                    Kind      = 'Hash'
+                    DataType  = 'String'
+                    Precision = -1
+                }
+
+                { $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -BeOfType 'CosmosDB.IndexingPolicy.Path.Index'
+                $script:result.Kind | Should -Be 'Hash'
+                $script:result.DataType | Should -Be 'String'
+                $script:result.Precision | Should -Be -1
+            }
+        }
+    }
+
+    Describe 'New-CosmosDbCollectionIncludedPath' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name New-CosmosDbCollectionIncludedPath  -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'Called with all parameters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbCollectionIncludedPathParameters = @{
+                    Path  = '/*'
+                    Index = (New-CosmosDbCollectionIncludedPathIndex -Kind 'Hash' -DataType 'String' -Precision -1)
+                }
+
+                { $script:result = New-CosmosDbCollectionIncludedPath @newCosmosDbCollectionIncludedPathParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -BeOfType 'CosmosDB.IndexingPolicy.Path.IncludedPath'
+                $script:result.Path | Should -Be '/*'
+                $script:result.Indexes[0].Kind | Should -Be 'Hash'
+                $script:result.Indexes[0].DataType | Should -Be 'String'
+                $script:result.Indexes[0].Precision | Should -Be -1
+            }
+        }
+    }
+
+    Describe 'New-CosmosDbCollectionExcludedPath' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name New-CosmosDbCollectionExcludedPath  -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'Called with all parameters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbCollectionExcludedPathParameters = @{
+                    Path  = '/*'
+                }
+
+                { $script:result = New-CosmosDbCollectionExcludedPath @newCosmosDbCollectionExcludedPathParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -BeOfType 'CosmosDB.IndexingPolicy.Path.ExcludedPath'
+                $script:result.Path | Should -Be '/*'
+            }
+        }
+    }
+
+    Describe 'New-CosmosDbCollectionIndexingPolicy' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name New-CosmosDbCollectionIndexingPolicy  -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'Called with all parameters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbCollectionIndexingPolicyParameters = @{
+                    Automatic = $true
+                    IndexingMode = 'Consistent'
+                    IncludedPath = (New-CosmosDbCollectionIncludedPath -Path '/*' -Index (New-CosmosDbCollectionIncludedPathIndex -Kind 'Hash' -DataType 'String' -Precision -1))
+                    ExcludedPath = (New-CosmosDbCollectionExcludedPath -Path '/*')
+                }
+
+                { $script:result = New-CosmosDbCollectionIndexingPolicy @newCosmosDbCollectionIndexingPolicyParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -BeOfType 'CosmosDB.IndexingPolicy.Policy'
+                $script:result.Automatic | Should -Be $true
+                $script:result.IndexingMode | Should -Be 'Consistent'
+                $script:result.IncludedPaths[0].Path | Should -Be '/*'
+                $script:result.ExcludedPaths[0].Path | Should -Be '/*'
+            }
+        }
+    }
+
     Describe 'Get-CosmosDbCollection' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name Get-CosmosDbCollection -ErrorAction Stop } | Should -Not -Throw
@@ -116,7 +222,7 @@ InModuleScope CosmosDB {
             It 'Should not throw exception' {
                 $getCosmosDbCollectionParameters = @{
                     Context = $script:testContext
-                    Id         = $script:testCollection1
+                    Id      = $script:testCollection1
                 }
 
                 { $script:result = Get-CosmosDbCollection @getCosmosDbCollectionParameters } | Should -Not -Throw
@@ -145,17 +251,22 @@ InModuleScope CosmosDB {
         }
 
         Context 'Called with context parameter and an Id' {
+            $invokecosmosdbrequest_parameterfilter = {
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'colls' -and `
+                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{ id = $script:testCollection1 } )
+            }
             $script:result = $null
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'colls' -and $Body -eq "{ `"id`": `"$($script:testCollection1)`" }" } `
+                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbCollectionParameters = @{
                     Context = $script:testContext
-                    Id         = $script:testCollection1
+                    Id      = $script:testCollection1
                 }
 
                 { $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters } | Should -Not -Throw
@@ -168,22 +279,28 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'colls' -and $Body -eq "{ `"id`": `"$($script:testCollection1)`" }" } `
+                    -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                     -Exactly -Times 1
             }
         }
 
         Context 'Called with context parameter and an Id and OfferThroughput parameter' {
             $script:result = $null
+            $invokecosmosdbrequest_parameterfilter = {
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'colls' -and `
+                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{ id = $script:testCollection1 } ) -and `
+                    $Headers['x-ms-offer-throughput'] -eq 400
+            }
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'colls' -and $Body -eq "{ `"id`": `"$($script:testCollection1)`" }" -and $Headers['x-ms-offer-throughput'] -eq 400 } `
+                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbCollectionParameters = @{
-                    Context      = $script:testContext
+                    Context         = $script:testContext
                     Id              = $script:testCollection1
                     OfferThroughput = 400
                 }
@@ -197,24 +314,30 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'colls' -and $Body -eq "{ `"id`": `"$($script:testCollection1)`" }" -and $Headers['x-ms-offer-throughput'] -eq 400 } `
+                    -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                     -Exactly -Times 1
             }
         }
 
         Context 'Called with context parameter and an Id and OfferType parameter' {
             $script:result = $null
+            $invokecosmosdbrequest_parameterfilter = {
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'colls' -and `
+                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{ id = $script:testCollection1 } ) -and `
+                    $Headers['x-ms-offer-type'] -eq 'S2'
+            }
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'colls' -and $Body -eq "{ `"id`": `"$($script:testCollection1)`" }" -and $Headers['x-ms-offer-type'] -eq 'S2' } `
+                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbCollectionParameters = @{
-                    Context = $script:testContext
-                    Id         = $script:testCollection1
-                    OfferType  = 'S2'
+                    Context   = $script:testContext
+                    Id        = $script:testCollection1
+                    OfferType = 'S2'
                 }
 
                 { $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters } | Should -Not -Throw
@@ -227,22 +350,33 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'colls' -and $Body -eq "{ `"id`": `"$($script:testCollection1)`" }" -and $Headers['x-ms-offer-type'] -eq 'S2' } `
+                    -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                     -Exactly -Times 1
             }
         }
 
         Context 'Called with context parameter and an Id and PartitionKey parameter' {
             $script:result = $null
+            $invokecosmosdbrequest_parameterfilter = {
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'colls' -and `
+                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{
+                        id           = $script:testCollection1
+                        partitionKey = @{
+                            paths = @('/partitionkey')
+                            kind  = 'Hash'
+                        }
+                    })
+            }
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'colls' -and $Body -eq "{ `"id`": `"$($script:testCollection1)`", `"partitionKey`": { `"paths`": [ `"/partitionkey`" ], `"kind`": `"Hash`" } }" } `
+                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbCollectionParameters = @{
-                    Context   = $script:testContext
+                    Context      = $script:testContext
                     Id           = $script:testCollection1
                     PartitionKey = 'partitionkey'
                 }
@@ -257,7 +391,7 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'colls' -and $Body -eq "{ `"id`": `"$($script:testCollection1)`", `"partitionKey`": { `"paths`": [ `"/partitionkey`" ], `"kind`": `"Hash`" } }" } `
+                    -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                     -Exactly -Times 1
             }
         }
@@ -271,7 +405,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $newCosmosDbCollectionParameters = @{
-                    Context      = $script:testContext
+                    Context         = $script:testContext
                     Id              = $script:testCollection1
                     OfferThroughput = 400
                     OfferType       = 'S1'
@@ -304,7 +438,7 @@ InModuleScope CosmosDB {
             It 'Should not throw exception' {
                 $removeCosmosDbCollectionParameters = @{
                     Context = $script:testContext
-                    Id         = $script:testCollection1
+                    Id      = $script:testCollection1
                 }
 
                 { $script:result = Remove-CosmosDbCollection @removeCosmosDbCollectionParameters } | Should -Not -Throw
