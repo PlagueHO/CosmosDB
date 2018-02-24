@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.0.2.184'
+    ModuleVersion     = '2.0.3.184'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -168,6 +168,13 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+February 25, 2018
+
+- Added support for creating custom indexing policies when
+  creating a new collection.
+
 ## What is New in CosmosDB 2.0.2.184
 
 February 24, 2018

@@ -2,13 +2,18 @@
 
 ## What is New in CosmosDB Unreleased
 
+February 25, 2018
+
+- Added support for creating custom indexing policies when
+  creating a new collection.
+
+## What is New in CosmosDB 2.0.2.184
+
 February 24, 2018
 
 - Converted all `connection` function names and parameter names
   over to `context`. Aliases were implemented for old `connection`
   function and parameter names to reduce possibility of breakage.
-- Added support for creating custom indexing policies when
-  creating a new collection.
 
 ## What is New in CosmosDB 2.0.1
 
