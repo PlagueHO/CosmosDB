@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.0.3.190
 
 - Added support for configuring custom indexing policies when
   creating a new collection.
@@ -99,6 +99,7 @@
 ## 1.0.0.30
 
 - Initial Release.
+
 
 
 
