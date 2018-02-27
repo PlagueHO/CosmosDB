@@ -25,6 +25,7 @@ InModuleScope CosmosDB {
     $script:testDocument1 = 'testDocument1'
     $script:testDocument2 = 'testDocument2'
     $script:testDocumentBody = 'testDocumentBody'
+    $script:testPartitionKey = 'testPartitionKey'
     $script:testJsonMulti = @'
     {
         "_rId": "d9RzAJRFKgw=",
@@ -71,7 +72,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbDocumentResourcePath -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with all parameters' {
+        Context 'When called with all parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -95,12 +96,16 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbDocument -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and no Id but with header parameters' {
+        Context 'When called with context parameter and no Id but with header parameters' {
             $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Get' -and `
+                    $ResourceType -eq 'docs'
+            }
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'docs' } `
+                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith {
                 @{
                     Content = $script:testJsonMulti
@@ -109,7 +114,7 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $getCosmosDbDocumentParameters = @{
-                    Context          = $script:testContext
+                    Context             = $script:testContext
                     CollectionId        = $script:testCollection
                     MaxItemCount        = 5
                     ContinuationToken   = 'token'
@@ -130,17 +135,21 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'docs' } `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                     -Exactly -Times 1
             }
         }
 
-        Context 'Called with context parameter and no Id with headers returned' {
+        Context 'When called with context parameter and no Id with headers returned' {
             $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Get' -and `
+                    $ResourceType -eq 'docs'
+            }
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'docs' } `
+                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith {
                 @{
                     Content = $script:testJsonMulti
@@ -151,7 +160,7 @@ InModuleScope CosmosDB {
             It 'Should not throw exception' {
                 [ref] $script:resultHeaders = @{}
                 $getCosmosDbDocumentParameters = @{
-                    Context    = $script:testContext
+                    Context       = $script:testContext
                     CollectionId  = $script:testCollection
                     ResultHeaders = $script:resultHeaders
                 }
@@ -169,22 +178,27 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'docs' } `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                     -Exactly -Times 1
             }
         }
 
-        Context 'Called with context parameter and an Id' {
+        Context 'When called with context parameter and an Id' {
             $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Get' -and `
+                    $ResourceType -eq 'docs' -and `
+                    $ResourcePath -eq ('colls/{0}/docs/{1}' -f $script:testCollection, $script:testDocument1)
+            }
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'docs' -and $ResourcePath -eq ('colls/{0}/docs/{1}' -f $script:testCollection, $script:testDocument1) } `
+                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $getCosmosDbDocumentParameters = @{
-                    Context   = $script:testContext
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                     Id           = $script:testDocument1
                 }
@@ -199,7 +213,7 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'docs' -and $ResourcePath -eq ('colls/{0}/docs/{1}' -f $script:testCollection, $script:testDocument1) } `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                     -Exactly -Times 1
             }
         }
@@ -210,17 +224,21 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbDocument -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an Id' {
+        Context 'When called with context parameter and an Id' {
             $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'docs'
+            }
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'docs' } `
+                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbDocumentParameters = @{
-                    Context   = $script:testContext
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                     DocumentBody = $script:testDocumentBody
                 }
@@ -235,7 +253,43 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'docs' } `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id and Partition Key' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'docs' -and `
+                    $Headers['x-ms-documentdb-partitionkey'] -eq ('["{0}"]' -f $script:testPartitionKey)
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+
+            It 'Should not throw exception' {
+                $newCosmosDbDocumentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    DocumentBody = $script:testDocumentBody
+                    PartitionKey = $script:testPartitionKey
+                }
+
+                { $script:result = New-CosmosDbDocument @newCosmosDbDocumentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testDocument1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                     -Exactly -Times 1
             }
         }
@@ -246,16 +300,21 @@ InModuleScope CosmosDB {
             { Get-Command -Name Remove-CosmosDbDocument -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an Id' {
+        Context 'When called with context parameter and an Id' {
             $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Delete' -and `
+                    $ResourceType -eq 'docs' -and `
+                    $ResourcePath -eq ('colls/{0}/docs/{1}' -f $script:testCollection, $script:testDocument1)
+            }
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'docs' -and $ResourcePath -eq ('colls/{0}/docs/{1}' -f $script:testCollection, $script:testDocument1) }
+                -ParameterFilter $invokeCosmosDbRequest_parameterfilter
 
             It 'Should not throw exception' {
                 $removeCosmosDbDocumentParameters = @{
-                    Context   = $script:testContext
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                     Id           = $script:testDocument1
                 }
@@ -266,7 +325,39 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'docs' -and $ResourcePath -eq ('colls/{0}/docs/{1}' -f $script:testCollection, $script:testDocument1) } `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id and Partition Id' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Delete' -and `
+                    $ResourceType -eq 'docs' -and `
+                    $ResourcePath -eq ('colls/{0}/docs/{1}' -f $script:testCollection, $script:testDocument1) -and `
+                    $Headers['x-ms-documentdb-partitionkey'] -eq ('["{0}"]' -f $script:testPartitionKey)
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter $invokeCosmosDbRequest_parameterfilter
+
+            It 'Should not throw exception' {
+                $removeCosmosDbDocumentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    Id           = $script:testDocument1
+                    PartitionKey = $script:testPartitionKey
+                }
+
+                { $script:result = Remove-CosmosDbDocument @removeCosmosDbDocumentParameters } | Should -Not -Throw
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                     -Exactly -Times 1
             }
         }
@@ -277,17 +368,21 @@ InModuleScope CosmosDB {
             { Get-Command -Name Set-CosmosDbDocument -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an Id' {
+        Context 'When called with context parameter and an Id' {
             $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Put' -and `
+                    $ResourceType -eq 'docs'
+            }
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'docs' } `
+                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
 
             It 'Should not throw exception' {
                 $setCosmosDbDocumentParameters = @{
-                    Context   = $script:testContext
+                    Context      = $script:testContext
                     CollectionId = $script:testCollection
                     Id           = $script:testDocument1
                     DocumentBody = $script:testDocumentBody
@@ -303,7 +398,44 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'docs' } `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id and Partition Id' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Put' -and `
+                    $ResourceType -eq 'docs' -and `
+                    $Headers['x-ms-documentdb-partitionkey'] -eq ('["{0}"]' -f $script:testPartitionKey)
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+
+            It 'Should not throw exception' {
+                $setCosmosDbDocumentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    Id           = $script:testDocument1
+                    DocumentBody = $script:testDocumentBody
+                    PartitionKey = $script:testPartitionKey
+                }
+
+                { $script:result = Set-CosmosDbDocument @setCosmosDbDocumentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testDocument1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                     -Exactly -Times 1
             }
         }

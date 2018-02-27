@@ -1,5 +1,19 @@
 # Change Log
 
+## Unreleased
+
+- Fixed bug in `Get-CosmosDbDocument` when looking up a document in
+  a partitioned collection by adding a `PartitionKey` parameter.
+- Added `Upsert` parameter to `New-CosmosDbDocument` to enable updating
+  a document if it exists.
+- Fixed bug in `New-CosmosDbDocument` when adding document to
+  a partitioned collection but no partition key is specified - See
+  [Issue #48](https://github.com/PlagueHO/CosmosDB/issues/48).
+- Fixed bug in `Set-CosmosDbDocument` when updating a document in
+  a partitioned collection.
+- Fixed bug in `Remove-CosmosDbDocument` when deleting a document in
+  a partitioned collection.
+
 ## 2.0.3.190
 
 - Added support for configuring custom indexing policies when
