@@ -217,6 +217,43 @@ InModuleScope CosmosDB {
                     -Exactly -Times 1
             }
         }
+
+        Context 'When called with context parameter and an Id and Partition Key' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Get' -and `
+                    $ResourceType -eq 'docs' -and `
+                    $ResourcePath -eq ('colls/{0}/docs/{1}' -f $script:testCollection, $script:testDocument1) -and `
+                    $Headers['x-ms-documentdb-partitionkey'] -eq ('["{0}"]' -f $script:testPartitionKey)
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+
+            It 'Should not throw exception' {
+                $getCosmosDbDocumentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    Id           = $script:testDocument1
+                    PartitionKey = $script:testPartitionKey
+                }
+
+                { $script:result = Get-CosmosDbDocument @getCosmosDbDocumentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testDocument1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
     }
 
     Describe 'New-CosmosDbDocument' -Tag 'Unit' {
