@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.0.4.202
 
 - Fixed bug in `Get-CosmosDbDocument` when looking up a document in
   a partitioned collection by adding a `PartitionKey` parameter.
@@ -115,6 +115,7 @@
 ## 1.0.0.30
 
 - Initial Release.
+
 
 
 
