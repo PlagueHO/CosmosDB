@@ -122,11 +122,17 @@ Get a list of collections in a database:
 Get-CosmosDbCollection -Context $cosmosDbContext
 ```
 
+Create a collection in the database with the offer throughput of 2500 RU/s:
+
+```powershell
+New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -OfferThroughput 2500
+```
+
 Create a collection in the database with the partition key 'account' and
 the offer throughput of 50000 RU/s:
 
 ```powershell
-New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'account' -OfferThroughput 50000
+New-CosmosDbCollection -Context $cosmosDbContext -Id 'PartitionedCollection' -PartitionKey 'account' -OfferThroughput 50000
 ```
 
 Get a specified collection from a database:
@@ -177,7 +183,7 @@ Create 10 new documents in a collection in the database:
     `"more`": `"Some other string`"
 }
 "@
-    New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentBody $document
+New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentBody $document
 }
 ```
 
@@ -238,6 +244,33 @@ Delete a document from a collection in the database:
 
 ```powershell
 Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id $documents[0].id
+```
+
+### Working with Documents in a Partitioned Collection
+
+Creating a document in a collection that has a Partition Key requires the
+`PartitionKey` parameter to be specified for the document:
+
+```powershell
+$document = @"
+{
+    `"id`": `"en-us`",
+    `"locale`": `"English (US)`"
+}
+"@
+New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'PartitionedCollection' -DocumentBody $document -PartitionKey 'en-us'
+```
+
+Get a document from a partitioned collection with a specific Id:
+
+```powershell
+$document = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'PartitionedCollection' -Id 'en-us' -PartitionKey 'en-us'
+```
+
+Delete a document from a partitioned collection in the database:
+
+```powershell
+Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'PartitionedCollection' -Id 'en-us' -PartitionKey 'en-us'
 ```
 
 ### Working with Attachments

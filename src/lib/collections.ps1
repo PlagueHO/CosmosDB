@@ -410,7 +410,7 @@ function Get-CosmosDbCollection
     specified.
 
 .PARAMETER PartitionKey
-    This value is used to configure the partition key to be used
+    This value is used to configure the partition keys to be used
     for partitioning data into multiple partitions.
 
 .PARAMETER IndexingPolicy
@@ -485,6 +485,11 @@ function New-CosmosDbCollection
 
     if ($PSBoundParameters.ContainsKey('OfferThroughput'))
     {
+        if ($OfferThroughput -gt 10000 -and $PartitionKey.Count -eq 0)
+        {
+            New-InvalidOperationException -Message $($LocalizedData.ErrorNewCollectionParitionKeyRequired)
+        }
+
         $headers += @{
             'x-ms-offer-throughput' = $OfferThroughput
         }
@@ -509,7 +514,7 @@ function New-CosmosDbCollection
     {
         $bodyObject += @{
                 partitionKey = @{
-                    paths = @("/$PartitionKey")
+                    paths = @('/{0}' -f $PartitionKey)
                     kind = 'Hash'
                 }
             }
