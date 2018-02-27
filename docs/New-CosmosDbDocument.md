@@ -15,13 +15,15 @@ Create a new document for a collection in a CosmosDB database.
 ### Context (Default)
 ```
 New-CosmosDbDocument -Context <Context> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -CollectionId <String> -DocumentBody <String> [-IndexingDirective <String>] [<CommonParameters>]
+ -CollectionId <String> -DocumentBody <String> [-IndexingDirective <String>] [-Upsert <Boolean>]
+ [-PartitionKey <String[]>] [<CommonParameters>]
 ```
 
 ### Account
 ```
 New-CosmosDbDocument -Account <String> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -CollectionId <String> -DocumentBody <String> [-IndexingDirective <String>] [<CommonParameters>]
+ -CollectionId <String> -DocumentBody <String> [-IndexingDirective <String>] [-Upsert <Boolean>]
+ [-PartitionKey <String[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -171,9 +173,39 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Upsert
+Include adds the document to the index. Exclude omits the
+document from indexing. The default for indexing behavior is
+determined by the automatic propertyâ€™s value in the indexing
+policy for the collection.```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PartitionKey
+The partition key value for the document to be created. Must
+be included if and only if the collection is created with a
+partitionKey definition.```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

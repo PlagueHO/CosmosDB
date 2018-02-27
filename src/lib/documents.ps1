@@ -102,6 +102,11 @@ function Get-CosmosDbDocumentResourcePath
 .PARAMETER Id
     This is the id of the document to return.
 
+.PARAMETER PartitionKey
+    The partition key value for the document to be read. Must
+    be included if and only if the collection is created with
+    a partitionKey definition.
+
 .PARAMETER MaxItemCount
     An integer indicating the maximum number of items to be
     returned per page. Should not be set if Id is set.
@@ -188,6 +193,11 @@ function Get-CosmosDbDocument
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
+        [System.String[]]
+        $PartitionKey,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.Int32]
         $MaxItemCount = -1,
 
@@ -250,18 +260,27 @@ function Get-CosmosDbDocument
 
     $resourcePath = ('colls/{0}/docs' -f $CollectionId)
     $method = 'Get'
+    $headers = @{}
 
     if (-not [String]::IsNullOrEmpty($Id))
     {
         # A document Id has been specified
+        if ($PSBoundParameters.ContainsKey('PartitionKey'))
+        {
+            $headers += @{
+                'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
+            }
+            $null = $PSBoundParameters.Remove('PartitionKey')
+        }
+
         $document = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method $method `
+            -Headers $headers `
             -ResourceType 'docs' `
             -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
     }
     else
     {
-        $headers = @{}
         $body = ''
 
         if (-not [String]::IsNullOrEmpty($Query))
@@ -393,6 +412,17 @@ function Get-CosmosDbDocument
     document from indexing. The default for indexing behavior is
     determined by the automatic property’s value in the indexing
     policy for the collection.
+
+.PARAMETER Upsert
+    Include adds the document to the index. Exclude omits the
+    document from indexing. The default for indexing behavior is
+    determined by the automatic property’s value in the indexing
+    policy for the collection.
+
+.PARAMETER PartitionKey
+    The partition key value for the document to be created. Must
+    be included if and only if the collection is created with a
+    partitionKey definition.
 #>
 function New-CosmosDbDocument
 {
@@ -439,7 +469,16 @@ function New-CosmosDbDocument
         [Parameter()]
         [ValidateSet('Include', 'Exclude')]
         [System.String]
-        $IndexingDirective
+        $IndexingDirective,
+
+        [Parameter()]
+        [System.Boolean]
+        $Upsert,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String[]]
+        $PartitionKey
     )
 
     $null = $PSBoundParameters.Remove('CollectionId')
@@ -450,12 +489,28 @@ function New-CosmosDbDocument
 
     $headers = @{}
 
+    if ($PSBoundParameters.ContainsKey('Upsert'))
+    {
+        $headers += @{
+            'x-ms-documentdb-is-upsert' = $Upsert
+        }
+        $null = $PSBoundParameters.Remove('Upsert')
+    }
+
     if ($PSBoundParameters.ContainsKey('IndexingDirective'))
     {
         $headers += @{
             'x-ms-indexing-directive' = $IndexingDirective
         }
         $null = $PSBoundParameters.Remove('IndexingDirective')
+    }
+
+    if ($PSBoundParameters.ContainsKey('PartitionKey'))
+    {
+        $headers += @{
+            'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
+        }
+        $null = $PSBoundParameters.Remove('PartitionKey')
     }
 
     $document = Invoke-CosmosDbRequest @PSBoundParameters `
@@ -560,12 +615,12 @@ function Remove-CosmosDbDocument
 
     $headers = @{}
 
-    if ($PSBoundParameters.ContainsKey('PartitionKeyRangeId'))
+    if ($PSBoundParameters.ContainsKey('PartitionKey'))
     {
         $headers += @{
-            'x-ms-documentdb-partitionkey' = $PartitionKey
+            'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
         }
-        $null = $PSBoundParameters.Remove('PartitionKeyRangeId')
+        $null = $PSBoundParameters.Remove('PartitionKey')
     }
 
     $null = Invoke-CosmosDbRequest @PSBoundParameters `
@@ -694,12 +749,12 @@ function Set-CosmosDbDocument
         $null = $PSBoundParameters.Remove('IndexingDirective')
     }
 
-    if ($PSBoundParameters.ContainsKey('PartitionKeyRangeId'))
+    if ($PSBoundParameters.ContainsKey('PartitionKey'))
     {
         $headers += @{
-            'x-ms-documentdb-partitionkey' = $PartitionKey
+            'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
         }
-        $null = $PSBoundParameters.Remove('PartitionKeyRangeId')
+        $null = $PSBoundParameters.Remove('PartitionKey')
     }
 
     $document = Invoke-CosmosDbRequest @PSBoundParameters `
