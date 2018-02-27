@@ -15,6 +15,8 @@ February 27, 2018
   a partitioned collection.
 - Fixed bug in `Remove-CosmosDbDocument` when deleting a document in
   a partitioned collection.
+- Added check to `New-CosmosDbCollection` to ensure `PartitionKey`
+  parameter is passed if `OfferThroughput` is greater than 10000.
 
 ## What is New in CosmosDB 2.0.3.190
 

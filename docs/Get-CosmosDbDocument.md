@@ -15,19 +15,19 @@ Return the documents for a CosmosDB database collection.
 ### Context (Default)
 ```
 Get-CosmosDbDocument -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -CollectionId <String> [-Id <String>] [-MaxItemCount <Int32>] [-ContinuationToken <String>]
- [-ConsistencyLevel <String>] [-SessionToken <String>] [-PartitionKeyRangeId <String>] [-Query <String>]
- [-QueryParameters <Hashtable[]>] [-QueryEnableCrossPartition <Boolean>] [-ResultHeaders <PSReference>]
- [<CommonParameters>]
+ -CollectionId <String> [-Id <String>] [-PartitionKey <String[]>] [-MaxItemCount <Int32>]
+ [-ContinuationToken <String>] [-ConsistencyLevel <String>] [-SessionToken <String>]
+ [-PartitionKeyRangeId <String>] [-Query <String>] [-QueryParameters <Hashtable[]>]
+ [-QueryEnableCrossPartition <Boolean>] [-ResultHeaders <PSReference>] [<CommonParameters>]
 ```
 
 ### Account
 ```
 Get-CosmosDbDocument -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -CollectionId <String> [-Id <String>] [-MaxItemCount <Int32>] [-ContinuationToken <String>]
- [-ConsistencyLevel <String>] [-SessionToken <String>] [-PartitionKeyRangeId <String>] [-Query <String>]
- [-QueryParameters <Hashtable[]>] [-QueryEnableCrossPartition <Boolean>] [-ResultHeaders <PSReference>]
- [<CommonParameters>]
+ -CollectionId <String> [-Id <String>] [-PartitionKey <String[]>] [-MaxItemCount <Int32>]
+ [-ContinuationToken <String>] [-ConsistencyLevel <String>] [-SessionToken <String>]
+ [-PartitionKeyRangeId <String>] [-Query <String>] [-QueryParameters <Hashtable[]>]
+ [-QueryEnableCrossPartition <Boolean>] [-ResultHeaders <PSReference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -145,6 +145,21 @@ This is the id of the document to return.
 
 ```yaml
 Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PartitionKey
+The partition key value for the document to be read. Must
+be included if and only if the collection is created with
+a partitionKey definition.```yaml
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 
@@ -316,8 +331,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
