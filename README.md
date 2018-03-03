@@ -100,6 +100,14 @@ following command:
 $cosmosDbContext = New-CosmosDbContext -Emulator -Database 'MyDatabase'
 ```
 
+### Working with Offers
+
+Get a list of offers in the CosmosDB account:
+
+```powershell
+Get-CosmosDbOffer -Context $cosmosDbContext
+```
+
 ### Working with Databases
 
 Get a list of databases in the CosmosDB account:
