@@ -66,7 +66,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbStoredProcedureResourcePath -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with all parameters' {
+        Context 'When called with all parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -90,7 +90,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbStoredProcedure -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and no id' {
+        Context 'When called with context parameter and no id' {
             $script:result = $null
 
             Mock `
@@ -121,7 +121,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -157,7 +157,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Invoke-CosmosDbStoredProcedure -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -194,7 +194,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbStoredProcedure -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -231,7 +231,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Remove-CosmosDbStoredProcedure -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -262,7 +262,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Set-CosmosDbStoredProcedure -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `

@@ -38,6 +38,9 @@ REMAINS WITH THE USER.
                         <Label>ResourceId</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
+                        <Label>Timestamp</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
                         <Label>Uri</Label>
                     </TableColumnHeader>
                 </TableHeaders>
@@ -58,6 +61,9 @@ REMAINS WITH THE USER.
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>ResourceId</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Timestamp</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Uri</PropertyName>
@@ -114,6 +120,9 @@ REMAINS WITH THE USER.
                         </ListItem>
                         <ListItem>
                             <PropertyName>ResourceId</PropertyName>
+                        </ListItem>
+                         <ListItem>
+                            <PropertyName>Timestamp</PropertyName>
                         </ListItem>
                          <ListItem>
                             <PropertyName>Uri</PropertyName>

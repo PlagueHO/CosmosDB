@@ -72,7 +72,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbTriggerResourcePath -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with all parameters' {
+        Context 'When called with all parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -96,7 +96,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbTrigger -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and no id' {
+        Context 'When called with context parameter and no id' {
             $script:result = $null
 
             Mock `
@@ -127,7 +127,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -163,7 +163,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbTrigger -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -202,7 +202,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Remove-CosmosDbTrigger -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -233,7 +233,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Set-CosmosDbTrigger -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `

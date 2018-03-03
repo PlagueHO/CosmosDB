@@ -48,7 +48,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbCollectionResourcePath  -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with all parameters' {
+        Context 'When called with all parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -71,7 +71,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbCollectionIncludedPathIndex  -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with all parameters' {
+        Context 'When called with all parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -98,7 +98,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbCollectionIncludedPath  -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with all parameters' {
+        Context 'When called with all parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -125,7 +125,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbCollectionExcludedPath  -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with all parameters' {
+        Context 'When called with all parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -148,7 +148,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbCollectionIndexingPolicy  -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with all parameters' {
+        Context 'When called with all parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -181,7 +181,7 @@ InModuleScope CosmosDB {
             Mock -CommandName Set-CosmosDbCollectionType -MockWith { $Collection }
         }
 
-        Context 'Called with context parameter and no Id' {
+        Context 'When called with context parameter and no Id' {
             $script:result = $null
 
             Mock `
@@ -211,7 +211,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with context parameter and an Id' {
+        Context 'When called with context parameter and an Id' {
             $script:result = $null
 
             Mock `
@@ -250,7 +250,7 @@ InModuleScope CosmosDB {
             Mock -CommandName Set-CosmosDbCollectionType -MockWith { $Collection }
         }
 
-        Context 'Called with context parameter and an Id' {
+        Context 'When called with context parameter and an Id' {
             $invokecosmosdbrequest_parameterfilter = {
                 $Method -eq 'Post' -and `
                     $ResourceType -eq 'colls' -and `
@@ -284,7 +284,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with context parameter and an Id and OfferThroughput parameter' {
+        Context 'When called with context parameter and an Id and OfferThroughput parameter' {
             $script:result = $null
             $invokecosmosdbrequest_parameterfilter = {
                 $Method -eq 'Post' -and `
@@ -319,7 +319,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with context parameter and an Id and OfferType parameter' {
+        Context 'When called with context parameter and an Id and OfferType parameter' {
             $script:result = $null
             $invokecosmosdbrequest_parameterfilter = {
                 $Method -eq 'Post' -and `
@@ -355,7 +355,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with context parameter and an Id and PartitionKey parameter' {
+        Context 'When called with context parameter and an Id and PartitionKey parameter' {
             $script:result = $null
             $invokecosmosdbrequest_parameterfilter = {
                 $Method -eq 'Post' -and `
@@ -396,7 +396,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with context parameter and an Id and OfferType and OfferThrougput' {
+        Context 'When called with context parameter and an Id and OfferType and OfferThrougput' {
             $script:result = $null
 
             Mock `
@@ -428,7 +428,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Remove-CosmosDbCollection -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an Id' {
+        Context 'When called with context parameter and an Id' {
             $script:result = $null
 
             Mock `

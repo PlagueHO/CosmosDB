@@ -49,6 +49,12 @@ REMAINS WITH THE USER.
             <Name>ResourceId</Name>
             <ReferencedMemberName>_rid</ReferencedMemberName>
         </AliasProperty>
+        <ScriptProperty>
+            <Name>Timestamp</Name>
+            <GetScriptBlock>
+                [System.DateTime]::new( 1970, 1, 1, 0, 0, 0, 0, [System.DateTimeKind]::Utc).AddSeconds( $this._ts ).ToLocalTime()
+            </GetScriptBlock>
+        </ScriptProperty>
         <AliasProperty>
             <Name>Uri</Name>
             <ReferencedMemberName>_self</ReferencedMemberName>

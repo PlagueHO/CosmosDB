@@ -71,7 +71,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbContext -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with Context parameters' {
+        Context 'When called with Context parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -94,7 +94,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with Azure parameters and not connected to Azure' {
+        Context 'When called with Azure parameters and not connected to Azure' {
             $script:result = $null
 
             Mock -CommandName Get-AzureRmContext -MockWith { throw }
@@ -132,7 +132,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with Azure parameters and connected to Azure' {
+        Context 'When called with Azure parameters and connected to Azure' {
             $script:result = $null
 
             Mock `
@@ -171,7 +171,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with Emulator parameters' {
+        Context 'When called with Emulator parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -199,7 +199,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbUri -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with Account parameter only' {
+        Context 'When called with Account parameter only' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -216,7 +216,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with Account and BaseUri parameters' {
+        Context 'When called with Account and BaseUri parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -240,7 +240,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name ConvertTo-CosmosDbTokenDateString -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with all parameters' {
+        Context 'When called with all parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -262,7 +262,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbAuthorizationToken } | Should -Not -Throw
         }
 
-        Context 'Called with all parameters' {
+        Context 'When called with all parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -294,7 +294,7 @@ InModuleScope CosmosDB {
             Mock -CommandName Get-Date -MockWith { $script:testDate }
         }
 
-        Context 'Called with context parameter and Get method' {
+        Context 'When called with context parameter and Get method' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -317,7 +317,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with context parameter and Post method' {
+        Context 'When called with context parameter and Post method' {
             $script:result = $null
 
             It 'Should not throw exception' {
