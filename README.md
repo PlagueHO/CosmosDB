@@ -108,6 +108,12 @@ Get a list of offers in the CosmosDB account:
 Get-CosmosDbOffer -Context $cosmosDbContext
 ```
 
+Query the offers in the CosmosDB account:
+
+```powershell
+Get-CosmosDbOffer -Context $cosmosDbContext -Query 'SELECT * FROM root WHERE (root["id"] = "lyiu")'
+```
+
 ### Working with Databases
 
 Get a list of databases in the CosmosDB account:
