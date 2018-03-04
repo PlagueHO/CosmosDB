@@ -485,7 +485,7 @@ function Invoke-CosmosDbRequest
             else
             {
                 $resourceLink = $ResourcePath
-                $resourceId = $resourceLink
+                $resourceId = ($ResourceLink -split '/')[1]
             }
         }
 
