@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.0.5.216
 
 - Added `*-CosmosDbOffer` cmdlets.
 
@@ -119,6 +119,7 @@
 ## 1.0.0.30
 
 - Initial Release.
+
 
 
 

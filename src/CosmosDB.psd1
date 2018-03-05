@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.0.5.202'
+    ModuleVersion     = '2.0.5.216'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -173,7 +173,7 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
-## What is New in CosmosDB Unreleased
+## What is New in CosmosDB 2.0.5.216
 
 March 3, 2018
 
@@ -252,6 +252,7 @@ November 12, 2017
     # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
     # DefaultCommandPrefix = ''
 }
+
 
 
 
