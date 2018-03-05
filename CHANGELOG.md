@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Added `*-CosmosDbOffer` cmdlets.
+
 ## 2.0.4.202
 
 - Fixed bug in `Get-CosmosDbDocument` when looking up a document in

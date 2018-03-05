@@ -5,20 +5,20 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-CosmosDbDocumentType
+# Set-CosmosDbOfferType
 
 ## SYNOPSIS
-Set the custom Cosmos DB document types to the document returned
-by an API call.
+Set the custom Cosmos DB Offer types to the offer
+returned by an API call.
 
 ## SYNTAX
 
 ```
-Set-CosmosDbDocumentType [-Document] <Object> [<CommonParameters>]
+Set-CosmosDbOfferType [-Offer] <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-This function applies the custom types to the document returned
+This function applies the custom types to the offer returned
 by an API call.
 
 ## EXAMPLES
@@ -32,8 +32,8 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Document
-This is the document that is returned by a document API call.
+### -Offer
+This is the offer that is returned by a user API call.
 
 ```yaml
 Type: Object

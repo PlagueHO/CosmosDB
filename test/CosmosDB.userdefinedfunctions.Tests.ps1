@@ -65,7 +65,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbUserDefinedFunctionResourcePath -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with all parameters' {
+        Context 'When called with all parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -89,7 +89,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbUserDefinedFunction -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and no id' {
+        Context 'When called with context parameter and no id' {
             $script:result = $null
 
             Mock `
@@ -120,7 +120,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -156,7 +156,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbUserDefinedFunction -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -193,7 +193,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Remove-CosmosDbUserDefinedFunction -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -224,7 +224,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Set-CosmosDbUserDefinedFunction -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `

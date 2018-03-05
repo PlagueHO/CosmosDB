@@ -100,6 +100,34 @@ following command:
 $cosmosDbContext = New-CosmosDbContext -Emulator -Database 'MyDatabase'
 ```
 
+### Working with Offers
+
+Get a list of offers in the CosmosDB account:
+
+```powershell
+Get-CosmosDbOffer -Context $cosmosDbContext
+```
+
+Query the offers in the CosmosDB account:
+
+```powershell
+Get-CosmosDbOffer -Context $cosmosDbContext -Query 'SELECT * FROM root WHERE (root["id"] = "lyiu")'
+```
+
+Update an existing V2 offer to set a different throughput:
+
+```powershell
+Get-CosmosDbOffer -Context $cosmosDbContext -Id 'lyiu' |
+    Set-CosmosDbOffer -Context $cosmosDbContext -OfferThroughput 1000 -OfferIsRUPerMinuteThroughputEnabled $true
+```
+
+Update all existing V2 offers to set a different throughput:
+
+```powershell
+Get-CosmosDbOffer -Context $cosmosDbContext -Query 'SELECT * FROM root WHERE (root["offerVersion"] = "V2")' |
+    Set-CosmosDbOffer -Context $cosmosDbContext -OfferThroughput 10000 -OfferIsRUPerMinuteThroughputEnabled $false
+```
+
 ### Working with Databases
 
 Get a list of databases in the CosmosDB account:

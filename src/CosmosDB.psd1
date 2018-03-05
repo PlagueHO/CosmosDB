@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.0.4.202'
+    ModuleVersion     = '2.0.5.202'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -56,6 +56,7 @@
         'types\collections.types.ps1xml'
         'types\databases.types.ps1xml'
         'types\documents.types.ps1xml'
+        'types\offers.types.ps1xml'
         'types\permissions.types.ps1xml'
         'types\storedprocedures.types.ps1xml'
         'types\triggers.types.ps1xml'
@@ -69,6 +70,7 @@
         'formats\collections.formats.ps1xml'
         'formats\databases.formats.ps1xml'
         'formats\documents.formats.ps1xml'
+        'formats\offers.formats.ps1xml'
         'formats\permissions.formats.ps1xml'
         'formats\storedprocedures.formats.ps1xml'
         'formats\triggers.formats.ps1xml'
@@ -92,6 +94,8 @@
         'Get-CosmosDBDatabaseResourcePath'
         'Get-CosmosDBDocument'
         'Get-CosmosDBDocumentResourcePath'
+        'Get-CosmosDBOffer'
+        'Get-CosmosDBOfferResourcePath'
         'Get-CosmosDbPermission'
         'Get-CosmosDbPermissionResourcePath'
         'Get-CosmosDbStoredProcedure'
@@ -128,6 +132,7 @@
         'Remove-CosmosDbUserDefinedFunction'
         'Set-CosmosDbAttachment'
         'Set-CosmosDbDocument'
+        'Set-CosmosDbOffer'
         'Set-CosmosDbStoredProcedure'
         'Set-CosmosDbTrigger'
         'Set-CosmosDbUser'
@@ -168,6 +173,12 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+March 3, 2018
+
+- Added `*-CosmosDbOffer` cmdlets.
+
 ## What is New in CosmosDB 2.0.4.202
 
 February 27, 2018
@@ -231,18 +242,6 @@ December 8, 2017
 November 12, 2017
 
 - Added support for managing Documents.
-
-## What is New in CosmosDB 1.0.9
-
-November 5, 2017
-
-- Added support for managing User Defined Functions.
-
-## What is New in CosmosDB 1.0.8
-
-November 5, 2017
-
-- Added support for managing Stored Procedures.
             '
         } # End of PSData hashtable
     } # End of PrivateData hashtable

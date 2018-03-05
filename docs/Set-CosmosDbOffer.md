@@ -5,30 +5,29 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-CosmosDbDocument
+# Set-CosmosDbOffer
 
 ## SYNOPSIS
-Update a document from a CosmosDB collection.
+Update an existing offer in a CosmosDB database.
 
 ## SYNTAX
 
 ### Context (Default)
 ```
-Set-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString>] -CollectionId <String>
- -Id <String> -DocumentBody <String> [-IndexingDirective <String>] [-PartitionKey <String>]
- [<CommonParameters>]
+Set-CosmosDbOffer -Context <Context> [-Database <String>] [-Key <SecureString>] -InputObject <Object[]>
+ [-OfferVersion <String>] [-OfferType <String>] [-OfferThroughput <Int32>]
+ [-OfferIsRUPerMinuteThroughputEnabled <Boolean>] [<CommonParameters>]
 ```
 
 ### Account
 ```
-Set-CosmosDbDocument -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -CollectionId <String> -Id <String> -DocumentBody <String> [-IndexingDirective <String>]
- [-PartitionKey <String>] [<CommonParameters>]
+Set-CosmosDbOffer -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
+ -InputObject <Object[]> [-OfferVersion <String>] [-OfferType <String>] [-OfferThroughput <Int32>]
+ [-OfferIsRUPerMinuteThroughputEnabled <Boolean>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-This cmdlet will update an existing document in a CosmosDB
-collection.
+This cmdlet will update an offer resource in CosmosDB.
 
 ## EXAMPLES
 
@@ -75,7 +74,7 @@ Accept wildcard characters: False
 ```
 
 ### -Database
-The name of the database to access in the CosmosDB account.
+{{Fill Database Description}}
 
 ```yaml
 Type: String
@@ -119,57 +118,24 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -CollectionId
-This is the Id of the collection to update the document for.
+### -InputObject
+{{Fill InputObject Description}}
 
 ```yaml
-Type: String
+Type: Object[]
 Parameter Sets: (All)
 Aliases:
 
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -Id
-This is the Id of the document to update.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DocumentBody
-This is the body of the document to update.
-It must be
-formatted as a JSON string and contain the Id value of the
-document to create.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IndexingDirective
-Include includes the document in the indexing path while
-Exclude omits the document from indexing.
+### -OfferVersion
+This can be V1 for pre-defined throughput levels and V2 for user-defined
+throughput levels.
 
 ```yaml
 Type: String
@@ -183,10 +149,10 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -PartitionKey
-The partition key value for the document to be deleted.
-Required if and must be specified only if the collection is
-created with a partitionKey definition.
+### -OfferType
+This is a user settable property, which must be set to S1, S2, or S3 for
+pre-defined performance levels, and Invalid for user-defined performance
+levels.
 
 ```yaml
 Type: String
@@ -196,6 +162,40 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -OfferThroughput
+This contains the throughput of the collection.
+Applicable for V2 offers
+only.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -OfferIsRUPerMinuteThroughputEnabled
+The offer is RU per minute throughput enabled.
+Applicable for V2 offers
+only.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

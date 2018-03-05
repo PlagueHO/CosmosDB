@@ -71,7 +71,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbPermissionResourcePath -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with all parameters' {
+        Context 'When called with all parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -95,7 +95,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbPermission -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and no id' {
+        Context 'When called with context parameter and no id' {
             $script:result = $null
 
             Mock `
@@ -126,7 +126,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -156,7 +156,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with context parameter and an id and token expiry' {
+        Context 'When called with context parameter and an id and token expiry' {
             $script:result = $null
 
             Mock `
@@ -193,7 +193,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbPermission -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -230,7 +230,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Remove-CosmosDbPermission -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `

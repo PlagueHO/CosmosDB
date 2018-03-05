@@ -71,7 +71,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbContext -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with Context parameters' {
+        Context 'When called with Context parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -94,7 +94,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with Azure parameters and not connected to Azure' {
+        Context 'When called with Azure parameters and not connected to Azure' {
             $script:result = $null
 
             Mock -CommandName Get-AzureRmContext -MockWith { throw }
@@ -132,7 +132,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with Azure parameters and connected to Azure' {
+        Context 'When called with Azure parameters and connected to Azure' {
             $script:result = $null
 
             Mock `
@@ -171,7 +171,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with Emulator parameters' {
+        Context 'When called with Emulator parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -199,7 +199,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbUri -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with Account parameter only' {
+        Context 'When called with Account parameter only' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -216,7 +216,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with Account and BaseUri parameters' {
+        Context 'When called with Account and BaseUri parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -240,7 +240,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name ConvertTo-CosmosDbTokenDateString -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with all parameters' {
+        Context 'When called with all parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -262,7 +262,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbAuthorizationToken } | Should -Not -Throw
         }
 
-        Context 'Called with all parameters' {
+        Context 'When called with all parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -290,11 +290,25 @@ InModuleScope CosmosDB {
         }
 
         BeforeEach {
-            Mock -CommandName Invoke-RestMethod -MockWith { ConvertFrom-Json -InputObject $script:testJson }
             Mock -CommandName Get-Date -MockWith { $script:testDate }
         }
 
-        Context 'Called with context parameter and Get method' {
+        $invokeRestMethod_mockwith = {
+            ConvertFrom-Json -InputObject $script:testJson
+        }
+
+        Context 'When called with context parameter and Get method and ResourceType is ''users''' {
+            $invokeRestMethod_parameterfilter = {
+                $Method -eq 'Get' -and `
+                $ContentType -eq 'application/json' -and `
+                $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri,$script:testContext.Database,'users')
+            }
+
+            Mock `
+                -CommandName Invoke-RestMethod `
+                -ParameterFilter $invokeRestMethod_parameterfilter `
+                -MockWith $invokeRestMethod_mockwith
+
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -312,12 +326,100 @@ InModuleScope CosmosDB {
             }
 
             It 'Should call expected mocks' {
-                Assert-MockCalled -CommandName Invoke-RestMethod -Exactly -Times 1
+                Assert-MockCalled `
+                    -CommandName Invoke-RestMethod `
+                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
             }
         }
 
-        Context 'Called with context parameter and Post method' {
+        Context 'When called with context parameter and Get method and ResourceType is ''dbs''' {
+            $invokeRestMethod_parameterfilter = {
+                $Method -eq 'Get' -and `
+                $ContentType -eq 'application/json' -and `
+                $Uri -eq ('{0}{1}' -f $script:testContext.BaseUri,'dbs')
+            }
+
+            Mock `
+                -CommandName Invoke-RestMethod `
+                -ParameterFilter $invokeRestMethod_parameterfilter `
+                -MockWith $invokeRestMethod_mockwith
+
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $invokeCosmosDbRequestparameters = @{
+                    Context      = $script:testContext
+                    Method       = 'Get'
+                    ResourceType = 'dbs'
+                }
+
+                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result._count | Should -Be 1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-RestMethod `
+                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -Exactly -Times 1
+                Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and Get method and ResourceType is ''offers''' {
+            $invokeRestMethod_parameterfilter = {
+                $Method -eq 'Get' -and `
+                $ContentType -eq 'application/json' -and `
+                $Uri -eq ('{0}{1}' -f $script:testContext.BaseUri,'offers')
+            }
+
+            Mock `
+                -CommandName Invoke-RestMethod `
+                -ParameterFilter $invokeRestMethod_parameterfilter `
+                -MockWith $invokeRestMethod_mockwith
+
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $invokeCosmosDbRequestparameters = @{
+                    Context      = $script:testContext
+                    Method       = 'Get'
+                    ResourceType = 'offers'
+                }
+
+                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result._count | Should -Be 1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-RestMethod `
+                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -Exactly -Times 1
+                Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and Post method' {
+            $invokeRestMethod_parameterfilter = {
+                $Method -eq 'Post' -and `
+                $ContentType -eq 'application/query+json' -and `
+                $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri,$script:testContext.Database,'users')
+            }
+
+            Mock `
+                -CommandName Invoke-RestMethod `
+                -ParameterFilter $invokeRestMethod_parameterfilter `
+                -MockWith $invokeRestMethod_mockwith
+
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -325,6 +427,7 @@ InModuleScope CosmosDB {
                     Context      = $script:testContext
                     Method       = 'Post'
                     ResourceType = 'users'
+                    ContentType  = 'application/query+json'
                     Body         = '{ "id": "daniel" }'
                 }
 
@@ -336,7 +439,10 @@ InModuleScope CosmosDB {
             }
 
             It 'Should call expected mocks' {
-                Assert-MockCalled -CommandName Invoke-RestMethod -Exactly -Times 1
+                Assert-MockCalled `
+                    -CommandName Invoke-RestMethod `
+                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
             }
         }
