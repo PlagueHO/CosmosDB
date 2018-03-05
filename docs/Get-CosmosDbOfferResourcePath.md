@@ -5,21 +5,20 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-CosmosDbDocumentType
+# Get-CosmosDbOfferResourcePath
 
 ## SYNOPSIS
-Set the custom Cosmos DB document types to the document returned
-by an API call.
+Return the resource path for a offer object.
 
 ## SYNTAX
 
 ```
-Set-CosmosDbDocumentType [-Document] <Object> [<CommonParameters>]
+Get-CosmosDbOfferResourcePath [-Id] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-This function applies the custom types to the document returned
-by an API call.
+This cmdlet returns the resource identifier for a offer
+object.
 
 ## EXAMPLES
 
@@ -32,11 +31,11 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Document
-This is the document that is returned by a document API call.
+### -Id
+This is the Id of the offer.
 
 ```yaml
-Type: Object
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -54,6 +53,8 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 ## INPUTS
 
 ## OUTPUTS
+
+### System.String
 
 ## NOTES
 

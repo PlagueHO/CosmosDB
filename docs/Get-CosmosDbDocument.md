@@ -156,9 +156,12 @@ Accept wildcard characters: False
 ```
 
 ### -PartitionKey
-The partition key value for the document to be read. Must
+The partition key value for the document to be read.
+Must
 be included if and only if the collection is created with
-a partitionKey definition.```yaml
+a partitionKey definition.
+
+```yaml
 Type: String[]
 Parameter Sets: (All)
 Aliases:
@@ -331,7 +334,8 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

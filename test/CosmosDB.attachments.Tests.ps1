@@ -71,7 +71,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbAttachmentResourcePath -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with all parameters' {
+        Context 'When called with all parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -96,7 +96,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Get-CosmosDbAttachment -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and no id' {
+        Context 'When called with context parameter and no id' {
             $script:result = $null
 
             Mock `
@@ -128,7 +128,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -165,7 +165,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbAttachment -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -204,7 +204,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Remove-CosmosDbAttachment -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an id' {
+        Context 'When called with context parameter and an id' {
             $script:result = $null
 
             Mock `
@@ -236,7 +236,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name Set-CosmosDbAttachment -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'Called with context parameter and an Id' {
+        Context 'When called with context parameter and an Id' {
             $script:result = $null
 
             Mock `

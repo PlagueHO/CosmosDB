@@ -292,7 +292,7 @@ function New-CosmosDbAuthorizationToken
     $payLoad = @(
         $Method.ToLowerInvariant() + "`n" + `
             $ResourceType.ToLowerInvariant() + "`n" + `
-            $ResourceId + "`n" + `
+            $ResourceId.ToLowerInvariant() + "`n" + `
             $dateString.ToLowerInvariant() + "`n" + `
             "" + "`n"
     )
@@ -403,7 +403,7 @@ function Invoke-CosmosDbRequest
         $Method = 'Get',
 
         [Parameter(Mandatory = $True)]
-        [ValidateSet('attachments', 'colls', 'dbs', 'docs', 'users', 'permissions', 'triggers', 'sprocs', 'udfs')]
+        [ValidateSet('attachments', 'colls', 'dbs', 'docs', 'users', 'permissions', 'triggers', 'sprocs', 'udfs', 'offers')]
         [System.String]
         $ResourceType,
 
@@ -459,43 +459,62 @@ function Invoke-CosmosDbRequest
     $dateString = ConvertTo-CosmosDbTokenDateString -Date $date
 
     # Generate the resource link value that will be used in the URI and to generate the resource id
-    if ($resourceType -eq 'dbs')
+    switch ($resourceType)
     {
-        # Request for a database object
-        if ([String]::IsNullOrEmpty($ResourcePath))
+        'dbs'
         {
-            $ResourceLink = 'dbs'
-        }
-        else
-        {
-            $resourceLink = $ResourcePath
-            $resourceId = $resourceLink
-        }
-    }
-    else
-    {
-        $resourceLink = ('dbs/{0}' -f $Database)
-
-        if ($PSBoundParameters.ContainsKey('ResourcePath'))
-        {
-            $resourceLink = ('{0}/{1}' -f $resourceLink, $ResourcePath)
-        }
-        else
-        {
-            $resourceLink = ('{0}/{1}' -f $resourceLink, $ResourceType)
+            # Request for a database object (not containined in a database)
+            if ([String]::IsNullOrEmpty($ResourcePath))
+            {
+                $ResourceLink = 'dbs'
+            }
+            else
+            {
+                $resourceLink = $ResourcePath
+                $resourceId = $resourceLink
+            }
         }
 
-        # Generate the resource Id from the resource link value
-        $resourceElements = [System.Collections.ArrayList] ($resourceLink -split '/')
-
-        if (($resourceElements.Count % 2) -eq 0)
+        'offers'
         {
-            $resourceId = $resourceLink
+            # Request for an offer object (not contained in a database)
+            if ([String]::IsNullOrEmpty($ResourcePath))
+            {
+                $ResourceLink = 'offers'
+            }
+            else
+            {
+                $resourceLink = $ResourcePath
+                $resourceId = ($ResourceLink -split '/')[1]
+            }
         }
-        else
+
+        default
         {
-            $resourceElements.RemoveAt($resourceElements.Count - 1)
-            $resourceId = $resourceElements -Join '/'
+            # Request for an object that is within a database
+            $resourceLink = ('dbs/{0}' -f $Database)
+
+            if ($PSBoundParameters.ContainsKey('ResourcePath'))
+            {
+                $resourceLink = ('{0}/{1}' -f $resourceLink, $ResourcePath)
+            }
+            else
+            {
+                $resourceLink = ('{0}/{1}' -f $resourceLink, $ResourceType)
+            }
+
+            # Generate the resource Id from the resource link value
+            $resourceElements = [System.Collections.ArrayList] ($resourceLink -split '/')
+
+            if (($resourceElements.Count % 2) -eq 0)
+            {
+                $resourceId = $resourceLink
+            }
+            else
+            {
+                $resourceElements.RemoveAt($resourceElements.Count - 1)
+                $resourceId = $resourceElements -Join '/'
+            }
         }
     }
 

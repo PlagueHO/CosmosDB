@@ -2,6 +2,12 @@
 
 ## What is New in CosmosDB Unreleased
 
+March 3, 2018
+
+- Added `*-CosmosDbOffer` cmdlets.
+
+## What is New in CosmosDB 2.0.4.202
+
 February 27, 2018
 
 - Fixed bug in `Get-CosmosDbDocument` when looking up a document in
