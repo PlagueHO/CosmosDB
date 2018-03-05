@@ -132,6 +132,7 @@
         'Remove-CosmosDbUserDefinedFunction'
         'Set-CosmosDbAttachment'
         'Set-CosmosDbDocument'
+        'Set-CosmosDbOffer'
         'Set-CosmosDbStoredProcedure'
         'Set-CosmosDbTrigger'
         'Set-CosmosDbUser'

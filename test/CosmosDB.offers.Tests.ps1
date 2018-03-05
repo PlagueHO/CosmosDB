@@ -172,10 +172,10 @@ InModuleScope CosmosDB {
             $script:result = $null
             $invokeCosmosDbRequest_parameterfilter = {
                 $Method -eq 'Post' -and `
-                $ResourceType -eq 'offers' -and `
-                $Headers['x-ms-documentdb-isquery'] -eq $True -and `
-                $Body -eq (ConvertTo-Json -InputObject @{ query = $script:testQuery }) -and `
-                $ContentType -eq 'application/query+json'
+                    $ResourceType -eq 'offers' -and `
+                    $Headers['x-ms-documentdb-isquery'] -eq $True -and `
+                    $Body -eq (ConvertTo-Json -InputObject @{ query = $script:testQuery }) -and `
+                    $ContentType -eq 'application/query+json'
             }
 
             Mock `
@@ -202,6 +202,85 @@ InModuleScope CosmosDB {
                     -CommandName Invoke-CosmosDbRequest `
                     -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                     -Exactly -Times 1
+            }
+        }
+    }
+    Describe 'Set-CosmosDbOffer' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Set-CosmosDbOffer -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with context parameter and a V2 InputObject' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Put' -and `
+                    $ResourceType -eq 'offers' -and `
+                    (ConvertFrom-Json -InputObject $Body).content.offerThroughput -eq 10000
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+
+            It 'Should not throw exception' {
+                $setCosmosDbOfferParameters = @{
+                    Context = $script:testContext
+                    InputObject = (ConvertFrom-Json -InputObject $script:testJsonSingle)
+                    OfferThroughput = 10000
+                }
+
+                { $script:result = Set-CosmosDbOffer @setCosmosDbOfferParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testOfferId1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and V2 InputObject with two objects' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Put' -and `
+                    $ResourceType -eq 'offers' -and `
+                    (ConvertFrom-Json -InputObject $Body).content.offerThroughput -eq 10000
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+
+            It 'Should not throw exception' {
+                $setCosmosDbOfferParameters = @{
+                    Context = $script:testContext
+                    InputObject = @(
+                        (ConvertFrom-Json -InputObject $script:testJsonSingle)
+                        (ConvertFrom-Json -InputObject $script:testJsonSingle)
+                    )
+                    OfferThroughput = 10000
+                }
+
+                { $script:result = Set-CosmosDbOffer @setCosmosDbOfferParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result[0].id | Should -Be $script:testOfferId1
+                $script:result[1].id | Should -Be $script:testOfferId1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 2
             }
         }
     }

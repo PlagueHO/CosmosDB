@@ -292,7 +292,7 @@ function New-CosmosDbAuthorizationToken
     $payLoad = @(
         $Method.ToLowerInvariant() + "`n" + `
             $ResourceType.ToLowerInvariant() + "`n" + `
-            $ResourceId + "`n" + `
+            $ResourceId.ToLowerInvariant() + "`n" + `
             $dateString.ToLowerInvariant() + "`n" + `
             "" + "`n"
     )
