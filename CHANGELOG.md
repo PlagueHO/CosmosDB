@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Added `PSEdition_Desktop` tag to manifest.
+
 ## 2.0.5.216
 
 - Added `*-CosmosDbOffer` cmdlets.
