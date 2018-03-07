@@ -51,7 +51,7 @@
     # ScriptsToProcess = @()
 
     # Type files (.ps1xml) to be loaded when importing this module
-    TypesToProcess = @(
+    TypesToProcess    = @(
         'types\attachments.types.ps1xml'
         'types\collections.types.ps1xml'
         'types\databases.types.ps1xml'
@@ -82,10 +82,7 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    # FunctionsToExport = @()
-
-    # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-    CmdletsToExport   = @(
+    FunctionsToExport = @(
         'Get-CosmosDbAttachment'
         'Get-CosmosDbAttachmentResourcePath'
         'Get-CosmosDbCollection'
@@ -138,6 +135,9 @@
         'Set-CosmosDbUser'
         'Set-CosmosDbUserDefinedFunction'
     )
+
+    # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
+    CmdletsToExport   = @()
 
     # Variables to export from this module
     VariablesToExport = @(

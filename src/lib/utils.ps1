@@ -1,57 +1,3 @@
-<#
-.SYNOPSIS
-    Create a context object containing the information required
-    to connect to a CosmosDB.
-
-.DESCRIPTION
-    This cmdlet is used to simplify the calling of the CosmosDB
-    cmdlets by providing all the context information in an
-    object that can be passed to the CosmosDB cmdlets.
-
-    It can also retrieve the CosmosDB primary or secondary key
-    from Azure Resource Manager.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Database
-    The name of the database to access in the CosmosDB account.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER ResourceGroup
-    This is the name of the Azure Resouce Group containing the
-    CosmosDB.
-
-.PARAMETER MasterKeyType
-    This is the master key type to use retrieve from Azure for
-    the CosmosDB.
-
-.PARAMETER Emulator
-    Using this switch creates a context for a CosmosDB emulator
-    installed onto the local host.
-
-.PARAMETER Port
-    This is the port the CosmosDB emulator is installed onto.
-    If not specified it will use the default port of 8081.
-
-.EXAMPLE
-    PS C:\>$primaryKey = ConvertTo-SecureString -String 'your master key' -AsPlainText -Force
-    PS C:\>$cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey
-
-    Creates a CosmosDB context specifying the master key manually.
-
-.EXAMPLE
-    PS C:\>Add-AzureRmAccount
-    PS C:\>$cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -ResourceGroup 'MyCosmosDbResourceGroup' -MasterKeyType 'PrimaryMasterKey'
-
-    Creates a CosmosDB context by logging into Azure and getting
-    it from the portal.
-#>
 function New-CosmosDbContext
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -166,18 +112,6 @@ function New-CosmosDbContext
     return $context
 }
 
-<#
-.SYNOPSIS
-    Return the URI of the CosmosDB that Rest APIs requests will
-    be sent to.
-
-.DESCRIPTION
-    This cmdlet returns the root URI of the CosmosDB.
-
-.PARAMETER Account
-    This is the name of the CosmosDB Account to get the URI
-    for.
-#>
 function Get-CosmosDbUri
 {
     [CmdletBinding()]
@@ -196,18 +130,6 @@ function Get-CosmosDbUri
     return [uri]::new(('https://{0}.{1}' -f $Account, $BaseUri))
 }
 
-<#
-.SYNOPSIS
-    Convert a DateTime object into the format required for use
-    in a CosmosDB Authorization Token and request header.
-
-.DESCRIPTION
-    This cmdlet converts a DateTime object into the format required
-    by the Authorization Token and in the request header.
-
-.PARAMETER Date
-    This is the DateTime object to convert.
-#>
 function ConvertTo-CosmosDbTokenDateString
 {
     [CmdletBinding()]
@@ -222,42 +144,6 @@ function ConvertTo-CosmosDbTokenDateString
     return $Date.ToUniversalTime().ToString("r", [System.Globalization.CultureInfo]::InvariantCulture)
 }
 
-<#
-.SYNOPSIS
-    Create a new Authorization Token to be used with in a
-    Rest API request to CosmosDB.
-
-.DESCRIPTION
-    This cmdlet is used to create an Authorization Token to
-    pass in the header of a Rest API request to an Azure CosmosDB.
-    The Authorization token that is generated must match the
-    other parameters in the header of the request that is passed.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER Method
-    This is the Rest API method that will be made in the request
-    this token is being generated for.
-
-.PARAMETER ResourceType
-    This is type of resource being accessed in the CosmosDB.
-    For example: users, colls
-
-.PARAMETER ResourceId
-    This is the resource Id of the CosmosDB being accessed.
-    This is in the format 'dbs/{database}' and must match the
-    the value in the path of the URI that the request is made
-    to.
-
-.PARAMETER Date
-    This is the DateTime of the request being made. This must
-    be included in the 'x-ms-date' parameter in the request
-    header and match what was provided to this cmdlet.
-#>
 function New-CosmosDbAuthorizationToken
 {
     [CmdletBinding()]
@@ -319,66 +205,6 @@ function New-CosmosDbAuthorizationToken
     return $token
 }
 
-<#
-.SYNOPSIS
-    Create a new Authorization Token to be used with in a
-    Rest API request to CosmosDB.
-
-.DESCRIPTION
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be accessed. It should be created
-    by `New-CosmosDbContext`.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER Database
-    If specified will override the value in the context.
-    If an empty database is specified then no dbs will be specified
-    in the Rest API URI which will allow working with database
-    objects.
-
-.PARAMETER Method
-    This is the Rest API method that will be made to the CosmosDB.
-
-.PARAMETER ResourceType
-    This is type of resource being accessed in the CosmosDB.
-    For example: users, colls
-
-.PARAMETER ResourcePath
-    This is the path to the resource that should be accessed in
-    the CosmosDB. This will be appended to the path after the
-    resourceId in the URI that will be used to access the resource.
-
-.PARAMETER Body
-    This is the body of the request that will be submitted if the
-    method is 'Put', 'Post' or 'Patch'.
-
-.PARAMETER ApiVersion
-    This is the version of the Rest API that will be called.
-
-.PARAMETER Headers
-    This parameter can be used to provide any additional headers
-    to the Rest API.
-
-.PARAMETER UseWebRequest
-    This parameter forces the request to be made using
-    the Invoke-WebRequest cmdlet and to return the object that
-    it returns. This will enable extraction of the headers
-    from the result, which is required for some requests.
-
-.PARAMETER ContentType
-    This parameter allows the ContentType to be overridden
-    which can be required for some types of requests.
-#>
 function Invoke-CosmosDbRequest
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -579,29 +405,19 @@ function Invoke-CosmosDbRequest
     return $restResult
 }
 
-<#
-    .SYNOPSIS
-        Creates and throws an invalid argument exception
-
-    .PARAMETER Message
-        The message explaining why this error is being thrown
-
-    .PARAMETER ArgumentName
-        The name of the invalid argument that is causing this error to be thrown
-#>
-function New-InvalidArgumentException
+function New-CosmosDbInvalidArgumentException
 {
     [CmdletBinding()]
     param
     (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [System.String]
         $Message,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [System.String]
         $ArgumentName
     )
 
@@ -616,25 +432,17 @@ function New-InvalidArgumentException
     throw $errorRecord
 }
 
-<#
-    .SYNOPSIS
-        Creates and throws an invalid operation exception
-
-    .PARAMETER Message
-        The message explaining why this error is being thrown
-
-    .PARAMETER ErrorRecord
-        The error record containing the exception that is causing this terminating error
-#>
-function New-InvalidOperationException
+function New-CosmosDbInvalidOperationException
 {
     [CmdletBinding()]
     param
     (
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [System.String]
         $Message,
 
+        [Parameter()]
         [ValidateNotNull()]
         [System.Management.Automation.ErrorRecord]
         $ErrorRecord

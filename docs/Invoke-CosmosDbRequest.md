@@ -8,40 +8,57 @@ schema: 2.0.0
 # Invoke-CosmosDbRequest
 
 ## SYNOPSIS
-Create a new Authorization Token to be used with in a
-Rest API request to CosmosDB.
+
+Execute a new request to a CosmosDB REST endpoint.
 
 ## SYNTAX
 
 ### Context (Default)
-```
+
+```powershell
 Invoke-CosmosDbRequest -Context <Context> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
  [-Headers <Hashtable>] [-UseWebRequest] [-ContentType <String>] [<CommonParameters>]
 ```
 
 ### Account
-```
+
+```powershell
 Invoke-CosmosDbRequest -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
  [-Headers <Hashtable>] [-UseWebRequest] [-ContentType <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+
+Invokes a REST request against the specified CosmosDB
+context or account.
 
 ## EXAMPLES
 
-### Example 1
+### EXAMPLE 1
+
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\>$result = Invoke-CosmosDbRequest -Context $context -ResourceType 'colls' -ResourcePath 'dbs/mydatabase'
 ```
 
-{{ Add example description here }}
+Execute a request to the CosmosDB specified by the context
+$context to Get the collections in the database mydatabase.
+
+### EXAMPLE 2
+
+```powershell
+PS C:\>$result = Invoke-CosmosDbRequest -Context $context -ResourceType 'docs' -ResourcePath 'dbs/mydatabase/colls/mycollection/docs/ac12345' -Method 'Put' -Body $body
+```
+
+Execute a request to the CosmosDB specified by the context
+$context to Put document 'ac12345' into collection mycollection
+in database mydatabase.
 
 ## PARAMETERS
 
 ### -Context
+
 This is an object containing the context information of
 the CosmosDB database that will be accessed.
 It should be created
@@ -60,6 +77,7 @@ Accept wildcard characters: False
 ```
 
 ### -Account
+
 The account name of the CosmosDB to access.
 
 ```yaml
@@ -75,6 +93,7 @@ Accept wildcard characters: False
 ```
 
 ### -Database
+
 If specified will override the value in the context.
 If an empty database is specified then no dbs will be specified
 in the Rest API URI which will allow working with database
@@ -93,6 +112,7 @@ Accept wildcard characters: False
 ```
 
 ### -Key
+
 The key to be used to access this CosmosDB.
 
 ```yaml
@@ -108,6 +128,7 @@ Accept wildcard characters: False
 ```
 
 ### -KeyType
+
 The type of key that will be used to access ths CosmosDB.
 
 ```yaml
@@ -123,6 +144,7 @@ Accept wildcard characters: False
 ```
 
 ### -Method
+
 This is the Rest API method that will be made to the CosmosDB.
 
 ```yaml
@@ -138,6 +160,7 @@ Accept wildcard characters: False
 ```
 
 ### -ResourceType
+
 This is type of resource being accessed in the CosmosDB.
 For example: users, colls
 
@@ -154,6 +177,7 @@ Accept wildcard characters: False
 ```
 
 ### -ResourcePath
+
 This is the path to the resource that should be accessed in
 the CosmosDB.
 This will be appended to the path after the
@@ -172,6 +196,7 @@ Accept wildcard characters: False
 ```
 
 ### -Body
+
 This is the body of the request that will be submitted if the
 method is 'Put', 'Post' or 'Patch'.
 
@@ -188,6 +213,7 @@ Accept wildcard characters: False
 ```
 
 ### -ApiVersion
+
 This is the version of the Rest API that will be called.
 
 ```yaml
@@ -203,6 +229,7 @@ Accept wildcard characters: False
 ```
 
 ### -Headers
+
 This parameter can be used to provide any additional headers
 to the Rest API.
 
@@ -219,6 +246,7 @@ Accept wildcard characters: False
 ```
 
 ### -UseWebRequest
+
 This parameter forces the request to be made using
 the Invoke-WebRequest cmdlet and to return the object that
 it returns.
@@ -238,6 +266,7 @@ Accept wildcard characters: False
 ```
 
 ### -ContentType
+
 This parameter allows the ContentType to be overridden
 which can be required for some types of requests.
 
@@ -254,6 +283,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 

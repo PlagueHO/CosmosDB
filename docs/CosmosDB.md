@@ -1,93 +1,97 @@
 ---
 Module Name: CosmosDB
 Module Guid: 7d7aeb42-8ed9-4555-b5fd-020795a5aa01
-Download Help Link: {{Please enter FwLink manually}}
-Help Version: {{Please enter version of help manually (X.X.X.X) format}}
+Download Help Link:
+Help Version: 2.0.0.0
 Locale: en-US
 ---
 
 # CosmosDB Module
 ## Description
-{{Manually Enter Description Here}}
+This PowerShell module provides cmdlets for working with Azure Cosmos DB.
 
 ## CosmosDB Cmdlets
 ### [ConvertTo-CosmosDbTokenDateString](ConvertTo-CosmosDbTokenDateString.md)
-{{Manually Enter ConvertTo-CosmosDbTokenDateString Description Here}}
+Convert a DateTime object into the format required for use
+in a CosmosDB Authorization Token and request header.
 
 ### [Get-CosmosDbAttachment](Get-CosmosDbAttachment.md)
-{{Manually Enter Get-CosmosDbAttachment Description Here}}
+Return the attachments for a CosmosDB document.
 
 ### [Get-CosmosDbAttachmentResourcePath](Get-CosmosDbAttachmentResourcePath.md)
-{{Manually Enter Get-CosmosDbAttachmentResourcePath Description Here}}
+Return the resource path for an attachment object.
 
 ### [Get-CosmosDbCollection](Get-CosmosDbCollection.md)
-{{Manually Enter Get-CosmosDbCollection Description Here}}
+Return the collections in a CosmosDB database.
 
 ### [Get-CosmosDbCollectionResourcePath](Get-CosmosDbCollectionResourcePath.md)
-{{Manually Enter Get-CosmosDbCollectionResourcePath Description Here}}
+Return the resource path for a collection object.
 
 ### [Get-CosmosDbDatabase](Get-CosmosDbDatabase.md)
-{{Manually Enter Get-CosmosDbDatabase Description Here}}
+Return the databases in a CosmosDB account.
 
 ### [Get-CosmosDbDatabaseResourcePath](Get-CosmosDbDatabaseResourcePath.md)
-{{Manually Enter Get-CosmosDbDatabaseResourcePath Description Here}}
+Return the resource path for a database object.
 
 ### [Get-CosmosDbDocument](Get-CosmosDbDocument.md)
-{{Manually Enter Get-CosmosDbDocument Description Here}}
+Return the documents for a CosmosDB database collection.
 
 ### [Get-CosmosDbDocumentResourcePath](Get-CosmosDbDocumentResourcePath.md)
-{{Manually Enter Get-CosmosDbDocumentResourcePath Description Here}}
+Return the resource path for a document object.
 
 ### [Get-CosmosDbOffer](Get-CosmosDbOffer.md)
-{{Manually Enter Get-CosmosDbOffer Description Here}}
+Return the offers in a CosmosDB account.
 
 ### [Get-CosmosDbOfferResourcePath](Get-CosmosDbOfferResourcePath.md)
-{{Manually Enter Get-CosmosDbOfferResourcePath Description Here}}
+Return the resource path for a offer object.
 
 ### [Get-CosmosDbPermission](Get-CosmosDbPermission.md)
-{{Manually Enter Get-CosmosDbPermission Description Here}}
+Return the permissions for a CosmosDB database user.
 
 ### [Get-CosmosDbPermissionResourcePath](Get-CosmosDbPermissionResourcePath.md)
-{{Manually Enter Get-CosmosDbPermissionResourcePath Description Here}}
+Return the resource path for a permission object.
 
 ### [Get-CosmosDbStoredProcedure](Get-CosmosDbStoredProcedure.md)
-{{Manually Enter Get-CosmosDbStoredProcedure Description Here}}
+Return the stored procedures for a CosmosDB database collection.
 
 ### [Get-CosmosDbStoredProcedureResourcePath](Get-CosmosDbStoredProcedureResourcePath.md)
-{{Manually Enter Get-CosmosDbStoredProcedureResourcePath Description Here}}
+Execute a new stored procedure for a collection in a CosmosDB
+database.
 
 ### [Get-CosmosDbTrigger](Get-CosmosDbTrigger.md)
-{{Manually Enter Get-CosmosDbTrigger Description Here}}
+Return the triggers for a CosmosDB database collection.
 
 ### [Get-CosmosDbTriggerResourcePath](Get-CosmosDbTriggerResourcePath.md)
-{{Manually Enter Get-CosmosDbTriggerResourcePath Description Here}}
+Return the resource path for a trigger object.
 
 ### [Get-CosmosDbUri](Get-CosmosDbUri.md)
-{{Manually Enter Get-CosmosDbUri Description Here}}
+Return the URI of the CosmosDB that Rest APIs requests will
+be sent to.
 
 ### [Get-CosmosDbUser](Get-CosmosDbUser.md)
-{{Manually Enter Get-CosmosDbUser Description Here}}
+Return the users in a CosmosDB database.
 
 ### [Get-CosmosDbUserDefinedFunction](Get-CosmosDbUserDefinedFunction.md)
-{{Manually Enter Get-CosmosDbUserDefinedFunction Description Here}}
+Return the user defined functions for a CosmosDB database collection.
 
 ### [Get-CosmosDbUserDefinedFunctionResourcePath](Get-CosmosDbUserDefinedFunctionResourcePath.md)
-{{Manually Enter Get-CosmosDbUserDefinedFunctionResourcePath Description Here}}
+Return the resource path for a user defined function object.
 
 ### [Get-CosmosDbUserResourcePath](Get-CosmosDbUserResourcePath.md)
-{{Manually Enter Get-CosmosDbUserResourcePath Description Here}}
+Return the resource path for a user object.
 
 ### [Invoke-CosmosDbRequest](Invoke-CosmosDbRequest.md)
-{{Manually Enter Invoke-CosmosDbRequest Description Here}}
+Execute a new request to a CosmosDB REST endpoint.
 
 ### [Invoke-CosmosDbStoredProcedure](Invoke-CosmosDbStoredProcedure.md)
-{{Manually Enter Invoke-CosmosDbStoredProcedure Description Here}}
+Execute a new stored procedure for a collection in a CosmosDB database.
 
 ### [New-CosmosDbAttachment](New-CosmosDbAttachment.md)
-{{Manually Enter New-CosmosDbAttachment Description Here}}
+Create a new attachment for a document in a CosmosDB database.
 
 ### [New-CosmosDbAuthorizationToken](New-CosmosDbAuthorizationToken.md)
-{{Manually Enter New-CosmosDbAuthorizationToken Description Here}}
+Create a new Authorization Token to be used with in a
+Rest API request to CosmosDB.
 
 ### [New-CosmosDbCollection](New-CosmosDbCollection.md)
 {{Manually Enter New-CosmosDbCollection Description Here}}
@@ -128,11 +132,11 @@ Locale: en-US
 ### [New-CosmosDbUserDefinedFunction](New-CosmosDbUserDefinedFunction.md)
 {{Manually Enter New-CosmosDbUserDefinedFunction Description Here}}
 
-### [New-InvalidArgumentException](New-InvalidArgumentException.md)
-{{Manually Enter New-InvalidArgumentException Description Here}}
+### [New-CosmosDbInvalidArgumentException](New-CosmosDbInvalidArgumentException.md)
+{{Manually Enter New-CosmosDbInvalidArgumentException Description Here}}
 
-### [New-InvalidOperationException](New-InvalidOperationException.md)
-{{Manually Enter New-InvalidOperationException Description Here}}
+### [New-CosmosDbInvalidOperationException](New-CosmosDbInvalidOperationException.md)
+{{Manually Enter New-CosmosDbInvalidOperationException Description Here}}
 
 ### [Remove-CosmosDbAttachment](Remove-CosmosDbAttachment.md)
 {{Manually Enter Remove-CosmosDbAttachment Description Here}}
@@ -211,4 +215,3 @@ Locale: en-US
 
 ### [Set-CosmosDbUserType](Set-CosmosDbUserType.md)
 {{Manually Enter Set-CosmosDbUserType Description Here}}
-

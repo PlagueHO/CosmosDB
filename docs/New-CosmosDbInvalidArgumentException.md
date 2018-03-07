@@ -5,55 +5,61 @@ online version:
 schema: 2.0.0
 ---
 
-# New-InvalidOperationException
+# New-CosmosDbInvalidArgumentException
 
 ## SYNOPSIS
-Creates and throws an invalid operation exception
+
+Creates and throws an invalid argument exception.
 
 ## SYNTAX
 
-```
-New-InvalidOperationException [[-Message] <String>] [[-ErrorRecord] <ErrorRecord>] [<CommonParameters>]
+```powershell
+New-CosmosDbInvalidArgumentException [-Message] <String> [-ArgumentName] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+
+Creates and throws an invalid argument exception.
 
 ## EXAMPLES
 
-### Example 1
+### EXAMPLE 1
+
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\>New-CosmosDbInvalidArgumentException -Message 'Invalid value for your parameter' -ArgumentName 'MyArg'
 ```
 
-{{ Add example description here }}
+Raise an invalid argument exception for argument 'MyArg'.
 
 ## PARAMETERS
 
 ### -Message
-The message explaining why this error is being thrown
+
+The message explaining why this error is being thrown.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ErrorRecord
-The error record containing the exception that is causing this terminating error
+### -ArgumentName
+
+The name of the invalid argument that is causing this
+error to be thrown.
 
 ```yaml
-Type: ErrorRecord
+Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: 2
 Default value: None
 Accept pipeline input: False
@@ -61,6 +67,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 

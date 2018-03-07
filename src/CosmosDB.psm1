@@ -1,3 +1,6 @@
+<#
+.EXTERNALHELP CosmosDB-help.xml
+#>
 #Requires -version 5.0
 
 $moduleRoot = Split-Path `

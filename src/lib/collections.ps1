@@ -480,14 +480,14 @@ function New-CosmosDbCollection
     if ($PSBoundParameters.ContainsKey('OfferThroughput') -and `
             $PSBoundParameters.ContainsKey('OfferType'))
     {
-        New-InvalidOperationException -Message $($LocalizedData.ErrorNewCollectionOfferParameterConflict)
+        New-CosmosDbInvalidOperationException -Message $($LocalizedData.ErrorNewCollectionOfferParameterConflict)
     }
 
     if ($PSBoundParameters.ContainsKey('OfferThroughput'))
     {
         if ($OfferThroughput -gt 10000 -and $PartitionKey.Count -eq 0)
         {
-            New-InvalidOperationException -Message $($LocalizedData.ErrorNewCollectionParitionKeyRequired)
+            New-CosmosDbInvalidOperationException -Message $($LocalizedData.ErrorNewCollectionParitionKeyRequired)
         }
 
         $headers += @{

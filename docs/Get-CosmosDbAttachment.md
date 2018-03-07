@@ -8,18 +8,21 @@ schema: 2.0.0
 # Get-CosmosDbAttachment
 
 ## SYNOPSIS
+
 Return the attachments for a CosmosDB document.
 
 ## SYNTAX
 
 ### Context (Default)
-```
+
+```powershell
 Get-CosmosDbAttachment -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -CollectionId <String> -DocumentId <String> [-Id <String>] [<CommonParameters>]
 ```
 
 ### Account
-```
+
+```powershell
 Get-CosmosDbAttachment -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -CollectionId <String> -DocumentId <String> [-Id <String>] [<CommonParameters>]
 ```

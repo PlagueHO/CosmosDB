@@ -11,7 +11,6 @@ install:
   - ps: |
         Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
         Install-Module Pester -MinimumVersion 3.4.0 -Scope CurrentUser -Force | Out-Null
-        Install-Module psake -Scope CurrentUser -Force | Out-Null
         Install-Module PSScriptAnalyzer -Scope CurrentUser -Force | Out-Null
         Install-Module platyPS -Scope CurrentUser -Force | Out-Null
 
@@ -94,6 +93,11 @@ test_script:
           if ($results.FailedCount -gt 0) {
               throw "$($results.FailedCount) tests failed."
           }
+
+          New-ExternalHelp `
+            -Path (Join-Path -Path $buildFolder -ChildPath 'docs\') `
+            -OutputPath (Join-Path -Path $buildFolder -ChildPath 'src\') `
+            -Force
 #---------------------------------#
 #      deployment configuration   #
 #---------------------------------#
@@ -113,6 +117,7 @@ deploy_script:
         # Populate Version Folder
         $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'src/CosmosDB.psd1') -Destination $VersionFolder
         $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'src/CosmosDB.psm1') -Destination $VersionFolder
+        $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'src/CosmosDB-help.xml') -Destination $VersionFolder
         $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'src/lib') -Destination $VersionFolder -Recurse
         $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'src/formats') -Destination $VersionFolder -Recurse
         $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'src/types') -Destination $VersionFolder -Recurse
