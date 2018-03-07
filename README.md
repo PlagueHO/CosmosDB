@@ -15,6 +15,7 @@ The CosmosDB PowerShell module enables management of:
 - Collections
 - Databases
 - Documents
+- Offers
 - Permissions
 - Stored procedures
 - Triggers

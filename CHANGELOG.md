@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Added `PSEdition_Desktop` tag to manifest.
+- Added cmdlet help examples for 'utils'.
 
 ## 2.0.5.216
 

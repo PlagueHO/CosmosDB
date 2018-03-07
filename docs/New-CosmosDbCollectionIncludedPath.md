@@ -42,7 +42,7 @@ the prefix.
 For example, to serve
 SELECT * FROM Families F WHEREF.familyName = "Andersen", you
 must include an index path for /familyName/?
-in the collectionâ€™s
+in the collection's
 index policy.
 
 Index paths can also use the * wildcard operator to specify the

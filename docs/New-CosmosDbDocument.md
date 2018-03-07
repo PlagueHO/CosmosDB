@@ -158,7 +158,7 @@ Include adds the document to the index.
 Exclude omits the
 document from indexing.
 The default for indexing behavior is
-determined by the automatic propertyâ€™s value in the indexing
+determined by the automatic property's value in the indexing
 policy for the collection.
 
 ```yaml
@@ -178,7 +178,7 @@ Include adds the document to the index.
 Exclude omits the
 document from indexing.
 The default for indexing behavior is
-determined by the automatic propertyâ€™s value in the indexing
+determined by the automatic property's value in the indexing
 policy for the collection.
 
 ```yaml

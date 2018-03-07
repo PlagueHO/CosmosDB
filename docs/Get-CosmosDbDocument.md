@@ -211,7 +211,7 @@ Accept wildcard characters: False
 ### -ConsistencyLevel
 This is the consistency level override.
 The override must
-be the same or weaker than the accountâ€™s configured consistency
+be the same or weaker than the account's configured consistency
 level.
 Should not be set if Id is set.
 
