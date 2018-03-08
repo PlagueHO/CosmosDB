@@ -9,10 +9,10 @@
 
 ## Table of Contents
 
-- [Introduction](Introduction)
-- [Requirements](Requirements)
-- [Installation](Installation)
-- [Quick Start](#Quick-Start)
+- [Introduction](#Introduction)
+- [Requirements](#Requirements)
+- [Installation](#installation)
+- [Getting Started](#Getting-Started)
   - [Working with Contexts](#Working-with-Contexts)
     - [Create a Context specifying the Key Manually](#Create-a-Context-specifying-the-Key-Manually)
     - [Use CosmosDB Module to Retrieve Key from Azure Management Portal](#Use-CosmosDB-Module-to-Retrieve-Key-from-Azure-Management-Portal)
@@ -76,7 +76,7 @@ To install the module from PowerShell Gallery, use the PowerShell Cmdlet:
 Install-Module -Name CosmosDB
 ```
 
-## Quick Start
+## Getting Started
 
 The easiest way to use this module is to first create a context
 object using the `New-CosmosDbContext` cmdlet which you can then
