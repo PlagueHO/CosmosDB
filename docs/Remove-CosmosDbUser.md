@@ -36,10 +36,10 @@ This cmdlet will delete a user in a CosmosDB.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Remove-CosmosDbUser -Context $cosmosDbContext -Id 'Mary'
 ```
 
-{{ Add example description here }}
+Delete the user 'Mary' from the database.
 
 ## PARAMETERS
 

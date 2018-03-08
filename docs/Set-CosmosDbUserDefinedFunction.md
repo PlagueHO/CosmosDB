@@ -37,10 +37,21 @@ collection.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> $body = @'
+function tax(income) {
+    if(income == undefined) throw 'no input';
+    if (income < 1000)
+        return income * 0.2;
+    else if (income < 10000)
+        return income * 0.3;
+    else
+        return income * 0.4;
+}
+'@
+PS C:\> Set-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'udfTax' -Body $body
 ```
 
-{{ Add example description here }}
+Update an existing user defined function 'udfTax' for a collection in the database.
 
 ## PARAMETERS
 

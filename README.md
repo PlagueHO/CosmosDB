@@ -570,7 +570,7 @@ New-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNewCo
 Update an existing user defined function for a collection in the database:
 
 ```powershell
-$Body = @'
+$body = @'
 function tax(income) {
     if(income == undefined) throw 'no input';
     if (income < 1000)
@@ -581,7 +581,7 @@ function tax(income) {
         return income * 0.4;
 }
 '@
-New-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'udfTax' -Body $Body
+Set-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'udfTax' -Body $body
 ```
 
 Remove a user defined function for a collection from the database:

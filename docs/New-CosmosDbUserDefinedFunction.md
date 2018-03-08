@@ -38,10 +38,21 @@ This cmdlet will create a user defined function for a collection in a CosmosDB.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> $body = @'
+function tax(income) {
+    if(income == undefined) throw 'no input';
+    if (income < 1000)
+        return income * 0.1;
+    else if (income < 10000)
+        return income * 0.2;
+    else
+        return income * 0.4;
+}
+'@
+PS C:\> New-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'udfTax' -UserDefinedFunctionBody $body
 ```
 
-{{ Add example description here }}
+Create a user defined function 'udfTax' for a collection in the database.
 
 ## PARAMETERS
 

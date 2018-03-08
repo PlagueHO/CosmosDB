@@ -37,10 +37,10 @@ a CosmosDB.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-CosmosDbUser -Context $cosmosDbContext -Id 'Mary' -NewId 'Sam'
 ```
 
-{{ Add example description here }}
+Rename the user 'Mary' to 'Sam' in the database.
 
 ## PARAMETERS
 

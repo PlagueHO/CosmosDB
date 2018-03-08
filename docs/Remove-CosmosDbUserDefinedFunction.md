@@ -36,10 +36,10 @@ This cmdlet will delete a user defined function in a CosmosDB from a collection.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Remove-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'udfTax'
 ```
 
-{{ Add example description here }}
+Remove a user defined function 'udfTax' from a collection in the database.
 
 ## PARAMETERS
 

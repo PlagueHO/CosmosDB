@@ -36,10 +36,10 @@ This cmdlet will create a user in a CosmosDB.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> New-CosmosDbUser -Context $cosmosDbContext -Id 'Mary'
 ```
 
-{{ Add example description here }}
+Create a user 'Mary' in the database.
 
 ## PARAMETERS
 
