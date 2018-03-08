@@ -29,8 +29,8 @@ Get-CosmosDbAttachment -Account <String> [-Key <SecureString>] [-KeyType <String
 
 ## DESCRIPTION
 
-This cmdlet will return the attachments for a specified document in
-a CosmosDB database.
+This cmdlet will return the attachments for a specified document
+in a CosmosDB database.
 If an Id is specified then only the specified permission will be returned.
 
 ## EXAMPLES
@@ -55,10 +55,8 @@ Get an attachment by Id for a document in a collection.
 
 ### -Context
 
-This is an object containing the context information of
-the CosmosDB database that will be accessed.
-It should be created
-by \`New-CosmosDbContext\`.
+This is an object containing the context information of the CosmosDB database
+that will be deleted. It should be created by \`New-CosmosDbContext\`.
 
 ```yaml
 Type: Context

@@ -37,8 +37,7 @@ Get-CosmosDbDocument -Account <String> [-Key <SecureString>] [-KeyType <String>]
 
 This cmdlet will return the documents for a specified
 collection in a CosmosDB database.
-If an Id is specified then only
-the specified documents will be returned.
+If an Id is specified then only the specified documents will be returned.
 
 ## EXAMPLES
 
@@ -54,10 +53,8 @@ PS C:\> {{ Add example code here }}
 
 ### -Context
 
-This is an object containing the context information of
-the CosmosDB database that will be accessed.
-It should be created
-by \`New-CosmosDbContext\`.
+This is an object containing the context information of the CosmosDB database
+that will be deleted. It should be created by \`New-CosmosDbContext\`.
 
 ```yaml
 Type: Context

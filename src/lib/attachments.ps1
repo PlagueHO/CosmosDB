@@ -1,15 +1,3 @@
-<#
-.SYNOPSIS
-    Set the custom Cosmos DB Attachment types to the attachment
-    returned by an API call.
-
-.DESCRIPTION
-    This function applies the custom types to the attachment
-    returned by an API call.
-
-.PARAMETER UserDefinedFunction
-    This is the attachment that is returned by an attachment API call.
-#>
 function Set-CosmosDbAttachmentType
 {
     [CmdletBinding()]
@@ -27,26 +15,6 @@ function Set-CosmosDbAttachmentType
     return $Attachment
 }
 
-<#
-.SYNOPSIS
-    Return the resource path for an attachment object.
-
-.DESCRIPTION
-    This cmdlet returns the resource identifier for an
-    attachment object.
-
-.PARAMETER Database
-    This is the database containing the attachment.
-
-.PARAMETER CollectionId
-    This is the Id of the collection containing the attachment.
-
-.PARAMETER DocumentId
-    This is the Id of the document containing the attachment.
-
-.PARAMETER Id
-    This is the Id of the attachment.
-#>
 function Get-CosmosDbAttachmentResourcePath
 {
     [CmdletBinding()]
@@ -77,41 +45,6 @@ function Get-CosmosDbAttachmentResourcePath
     return ('dbs/{0}/colls/{1}/docs/{2}/attachments/{3}' -f $Database, $CollectionId, $DocumentId, $Id)
 }
 
-<#
-.SYNOPSIS
-    Return the attachments for a CosmosDB document.
-
-.DESCRIPTION
-    This cmdlet will return the attachments for a specified document
-    in a CosmosDB database. If an Id is specified then only the
-    specified permission will be returned.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be accessed. It should be created
-    by `New-CosmosDbContext`.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Database
-    The name of the database to access in the CosmosDB account.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER CollectionId
-    This is the Id of the collection to get the attachments for.
-
-.PARAMETER DocumentId
-    This is the Id of the document to get the attachments for.
-
-.PARAMETER Id
-    This is the Id of the attachment to retrieve.
-#>
 function Get-CosmosDbAttachment
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -189,54 +122,6 @@ function Get-CosmosDbAttachment
     }
 }
 
-<#
-.SYNOPSIS
-    Create a new attachment for a document in a CosmosDB database.
-
-.DESCRIPTION
-    This cmdlet will create a attachment for a document in a CosmosDB.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbContext`.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Database
-    The name of the database to access in the CosmosDB account.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER CollectionId
-    This is the Id of the collection to create the attachment in.
-
-.PARAMETER DocumentId
-    This is the Id of the document to create the attachment on.
-
-.PARAMETER Id
-    Not Required to be set when attaching raw media. This is a user
-    settable property. It is the unique name that identifies the
-    attachment, i.e. no two attachments will share the same id.
-    The id must not exceed 255 characters.
-
-.PARAMETER ContentType
-    Not Required to be set when attaching raw media. This is a user
-    settable property. It notes the content type of the attachment.
-
-.PARAMETER Media
-    Not Required to be set when attaching raw media. This is the
-    URL link or file path where the attachment resides.
-
-.PARAMETER Slug
-    The name of the attachment. This is only required when raw media
-    is submitted to the Azure Cosmos DB attachment storage.
-#>
 function New-CosmosDbAttachment
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -349,39 +234,6 @@ function New-CosmosDbAttachment
     }
 }
 
-<#
-.SYNOPSIS
-    Delete an attachment from a CosmosDB document.
-
-.DESCRIPTION
-    This cmdlet will delete an attachment in a CosmosDB from a document.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbContext`.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Database
-    The name of the database to access in the CosmosDB account.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER CollectionId
-    This is the Id of the collection to delete the attachment from.
-
-.PARAMETER DocumentId
-    This is the Id of the document to delete the attachment from.
-
-.PARAMETER Id
-    This is the Id of the attachment to delete.
-#>
 function Remove-CosmosDbAttachment
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -441,55 +293,6 @@ function Remove-CosmosDbAttachment
         -ResourcePath $resourcePath
 }
 
-<#
-.SYNOPSIS
-    Update am attachment for a CosmosDB document.
-
-.DESCRIPTION
-    This cmdlet will update an existing attachment in a CosmosDB
-    document.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbContext`.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Database
-    The name of the database to access in the CosmosDB account.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER CollectionId
-    This is the Id of the collection to update the attachment for.
-
-.PARAMETER DocumentId
-    This is the Id of the collection to update the attachment for.
-
-.PARAMETER Id
-    This is the Id of the attachment to update.
-
-.PARAMETER NewId
-    This is the new Id of the attachment if renaming the attachment.
-
-.PARAMETER ContentType
-    Not Required to be set when attaching raw media. This is a user
-    settable property. It notes the content type of the attachment.
-
-.PARAMETER Media
-    Not Required to be set when attaching raw media. This is the
-    URL link or file path where the attachment resides.
-
-.PARAMETER Slug
-    The name of the attachment. This is only required when raw media
-    is submitted to the Azure Cosmos DB attachment storage.
-#>
 function Set-CosmosDbAttachment
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]

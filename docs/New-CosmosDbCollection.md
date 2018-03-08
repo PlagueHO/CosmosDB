@@ -8,30 +8,35 @@ schema: 2.0.0
 # New-CosmosDbCollection
 
 ## SYNOPSIS
+
 Create a new collection in a CosmosDB database.
 
 ## SYNTAX
 
 ### Context (Default)
-```
+
+```powershell
 New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>]
  [-IndexingPolicy <Policy>] [<CommonParameters>]
 ```
 
 ### Account
-```
+
+```powershell
 New-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>]
  [-IndexingPolicy <Policy>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This cmdlet will create a collection in a CosmosDB.
 
 ## EXAMPLES
 
 ### Example 1
+
 ```powershell
 PS C:\> {{ Add example code here }}
 ```
@@ -41,10 +46,9 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Context
-This is an object containing the context information of
-the CosmosDB database that will be deleted.
-It should be created
-by \`New-CosmosDbContext\`.
+
+This is an object containing the context information of the CosmosDB database
+that will be deleted. It should be created by \`New-CosmosDbContext\`.
 
 ```yaml
 Type: Context
@@ -59,6 +63,7 @@ Accept wildcard characters: False
 ```
 
 ### -Account
+
 The account name of the CosmosDB to access.
 
 ```yaml
@@ -74,6 +79,7 @@ Accept wildcard characters: False
 ```
 
 ### -Key
+
 The key to be used to access this CosmosDB.
 
 ```yaml
@@ -89,6 +95,7 @@ Accept wildcard characters: False
 ```
 
 ### -KeyType
+
 The type of key that will be used to access ths CosmosDB.
 
 ```yaml
@@ -104,6 +111,7 @@ Accept wildcard characters: False
 ```
 
 ### -Database
+
 The name of the database to access in the CosmosDB account.
 
 ```yaml
@@ -119,6 +127,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
+
 This is the Id of the collection to create.
 
 ```yaml
@@ -134,10 +143,10 @@ Accept wildcard characters: False
 ```
 
 ### -OfferThroughput
+
 The user specified throughput for the collection expressed
 in units of 100 request units per second.
-This can be between
-400 and 250,000 (or higher by requesting a limit increase).
+This can be between 400 and 250,000 (or higher by requesting a limit increase).
 If specified OfferType should not be specified.
 
 ```yaml
@@ -153,10 +162,10 @@ Accept wildcard characters: False
 ```
 
 ### -OfferType
+
 The user specified performance level for pre-defined performance
 levels S1, S2 and S3.
-If specified OfferThroughput should not be
-specified.
+If specified OfferThroughput should not be specified.
 
 ```yaml
 Type: String
@@ -171,6 +180,7 @@ Accept wildcard characters: False
 ```
 
 ### -PartitionKey
+
 This value is used to configure the partition keys to be used
 for partitioning data into multiple partitions.
 
@@ -187,6 +197,7 @@ Accept wildcard characters: False
 ```
 
 ### -IndexingPolicy
+
 This is an Indexing Policy object that was created by the
 New-CosmosDbCollectionIndexingPolicy function.
 
@@ -203,6 +214,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
