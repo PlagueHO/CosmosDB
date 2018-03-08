@@ -26,7 +26,7 @@ Creates and throws an invalid operation exception.
 ### EXAMPLE 1
 
 ```powershell
-PS C:\>New-CosmosDbInvalidOperationException -Message 'Invalid operation'
+PS C:\> New-CosmosDbInvalidOperationException -Message 'Invalid operation'
 ```
 
 Raise an invalid operation exception.

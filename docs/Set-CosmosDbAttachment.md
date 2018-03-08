@@ -39,7 +39,7 @@ document.
 ### Example 1
 
 ```powershell
-Set-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId 'ac12345' -Id 'image_1' -NewId 'Image_2'
+PS C:\> Set-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId 'ac12345' -Id 'image_1' -NewId 'Image_2'
 ```
 
 Rename the Id of an attachment for a document in a collection.

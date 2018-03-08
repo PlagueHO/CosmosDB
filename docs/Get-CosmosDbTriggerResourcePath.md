@@ -28,7 +28,7 @@ trigger object.
 ### Example 1
 
 ```powershell
-Get-CosmosDbTriggerResourcePath -Database 'MyDatabase' -CollectionId 'MyCollection' -Id 'sp_batch'
+PS C:\> Get-CosmosDbTriggerResourcePath -Database 'MyDatabase' -CollectionId 'MyCollection' -Id 'sp_batch'
 ```
 
 Generate a resource path for trigger with Id 'mytrigger'

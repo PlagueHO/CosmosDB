@@ -28,7 +28,7 @@ stored procedure object.
 ### Example 1
 
 ```powershell
-Get-CosmosDbStoredProcedureResourcePath -Database 'MyDatabase' -CollectionId 'MyCollection' -Id 'sp_batch'
+PS C:\> Get-CosmosDbStoredProcedureResourcePath -Database 'MyDatabase' -CollectionId 'MyCollection' -Id 'sp_batch'
 ```
 
 Generate a resource path for stored procedure with Id 'sp_batch'

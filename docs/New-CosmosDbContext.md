@@ -48,8 +48,8 @@ from Azure Resource Manager.
 ### EXAMPLE 1
 
 ```powershell
-PS C:\>$primaryKey = ConvertTo-SecureString -String 'your master key' -AsPlainText -Force
-PS C:\>$cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey
+PS C:\> $primaryKey = ConvertTo-SecureString -String 'your master key' -AsPlainText -Force
+PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey
 ```
 
 Creates a CosmosDB context specifying the master key manually.
@@ -57,8 +57,8 @@ Creates a CosmosDB context specifying the master key manually.
 ### EXAMPLE 2
 
 ```powershell
-PS C:\>Add-AzureRmAccount
-PS C:\>$cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -ResourceGroup 'MyCosmosDbResourceGroup' -MasterKeyType 'PrimaryMasterKey'
+PS C:\> Add-AzureRmAccount
+PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -ResourceGroup 'MyCosmosDbResourceGroup' -MasterKeyType 'PrimaryMasterKey'
 ```
 
 Creates a CosmosDB context by logging into Azure and getting

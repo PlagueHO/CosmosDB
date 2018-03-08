@@ -38,10 +38,18 @@ in a CosmosDB.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Invoke-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld'
 ```
 
-{{ Add example description here }}
+Execute a stored procedure called 'spHelloWorld' in a collection in the database.
+
+### Example 2
+
+```powershell
+PS C:\> Invoke-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureParameters @('PowerShell')
+```
+
+Execute a stored procedure called 'spHelloWorld' passing in the parameter 'PowerShell' in a collection in the database.
 
 ## PARAMETERS
 

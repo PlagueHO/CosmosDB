@@ -28,7 +28,7 @@ returned by an API call.
 ### Example 1
 
 ```powershell
-Set-CosmosDbAttachmentType -Attachment $attachment
+PS C:\> Set-CosmosDbAttachmentType -Attachment $attachment
 ```
 
 Apply the attachment data type to the object provided attachment.

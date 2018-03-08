@@ -36,10 +36,10 @@ This cmdlet will delete a stored procedure in a CosmosDB from a collection.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Remove-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld'
 ```
 
-{{ Add example description here }}
+Remove stored procedure 'spHelloWorld' from a collection in the database.
 
 ## PARAMETERS
 

@@ -37,10 +37,18 @@ collection.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> $body = @'
+function (personToGreet) {
+    var context = getContext();
+    var response = context.getResponse();
+
+    response.setBody("Hello, " + personToGreet);
+}
+'@
+PS C:\> Set-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureBody $body
 ```
 
-{{ Add example description here }}
+Update an existing stored procedure 'spHelloWorld' in a collection in the database.
 
 ## PARAMETERS
 

@@ -38,7 +38,7 @@ If an Id is specified then only the specified permission will be returned.
 ### Example 1
 
 ```powershell
-Get-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId 'ac12345'
+PS C:\> Get-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId 'ac12345'
 ```
 
 Get all attachments for a document in a collection.
@@ -46,7 +46,7 @@ Get all attachments for a document in a collection.
 ### Example 2
 
 ```powershell
-Get-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId 'ac12345' -Id 'image_1'
+PS C:\> Get-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId 'ac12345' -Id 'image_1'
 ```
 
 Get an attachment by Id for a document in a collection.

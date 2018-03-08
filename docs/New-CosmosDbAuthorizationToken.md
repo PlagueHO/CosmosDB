@@ -32,8 +32,8 @@ other parameters in the header of the request that is passed.
 ### EXAMPLE 1
 
 ```powershell
-PS C:\>$dttoken = ConvertTo-CosmosDbTokenDateString -Date (Get-Date)
-PS C:\>$token = New-CosmosDbAuthorizationToken -Key $Key -KeyType master -Method Get -ResourceType 'dbs' -ResourceId 'dbs/mydatabase' -Date ($dttoken)
+PS C:\> $dttoken = ConvertTo-CosmosDbTokenDateString -Date (Get-Date)
+PS C:\> $token = New-CosmosDbAuthorizationToken -Key $Key -KeyType master -Method Get -ResourceType 'dbs' -ResourceId 'dbs/mydatabase' -Date ($dttoken)
 ```
 
 Generate a CosmosDB authorization token using a master key $Key

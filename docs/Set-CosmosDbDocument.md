@@ -38,14 +38,14 @@ This cmdlet will update an existing document in a CosmosDB collection.
 ### Example 1
 
 ```powershell
-$newDocument = @"
+PS C:\> $newDocument = @"
 {
     `"id`": `"ac12345`",
     `"content`": `"New string`",
     `"more`": `"Another new string`"
 }
 "@
-Set-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'ac12345' -DocumentBody $newDocument
+PS C:\> Set-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'ac12345' -DocumentBody $newDocument
 ```
 
 Replace the content of a document in a collection in the database.

@@ -27,7 +27,7 @@ object.
 ### Example 1
 
 ```powershell
-Get-CosmosDbOfferResourcePath -Id '6teb'
+PS C:\> Get-CosmosDbOfferResourcePath -Id '6teb'
 ```
 
 Generate a resource path for offer '6teb'.

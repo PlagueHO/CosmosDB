@@ -28,7 +28,7 @@ by the Authorization Token and in the request header.
 ### EXAMPLE 1
 
 ```powershell
-$dttoken = ConvertTo-CosmosDbTokenDateString -Date (Get-Date)
+PS C:\> $dttoken = ConvertTo-CosmosDbTokenDateString -Date (Get-Date)
 ```
 
 Generate date string for use in a CosmosDB token.

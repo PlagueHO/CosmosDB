@@ -505,7 +505,7 @@ Get-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollec
 Create a stored procedure for a collection in the database:
 
 ```powershell
-$Body = @'
+$body = @'
 function () {
     var context = getContext();
     var response = context.getResponse();
@@ -513,13 +513,13 @@ function () {
     response.setBody("Hello, World");
 }
 '@
-New-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureBody $Body
+New-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureBody $body
 ```
 
 Update an existing stored procedure for a collection in the database:
 
 ```powershell
-$Body = @'
+$body = @'
 function (personToGreet) {
     var context = getContext();
     var response = context.getResponse();
@@ -527,7 +527,7 @@ function (personToGreet) {
     response.setBody("Hello, " + personToGreet);
 }
 '@
-New-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureBody $Body
+Set-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureBody $body
 ```
 
 Execute a stored procedure for a collection from the database:

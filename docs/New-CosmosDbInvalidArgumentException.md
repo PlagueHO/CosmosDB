@@ -26,7 +26,7 @@ Creates and throws an invalid argument exception.
 ### EXAMPLE 1
 
 ```powershell
-PS C:\>New-CosmosDbInvalidArgumentException -Message 'Invalid value for your parameter' -ArgumentName 'MyArg'
+PS C:\> New-CosmosDbInvalidArgumentException -Message 'Invalid value for your parameter' -ArgumentName 'MyArg'
 ```
 
 Raise an invalid argument exception for argument 'MyArg'.

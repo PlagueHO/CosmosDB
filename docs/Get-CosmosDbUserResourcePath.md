@@ -27,7 +27,7 @@ object.
 ### Example 1
 
 ```powershell
-Get-CosmosDbUserResourcePath -Database 'MyDatabase' -Id 'Mary'
+PS C:\> Get-CosmosDbUserResourcePath -Database 'MyDatabase' -Id 'Mary'
 ```
 
 Generate a resource path for user with Id 'Mary' in database 'MyDatabase'.

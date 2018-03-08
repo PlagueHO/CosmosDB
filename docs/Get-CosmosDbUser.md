@@ -38,7 +38,7 @@ Id will be returned, otherwise all users will be returned.
 ### Example 1
 
 ```powershell
-Get-CosmosDbUser -Context $cosmosDbContext
+PS C:\> Get-CosmosDbUser -Context $cosmosDbContext
 ```
 
 Get a list of users from the database.
@@ -46,7 +46,7 @@ Get a list of users from the database.
 ### Example 2
 
 ```powershell
-Get-CosmosDbUser -Context $cosmosDbContext -Id 'Mary'
+PS C:\> Get-CosmosDbUser -Context $cosmosDbContext -Id 'Mary'
 ```
 
 Get a the user with Id 'Mary' from the database.

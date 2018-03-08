@@ -36,10 +36,18 @@ This cmdlet will create a stored procedure for a collection in a CosmosDB.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> $Body = @'
+function (personToGreet) {
+    var context = getContext();
+    var response = context.getResponse();
+
+    response.setBody("Hello, " + personToGreet);
+}
+'@
+PS C:\> New-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureBody $Body
 ```
 
-{{ Add example description here }}
+Create a stored procedure 'spHelloWorld' in a collection in the database.
 
 ## PARAMETERS
 

@@ -38,7 +38,7 @@ Id will be returned, otherwise all databases will be returned.
 ### Example 1
 
 ```powershell
-Get-CosmosDbDatabase -Context $cosmosDbContext
+PS C:\> Get-CosmosDbDatabase -Context $cosmosDbContext
 ```
 
 Get a list of databases in the CosmosDB account.
@@ -46,7 +46,7 @@ Get a list of databases in the CosmosDB account.
 ### Example 2
 
 ```powershell
-Get-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase'
+PS C:\> Get-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase'
 ```
 
 Get the database 'MyDatabase' from the CosmosDB account.
