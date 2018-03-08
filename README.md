@@ -1,9 +1,27 @@
 # CosmosDB PowerShell Module
 
+## Module Build Status
+
 | Branch | Build Status | Code Coverage |
 | --- | --- | --- |
 | dev | [![Build status](https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/dev?svg=true)](https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/dev) | [![codecov](https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev/graph/badge.svg)](https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev) |
 | master | [![Build status](https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/master?svg=true)](https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/master) | [![codecov](https://codecov.io/gh/PlagueHO/CosmosDB/branch/master/graph/badge.svg)](https://codecov.io/gh/PlagueHO/CosmosDB/branch/master) |
+
+## Table of Contents
+
+- [Introduction](Introduction)
+- [Requirements](Requirements)
+- [Installation](Installation)
+- [Quick Start](#Quick-Start)
+  - [Working with Contexts](#Working-with-Contexts)
+    - [Create a Context specifying the Key Manually](#Create-a-Context-specifying-the-Key-Manually)
+    - [Use CosmosDB Module to Retrieve Key from Azure Management Portal](#Use-CosmosDB-Module-to-Retrieve-Key-from-Azure-Management-Portal)
+    - [Create a Context for a CosmosDB Emulator](#Create-a-Context-for-a-CosmosDB-Emulator)
+  - [Working with Databases](#Working-with-Databases)
+  - [Working with Offers](#Working-with-Offers)
+  - [Working with Collections](#Working-with-Collections)
+    - [Creating a Collection with a custom Indexing Policy](#Creating-a-Collection-with-a-custom-Indexing-Policy)
+  - [Working with Documents](#Working-with-Documents)
 
 ## Introduction
 
@@ -12,10 +30,10 @@ This PowerShell module provides cmdlets for working with Azure Cosmos DB.
 The CosmosDB PowerShell module enables management of:
 
 - Attachments
-- Collections
-- Databases
-- Documents
-- Offers
+- [Collections](#Working-with-Collections)
+- [Databases](#Working-with-Databases)
+- [Documents](#Working-with-Documents)
+- [Offers](#Working-with-Offers)
 - Permissions
 - Stored procedures
 - Triggers
@@ -59,7 +77,9 @@ primary primary or secondary keys from your CosmosDB account or allow
 the CosmosDB module to retrieve the keys directly from the Azure
 management portal for you.
 
-### Create a Context specifying the Key Manually
+### Working with Contexts
+
+#### Create a Context specifying the Key Manually
 
 First convert your key into a secure string:
 
@@ -74,7 +94,7 @@ create a context variable:
 $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey
 ```
 
-### Use CosmosDB Module to Retrieve Key from Azure Management Portal
+#### Use CosmosDB Module to Retrieve Key from Azure Management Portal
 
 To create a context object so that the CosmosDB module retrieves the
 primary or secondary key from the Azure Management Portal, use the
@@ -90,7 +110,7 @@ an account that doesn't contain the CosmosDB you wish to connect to then
 you will first need to connect to the correct account using the
 `Add-AzureRmAccount` cmdlet._
 
-### Create a Context for a CosmosDB Emulator
+#### Create a Context for a CosmosDB Emulator
 
 Microsoft provides a [CosmosDB emulator](https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator) that
 you can run locally to enable testing and debugging scenarios. To create
@@ -99,6 +119,20 @@ following command:
 
 ```powershell
 $cosmosDbContext = New-CosmosDbContext -Emulator -Database 'MyDatabase'
+```
+
+### Working with Databases
+
+Get a list of databases in the CosmosDB account:
+
+```powershell
+Get-CosmosDbDatabase -Context $cosmosDbContext
+```
+
+Get the specified database from the CosmosDB account:
+
+```powershell
+Get-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase'
 ```
 
 ### Working with Offers
@@ -127,20 +161,6 @@ Update all existing V2 offers to set a different throughput:
 ```powershell
 Get-CosmosDbOffer -Context $cosmosDbContext -Query 'SELECT * FROM root WHERE (root["offerVersion"] = "V2")' |
     Set-CosmosDbOffer -Context $cosmosDbContext -OfferThroughput 10000 -OfferIsRUPerMinuteThroughputEnabled $false
-```
-
-### Working with Databases
-
-Get a list of databases in the CosmosDB account:
-
-```powershell
-Get-CosmosDbDatabase -Context $cosmosDbContext
-```
-
-Get the specified database from the CosmosDB account:
-
-```powershell
-Get-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase'
 ```
 
 ### Working with Collections
