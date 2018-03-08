@@ -28,10 +28,11 @@ user defined function object.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+Get-CosmosDbUserDefinedFunctionResourcePath -Database 'MyDatabase' -CollectionId 'MyCollection' -Id 'myudf'
 ```
 
-{{ Add example description here }}
+Generate a resource path for user defined function with Id 'myudf'
+in collection 'MyCollection' in database 'MyDatabase'.
 
 ## PARAMETERS
 

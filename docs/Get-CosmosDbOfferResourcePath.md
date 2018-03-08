@@ -27,10 +27,10 @@ object.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+Get-CosmosDbOfferResourcePath -Id '6teb'
 ```
 
-{{ Add example description here }}
+Generate a resource path for offer '6teb'.
 
 ## PARAMETERS
 

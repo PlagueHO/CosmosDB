@@ -27,10 +27,11 @@ permission object.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+Get-CosmosDbPermissionResourcePath -Database 'MyDatabase' -UserId 'Mary' -Id 'addresses'
 ```
 
-{{ Add example description here }}
+Generate a resource path for permission Id 'addresses' for user 'Mary'
+in database 'MyDatabase'.
 
 ## PARAMETERS
 

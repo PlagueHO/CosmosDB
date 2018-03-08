@@ -36,10 +36,10 @@ This cmdlet will delete a collection in a CosmosDB.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Remove-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection'
 ```
 
-{{ Add example description here }}
+Delete the collection MyNewCollection from the database.
 
 ## PARAMETERS
 

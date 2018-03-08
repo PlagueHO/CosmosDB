@@ -28,10 +28,11 @@ trigger object.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+Get-CosmosDbTriggerResourcePath -Database 'MyDatabase' -CollectionId 'MyCollection' -Id 'sp_batch'
 ```
 
-{{ Add example description here }}
+Generate a resource path for trigger with Id 'mytrigger'
+in collection 'MyCollection' in database 'MyDatabase'.
 
 ## PARAMETERS
 

@@ -38,10 +38,18 @@ Id will be returned, otherwise all collections will be returned.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-CosmosDbCollection -Context $cosmosDbContext
 ```
 
-{{ Add example description here }}
+Gets a list of collections in a database.
+
+### Example 2
+
+```powershell
+PS C:\> Get-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection'
+```
+
+Get a the MyNewCollection collection from a database.
 
 ## PARAMETERS
 

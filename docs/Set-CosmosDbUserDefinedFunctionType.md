@@ -28,10 +28,11 @@ returned by an API call.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-CosmosDbUserDefinedFunctionType -UserDefinedFunction $userDefinedFunction
 ```
 
-{{ Add example description here }}
+Apply the user defined function data type to the object provided
+user defined function.
 
 ## PARAMETERS
 

@@ -28,10 +28,10 @@ by an API call.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-CosmosDbOfferType -Offer $offer
 ```
 
-{{ Add example description here }}
+Apply the offer data type to the object provided offer.
 
 ## PARAMETERS
 

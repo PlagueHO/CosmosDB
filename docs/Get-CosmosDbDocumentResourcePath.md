@@ -27,10 +27,11 @@ This cmdlet returns the resource identifier for a document object.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+Get-CosmosDbDocumentResourcePath -Database 'MyDatabase' -CollectionId 'MyNewCollection' -Id 'ac12345'
 ```
 
-{{ Add example description here }}
+Generate a resource path for document 'ac12345 in collection 'MyNewCollection'
+in database 'MyDatabase'.
 
 ## PARAMETERS
 

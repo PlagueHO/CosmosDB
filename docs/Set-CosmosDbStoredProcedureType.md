@@ -28,10 +28,11 @@ procedure returned by an API call.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-CosmosDbStoredProcedureType -StoredProcedure $storedProcedure
 ```
 
-{{ Add example description here }}
+Apply the stored procedure data type to the object provided
+stored procedure.
 
 ## PARAMETERS
 

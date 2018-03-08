@@ -27,7 +27,7 @@ This cmdlet returns the root URI of the CosmosDB.
 ### EXAMPLE 1
 
 ```powershell
-PS C:\>$uri = Get-CosmosDbUri -Account 'MyAzureCosmosDB'
+PS C:\> $uri = Get-CosmosDbUri -Account 'MyAzureCosmosDB'
 ```
 
 Generates the URI for accessing an Azure CosmosDB account.

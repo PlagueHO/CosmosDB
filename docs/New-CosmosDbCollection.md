@@ -38,10 +38,19 @@ This cmdlet will create a collection in a CosmosDB.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -OfferThroughput 2500
 ```
 
-{{ Add example description here }}
+Create a collection in the database with the offer throughput of 2500 RU/s.
+
+### Example 2
+
+```powershell
+PS C:\> New-CosmosDbCollection -Context $cosmosDbContext -Id 'PartitionedCollection' -PartitionKey 'account' -OfferThroughput 50000
+```
+
+Create a collection in the database with the partition key 'account' and
+the offer throughput of 50000 RU/s.
 
 ## PARAMETERS
 

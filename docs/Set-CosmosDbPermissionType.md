@@ -28,10 +28,11 @@ by an API call.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-CosmosDbPermissionType -Permission $permission
 ```
 
-{{ Add example description here }}
+Apply the permission data type to the object provided
+permission.
 
 ## PARAMETERS
 

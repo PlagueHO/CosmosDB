@@ -39,10 +39,18 @@ the specified user defined functions will be returned.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+Get-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNewCollection'
 ```
 
-{{ Add example description here }}
+Get a list of user defined functions for a collection in the database.
+
+### Example 2
+
+```powershell
+Get-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'myudf'
+```
+
+Get the 'myudf' user defined function from a collection in the database.
 
 ## PARAMETERS
 

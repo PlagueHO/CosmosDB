@@ -28,10 +28,10 @@ by an API call.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-CosmosDbUserType -User $user
 ```
 
-{{ Add example description here }}
+Apply the user data type to the object provided user.
 
 ## PARAMETERS
 
