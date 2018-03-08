@@ -95,9 +95,10 @@ test_script:
           }
 
           New-ExternalHelp `
-            -Path (Join-Path -Path $buildFolder -ChildPath 'docs\') `
-            -OutputPath (Join-Path -Path $buildFolder -ChildPath 'src\') `
-            -Force
+            -Path (Join-Path -Path $ENV:APPVEYOR_BUILD_FOLDER -ChildPath 'docs\') `
+            -OutputPath (Join-Path -Path $ENV:APPVEYOR_BUILD_FOLDER -ChildPath 'src\') `
+            -Force `
+            -Verbose
 #---------------------------------#
 #      deployment configuration   #
 #---------------------------------#
