@@ -36,7 +36,7 @@ context or account.
 
 ## EXAMPLES
 
-### EXAMPLE 1
+### Example 1
 
 ```powershell
 PS C:\>$result = Invoke-CosmosDbRequest -Context $context -ResourceType 'colls' -ResourcePath 'dbs/mydatabase'
@@ -45,7 +45,7 @@ PS C:\>$result = Invoke-CosmosDbRequest -Context $context -ResourceType 'colls' 
 Execute a request to the CosmosDB specified by the context
 $context to Get the collections in the database mydatabase.
 
-### EXAMPLE 2
+### Example 2
 
 ```powershell
 PS C:\>$result = Invoke-CosmosDbRequest -Context $context -ResourceType 'docs' -ResourcePath 'dbs/mydatabase/colls/mycollection/docs/ac12345' -Method 'Put' -Body $body

@@ -38,10 +38,18 @@ If an Id is specified then only the specified trigger will be returned.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+Get-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection'
 ```
 
-{{ Add example description here }}
+Get a list of triggers from a collection in the database.
+
+### Example 2
+
+```powershell
+Get-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'eventhub'
+```
+
+Get the 'eventhub' trigger from a collection in the database.
 
 ## PARAMETERS
 

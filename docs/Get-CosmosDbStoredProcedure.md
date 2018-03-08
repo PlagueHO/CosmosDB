@@ -39,10 +39,18 @@ will be returned.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection'
 ```
 
-{{ Add example description here }}
+Get a list of stored procedures from a collection in the database.
+
+### Example 2
+
+```powershell
+PS C:\> Get-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'sp_calls'
+```
+
+Get the 'sp_calls' stored procedure from a collection in the database.
 
 ## PARAMETERS
 

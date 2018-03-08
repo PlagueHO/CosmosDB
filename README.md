@@ -254,7 +254,7 @@ $documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNew
 $continuationToken = $resultHeaders.value.'x-ms-continuation'
 ```
 
-Get the next document from a collection in the database using
+Get the next 5 documents from a collection in the database using
 the continuation token found in the headers from the previous
 request:
 

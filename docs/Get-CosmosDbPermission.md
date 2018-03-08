@@ -38,10 +38,18 @@ specified permission will be returned.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-CosmosDbPermission -Context $cosmosDbContext -UserId 'MyApplication'
 ```
 
-{{ Add example description here }}
+Get a list of permissions for a user 'MyApplication' in the database.
+
+### Example 2
+
+```powershell
+PS C:\> Get-CosmosDbPermission -Context $cosmosDbContext -UserId 'MyApplication' -Id 'read'
+```
+
+Get the 'read' permission for a user 'MyApplication' in the database.
 
 ## PARAMETERS
 

@@ -38,10 +38,18 @@ Id will be returned, otherwise all users will be returned.
 ### Example 1
 
 ```powershell
-Get-CosmosDbUserResourcePath -Database 'MyDatabase' -Id 'Mary'
+Get-CosmosDbUser -Context $cosmosDbContext
 ```
 
-Generate a resource path for user with Id 'Mary' in database 'MyDatabase'.
+Get a list of users from the database.
+
+### Example 2
+
+```powershell
+Get-CosmosDbUser -Context $cosmosDbContext -Id 'Mary'
+```
+
+Get a the user with Id 'Mary' from the database.
 
 ## PARAMETERS
 

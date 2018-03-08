@@ -44,10 +44,51 @@ If an Id is specified then only the specified documents will be returned.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'ac12345'
 ```
 
-{{ Add example description here }}
+Return a document with a Id 'ac12345' from a collection in the database.
+
+### Example 2
+
+```powershell
+$resultHeaders = ''
+$documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -MaxItemCount 5 -ResultHeaders $resultHeaders
+$continuationToken = $resultHeaders.value.'x-ms-continuation'
+```
+
+Get the first 5 documents from the collection in the database
+storing a continuation token.
+
+### Example 3
+
+```powershell
+$documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -MaxItemCount 5 -ContinuationToken $continuationToken
+```
+
+Get the next 5 documents from a collection in the database using the
+continuation token found in the headers from the previous example.
+
+### Example 4
+
+```powershell
+$query = "SELECT * FROM customers c WHERE (c.id = 'user@contoso.com')"
+Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Query $query
+```
+
+Querying the documents in a collection.
+
+### Example 5
+
+```powershell
+$query = "SELECT * FROM customers c WHERE (c.id = @id)"
+$queryParameters = @(
+    @{ name = "@id"; value="user@contoso.com"; }
+)
+Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Query $query -QueryParameters $queryParameters
+```
+
+Query the documents in a collection using a parameterized query.
 
 ## PARAMETERS
 

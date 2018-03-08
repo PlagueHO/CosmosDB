@@ -36,10 +36,10 @@ This cmdlet will delete a document in a CosmosDB from a collection.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'ac12345'
 ```
 
-{{ Add example description here }}
+Delete a document from a collection in the database.
 
 ## PARAMETERS
 

@@ -38,10 +38,18 @@ Id will be returned, otherwise all offers will be returned.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-CosmosDbOffer -Context $cosmosDbContext
 ```
 
-{{ Add example description here }}
+Get a list of offers in a CosmosDB account.
+
+### Example 2
+
+```powershell
+PS C:\> Get-CosmosDbOffer -Context $cosmosDbContext -Id '6d9t'
+```
+
+Get the offer with Id '6d9t' from a CosmosDB account.
 
 ## PARAMETERS
 
