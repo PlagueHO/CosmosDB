@@ -38,10 +38,10 @@ This cmdlet will create a attachment for a document in a CosmosDB.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+New-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId 'ac12345' -Id 'image_1' -ContentType 'image/jpg' -Media 'www.bing.com'
 ```
 
-{{ Add example description here }}
+Create an attachment on a document in a collection.
 
 ## PARAMETERS
 

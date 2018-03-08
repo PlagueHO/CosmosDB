@@ -36,10 +36,10 @@ This cmdlet will delete an attachment in a CosmosDB from a document.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+Remove-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'ac12345' -Id 'Image_2'
 ```
 
-{{ Add example description here }}
+Delete an attachment from a document in collection.
 
 ## PARAMETERS
 
