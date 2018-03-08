@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Delete a datanase from a CosmosDB account.
+Delete a database from a CosmosDB account.
 
 ## SYNTAX
 
