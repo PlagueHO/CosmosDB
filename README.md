@@ -22,6 +22,16 @@
   - [Working with Collections](#Working-with-Collections)
     - [Creating a Collection with a custom Indexing Policy](#Creating-a-Collection-with-a-custom-Indexing-Policy)
   - [Working with Documents](#Working-with-Documents)
+    -[Working with Documents in a Partitioned Collection](#Working-with-Documents-in-a-Partitioned-Collection)
+  - [Working with Attachments](#Working-with-Attachments)
+  - [Working with Users](#Working-with-Users)
+  - [Stored Procedures](#Working-with-Stored-Procedures)
+  - [Working with Triggers](#Working-with-Triggers)
+  - [Working with User Defined Functions](#Working-with-User-Defined-Functions)
+- [Contributing](#Contributing)
+- [Cmdlets](#Cmdlets)
+- [Change Log](#Change-Log)
+- [Links](#Links)
 
 ## Introduction
 
@@ -29,16 +39,16 @@ This PowerShell module provides cmdlets for working with Azure Cosmos DB.
 
 The CosmosDB PowerShell module enables management of:
 
-- Attachments
+- [Attachments](#Working-with-Attachments)
 - [Collections](#Working-with-Collections)
 - [Databases](#Working-with-Databases)
 - [Documents](#Working-with-Documents)
 - [Offers](#Working-with-Offers)
-- Permissions
-- Stored procedures
-- Triggers
-- User Defined Functions
-- Users
+- [Permissions](#Working-with-Permissions)
+- [Stored Procedures](#Working-with-Stored-Procedures)
+- [Triggers](#Working-with-Triggers)
+- [User Defined Functions](#Working-with-User-Defined-Functions)
+- [Users](#Working-with-Users)
 
 The module uses the CosmosDB (DocumentDB) Rest APIs.
 
@@ -295,7 +305,7 @@ Delete a document from a collection in the database:
 Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id $documents[0].id
 ```
 
-### Working with Documents in a Partitioned Collection
+#### Working with Documents in a Partitioned Collection
 
 Creating a document in a collection that has a Partition Key requires the
 `PartitionKey` parameter to be specified for the document:
@@ -484,7 +494,7 @@ Remove a trigger for a collection from the database:
 Remove-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'MyTrigger'
 ```
 
-### Working with Stored procedures
+### Working with Stored Procedures
 
 Get a list of stored procedures for a collection in the database:
 
