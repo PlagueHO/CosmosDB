@@ -1,15 +1,3 @@
-<#
-.SYNOPSIS
-    Set the custom Cosmos DB Database types to the database
-    returned by an API call.
-
-.DESCRIPTION
-    This function applies the custom types to the database returned
-    by an API call.
-
-.PARAMETER Database
-    This is the database that is returned by a user API call.
-#>
 function Set-CosmosDbDatabaseType
 {
     [CmdletBinding()]
@@ -27,17 +15,6 @@ function Set-CosmosDbDatabaseType
     return $Database
 }
 
-<#
-.SYNOPSIS
-    Return the resource path for a database object.
-
-.DESCRIPTION
-    This cmdlet returns the resource identifier for a database
-    object.
-
-.PARAMETER Id
-    This is the Id of the database.
-#>
 function Get-CosmosDbDatabaseResourcePath
 {
     [CmdletBinding()]
@@ -53,34 +30,6 @@ function Get-CosmosDbDatabaseResourcePath
     return ('dbs/{0}' -f $Id)
 }
 
-<#
-.SYNOPSIS
-    Return the databases in a CosmosDB account.
-
-.DESCRIPTION
-    This cmdlet will return the databases in a CosmosDB account.
-    If the Id is specified then only the database matching this
-    Id will be returned, otherwise all databases will be returned.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be accessed. It should be created
-    by `New-CosmosDbContext`.
-
-    If the context contains a database it will be ignored.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER Id
-    This is the Id of the database to get.
-#>
 function Get-CosmosDbDatabase
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -138,30 +87,6 @@ function Get-CosmosDbDatabase
     }
 }
 
-<#
-.SYNOPSIS
-    Create a new database in a CosmosDB account.
-
-.DESCRIPTION
-    This cmdlet will create a database in CosmosDB.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbContext`.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER Id
-    This is the Id of the database to create.
-#>
 function New-CosmosDbDatabase
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -208,30 +133,6 @@ function New-CosmosDbDatabase
     }
 }
 
-<#
-.SYNOPSIS
-    Delete a datanase from a CosmosDB account.
-
-.DESCRIPTION
-    This cmdlet will delete a database in CosmosDB.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbContext`.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER Id
-    This is the Id of the database to delete.
-#>
 function Remove-CosmosDbDatabase
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]

@@ -59,10 +59,8 @@ in database mydatabase.
 
 ### -Context
 
-This is an object containing the context information of
-the CosmosDB database that will be accessed.
-It should be created
-by \`New-CosmosDbContext\`.
+This is an object containing the context information of the CosmosDB database
+that will be deleted. It should be created by \`New-CosmosDbContext\`.
 
 ```yaml
 Type: Context
