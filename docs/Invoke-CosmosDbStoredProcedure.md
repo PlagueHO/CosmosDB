@@ -8,30 +8,35 @@ schema: 2.0.0
 # Invoke-CosmosDbStoredProcedure
 
 ## SYNOPSIS
+
 Execute a new stored procedure for a collection in a CosmosDB database.
 
 ## SYNTAX
 
 ### Context (Default)
-```
+
+```powershell
 Invoke-CosmosDbStoredProcedure -Context <Context> [-KeyType <String>] [-Key <SecureString>]
  [-Database <String>] -CollectionId <String> -Id <String> [-StoredProcedureParameter <String[]>]
  [<CommonParameters>]
 ```
 
 ### Account
-```
+
+```powershell
 Invoke-CosmosDbStoredProcedure -Account <String> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
  -CollectionId <String> -Id <String> [-StoredProcedureParameter <String[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This cmdlet will execute a stored procedure contained in a collection
 in a CosmosDB.
 
 ## EXAMPLES
 
 ### Example 1
+
 ```powershell
 PS C:\> {{ Add example code here }}
 ```
@@ -41,10 +46,10 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Context
+
 This is an object containing the context information of
 the CosmosDB database that will be deleted.
-It should be created
-by \`New-CosmosDbContext\`.
+It should be created by \`New-CosmosDbContext\`.
 
 ```yaml
 Type: Context
@@ -59,6 +64,7 @@ Accept wildcard characters: False
 ```
 
 ### -Account
+
 The account name of the CosmosDB to access.
 
 ```yaml
@@ -74,6 +80,7 @@ Accept wildcard characters: False
 ```
 
 ### -KeyType
+
 The type of key that will be used to access ths CosmosDB.
 
 ```yaml
@@ -89,6 +96,7 @@ Accept wildcard characters: False
 ```
 
 ### -Key
+
 The key to be used to access this CosmosDB.
 
 ```yaml
@@ -104,6 +112,7 @@ Accept wildcard characters: False
 ```
 
 ### -Database
+
 The name of the database to access in the CosmosDB account.
 
 ```yaml
@@ -119,6 +128,7 @@ Accept wildcard characters: False
 ```
 
 ### -CollectionId
+
 This is the Id of the collection that contains the stored procedure
 to execute.
 
@@ -135,6 +145,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
+
 This is the Id of the stored procedure to execute.
 
 ```yaml
@@ -150,7 +161,9 @@ Accept wildcard characters: False
 ```
 
 ### -StoredProcedureParameter
-{{Fill StoredProcedureParameter Description}}
+
+This is an array of strings that will be passed as stored
+procedure parameters.
 
 ```yaml
 Type: String[]
@@ -165,6 +178,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 

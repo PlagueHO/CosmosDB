@@ -8,31 +8,35 @@ schema: 2.0.0
 # Get-CosmosDbPermission
 
 ## SYNOPSIS
+
 Return the permissions for a CosmosDB database user.
 
 ## SYNTAX
 
 ### Context (Default)
-```
+
+```powershell
 Get-CosmosDbPermission -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -UserId <String> [-Id <String>] [-TokenExpiry <Int32>] [<CommonParameters>]
 ```
 
 ### Account
-```
+
+```powershell
 Get-CosmosDbPermission -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -UserId <String> [-Id <String>] [-TokenExpiry <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This cmdlet will return the permissions for a specified user
-in a CosmosDB database.
-If an Id is specified then only the
+in a CosmosDB database. If an Id is specified then only the
 specified permission will be returned.
 
 ## EXAMPLES
 
 ### Example 1
+
 ```powershell
 PS C:\> {{ Add example code here }}
 ```
@@ -42,10 +46,10 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Context
+
 This is an object containing the context information of
 the CosmosDB database that will be accessed.
-It should be created
-by \`New-CosmosDbContext\`.
+It should be created by \`New-CosmosDbContext\`.
 
 ```yaml
 Type: Context
@@ -60,6 +64,7 @@ Accept wildcard characters: False
 ```
 
 ### -Account
+
 The account name of the CosmosDB to access.
 
 ```yaml
@@ -75,6 +80,7 @@ Accept wildcard characters: False
 ```
 
 ### -Key
+
 The key to be used to access this CosmosDB.
 
 ```yaml
@@ -90,6 +96,7 @@ Accept wildcard characters: False
 ```
 
 ### -KeyType
+
 The type of key that will be used to access ths CosmosDB.
 
 ```yaml
@@ -105,6 +112,7 @@ Accept wildcard characters: False
 ```
 
 ### -Database
+
 The name of the database to access in the CosmosDB account.
 
 ```yaml
@@ -120,6 +128,7 @@ Accept wildcard characters: False
 ```
 
 ### -UserId
+
 This is the id of the user to get the permissions for.
 
 ```yaml
@@ -135,6 +144,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
+
 This is the id of the permission to return.
 
 ```yaml
@@ -150,9 +160,9 @@ Accept wildcard characters: False
 ```
 
 ### -TokenExpiry
+
 This is the number of seconds that the resource token for each
-permission will expire in.
-If not specified the default value
+permission will expire in. If not specified the default value
 of 3600 seconds (1 hour) is used.
 
 The minimum token expiry is 600 seconds and the maximum token
@@ -171,6 +181,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 

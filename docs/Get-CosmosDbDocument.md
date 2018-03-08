@@ -8,12 +8,14 @@ schema: 2.0.0
 # Get-CosmosDbDocument
 
 ## SYNOPSIS
+
 Return the documents for a CosmosDB database collection.
 
 ## SYNTAX
 
 ### Context (Default)
-```
+
+```powershell
 Get-CosmosDbDocument -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -CollectionId <String> [-Id <String>] [-PartitionKey <String[]>] [-MaxItemCount <Int32>]
  [-ContinuationToken <String>] [-ConsistencyLevel <String>] [-SessionToken <String>]
@@ -22,7 +24,8 @@ Get-CosmosDbDocument -Context <Context> [-Key <SecureString>] [-KeyType <String>
 ```
 
 ### Account
-```
+
+```powershell
 Get-CosmosDbDocument -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -CollectionId <String> [-Id <String>] [-PartitionKey <String[]>] [-MaxItemCount <Int32>]
  [-ContinuationToken <String>] [-ConsistencyLevel <String>] [-SessionToken <String>]
@@ -31,6 +34,7 @@ Get-CosmosDbDocument -Account <String> [-Key <SecureString>] [-KeyType <String>]
 ```
 
 ## DESCRIPTION
+
 This cmdlet will return the documents for a specified
 collection in a CosmosDB database.
 If an Id is specified then only
@@ -39,6 +43,7 @@ the specified documents will be returned.
 ## EXAMPLES
 
 ### Example 1
+
 ```powershell
 PS C:\> {{ Add example code here }}
 ```
@@ -48,6 +53,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Context
+
 This is an object containing the context information of
 the CosmosDB database that will be accessed.
 It should be created
@@ -66,6 +72,7 @@ Accept wildcard characters: False
 ```
 
 ### -Account
+
 The account name of the CosmosDB to access.
 
 ```yaml
@@ -81,6 +88,7 @@ Accept wildcard characters: False
 ```
 
 ### -Key
+
 The key to be used to access this CosmosDB.
 
 ```yaml
@@ -96,6 +104,7 @@ Accept wildcard characters: False
 ```
 
 ### -KeyType
+
 The type of key that will be used to access ths CosmosDB.
 
 ```yaml
@@ -111,6 +120,7 @@ Accept wildcard characters: False
 ```
 
 ### -Database
+
 The name of the database to access in the CosmosDB account.
 
 ```yaml
@@ -126,6 +136,7 @@ Accept wildcard characters: False
 ```
 
 ### -CollectionId
+
 This is the id of the collection to get the documents for.
 
 ```yaml
@@ -141,6 +152,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
+
 This is the id of the document to return.
 
 ```yaml
@@ -156,10 +168,10 @@ Accept wildcard characters: False
 ```
 
 ### -PartitionKey
+
 The partition key value for the document to be read.
-Must
-be included if and only if the collection is created with
-a partitionKey definition.
+Must be included if and only if the collection is created
+with a partitionKey definition.
 
 ```yaml
 Type: String[]
@@ -174,9 +186,9 @@ Accept wildcard characters: False
 ```
 
 ### -MaxItemCount
+
 An integer indicating the maximum number of items to be
-returned per page.
-Should not be set if Id is set.
+returned per page. Should not be set if Id is set.
 
 ```yaml
 Type: Int32
@@ -191,10 +203,10 @@ Accept wildcard characters: False
 ```
 
 ### -ContinuationToken
+
 A string token returned for queries and read-feed operations
 if there are more results to be read.
-Should not be set if
-Id is set.
+Should not be set if Id is set.
 
 ```yaml
 Type: String
@@ -209,10 +221,10 @@ Accept wildcard characters: False
 ```
 
 ### -ConsistencyLevel
+
 This is the consistency level override.
-The override must
-be the same or weaker than the account's configured consistency
-level.
+The override must be the same or weaker than the account's
+configured consistency level.
 Should not be set if Id is set.
 
 ```yaml
@@ -228,12 +240,11 @@ Accept wildcard characters: False
 ```
 
 ### -SessionToken
+
 A string token used with session level consistency.
-Clients
-must echo the latest read value of this header during read
-requests for session consistency.
-Should not be set if Id is
-set.
+Clients must echo the latest read value of this header during
+read requests for session consistency.
+Should not be set if Id is set.
 
 ```yaml
 Type: String
@@ -248,9 +259,9 @@ Accept wildcard characters: False
 ```
 
 ### -PartitionKeyRangeId
+
 The partition key range Id for reading data.
-Should not be set
-if Id is set.
+Should not be set if Id is set.
 
 ```yaml
 Type: String
@@ -265,9 +276,9 @@ Accept wildcard characters: False
 ```
 
 ### -Query
+
 A SQL select query to execute to select the documents.
-This
-should not be specified if Id is specified.
+This should not be specified if Id is specified.
 
 ```yaml
 Type: String
@@ -282,10 +293,10 @@ Accept wildcard characters: False
 ```
 
 ### -QueryParameters
+
 This is an array of key value pairs (Name, Value) that will be
 passed into the SQL Query.
-This should only be specified if
-Query is specified.
+This should only be specified if Query is specified.
 
 ```yaml
 Type: Hashtable[]
@@ -300,10 +311,10 @@ Accept wildcard characters: False
 ```
 
 ### -QueryEnableCrossPartition
+
 If the collection is partitioned, this must be set to True to
 allow execution across multiple partitions.
-This should only
-be specified if Query is specified.
+This should only be specified if Query is specified.
 
 ```yaml
 Type: Boolean
@@ -318,6 +329,7 @@ Accept wildcard characters: False
 ```
 
 ### -ResultHeaders
+
 This is a reference variable that will be used to return the
 hashtable that contains any headers returned by the request.
 
@@ -334,6 +346,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 

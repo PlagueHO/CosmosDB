@@ -8,21 +8,24 @@ schema: 2.0.0
 # Get-CosmosDbPermissionResourcePath
 
 ## SYNOPSIS
+
 Return the resource path for a permission object.
 
 ## SYNTAX
 
-```
+```powershell
 Get-CosmosDbPermissionResourcePath [-Database] <String> [-UserId] <String> [-Id] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This cmdlet returns the resource identifier for a
 permission object.
 
 ## EXAMPLES
 
 ### Example 1
+
 ```powershell
 PS C:\> {{ Add example code here }}
 ```
@@ -32,6 +35,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Database
+
 This is the database containing the permission.
 
 ```yaml
@@ -47,6 +51,7 @@ Accept wildcard characters: False
 ```
 
 ### -UserId
+
 This is the Id of the user containing the permission.
 
 ```yaml
@@ -62,6 +67,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
+
 This is the Id of the permission.
 
 ```yaml
@@ -77,6 +83,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 

@@ -8,23 +8,27 @@ schema: 2.0.0
 # Get-CosmosDbCollection
 
 ## SYNOPSIS
+
 Return the collections in a CosmosDB database.
 
 ## SYNTAX
 
 ### Context (Default)
-```
+
+```powershell
 Get-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  [-Id <String>] [<CommonParameters>]
 ```
 
 ### Account
-```
+
+```powershell
 Get-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  [-Id <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This cmdlet will return the collections in a CosmosDB database.
 If the Id is specified then only the collection matching this
 Id will be returned, otherwise all collections will be returned.
@@ -32,6 +36,7 @@ Id will be returned, otherwise all collections will be returned.
 ## EXAMPLES
 
 ### Example 1
+
 ```powershell
 PS C:\> {{ Add example code here }}
 ```
@@ -41,6 +46,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Context
+
 This is an object containing the context information of
 the CosmosDB database that will be accessed.
 It should be created
@@ -59,6 +65,7 @@ Accept wildcard characters: False
 ```
 
 ### -Account
+
 The account name of the CosmosDB to access.
 
 ```yaml
@@ -74,6 +81,7 @@ Accept wildcard characters: False
 ```
 
 ### -Key
+
 The key to be used to access this CosmosDB.
 
 ```yaml
@@ -89,6 +97,7 @@ Accept wildcard characters: False
 ```
 
 ### -KeyType
+
 The type of key that will be used to access ths CosmosDB.
 
 ```yaml
@@ -104,6 +113,7 @@ Accept wildcard characters: False
 ```
 
 ### -Database
+
 The name of the database to access in the CosmosDB account.
 
 ```yaml
@@ -119,6 +129,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
+
 This is the id of the collection to get.
 If not specified
 all collections in the database will be returned.
@@ -136,6 +147,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 

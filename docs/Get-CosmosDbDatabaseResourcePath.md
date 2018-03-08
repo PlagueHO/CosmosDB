@@ -8,21 +8,24 @@ schema: 2.0.0
 # Get-CosmosDbDatabaseResourcePath
 
 ## SYNOPSIS
+
 Return the resource path for a database object.
 
 ## SYNTAX
 
-```
+```powershell
 Get-CosmosDbDatabaseResourcePath [-Id] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This cmdlet returns the resource identifier for a database
 object.
 
 ## EXAMPLES
 
 ### Example 1
+
 ```powershell
 PS C:\> {{ Add example code here }}
 ```
@@ -32,6 +35,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Id
+
 This is the Id of the database.
 
 ```yaml
@@ -47,6 +51,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
