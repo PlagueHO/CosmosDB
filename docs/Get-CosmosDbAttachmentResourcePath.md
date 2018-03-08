@@ -28,10 +28,11 @@ attachment object.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+Get-CosmosDbAttachmentResourcePath -Database 'MyDatabase' -CollectionId 'MyNewCollection' -DocumentId 'ac12345' -Id 'Image_1'
 ```
 
-{{ Add example description here }}
+Generate a resource path for attachment 'Image_1' in document 'ac12345'
+in collection 'MyNewCollection' in database 'MyDatabase'.
 
 ## PARAMETERS
 

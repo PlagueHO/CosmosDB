@@ -29,20 +29,27 @@ Get-CosmosDbAttachment -Account <String> [-Key <SecureString>] [-KeyType <String
 
 ## DESCRIPTION
 
-This cmdlet will return the attachments for a specified document
-in a CosmosDB database.
-If an Id is specified then only the
-specified permission will be returned.
+This cmdlet will return the attachments for a specified document in
+a CosmosDB database.
+If an Id is specified then only the specified permission will be returned.
 
 ## EXAMPLES
 
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+Get-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId 'ac12345'
 ```
 
-{{ Add example description here }}
+Get all attachments for a document in a collection.
+
+### Example 2
+
+```powershell
+Get-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId 'ac12345' -Id 'image_1'
+```
+
+Get an attachment by Id for a document in a collection.
 
 ## PARAMETERS
 
