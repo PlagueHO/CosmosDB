@@ -38,10 +38,10 @@ This cmdlet will update an offer resource in CosmosDB.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+Get-CosmosDbOffer -Context $cosmosDbContext -Id 'lyiu' | Set-CosmosDbOffer -Context $cosmosDbContext -OfferThroughput 1000 -OfferIsRUPerMinuteThroughputEnabled $true
 ```
 
-{{ Add example description here }}
+Update an existing V2 offer with the Id 'lyiu' to set a different throughput.
 
 ## PARAMETERS
 

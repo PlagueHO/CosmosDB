@@ -181,6 +181,7 @@ March 8, 2018
 - Added cmdlet help examples for utils.
 - Converted help to MAML file CosmosDB-help.xml.
 - Updated AppVeyor build to generate MAML help.
+- Added more README.MD badges.
 
 ## What is New in CosmosDB 2.0.5.216
 

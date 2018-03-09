@@ -465,7 +465,7 @@ Update an existing trigger for a collection in the database to execute before
 all operations:
 
 ```powershell
-$Body = @'
+$body = @'
 function updateMetadata() {
     var context = getContext();
     var collection = context.getCollection();
@@ -496,7 +496,7 @@ function updateMetadata() {
     }
 }
 '@
-New-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'MyTrigger' -Body $Body -TriggerOperation All -TriggerType Pre
+Set-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'MyTrigger' -Body $body -TriggerOperation All -TriggerType Pre
 ```
 
 Remove a trigger for a collection from the database:
