@@ -1,16 +1,3 @@
-<#
-.SYNOPSIS
-    Set the custom Cosmos DB stored procedure types to the
-    stored procedure returned by an API call.
-
-.DESCRIPTION
-    This function applies the custom types to the stored
-    procedure returned by an API call.
-
-.PARAMETER StoredProcedure
-    This is the stored procedure that is returned by a
-    stored procedure API call.
-#>
 function Set-CosmosDbStoredProcedureType
 {
     [CmdletBinding()]
@@ -28,23 +15,6 @@ function Set-CosmosDbStoredProcedureType
     return $StoredProcedure
 }
 
-<#
-.SYNOPSIS
-    Return the resource path for a stored procedure object.
-
-.DESCRIPTION
-    This cmdlet returns the resource identifier for a
-    stored procedure object.
-
-.PARAMETER Database
-    This is the database containing the stored procedure.
-
-.PARAMETER CollectionId
-    This is the Id of the collection containing the stored procedure.
-
-.PARAMETER Id
-    This is the Id of the stored procedure.
-#>
 function Get-CosmosDbStoredProcedureResourcePath
 {
     [CmdletBinding()]
@@ -70,38 +40,6 @@ function Get-CosmosDbStoredProcedureResourcePath
     return ('dbs/{0}/colls/{1}/sprocs/{2}' -f $Database, $CollectionId, $Id)
 }
 
-<#
-.SYNOPSIS
-    Return the stored procedures for a CosmosDB database collection.
-
-.DESCRIPTION
-    This cmdlet will return the stored procedures for a specified
-    collection in a CosmosDB database. If an Id is specified then only
-    the specified stored procedures will be returned.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be accessed. It should be created
-    by `New-CosmosDbContext`.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Database
-    The name of the database to access in the CosmosDB account.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER CollectionId
-    This is the id of the collection to get the stored procedure for.
-
-.PARAMETER Id
-    This is the id of the stored procedures to return.
-#>
 function Get-CosmosDbStoredProcedure
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -174,42 +112,6 @@ function Get-CosmosDbStoredProcedure
     }
 }
 
-<#
-.SYNOPSIS
-    Execute a new stored procedure for a collection in a CosmosDB database.
-
-.DESCRIPTION
-    This cmdlet will execute a stored procedure contained in a collection
-    in a CosmosDB.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbContext`.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Database
-    The name of the database to access in the CosmosDB account.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER CollectionId
-    This is the Id of the collection that contains the stored procedure
-    to execute.
-
-.PARAMETER Id
-    This is the Id of the stored procedure to execute.
-
-.PARAMETER StoredProcedureParameters
-    This is an array of strings containing the parameters to pass to
-    the stored procedure.
-#>
 function Invoke-CosmosDbStoredProcedure
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -281,39 +183,6 @@ function Invoke-CosmosDbStoredProcedure
         -Body $body
 }
 
-<#
-.SYNOPSIS
-    Create a new stored procedure for a collection in a CosmosDB database.
-
-.DESCRIPTION
-    This cmdlet will create a stored procedure for a collection in a CosmosDB.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbContext`.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Database
-    The name of the database to access in the CosmosDB account.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER CollectionId
-    This is the Id of the collection to create the stored procedure for.
-
-.PARAMETER Id
-    This is the Id of the stored procedure to create.
-
-.PARAMETER StoredProcedureBody
-    This is the body of the stored procedure.
-#>
 function New-CosmosDbStoredProcedure
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -382,36 +251,6 @@ function New-CosmosDbStoredProcedure
     }
 }
 
-<#
-.SYNOPSIS
-    Delete a stored procedure from a CosmosDB collection.
-
-.DESCRIPTION
-    This cmdlet will delete a stored procedure in a CosmosDB from a collection.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbContext`.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Database
-    The name of the database to access in the CosmosDB account.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER CollectionId
-    This is the Id of the collection to delete the stored procedure from.
-
-.PARAMETER Id
-    This is the Id of the stored procedure to delete.
-#>
 function Remove-CosmosDbStoredProcedure
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -465,40 +304,6 @@ function Remove-CosmosDbStoredProcedure
         -ResourcePath $resourcePath
 }
 
-<#
-.SYNOPSIS
-    Update a stored procedure from a CosmosDB collection.
-
-.DESCRIPTION
-    This cmdlet will update an existing stored procedure in a CosmosDB
-    collection.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbContext`.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Database
-    The name of the database to access in the CosmosDB account.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER CollectionId
-    This is the Id of the collection to update the stored procedure for.
-
-.PARAMETER Id
-    This is the Id of the stored procedure to update.
-
-.PARAMETER StoredProcedureBody
-    This is the body of the stored procedure.
-#>
 function Set-CosmosDbStoredProcedure
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]

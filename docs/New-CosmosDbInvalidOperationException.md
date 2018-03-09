@@ -5,33 +5,46 @@ online version:
 schema: 2.0.0
 ---
 
-# New-InvalidOperationException
+# New-CosmosDbInvalidOperationException
 
 ## SYNOPSIS
-Creates and throws an invalid operation exception
+
+Creates and throws an invalid operation exception.
 
 ## SYNTAX
 
-```
-New-InvalidOperationException [[-Message] <String>] [[-ErrorRecord] <ErrorRecord>] [<CommonParameters>]
+```powershell
+New-CosmosDbInvalidOperationException [[-Message] <String>] [[-ErrorRecord] <ErrorRecord>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+
+Creates and throws an invalid operation exception.
 
 ## EXAMPLES
 
-### Example 1
+### EXAMPLE 1
+
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> New-CosmosDbInvalidOperationException -Message 'Invalid operation'
 ```
 
-{{ Add example description here }}
+Raise an invalid operation exception.
+
+### EXAMPLE 2
+
+```powershell
+PS C:\>New-CosmosDbInvalidOperationException -Message 'Invalid operation' -ErrorRecord $errorRecord
+```
+
+Raise an invalid operation exception and attach the PowerShell
+automation error record to it.
 
 ## PARAMETERS
 
 ### -Message
-The message explaining why this error is being thrown
+
+The message explaining why this error is being thrown.
 
 ```yaml
 Type: String
@@ -46,7 +59,9 @@ Accept wildcard characters: False
 ```
 
 ### -ErrorRecord
-The error record containing the exception that is causing this terminating error
+
+The error record containing the exception that is
+causing this terminating error.
 
 ```yaml
 Type: ErrorRecord
@@ -61,6 +76,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 

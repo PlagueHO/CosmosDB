@@ -8,31 +8,35 @@ schema: 2.0.0
 # Set-CosmosDbCollectionType
 
 ## SYNOPSIS
+
 Set the custom Cosmos DB Collection types to the collection
 returned by an API call.
 
 ## SYNTAX
 
-```
+```powershell
 Set-CosmosDbCollectionType [-Collection] <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This function applies the custom types to the collection returned
 by an API call.
 
 ## EXAMPLES
 
 ### Example 1
+
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-CosmosDbCollectionType -Collection $collection
 ```
 
-{{ Add example description here }}
+Apply the collection data type to the object provided collection.
 
 ## PARAMETERS
 
 ### -Collection
+
 This is the collection that is returned by a collection API call.
 
 ```yaml
@@ -48,6 +52,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 

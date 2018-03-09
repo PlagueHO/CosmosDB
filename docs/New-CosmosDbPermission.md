@@ -8,41 +8,47 @@ schema: 2.0.0
 # New-CosmosDbPermission
 
 ## SYNOPSIS
+
 Create a new permission for a user in a CosmosDB database.
 
 ## SYNTAX
 
 ### Context (Default)
-```
+
+```powershell
 New-CosmosDbPermission -Context <Context> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
  -UserId <String> -Id <String> -Resource <String> [-PermissionMode <String>] [<CommonParameters>]
 ```
 
 ### Account
-```
+
+```powershell
 New-CosmosDbPermission -Account <String> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
  -UserId <String> -Id <String> -Resource <String> [-PermissionMode <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This cmdlet will create a permission for a user in a CosmosDB.
 
 ## EXAMPLES
 
 ### Example 1
+
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> $collectionId = Get-CosmosDbCollectionResourcePath -Database 'MyDatabase' -Id 'MyNewCollection'
+PS C:\> New-CosmosDbPermission -Context $cosmosDbContext -UserId 'MyApplication' -Id 'r_mynewcollection' -Resource $collectionId -PermissionMode Read
 ```
 
-{{ Add example description here }}
+Create a 'read' permission to the 'MyNewCollection' collection in a database
+for the user 'MyApplication'.
 
 ## PARAMETERS
 
 ### -Context
-This is an object containing the context information of
-the CosmosDB database that will be deleted.
-It should be created
-by \`New-CosmosDbContext\`.
+
+This is an object containing the context information of the CosmosDB database
+that will be deleted. It should be created by \`New-CosmosDbContext\`.
 
 ```yaml
 Type: Context
@@ -57,6 +63,7 @@ Accept wildcard characters: False
 ```
 
 ### -Account
+
 The account name of the CosmosDB to access.
 
 ```yaml
@@ -72,6 +79,7 @@ Accept wildcard characters: False
 ```
 
 ### -KeyType
+
 The type of key that will be used to access ths CosmosDB.
 
 ```yaml
@@ -87,6 +95,7 @@ Accept wildcard characters: False
 ```
 
 ### -Key
+
 The key to be used to access this CosmosDB.
 
 ```yaml
@@ -102,6 +111,7 @@ Accept wildcard characters: False
 ```
 
 ### -Database
+
 The name of the database to access in the CosmosDB account.
 
 ```yaml
@@ -117,6 +127,7 @@ Accept wildcard characters: False
 ```
 
 ### -UserId
+
 This is the id of the user to create the permissions for.
 
 ```yaml
@@ -132,6 +143,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
+
 This is the Id of the permission to create.
 
 ```yaml
@@ -147,8 +159,8 @@ Accept wildcard characters: False
 ```
 
 ### -Resource
-This is the full path to the resource to grant permission
-to the user.
+
+This is the full path to the resource to grant permission to the user.
 
 ```yaml
 Type: String
@@ -163,7 +175,8 @@ Accept wildcard characters: False
 ```
 
 ### -PermissionMode
-{{Fill PermissionMode Description}}
+
+This is the type of the permission to create.
 
 ```yaml
 Type: String
@@ -178,6 +191,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 

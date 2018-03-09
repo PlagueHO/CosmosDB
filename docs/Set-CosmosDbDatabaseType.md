@@ -8,31 +8,35 @@ schema: 2.0.0
 # Set-CosmosDbDatabaseType
 
 ## SYNOPSIS
+
 Set the custom Cosmos DB Database types to the database
 returned by an API call.
 
 ## SYNTAX
 
-```
+```powershell
 Set-CosmosDbDatabaseType [-Database] <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This function applies the custom types to the database returned
 by an API call.
 
 ## EXAMPLES
 
 ### Example 1
+
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-CosmosDbDatabaseType -Database $database
 ```
 
-{{ Add example description here }}
+Apply the database data type to the object provided database.
 
 ## PARAMETERS
 
 ### -Database
+
 This is the database that is returned by a user API call.
 
 ```yaml
@@ -48,6 +52,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 

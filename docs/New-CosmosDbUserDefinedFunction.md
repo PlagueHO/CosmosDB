@@ -8,43 +8,58 @@ schema: 2.0.0
 # New-CosmosDbUserDefinedFunction
 
 ## SYNOPSIS
+
 Create a new user defined function for a collection in a CosmosDB database.
 
 ## SYNTAX
 
 ### Context (Default)
-```
+
+```powershell
 New-CosmosDbUserDefinedFunction -Context <Context> [-KeyType <String>] [-Key <SecureString>]
  [-Database <String>] -CollectionId <String> -Id <String> -UserDefinedFunctionBody <String>
  [<CommonParameters>]
 ```
 
 ### Account
-```
+
+```powershell
 New-CosmosDbUserDefinedFunction -Account <String> [-KeyType <String>] [-Key <SecureString>]
  [-Database <String>] -CollectionId <String> -Id <String> -UserDefinedFunctionBody <String>
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This cmdlet will create a user defined function for a collection in a CosmosDB.
 
 ## EXAMPLES
 
 ### Example 1
+
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> $body = @'
+function tax(income) {
+    if(income == undefined) throw 'no input';
+    if (income < 1000)
+        return income * 0.1;
+    else if (income < 10000)
+        return income * 0.2;
+    else
+        return income * 0.4;
+}
+'@
+PS C:\> New-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'udfTax' -UserDefinedFunctionBody $body
 ```
 
-{{ Add example description here }}
+Create a user defined function 'udfTax' for a collection in the database.
 
 ## PARAMETERS
 
 ### -Context
-This is an object containing the context information of
-the CosmosDB database that will be deleted.
-It should be created
-by \`New-CosmosDbContext\`.
+
+This is an object containing the context information of the CosmosDB database
+that will be deleted. It should be created by \`New-CosmosDbContext\`.
 
 ```yaml
 Type: Context
@@ -59,6 +74,7 @@ Accept wildcard characters: False
 ```
 
 ### -Account
+
 The account name of the CosmosDB to access.
 
 ```yaml
@@ -74,6 +90,7 @@ Accept wildcard characters: False
 ```
 
 ### -KeyType
+
 The type of key that will be used to access ths CosmosDB.
 
 ```yaml
@@ -89,6 +106,7 @@ Accept wildcard characters: False
 ```
 
 ### -Key
+
 The key to be used to access this CosmosDB.
 
 ```yaml
@@ -104,6 +122,7 @@ Accept wildcard characters: False
 ```
 
 ### -Database
+
 The name of the database to access in the CosmosDB account.
 
 ```yaml
@@ -119,6 +138,7 @@ Accept wildcard characters: False
 ```
 
 ### -CollectionId
+
 This is the Id of the collection to create the user defined function for.
 
 ```yaml
@@ -134,6 +154,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
+
 This is the Id of the user defined function to create.
 
 ```yaml
@@ -149,6 +170,7 @@ Accept wildcard characters: False
 ```
 
 ### -UserDefinedFunctionBody
+
 This is the body of the user defined function.
 
 ```yaml
@@ -164,6 +186,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 

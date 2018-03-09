@@ -8,44 +8,54 @@ schema: 2.0.0
 # Set-CosmosDbDocument
 
 ## SYNOPSIS
+
 Update a document from a CosmosDB collection.
 
 ## SYNTAX
 
 ### Context (Default)
-```
+
+```powershell
 Set-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString>] -CollectionId <String>
  -Id <String> -DocumentBody <String> [-IndexingDirective <String>] [-PartitionKey <String>]
  [<CommonParameters>]
 ```
 
 ### Account
-```
+
+```powershell
 Set-CosmosDbDocument -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  -CollectionId <String> -Id <String> -DocumentBody <String> [-IndexingDirective <String>]
  [-PartitionKey <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-This cmdlet will update an existing document in a CosmosDB
-collection.
+
+This cmdlet will update an existing document in a CosmosDB collection.
 
 ## EXAMPLES
 
 ### Example 1
+
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> $newDocument = @"
+{
+    `"id`": `"ac12345`",
+    `"content`": `"New string`",
+    `"more`": `"Another new string`"
+}
+"@
+PS C:\> Set-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'ac12345' -DocumentBody $newDocument
 ```
 
-{{ Add example description here }}
+Replace the content of a document in a collection in the database.
 
 ## PARAMETERS
 
 ### -Context
-This is an object containing the context information of
-the CosmosDB database that will be deleted.
-It should be created
-by \`New-CosmosDbContext\`.
+
+This is an object containing the context information of the CosmosDB database
+that will be deleted. It should be created by \`New-CosmosDbContext\`.
 
 ```yaml
 Type: Context

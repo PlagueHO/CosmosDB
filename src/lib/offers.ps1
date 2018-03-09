@@ -1,15 +1,3 @@
-<#
-.SYNOPSIS
-    Set the custom Cosmos DB Offer types to the offer
-    returned by an API call.
-
-.DESCRIPTION
-    This function applies the custom types to the offer returned
-    by an API call.
-
-.PARAMETER Offer
-    This is the offer that is returned by a user API call.
-#>
 function Set-CosmosDbOfferType
 {
     [CmdletBinding()]
@@ -27,17 +15,6 @@ function Set-CosmosDbOfferType
     return $Offer
 }
 
-<#
-.SYNOPSIS
-    Return the resource path for a offer object.
-
-.DESCRIPTION
-    This cmdlet returns the resource identifier for a offer
-    object.
-
-.PARAMETER Id
-    This is the Id of the offer.
-#>
 function Get-CosmosDbOfferResourcePath
 {
     [CmdletBinding()]
@@ -53,38 +30,6 @@ function Get-CosmosDbOfferResourcePath
     return ('offers/{0}' -f $Id)
 }
 
-<#
-.SYNOPSIS
-    Return the offers in a CosmosDB account.
-
-.DESCRIPTION
-    This cmdlet will return the offers in a CosmosDB account.
-    If the Id is specified then only the offer matching this
-    Id will be returned, otherwise all offers will be returned.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB account that will be accessed. It should be created
-    by `New-CosmosDbContext`.
-
-    If the context contains a database it will be ignored.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER Id
-    This is the Id of the offer to get.
-
-.PARAMETER Query
-    A SQL select query to execute to select the offers. This
-    should not be specified if Id is specified.
-#>
 function Get-CosmosDbOffer
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -172,47 +117,6 @@ function Get-CosmosDbOffer
     }
 }
 
-<#
-.SYNOPSIS
-    Update an existing offer in a CosmosDB database.
-
-.DESCRIPTION
-    This cmdlet will update an offer resource in CosmosDB.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbContext`.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER Id
-    The offer Id of the offer to set.
-
-.PARAMETER OfferVersion
-    This can be V1 for pre-defined throughput levels and V2 for user-defined
-    throughput levels.
-
-.PARAMETER OfferType
-    This is a user settable property, which must be set to S1, S2, or S3 for
-    pre-defined performance levels, and Invalid for user-defined performance
-    levels.
-
-.PARAMETER OfferThroughput
-    This contains the throughput of the collection. Applicable for V2 offers
-    only.
-
-.PARAMETER OfferIsRUPerMinuteThroughputEnabled
-    The offer is RU per minute throughput enabled. Applicable for V2 offers
-    only.
-#>
 function Set-CosmosDbOffer
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -229,11 +133,6 @@ function Set-CosmosDbOffer
         [ValidateNotNullOrEmpty()]
         [System.String]
         $Account,
-
-        [Parameter()]
-        [ValidateNotNullOrEmpty()]
-        [System.String]
-        $Database,
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
