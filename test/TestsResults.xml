@@ -1,0 +1,932 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="283" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2018-03-09" time="15:30:17">
+  <environment cwd="C:\Users\si557856\source\github\CosmosDB" os-version="10.0.14393" clr-version="Unknown" machine-name="GR059600" user-domain="LDSTAT01" nunit-version="2.5.8.0" platform="Microsoft Windows 10 Enterprise|C:\Windows|\Device\Harddisk0\Partition2" user="si557856" />
+  <culture-info current-culture="en-NZ" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="19.8139" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.attachments.Tests.ps1" executed="True" result="Success" success="True" time="4.0902" asserts="0" description="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.attachments.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Get-CosmosDbAttachmentResourcePath" executed="True" result="Success" success="True" time="3.024" asserts="0" description="Get-CosmosDbAttachmentResourcePath">
+            <results>
+              <test-suite type="TestFixture" name="When called with all parameters" executed="True" result="Success" success="True" time="0.0794" asserts="0" description="When called with all parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbAttachmentResourcePath.When called with all parameters.Should not throw exception" time="0.0618" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbAttachmentResourcePath.When called with all parameters.Should return expected result" time="0.0176" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbAttachmentResourcePath.Should exist" time="2.9446" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Get-CosmosDbAttachment" executed="True" result="Success" success="True" time="0.3741" asserts="0" description="Get-CosmosDbAttachment">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and no id" executed="True" result="Success" success="True" time="0.138" asserts="0" description="When called with context parameter and no id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbAttachment.When called with context parameter and no id.Should not throw exception" time="0.0889" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbAttachment.When called with context parameter and no id.Should return expected result" time="0.0287" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbAttachment.When called with context parameter and no id.Should call expected mocks" time="0.0204" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.166" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbAttachment.When called with context parameter and an id.Should not throw exception" time="0.1125" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbAttachment.When called with context parameter and an id.Should return expected result" time="0.0208" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbAttachment.When called with context parameter and an id.Should call expected mocks" time="0.0326" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbAttachment.Should exist" time="0.0702" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="New-CosmosDbAttachment" executed="True" result="Success" success="True" time="0.2373" asserts="0" description="New-CosmosDbAttachment">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.1494" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbAttachment.When called with context parameter and an id.Should not throw exception" time="0.106" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbAttachment.When called with context parameter and an id.Should return expected result" time="0.0182" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="New-CosmosDbAttachment.When called with context parameter and an id.Should call expected mocks" time="0.0253" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="New-CosmosDbAttachment.Should exist" time="0.0879" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Remove-CosmosDbAttachment" executed="True" result="Success" success="True" time="0.2416" asserts="0" description="Remove-CosmosDbAttachment">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.1451" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="Remove-CosmosDbAttachment.When called with context parameter and an id.Should not throw exception" time="0.1163" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Remove-CosmosDbAttachment.When called with context parameter and an id.Should call expected mocks" time="0.0287" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Remove-CosmosDbAttachment.Should exist" time="0.0965" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Set-CosmosDbAttachment" executed="True" result="Success" success="True" time="0.2132" asserts="0" description="Set-CosmosDbAttachment">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id" executed="True" result="Success" success="True" time="0.117" asserts="0" description="When called with context parameter and an Id">
+                <results>
+                  <test-case description="Should not throw exception" name="Set-CosmosDbAttachment.When called with context parameter and an Id.Should not throw exception" time="0.0755" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Set-CosmosDbAttachment.When called with context parameter and an Id.Should return expected result" time="0.0172" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Set-CosmosDbAttachment.When called with context parameter and an Id.Should call expected mocks" time="0.0242" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Set-CosmosDbAttachment.Should exist" time="0.0962" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.collections.Tests.ps1" executed="True" result="Success" success="True" time="2.7139" asserts="0" description="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.collections.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Get-CosmosDbCollectionResourcePath" executed="True" result="Success" success="True" time="0.4559" asserts="0" description="Get-CosmosDbCollectionResourcePath">
+            <results>
+              <test-suite type="TestFixture" name="When called with all parameters" executed="True" result="Success" success="True" time="0.0852" asserts="0" description="When called with all parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbCollectionResourcePath.When called with all parameters.Should not throw exception" time="0.065" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbCollectionResourcePath.When called with all parameters.Should return expected result" time="0.0202" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbCollectionResourcePath.Should exist" time="0.3706" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="New-CosmosDbCollectionIncludedPathIndex" executed="True" result="Success" success="True" time="0.1627" asserts="0" description="New-CosmosDbCollectionIncludedPathIndex">
+            <results>
+              <test-suite type="TestFixture" name="When called with all parameters" executed="True" result="Success" success="True" time="0.0838" asserts="0" description="When called with all parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbCollectionIncludedPathIndex.When called with all parameters.Should not throw exception" time="0.0552" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbCollectionIncludedPathIndex.When called with all parameters.Should return expected result" time="0.0286" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="New-CosmosDbCollectionIncludedPathIndex.Should exist" time="0.0789" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="New-CosmosDbCollectionIncludedPath" executed="True" result="Success" success="True" time="0.1657" asserts="0" description="New-CosmosDbCollectionIncludedPath">
+            <results>
+              <test-suite type="TestFixture" name="When called with all parameters" executed="True" result="Success" success="True" time="0.0905" asserts="0" description="When called with all parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbCollectionIncludedPath.When called with all parameters.Should not throw exception" time="0.0543" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbCollectionIncludedPath.When called with all parameters.Should return expected result" time="0.0363" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="New-CosmosDbCollectionIncludedPath.Should exist" time="0.0752" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="New-CosmosDbCollectionExcludedPath" executed="True" result="Success" success="True" time="0.1898" asserts="0" description="New-CosmosDbCollectionExcludedPath">
+            <results>
+              <test-suite type="TestFixture" name="When called with all parameters" executed="True" result="Success" success="True" time="0.0814" asserts="0" description="When called with all parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbCollectionExcludedPath.When called with all parameters.Should not throw exception" time="0.0525" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbCollectionExcludedPath.When called with all parameters.Should return expected result" time="0.0289" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="New-CosmosDbCollectionExcludedPath.Should exist" time="0.1084" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="New-CosmosDbCollectionIndexingPolicy" executed="True" result="Success" success="True" time="0.1782" asserts="0" description="New-CosmosDbCollectionIndexingPolicy">
+            <results>
+              <test-suite type="TestFixture" name="When called with all parameters" executed="True" result="Success" success="True" time="0.09" asserts="0" description="When called with all parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbCollectionIndexingPolicy.When called with all parameters.Should not throw exception" time="0.0573" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbCollectionIndexingPolicy.When called with all parameters.Should return expected result" time="0.0327" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="New-CosmosDbCollectionIndexingPolicy.Should exist" time="0.0882" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Get-CosmosDbCollection" executed="True" result="Success" success="True" time="0.4651" asserts="0" description="Get-CosmosDbCollection">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and no Id" executed="True" result="Success" success="True" time="0.2021" asserts="0" description="When called with context parameter and no Id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbCollection.When called with context parameter and no Id.Should not throw exception" time="0.1364" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbCollection.When called with context parameter and no Id.Should return expected result" time="0.0339" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbCollection.When called with context parameter and no Id.Should call expected mocks" time="0.0318" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id" executed="True" result="Success" success="True" time="0.1507" asserts="0" description="When called with context parameter and an Id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbCollection.When called with context parameter and an Id.Should not throw exception" time="0.0998" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbCollection.When called with context parameter and an Id.Should return expected result" time="0.0244" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbCollection.When called with context parameter and an Id.Should call expected mocks" time="0.0266" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbCollection.Should exist" time="0.1123" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="New-CosmosDbCollection" executed="True" result="Success" success="True" time="0.9196" asserts="0" description="New-CosmosDbCollection">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id" executed="True" result="Success" success="True" time="0.1746" asserts="0" description="When called with context parameter and an Id">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbCollection.When called with context parameter and an Id.Should not throw exception" time="0.1068" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbCollection.When called with context parameter and an Id.Should return expected result" time="0.043" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="New-CosmosDbCollection.When called with context parameter and an Id.Should call expected mocks" time="0.0249" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id and OfferThroughput parameter" executed="True" result="Success" success="True" time="0.164" asserts="0" description="When called with context parameter and an Id and OfferThroughput parameter">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbCollection.When called with context parameter and an Id and OfferThroughput parameter.Should not throw exception" time="0.1104" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbCollection.When called with context parameter and an Id and OfferThroughput parameter.Should return expected result" time="0.0225" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="New-CosmosDbCollection.When called with context parameter and an Id and OfferThroughput parameter.Should call expected mocks" time="0.0311" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id and OfferType parameter" executed="True" result="Success" success="True" time="0.144" asserts="0" description="When called with context parameter and an Id and OfferType parameter">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbCollection.When called with context parameter and an Id and OfferType parameter.Should not throw exception" time="0.096" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbCollection.When called with context parameter and an Id and OfferType parameter.Should return expected result" time="0.0227" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="New-CosmosDbCollection.When called with context parameter and an Id and OfferType parameter.Should call expected mocks" time="0.0253" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id and PartitionKey parameter" executed="True" result="Success" success="True" time="0.1731" asserts="0" description="When called with context parameter and an Id and PartitionKey parameter">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbCollection.When called with context parameter and an Id and PartitionKey parameter.Should not throw exception" time="0.111" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbCollection.When called with context parameter and an Id and PartitionKey parameter.Should return expected result" time="0.0325" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="New-CosmosDbCollection.When called with context parameter and an Id and PartitionKey parameter.Should call expected mocks" time="0.0295" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id and OfferType and OfferThrougput" executed="True" result="Success" success="True" time="0.1702" asserts="0" description="When called with context parameter and an Id and OfferType and OfferThrougput">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbCollection.When called with context parameter and an Id and OfferType and OfferThrougput.Should not throw exception" time="0.146" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="New-CosmosDbCollection.When called with context parameter and an Id and OfferType and OfferThrougput.Should call expected mocks" time="0.0242" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="New-CosmosDbCollection.Should exist" time="0.0937" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Remove-CosmosDbCollection" executed="True" result="Success" success="True" time="0.177" asserts="0" description="Remove-CosmosDbCollection">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id" executed="True" result="Success" success="True" time="0.0914" asserts="0" description="When called with context parameter and an Id">
+                <results>
+                  <test-case description="Should not throw exception" name="Remove-CosmosDbCollection.When called with context parameter and an Id.Should not throw exception" time="0.072" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Remove-CosmosDbCollection.When called with context parameter and an Id.Should call expected mocks" time="0.0195" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Remove-CosmosDbCollection.Should exist" time="0.0855" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.databases.Tests.ps1" executed="True" result="Success" success="True" time="1.0697" asserts="0" description="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.databases.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Get-CosmosDbDatabaseResourcePath" executed="True" result="Success" success="True" time="0.3927" asserts="0" description="Get-CosmosDbDatabaseResourcePath">
+            <results>
+              <test-suite type="TestFixture" name="When called with all parameters" executed="True" result="Success" success="True" time="0.0741" asserts="0" description="When called with all parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbDatabaseResourcePath.When called with all parameters.Should not throw exception" time="0.0554" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbDatabaseResourcePath.When called with all parameters.Should return expected result" time="0.0187" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbDatabaseResourcePath.Should exist" time="0.3186" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Get-CosmosDbDatabase" executed="True" result="Success" success="True" time="0.3235" asserts="0" description="Get-CosmosDbDatabase">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and no Id" executed="True" result="Success" success="True" time="0.1263" asserts="0" description="When called with context parameter and no Id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbDatabase.When called with context parameter and no Id.Should not throw exception" time="0.0829" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbDatabase.When called with context parameter and no Id.Should return expected result" time="0.02" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbDatabase.When called with context parameter and no Id.Should call expected mocks" time="0.0233" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id" executed="True" result="Success" success="True" time="0.1298" asserts="0" description="When called with context parameter and an Id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbDatabase.When called with context parameter and an Id.Should not throw exception" time="0.0881" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbDatabase.When called with context parameter and an Id.Should return expected result" time="0.0169" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbDatabase.When called with context parameter and an Id.Should call expected mocks" time="0.0248" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbDatabase.Should exist" time="0.0674" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="New-CosmosDbDatabase" executed="True" result="Success" success="True" time="0.1866" asserts="0" description="New-CosmosDbDatabase">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id" executed="True" result="Success" success="True" time="0.1124" asserts="0" description="When called with context parameter and an Id">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbDatabase.When called with context parameter and an Id.Should not throw exception" time="0.074" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbDatabase.When called with context parameter and an Id.Should return expected result" time="0.0145" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="New-CosmosDbDatabase.When called with context parameter and an Id.Should call expected mocks" time="0.0238" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="New-CosmosDbDatabase.Should exist" time="0.0742" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Remove-CosmosDbDatabase" executed="True" result="Success" success="True" time="0.167" asserts="0" description="Remove-CosmosDbDatabase">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id" executed="True" result="Success" success="True" time="0.0944" asserts="0" description="When called with context parameter and an Id">
+                <results>
+                  <test-case description="Should not throw exception" name="Remove-CosmosDbDatabase.When called with context parameter and an Id.Should not throw exception" time="0.0751" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Remove-CosmosDbDatabase.When called with context parameter and an Id.Should call expected mocks" time="0.0193" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Remove-CosmosDbDatabase.Should exist" time="0.0726" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.documents.Tests.ps1" executed="True" result="Success" success="True" time="1.8716" asserts="0" description="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.documents.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Get-CosmosDbDocumentResourcePath" executed="True" result="Success" success="True" time="0.3819" asserts="0" description="Get-CosmosDbDocumentResourcePath">
+            <results>
+              <test-suite type="TestFixture" name="When called with all parameters" executed="True" result="Success" success="True" time="0.0736" asserts="0" description="When called with all parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbDocumentResourcePath.When called with all parameters.Should not throw exception" time="0.0577" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbDocumentResourcePath.When called with all parameters.Should return expected result" time="0.0159" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbDocumentResourcePath.Should exist" time="0.3083" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Get-CosmosDbDocument" executed="True" result="Success" success="True" time="0.6048" asserts="0" description="Get-CosmosDbDocument">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and no Id but with header parameters" executed="True" result="Success" success="True" time="0.1386" asserts="0" description="When called with context parameter and no Id but with header parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbDocument.When called with context parameter and no Id but with header parameters.Should not throw exception" time="0.0963" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbDocument.When called with context parameter and no Id but with header parameters.Should return expected result" time="0.0201" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbDocument.When called with context parameter and no Id but with header parameters.Should call expected mocks" time="0.0222" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and no Id with headers returned" executed="True" result="Success" success="True" time="0.1449" asserts="0" description="When called with context parameter and no Id with headers returned">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbDocument.When called with context parameter and no Id with headers returned.Should not throw exception" time="0.0936" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbDocument.When called with context parameter and no Id with headers returned.Should return expected result" time="0.0285" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbDocument.When called with context parameter and no Id with headers returned.Should call expected mocks" time="0.0228" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id" executed="True" result="Success" success="True" time="0.1231" asserts="0" description="When called with context parameter and an Id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbDocument.When called with context parameter and an Id.Should not throw exception" time="0.0809" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbDocument.When called with context parameter and an Id.Should return expected result" time="0.0198" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbDocument.When called with context parameter and an Id.Should call expected mocks" time="0.0223" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id and Partition Key" executed="True" result="Success" success="True" time="0.1279" asserts="0" description="When called with context parameter and an Id and Partition Key">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbDocument.When called with context parameter and an Id and Partition Key.Should not throw exception" time="0.0887" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbDocument.When called with context parameter and an Id and Partition Key.Should return expected result" time="0.0159" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbDocument.When called with context parameter and an Id and Partition Key.Should call expected mocks" time="0.0232" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbDocument.Should exist" time="0.0704" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="New-CosmosDbDocument" executed="True" result="Success" success="True" time="0.315" asserts="0" description="New-CosmosDbDocument">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id" executed="True" result="Success" success="True" time="0.1193" asserts="0" description="When called with context parameter and an Id">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbDocument.When called with context parameter and an Id.Should not throw exception" time="0.0793" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbDocument.When called with context parameter and an Id.Should return expected result" time="0.0176" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="New-CosmosDbDocument.When called with context parameter and an Id.Should call expected mocks" time="0.0223" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id and Partition Key" executed="True" result="Success" success="True" time="0.1252" asserts="0" description="When called with context parameter and an Id and Partition Key">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbDocument.When called with context parameter and an Id and Partition Key.Should not throw exception" time="0.0873" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbDocument.When called with context parameter and an Id and Partition Key.Should return expected result" time="0.0164" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="New-CosmosDbDocument.When called with context parameter and an Id and Partition Key.Should call expected mocks" time="0.0214" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="New-CosmosDbDocument.Should exist" time="0.0704" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Remove-CosmosDbDocument" executed="True" result="Success" success="True" time="0.2668" asserts="0" description="Remove-CosmosDbDocument">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id" executed="True" result="Success" success="True" time="0.0918" asserts="0" description="When called with context parameter and an Id">
+                <results>
+                  <test-case description="Should not throw exception" name="Remove-CosmosDbDocument.When called with context parameter and an Id.Should not throw exception" time="0.0728" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Remove-CosmosDbDocument.When called with context parameter and an Id.Should call expected mocks" time="0.0191" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id and Partition Id" executed="True" result="Success" success="True" time="0.1066" asserts="0" description="When called with context parameter and an Id and Partition Id">
+                <results>
+                  <test-case description="Should not throw exception" name="Remove-CosmosDbDocument.When called with context parameter and an Id and Partition Id.Should not throw exception" time="0.0869" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Remove-CosmosDbDocument.When called with context parameter and an Id and Partition Id.Should call expected mocks" time="0.0197" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Remove-CosmosDbDocument.Should exist" time="0.0685" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Set-CosmosDbDocument" executed="True" result="Success" success="True" time="0.3031" asserts="0" description="Set-CosmosDbDocument">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id" executed="True" result="Success" success="True" time="0.1125" asserts="0" description="When called with context parameter and an Id">
+                <results>
+                  <test-case description="Should not throw exception" name="Set-CosmosDbDocument.When called with context parameter and an Id.Should not throw exception" time="0.0725" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Set-CosmosDbDocument.When called with context parameter and an Id.Should return expected result" time="0.0193" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Set-CosmosDbDocument.When called with context parameter and an Id.Should call expected mocks" time="0.0207" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id and Partition Id" executed="True" result="Success" success="True" time="0.119" asserts="0" description="When called with context parameter and an Id and Partition Id">
+                <results>
+                  <test-case description="Should not throw exception" name="Set-CosmosDbDocument.When called with context parameter and an Id and Partition Id.Should not throw exception" time="0.0881" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Set-CosmosDbDocument.When called with context parameter and an Id and Partition Id.Should return expected result" time="0.0129" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Set-CosmosDbDocument.When called with context parameter and an Id and Partition Id.Should call expected mocks" time="0.018" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Set-CosmosDbDocument.Should exist" time="0.0716" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.offers.Tests.ps1" executed="True" result="Success" success="True" time="1.3109" asserts="0" description="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.offers.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Get-CosmosDbOfferResourcePath" executed="True" result="Success" success="True" time="0.3673" asserts="0" description="Get-CosmosDbOfferResourcePath">
+            <results>
+              <test-suite type="TestFixture" name="When called with all parameters" executed="True" result="Success" success="True" time="0.0741" asserts="0" description="When called with all parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbOfferResourcePath.When called with all parameters.Should not throw exception" time="0.0573" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbOfferResourcePath.When called with all parameters.Should return expected result" time="0.0168" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbOfferResourcePath.Should exist" time="0.2931" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Get-CosmosDbOffer" executed="True" result="Success" success="True" time="0.4289" asserts="0" description="Get-CosmosDbOffer">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and no Id" executed="True" result="Success" success="True" time="0.1151" asserts="0" description="When called with context parameter and no Id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbOffer.When called with context parameter and no Id.Should not throw exception" time="0.0749" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbOffer.When called with context parameter and no Id.Should return expected result" time="0.019" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbOffer.When called with context parameter and no Id.Should call expected mocks" time="0.0211" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an Id" executed="True" result="Success" success="True" time="0.1221" asserts="0" description="When called with context parameter and an Id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbOffer.When called with context parameter and an Id.Should not throw exception" time="0.082" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbOffer.When called with context parameter and an Id.Should return expected result" time="0.0169" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbOffer.When called with context parameter and an Id.Should call expected mocks" time="0.0231" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and a Query" executed="True" result="Success" success="True" time="0.1248" asserts="0" description="When called with context parameter and a Query">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbOffer.When called with context parameter and a Query.Should not throw exception" time="0.0815" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbOffer.When called with context parameter and a Query.Should return expected result" time="0.0217" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbOffer.When called with context parameter and a Query.Should call expected mocks" time="0.0215" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbOffer.Should exist" time="0.067" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Set-CosmosDbOffer" executed="True" result="Success" success="True" time="0.5147" asserts="0" description="Set-CosmosDbOffer">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and a V2 InputObject" executed="True" result="Success" success="True" time="0.1472" asserts="0" description="When called with context parameter and a V2 InputObject">
+                <results>
+                  <test-case description="Should not throw exception" name="Set-CosmosDbOffer.When called with context parameter and a V2 InputObject.Should not throw exception" time="0.088" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Set-CosmosDbOffer.When called with context parameter and a V2 InputObject.Should return expected result" time="0.0375" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Set-CosmosDbOffer.When called with context parameter and a V2 InputObject.Should call expected mocks" time="0.0217" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and V2 InputObject with two objects" executed="True" result="Success" success="True" time="0.2968" asserts="0" description="When called with context parameter and V2 InputObject with two objects">
+                <results>
+                  <test-case description="Should not throw exception" name="Set-CosmosDbOffer.When called with context parameter and V2 InputObject with two objects.Should not throw exception" time="0.2494" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Set-CosmosDbOffer.When called with context parameter and V2 InputObject with two objects.Should return expected result" time="0.0253" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Set-CosmosDbOffer.When called with context parameter and V2 InputObject with two objects.Should call expected mocks" time="0.022" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Set-CosmosDbOffer.Should exist" time="0.0707" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.permissions.Tests.ps1" executed="True" result="Success" success="True" time="1.4131" asserts="0" description="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.permissions.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Get-CosmosDbPermissionResourcePath" executed="True" result="Success" success="True" time="0.4676" asserts="0" description="Get-CosmosDbPermissionResourcePath">
+            <results>
+              <test-suite type="TestFixture" name="When called with all parameters" executed="True" result="Success" success="True" time="0.0743" asserts="0" description="When called with all parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbPermissionResourcePath.When called with all parameters.Should not throw exception" time="0.0589" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbPermissionResourcePath.When called with all parameters.Should return expected result" time="0.0154" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbPermissionResourcePath.Should exist" time="0.3933" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Get-CosmosDbPermission" executed="True" result="Success" success="True" time="0.5181" asserts="0" description="Get-CosmosDbPermission">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and no id" executed="True" result="Success" success="True" time="0.1331" asserts="0" description="When called with context parameter and no id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbPermission.When called with context parameter and no id.Should not throw exception" time="0.096" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbPermission.When called with context parameter and no id.Should return expected result" time="0.0175" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbPermission.When called with context parameter and no id.Should call expected mocks" time="0.0196" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.1555" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbPermission.When called with context parameter and an id.Should not throw exception" time="0.1221" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbPermission.When called with context parameter and an id.Should return expected result" time="0.0103" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbPermission.When called with context parameter and an id.Should call expected mocks" time="0.0232" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an id and token expiry" executed="True" result="Success" success="True" time="0.1582" asserts="0" description="When called with context parameter and an id and token expiry">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbPermission.When called with context parameter and an id and token expiry.Should not throw exception" time="0.1155" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbPermission.When called with context parameter and an id and token expiry.Should return expected result" time="0.0198" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbPermission.When called with context parameter and an id and token expiry.Should call expected mocks" time="0.0229" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbPermission.Should exist" time="0.0713" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="New-CosmosDbPermission" executed="True" result="Success" success="True" time="0.2429" asserts="0" description="New-CosmosDbPermission">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.1441" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbPermission.When called with context parameter and an id.Should not throw exception" time="0.0938" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbPermission.When called with context parameter and an id.Should return expected result" time="0.0277" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="New-CosmosDbPermission.When called with context parameter and an id.Should call expected mocks" time="0.0225" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="New-CosmosDbPermission.Should exist" time="0.0989" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Remove-CosmosDbPermission" executed="True" result="Success" success="True" time="0.1844" asserts="0" description="Remove-CosmosDbPermission">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.1037" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="Remove-CosmosDbPermission.When called with context parameter and an id.Should not throw exception" time="0.0858" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Remove-CosmosDbPermission.When called with context parameter and an id.Should call expected mocks" time="0.0179" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Remove-CosmosDbPermission.Should exist" time="0.0807" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.storedprocedures.Tests.ps1" executed="True" result="Success" success="True" time="1.3797" asserts="0" description="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.storedprocedures.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Get-CosmosDbStoredProcedureResourcePath" executed="True" result="Success" success="True" time="0.4336" asserts="0" description="Get-CosmosDbStoredProcedureResourcePath">
+            <results>
+              <test-suite type="TestFixture" name="When called with all parameters" executed="True" result="Success" success="True" time="0.0623" asserts="0" description="When called with all parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbStoredProcedureResourcePath.When called with all parameters.Should not throw exception" time="0.0464" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbStoredProcedureResourcePath.When called with all parameters.Should return expected result" time="0.0159" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbStoredProcedureResourcePath.Should exist" time="0.3713" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Get-CosmosDbStoredProcedure" executed="True" result="Success" success="True" time="0.2997" asserts="0" description="Get-CosmosDbStoredProcedure">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and no id" executed="True" result="Success" success="True" time="0.1252" asserts="0" description="When called with context parameter and no id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbStoredProcedure.When called with context parameter and no id.Should not throw exception" time="0.0869" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbStoredProcedure.When called with context parameter and no id.Should return expected result" time="0.0193" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbStoredProcedure.When called with context parameter and no id.Should call expected mocks" time="0.019" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.1107" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbStoredProcedure.When called with context parameter and an id.Should not throw exception" time="0.0799" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbStoredProcedure.When called with context parameter and an id.Should return expected result" time="0.0127" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbStoredProcedure.When called with context parameter and an id.Should call expected mocks" time="0.0181" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbStoredProcedure.Should exist" time="0.0637" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Invoke-CosmosDbStoredProcedure" executed="True" result="Success" success="True" time="0.1679" asserts="0" description="Invoke-CosmosDbStoredProcedure">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.0971" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="Invoke-CosmosDbStoredProcedure.When called with context parameter and an id.Should not throw exception" time="0.0596" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Invoke-CosmosDbStoredProcedure.When called with context parameter and an id.Should return expected result" time="0.0171" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Invoke-CosmosDbStoredProcedure.When called with context parameter and an id.Should call expected mocks" time="0.0204" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Invoke-CosmosDbStoredProcedure.Should exist" time="0.0708" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="New-CosmosDbStoredProcedure" executed="True" result="Success" success="True" time="0.1709" asserts="0" description="New-CosmosDbStoredProcedure">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.1028" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbStoredProcedure.When called with context parameter and an id.Should not throw exception" time="0.0711" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbStoredProcedure.When called with context parameter and an id.Should return expected result" time="0.0158" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="New-CosmosDbStoredProcedure.When called with context parameter and an id.Should call expected mocks" time="0.0159" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="New-CosmosDbStoredProcedure.Should exist" time="0.0681" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Remove-CosmosDbStoredProcedure" executed="True" result="Success" success="True" time="0.1456" asserts="0" description="Remove-CosmosDbStoredProcedure">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.0758" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="Remove-CosmosDbStoredProcedure.When called with context parameter and an id.Should not throw exception" time="0.0609" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Remove-CosmosDbStoredProcedure.When called with context parameter and an id.Should call expected mocks" time="0.015" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Remove-CosmosDbStoredProcedure.Should exist" time="0.0697" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Set-CosmosDbStoredProcedure" executed="True" result="Success" success="True" time="0.1622" asserts="0" description="Set-CosmosDbStoredProcedure">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.0952" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="Set-CosmosDbStoredProcedure.When called with context parameter and an id.Should not throw exception" time="0.0597" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Set-CosmosDbStoredProcedure.When called with context parameter and an id.Should return expected result" time="0.0165" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Set-CosmosDbStoredProcedure.When called with context parameter and an id.Should call expected mocks" time="0.019" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Set-CosmosDbStoredProcedure.Should exist" time="0.067" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.Tests.ps1" executed="True" result="Success" success="True" time="0.4577" asserts="0" description="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Module Manifest Tests" executed="True" result="Success" success="True" time="0.1003" asserts="0" description="Module Manifest Tests">
+            <results>
+              <test-case description="Passes Test-ModuleManifest" name="Module Manifest Tests.Passes Test-ModuleManifest" time="0.1003" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="PSScriptAnalyzer" executed="True" result="Success" success="True" time="0.3574" asserts="0" description="PSScriptAnalyzer">
+            <results>
+              <test-suite type="TestFixture" name="CosmosDB Module code and CosmosDB Lib Functions" executed="True" result="Success" success="True" time="0.3574" asserts="0" description="CosmosDB Module code and CosmosDB Lib Functions">
+                <results>
+                  <test-case description="Passes Invoke-ScriptAnalyzer" name="PSScriptAnalyzer.CosmosDB Module code and CosmosDB Lib Functions.Passes Invoke-ScriptAnalyzer" time="0.3574" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.triggers.Tests.ps1" executed="True" result="Success" success="True" time="1.1781" asserts="0" description="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.triggers.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Get-CosmosDbTriggerResourcePath" executed="True" result="Success" success="True" time="0.3501" asserts="0" description="Get-CosmosDbTriggerResourcePath">
+            <results>
+              <test-suite type="TestFixture" name="When called with all parameters" executed="True" result="Success" success="True" time="0.0643" asserts="0" description="When called with all parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbTriggerResourcePath.When called with all parameters.Should not throw exception" time="0.0493" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbTriggerResourcePath.When called with all parameters.Should return expected result" time="0.0149" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbTriggerResourcePath.Should exist" time="0.2859" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Get-CosmosDbTrigger" executed="True" result="Success" success="True" time="0.2919" asserts="0" description="Get-CosmosDbTrigger">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and no id" executed="True" result="Success" success="True" time="0.1157" asserts="0" description="When called with context parameter and no id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbTrigger.When called with context parameter and no id.Should not throw exception" time="0.0769" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbTrigger.When called with context parameter and no id.Should return expected result" time="0.021" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbTrigger.When called with context parameter and no id.Should call expected mocks" time="0.0178" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.1104" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbTrigger.When called with context parameter and an id.Should not throw exception" time="0.0745" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbTrigger.When called with context parameter and an id.Should return expected result" time="0.0165" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbTrigger.When called with context parameter and an id.Should call expected mocks" time="0.0193" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbTrigger.Should exist" time="0.0658" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="New-CosmosDbTrigger" executed="True" result="Success" success="True" time="0.1669" asserts="0" description="New-CosmosDbTrigger">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.1004" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbTrigger.When called with context parameter and an id.Should not throw exception" time="0.0653" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbTrigger.When called with context parameter and an id.Should return expected result" time="0.0121" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="New-CosmosDbTrigger.When called with context parameter and an id.Should call expected mocks" time="0.023" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="New-CosmosDbTrigger.Should exist" time="0.0665" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Remove-CosmosDbTrigger" executed="True" result="Success" success="True" time="0.1387" asserts="0" description="Remove-CosmosDbTrigger">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.071" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="Remove-CosmosDbTrigger.When called with context parameter and an id.Should not throw exception" time="0.0574" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Remove-CosmosDbTrigger.When called with context parameter and an id.Should call expected mocks" time="0.0136" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Remove-CosmosDbTrigger.Should exist" time="0.0677" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Set-CosmosDbTrigger" executed="True" result="Success" success="True" time="0.2304" asserts="0" description="Set-CosmosDbTrigger">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.1485" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="Set-CosmosDbTrigger.When called with context parameter and an id.Should not throw exception" time="0.1203" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Set-CosmosDbTrigger.When called with context parameter and an id.Should return expected result" time="0.0096" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Set-CosmosDbTrigger.When called with context parameter and an id.Should call expected mocks" time="0.0186" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Set-CosmosDbTrigger.Should exist" time="0.0819" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.userdefinedfunctions.Tests.ps1" executed="True" result="Success" success="True" time="1.1687" asserts="0" description="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.userdefinedfunctions.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Get-CosmosDbUserDefinedFunctionResourcePath" executed="True" result="Success" success="True" time="0.3534" asserts="0" description="Get-CosmosDbUserDefinedFunctionResourcePath">
+            <results>
+              <test-suite type="TestFixture" name="When called with all parameters" executed="True" result="Success" success="True" time="0.0662" asserts="0" description="When called with all parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbUserDefinedFunctionResourcePath.When called with all parameters.Should not throw exception" time="0.05" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbUserDefinedFunctionResourcePath.When called with all parameters.Should return expected result" time="0.0161" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbUserDefinedFunctionResourcePath.Should exist" time="0.2872" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Get-CosmosDbUserDefinedFunction" executed="True" result="Success" success="True" time="0.2964" asserts="0" description="Get-CosmosDbUserDefinedFunction">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and no id" executed="True" result="Success" success="True" time="0.1117" asserts="0" description="When called with context parameter and no id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbUserDefinedFunction.When called with context parameter and no id.Should not throw exception" time="0.0726" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbUserDefinedFunction.When called with context parameter and no id.Should return expected result" time="0.0209" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbUserDefinedFunction.When called with context parameter and no id.Should call expected mocks" time="0.0183" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.1181" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbUserDefinedFunction.When called with context parameter and an id.Should not throw exception" time="0.0819" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbUserDefinedFunction.When called with context parameter and an id.Should return expected result" time="0.0159" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbUserDefinedFunction.When called with context parameter and an id.Should call expected mocks" time="0.0202" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbUserDefinedFunction.Should exist" time="0.0666" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="New-CosmosDbUserDefinedFunction" executed="True" result="Success" success="True" time="0.1996" asserts="0" description="New-CosmosDbUserDefinedFunction">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.1327" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbUserDefinedFunction.When called with context parameter and an id.Should not throw exception" time="0.0689" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbUserDefinedFunction.When called with context parameter and an id.Should return expected result" time="0.0333" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="New-CosmosDbUserDefinedFunction.When called with context parameter and an id.Should call expected mocks" time="0.0305" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="New-CosmosDbUserDefinedFunction.Should exist" time="0.0669" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Remove-CosmosDbUserDefinedFunction" executed="True" result="Success" success="True" time="0.1581" asserts="0" description="Remove-CosmosDbUserDefinedFunction">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.0722" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="Remove-CosmosDbUserDefinedFunction.When called with context parameter and an id.Should not throw exception" time="0.0612" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Remove-CosmosDbUserDefinedFunction.When called with context parameter and an id.Should call expected mocks" time="0.011" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Remove-CosmosDbUserDefinedFunction.Should exist" time="0.0859" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Set-CosmosDbUserDefinedFunction" executed="True" result="Success" success="True" time="0.1612" asserts="0" description="Set-CosmosDbUserDefinedFunction">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.0932" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="Set-CosmosDbUserDefinedFunction.When called with context parameter and an id.Should not throw exception" time="0.0609" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Set-CosmosDbUserDefinedFunction.When called with context parameter and an id.Should return expected result" time="0.0129" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Set-CosmosDbUserDefinedFunction.When called with context parameter and an id.Should call expected mocks" time="0.0194" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Set-CosmosDbUserDefinedFunction.Should exist" time="0.068" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.users.Tests.ps1" executed="True" result="Success" success="True" time="1.0652" asserts="0" description="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.users.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Get-CosmosDbUserResourcePath" executed="True" result="Success" success="True" time="0.3496" asserts="0" description="Get-CosmosDbUserResourcePath">
+            <results>
+              <test-suite type="TestFixture" name="When called with all parameters" executed="True" result="Success" success="True" time="0.0648" asserts="0" description="When called with all parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbUserResourcePath.When called with all parameters.Should not throw exception" time="0.0498" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbUserResourcePath.When called with all parameters.Should return expected result" time="0.015" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbUserResourcePath.Should exist" time="0.2848" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Get-CosmosDbUser" executed="True" result="Success" success="True" time="0.2779" asserts="0" description="Get-CosmosDbUser">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and no id" executed="True" result="Success" success="True" time="0.1065" asserts="0" description="When called with context parameter and no id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbUser.When called with context parameter and no id.Should not throw exception" time="0.0756" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbUser.When called with context parameter and no id.Should return expected result" time="0.0141" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbUser.When called with context parameter and no id.Should call expected mocks" time="0.0169" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.1048" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbUser.When called with context parameter and an id.Should not throw exception" time="0.0695" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbUser.When called with context parameter and an id.Should return expected result" time="0.0164" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Get-CosmosDbUser.When called with context parameter and an id.Should call expected mocks" time="0.019" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbUser.Should exist" time="0.0665" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="New-CosmosDbUser" executed="True" result="Success" success="True" time="0.1571" asserts="0" description="New-CosmosDbUser">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.0923" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbUser.When called with context parameter and an id.Should not throw exception" time="0.0596" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbUser.When called with context parameter and an id.Should return expected result" time="0.0156" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="New-CosmosDbUser.When called with context parameter and an id.Should call expected mocks" time="0.0171" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="New-CosmosDbUser.Should exist" time="0.0648" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Remove-CosmosDbUser" executed="True" result="Success" success="True" time="0.1316" asserts="0" description="Remove-CosmosDbUser">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and an id" executed="True" result="Success" success="True" time="0.0678" asserts="0" description="When called with context parameter and an id">
+                <results>
+                  <test-case description="Should not throw exception" name="Remove-CosmosDbUser.When called with context parameter and an id.Should not throw exception" time="0.0517" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Remove-CosmosDbUser.When called with context parameter and an id.Should call expected mocks" time="0.0161" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Remove-CosmosDbUser.Should exist" time="0.0638" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Set-CosmosDbUser" executed="True" result="Success" success="True" time="0.149" asserts="0" description="Set-CosmosDbUser">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and Id and NewId" executed="True" result="Success" success="True" time="0.0865" asserts="0" description="When called with context parameter and Id and NewId">
+                <results>
+                  <test-case description="Should not throw exception" name="Set-CosmosDbUser.When called with context parameter and Id and NewId.Should not throw exception" time="0.055" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Set-CosmosDbUser.When called with context parameter and Id and NewId.Should return expected result" time="0.0143" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Set-CosmosDbUser.When called with context parameter and Id and NewId.Should call expected mocks" time="0.0172" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Set-CosmosDbUser.Should exist" time="0.0625" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.utils.Tests.ps1" executed="True" result="Success" success="True" time="2.095" asserts="0" description="C:\Users\si557856\source\github\CosmosDB\test\CosmosDB.utils.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Custom types" executed="True" result="Success" success="True" time="0.5357" asserts="0" description="Custom types">
+            <results>
+              <test-suite type="TestFixture" name="CosmosDB.Context" executed="True" result="Success" success="True" time="0.3232" asserts="0" description="CosmosDB.Context">
+                <results>
+                  <test-case description="Should exist" name="Custom types.CosmosDB.Context.Should exist" time="0.3232" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="CosmosDB.IndexingPolicy.Policy" executed="True" result="Success" success="True" time="0.0549" asserts="0" description="CosmosDB.IndexingPolicy.Policy">
+                <results>
+                  <test-case description="Should exist" name="Custom types.CosmosDB.IndexingPolicy.Policy.Should exist" time="0.0549" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="CosmosDB.IndexingPolicy.Path.Index" executed="True" result="Success" success="True" time="0.0534" asserts="0" description="CosmosDB.IndexingPolicy.Path.Index">
+                <results>
+                  <test-case description="Should exist" name="Custom types.CosmosDB.IndexingPolicy.Path.Index.Should exist" time="0.0534" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="CosmosDB.IndexingPolicy.Path.IncludedPath" executed="True" result="Success" success="True" time="0.0517" asserts="0" description="CosmosDB.IndexingPolicy.Path.IncludedPath">
+                <results>
+                  <test-case description="Should exist" name="Custom types.CosmosDB.IndexingPolicy.Path.IncludedPath.Should exist" time="0.0517" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="CosmosDB.IndexingPolicy.Path.ExcludedPath" executed="True" result="Success" success="True" time="0.0524" asserts="0" description="CosmosDB.IndexingPolicy.Path.ExcludedPath">
+                <results>
+                  <test-case description="Should exist" name="Custom types.CosmosDB.IndexingPolicy.Path.ExcludedPath.Should exist" time="0.0524" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="New-CosmosDbContext" executed="True" result="Success" success="True" time="0.5273" asserts="0" description="New-CosmosDbContext">
+            <results>
+              <test-suite type="TestFixture" name="When called with Context parameters" executed="True" result="Success" success="True" time="0.0638" asserts="0" description="When called with Context parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbContext.When called with Context parameters.Should not throw exception" time="0.0443" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbContext.When called with Context parameters.Should return expected result" time="0.0195" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with Azure parameters and not connected to Azure" executed="True" result="Success" success="True" time="0.1831" asserts="0" description="When called with Azure parameters and not connected to Azure">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbContext.When called with Azure parameters and not connected to Azure.Should not throw exception" time="0.1343" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbContext.When called with Azure parameters and not connected to Azure.Should return expected result" time="0.0217" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="New-CosmosDbContext.When called with Azure parameters and not connected to Azure.Should call expected mocks" time="0.0271" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with Azure parameters and connected to Azure" executed="True" result="Success" success="True" time="0.1355" asserts="0" description="When called with Azure parameters and connected to Azure">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbContext.When called with Azure parameters and connected to Azure.Should not throw exception" time="0.0951" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbContext.When called with Azure parameters and connected to Azure.Should return expected result" time="0.0177" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="New-CosmosDbContext.When called with Azure parameters and connected to Azure.Should call expected mocks" time="0.0227" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with Emulator parameters" executed="True" result="Success" success="True" time="0.0816" asserts="0" description="When called with Emulator parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbContext.When called with Emulator parameters.Should not throw exception" time="0.0591" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="New-CosmosDbContext.When called with Emulator parameters.Should return expected result" time="0.0225" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="New-CosmosDbContext.Should exist" time="0.0633" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Get-CosmosDbUri" executed="True" result="Success" success="True" time="0.1945" asserts="0" description="Get-CosmosDbUri">
+            <results>
+              <test-suite type="TestFixture" name="When called with Account parameter only" executed="True" result="Success" success="True" time="0.0625" asserts="0" description="When called with Account parameter only">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbUri.When called with Account parameter only.Should not throw exception" time="0.0446" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbUri.When called with Account parameter only.Should return expected result" time="0.0179" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with Account and BaseUri parameters" executed="True" result="Success" success="True" time="0.0706" asserts="0" description="When called with Account and BaseUri parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="Get-CosmosDbUri.When called with Account and BaseUri parameters.Should not throw exception" time="0.0544" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Get-CosmosDbUri.When called with Account and BaseUri parameters.Should return expected result" time="0.0162" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Get-CosmosDbUri.Should exist" time="0.0614" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="ConvertTo-CosmosDbTokenDateString" executed="True" result="Success" success="True" time="0.1267" asserts="0" description="ConvertTo-CosmosDbTokenDateString">
+            <results>
+              <test-suite type="TestFixture" name="When called with all parameters" executed="True" result="Success" success="True" time="0.0596" asserts="0" description="When called with all parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="ConvertTo-CosmosDbTokenDateString.When called with all parameters.Should not throw exception" time="0.0486" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="ConvertTo-CosmosDbTokenDateString.When called with all parameters.Should return expected result" time="0.011" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="ConvertTo-CosmosDbTokenDateString.Should exist" time="0.0672" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="New-CosmosDbAuthorizationToken" executed="True" result="Success" success="True" time="0.127" asserts="0" description="New-CosmosDbAuthorizationToken">
+            <results>
+              <test-suite type="TestFixture" name="When called with all parameters" executed="True" result="Success" success="True" time="0.0651" asserts="0" description="When called with all parameters">
+                <results>
+                  <test-case description="Should not throw exception" name="New-CosmosDbAuthorizationToken.When called with all parameters.Should not throw exception" time="0.0492" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result when" name="New-CosmosDbAuthorizationToken.When called with all parameters.Should return expected result when" time="0.0159" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="New-CosmosDbAuthorizationToken.Should exist" time="0.0619" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+          <test-suite type="TestFixture" name="Invoke-CosmosDbRequest" executed="True" result="Success" success="True" time="0.5838" asserts="0" description="Invoke-CosmosDbRequest">
+            <results>
+              <test-suite type="TestFixture" name="When called with context parameter and Get method and ResourceType is 'users'" executed="True" result="Success" success="True" time="0.1146" asserts="0" description="When called with context parameter and Get method and ResourceType is 'users'">
+                <results>
+                  <test-case description="Should not throw exception" name="Invoke-CosmosDbRequest.When called with context parameter and Get method and ResourceType is 'users'.Should not throw exception" time="0.0761" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Invoke-CosmosDbRequest.When called with context parameter and Get method and ResourceType is 'users'.Should return expected result" time="0.0136" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Invoke-CosmosDbRequest.When called with context parameter and Get method and ResourceType is 'users'.Should call expected mocks" time="0.025" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and Get method and ResourceType is 'dbs'" executed="True" result="Success" success="True" time="0.1269" asserts="0" description="When called with context parameter and Get method and ResourceType is 'dbs'">
+                <results>
+                  <test-case description="Should not throw exception" name="Invoke-CosmosDbRequest.When called with context parameter and Get method and ResourceType is 'dbs'.Should not throw exception" time="0.085" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Invoke-CosmosDbRequest.When called with context parameter and Get method and ResourceType is 'dbs'.Should return expected result" time="0.0186" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Invoke-CosmosDbRequest.When called with context parameter and Get method and ResourceType is 'dbs'.Should call expected mocks" time="0.0232" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and Get method and ResourceType is 'offers'" executed="True" result="Success" success="True" time="0.1321" asserts="0" description="When called with context parameter and Get method and ResourceType is 'offers'">
+                <results>
+                  <test-case description="Should not throw exception" name="Invoke-CosmosDbRequest.When called with context parameter and Get method and ResourceType is 'offers'.Should not throw exception" time="0.0891" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Invoke-CosmosDbRequest.When called with context parameter and Get method and ResourceType is 'offers'.Should return expected result" time="0.0182" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Invoke-CosmosDbRequest.When called with context parameter and Get method and ResourceType is 'offers'.Should call expected mocks" time="0.0249" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="When called with context parameter and Post method" executed="True" result="Success" success="True" time="0.1276" asserts="0" description="When called with context parameter and Post method">
+                <results>
+                  <test-case description="Should not throw exception" name="Invoke-CosmosDbRequest.When called with context parameter and Post method.Should not throw exception" time="0.0892" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should return expected result" name="Invoke-CosmosDbRequest.When called with context parameter and Post method.Should return expected result" time="0.0135" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should call expected mocks" name="Invoke-CosmosDbRequest.When called with context parameter and Post method.Should call expected mocks" time="0.0249" asserts="0" success="True" result="Success" executed="True" />
+                </results>
+              </test-suite>
+              <test-case description="Should exist" name="Invoke-CosmosDbRequest.Should exist" time="0.0825" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

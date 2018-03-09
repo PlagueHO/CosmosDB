@@ -1,5 +1,11 @@
 # Change Log
 
+## Unreleased
+
+- Updated CI process to use PSDepend for dependencies.
+- Updated CI process to use PSake for tasks.
+- Changes AppVeyor.yml to call PSake tasks.
+
 ## 2.0.6.247
 
 - Added `PSEdition_Desktop` tag to manifest.
