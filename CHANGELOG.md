@@ -6,6 +6,7 @@
 - Added cmdlet help examples for utils.
 - Converted help to MAML file CosmosDB-help.xml.
 - Updated AppVeyor build to generate MAML help.
+- Added more README.MD badges.
 
 ## 2.0.5.216
 

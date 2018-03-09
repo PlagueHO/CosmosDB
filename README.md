@@ -1,3 +1,8 @@
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/PlagueHO/CosmosDB/blob/dev/LICENSE)
+[![Documentation - CosmosDB](https://img.shields.io/badge/Documentation-CosmosDB-blue.svg)](https://github.com/PlagueHO/CosmosDB/wiki)
+[![PowerShell Gallery - CosmosDB](https://img.shields.io/badge/PowerShell%20Gallery-CosmosDB-blue.svg)](https://www.powershellgallery.com/packages/CosmosDB)
+[![Minimum Supported PowerShell Version](https://img.shields.io/badge/PowerShell-4.0-blue.svg)](https://github.com/PlagueHO/CosmosDB)
+
 # CosmosDB PowerShell Module
 
 ## Module Build Status
@@ -603,9 +608,6 @@ document first. We would be very grateful of any contributions.
 
 ## Cmdlets
 
-Full details of the cmdlets contained in this module can be found in
-the [docs](/docs/) folder.
-
 A list of Cmdlets in the CosmosDB module can be found by running the
 following PowerShell commands:
 
@@ -619,6 +621,9 @@ Help on individual Cmdlets can be found in the built-in Cmdlet help:
 ```PowerShell
 Get-Help -Name Get-CosmosDBUser
 ```
+
+The details of the cmdlets contained in this module can also be
+found in the [wiki](https://github.com/PlagueHO/CosmosDB/wiki).
 
 ## Change Log
 
