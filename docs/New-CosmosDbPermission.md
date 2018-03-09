@@ -36,10 +36,12 @@ This cmdlet will create a permission for a user in a CosmosDB.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> $collectionId = Get-CosmosDbCollectionResourcePath -Database 'MyDatabase' -Id 'MyNewCollection'
+PS C:\> New-CosmosDbPermission -Context $cosmosDbContext -UserId 'MyApplication' -Id 'r_mynewcollection' -Resource $collectionId -PermissionMode Read
 ```
 
-{{ Add example description here }}
+Create a 'read' permission to the 'MyNewCollection' collection in a database
+for the user 'MyApplication'.
 
 ## PARAMETERS
 

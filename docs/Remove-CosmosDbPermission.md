@@ -36,10 +36,10 @@ This cmdlet will delete a permission in a CosmosDB from a user.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Remove-CosmosDbPermission -Context $cosmosDbContext -UserId 'MyApplication' -Id 'r_mynewcollection'
 ```
 
-{{ Add example description here }}
+Remove a permission for user 'MyApplication' from the database.
 
 ## PARAMETERS
 

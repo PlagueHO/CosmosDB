@@ -38,10 +38,32 @@ This cmdlet will create a document for a collection in a CosmosDB.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> $document = @"
+{
+    `"id`": `"$([Guid]::NewGuid().ToString())`",
+    `"content`": `"Some string`",
+    `"more`": `"Some other string`"
+}
+"@
+PS C:\> New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentBody $document
+}
 ```
 
-{{ Add example description here }}
+Create a new document in a non-partitioned collection in a database.
+
+### Example 2
+
+```powershell
+PS C:\> $document = @"
+{
+    `"id`": `"en-us`",
+    `"locale`": `"English (US)`"
+}
+"@
+PS C:\> New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'PartitionedCollection' -DocumentBody $document -PartitionKey 'en-us'
+```
+
+Create a new document in the 'en-us' in a partitioned collection in a database.
 
 ## PARAMETERS
 

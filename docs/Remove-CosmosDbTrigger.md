@@ -36,10 +36,10 @@ This cmdlet will delete a trigger in a CosmosDB from a collection.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Remove-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'MyTrigger'
 ```
 
-{{ Add example description here }}
+Remove the trigger 'MyTrigger' from a collection from the database.
 
 ## PARAMETERS
 

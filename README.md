@@ -133,6 +133,12 @@ $cosmosDbContext = New-CosmosDbContext -Emulator -Database 'MyDatabase'
 
 ### Working with Databases
 
+Create a new database in the CosmosDB account:
+
+```powershell
+New-CosmosDbDatabase -Context $cosmosDbContext -Id 'AnotherDatabase'
+```
+
 Get a list of databases in the CosmosDB account:
 
 ```powershell
@@ -396,7 +402,7 @@ Create a permission for a user in the database with read access to a collection:
 
 ```powershell
 $collectionId = Get-CosmosDbCollectionResourcePath -Database 'MyDatabase' -Id 'MyNewCollection'
-New-CosmosDbPermission -Context $cosmosDbContext -UserId 'MyApplication' -Id 'r_mynewcollection' -Resource $$collectionId -PermissionMode Read
+New-CosmosDbPermission -Context $cosmosDbContext -UserId 'MyApplication' -Id 'r_mynewcollection' -Resource $collectionId -PermissionMode Read
 ```
 
 Remove a permission for a user from the database:
@@ -416,7 +422,7 @@ Get-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection'
 Create a trigger for a collection in the database that executes after all operations:
 
 ```powershell
-$Body = @'
+$body = @'
 function updateMetadata() {
     var context = getContext();
     var collection = context.getCollection();
@@ -447,7 +453,7 @@ function updateMetadata() {
     }
 }
 '@
-New-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'MyTrigger' -TriggerBody $Body -TriggerOperation All -TriggerType Post
+New-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'MyTrigger' -TriggerBody $body -TriggerOperation All -TriggerType Post
 ```
 
 Update an existing trigger for a collection in the database to execute before

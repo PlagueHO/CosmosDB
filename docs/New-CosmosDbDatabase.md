@@ -36,10 +36,10 @@ This cmdlet will create a database in CosmosDB.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> New-CosmosDbDatabase -Context $cosmosDbContext -Id 'AnotherDatabase'
 ```
 
-{{ Add example description here }}
+Create a new database in the CosmosDB account.
 
 ## PARAMETERS
 

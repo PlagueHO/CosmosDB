@@ -36,10 +36,10 @@ This cmdlet will delete a database in CosmosDB.
 ### Example 1
 
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> New-CosmosDbDatabase -Context $cosmosDbContext -Id 'AnotherDatabase'
 ```
 
-{{ Add example description here }}
+Delete the database 'AnotherDatabase' the CosmosDB account.
 
 ## PARAMETERS
 
