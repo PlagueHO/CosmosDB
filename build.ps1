@@ -15,7 +15,7 @@ $null = Get-PackageProvider -Name NuGet -ForceBootstrap
 
 Install-Module -Name PSDepend -Force -AllowClobber
 Import-Module -Name PSDepend
-Invoke-PSDepend -Path $PSScriptRoot -Force -Import
+Invoke-PSDepend -Path $PSScriptRoot -Force -Import -Install
 
 Set-BuildEnvironment -Force
 
