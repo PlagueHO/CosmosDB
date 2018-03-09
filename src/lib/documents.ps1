@@ -1,15 +1,3 @@
-<#
-.SYNOPSIS
-    Set the custom Cosmos DB document types to the document returned
-    by an API call.
-
-.DESCRIPTION
-    This function applies the custom types to the document returned
-    by an API call.
-
-.PARAMETER Document
-    This is the document that is returned by a document API call.
-#>
 function Set-CosmosDbDocumentType
 {
     [CmdletBinding()]
@@ -27,24 +15,6 @@ function Set-CosmosDbDocumentType
     return $Document
 }
 
-<#
-.SYNOPSIS
-    Return the resource path for a document object.
-
-.DESCRIPTION
-    This cmdlet returns the resource identifier for a
-    document object.
-
-.PARAMETER Database
-    This is the database containing the document.
-
-.PARAMETER CollectionId
-    This is the Id of the collection containing the
-    document.
-
-.PARAMETER Id
-    This is the Id of the document.
-#>
 function Get-CosmosDbDocumentResourcePath
 {
     [CmdletBinding()]
@@ -70,85 +40,6 @@ function Get-CosmosDbDocumentResourcePath
     return ('dbs/{0}/colls/{1}/docs/{2}' -f $Database, $CollectionId, $Id)
 }
 
-<#
-.SYNOPSIS
-    Return the documents for a CosmosDB database collection.
-
-.DESCRIPTION
-    This cmdlet will return the documents for a specified
-    collection in a CosmosDB database. If an Id is specified then only
-    the specified documents will be returned.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be accessed. It should be created
-    by `New-CosmosDbContext`.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Database
-    The name of the database to access in the CosmosDB account.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER CollectionId
-    This is the id of the collection to get the documents for.
-
-.PARAMETER Id
-    This is the id of the document to return.
-
-.PARAMETER PartitionKey
-    The partition key value for the document to be read. Must
-    be included if and only if the collection is created with
-    a partitionKey definition.
-
-.PARAMETER MaxItemCount
-    An integer indicating the maximum number of items to be
-    returned per page. Should not be set if Id is set.
-
-.PARAMETER ContinuationToken
-    A string token returned for queries and read-feed operations
-    if there are more results to be read. Should not be set if
-    Id is set.
-
-.PARAMETER ConsistencyLevel
-    This is the consistency level override. The override must
-    be the same or weaker than the account’s configured consistency
-    level. Should not be set if Id is set.
-
-.PARAMETER SessionToken
-    A string token used with session level consistency. Clients
-    must echo the latest read value of this header during read
-    requests for session consistency. Should not be set if Id is
-    set.
-
-.PARAMETER PartitionKeyRangeId
-    The partition key range Id for reading data. Should not be set
-    if Id is set.
-
-.PARAMETER Query
-    A SQL select query to execute to select the documents. This
-    should not be specified if Id is specified.
-
-.PARAMETER QueryParameters
-    This is an array of key value pairs (Name, Value) that will be
-    passed into the SQL Query. This should only be specified if
-    Query is specified.
-
-.PARAMETER QueryEnableCrossPartition
-    If the collection is partitioned, this must be set to True to
-    allow execution across multiple partitions. This should only
-    be specified if Query is specified.
-
-.PARAMETER ResultHeaders
-    This is a reference variable that will be used to return the
-    hashtable that contains any headers returned by the request.
-#>
 function Get-CosmosDbDocument
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -373,57 +264,6 @@ function Get-CosmosDbDocument
     }
 }
 
-<#
-.SYNOPSIS
-    Create a new document for a collection in a CosmosDB database.
-
-.DESCRIPTION
-    This cmdlet will create a document for a collection in a CosmosDB.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbContext`.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Database
-    The name of the database to access in the CosmosDB account.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER CollectionId
-    This is the Id of the collection to create the document for.
-
-.PARAMETER DocumentBody
-    This is the body of the document. It must be formatted as
-    a JSON string and contain the Id value of the document to
-    create.
-
-    The document body must contain an id field.
-
-.PARAMETER IndexingDirective
-    Include adds the document to the index. Exclude omits the
-    document from indexing. The default for indexing behavior is
-    determined by the automatic property’s value in the indexing
-    policy for the collection.
-
-.PARAMETER Upsert
-    Include adds the document to the index. Exclude omits the
-    document from indexing. The default for indexing behavior is
-    determined by the automatic property’s value in the indexing
-    policy for the collection.
-
-.PARAMETER PartitionKey
-    The partition key value for the document to be created. Must
-    be included if and only if the collection is created with a
-    partitionKey definition.
-#>
 function New-CosmosDbDocument
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -526,41 +366,6 @@ function New-CosmosDbDocument
     }
 }
 
-<#
-.SYNOPSIS
-    Delete a document from a CosmosDB collection.
-
-.DESCRIPTION
-    This cmdlet will delete a document in a CosmosDB from a collection.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbContext`.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Database
-    The name of the database to access in the CosmosDB account.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER CollectionId
-    This is the Id of the collection to delete the document from.
-
-.PARAMETER Id
-    This is the Id of the document to delete.
-
-.PARAMETER PartitionKey
-    The partition key value for the document to be deleted.
-    Must be included if and only if the collection is created
-    with a partitionKey definition.
-#>
 function Remove-CosmosDbDocument
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -630,51 +435,6 @@ function Remove-CosmosDbDocument
         -Headers $headers
 }
 
-<#
-.SYNOPSIS
-    Update a document from a CosmosDB collection.
-
-.DESCRIPTION
-    This cmdlet will update an existing document in a CosmosDB
-    collection.
-
-.PARAMETER Context
-    This is an object containing the context information of
-    the CosmosDB database that will be deleted. It should be created
-    by `New-CosmosDbContext`.
-
-.PARAMETER Account
-    The account name of the CosmosDB to access.
-
-.PARAMETER Database
-    The name of the database to access in the CosmosDB account.
-
-.PARAMETER Key
-    The key to be used to access this CosmosDB.
-
-.PARAMETER KeyType
-    The type of key that will be used to access ths CosmosDB.
-
-.PARAMETER CollectionId
-    This is the Id of the collection to update the document for.
-
-.PARAMETER Id
-    This is the Id of the document to update.
-
-.PARAMETER DocumentBody
-    This is the body of the document to update. It must be
-    formatted as a JSON string and contain the Id value of the
-    document to create.
-
-.PARAMETER IndexingDirective
-    Include includes the document in the indexing path while
-    Exclude omits the document from indexing.
-
-.PARAMETER PartitionKey
-    The partition key value for the document to be deleted.
-    Required if and must be specified only if the collection is
-    created with a partitionKey definition.
-#>
 function Set-CosmosDbDocument
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]

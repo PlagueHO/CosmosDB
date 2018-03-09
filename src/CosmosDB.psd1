@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.0.5.216'
+    ModuleVersion     = '2.0.6.216'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -51,7 +51,7 @@
     # ScriptsToProcess = @()
 
     # Type files (.ps1xml) to be loaded when importing this module
-    TypesToProcess = @(
+    TypesToProcess    = @(
         'types\attachments.types.ps1xml'
         'types\collections.types.ps1xml'
         'types\databases.types.ps1xml'
@@ -82,10 +82,7 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    # FunctionsToExport = @()
-
-    # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-    CmdletsToExport   = @(
+    FunctionsToExport = @(
         'Get-CosmosDbAttachment'
         'Get-CosmosDbAttachmentResourcePath'
         'Get-CosmosDbCollection'
@@ -139,6 +136,9 @@
         'Set-CosmosDbUserDefinedFunction'
     )
 
+    # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
+    CmdletsToExport   = @()
+
     # Variables to export from this module
     VariablesToExport = @(
         'New-CosmosDbConnection'
@@ -160,7 +160,7 @@
     PrivateData       = @{
         PSData = @{
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags         = @('CosmosDB', 'DocumentDb', 'Azure', 'PSEdition_Core')
+            Tags         = @('CosmosDB', 'DocumentDb', 'Azure', 'PSEdition_Core', 'PSEdition_Desktop')
 
             # A URL to the license for this module.
             LicenseUri   = 'https://github.com/PlagueHO/CosmosDB/blob/master/LICENSE'
@@ -173,6 +173,16 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+March 8, 2018
+
+- Added `PSEdition_Desktop` tag to manifest.
+- Added cmdlet help examples for utils.
+- Converted help to MAML file CosmosDB-help.xml.
+- Updated AppVeyor build to generate MAML help.
+- Added more README.MD badges.
+
 ## What is New in CosmosDB 2.0.5.216
 
 March 3, 2018

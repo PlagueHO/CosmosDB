@@ -8,33 +8,37 @@ schema: 2.0.0
 # Set-CosmosDbStoredProcedureType
 
 ## SYNOPSIS
+
 Set the custom Cosmos DB stored procedure types to the
 stored procedure returned by an API call.
 
 ## SYNTAX
 
-```
+```powershell
 Set-CosmosDbStoredProcedureType [-StoredProcedure] <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This function applies the custom types to the stored
 procedure returned by an API call.
 
 ## EXAMPLES
 
 ### Example 1
+
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-CosmosDbStoredProcedureType -StoredProcedure $storedProcedure
 ```
 
-{{ Add example description here }}
+Apply the stored procedure data type to the object provided
+stored procedure.
 
 ## PARAMETERS
 
 ### -StoredProcedure
-This is the stored procedure that is returned by a
-stored procedure API call.
+
+This is the stored procedure that is returned by a stored procedure API call.
 
 ```yaml
 Type: Object
@@ -49,6 +53,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 

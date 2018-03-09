@@ -8,31 +8,35 @@ schema: 2.0.0
 # Set-CosmosDbDocumentType
 
 ## SYNOPSIS
+
 Set the custom Cosmos DB document types to the document returned
 by an API call.
 
 ## SYNTAX
 
-```
+```powershell
 Set-CosmosDbDocumentType [-Document] <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This function applies the custom types to the document returned
 by an API call.
 
 ## EXAMPLES
 
 ### Example 1
+
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-CosmosDbDocumentType -Document $document
 ```
 
-{{ Add example description here }}
+Apply the document data type to the object provided document.
 
 ## PARAMETERS
 
 ### -Document
+
 This is the document that is returned by a document API call.
 
 ```yaml
@@ -48,6 +52,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 

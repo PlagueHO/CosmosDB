@@ -1,9 +1,42 @@
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/PlagueHO/CosmosDB/blob/dev/LICENSE)
+[![Documentation - CosmosDB](https://img.shields.io/badge/Documentation-CosmosDB-blue.svg)](https://github.com/PlagueHO/CosmosDB/wiki)
+[![PowerShell Gallery - CosmosDB](https://img.shields.io/badge/PowerShell%20Gallery-CosmosDB-blue.svg)](https://www.powershellgallery.com/packages/CosmosDB)
+[![Minimum Supported PowerShell Version](https://img.shields.io/badge/PowerShell-4.0-blue.svg)](https://github.com/PlagueHO/CosmosDB)
+
 # CosmosDB PowerShell Module
+
+## Module Build Status
 
 | Branch | Build Status | Code Coverage |
 | --- | --- | --- |
 | dev | [![Build status](https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/dev?svg=true)](https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/dev) | [![codecov](https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev/graph/badge.svg)](https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev) |
 | master | [![Build status](https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/master?svg=true)](https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/master) | [![codecov](https://codecov.io/gh/PlagueHO/CosmosDB/branch/master/graph/badge.svg)](https://codecov.io/gh/PlagueHO/CosmosDB/branch/master) |
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Getting Started](#getting-started)
+  - [Working with Contexts](#working-with-contexts)
+    - [Create a Context specifying the Key Manually](#create-a-context-specifying-the-key-manually)
+    - [Use CosmosDB Module to Retrieve Key from Azure Management Portal](#use-cosmosdb-module-to-retrieve-key-from-azure-management-portal)
+    - [Create a Context for a CosmosDB Emulator](#create-a-context-for-a-cosmosdb-emulator)
+  - [Working with Databases](#working-with-databases)
+  - [Working with Offers](#working-with-offers)
+  - [Working with Collections](#working-with-collections)
+    - [Creating a Collection with a custom Indexing Policy](#creating-a-collection-with-a-custom-indexing-policy)
+  - [Working with Documents](#working-with-documents)
+    -[Working with Documents in a Partitioned Collection](#working-with-documents-in-a-partitioned-collection)
+  - [Working with Attachments](#working-with-attachments)
+  - [Working with Users](#working-with-users)
+  - [Stored Procedures](#working-with-stored-procedures)
+  - [Working with Triggers](#working-with-triggers)
+  - [Working with User Defined Functions](#working-with-user-defined-functions)
+- [Contributing](#contributing)
+- [Cmdlets](#cmdlets)
+- [Change Log](#change-log)
+- [Links](#links)
 
 ## Introduction
 
@@ -11,15 +44,16 @@ This PowerShell module provides cmdlets for working with Azure Cosmos DB.
 
 The CosmosDB PowerShell module enables management of:
 
-- Attachments
-- Collections
-- Databases
-- Documents
-- Permissions
-- Stored procedures
-- Triggers
-- User Defined Functions
-- Users
+- [Attachments](#working-with-attachments)
+- [Collections](#working-with-collections)
+- [Databases](#working-with-databases)
+- [Documents](#working-with-documents)
+- [Offers](#working-with-offers)
+- [Permissions](#working-with-permissions)
+- [Stored Procedures](#working-with-stored-procedures)
+- [Triggers](#working-with-triggers)
+- [User Defined Functions](#working-with-user-defined-functions)
+- [Users](#working-with-users)
 
 The module uses the CosmosDB (DocumentDB) Rest APIs.
 
@@ -47,7 +81,7 @@ To install the module from PowerShell Gallery, use the PowerShell Cmdlet:
 Install-Module -Name CosmosDB
 ```
 
-## Quick Start
+## Getting Started
 
 The easiest way to use this module is to first create a context
 object using the `New-CosmosDbContext` cmdlet which you can then
@@ -58,7 +92,9 @@ primary primary or secondary keys from your CosmosDB account or allow
 the CosmosDB module to retrieve the keys directly from the Azure
 management portal for you.
 
-### Create a Context specifying the Key Manually
+### Working with Contexts
+
+#### Create a Context specifying the Key Manually
 
 First convert your key into a secure string:
 
@@ -73,7 +109,7 @@ create a context variable:
 $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey
 ```
 
-### Use CosmosDB Module to Retrieve Key from Azure Management Portal
+#### Use CosmosDB Module to Retrieve Key from Azure Management Portal
 
 To create a context object so that the CosmosDB module retrieves the
 primary or secondary key from the Azure Management Portal, use the
@@ -89,7 +125,7 @@ an account that doesn't contain the CosmosDB you wish to connect to then
 you will first need to connect to the correct account using the
 `Add-AzureRmAccount` cmdlet._
 
-### Create a Context for a CosmosDB Emulator
+#### Create a Context for a CosmosDB Emulator
 
 Microsoft provides a [CosmosDB emulator](https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator) that
 you can run locally to enable testing and debugging scenarios. To create
@@ -98,6 +134,26 @@ following command:
 
 ```powershell
 $cosmosDbContext = New-CosmosDbContext -Emulator -Database 'MyDatabase'
+```
+
+### Working with Databases
+
+Create a new database in the CosmosDB account:
+
+```powershell
+New-CosmosDbDatabase -Context $cosmosDbContext -Id 'AnotherDatabase'
+```
+
+Get a list of databases in the CosmosDB account:
+
+```powershell
+Get-CosmosDbDatabase -Context $cosmosDbContext
+```
+
+Get the specified database from the CosmosDB account:
+
+```powershell
+Get-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase'
 ```
 
 ### Working with Offers
@@ -126,20 +182,6 @@ Update all existing V2 offers to set a different throughput:
 ```powershell
 Get-CosmosDbOffer -Context $cosmosDbContext -Query 'SELECT * FROM root WHERE (root["offerVersion"] = "V2")' |
     Set-CosmosDbOffer -Context $cosmosDbContext -OfferThroughput 10000 -OfferIsRUPerMinuteThroughputEnabled $false
-```
-
-### Working with Databases
-
-Get a list of databases in the CosmosDB account:
-
-```powershell
-Get-CosmosDbDatabase -Context $cosmosDbContext
-```
-
-Get the specified database from the CosmosDB account:
-
-```powershell
-Get-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase'
 ```
 
 ### Working with Collections
@@ -223,7 +265,7 @@ $documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNew
 $continuationToken = $resultHeaders.value.'x-ms-continuation'
 ```
 
-Get the next document from a collection in the database using
+Get the next 5 documents from a collection in the database using
 the continuation token found in the headers from the previous
 request:
 
@@ -274,7 +316,7 @@ Delete a document from a collection in the database:
 Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id $documents[0].id
 ```
 
-### Working with Documents in a Partitioned Collection
+#### Working with Documents in a Partitioned Collection
 
 Creating a document in a collection that has a Partition Key requires the
 `PartitionKey` parameter to be specified for the document:
@@ -365,7 +407,7 @@ Create a permission for a user in the database with read access to a collection:
 
 ```powershell
 $collectionId = Get-CosmosDbCollectionResourcePath -Database 'MyDatabase' -Id 'MyNewCollection'
-New-CosmosDbPermission -Context $cosmosDbContext -UserId 'MyApplication' -Id 'r_mynewcollection' -Resource $$collectionId -PermissionMode Read
+New-CosmosDbPermission -Context $cosmosDbContext -UserId 'MyApplication' -Id 'r_mynewcollection' -Resource $collectionId -PermissionMode Read
 ```
 
 Remove a permission for a user from the database:
@@ -385,7 +427,7 @@ Get-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection'
 Create a trigger for a collection in the database that executes after all operations:
 
 ```powershell
-$Body = @'
+$body = @'
 function updateMetadata() {
     var context = getContext();
     var collection = context.getCollection();
@@ -416,14 +458,14 @@ function updateMetadata() {
     }
 }
 '@
-New-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'MyTrigger' -TriggerBody $Body -TriggerOperation All -TriggerType Post
+New-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'MyTrigger' -TriggerBody $body -TriggerOperation All -TriggerType Post
 ```
 
 Update an existing trigger for a collection in the database to execute before
 all operations:
 
 ```powershell
-$Body = @'
+$body = @'
 function updateMetadata() {
     var context = getContext();
     var collection = context.getCollection();
@@ -454,7 +496,7 @@ function updateMetadata() {
     }
 }
 '@
-New-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'MyTrigger' -Body $Body -TriggerOperation All -TriggerType Pre
+Set-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'MyTrigger' -Body $body -TriggerOperation All -TriggerType Pre
 ```
 
 Remove a trigger for a collection from the database:
@@ -463,7 +505,7 @@ Remove a trigger for a collection from the database:
 Remove-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'MyTrigger'
 ```
 
-### Working with Stored procedures
+### Working with Stored Procedures
 
 Get a list of stored procedures for a collection in the database:
 
@@ -474,7 +516,7 @@ Get-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollec
 Create a stored procedure for a collection in the database:
 
 ```powershell
-$Body = @'
+$body = @'
 function () {
     var context = getContext();
     var response = context.getResponse();
@@ -482,13 +524,13 @@ function () {
     response.setBody("Hello, World");
 }
 '@
-New-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureBody $Body
+New-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureBody $body
 ```
 
 Update an existing stored procedure for a collection in the database:
 
 ```powershell
-$Body = @'
+$body = @'
 function (personToGreet) {
     var context = getContext();
     var response = context.getResponse();
@@ -496,7 +538,7 @@ function (personToGreet) {
     response.setBody("Hello, " + personToGreet);
 }
 '@
-New-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureBody $Body
+Set-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureBody $body
 ```
 
 Execute a stored procedure for a collection from the database:
@@ -539,7 +581,7 @@ New-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNewCo
 Update an existing user defined function for a collection in the database:
 
 ```powershell
-$Body = @'
+$body = @'
 function tax(income) {
     if(income == undefined) throw 'no input';
     if (income < 1000)
@@ -550,7 +592,7 @@ function tax(income) {
         return income * 0.4;
 }
 '@
-New-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'udfTax' -Body $Body
+Set-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'udfTax' -Body $body
 ```
 
 Remove a user defined function for a collection from the database:
@@ -566,9 +608,6 @@ document first. We would be very grateful of any contributions.
 
 ## Cmdlets
 
-Full details of the cmdlets contained in this module can be found in
-the [docs](/docs/) folder.
-
 A list of Cmdlets in the CosmosDB module can be found by running the
 following PowerShell commands:
 
@@ -582,6 +621,9 @@ Help on individual Cmdlets can be found in the built-in Cmdlet help:
 ```PowerShell
 Get-Help -Name Get-CosmosDBUser
 ```
+
+The details of the cmdlets contained in this module can also be
+found in the [wiki](https://github.com/PlagueHO/CosmosDB/wiki).
 
 ## Change Log
 

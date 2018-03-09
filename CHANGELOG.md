@@ -1,5 +1,13 @@
 # Change Log
 
+## Unreleased
+
+- Added `PSEdition_Desktop` tag to manifest.
+- Added cmdlet help examples for utils.
+- Converted help to MAML file CosmosDB-help.xml.
+- Updated AppVeyor build to generate MAML help.
+- Added more README.MD badges.
+
 ## 2.0.5.216
 
 - Added `*-CosmosDbOffer` cmdlets.

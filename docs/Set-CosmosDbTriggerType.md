@@ -8,31 +8,35 @@ schema: 2.0.0
 # Set-CosmosDbTriggerType
 
 ## SYNOPSIS
+
 Set the custom Cosmos DB trigger types to the trigger returned
 by an API call.
 
 ## SYNTAX
 
-```
+```powershell
 Set-CosmosDbTriggerType [-Trigger] <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This function applies the custom types to the trigger returned
 by an API call.
 
 ## EXAMPLES
 
 ### Example 1
+
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-CosmosDbTriggerType -Trigger $trigger
 ```
 
-{{ Add example description here }}
+Apply the trigger data type to the object provided trigger.
 
 ## PARAMETERS
 
 ### -Trigger
+
 This is the trigger that is returned by a trigger API call.
 
 ```yaml
@@ -48,6 +52,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
