@@ -13,8 +13,8 @@ if ($Deploy)
 
 $null = Get-PackageProvider -Name NuGet -ForceBootstrap
 
-Install-Module -Name PSDeploy -Force -AllowClobber
-Import-Module -Name PSDeploy
+Install-Module -Name PSDepend -Force -AllowClobber
+Import-Module -Name PSDepend
 Invoke-PSDepend -Path $PSScriptRoot -Force -Import
 
 Set-BuildEnvironment -Force
