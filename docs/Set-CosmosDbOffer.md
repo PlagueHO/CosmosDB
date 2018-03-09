@@ -78,22 +78,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Database
-
-{{Fill Database Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Key
 
 The key to be used to access this CosmosDB.

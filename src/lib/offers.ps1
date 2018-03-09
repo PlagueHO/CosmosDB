@@ -136,11 +136,6 @@ function Set-CosmosDbOffer
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [System.String]
-        $Database,
-
-        [Parameter()]
-        [ValidateNotNullOrEmpty()]
         [System.Security.SecureString]
         $Key,
 
