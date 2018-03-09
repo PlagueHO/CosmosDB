@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.0.6.247
 
 - Added `PSEdition_Desktop` tag to manifest.
 - Added cmdlet help examples for utils.
@@ -127,6 +127,7 @@
 ## 1.0.0.30
 
 - Initial Release.
+
 
 
 
