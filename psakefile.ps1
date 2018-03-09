@@ -231,7 +231,10 @@ Task Deploy -Depends Build {
                 Set-Location -Path $ProjectRoot
                 exec { git @('config', '--global', 'credential.helper', 'store') }
 
-                Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:GitHubPushFromPlagueHO):x-oauth-basic@github.com`n"
+                Add-Content `
+                    -Path "$env:USERPROFILE\.git-credentials" `
+                    -Content "https://$($env:GitHubPushFromPlagueHO):x-oauth-basic@github.com`n"
+
                 exec { git @('config', '--global', 'user.email', 'plagueho@gmail.com') }
                 exec { git @('config', '--global', 'user.name', 'Daniel Scott-Raynsford') }
 
