@@ -83,6 +83,9 @@ Task Test -Depends Init {
             "https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)",
             (Resolve-Path $testResultsFile))
 
+        "Publishing test results to AppVeyor as Artifact"
+        Push-AppveyorArtifact $testResultsFile
+
         if ($testResults.FailedCount -gt 0)
         {
             throw "$($testResults.FailedCount) tests failed."
@@ -197,16 +200,14 @@ Task Deploy -Depends Build {
     if ($ENV:BHBuildSystem -eq 'AppVeyor')
     {
         # If AppVeyor, publish the deploy artefacts for debug purposes
-        @( $zipFilePath, $testResultsFile ) |
-            Foreach-Object {
-            "Pushing package $_ as Appveyor artifact"
-            Push-AppveyorArtifact $_
-            Remove-Item -Path $_ -Force
-        }
+        "Pushing package $zipFilePath as Appveyor artifact"
+        Push-AppveyorArtifact $zipFilePath
+        Remove-Item -Path $zipFilePath -Force
 
-        # If this is a build of the Master branch and not a PR push
-        # then publish the Module to the PowerShell Gallery.
-        # Deployment management
+        <#
+            If this is a build of the Master branch and not a PR push
+            then publish the Module to the PowerShell Gallery.
+        #>
         if ($ENV:BHBranchName -eq 'master')
         {
             if ($ENV:APPVEYOR_PULL_REQUEST_NUMBER)
