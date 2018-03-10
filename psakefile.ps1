@@ -14,7 +14,6 @@ Properties {
 
     $Timestamp = Get-Date -uformat "%Y%m%d-%H%M%S"
     $PSVersion = $PSVersionTable.PSVersion.Major
-    $TestFile = "TestResults_PS$PSVersion`_$TimeStamp.xml"
     $separator = '----------------------------------------------------------------------'
 }
 
@@ -179,8 +178,7 @@ Task Deploy -Depends Build {
     $VersionFolder = Join-Path -Path $ModuleFolder -ChildPath $newVersion
 
     # Copy the module to the PSModulePath
-    $documentsFolder = Join-Path -Path $ENV:USERPROFILE -ChildPath 'Documents'
-    $PSModulePath = Join-Path -Path $documentsFolder -ChildPath ($ENV:PSModulePath -split ';')[0]
+    $PSModulePath = ($ENV:PSModulePath -split ';')[0]
 
     "Copying Module to $PSModulePath"
     Copy-Item `
