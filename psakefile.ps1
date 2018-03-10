@@ -59,7 +59,16 @@ Task Test -Depends Init {
         if ($ENV:BHBuildSystem -eq 'AppVeyor')
         {
             'Uploading CodeCoverage to CodeCov.io'
-            Invoke-UploadCoveCoveIoReport -Path $jsonPath
+            try
+            {
+                Invoke-UploadCoveCoveIoReport -Path $jsonPath
+            }
+            catch
+            {
+                # CodeCov currently reports an error when uploading
+                # This is not fatal and can be ignored
+                Write-Warning -Message $_
+            }
         }
     }
     else
@@ -70,6 +79,7 @@ Task Test -Depends Init {
     # Upload tests
     if ($ENV:BHBuildSystem -eq 'AppVeyor')
     {
+        'Publishing test results to AppVeyor'
         (New-Object 'System.Net.WebClient').UploadFile(
             "https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)",
             (Resolve-Path $testResultsFile))
