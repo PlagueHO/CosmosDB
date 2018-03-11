@@ -238,7 +238,7 @@ Task Deploy -Depends Build {
 
                 # Pull the master branch, update the readme.md and manifest
                 Set-Location -Path $ProjectRoot
-                Invoke-Git -GitParameters @('config', '--global', 'credential.helper', 'store') }
+                Invoke-Git -GitParameters @('config', '--global', 'credential.helper', 'store')
 
                 Add-Content `
                     -Path "$env:USERPROFILE\.git-credentials" `
@@ -334,7 +334,8 @@ function Invoke-Git
 
     try
     {
-        Invoke-Git -GitParameters $GitParameters }
+        "Executing 'git $($GitParameters -join ' ')'"
+        exec { & git $GitParameters }
     }
     catch
     {
