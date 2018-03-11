@@ -166,6 +166,8 @@ Task Build -Depends Test {
     $stagedReleaseNotesContent = Get-Content -Path $stagedReleaseNotesPath -Raw
     $stagedReleaseNotesContent = $stagedReleaseNotesContent -replace '## What is New in CosmosDB Unreleased', "## What is New in CosmosDB $newVersion"
     Set-Content -Path $stagedReleaseNotesPath -Value $stagedReleaseNotesContent -NoNewLine -Force
+
+    "`n"
 }
 
 Task Deploy -Depends Build {
@@ -210,15 +212,17 @@ Task Deploy -Depends Build {
         #>
         if ($ENV:BHBranchName -eq 'master')
         {
-            if ($ENV:APPVEYOR_PULL_REQUEST_NUMBER)
-            {
-                # This is a PR so do nothing
-                'Skipping deployment because this is a Pull Request'
-            }
-            elseif ($ENV:BHCommitMessage -like '* Deploy!')
+            'Commit to Master branch detected'
+
+            if ($ENV:BHCommitMessage -like '* Deploy!')
             {
                 # This was a deploy commit so no need to do anything
                 'Skipping deployment because this was a commit triggered by a deployment'
+            }
+            elseif ($ENV:APPVEYOR_PULL_REQUEST_NUMBER)
+            {
+                # This is a PR so do nothing
+                'Skipping deployment because this is a Pull Request'
             }
             else
             {
