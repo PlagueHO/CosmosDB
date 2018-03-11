@@ -238,55 +238,47 @@ Task Deploy -Depends Build {
 
                 # Pull the master branch, update the readme.md and manifest
                 Set-Location -Path $ProjectRoot
-                exec { git @('config', '--global', 'credential.helper', 'store') }
+                Invoke-Git -GitParameters @('config', '--global', 'credential.helper', 'store') }
 
                 Add-Content `
                     -Path "$env:USERPROFILE\.git-credentials" `
                     -Value "https://$($env:GitHubPushFromPlagueHO):x-oauth-basic@github.com`n"
 
-                exec { git @('config', '--global', 'user.email', 'plagueho@gmail.com') }
-                exec { git @('config', '--global', 'user.name', 'Daniel Scott-Raynsford') }
-
-                try
-                {
-                    exec { git @('checkout', '-f', 'master') }
-                }
-                catch
-                {
-                    Write-Warning -Message $_
-                }
+                Invoke-Git -GitParameters @('config', '--global', 'user.email', 'plagueho@gmail.com')
+                Invoke-Git -GitParameters @('config', '--global', 'user.name', 'Daniel Scott-Raynsford')
+                Invoke-Git -GitParameters @('checkout', '-f', 'master')
 
                 # Replace the manifest with the one that was published
                 Copy-Item `
-                    -Path (Join-Item -Path $VersionFolder -ChildPath 'CosmosDB.psd1') `
+                    -Path (Join-Path -Path $VersionFolder -ChildPath 'CosmosDB.psd1') `
                     -Destination $ModuleFolder `
                     -Force
                 Copy-Item `
-                    -Path (Join-Item -Path $VersionFolder -ChildPath 'CHANGELOG.MD') `
+                    -Path (Join-Path -Path $VersionFolder -ChildPath 'CHANGELOG.MD') `
                     -Destination $ModuleFolder `
                     -Force
                 Copy-Item `
-                    -Path (Join-Item -Path $VersionFolder -ChildPath 'RELEASENOTES.MD') `
+                    -Path (Join-Path -Path $VersionFolder -ChildPath 'RELEASENOTES.MD') `
                     -Destination $ModuleFolder `
                     -Force
 
                 # Update the master branch
                 'Pushing deployment changes to Master'
-                & git @('add', '.')
-                & git @('commit', '-m', "$NewVersion Deploy!")
-                & git @('status')
-                & git @('push', 'origin', 'master')
+                Invoke-Git -GitParameters @('add', '.')
+                Invoke-Git -GitParameters @('commit', '-m', "$NewVersion Deploy!")
+                Invoke-Git -GitParameters @('status')
+                Invoke-Git -GitParameters @('push', 'origin', 'master')
 
                 # Create the version tag and push it
                 "Pushing $newVersion tag to Master"
-                & git @('tag', '-a', $newVersion, '-m', $newVersion)
-                & git @('push', 'origin', $newVersion)
+                Invoke-Git -GitParameters @('tag', '-a', $newVersion, '-m', $newVersion)
+                Invoke-Git -GitParameters @('push', 'origin', $newVersion)
 
                 # Merge the changes to the Dev branch as well
                 'Pushing deployment changes to Dev'
-                & git @('checkout', '-f', 'dev')
-                & git @('merge', 'master')
-                & git @('push', 'origin', 'dev')
+                Invoke-Git -GitParameters @('checkout', '-f', 'dev')
+                Invoke-Git -GitParameters @('merge', 'master')
+                Invoke-Git -GitParameters @('push', 'origin', 'dev')
             }
         }
     }
@@ -329,4 +321,23 @@ function Get-NewVersionNumber
     }
     $newVersion += $Build
     return $newVersion
+}
+
+function Invoke-Git
+{
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String[]]
+        $GitParameters
+    )
+
+    try
+    {
+        Invoke-Git -GitParameters $GitParameters }
+    }
+    catch
+    {
+        Write-Warning -Message $_
+    }
 }
