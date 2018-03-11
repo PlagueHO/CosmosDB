@@ -249,17 +249,18 @@ Task Deploy -Depends Build {
                 Invoke-Git -GitParameters @('checkout', '-f', 'master')
 
                 # Replace the manifest with the one that was published
+                'Updating files changed during deployment.='
                 Copy-Item `
                     -Path (Join-Path -Path $VersionFolder -ChildPath 'CosmosDB.psd1') `
-                    -Destination $ModuleFolder `
+                    -Destination (Join-Path -Path $ProjectRoot -ChildPath 'src') `
                     -Force
                 Copy-Item `
                     -Path (Join-Path -Path $VersionFolder -ChildPath 'CHANGELOG.MD') `
-                    -Destination $ModuleFolder `
+                    -Destination $ProjectRoot `
                     -Force
                 Copy-Item `
                     -Path (Join-Path -Path $VersionFolder -ChildPath 'RELEASENOTES.MD') `
-                    -Destination $ModuleFolder `
+                    -Destination $ProjectRoot `
                     -Force
 
                 # Update the master branch
