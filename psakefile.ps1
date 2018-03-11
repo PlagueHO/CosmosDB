@@ -212,7 +212,7 @@ Task Deploy -Depends Build {
         #>
         if ($ENV:BHBranchName -eq 'master')
         {
-            'Commit to Master branch detected'
+            "Commit to Master branch detected with commit message: $($ENV:BHCommitMessage)"
 
             if ($ENV:BHCommitMessage -like '* Deploy!')
             {
@@ -226,6 +226,8 @@ Task Deploy -Depends Build {
             }
             else
             {
+                'Executed a Deploy'
+                return
                 # This is a commit to Master
                 'Publishing Module to PowerShell Gallery'
                 Get-PackageProvider `
