@@ -244,8 +244,8 @@ Task Deploy -Depends Build {
                     -Path "$env:USERPROFILE\.git-credentials" `
                     -Value "https://$($env:GitHubPushFromPlagueHO):x-oauth-basic@github.com`n"
 
-                & git @('config', '--global', 'user.email', 'plagueho@gmail.com')
-                & git @('config', '--global', 'user.name', 'Daniel Scott-Raynsford')
+                exec { git @('config', '--global', 'user.email', 'plagueho@gmail.com') }
+                exec { git @('config', '--global', 'user.name', 'Daniel Scott-Raynsford') }
 
                 try
                 {
@@ -253,6 +253,7 @@ Task Deploy -Depends Build {
                 }
                 catch
                 {
+                    Write-Warning -Message $_
                 }
 
                 # Replace the manifest with the one that was published
