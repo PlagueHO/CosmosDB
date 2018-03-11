@@ -212,9 +212,10 @@ Task Deploy -Depends Build {
         #>
         if ($ENV:BHBranchName -eq 'master')
         {
-            "Commit to Master branch detected with commit message: $($ENV:BHCommitMessage)"
+            $commitMessage = $ENV:BHCommitMessage.Trim()
+            "Commit to Master branch detected with commit message: '$commitMessage'"
 
-            if ($ENV:BHCommitMessage -like '* Deploy!')
+            if ($commitMessage -match ' Deploy!$')
             {
                 # This was a deploy commit so no need to do anything
                 'Skipping deployment because this was a commit triggered by a deployment'
