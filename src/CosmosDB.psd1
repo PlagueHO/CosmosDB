@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.0.6.247'
+    ModuleVersion     = '2.0.7.0'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -21,7 +21,7 @@
     Copyright         = '(c) 2018 Daniel Scott-Raynsford. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description       = 'This module provides cmdlets for working with Azure Cosmos DB databases, collections, users and permissions.'
+    Description       = 'This module provides cmdlets for working with Azure Cosmos DB databases, collections, documents, attachments, offers, users, permissions, triggers, stored procedures and user defined functions.'
 
     # Minimum version of the Windows PowerShell engine required by this module
     # PowerShellVersion = ''
@@ -173,6 +173,14 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+March 9, 2018
+
+- Updated CI process to use PSDepend for dependencies.
+- Updated CI process to use PSake for tasks.
+- Changes AppVeyor.yml to call PSake tasks.
+
 ## What is New in CosmosDB 2.0.6.247
 
 March 8, 2018
