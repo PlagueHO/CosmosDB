@@ -226,8 +226,6 @@ Task Deploy -Depends Build {
             }
             else
             {
-                'Executed a Deploy'
-                return
                 # This is a commit to Master
                 'Publishing Module to PowerShell Gallery'
                 Get-PackageProvider `
