@@ -238,7 +238,7 @@ Task Deploy -Depends Build {
 
                 # Pull the master branch, update the readme.md and manifest
                 Set-Location -Path $ProjectRoot
-                & git @('config', '--global', 'credential.helper', 'store')
+                exec { git @('config', '--global', 'credential.helper', 'store') }
 
                 Add-Content `
                     -Path "$env:USERPROFILE\.git-credentials" `
@@ -247,7 +247,13 @@ Task Deploy -Depends Build {
                 & git @('config', '--global', 'user.email', 'plagueho@gmail.com')
                 & git @('config', '--global', 'user.name', 'Daniel Scott-Raynsford')
 
-                & git @('checkout', '-f', 'master')
+                try
+                {
+                    exec { git @('checkout', '-f', 'master') }
+                }
+                catch
+                {
+                }
 
                 # Replace the manifest with the one that was published
                 Copy-Item `
