@@ -238,16 +238,16 @@ Task Deploy -Depends Build {
 
                 # Pull the master branch, update the readme.md and manifest
                 Set-Location -Path $ProjectRoot
-                exec { git @('config', '--global', 'credential.helper', 'store') }
+                & git @('config', '--global', 'credential.helper', 'store')
 
                 Add-Content `
                     -Path "$env:USERPROFILE\.git-credentials" `
                     -Value "https://$($env:GitHubPushFromPlagueHO):x-oauth-basic@github.com`n"
 
-                exec { git @('config', '--global', 'user.email', 'plagueho@gmail.com') }
-                exec { git @('config', '--global', 'user.name', 'Daniel Scott-Raynsford') }
+                & git @('config', '--global', 'user.email', 'plagueho@gmail.com')
+                & git @('config', '--global', 'user.name', 'Daniel Scott-Raynsford')
 
-                exec { git @('checkout', '-f', 'master') }
+                & git @('checkout', '-f', 'master')
 
                 # Replace the manifest with the one that was published
                 Copy-Item `
@@ -265,21 +265,21 @@ Task Deploy -Depends Build {
 
                 # Update the master branch
                 'Pushing deployment changes to Master'
-                exec { git @('add', '.') }
-                exec { git @('commit', '-m', "$NewVersion Deploy!") }
-                exec { git @('status') }
-                exec { git @('push', 'origin', 'master') }
+                & git @('add', '.')
+                & git @('commit', '-m', "$NewVersion Deploy!")
+                & git @('status')
+                & git @('push', 'origin', 'master')
 
                 # Create the version tag and push it
                 "Pushing $newVersion tag to Master"
-                exec { git @('tag', '-a', $newVersion, '-m', $newVersion) }
-                exec { git @('push', 'origin', $newVersion) }
+                & git @('tag', '-a', $newVersion, '-m', $newVersion)
+                & git @('push', 'origin', $newVersion)
 
                 # Merge the changes to the Dev branch as well
                 'Pushing deployment changes to Dev'
-                exec { git @('checkout', '-f', 'dev') }
-                exec { git @('merge', 'master') }
-                exec { git @('push', 'origin', 'dev') }
+                & git @('checkout', '-f', 'dev')
+                & git @('merge', 'master')
+                & git @('push', 'origin', 'dev')
             }
         }
     }
