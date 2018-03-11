@@ -247,7 +247,7 @@ Task Deploy -Depends Build {
                 exec { git @('config', '--global', 'user.email', 'plagueho@gmail.com') }
                 exec { git @('config', '--global', 'user.name', 'Daniel Scott-Raynsford') }
 
-                exec { git @('checkout', '-f', 'master') }
+                exec { git @('checkout', '-f', 'master') } -ErrorAction Continue
 
                 # Replace the manifest with the one that was published
                 Copy-Item `
@@ -265,21 +265,21 @@ Task Deploy -Depends Build {
 
                 # Update the master branch
                 'Pushing deployment changes to Master'
-                exec { git @('add', '.') }
-                exec { git @('commit', '-m', "$NewVersion Deploy!") }
-                exec { git @('status') }
-                exec { git @('push', 'origin', 'master') }
+                exec { git @('add', '.') } -ErrorAction Continue
+                exec { git @('commit', '-m', "$NewVersion Deploy!") } -ErrorAction Continue
+                exec { git @('status') } -ErrorAction Continue
+                exec { git @('push', 'origin', 'master') } -ErrorAction Continue
 
                 # Create the version tag and push it
                 "Pushing $newVersion tag to Master"
-                exec { git @('tag', '-a', $newVersion, '-m', $newVersion) }
-                exec { git @('push', 'origin', $newVersion) }
+                exec { git @('tag', '-a', $newVersion, '-m', $newVersion) } -ErrorAction Continue
+                exec { git @('push', 'origin', $newVersion) } -ErrorAction Continue
 
                 # Merge the changes to the Dev branch as well
                 'Pushing deployment changes to Dev'
-                exec { git @('checkout', '-f', 'dev') }
-                exec { git @('merge', 'master') }
-                exec { git @('push', 'origin', 'dev') }
+                exec { git @('checkout', '-f', 'dev') } -ErrorAction Continue
+                exec { git @('merge', 'master') } -ErrorAction Continue
+                exec { git @('push', 'origin', 'dev') } -ErrorAction Continue
             }
         }
     }
