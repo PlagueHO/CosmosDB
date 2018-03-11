@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.0.7.288
 
 - Updated CI process to use PSDepend for dependencies.
 - Updated CI process to use PSake for tasks.
