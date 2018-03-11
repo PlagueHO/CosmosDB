@@ -212,7 +212,7 @@ Task Deploy -Depends Build {
         #>
         if ($ENV:BHBranchName -eq 'master')
         {
-            $commitMessage = $ENV:BHCommitMessage.Trim()
+            $commitMessage = $ENV:BHCommitMessage.TrimEnd()
             "Commit to Master branch detected with commit message: '$commitMessage'"
 
             if ($commitMessage -match ' Deploy!$')
