@@ -2,6 +2,14 @@
 
 ## What is New in CosmosDB Unreleased
 
+March 9, 2018
+
+- Updated CI process to use PSDepend for dependencies.
+- Updated CI process to use PSake for tasks.
+- Changes AppVeyor.yml to call PSake tasks.
+
+## What is New in CosmosDB 2.0.6.247
+
 March 8, 2018
 
 - Added `PSEdition_Desktop` tag to manifest.
