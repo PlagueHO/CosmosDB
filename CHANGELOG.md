@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.0.8.350
 
 - Fixed `New-CosmosDbAuthorizationToken` function to support
   generating authorization tokens for case sensitive resource
