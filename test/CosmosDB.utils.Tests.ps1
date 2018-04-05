@@ -282,6 +282,27 @@ InModuleScope CosmosDB {
                 $script:result | Should -Be 'type%3dmaster%26ver%3d1.0%26sig%3dr3RhzxX7rv4ZHqo4aT1jDszfV7svQ7JFXoi7hz1Iwto%3d'
             }
         }
+
+        Context 'When called with all parameters and mixed case ResourceId' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbAuthorizationTokenParameters = @{
+                    Key          = $script:testKeySecureString
+                    KeyType      = 'master'
+                    Method       = 'Get'
+                    ResourceType = 'users'
+                    ResourceId   = 'dbs/Testdb'
+                    Date         = $script:testUniversalDate
+                }
+
+                { $script:result = New-CosmosDbAuthorizationToken @newCosmosDbAuthorizationTokenParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result when' {
+                $script:result | Should -Be 'type%3dmaster%26ver%3d1.0%26sig%3dncZem2Awq%2b0LkrQ7mlwJePX%2f2qyEPG3bQDrnuedrjZU%3d'
+            }
+        }
     }
 
     Describe 'Invoke-CosmosDbRequest' -Tag 'Unit' {

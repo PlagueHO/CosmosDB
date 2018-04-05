@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.0.7.342'
+    ModuleVersion     = '2.0.8.342'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -173,6 +173,13 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## Unreleased
+
+- Fixed `New-CosmosDbAuthorizationToken` function to support
+  generating authorization tokens for case sensitive resource
+  names - See [Issue #76](https://github.com/PlagueHO/CosmosDB/issues/76).
+  Thanks [MWL88](https://github.com/MWL88).
+
 ## What is New in CosmosDB 2.0.7.288
 
 March 9, 2018
