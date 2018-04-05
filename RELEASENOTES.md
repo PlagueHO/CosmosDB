@@ -1,5 +1,14 @@
 # Release Notes
 
+## Unreleased
+
+April 5, 2018
+
+- Fixed `New-CosmosDbAuthorizationToken` function to support
+  generating authorization tokens for case sensitive resource
+  names - See [Issue #76](https://github.com/PlagueHO/CosmosDB/issues/76).
+  Thanks [MWL88](https://github.com/MWL88).
+
 ## What is New in CosmosDB 2.0.7.288
 
 March 9, 2018
