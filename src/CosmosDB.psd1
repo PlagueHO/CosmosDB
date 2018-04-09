@@ -87,6 +87,7 @@
         'Get-CosmosDbAttachmentResourcePath'
         'Get-CosmosDbCollection'
         'Get-CosmosDbCollectionResourcePath'
+        'Get-CosmosDbCollectionSize'
         'Get-CosmosDBDatabase'
         'Get-CosmosDBDatabaseResourcePath'
         'Get-CosmosDBDocument'
@@ -174,6 +175,15 @@
             # ReleaseNotes of this module
             ReleaseNotes = '
 ## Unreleased
+
+-Added `New-CosmosCollectionSize` function to return
+ data about size and object counts of collections.
+ See [Issue #79](https://github.com/PlagueHO/CosmosDB/issues/79).
+ Thanks [WatersJohn](https://github.com/WatersJohn).
+  
+## What is New in CosmosDB 2.0.8.350
+
+April 5, 2018
 
 - Fixed `New-CosmosDbAuthorizationToken` function to support
   generating authorization tokens for case sensitive resource
