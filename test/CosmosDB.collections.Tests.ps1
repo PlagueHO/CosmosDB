@@ -241,6 +241,13 @@ InModuleScope CosmosDB {
         }
     }
 
+    Describe 'Get-CosmosDbCollectionSize' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Get-CosmosDbCollectionSize -ErrorAction Stop } | Should -Not -Throw
+        }
+    }
+
+
     Describe 'New-CosmosDbCollection' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name New-CosmosDbCollection -ErrorAction Stop } | Should -Not -Throw

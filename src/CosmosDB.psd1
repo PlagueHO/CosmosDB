@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.0.8.350'
+    ModuleVersion     = '2.0.9.350'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -176,11 +176,11 @@
             ReleaseNotes = '
 ## Unreleased
 
--Added `New-CosmosCollectionSize` function to return
- data about size and object counts of collections.
- See [Issue #79](https://github.com/PlagueHO/CosmosDB/issues/79).
- Thanks [WatersJohn](https://github.com/WatersJohn).
-  
+- Added `Get-CosmosCollectionSize` function to return
+  data about size and object counts of collections -
+  See [Issue #79](https://github.com/PlagueHO/CosmosDB/issues/79).
+  Thanks [WatersJohn](https://github.com/WatersJohn).
+
 ## What is New in CosmosDB 2.0.8.350
 
 April 5, 2018

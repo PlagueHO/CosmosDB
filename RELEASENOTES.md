@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+April 9, 2018
+
+- Added `Get-CosmosCollectionSize` function to return
+  data about size and object counts of collections -
+  See [Issue #79](https://github.com/PlagueHO/CosmosDB/issues/79).
+  Thanks [WatersJohn](https://github.com/WatersJohn).
+
+## What is New in CosmosDB 2.0.8.350
+
 April 5, 2018
 
 - Fixed `New-CosmosDbAuthorizationToken` function to support

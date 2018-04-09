@@ -1,11 +1,11 @@
 # Change Log
 
-### Unreleased
+## Unreleased
 
--Added `New-CosmosCollectionSize` function to return
- data about size and object counts of collections.
- See [Issue #79](https://github.com/PlagueHO/CosmosDB/issues/79).
- Thanks [WatersJohn](https://github.com/WatersJohn).
+- Added `Get-CosmosCollectionSize` function to return
+  data about size and object counts of collections -
+  See [Issue #79](https://github.com/PlagueHO/CosmosDB/issues/79).
+  Thanks [WatersJohn](https://github.com/WatersJohn).
 
 ## 2.0.8.350
 

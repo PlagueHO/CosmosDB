@@ -202,7 +202,7 @@ function Get-CosmosDbCollection
             -Method 'Get' `
             -ResourceType 'colls' `
             -ResourcePath ('colls/{0}' -f $Id)
-        }
+    }
     else
     {
         $result = Invoke-CosmosDbRequest @PSBoundParameters `
@@ -255,9 +255,12 @@ function Get-CosmosDbCollectionSize
         [System.String]
         $Id
     )
-# per https://docs.microsoft.com/en-us/azure/cosmos-db/monitor-accounts,
-# The quota and usage information for the collection is returned in the
-# x-ms-resource-quota and x-ms-resource-usage headers in the response.
+
+    <#
+        per https://docs.microsoft.com/en-us/azure/cosmos-db/monitor-accounts,
+        The quota and usage information for the collection is returned in the
+        x-ms-resource-quota and x-ms-resource-usage headers in the response.
+    #>
 
     if ($PSBoundParameters.ContainsKey('Id'))
     {
@@ -267,28 +270,26 @@ function Get-CosmosDbCollectionSize
             -Method 'Get' `
             -ResourceType 'colls' `
             -ResourcePath ('colls/{0}' -f $Id) `
-            -UseWebRequest;
-         }
+            -UseWebRequest
+    }
     else
     {
-        throw("Collection ID must be supplied.")
-        #$result = Invoke-CosmosDbRequest @PSBoundParameters `
-        #    -Method 'Get' `
-        #    -ResourceType 'colls' `
-        #    -UseWebRequest;
-     }
-
-    $usageItems=@{};
-    $($result.headers["x-ms-resource-usage"]).Split(';',[System.StringSplitOptions]::RemoveEmptyEntries) `
-        | ForEach-Object {
-        $k,$v = $_.Split('=');
-        $usageItems[$k] = $v;
+        New-CosmosDbInvalidOperationException -Message 'Collection ID must be supplied.'
     }
 
-    if ($usageItems) {
-        return $usageItems;
+    $usageItems = @{}
+    $($result.headers["x-ms-resource-usage"]).Split(';', [System.StringSplitOptions]::RemoveEmptyEntries) |
+        ForEach-Object {
+            $k, $v = $_.Split('=')
+            $usageItems[$k] = $v
+        }
+
+    if ($usageItems)
+    {
+        return $usageItems
     }
 }
+
 function New-CosmosDbCollection
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -379,25 +380,25 @@ function New-CosmosDbCollection
     $null = $PSBoundParameters.Remove('Id')
 
     $bodyObject = @{
-        id  = $id
+        id = $id
     }
 
     if ($PSBoundParameters.ContainsKey('PartitionKey'))
     {
         $bodyObject += @{
-                partitionKey = @{
-                    paths = @('/{0}' -f $PartitionKey)
-                    kind = 'Hash'
-                }
+            partitionKey = @{
+                paths = @('/{0}' -f $PartitionKey)
+                kind  = 'Hash'
             }
+        }
         $null = $PSBoundParameters.Remove('PartitionKey')
     }
 
     if ($PSBoundParameters.ContainsKey('IndexingPolicy'))
     {
         $bodyObject += @{
-                indexingPolicy = $IndexingPolicy
-            }
+            indexingPolicy = $IndexingPolicy
+        }
         $null = $PSBoundParameters.Remove('IndexingPolicy')
     }
 
