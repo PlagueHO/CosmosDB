@@ -176,6 +176,8 @@
             ReleaseNotes = '
 ## Unreleased
 
+April 9, 2018
+
 - Added `Get-CosmosCollectionSize` function to return
   data about size and object counts of collections -
   See [Issue #79](https://github.com/PlagueHO/CosmosDB/issues/79).
