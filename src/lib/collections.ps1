@@ -218,6 +218,77 @@ function Get-CosmosDbCollection
     }
 }
 
+function Get-CosmosDbCollectionSize
+{
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
+    [OutputType([System.Collections.Hashtable])]
+    param
+    (
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
+        [ValidateNotNullOrEmpty()]
+        [CosmosDb.Context]
+        $Context,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Account,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.Security.SecureString]
+        $Key,
+
+        [Parameter()]
+        [ValidateSet('master', 'resource')]
+        [System.String]
+        $KeyType = 'master',
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Database,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Id
+    )
+# per https://docs.microsoft.com/en-us/azure/cosmos-db/monitor-accounts,
+# The quota and usage information for the collection is returned in the
+# x-ms-resource-quota and x-ms-resource-usage headers in the response.
+
+    if ($PSBoundParameters.ContainsKey('Id'))
+    {
+        $null = $PSBoundParameters.Remove('Id')
+
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
+            -Method 'Get' `
+            -ResourceType 'colls' `
+            -ResourcePath ('colls/{0}' -f $Id) `
+            -UseWebRequest;
+         }
+    else
+    {
+        throw("Collection ID must be supplied.")
+        #$result = Invoke-CosmosDbRequest @PSBoundParameters `
+        #    -Method 'Get' `
+        #    -ResourceType 'colls' `
+        #    -UseWebRequest;
+     }
+
+    $usageItems=@{};
+    $($result.headers["x-ms-resource-usage"]).Split(';',[System.StringSplitOptions]::RemoveEmptyEntries) `
+        | ForEach-Object {
+        $k,$v = $_.Split('=');
+        $usageItems[$k] = $v;
+    }
+
+    if ($usageItems) {
+        return $usageItems;
+    }
+}
 function New-CosmosDbCollection
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
