@@ -202,7 +202,7 @@ function Get-CosmosDbCollection
             -Method 'Get' `
             -ResourceType 'colls' `
             -ResourcePath ('colls/{0}' -f $Id)
-        }
+    }
     else
     {
         $result = Invoke-CosmosDbRequest @PSBoundParameters `
@@ -215,6 +215,78 @@ function Get-CosmosDbCollection
     if ($collection)
     {
         return (Set-CosmosDbCollectionType -Collection $collection)
+    }
+}
+
+function Get-CosmosDbCollectionSize
+{
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
+    [OutputType([System.Collections.Hashtable])]
+    param
+    (
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
+        [ValidateNotNullOrEmpty()]
+        [CosmosDb.Context]
+        $Context,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Account,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.Security.SecureString]
+        $Key,
+
+        [Parameter()]
+        [ValidateSet('master', 'resource')]
+        [System.String]
+        $KeyType = 'master',
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Database,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Id
+    )
+
+    <#
+        per https://docs.microsoft.com/en-us/azure/cosmos-db/monitor-accounts,
+        The quota and usage information for the collection is returned in the
+        x-ms-resource-quota and x-ms-resource-usage headers in the response.
+    #>
+
+    if ($PSBoundParameters.ContainsKey('Id'))
+    {
+        $null = $PSBoundParameters.Remove('Id')
+
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
+            -Method 'Get' `
+            -ResourceType 'colls' `
+            -ResourcePath ('colls/{0}' -f $Id) `
+            -UseWebRequest
+    }
+    else
+    {
+        New-CosmosDbInvalidOperationException -Message 'Collection ID must be supplied.'
+    }
+
+    $usageItems = @{}
+    $($result.headers["x-ms-resource-usage"]).Split(';', [System.StringSplitOptions]::RemoveEmptyEntries) |
+        ForEach-Object {
+            $k, $v = $_.Split('=')
+            $usageItems[$k] = $v
+        }
+
+    if ($usageItems)
+    {
+        return $usageItems
     }
 }
 
@@ -308,25 +380,25 @@ function New-CosmosDbCollection
     $null = $PSBoundParameters.Remove('Id')
 
     $bodyObject = @{
-        id  = $id
+        id = $id
     }
 
     if ($PSBoundParameters.ContainsKey('PartitionKey'))
     {
         $bodyObject += @{
-                partitionKey = @{
-                    paths = @('/{0}' -f $PartitionKey)
-                    kind = 'Hash'
-                }
+            partitionKey = @{
+                paths = @('/{0}' -f $PartitionKey)
+                kind  = 'Hash'
             }
+        }
         $null = $PSBoundParameters.Remove('PartitionKey')
     }
 
     if ($PSBoundParameters.ContainsKey('IndexingPolicy'))
     {
         $bodyObject += @{
-                indexingPolicy = $IndexingPolicy
-            }
+            indexingPolicy = $IndexingPolicy
+        }
         $null = $PSBoundParameters.Remove('IndexingPolicy')
     }
 
