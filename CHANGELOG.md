@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.0.9.360
 
 - Added `Get-CosmosCollectionSize` function to return
   data about size and object counts of collections -
