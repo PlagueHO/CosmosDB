@@ -174,6 +174,15 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## Unreleased
+
+April 25, 2018
+
+- Added basic integration test support.
+- Fixed 401 error returned by `Set-CosmosDbOffer` when
+  updating offer - See [Issue #85](https://github.com/PlagueHO/CosmosDB/issues/85).
+  Thanks [dl8on](https://github.com/dl8on)
+
 ## What is New in CosmosDB 2.0.9.360
 
 April 9, 2018
