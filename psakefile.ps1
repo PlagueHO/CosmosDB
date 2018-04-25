@@ -36,7 +36,7 @@ Task Test -Depends Init {
     $separator
 
     # Execute tests
-    $testResultsFile = Join-Path -Path $ProjectRoot -ChildPath 'test\TestsResults.xml'
+    $testResultsFile = Join-Path -Path $ProjectRoot -ChildPath 'test\TestResults.xml'
     $testResults = Invoke-Pester `
         -OutputFormat NUnitXml `
         -OutputFile $testResultsFile `
