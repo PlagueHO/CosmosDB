@@ -165,3 +165,9 @@ function Remove-AzureCosmosDbAccount
         Write-Error -Message "An error occured during the removal of the Cosmos DB test account.`n$($_.exception.message)"
     }
 }
+
+Export-ModuleMember -Function `
+    Get-AzureServicePrincipal, `
+    Connect-AzureServicePrincipal, `
+    New-AzureCosmosDbAccount, `
+    Remove-AzureCosmosDbAccount
