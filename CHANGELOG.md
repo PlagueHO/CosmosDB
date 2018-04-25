@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Added basic integration test support.
+
 ## 2.0.9.360
 
 - Added `Get-CosmosCollectionSize` function to return
