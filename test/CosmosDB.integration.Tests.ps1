@@ -129,7 +129,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 $script:result = Get-CosmosDbOffer -Context $script:testContext -Verbose
             } | Should -Not -Throw
         }
-        Write-Verbose -Message ($script:result | fl * | Out-String ) -Verbose
 
         It 'Should return expected object' {
             $script:result.Timestamp | Should -BeOfType [System.DateTime]
