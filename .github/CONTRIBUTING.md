@@ -35,7 +35,7 @@ While these guidelines aren't necessarily "set in stone," they should help guide
 
 ## Style guidelines
 
-When contributing to any PowerShell repositories, please follow the following [Style Guidelines](/.github/STYLGUIDELINES.md)
+When contributing to any PowerShell repositories, please follow the following [Style Guidelines](/.github/STYLEGUIDELINES.md)
 
 ## Lifecycle of a pull request
 

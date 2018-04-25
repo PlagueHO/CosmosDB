@@ -1,8 +1,15 @@
 # Change Log
 
+## Unreleased
+
+- Added basic integration test support.
+- Fixed 401 error returned by `Set-CosmosDbOffer` when
+  updating offer - See [Issue #85](https://github.com/PlagueHO/CosmosDB/issues/85).
+  Thanks [dl8on](https://github.com/dl8on)
+
 ## 2.0.9.360
 
-- Added `Get-CosmosCollectionSize` function to return
+- Added `Get-CosmosDbCollectionSize` function to return
   data about size and object counts of collections -
   See [Issue #79](https://github.com/PlagueHO/CosmosDB/issues/79).
   Thanks [WatersJohn](https://github.com/WatersJohn).
