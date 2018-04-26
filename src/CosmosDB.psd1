@@ -174,7 +174,7 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
-## Unreleased
+## What is New in CosmosDB Unreleased
 
 April 25, 2018
 
