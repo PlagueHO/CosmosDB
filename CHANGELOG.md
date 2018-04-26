@@ -1,6 +1,6 @@
 # Change Log
 
-## 2.0.10.382
+## Unreleased
 
 - Added basic integration test support.
 - Fixed 401 error returned by `Set-CosmosDbOffer` when
