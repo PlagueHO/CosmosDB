@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Added PowerShell Core version support badge.
+
 ## 2.0.10.388
 
 - Added basic integration test support.
