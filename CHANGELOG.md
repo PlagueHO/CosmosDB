@@ -5,6 +5,7 @@
 - Added PowerShell Core version support badge.
 - Prevent integration tests from running if Azure connection
   environment variables are not set.
+- Added Code of Conduct to project.
 
 ## 2.0.10.388
 
