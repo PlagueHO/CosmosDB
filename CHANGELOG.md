@@ -3,6 +3,8 @@
 ## Unreleased
 
 - Added PowerShell Core version support badge.
+- Prevent integration tests from running if Azure connection
+  environment variables are not set.
 
 ## 2.0.10.388
 
