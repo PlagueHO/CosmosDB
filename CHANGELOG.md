@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.0.11.407
 
 - Added PowerShell Core version support badge.
 - Prevent integration tests from running if Azure connection
