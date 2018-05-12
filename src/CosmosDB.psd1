@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.0.10.388'
+    ModuleVersion     = '2.0.11.388'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -174,6 +174,19 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+May 12, 2018
+
+- Added PowerShell Core version support badge.
+- Prevent integration tests from running if Azure connection
+  environment variables are not set.
+- Added Code of Conduct to project.
+- Fixed error returned by `Get-CosmosDbDocument` when getting documents
+  from a partitioned collection without specifying an Id or Query - See
+  [Issue #97](https://github.com/PlagueHO/CosmosDB/issues/97).
+  Thanks [jasonchester](https://github.com/jasonchester)
+
 ## What is New in CosmosDB 2.0.10.388
 
 April 25, 2018
@@ -263,31 +276,6 @@ February 24, 2018
 January 27, 2018
 
 - Added support for CosmosDB Emulator.
-
-## What is New in CosmosDB 2.0.0
-
-December 23, 2017
-
-- BREAKING CHANGE: Converted all cmdlets to return custom types
-  and added support for custom formats.
-
-## What is New in CosmosDB 1.0.12
-
-December 9, 2017
-
-- Added support for managing Attachments.
-
-## What is New in CosmosDB 1.0.11
-
-December 8, 2017
-
-- Fix bug in querying documents.
-
-## What is New in CosmosDB 1.0.10
-
-November 12, 2017
-
-- Added support for managing Documents.
             '
         } # End of PSData hashtable
     } # End of PrivateData hashtable

@@ -212,6 +212,14 @@ function Get-CosmosDbDocument
         }
 
         # The following headers apply when querying documents or just getting a list
+        if ($PSBoundParameters.ContainsKey('PartitionKey'))
+        {
+            $headers += @{
+                'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
+            }
+            $null = $PSBoundParameters.Remove('PartitionKey')
+        }
+
         $headers += @{
             'x-ms-max-item-count' = $MaxItemCount
         }
