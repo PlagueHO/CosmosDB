@@ -2,6 +2,17 @@
 
 ## What is New in CosmosDB Unreleased
 
+May 12, 2018
+
+- Added PowerShell Core version support badge.
+- Prevent integration tests from running if Azure connection
+  environment variables are not set.
+- Added Code of Conduct to project.
+- Fixed error returned by `Get-CosmosDbDocument` when getting documents
+  from a partitioned collection without specifying an Id or Query - See
+  [Issue #97](https://github.com/PlagueHO/CosmosDB/issues/97).
+  Thanks [jasonchester](https://github.com/jasonchester)
+
 ## What is New in CosmosDB 2.0.10.388
 
 April 25, 2018

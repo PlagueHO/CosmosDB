@@ -27,6 +27,15 @@ $script:testAccountName = ('cdbtest{0}' -f [System.IO.Path]::GetRandomFileName()
 $script:testOffer = 'testOffer'
 $script:testDatabase = 'testDatabase'
 $script:testCollection = 'testCollection'
+$script:testPartitionKey = 'id'
+$script:testDocumentId = [Guid]::NewGuid().ToString()
+$script:testDocumentBody = @"
+{
+    `"id`": `"$script:testDocumentId`",
+    `"content`": `"Some string`",
+    `"more`": `"Some other string`"
+}
+"@
 
 # Connect to Azure
 Connect-AzureServicePrincipal `
@@ -102,6 +111,14 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Triggers | Should -BeOfType [System.String]
             $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testCollection
+            $script:result.indexingPolicy.indexingMode | Should -Be 'consistent'
+            $script:result.indexingPolicy.automatic | Should -Be $true
+            $script:result.indexingPolicy.includedPaths.Indexes[0].DataType | Should -Be 'Number'
+            $script:result.indexingPolicy.includedPaths.Indexes[0].Kind | Should -Be 'Range'
+            $script:result.indexingPolicy.includedPaths.Indexes[0].Precision | Should -Be -1
+            $script:result.indexingPolicy.includedPaths.Indexes[1].DataType | Should -Be 'String'
+            $script:result.indexingPolicy.includedPaths.Indexes[1].Kind | Should -Be 'Hash'
+            $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
         }
     }
 
@@ -123,6 +140,14 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Triggers | Should -BeOfType [System.String]
             $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testCollection
+            $script:result.indexingPolicy.indexingMode | Should -Be 'consistent'
+            $script:result.indexingPolicy.automatic | Should -Be $true
+            $script:result.indexingPolicy.includedPaths.Indexes[0].DataType | Should -Be 'Number'
+            $script:result.indexingPolicy.includedPaths.Indexes[0].Kind | Should -Be 'Range'
+            $script:result.indexingPolicy.includedPaths.Indexes[0].Precision | Should -Be -1
+            $script:result.indexingPolicy.includedPaths.Indexes[1].DataType | Should -Be 'String'
+            $script:result.indexingPolicy.includedPaths.Indexes[1].Kind | Should -Be 'Hash'
+            $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
         }
     }
 
@@ -170,7 +195,140 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    Context 'Add a document to a collection' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = New-CosmosDbDocument `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -DocumentBody $script:testDocumentBody `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Attachments | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testDocumentId
+            $script:result.Content | Should -Be 'Some string'
+            $script:result.More | Should -Be 'Some other string'
+        }
+    }
+
     Context 'Remove existing collection' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
+            } | Should -Not -Throw
+        }
+    }
+
+    Context 'Create a new collection with a partition key' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = New-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -PartitionKey $script:testPartitionKey -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Conflicts | Should -BeOfType [System.String]
+            $script:result.Documents | Should -BeOfType [System.String]
+            $script:result.StoredProcedures | Should -BeOfType [System.String]
+            $script:result.Triggers | Should -BeOfType [System.String]
+            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testCollection
+            $script:result.indexingPolicy.indexingMode | Should -Be 'consistent'
+            $script:result.indexingPolicy.automatic | Should -Be $true
+            $script:result.indexingPolicy.includedPaths.Indexes[0].DataType | Should -Be 'Number'
+            $script:result.indexingPolicy.includedPaths.Indexes[0].Kind | Should -Be 'Range'
+            $script:result.indexingPolicy.includedPaths.Indexes[0].Precision | Should -Be -1
+            $script:result.indexingPolicy.includedPaths.Indexes[1].DataType | Should -Be 'String'
+            $script:result.indexingPolicy.includedPaths.Indexes[1].Kind | Should -Be 'Hash'
+            $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
+            $script:result.partitionKey.kind | Should -Be 'Hash'
+            $script:result.partitionKey.paths[0] | Should -Be ('/{0}' -f $script:testPartitionKey)
+        }
+    }
+
+    Context 'Add a document to a collection with a partition key' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = New-CosmosDbDocument `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -DocumentBody $script:testDocumentBody `
+                    -PartitionKey $script:testDocumentId `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Attachments | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testDocumentId
+            $script:result.Content | Should -Be 'Some string'
+            $script:result.More | Should -Be 'Some other string'
+        }
+    }
+
+    Context 'Get the document in a collection by using the Id with a partition key' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Get-CosmosDbDocument `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testDocumentId `
+                    -PartitionKey $script:testDocumentId `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Attachments | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testDocumentId
+            $script:result.Content | Should -Be 'Some string'
+            $script:result.More | Should -Be 'Some other string'
+        }
+    }
+
+    Context 'Get all the documents in a collection with a partition key' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Get-CosmosDbDocument `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -PartitionKey $script:testDocumentId `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Attachments | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testDocumentId
+            $script:result.Content | Should -Be 'Some string'
+            $script:result.More | Should -Be 'Some other string'
+        }
+    }
+
+    Context 'Remove existing collection with a partition key' {
         It 'Should not throw an exception' {
             {
                 $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
