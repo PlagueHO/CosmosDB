@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Changed Id parameter in `Get-CosmosDbCollectionSize` to be mandatory.
+- Added documentation for creating a resource token context - See
+  [Issue #33](https://github.com/PlagueHO/CosmosDB/issues/33).
+- Added `New-CosmosDbContextToken` to create a resource token context
+  object that can be passed to `New-CosmosDbContext` to support working
+  with resource level access controls - See
+  [Issue #33](https://github.com/PlagueHO/CosmosDB/issues/33).
+- Added support to `New-CosmosDbContext` for creating a context object
+  with resource tokens from permissions - See
+  [Issue #33](https://github.com/PlagueHO/CosmosDB/issues/33).
+
 ## 2.0.11.407
 
 - Added PowerShell Core version support badge.

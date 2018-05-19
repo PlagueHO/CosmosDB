@@ -248,6 +248,57 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    Context 'Get existing collection using resource token for user permission as context' {
+        It 'Should not throw an exception' {
+            {
+                $script:collectionResourcePath = Get-CosmosDbCollectionResourcePath `
+                    -Database $script:testDatabase `
+                    -Id $script:testCollection `
+                    -Verbose
+                $permission = Get-CosmosDbPermission `
+                    -Context $script:testContext `
+                    -UserId $script:testUser `
+                    -Id $script:testCollectionPermission `
+                    -Verbose
+                $contextToken = New-CosmosDbContextToken `
+                    -Resource $script:collectionResourcePath `
+                    -TimeStamp $permission[0].Timestamp `
+                    -Token (ConvertTo-SecureString -String $permission[0].Token -AsPlainText -Force) `
+                    -Verbose
+                $resourceContext = New-CosmosDbContext `
+                    -Account $script:testAccountName `
+                    -Database $script:testDatabase `
+                    -Token $contextToken `
+                    -Verbose
+                $script:result = Get-CosmosDbCollection `
+                    -Context $resourceContext `
+                    -Id $script:testCollection `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Conflicts | Should -BeOfType [System.String]
+            $script:result.Documents | Should -BeOfType [System.String]
+            $script:result.StoredProcedures | Should -BeOfType [System.String]
+            $script:result.Triggers | Should -BeOfType [System.String]
+            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testCollection
+            $script:result.indexingPolicy.indexingMode | Should -Be 'consistent'
+            $script:result.indexingPolicy.automatic | Should -Be $true
+            $script:result.indexingPolicy.includedPaths.Indexes[0].DataType | Should -Be 'Number'
+            $script:result.indexingPolicy.includedPaths.Indexes[0].Kind | Should -Be 'Range'
+            $script:result.indexingPolicy.includedPaths.Indexes[0].Precision | Should -Be -1
+            $script:result.indexingPolicy.includedPaths.Indexes[1].DataType | Should -Be 'String'
+            $script:result.indexingPolicy.includedPaths.Indexes[1].Kind | Should -Be 'Hash'
+            $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
+        }
+    }
+
     Context 'Get existing offers' {
         It 'Should not throw an exception' {
             {
