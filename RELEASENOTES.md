@@ -1,5 +1,7 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
 ## What is New in CosmosDB 2.0.11.407
 
 May 12, 2018

@@ -27,6 +27,9 @@ $script:testAccountName = ('cdbtest{0}' -f [System.IO.Path]::GetRandomFileName()
 $script:testOffer = 'testOffer'
 $script:testDatabase = 'testDatabase'
 $script:testCollection = 'testCollection'
+$script:testUser = 'testUser'
+$script:testCollectionPermission = 'testCollectionPermission'
+$script:testDocumentPermission = 'testDocumentPermission'
 $script:testPartitionKey = 'id'
 $script:testDocumentId = [Guid]::NewGuid().ToString()
 $script:testDocumentBody = @"
@@ -93,6 +96,46 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    Context 'Add a user to a database' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = New-CosmosDbUser `
+                    -Context $script:testContext `
+                    -Id $script:testUser `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testUser
+            $script:result.Permissions | Should -Be 'permissions/'
+        }
+    }
+
+    Context 'Get the user from a database' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Get-CosmosDbUser `
+                    -Context $script:testContext `
+                    -Id $script:testUser `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testUser
+            $script:result.Permissions | Should -Be 'permissions/'
+        }
+    }
+
     Context 'Create a new collection' {
         It 'Should not throw an exception' {
             {
@@ -148,6 +191,60 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.indexingPolicy.includedPaths.Indexes[1].DataType | Should -Be 'String'
             $script:result.indexingPolicy.includedPaths.Indexes[1].Kind | Should -Be 'Hash'
             $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
+        }
+    }
+
+    Context 'Add a permission for a user to the collection' {
+        It 'Should not throw an exception' {
+            {
+                $script:collectionResourcePath = Get-CosmosDbCollectionResourcePath `
+                    -Database $script:testDatabase `
+                    -Id $script:testCollection
+                $script:result = New-CosmosDbPermission `
+                    -Context $script:testContext `
+                    -UserId $script:testUser `
+                    -Id $script:testCollectionPermission `
+                    -Resource $script:collectionResourcePath `
+                    -PermissionMode All `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testCollectionPermission
+            $script:result.permissionMode | Should -Be 'All'
+            $script:result.resource | Should -Be $script:collectionResourcePath
+            $script:result.Token | Should -BeOfType [System.String]
+        }
+    }
+
+    Context 'Get the permission for the user to the collection' {
+        It 'Should not throw an exception' {
+            {
+                $script:collectionResourcePath = Get-CosmosDbCollectionResourcePath `
+                    -Database $script:testDatabase `
+                    -Id $script:testCollection
+                $script:result = Get-CosmosDbPermission `
+                    -Context $script:testContext `
+                    -UserId $script:testUser `
+                    -Id $script:testCollectionPermission `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testCollectionPermission
+            $script:result.permissionMode | Should -Be 'All'
+            $script:result.resource | Should -Be $script:collectionResourcePath
+            $script:result.Token | Should -BeOfType [System.String]
         }
     }
 
@@ -215,6 +312,18 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Id | Should -Be $script:testDocumentId
             $script:result.Content | Should -Be 'Some string'
             $script:result.More | Should -Be 'Some other string'
+        }
+    }
+
+    Context 'Remove existing permission for a user for the collection' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Remove-CosmosDbPermission `
+                    -Context $script:testContext `
+                    -UserId $script:testUser `
+                    -Id $script:testCollectionPermission `
+                    -Verbose
+            } | Should -Not -Throw
         }
     }
 
@@ -332,6 +441,14 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         It 'Should not throw an exception' {
             {
                 $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
+            } | Should -Not -Throw
+        }
+    }
+
+    Context 'Remove existing user' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Remove-CosmosDbUser -Context $script:testContext -Id $script:testUser -Verbose
             } | Should -Not -Throw
         }
     }
