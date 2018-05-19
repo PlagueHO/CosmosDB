@@ -9,7 +9,8 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-{{Fill in the Synopsis}}
+Create a new Context Token that can be used to create a resource
+context.
 
 ## SYNTAX
 
@@ -20,9 +21,9 @@ New-CosmosDbContextToken [-Resource] <String> [-TimeStamp] <DateTime> [-Token] <
 
 ## DESCRIPTION
 
-Create a new Context Token that can be used to create a resource
-context. This is created from a token retrieved from a Cosmos DB
-permission for a user.
+This function creates a new Context Token that can be used to create
+a context containing resource level access tokens. This is created
+from a token retrieved from a Cosmos DB permission for a user.
 
 ## EXAMPLES
 
@@ -74,6 +75,24 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -TokenExpiry
+
+This is the number of seconds the token will be valid for. It is
+added to the TimeStamp parameter to calculate the expected expiration
+date/time of the token.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 2
+Default value: 3600
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Token
 
 This is the token retrieved from a Cosmos DB user permission for
@@ -85,7 +104,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 2
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

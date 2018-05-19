@@ -16,6 +16,7 @@ namespace CosmosDB {
     {
         public System.String Resource;
         public System.DateTime TimeStamp;
+        public System.DateTime Expires;
         public System.Security.SecureString Token;
     }
 

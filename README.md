@@ -454,10 +454,11 @@ the `MyNewCollection`.
 ```powershell
 $collectionId = Get-CosmosDbCollectionResourcePath -Database 'MyDatabase' -Id 'MyNewCollection'
 $permission = Get-CosmosDbPermission -Context $cosmosDbContext -UserId 'dscottraynsford@contoso.com' -Id 'r_mynewcollection' -Resource $collectionId -TokenExpiry 7200
-# There are some new features planned to make creation of a resource context easier
+# Future features planned to make creation of a resource context token from a permission easier
 $contextToken = New-CosmosDbContextToken `
     -Resource $collectionId `
     -TimeStamp $permission[0].Timestamp `
+    -TokenExpiry 7200 `
     -Token (ConvertTo-SecureString -String $permission[0].Token -AsPlainText -Force)
 $resourceContext = New-CosmosDbContext `
     -Account $cosmosDBContext.Account

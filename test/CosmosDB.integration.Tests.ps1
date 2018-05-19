@@ -13,9 +13,9 @@ Import-Module -Name $TestHelperPath -Force
 Get-AzureServicePrincipal
 
 if ([String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
-    [String]::IsNullOrEmpty($env:azureApplicationId) -or `
-    [String]::IsNullOrEmpty($env:azureApplicationPassword) -or `
-    [String]::IsNullOrEmpty($env:azureTenantId))
+        [String]::IsNullOrEmpty($env:azureApplicationId) -or `
+        [String]::IsNullOrEmpty($env:azureApplicationPassword) -or `
+        [String]::IsNullOrEmpty($env:azureTenantId))
 {
     Write-Warning -Message 'Integration tests can not be run because one or more Azure connection environment variables are not set.'
     return
@@ -194,7 +194,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'Add a permission for a user to the collection' {
+    Context 'Add a read collection permission for a user' {
         It 'Should not throw an exception' {
             {
                 $script:collectionResourcePath = Get-CosmosDbCollectionResourcePath `
@@ -205,7 +205,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     -UserId $script:testUser `
                     -Id $script:testCollectionPermission `
                     -Resource $script:collectionResourcePath `
-                    -PermissionMode All `
+                    -PermissionMode Read `
                     -Verbose
             } | Should -Not -Throw
         }
@@ -216,13 +216,13 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.ResourceId | Should -BeOfType [System.String]
             $script:result.Uri | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testCollectionPermission
-            $script:result.permissionMode | Should -Be 'All'
+            $script:result.permissionMode | Should -Be 'Read'
             $script:result.resource | Should -Be $script:collectionResourcePath
             $script:result.Token | Should -BeOfType [System.String]
         }
     }
 
-    Context 'Get the permission for the user to the collection' {
+    Context 'Get the read collection permission for the user' {
         It 'Should not throw an exception' {
             {
                 $script:collectionResourcePath = Get-CosmosDbCollectionResourcePath `
@@ -242,7 +242,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.ResourceId | Should -BeOfType [System.String]
             $script:result.Uri | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testCollectionPermission
-            $script:result.permissionMode | Should -Be 'All'
+            $script:result.permissionMode | Should -Be 'Read'
             $script:result.resource | Should -Be $script:collectionResourcePath
             $script:result.Token | Should -BeOfType [System.String]
         }
@@ -366,7 +366,106 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'Remove existing permission for a user for the collection' {
+    Context 'Add a read document permission for a user' {
+        It 'Should not throw an exception' {
+            {
+                $script:documentResourcePath = Get-CosmosDbDocumentResourcePath `
+                    -Database $script:testDatabase `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testDocumentId
+                $script:result = New-CosmosDbPermission `
+                    -Context $script:testContext `
+                    -UserId $script:testUser `
+                    -Id $script:testDocumentPermission `
+                    -Resource $script:documentResourcePath `
+                    -PermissionMode Read `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testDocumentPermission
+            $script:result.permissionMode | Should -Be 'Read'
+            $script:result.resource | Should -Be $script:documentResourcePath
+            $script:result.Token | Should -BeOfType [System.String]
+        }
+    }
+
+    Context 'Get the read document permission for the user' {
+        It 'Should not throw an exception' {
+            {
+                $script:documentResourcePath = Get-CosmosDbDocumentResourcePath `
+                    -Database $script:testDatabase `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testDocumentId
+                $script:result = Get-CosmosDbPermission `
+                    -Context $script:testContext `
+                    -UserId $script:testUser `
+                    -Id $script:testDocumentPermission `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testDocumentPermission
+            $script:result.permissionMode | Should -Be 'Read'
+            $script:result.resource | Should -Be $script:documentResourcePath
+            $script:result.Token | Should -BeOfType [System.String]
+        }
+    }
+
+    Context 'Get existing document using resource token for user permission as context' {
+        It 'Should not throw an exception' {
+            {
+                $script:documentResourcePath = Get-CosmosDbDocumentResourcePath `
+                    -Database $script:testDatabase `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testDocumentId
+                $permission = Get-CosmosDbPermission `
+                    -Context $script:testContext `
+                    -UserId $script:testUser `
+                    -Id $script:testDocumentPermission `
+                    -Verbose
+                $contextToken = New-CosmosDbContextToken `
+                    -Resource $script:documentResourcePath `
+                    -TimeStamp $permission[0].Timestamp `
+                    -Token (ConvertTo-SecureString -String $permission[0].Token -AsPlainText -Force) `
+                    -Verbose
+                $resourceContext = New-CosmosDbContext `
+                    -Account $script:testAccountName `
+                    -Database $script:testDatabase `
+                    -Token $contextToken `
+                    -Verbose
+                $script:result = Get-CosmosDbDocument `
+                    -Context $resourceContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testDocumentId `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+    }
+
+    Context 'Remove the existing read document permission for the user' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Remove-CosmosDbPermission `
+                    -Context $script:testContext `
+                    -UserId $script:testUser `
+                    -Id $script:testDocumentPermission `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+    }
+
+    Context 'Remove the existing read collection permission for the user' {
         It 'Should not throw an exception' {
             {
                 $script:result = Remove-CosmosDbPermission `

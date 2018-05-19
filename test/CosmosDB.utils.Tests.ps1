@@ -29,9 +29,11 @@ InModuleScope CosmosDB {
     $script:testToken = 'type-resource&ver=1.0&sig=5mDuQBYA0kb70WDJoTUzSBMTG3owkC0/cEN4fqa18/s='
     $script:testTokenSecureString = ConvertTo-SecureString -String $script:testToken -AsPlainText -Force
     $script:testTokenResource = ('dbs/{0}/colls/{1}' -f $script:testDatabase, $script:testCollection)
+    $script:testTokenExpiry = 7200
     $script:testContextToken = [CosmosDB.ContextToken] @{
         Resource  = $script:testTokenResource
         TimeStamp = $script:testDate
+        Expires   = $script:testDate.AddSeconds($script:testTokenExpiry)
         Token     = $script:testTokenSecureString
     }
     $script:testResourceContext = [CosmosDb.Context] @{
@@ -247,10 +249,11 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $newCosmosDbContextTokenParameters = @{
-                    Resource  = $script:testTokenResource
-                    TimeStamp = $script:testDate
-                    Token     = $script:testTokenSecureString
-                    Verbose   = $true
+                    Resource    = $script:testTokenResource
+                    TimeStamp   = $script:testDate
+                    TokenExpiry = $script:testTokenExpiry
+                    Token       = $script:testTokenSecureString
+                    Verbose     = $true
                 }
 
                 { $script:result = New-CosmosDbContextToken @newCosmosDbContextTokenParameters } | Should -Not -Throw
@@ -259,6 +262,7 @@ InModuleScope CosmosDB {
             It 'Should return expected result' {
                 $script:result.Resource | Should -Be $script:testTokenResource
                 $script:result.TimeStamp | Should -Be $script:testDate
+                $script:result.Expires | Should -Be $script:testDate.AddSeconds($script:testTokenExpiry)
                 $script:result.Token | Should -Be $script:testTokenSecureString
             }
         }
@@ -396,8 +400,8 @@ InModuleScope CosmosDB {
         Context 'When called with context parameter and Get method and ResourceType is ''users''' {
             $invokeRestMethod_parameterfilter = {
                 $Method -eq 'Get' -and `
-                $ContentType -eq 'application/json' -and `
-                $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
+                    $ContentType -eq 'application/json' -and `
+                    $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
             }
 
             Mock `
@@ -510,8 +514,8 @@ InModuleScope CosmosDB {
         Context 'When called with context parameter and Get method and ResourceType is ''colls''' {
             $invokeRestMethod_parameterfilter = {
                 $Method -eq 'Get' -and `
-                $ContentType -eq 'application/json' -and `
-                $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'colls')
+                    $ContentType -eq 'application/json' -and `
+                    $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'colls')
             }
 
             Mock `
@@ -548,8 +552,8 @@ InModuleScope CosmosDB {
         Context 'When called with resource context parameter and Get method and ResourceType is ''colls''' {
             $invokeRestMethod_parameterfilter = {
                 $Method -eq 'Get' -and `
-                $ContentType -eq 'application/json' -and `
-                $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, $script:testCollection)
+                    $ContentType -eq 'application/json' -and `
+                    $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, $script:testCollection)
             }
 
             Mock `
@@ -587,8 +591,8 @@ InModuleScope CosmosDB {
         Context 'When called with context parameter and Post method' {
             $invokeRestMethod_parameterfilter = {
                 $Method -eq 'Post' -and `
-                $ContentType -eq 'application/query+json' -and `
-                $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
+                    $ContentType -eq 'application/query+json' -and `
+                    $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
             }
 
             Mock `
