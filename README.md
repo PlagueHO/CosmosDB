@@ -23,12 +23,14 @@
     - [Create a Context specifying the Key Manually](#create-a-context-specifying-the-key-manually)
     - [Use CosmosDB Module to Retrieve Key from Azure Management Portal](#use-cosmosdb-module-to-retrieve-key-from-azure-management-portal)
     - [Create a Context for a CosmosDB Emulator](#create-a-context-for-a-cosmosdb-emulator)
+    - [Create a Context from Resource Authorization Tokens](#create-a-Context-from-resource-authorization-tokens)
   - [Working with Databases](#working-with-databases)
   - [Working with Offers](#working-with-offers)
   - [Working with Collections](#working-with-collections)
     - [Creating a Collection with a custom Indexing Policy](#creating-a-collection-with-a-custom-indexing-policy)
   - [Working with Documents](#working-with-documents)
     -[Working with Documents in a Partitioned Collection](#working-with-documents-in-a-partitioned-collection)
+  - [Using Resource Authorization Tokens](#using-resource-authorization-tokens)
   - [Working with Attachments](#working-with-attachments)
   - [Working with Users](#working-with-users)
   - [Stored Procedures](#working-with-stored-procedures)
@@ -136,6 +138,12 @@ following command:
 ```powershell
 $cosmosDbContext = New-CosmosDbContext -Emulator -Database 'MyDatabase'
 ```
+
+#### Create a Context from Resource Authorization Tokens
+
+See the section [Using Resource Authorization Tokens](#using-resource-authorization-tokens)
+for instructions on how to create a Context object containing one or more _Resource
+Authorization Tokens_.
 
 ### Working with Databases
 
@@ -387,13 +395,13 @@ Get-CosmosDbUser -Context $cosmosDbContext
 Create a user in the database:
 
 ```powershell
-New-CosmosDbUser -Context $cosmosDbContext -Id 'MyApplication'
+New-CosmosDbUser -Context $cosmosDbContext -Id 'dscottraynsford@contoso.com'
 ```
 
 Delete a user from the database:
 
 ```powershell
-Remove-CosmosDbUser -Context $cosmosDbContext -Id 'MyApplication'
+Remove-CosmosDbUser -Context $cosmosDbContext -Id 'dscottraynsford@contoso.com'
 ```
 
 ### Working with Permissions
@@ -401,20 +409,77 @@ Remove-CosmosDbUser -Context $cosmosDbContext -Id 'MyApplication'
 Get a list of permissions for a user in the database:
 
 ```powershell
-Get-CosmosDbPermission -Context $cosmosDbContext -UserId 'MyApplication'
+Get-CosmosDbPermission -Context $cosmosDbContext -UserId 'dscottraynsford@contoso.com'
 ```
 
 Create a permission for a user in the database with read access to a collection:
 
 ```powershell
 $collectionId = Get-CosmosDbCollectionResourcePath -Database 'MyDatabase' -Id 'MyNewCollection'
-New-CosmosDbPermission -Context $cosmosDbContext -UserId 'MyApplication' -Id 'r_mynewcollection' -Resource $collectionId -PermissionMode Read
+New-CosmosDbPermission -Context $cosmosDbContext -UserId 'dscottraynsford@contoso.com' -Id 'r_mynewcollection' -Resource $collectionId -PermissionMode Read
 ```
 
 Remove a permission for a user from the database:
 
 ```powershell
-Remove-CosmosDbPermission -Context $cosmosDbContext -UserId 'MyApplication' -Id 'r_mynewcollection'
+Remove-CosmosDbPermission -Context $cosmosDbContext -UserId 'dscottraynsford@contoso.com' -Id 'r_mynewcollection'
+```
+
+### Using Resource Authorization Tokens
+
+Cosmos DB supports using _resource authorization tokens_ to grant
+access to individual resources (eg. documents, collections, triggers)
+to a specific user. A user in this context can also be used to represent
+an application that needs access to specific data.
+This can be used to reduce the need to provide access to master keys
+to end users.
+
+To use a resource authorization token, first a permission must be assigned
+to the user for the resource using the `New-CosmosDbPermission`. A user
+can be created using the `New-CosmosDbUser` function.
+
+**Note: By default, Resource Authorization Tokens expire after an hour.
+This can be extended to a maximum of 5 hours or reduced to minimum of 10
+minutes. Use the `TokenExpiry` parameter to control the length of time
+that the resource authorization tokens will be valid for.**
+
+The typical pattern for using _resource authorization tokens_ is to
+have a **token broker app** that provides some form of user authentication
+and then returns the _resource authorization tokens_ assigned to that
+user. This removes the requirement for the user to be given access to
+the **master** key for the CosmosDB database.
+
+For more information on using _resource authorization tokens_ or the
+**token broker app* pattern, please see [this document](https://docs.microsoft.com/en-us/azure/cosmos-db/secure-access-to-data#resource-tokens).
+
+The following is an example showing how to create a resource context object
+that contains a _resource authorization token_ granting access to read
+the collection `MyNewCollection`. It is assumed that the permission for
+the user `dscottraynsford@contoso.com` has been created as per the
+previous section. The resource context object is then used to retrieve
+the `MyNewCollection`.
+
+The _resource authorization token_ is stored in the context object with an
+expiration date/time matching what was returned in the permission so that
+the validity of a token can be validated and reported on without making
+a request to the Cosmos DB server.
+
+```powershell
+$collectionId = Get-CosmosDbCollectionResourcePath -Database 'MyDatabase' -Id 'MyNewCollection'
+$permission = Get-CosmosDbPermission -Context $cosmosDbContext -UserId 'dscottraynsford@contoso.com' -Id 'r_mynewcollection' -Resource $collectionId -TokenExpiry 7200
+# Future features planned to make creation of a resource context token from a permission easier
+$contextToken = New-CosmosDbContextToken `
+    -Resource $collectionId `
+    -TimeStamp $permission[0].Timestamp `
+    -TokenExpiry 7200 `
+    -Token (ConvertTo-SecureString -String $permission[0].Token -AsPlainText -Force)
+$resourceContext = New-CosmosDbContext `
+    -Account $cosmosDBContext.Account
+    -Database 'MyDatabase' `
+    -Token $contextToken
+Get-CosmosDbCollection `
+    -Context $resourceContext `
+    -Id 'MyNewCollection' `
 ```
 
 ### Working with Triggers

@@ -12,6 +12,14 @@ if (-not ([System.Management.Automation.PSTypeName]'CosmosDB.Context').Type)
 {
     $typeDefinition = @'
 namespace CosmosDB {
+    public class ContextToken
+    {
+        public System.String Resource;
+        public System.DateTime TimeStamp;
+        public System.DateTime Expires;
+        public System.Security.SecureString Token;
+    }
+
     public class Context
     {
         public System.String Account;
@@ -19,6 +27,7 @@ namespace CosmosDB {
         public System.Security.SecureString Key;
         public System.String KeyType;
         public System.String BaseUri;
+        public CosmosDB.ContextToken[] Token;
     }
 
     namespace IndexingPolicy {

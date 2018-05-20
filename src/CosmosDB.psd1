@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.0.11.407'
+    ModuleVersion     = '2.0.12.407'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -114,6 +114,7 @@
         'New-CosmosDbDatabase'
         'New-CosmosDbDocument'
         'New-CosmosDbContext'
+        'New-CosmosDbContextToken'
         'New-CosmosDbPermission'
         'New-CosmosDbStoredProcedure'
         'New-CosmosDbTrigger'
@@ -174,6 +175,21 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+May 19, 2018
+
+- Changed Id parameter in `Get-CosmosDbCollectionSize` to be mandatory.
+- Added documentation for creating a resource token context - See
+  [Issue #33](https://github.com/PlagueHO/CosmosDB/issues/33).
+- Added `New-CosmosDbContextToken` to create a resource token context
+  object that can be passed to `New-CosmosDbContext` to support working
+  with resource level access controls - See
+  [Issue #33](https://github.com/PlagueHO/CosmosDB/issues/33).
+- Added support to `New-CosmosDbContext` for creating a context object
+  with resource tokens from permissions - See
+  [Issue #33](https://github.com/PlagueHO/CosmosDB/issues/33).
+
 ## What is New in CosmosDB 2.0.11.407
 
 May 12, 2018
