@@ -1,12 +1,13 @@
 function New-CosmosDbContext
 {
-    [CmdletBinding(DefaultParameterSetName = 'Context')]
+    [CmdletBinding(DefaultParameterSetName = 'Account')]
     [OutputType([System.Management.Automation.PSCustomObject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Scope = 'Function')]
     param
     (
-        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
-        [Parameter(Mandatory = $true, ParameterSetName = 'Azure')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Token')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'AzureAccount')]
         [ValidateNotNullOrEmpty()]
         [System.String]
         $Account,
@@ -16,22 +17,22 @@ function New-CosmosDbContext
         [System.String]
         $Database,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [ValidateNotNullOrEmpty()]
         [System.Security.SecureString]
         $Key,
 
-        [Parameter(ParameterSetName = 'Context')]
+        [Parameter(ParameterSetName = 'Account')]
         [ValidateSet('master', 'resource')]
         [System.String]
         $KeyType = 'master',
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Azure')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'AzureAccount')]
         [ValidateNotNullOrEmpty()]
         [System.String]
         $ResourceGroup,
 
-        [Parameter(ParameterSetName = 'Azure')]
+        [Parameter(ParameterSetName = 'AzureAccount')]
         [ValidateSet('PrimaryMasterKey', 'SecondaryMasterKey', 'PrimaryReadonlyMasterKey', 'SecondaryReadonlyMasterKey')]
         [System.String]
         $MasterKeyType = 'PrimaryMasterKey',
@@ -42,7 +43,13 @@ function New-CosmosDbContext
 
         [Parameter(ParameterSetName = 'Emulator')]
         [System.Int16]
-        $Port = 8081
+        $Port = 8081,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'Token')]
+        [Parameter(ParameterSetName = 'Emulator')]
+        [ValidateNotNullOrEmpty()]
+        [CosmosDB.ContextToken[]]
+        $Token
     )
 
     switch ($PSCmdlet.ParameterSetName)
@@ -60,7 +67,7 @@ function New-CosmosDbContext
             $BaseUri = [uri]::new('https://localhost:{0}' -f $Port)
         }
 
-        'Azure'
+        'AzureAccount'
         {
             try
             {
@@ -95,7 +102,12 @@ function New-CosmosDbContext
             $BaseUri = (Get-CosmosDbUri -Account $Account)
         }
 
-        'Context'
+        'Account'
+        {
+            $BaseUri = (Get-CosmosDbUri -Account $Account)
+        }
+
+        'Token'
         {
             $BaseUri = (Get-CosmosDbUri -Account $Account)
         }
@@ -107,9 +119,48 @@ function New-CosmosDbContext
         Key      = $Key
         KeyType  = $KeyType
         BaseUri  = $BaseUri
+        Token    = $Token
     }
 
     return $context
+}
+
+function New-CosmosDbContextToken
+{
+    [CmdletBinding()]
+    [OutputType([System.Management.Automation.PSCustomObject])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Scope = 'Function')]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Resource,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.DateTime]
+        $TimeStamp,
+
+        [Parameter()]
+        [ValidateRange(600,18000)]
+        [System.Int32]
+        $TokenExpiry = 3600,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.Security.SecureString]
+        $Token
+    )
+
+    $contextToken = New-Object -TypeName 'CosmosDB.ContextToken' -Property @{
+        Resource  = $Resource
+        TimeStamp = $TimeStamp
+        Expires   = $TimeStamp.AddSeconds($TokenExpiry)
+        Token     = $Token
+    }
+
+    return $contextToken
 }
 
 function Get-CosmosDbUri
@@ -182,6 +233,8 @@ function New-CosmosDbAuthorizationToken
         [System.String]
         $TokenVersion = '1.0'
     )
+
+    Write-Verbose -Message $($LocalizedData.CreateAuthorizationToken -f $Method, $ResourceType, $ResourceId, $Date)
 
     $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Key)
     $decryptedKey = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
@@ -283,20 +336,6 @@ function Invoke-CosmosDbRequest
         $Database = $Context.Database
     }
 
-    if (-not ($PSBoundParameters.ContainsKey('Key')))
-    {
-        $Key = $Context.Key
-    }
-
-    if (-not ($PSBoundParameters.ContainsKey('KeyType')))
-    {
-        $KeyType = $Context.KeyType
-    }
-
-    $baseUri = $Context.BaseUri.ToString()
-    $date = Get-Date
-    $dateString = ConvertTo-CosmosDbTokenDateString -Date $date
-
     # Generate the resource link value that will be used in the URI and to generate the resource id
     switch ($resourceType)
     {
@@ -358,15 +397,86 @@ function Invoke-CosmosDbRequest
     }
 
     # Generate the URI from the base connection URI and the resource link
+    $baseUri = $Context.BaseUri.ToString()
     $uri = [uri]::New(('{0}{1}' -f $baseUri, $resourceLink))
 
-    $token = New-CosmosDbAuthorizationToken `
-        -Key $Key `
-        -KeyType $KeyType `
-        -Method $Method `
-        -ResourceType $ResourceType `
-        -ResourceId $resourceId `
-        -Date $date
+    # Determine the token to use to gain access to the resource
+    $token = $null
+
+    if ($null -ne $Context.Token)
+    {
+        Write-Verbose -Message $($LocalizedData.FindResourceTokenInContext -f $resourceLink)
+
+        # Find the most recent token non-expired matching the resource link
+        $matchToken = $context.Token |
+            Where-Object -FilterScript { $_.Resource -eq $resourceLink }
+
+        if ($matchToken)
+        {
+            # One or more matching tokens could be found
+            Write-Verbose -Message $($LocalizedData.FoundResourceTokenInContext -f $matchToken.Count, $matchToken.Resource)
+
+            $now = (Get-Date)
+            $validToken = $matchToken |
+                Where-Object -FilterScript { $_.Expires -gt $now } |
+                Sort-Object -Property Expires -Descending |
+                Select-Object -First 1
+
+            if ($validToken)
+            {
+                # One or more matching tokens could be found
+                Write-Verbose -Message $($LocalizedData.FoundUnExpiredResourceTokenInContext -f $validToken.Resource, $validToken.TimeStamp)
+
+                $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($validToken.Token)
+                $decryptedToken = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+                $token = [System.Web.HttpUtility]::UrlEncode($decryptedToken)
+                $date = $validToken.TimeStamp
+                $dateString = ConvertTo-CosmosDbTokenDateString -Date $date
+            }
+            else
+            {
+                # No un-expired matching token could be found, so fall back to using a master key if possible
+                Write-Verbose -Message $($LocalizedData.NoMatchingUnexpiredResourceTokenInContext -f $resourceLink)
+            }
+        }
+        else
+        {
+            # No matching token could be found, so fall back to using a master key if possible
+            Write-Verbose -Message $($LocalizedData.NotFoundResourceTokenInContext -f $resourceLink)
+        }
+    }
+
+    if ($null -eq $token)
+    {
+        <#
+            A token in the context that matched the resource link could not
+            be found. So use the master key to generate the resource link.
+        #>
+        if (-not ($PSBoundParameters.ContainsKey('Key')))
+        {
+            if (-not [System.String]::IsNullOrEmpty($Context.Key))
+            {
+                $Key = $Context.Key
+            }
+        }
+
+        if ([System.String]::IsNullOrEmpty($Key))
+        {
+            New-CosmosDbInvalidOperationException -Message ($LocalizedData.ErrorAuthorizationKeyEmpty)
+        }
+
+        # Generate the date used for the authorization token
+        $date = Get-Date
+        $dateString = ConvertTo-CosmosDbTokenDateString -Date $date
+
+        $token = New-CosmosDbAuthorizationToken `
+            -Key $Key `
+            -KeyType $KeyType `
+            -Method $Method `
+            -ResourceType $ResourceType `
+            -ResourceId $resourceId `
+            -Date $date
+    }
 
     $Headers += @{
         'authorization' = $token

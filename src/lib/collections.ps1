@@ -250,7 +250,7 @@ function Get-CosmosDbCollectionSize
         [System.String]
         $Database,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [System.String]
         $Id
@@ -262,20 +262,13 @@ function Get-CosmosDbCollectionSize
         x-ms-resource-quota and x-ms-resource-usage headers in the response.
     #>
 
-    if ($PSBoundParameters.ContainsKey('Id'))
-    {
-        $null = $PSBoundParameters.Remove('Id')
+    $null = $PSBoundParameters.Remove('Id')
 
-        $result = Invoke-CosmosDbRequest @PSBoundParameters `
-            -Method 'Get' `
-            -ResourceType 'colls' `
-            -ResourcePath ('colls/{0}' -f $Id) `
-            -UseWebRequest
-    }
-    else
-    {
-        New-CosmosDbInvalidOperationException -Message 'Collection ID must be supplied.'
-    }
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
+        -Method 'Get' `
+        -ResourceType 'colls' `
+        -ResourcePath ('colls/{0}' -f $Id) `
+        -UseWebRequest
 
     $usageItems = @{}
     $($result.headers["x-ms-resource-usage"]).Split(';', [System.StringSplitOptions]::RemoveEmptyEntries) |

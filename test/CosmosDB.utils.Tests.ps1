@@ -12,6 +12,7 @@ InModuleScope CosmosDB {
     # Variables for use in tests
     $script:testAccount = 'testAccount'
     $script:testDatabase = 'testDatabase'
+    $script:testCollection = 'testCollection'
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
     $script:testEmulatorKey = 'C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=='
@@ -25,6 +26,23 @@ InModuleScope CosmosDB {
         KeyType  = 'master'
         BaseUri  = ('https://{0}.documents.azure.com/' -f $script:testAccount)
     }
+    $script:testToken = 'type-resource&ver=1.0&sig=5mDuQBYA0kb70WDJoTUzSBMTG3owkC0/cEN4fqa18/s='
+    $script:testTokenSecureString = ConvertTo-SecureString -String $script:testToken -AsPlainText -Force
+    $script:testTokenResource = ('dbs/{0}/colls/{1}' -f $script:testDatabase, $script:testCollection)
+    $script:testTokenExpiry = 7200
+    $script:testContextToken = [CosmosDB.ContextToken] @{
+        Resource  = $script:testTokenResource
+        TimeStamp = $script:testDate
+        Expires   = $script:testDate.AddSeconds($script:testTokenExpiry)
+        Token     = $script:testTokenSecureString
+    }
+    $script:testResourceContext = [CosmosDb.Context] @{
+        Account  = $script:testAccount
+        Database = $script:testDatabase
+        BaseUri  = ('https://{0}.documents.azure.com/' -f $script:testAccount)
+        Token    = $script:testContextToken
+    }
+
     $script:testJson = @'
 {
     "_rid": "2MFbAA==",
@@ -71,7 +89,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbContext -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'When called with Context parameters' {
+        Context 'When called with Account parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -94,7 +112,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'When called with Azure parameters and not connected to Azure' {
+        Context 'When called with AzureAccount parameters and not connected to Azure' {
             $script:result = $null
 
             Mock -CommandName Get-AzureRmContext -MockWith { throw }
@@ -132,7 +150,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'When called with Azure parameters and connected to Azure' {
+        Context 'When called with AzureAccount parameters and connected to Azure' {
             $script:result = $null
 
             Mock `
@@ -144,7 +162,7 @@ InModuleScope CosmosDB {
                     secondaryReadonlyMasterKey = 'secondaryReadonlyMasterKey'
                 } }
 
-            Mock -CommandName Get-AzureRmContext -MockWith { $true  }
+            Mock -CommandName Get-AzureRmContext -MockWith { $true }
             Mock -CommandName Add-AzureRmAccount
 
             It 'Should not throw exception' {
@@ -178,6 +196,7 @@ InModuleScope CosmosDB {
                 $newCosmosDbContextParameters = @{
                     Database = $script:testDatabase
                     Emulator = $true
+                    Verbose  = $true
                 }
 
                 { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
@@ -190,6 +209,61 @@ InModuleScope CosmosDB {
                 $tempCredential.Password | Should -Be $script:testEmulatorKey
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.BaseUri | Should -Be ('https://localhost:8081/')
+            }
+        }
+
+        Context 'When called with Token parameters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Account  = $script:testAccount
+                    Database = $script:testDatabase
+                    Token    = $script:testContextToken
+                    Verbose  = $true
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be $script:testAccount
+                $script:result.Database | Should -Be $script:testDatabase
+                $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
+                $script:result.Token[0].Resource | Should -Be $script:testTokenResource
+                $script:result.Token[0].TimeStamp | Should -Be $script:testDate
+                $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($script:result.Token[0].Token)
+                $decryptedToken = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+                $decryptedToken | Should -Be $script:testToken
+            }
+        }
+    }
+
+    Describe 'New-CosmosDbContextToken' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name New-CosmosDbContextToken -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with paramters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextTokenParameters = @{
+                    Resource    = $script:testTokenResource
+                    TimeStamp   = $script:testDate
+                    TokenExpiry = $script:testTokenExpiry
+                    Token       = $script:testTokenSecureString
+                    Verbose     = $true
+                }
+
+                { $script:result = New-CosmosDbContextToken @newCosmosDbContextTokenParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Resource | Should -Be $script:testTokenResource
+                $script:result.TimeStamp | Should -Be $script:testDate
+                $script:result.Expires | Should -Be $script:testDate.AddSeconds($script:testTokenExpiry)
+                $script:result.Token | Should -Be $script:testTokenSecureString
             }
         }
     }
@@ -205,6 +279,7 @@ InModuleScope CosmosDB {
             It 'Should not throw exception' {
                 $GetCosmosDbUriParameters = @{
                     Account = $script:testAccount
+                    Verbose = $true
                 }
 
                 { $script:result = Get-CosmosDbUri @GetCosmosDbUriParameters } | Should -Not -Throw
@@ -223,6 +298,7 @@ InModuleScope CosmosDB {
                 $GetCosmosDbUriParameters = @{
                     Account = $script:testAccount
                     BaseUri = $script:testBaseUri
+                    Verbose = $true
                 }
 
                 { $script:result = Get-CosmosDbUri @GetCosmosDbUriParameters } | Should -Not -Throw
@@ -245,7 +321,8 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $convertToCosmosDBTokenDateStringParameters = @{
-                    Date = $script:testDate
+                    Date    = $script:testDate
+                    Verbose = $true
                 }
 
                 { $script:result = ConvertTo-CosmosDbTokenDateString @convertToCosmosDBTokenDateStringParameters } | Should -Not -Throw
@@ -273,6 +350,7 @@ InModuleScope CosmosDB {
                     ResourceType = 'users'
                     ResourceId   = 'dbs/testdb'
                     Date         = $script:testUniversalDate
+                    Verbose      = $true
                 }
 
                 { $script:result = New-CosmosDbAuthorizationToken @newCosmosDbAuthorizationTokenParameters } | Should -Not -Throw
@@ -294,6 +372,7 @@ InModuleScope CosmosDB {
                     ResourceType = 'users'
                     ResourceId   = 'dbs/Testdb'
                     Date         = $script:testUniversalDate
+                    Verbose      = $true
                 }
 
                 { $script:result = New-CosmosDbAuthorizationToken @newCosmosDbAuthorizationTokenParameters } | Should -Not -Throw
@@ -321,8 +400,8 @@ InModuleScope CosmosDB {
         Context 'When called with context parameter and Get method and ResourceType is ''users''' {
             $invokeRestMethod_parameterfilter = {
                 $Method -eq 'Get' -and `
-                $ContentType -eq 'application/json' -and `
-                $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri,$script:testContext.Database,'users')
+                    $ContentType -eq 'application/json' -and `
+                    $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
             }
 
             Mock `
@@ -337,6 +416,7 @@ InModuleScope CosmosDB {
                     Context      = $script:testContext
                     Method       = 'Get'
                     ResourceType = 'users'
+                    Verbose      = $true
                 }
 
                 { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
@@ -358,8 +438,8 @@ InModuleScope CosmosDB {
         Context 'When called with context parameter and Get method and ResourceType is ''dbs''' {
             $invokeRestMethod_parameterfilter = {
                 $Method -eq 'Get' -and `
-                $ContentType -eq 'application/json' -and `
-                $Uri -eq ('{0}{1}' -f $script:testContext.BaseUri,'dbs')
+                    $ContentType -eq 'application/json' -and `
+                    $Uri -eq ('{0}{1}' -f $script:testContext.BaseUri, 'dbs')
             }
 
             Mock `
@@ -374,6 +454,7 @@ InModuleScope CosmosDB {
                     Context      = $script:testContext
                     Method       = 'Get'
                     ResourceType = 'dbs'
+                    Verbose      = $true
                 }
 
                 { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
@@ -395,8 +476,8 @@ InModuleScope CosmosDB {
         Context 'When called with context parameter and Get method and ResourceType is ''offers''' {
             $invokeRestMethod_parameterfilter = {
                 $Method -eq 'Get' -and `
-                $ContentType -eq 'application/json' -and `
-                $Uri -eq ('{0}{1}' -f $script:testContext.BaseUri,'offers')
+                    $ContentType -eq 'application/json' -and `
+                    $Uri -eq ('{0}{1}' -f $script:testContext.BaseUri, 'offers')
             }
 
             Mock `
@@ -411,6 +492,7 @@ InModuleScope CosmosDB {
                     Context      = $script:testContext
                     Method       = 'Get'
                     ResourceType = 'offers'
+                    Verbose      = $true
                 }
 
                 { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
@@ -429,11 +511,127 @@ InModuleScope CosmosDB {
             }
         }
 
+        Context 'When called with context parameter and Get method and ResourceType is ''colls''' {
+            $invokeRestMethod_parameterfilter = {
+                $Method -eq 'Get' -and `
+                    $ContentType -eq 'application/json' -and `
+                    $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'colls')
+            }
+
+            Mock `
+                -CommandName Invoke-RestMethod `
+                -ParameterFilter $invokeRestMethod_parameterfilter `
+                -MockWith $invokeRestMethod_mockwith
+
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $invokeCosmosDbRequestparameters = @{
+                    Context      = $script:testContext
+                    Method       = 'Get'
+                    ResourceType = 'colls'
+                    Verbose      = $true
+                }
+
+                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result._count | Should -Be 1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-RestMethod `
+                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -Exactly -Times 1
+                Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with Get method and ResourceType is ''colls'' and a resource token context that matches the resource link' {
+            $invokeRestMethod_parameterfilter = {
+                $Method -eq 'Get' -and `
+                $ContentType -eq 'application/json' -and `
+                $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, $script:testCollection)
+            }
+
+            Mock `
+                -CommandName Invoke-RestMethod `
+                -ParameterFilter $invokeRestMethod_parameterfilter `
+                -MockWith $invokeRestMethod_mockwith
+
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $invokeCosmosDbRequestparameters = @{
+                    Context      = $script:testResourceContext
+                    Method       = 'Get'
+                    ResourceType = 'colls'
+                    ResourcePath = ('colls/{0}' -f $script:testCollection)
+                    Verbose      = $true
+                }
+
+                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result._count | Should -Be 1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-RestMethod `
+                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -Exactly -Times 1
+                Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with Get method and ResourceType is ''colls'' and a resource token context without matching token and no master key' {
+            $invokeRestMethod_parameterfilter = {
+                $Method -eq 'Get' -and `
+                $ContentType -eq 'application/json' -and `
+                $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'anotherCollection')
+            }
+
+            Mock `
+                -CommandName Invoke-RestMethod `
+                -ParameterFilter $invokeRestMethod_parameterfilter `
+                -MockWith $invokeRestMethod_mockwith
+
+            $script:result = $null
+
+            It 'Should throw exception' {
+                $invokeCosmosDbRequestparameters = @{
+                    Context      = $script:testResourceContext
+                    Method       = 'Get'
+                    ResourceType = 'colls'
+                    ResourcePath = ('colls/{0}' -f 'anotherCollection')
+                    Verbose      = $true
+                }
+
+                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Throw ($LocalizedData.ErrorAuthorizationKeyEmpty)
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -BeNullOrEmpty
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-RestMethod `
+                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -Exactly -Times 0
+                Assert-MockCalled -CommandName Get-Date -Exactly -Times 0
+            }
+        }
+
         Context 'When called with context parameter and Post method' {
             $invokeRestMethod_parameterfilter = {
                 $Method -eq 'Post' -and `
-                $ContentType -eq 'application/query+json' -and `
-                $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri,$script:testContext.Database,'users')
+                    $ContentType -eq 'application/query+json' -and `
+                    $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
             }
 
             Mock `
@@ -450,6 +648,7 @@ InModuleScope CosmosDB {
                     ResourceType = 'users'
                     ContentType  = 'application/query+json'
                     Body         = '{ "id": "daniel" }'
+                    Verbose      = $true
                 }
 
                 { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
