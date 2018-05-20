@@ -407,22 +407,37 @@ function Invoke-CosmosDbRequest
     {
         Write-Verbose -Message $($LocalizedData.FindResourceTokenInContext -f $resourceLink)
 
-        # Find the most recent token matching the resource link
+        # Find the most recent token non-expired matching the resource link
         $matchToken = $context.Token |
-            Where-Object -Property Resource -EQ $resourceLink |
-            Sort-Object -Property TimeStamp -Descending |
-            Select-Object -First 1
+            Where-Object -FilterScript { $_.Resource -eq $resourceLink }
 
         if ($matchToken)
         {
-            # A matching token could be found - we should check it is not expired
-            Write-Verbose -Message $($LocalizedData.FoundResourceTokenInContext -f $matchToken.Resource, $matchToken.TimeStamp)
+            # One or more matching tokens could be found
+            Write-Verbose -Message $($LocalizedData.FoundResourceTokenInContext -f $matchToken.Count, $matchToken.Resource)
 
-            $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($matchToken.Token)
-            $decryptedToken = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
-            $token = [System.Web.HttpUtility]::UrlEncode($decryptedToken)
-            $date = $matchToken.TimeStamp
-            $dateString = ConvertTo-CosmosDbTokenDateString -Date $date
+            $now = (Get-Date)
+            $validToken = $matchToken |
+                Where-Object -FilterScript { $_.Expires -gt $now } |
+                Sort-Object -Property Expires -Descending |
+                Select-Object -First 1
+
+            if ($validToken)
+            {
+                # One or more matching tokens could be found
+                Write-Verbose -Message $($LocalizedData.FoundUnExpiredResourceTokenInContext -f $validToken.Resource, $validToken.TimeStamp)
+
+                $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($validToken.Token)
+                $decryptedToken = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+                $token = [System.Web.HttpUtility]::UrlEncode($decryptedToken)
+                $date = $validToken.TimeStamp
+                $dateString = ConvertTo-CosmosDbTokenDateString -Date $date
+            }
+            else
+            {
+                # No un-expired matching token could be found, so fall back to using a master key if possible
+                Write-Verbose -Message $($LocalizedData.NoMatchingUnexpiredResourceTokenInContext -f $resourceLink)
+            }
         }
         else
         {

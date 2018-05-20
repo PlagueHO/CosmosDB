@@ -451,6 +451,11 @@ the user `dscottraynsford@contoso.com` has been created as per the
 previous section. The resource context object is then used to retrieve
 the `MyNewCollection`.
 
+The _resource authorization token_ is stored in the context object with an
+expiration date/time matching what was returned in the permission so that
+the validity of a token can be validated and reported on without making
+a request to the Cosmos DB server.
+
 ```powershell
 $collectionId = Get-CosmosDbCollectionResourcePath -Database 'MyDatabase' -Id 'MyNewCollection'
 $permission = Get-CosmosDbPermission -Context $cosmosDbContext -UserId 'dscottraynsford@contoso.com' -Id 'r_mynewcollection' -Resource $collectionId -TokenExpiry 7200

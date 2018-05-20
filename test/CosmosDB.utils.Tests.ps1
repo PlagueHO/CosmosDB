@@ -549,11 +549,11 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'When called with resource context parameter and Get method and ResourceType is ''colls''' {
+        Context 'When called with Get method and ResourceType is ''colls'' and a resource token context that matches the resource link' {
             $invokeRestMethod_parameterfilter = {
                 $Method -eq 'Get' -and `
-                    $ContentType -eq 'application/json' -and `
-                    $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, $script:testCollection)
+                $ContentType -eq 'application/json' -and `
+                $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, $script:testCollection)
             }
 
             Mock `
@@ -584,6 +584,45 @@ InModuleScope CosmosDB {
                     -CommandName Invoke-RestMethod `
                     -ParameterFilter $invokeRestMethod_parameterfilter `
                     -Exactly -Times 1
+                Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with Get method and ResourceType is ''colls'' and a resource token context without matching token and no master key' {
+            $invokeRestMethod_parameterfilter = {
+                $Method -eq 'Get' -and `
+                $ContentType -eq 'application/json' -and `
+                $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'anotherCollection')
+            }
+
+            Mock `
+                -CommandName Invoke-RestMethod `
+                -ParameterFilter $invokeRestMethod_parameterfilter `
+                -MockWith $invokeRestMethod_mockwith
+
+            $script:result = $null
+
+            It 'Should throw exception' {
+                $invokeCosmosDbRequestparameters = @{
+                    Context      = $script:testResourceContext
+                    Method       = 'Get'
+                    ResourceType = 'colls'
+                    ResourcePath = ('colls/{0}' -f 'anotherCollection')
+                    Verbose      = $true
+                }
+
+                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Throw ($LocalizedData.ErrorAuthorizationKeyEmpty)
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -BeNullOrEmpty
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-RestMethod `
+                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -Exactly -Times 0
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 0
             }
         }
