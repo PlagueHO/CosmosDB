@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.0.12.418
 
 - Changed Id parameter in `Get-CosmosDbCollectionSize` to be mandatory.
 - Added documentation for creating a resource token context - See
