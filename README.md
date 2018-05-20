@@ -23,12 +23,14 @@
     - [Create a Context specifying the Key Manually](#create-a-context-specifying-the-key-manually)
     - [Use CosmosDB Module to Retrieve Key from Azure Management Portal](#use-cosmosdb-module-to-retrieve-key-from-azure-management-portal)
     - [Create a Context for a CosmosDB Emulator](#create-a-context-for-a-cosmosdb-emulator)
+    - [Create a Context from Resource Authorization Tokens](#create-a-Context-from-resource-authorization-tokens)
   - [Working with Databases](#working-with-databases)
   - [Working with Offers](#working-with-offers)
   - [Working with Collections](#working-with-collections)
     - [Creating a Collection with a custom Indexing Policy](#creating-a-collection-with-a-custom-indexing-policy)
   - [Working with Documents](#working-with-documents)
     -[Working with Documents in a Partitioned Collection](#working-with-documents-in-a-partitioned-collection)
+  - [Using Resource Authorization Tokens](#using-resource-authorization-tokens)
   - [Working with Attachments](#working-with-attachments)
   - [Working with Users](#working-with-users)
   - [Stored Procedures](#working-with-stored-procedures)
@@ -136,6 +138,12 @@ following command:
 ```powershell
 $cosmosDbContext = New-CosmosDbContext -Emulator -Database 'MyDatabase'
 ```
+
+#### Create a Context from Resource Authorization Tokens
+
+See the section [Using Resource Authorization Tokens](#using-resource-authorization-tokens)
+for instructions on how to create a Context object containing one or more _Resource
+Authorization Tokens_.
 
 ### Working with Databases
 
