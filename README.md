@@ -29,7 +29,7 @@
   - [Working with Collections](#working-with-collections)
     - [Creating a Collection with a custom Indexing Policy](#creating-a-collection-with-a-custom-indexing-policy)
   - [Working with Documents](#working-with-documents)
-    -[Working with Documents in a Partitioned Collection](#working-with-documents-in-a-partitioned-collection)
+    - [Working with Documents in a Partitioned Collection](#working-with-documents-in-a-partitioned-collection)
   - [Using Resource Authorization Tokens](#using-resource-authorization-tokens)
   - [Working with Attachments](#working-with-attachments)
   - [Working with Users](#working-with-users)
