@@ -450,3 +450,87 @@ function Remove-CosmosDbCollection
         -ResourceType 'colls' `
         -ResourcePath ('colls/{0}' -f $Id)
 }
+
+function Set-CosmosDbCollection
+{
+    [CmdletBinding(DefaultParameterSetName = 'Context')]
+    [OutputType([Object])]
+    param
+    (
+        [Alias("Connection")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
+        [ValidateNotNullOrEmpty()]
+        [CosmosDb.Context]
+        $Context,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Account,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.Security.SecureString]
+        $Key,
+
+        [Parameter()]
+        [ValidateSet('master', 'resource')]
+        [System.String]
+        $KeyType = 'master',
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Database,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Id,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [CosmosDB.IndexingPolicy.Policy]
+        $IndexingPolicy
+    )
+
+    $headers = @{}
+
+    $null = $PSBoundParameters.Remove('Id')
+    $null = $PSBoundParameters.Remove('IndexingPolicy')
+
+    $bodyObject = @{
+        id = $id
+    }
+
+    $bodyObject += @{
+        indexingPolicy = $IndexingPolicy
+    }
+
+    <#
+        The partition key on an existing collection can not be changed.
+        So to ensure an error does not occur, get the current collection
+        and pass the existing partition key in the body.
+    #>
+    $existingCollection = Get-CosmosDbCollection @PSBoundParameters -Id $Id
+    if ($existingCollection.partitionKey)
+    {
+        $bodyObject += @{
+            partitionKey = $existingCollection.partitionKey
+        }
+    }
+
+    $body = ConvertTo-Json -InputObject $bodyObject -Depth 10
+
+    $collection = Invoke-CosmosDbRequest @PSBoundParameters `
+        -Method 'Put' `
+        -ResourceType 'colls' `
+        -ResourcePath ('colls/{0}' -f $Id) `
+        -Headers $headers `
+        -Body $body
+
+    if ($collection)
+    {
+        return (Set-CosmosDbCollectionType -Collection $collection)
+    }
+}

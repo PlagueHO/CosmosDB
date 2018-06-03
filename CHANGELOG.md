@@ -1,5 +1,12 @@
 # Change Log
 
+## Unreleased
+
+- Added `Set-CosmosDbCollection` function for updating a collection - See
+  [Issue #104](https://github.com/PlagueHO/CosmosDB/issues/104).
+- Updated `Invoke-CosmosDbRequest` function to output additional exception
+  information to the Verbose stream - See [Issue #103](https://github.com/PlagueHO/CosmosDB/issues/103).
+
 ## 2.0.12.418
 
 - Changed Id parameter in `Get-CosmosDbCollectionSize` to be mandatory.

@@ -503,13 +503,40 @@ function Invoke-CosmosDbRequest
         }
     }
 
-    if ($UseWebRequest)
+    try
     {
-        $restResult = Invoke-WebRequest -UseBasicParsing @invokeRestMethodParameters
+        if ($UseWebRequest)
+        {
+            $restResult = Invoke-WebRequest -UseBasicParsing @invokeRestMethodParameters
+        }
+        else
+        {
+            $restResult = Invoke-RestMethod @invokeRestMethodParameters
+        }
     }
-    else
+    catch [System.Net.WebException]
     {
-        $restResult = Invoke-RestMethod @invokeRestMethodParameters
+        <#
+            Write out additional exception information into the verbose stream
+            In a future version a custom exception type for CosmosDB that
+            contains this additional information.
+        #>
+        if ($_.Exception.Response)
+        {
+            $exceptionStream = $_.Exception.Response.GetResponseStream()
+            $streamReader = New-Object -TypeName System.IO.StreamReader -ArgumentList $exceptionStream
+            $exceptionResponse = $streamReader.ReadToEnd()
+            if ($exceptionResponse)
+            {
+                Write-Verbose -Message $exceptionResponse
+            }
+        }
+
+        Throw $_
+    }
+    catch
+    {
+        Throw $_
     }
 
     return $restResult

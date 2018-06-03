@@ -28,8 +28,9 @@
   - [Working with Offers](#working-with-offers)
   - [Working with Collections](#working-with-collections)
     - [Creating a Collection with a custom Indexing Policy](#creating-a-collection-with-a-custom-indexing-policy)
+    - [Update an existing Collection with a new Indexing Policy](#update-an-existing-collection-with-a-new-indexing-policy)
   - [Working with Documents](#working-with-documents)
-    -[Working with Documents in a Partitioned Collection](#working-with-documents-in-a-partitioned-collection)
+    - [Working with Documents in a Partitioned Collection](#working-with-documents-in-a-partitioned-collection)
   - [Using Resource Authorization Tokens](#using-resource-authorization-tokens)
   - [Working with Attachments](#working-with-attachments)
   - [Working with Users](#working-with-users)
@@ -248,6 +249,19 @@ New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -Partitio
 ```
 
 For more information on how CosmosDB indexes documents, see [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/indexing-policies).
+
+#### Update an existing Collection with a new Indexing Policy
+
+You can update an existing collection with a custom indexing policy by
+assembling an Indexing Policy using the method in the previous section
+and then applying it using the `Set-CosmosDbCollection` function:
+
+```powershell
+$indexStringRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType String -Precision -1
+$indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $indexStringRange
+$indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $indexIncludedPath
+Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -IndexingPolicy $indexingPolicy
+```
 
 ### Working with Documents
 
