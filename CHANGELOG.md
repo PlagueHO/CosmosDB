@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.0.13.427
 
 - Added `Set-CosmosDbCollection` function for updating a collection - See
   [Issue #104](https://github.com/PlagueHO/CosmosDB/issues/104).
