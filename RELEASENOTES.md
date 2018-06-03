@@ -1,5 +1,14 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+June 03, 2018
+
+- Added `Set-CosmosDbCollection` function for updating a collection - See
+  [Issue #104](https://github.com/PlagueHO/CosmosDB/issues/104).
+- Updated `Invoke-CosmosDbRequest` function to output additional exception
+  information to the Verbose stream - See [Issue #103](https://github.com/PlagueHO/CosmosDB/issues/103).
+
 ## What is New in CosmosDB 2.0.12.418
 
 May 19, 2018
