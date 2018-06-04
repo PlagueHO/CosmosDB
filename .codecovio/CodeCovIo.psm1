@@ -326,7 +326,7 @@ function Invoke-UploadCoveCoveIoReport
 
     if ($env:APPVEYOR_REPO_BRANCH)
     {
-        Push-TestArtifact -Path $resolvedResultFile
+        Push-AppveyorArtifact -Path $resolvedResultFile
     }
 
     <#
@@ -342,6 +342,6 @@ function Invoke-UploadCoveCoveIoReport
         $logPath = (Join-Path -Path $env:TEMP -ChildPath 'codeCovUpload.log')
         $uploadResults | Out-File -Encoding ascii -LiteralPath $logPath -Force
         $resolvedLogPath = (Resolve-Path -Path $logPath).ProviderPath
-        Push-TestArtifact -Path $resolvedLogPath
+        Push-AppveyorArtifact -Path $resolvedLogPath
     }
 }
