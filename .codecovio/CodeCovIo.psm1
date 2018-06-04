@@ -22,7 +22,7 @@ function Add-UniqueFileLineToTable
     param
     (
         [Parameter(Mandatory = $true)]
-        [System.Collections.Hashtable]
+        [HashTable]
         $FileLine,
 
         [Parameter(Mandatory = $true)]
@@ -53,16 +53,16 @@ function Add-UniqueFileLineToTable
             $file = $command.File
             $fileKey = $file.replace($RepoRoot,'').TrimStart('\').replace('\','/')
             $fileKey = $fileKeys.where{$_ -like $fileKey}
-            
+
             if ($null -eq $fileKey)
             {
                 Write-Warning -Message "Unexpected error filekey was null"
                 continue
             }
-            elseif ($fileKey.Count -ne 1) 
+            elseif ($fileKey.Count -ne 1)
             {
                 Write-Warning -Message "Unexpected error, more than one git file matched file ($file): $($fileKey -join ', ')"
-                continue                
+                continue
             }
 
             $fileKey = $fileKey | Select-Object -First 1
@@ -118,7 +118,7 @@ function Test-CodeCoverage
         throw 'Must be a Pester CodeCoverage object'
     }
 
-    return $true    
+    return $true
 }
 
 <#
@@ -224,7 +224,7 @@ function Export-CodeCovIoJson
         $max = $hits.Keys | Sort-Object -Descending | Select-Object -First 1
         $maxMissLine = $misses.Keys | Sort-Object -Descending | Select-Object -First 1
 
-        <# 
+        <#
             if max missed line is greater than maxed hit line
             used max missed line as the max line
         #>
@@ -326,20 +326,22 @@ function Invoke-UploadCoveCoveIoReport
 
     if ($env:APPVEYOR_REPO_BRANCH)
     {
-        Push-AppVeyorArtifact $resolvedResultFile
+        Push-TestArtifact -Path $resolvedResultFile
     }
 
-    # Set the location of Python, install the pip and get the CodeCov script, and upload the code coverage report to CodeCov
-    $ENV:PATH = 'C:\\Python34;C:\\Python34\\Scripts;' + $ENV:PATH
-    $null = python -m pip install --upgrade pip
-    $null = pip install git+git://github.com/codecov/codecov-python.git
-    $uploadResults = codecov -f $resolvedResultFile -X gcov
-    
+    <#
+        See this link for information around codecov.exe
+        https://github.com/codecov/codecov-exe
+    #>
+    $uploadResults = & choco install codecov --yes
+
+    $uploadResults += codecov -f $resolvedResultFile --required
+
     if ($env:APPVEYOR_REPO_BRANCH)
     {
         $logPath = (Join-Path -Path $env:TEMP -ChildPath 'codeCovUpload.log')
         $uploadResults | Out-File -Encoding ascii -LiteralPath $logPath -Force
         $resolvedLogPath = (Resolve-Path -Path $logPath).ProviderPath
-        Push-AppVeyorArtifact $resolvedLogPath
+        Push-TestArtifact -Path $resolvedLogPath
     }
 }

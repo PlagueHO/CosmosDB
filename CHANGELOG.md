@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Fixed Code Coverage upload to CodeCov.io.
+
 ## 2.0.13.427
 
 - Added `Set-CosmosDbCollection` function for updating a collection - See
