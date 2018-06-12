@@ -1,5 +1,14 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+June 12, 2018
+
+- Fixed Code Coverage upload to CodeCov.io.
+- Fix `New-CosmosDbCollectionIncludedPathIndex` Kind parameter spelling
+  of spacial - See [Issue #112](https://github.com/PlagueHO/CosmosDB/issues/112).
+- Added parameter validation to `New-CosmosDbCollectionIncludedPathIndex`.
+
 ## What is New in CosmosDB 2.0.13.427
 
 June 03, 2018

@@ -86,7 +86,7 @@ InModuleScope CosmosDB {
             { Get-Command -Name New-CosmosDbCollectionIncludedPathIndex  -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'When called with all parameters' {
+        Context 'When called with valid Hash parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -104,6 +104,99 @@ InModuleScope CosmosDB {
                 $script:result.Kind | Should -Be 'Hash'
                 $script:result.DataType | Should -Be 'String'
                 $script:result.Precision | Should -Be -1
+            }
+        }
+
+        Context 'When called with invalid Hash parameters' {
+            $script:result = $null
+
+            It 'Should throw expected exception' {
+                $newCosmosDbCollectionIncludedPathIndexParameters = @{
+                    Kind      = 'Hash'
+                    DataType  = 'Point'
+                    Precision = -1
+                }
+
+                $errorMessage = $($LocalizedData.ErrorNewCollectionIncludedPathIndexInvalidDataType `
+                    -f $newCosmosDbCollectionIncludedPathIndexParameters.Kind, $newCosmosDbCollectionIncludedPathIndexParameters.DataType, 'String, Number')
+
+                { $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters } | Should -Throw $errorMessage
+            }
+        }
+
+        Context 'When called with valid Range parameters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbCollectionIncludedPathIndexParameters = @{
+                    Kind      = 'Range'
+                    DataType  = 'Number'
+                    Precision = 2
+                }
+
+                { $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -BeOfType 'CosmosDB.IndexingPolicy.Path.Index'
+                $script:result.Kind | Should -Be 'Range'
+                $script:result.DataType | Should -Be 'Number'
+                $script:result.Precision | Should -Be 2
+            }
+        }
+
+        Context 'When called with invalid Range parameters' {
+            $script:result = $null
+
+            It 'Should throw expected exception' {
+                $newCosmosDbCollectionIncludedPathIndexParameters = @{
+                    Kind      = 'Range'
+                    DataType  = 'Point'
+                    Precision = -1
+                }
+
+                $errorMessage = $($LocalizedData.ErrorNewCollectionIncludedPathIndexInvalidDataType `
+                    -f $newCosmosDbCollectionIncludedPathIndexParameters.Kind, $newCosmosDbCollectionIncludedPathIndexParameters.DataType, 'String, Number')
+
+                { $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters } | Should -Throw $errorMessage
+            }
+        }
+
+        Context 'When called with valid Spatial parameters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbCollectionIncludedPathIndexParameters = @{
+                    Kind      = 'Spatial'
+                    DataType  = 'Point'
+                    Precision = -1
+                }
+
+                { $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -BeOfType 'CosmosDB.IndexingPolicy.Path.Index'
+                $script:result.Kind | Should -Be 'Spatial'
+                $script:result.DataType | Should -Be 'Point'
+                $script:result.Precision | Should -Be -1
+            }
+        }
+
+        Context 'When called with invalid Spatial parameters' {
+            $script:result = $null
+
+            It 'Should throw expected exception' {
+                $newCosmosDbCollectionIncludedPathIndexParameters = @{
+                    Kind      = 'Spatial'
+                    DataType  = 'Number'
+                    Precision = -1
+                }
+
+                $errorMessage = $($LocalizedData.ErrorNewCollectionIncludedPathIndexInvalidDataType `
+                    -f $newCosmosDbCollectionIncludedPathIndexParameters.Kind, $newCosmosDbCollectionIncludedPathIndexParameters.DataType, 'Point, Polygon, LineString')
+
+                { $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters } | Should -Throw $errorMessage
             }
         }
     }

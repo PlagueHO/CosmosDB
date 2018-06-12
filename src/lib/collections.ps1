@@ -59,7 +59,7 @@ function New-CosmosDbCollectionIncludedPathIndex
     param
     (
         [Parameter(Mandatory = $true)]
-        [ValidateSet('Hash', 'Range', 'Spacial')]
+        [ValidateSet('Hash', 'Range', 'Spatial')]
         [System.String]
         $Kind,
 
@@ -73,6 +73,40 @@ function New-CosmosDbCollectionIncludedPathIndex
         $Precision
     )
 
+    # Validate the path index parameters
+    switch ($Kind)
+    {
+        'Hash'
+        {
+            if ($DataType -notin @('String', 'Number'))
+            {
+                New-CosmosDbInvalidArgumentException `
+                    -Message $($LocalizedData.ErrorNewCollectionIncludedPathIndexInvalidDataType -f $Kind, $DataType, 'String, Number') `
+                    -ArgumentName 'DataType'
+            }
+        }
+
+        'Range'
+        {
+            if ($DataType -notin @('String', 'Number'))
+            {
+                New-CosmosDbInvalidArgumentException `
+                    -Message $($LocalizedData.ErrorNewCollectionIncludedPathIndexInvalidDataType -f $Kind, $DataType, 'String, Number') `
+                    -ArgumentName 'DataType'
+            }
+
+        }
+
+        'Spatial'
+        {
+            if ($DataType -notin @('Point', 'Polygon', 'LineString'))
+            {
+                New-CosmosDbInvalidArgumentException `
+                    -Message $($LocalizedData.ErrorNewCollectionIncludedPathIndexInvalidDataType -f $Kind, $DataType, 'Point, Polygon, LineString') `
+                    -ArgumentName 'DataType'
+            }
+        }
+    }
     $index = [CosmosDB.IndexingPolicy.Path.Index]::new()
     $index.Kind = $Kind
     $index.DataType = $DataType
