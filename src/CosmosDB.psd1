@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.0.13.427'
+    ModuleVersion     = '2.0.14.427'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -176,6 +176,15 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+June 12, 2018
+
+- Fixed Code Coverage upload to CodeCov.io.
+- Fix `New-CosmosDbCollectionIncludedPathIndex` Kind parameter spelling
+  of spacial - See [Issue #112](https://github.com/PlagueHO/CosmosDB/issues/112).
+- Added parameter validation to `New-CosmosDbCollectionIncludedPathIndex`.
+
 ## What is New in CosmosDB 2.0.13.427
 
 June 03, 2018
@@ -288,20 +297,6 @@ February 25, 2018
 
 - Added support for creating custom indexing policies when
   creating a new collection.
-
-## What is New in CosmosDB 2.0.2.184
-
-February 24, 2018
-
-- Converted all `connection` function names and parameter names
-  over to `context`. Aliases were implemented for old `connection`
-  function and parameter names to reduce possibility of breakage.
-
-## What is New in CosmosDB 2.0.1
-
-January 27, 2018
-
-- Added support for CosmosDB Emulator.
             '
         } # End of PSData hashtable
     } # End of PrivateData hashtable
