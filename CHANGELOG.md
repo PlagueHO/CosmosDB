@@ -7,7 +7,6 @@
   of spacial - See [Issue #112](https://github.com/PlagueHO/CosmosDB/issues/112).
 - Added parameter validation to `New-CosmosDbCollectionIncludedPathIndex`.
 
-
 ## 2.0.13.427
 
 - Added `Set-CosmosDbCollection` function for updating a collection - See
