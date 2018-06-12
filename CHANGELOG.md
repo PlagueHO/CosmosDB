@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.0.14.439
 
 - Fixed Code Coverage upload to CodeCov.io.
 - Fix `New-CosmosDbCollectionIncludedPathIndex` Kind parameter spelling
