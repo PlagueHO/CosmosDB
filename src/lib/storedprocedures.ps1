@@ -149,6 +149,11 @@ function Invoke-CosmosDbStoredProcedure
         [System.String]
         $CollectionId,
 
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String[]]
+        $PartitionKey,
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [System.String]
@@ -156,7 +161,7 @@ function Invoke-CosmosDbStoredProcedure
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [System.String[]]
+        [System.Object[]]
         $StoredProcedureParameter
     )
 
@@ -165,10 +170,18 @@ function Invoke-CosmosDbStoredProcedure
 
     $resourcePath = ('colls/{0}/sprocs/{1}' -f $CollectionId, $Id)
 
+    $headers = @{}
+    if ($PSBoundParameters.ContainsKey('PartitionKey'))
+    {
+        $headers += @{
+            'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
+        }
+        $null = $PSBoundParameters.Remove('PartitionKey')
+    }
+
     if ($PSBoundParameters.ContainsKey('StoredProcedureParameter'))
     {
-        $body = ( $StoredProcedureParameter | ForEach-Object { "`"$_`"" } ) -join ','
-        $body = "[$body]"
+        $body = ConvertTo-Json -InputObject $StoredProcedureParameter -Depth 10 -Compress
         $null = $PSBoundParameters.Remove('StoredProcedureParameter')
     }
     else
@@ -178,6 +191,7 @@ function Invoke-CosmosDbStoredProcedure
 
     return Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
+        -Headers $headers `
         -ResourceType 'sprocs' `
         -ResourcePath $resourcePath `
         -Body $body
