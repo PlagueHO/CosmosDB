@@ -200,7 +200,7 @@ function Invoke-CosmosDbStoredProcedure
     # Because the headers of this request will contain important information
     # then we need to use a plain web request.
     $result = Invoke-CosmosDbRequest @PSBoundParameters `
-        -Method $method `
+        -Method 'Post' `
         -ResourceType 'sprocs' `
         -ResourcePath $resourcePath `
         -Headers $headers `
