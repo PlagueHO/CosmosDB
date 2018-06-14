@@ -163,7 +163,9 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'sprocs' -and $body -eq '["testParameter1","testParameter2"]'} `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith {
+                    @{ Content = $script:testJsonSingle }
+                }
 
             It 'Should not throw exception' {
                 $invokeCosmosDbStoredProcedureParameters = @{
