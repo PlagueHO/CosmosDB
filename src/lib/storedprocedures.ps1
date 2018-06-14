@@ -212,13 +212,6 @@ function Invoke-CosmosDbStoredProcedure
     }
 
     return (ConvertFrom-JSON -InputObject $result.Content)
-
-    # return Invoke-CosmosDbRequest @PSBoundParameters `
-    #     -Method 'Post' `
-    #     -Headers $headers `
-    #     -ResourceType 'sprocs' `
-    #     -ResourcePath $resourcePath `
-    #     -Body $body `
 }
 
 function New-CosmosDbStoredProcedure
