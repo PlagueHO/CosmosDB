@@ -169,7 +169,6 @@ InModuleScope CosmosDB {
                 $newCosmosDbCollectionIncludedPathIndexParameters = @{
                     Kind      = 'Spatial'
                     DataType  = 'Point'
-                    Precision = -1
                 }
 
                 { $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters } | Should -Not -Throw
@@ -179,7 +178,7 @@ InModuleScope CosmosDB {
                 $script:result | Should -BeOfType 'CosmosDB.IndexingPolicy.Path.Index'
                 $script:result.Kind | Should -Be 'Spatial'
                 $script:result.DataType | Should -Be 'Point'
-                $script:result.Precision | Should -Be -1
+                $script:result.Precision | Should -BeNull
             }
         }
 

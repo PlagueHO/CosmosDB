@@ -35,7 +35,17 @@ namespace CosmosDB {
             public class Index {
                 public System.String dataType;
                 public System.String kind;
+            }
+
+            public class IndexRange : CosmosDB.IndexingPolicy.Path.Index {
                 public System.Int32 precision;
+            }
+
+            public class IndexHash : CosmosDB.IndexingPolicy.Path.Index {
+                public System.Int32 precision;
+            }
+
+            public class IndexSpatial : CosmosDB.IndexingPolicy.Path.Index {
             }
 
             public class IncludedPath
