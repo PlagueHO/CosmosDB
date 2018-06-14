@@ -211,7 +211,12 @@ function Invoke-CosmosDbStoredProcedure
         Write-Verbose "Script Log Results: $($result.Headers.'x-ms-documentdb-script-log-results')"
     }
 
-    return (ConvertFrom-JSON -InputObject $result.Content)
+    if($result.Content) {
+        return (ConvertFrom-JSON -InputObject $result.Content)
+    }
+    else {
+        return $null
+    }
 }
 
 function New-CosmosDbStoredProcedure
