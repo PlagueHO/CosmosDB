@@ -207,14 +207,17 @@ function Invoke-CosmosDbStoredProcedure
         -Body $body `
         -UseWebRequest
 
-    if($result.Headers.'x-ms-documentdb-script-log-results') {
-        Write-Verbose "Script Log Results: $($result.Headers.'x-ms-documentdb-script-log-results')"
+    if ($result.Headers.'x-ms-documentdb-script-log-results')
+    {
+        Write-Verbose -Message "Script Log Results: $($result.Headers.'x-ms-documentdb-script-log-results')"
     }
 
-    if($result.Content) {
+    if ($result.Content)
+    {
         return (ConvertFrom-JSON -InputObject $result.Content)
     }
-    else {
+    else
+    {
         return $null
     }
 }
