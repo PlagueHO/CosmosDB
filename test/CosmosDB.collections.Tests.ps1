@@ -169,7 +169,6 @@ InModuleScope CosmosDB {
                 $newCosmosDbCollectionIncludedPathIndexParameters = @{
                     Kind      = 'Spatial'
                     DataType  = 'Point'
-                    Precision = -1
                 }
 
                 { $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters } | Should -Not -Throw
@@ -179,7 +178,7 @@ InModuleScope CosmosDB {
                 $script:result | Should -BeOfType 'CosmosDB.IndexingPolicy.Path.Index'
                 $script:result.Kind | Should -Be 'Spatial'
                 $script:result.DataType | Should -Be 'Point'
-                $script:result.Precision | Should -Be -1
+                $script:result.Precision | Should -BeNull
             }
         }
 
@@ -190,11 +189,27 @@ InModuleScope CosmosDB {
                 $newCosmosDbCollectionIncludedPathIndexParameters = @{
                     Kind      = 'Spatial'
                     DataType  = 'Number'
-                    Precision = -1
                 }
 
                 $errorMessage = $($LocalizedData.ErrorNewCollectionIncludedPathIndexInvalidDataType `
                     -f $newCosmosDbCollectionIncludedPathIndexParameters.Kind, $newCosmosDbCollectionIncludedPathIndexParameters.DataType, 'Point, Polygon, LineString')
+
+                { $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters } | Should -Throw $errorMessage
+            }
+        }
+
+        Context 'When called with invalid Spatial Precision parameters' {
+            $script:result = $null
+
+            It 'Should throw expected exception' {
+                $newCosmosDbCollectionIncludedPathIndexParameters = @{
+                    Kind      = 'Spatial'
+                    DataType  = 'Point'
+                    Precision = 1
+                }
+
+                $errorMessage = $($LocalizedData.ErrorNewCollectionIncludedPathIndexPrecisionNotSupported `
+                    -f $newCosmosDbCollectionIncludedPathIndexParameters.Kind)
 
                 { $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters } | Should -Throw $errorMessage
             }

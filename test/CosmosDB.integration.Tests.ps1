@@ -141,7 +141,8 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             {
                 $script:indexNumberRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType Number -Precision -1
                 $script:indexStringRange = New-CosmosDbCollectionIncludedPathIndex -Kind Hash -DataType String -Precision 3
-                $script:indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $script:indexNumberRange, $script:indexStringRange
+                $script:indexSpatialPoint = New-CosmosDbCollectionIncludedPathIndex -Kind Spatial -DataType Point
+                $script:indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $script:indexNumberRange, $script:indexStringRange, $script:indexSpatialPoint
                 $script:indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $script:indexIncludedPath
             } | Should -Not -Throw
         }
@@ -178,6 +179,8 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.indexingPolicy.includedPaths.Indexes[1].DataType | Should -Be 'String'
             $script:result.indexingPolicy.includedPaths.Indexes[1].Kind | Should -Be 'Hash'
             $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
+            $script:result.indexingPolicy.includedPaths.Indexes[2].DataType | Should -Be 'Point'
+            $script:result.indexingPolicy.includedPaths.Indexes[2].Kind | Should -Be 'Spatial'
         }
     }
 
@@ -210,6 +213,8 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.indexingPolicy.includedPaths.Indexes[1].DataType | Should -Be 'String'
             $script:result.indexingPolicy.includedPaths.Indexes[1].Kind | Should -Be 'Hash'
             $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
+            $script:result.indexingPolicy.includedPaths.Indexes[2].DataType | Should -Be 'Point'
+            $script:result.indexingPolicy.includedPaths.Indexes[2].Kind | Should -Be 'Spatial'
         }
     }
 
@@ -243,6 +248,8 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.indexingPolicy.includedPaths.Indexes[1].DataType | Should -Be 'String'
             $script:result.indexingPolicy.includedPaths.Indexes[1].Kind | Should -Be 'Hash'
             $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
+            $script:result.indexingPolicy.includedPaths.Indexes[2].DataType | Should -Be 'Point'
+            $script:result.indexingPolicy.includedPaths.Indexes[2].Kind | Should -Be 'Spatial'
         }
     }
 
@@ -348,6 +355,8 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.indexingPolicy.includedPaths.Indexes[1].DataType | Should -Be 'String'
             $script:result.indexingPolicy.includedPaths.Indexes[1].Kind | Should -Be 'Hash'
             $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
+            $script:result.indexingPolicy.includedPaths.Indexes[2].DataType | Should -Be 'Point'
+            $script:result.indexingPolicy.includedPaths.Indexes[2].Kind | Should -Be 'Spatial'
         }
     }
 
@@ -559,14 +568,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Triggers | Should -BeOfType [System.String]
             $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testCollection
-            $script:result.indexingPolicy.indexingMode | Should -Be 'consistent'
-            $script:result.indexingPolicy.automatic | Should -Be $true
-            $script:result.indexingPolicy.includedPaths.Indexes[0].DataType | Should -Be 'Number'
-            $script:result.indexingPolicy.includedPaths.Indexes[0].Kind | Should -Be 'Range'
-            $script:result.indexingPolicy.includedPaths.Indexes[0].Precision | Should -Be -1
-            $script:result.indexingPolicy.includedPaths.Indexes[1].DataType | Should -Be 'String'
-            $script:result.indexingPolicy.includedPaths.Indexes[1].Kind | Should -Be 'Hash'
-            $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
             $script:result.partitionKey.kind | Should -Be 'Hash'
             $script:result.partitionKey.paths[0] | Should -Be ('/{0}' -f $script:testPartitionKey)
         }

@@ -17,15 +17,16 @@ Execute a new stored procedure for a collection in a CosmosDB database.
 
 ```powershell
 Invoke-CosmosDbStoredProcedure -Context <Context> [-KeyType <String>] [-Key <SecureString>]
- [-Database <String>] -CollectionId <String> -Id <String> [-StoredProcedureParameter <String[]>]
- [<CommonParameters>]
+ [-Database <String>] -CollectionId <String> [-PartitionKey <String[]>] -Id <String>
+ [-StoredProcedureParameter <Object[]>] [<CommonParameters>]
 ```
 
 ### Account
 
 ```powershell
-Invoke-CosmosDbStoredProcedure -Account <String> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -CollectionId <String> -Id <String> [-StoredProcedureParameter <String[]>] [<CommonParameters>]
+Invoke-CosmosDbStoredProcedure -Account <String> [-KeyType <String>] [-Key <SecureString>]
+  [-Database <String>] -CollectionId <String> [-PartitionKey <String[]>] -Id <String>
+  [-StoredProcedureParameter <Object[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -151,6 +152,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -PartitionKey
+
+This is the Partition Keys of the collection that contains the stored
+procedure to execute.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Id
 
 This is the Id of the stored procedure to execute.
@@ -173,7 +191,7 @@ This is an array of strings that will be passed as stored
 procedure parameters.
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases:
 

@@ -94,7 +94,6 @@ function New-CosmosDbCollectionIncludedPathIndex
                     -Message $($LocalizedData.ErrorNewCollectionIncludedPathIndexInvalidDataType -f $Kind, $DataType, 'String, Number') `
                     -ArgumentName 'DataType'
             }
-
         }
 
         'Spatial'
@@ -105,9 +104,17 @@ function New-CosmosDbCollectionIncludedPathIndex
                     -Message $($LocalizedData.ErrorNewCollectionIncludedPathIndexInvalidDataType -f $Kind, $DataType, 'Point, Polygon, LineString') `
                     -ArgumentName 'DataType'
             }
+
+            if ($PSBoundParameters.ContainsKey('Precision'))
+            {
+                New-CosmosDbInvalidArgumentException `
+                    -Message $($LocalizedData.ErrorNewCollectionIncludedPathIndexPrecisionNotSupported -f $Kind) `
+                    -ArgumentName 'Precision'
+            }
         }
     }
-    $index = [CosmosDB.IndexingPolicy.Path.Index]::new()
+
+    $index = New-Object -TypeName ('CosmosDB.IndexingPolicy.Path.Index' + $Kind)
     $index.Kind = $Kind
     $index.DataType = $DataType
     if ($PSBoundParameters.ContainsKey('Precision'))

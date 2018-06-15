@@ -149,6 +149,11 @@ function Invoke-CosmosDbStoredProcedure
         [System.String]
         $CollectionId,
 
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String[]]
+        $PartitionKey,
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [System.String]
@@ -156,7 +161,7 @@ function Invoke-CosmosDbStoredProcedure
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [System.String[]]
+        [System.Object[]]
         $StoredProcedureParameter
     )
 
@@ -165,10 +170,26 @@ function Invoke-CosmosDbStoredProcedure
 
     $resourcePath = ('colls/{0}/sprocs/{1}' -f $CollectionId, $Id)
 
+    $headers = @{}
+    if ($PSBoundParameters.ContainsKey('PartitionKey'))
+    {
+        $headers += @{
+            'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
+        }
+        $null = $PSBoundParameters.Remove('PartitionKey')
+    }
+
+    if ($PSBoundParameters.ContainsKey('Debug'))
+    {
+        $headers += @{
+            'x-ms-documentdb-script-enable-logging' = $true
+        }
+        $null = $PSBoundParameters.Remove('Debug')
+    }
+
     if ($PSBoundParameters.ContainsKey('StoredProcedureParameter'))
     {
-        $body = ( $StoredProcedureParameter | ForEach-Object { "`"$_`"" } ) -join ','
-        $body = "[$body]"
+        $body = ConvertTo-Json -InputObject $StoredProcedureParameter -Depth 10 -Compress
         $null = $PSBoundParameters.Remove('StoredProcedureParameter')
     }
     else
@@ -176,11 +197,29 @@ function Invoke-CosmosDbStoredProcedure
         $body = '[]'
     }
 
-    return Invoke-CosmosDbRequest @PSBoundParameters `
+    # Because the headers of this request will contain important information
+    # then we need to use a plain web request.
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'sprocs' `
         -ResourcePath $resourcePath `
-        -Body $body
+        -Headers $headers `
+        -Body $body `
+        -UseWebRequest
+
+    if ($result.Headers.'x-ms-documentdb-script-log-results')
+    {
+        Write-Verbose -Message "Script Log Results: $($result.Headers.'x-ms-documentdb-script-log-results')"
+    }
+
+    if ($result.Content)
+    {
+        return (ConvertFrom-JSON -InputObject $result.Content)
+    }
+    else
+    {
+        return $null
+    }
 }
 
 function New-CosmosDbStoredProcedure
