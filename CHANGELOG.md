@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.0.15.454
 
 - Fix creation of spatial index by `New-CosmosDbCollectionIncludedPathIndex`
   so that precision is not used when passing to `New-CosmosDbCollection`.
