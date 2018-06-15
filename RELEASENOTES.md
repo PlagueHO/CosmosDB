@@ -1,5 +1,15 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+June 15, 2018
+
+- Fix creation of spatial index by `New-CosmosDbCollectionIncludedPathIndex`
+  so that precision is not used when passing to `New-CosmosDbCollection`.
+- Added support for `-PartitionKey` in `Invoke-CosmosDbStoredProcedure` - See [Issue #116](https://github.com/PlagueHO/CosmosDB/issues/116)
+- Changed -StoredProcedureParameter from string[] to object[] in `Invoke-CosmosDbStoredProcedure` - See [Issue #116](https://github.com/PlagueHO/CosmosDB/issues/116)
+- Updated `Invoke-CosmosDbStoredProcedure` to set `x-ms-documentdb-script-enable-logging: true` header and write stored procedure logs to the Verbose Stream when `-Debug` is set - See [Issue #116](https://github.com/PlagueHO/CosmosDB/issues/116)
+
 ## What is New in CosmosDB 2.0.14.439
 
 June 12, 2018

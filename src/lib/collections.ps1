@@ -104,6 +104,13 @@ function New-CosmosDbCollectionIncludedPathIndex
                     -Message $($LocalizedData.ErrorNewCollectionIncludedPathIndexInvalidDataType -f $Kind, $DataType, 'Point, Polygon, LineString') `
                     -ArgumentName 'DataType'
             }
+
+            if ($PSBoundParameters.ContainsKey('Precision'))
+            {
+                New-CosmosDbInvalidArgumentException `
+                    -Message $($LocalizedData.ErrorNewCollectionIncludedPathIndexPrecisionNotSupported -f $Kind) `
+                    -ArgumentName 'Precision'
+            }
         }
     }
 
