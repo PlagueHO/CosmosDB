@@ -175,7 +175,7 @@ function New-CosmosDbCollectionIndexingPolicy
         $Automatic = $true,
 
         [Parameter()]
-        [ValidateSet('Consistent', 'Lazy')]
+        [ValidateSet('Consistent', 'Lazy', 'None')]
         [System.String]
         $IndexingMode = 'Consistent',
 
