@@ -1,5 +1,20 @@
 # Release Notes
 
+## Unreleased
+
+- Added `-RetryOnRequestRateTooLarge` parameter to handle Response Code 429 errors in `Invoke-CosmosDbRequest`, `Get-CosmosDbDocument` and `Invoke-CosmosDbStoredProcedure`. This resolves some of [Issue #87](https://github.com/PlagueHO/CosmosDB/issues/87)
+- Added RU Output to Verbose Output Stream in `Invoke-CosmosDbRequest` with `-UseWebRequest`
+  ```
+  VERBOSE: Request Charge: 1570.5 RUs
+  ```
+- Improved ScriptLogResults when using `Invoke-CosmosDbStoredProcedure -Debug -Verbose`
+  ```
+  VERBOSE: ScriptLogResults:
+  enter my procedure
+  some console.log() messages
+  my procedure complete
+  ```
+
 ## What is New in CosmosDB 2.0.15.454
 
 June 15, 2018
