@@ -162,7 +162,11 @@ function Invoke-CosmosDbStoredProcedure
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.Object[]]
-        $StoredProcedureParameter
+        $StoredProcedureParameter,
+
+        [Parameter()]
+        [Switch]
+        $RetryOnRequestRateTooLarge
     )
 
     $null = $PSBoundParameters.Remove('CollectionId')

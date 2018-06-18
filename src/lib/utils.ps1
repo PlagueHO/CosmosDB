@@ -323,7 +323,11 @@ function Invoke-CosmosDbRequest
 
         [Parameter()]
         [System.String]
-        $ContentType = 'application/json'
+        $ContentType = 'application/json',
+
+        [Parameter()]
+        [Switch]
+        $RetryOnRequestRateTooLarge
     )
 
     if ($PSCmdlet.ParameterSetName -eq 'Account')
@@ -502,41 +506,61 @@ function Invoke-CosmosDbRequest
             Body = $Body
         }
     }
-
-    try
-    {
-        if ($UseWebRequest)
+    do {
+        try
         {
-            $restResult = Invoke-WebRequest -UseBasicParsing @invokeRestMethodParameters
-        }
-        else
-        {
-            $restResult = Invoke-RestMethod @invokeRestMethodParameters
-        }
-    }
-    catch [System.Net.WebException]
-    {
-        <#
-            Write out additional exception information into the verbose stream
-            In a future version a custom exception type for CosmosDB that
-            contains this additional information.
-        #>
-        if ($_.Exception.Response)
-        {
-            $exceptionStream = $_.Exception.Response.GetResponseStream()
-            $streamReader = New-Object -TypeName System.IO.StreamReader -ArgumentList $exceptionStream
-            $exceptionResponse = $streamReader.ReadToEnd()
-            if ($exceptionResponse)
+            if ($UseWebRequest)
             {
-                Write-Verbose -Message $exceptionResponse
+                $restResult = Invoke-WebRequest -UseBasicParsing @invokeRestMethodParameters
+            }
+            else
+            {
+                $restResult = Invoke-RestMethod @invokeRestMethodParameters
+            }
+            $done = $true;
+        }
+        catch [Microsoft.PowerShell.Commands.HttpResponseException]
+        {
+            if($_.Exception.Response.StatusCode -eq 429 -and $RetryOnRequestRateTooLarge)
+            {
+                [int] $delay = [int](($_.Exception.Response.Headers | Where-Object Key -eq 'x-ms-retry-after-ms').Value[0])
+                Write-Verbose -Message "Retry Caught, delaying $delay ms"
+                Start-Sleep -Milliseconds $delay
+            }
+            else
+            {
+                Throw $_
             }
         }
+        catch [System.Net.WebException]
+        {
+            <#
+                Write out additional exception information into the verbose stream
+                In a future version a custom exception type for CosmosDB that
+                contains this additional information.
+            #>
+            if ($_.Exception.Response)
+            {
+                $exceptionStream = $_.Exception.Response.GetResponseStream()
+                $streamReader = New-Object -TypeName System.IO.StreamReader -ArgumentList $exceptionStream
+                $exceptionResponse = $streamReader.ReadToEnd()
+                if ($exceptionResponse)
+                {
+                    Write-Verbose -Message $exceptionResponse
+                }
+            }
 
-        Throw $_
-    }
-    catch
+            Throw $_
+        }
+        catch
+        {
+            Throw $_
+        }
+    } while ($done -ne $true)
+
+    if($restResult.Headers.'x-ms-request-charge')
     {
-        Throw $_
+        Write-Verbose -Message "Request Charge: $($restResult.Headers.'x-ms-request-charge') RUs"
     }
 
     return $restResult
