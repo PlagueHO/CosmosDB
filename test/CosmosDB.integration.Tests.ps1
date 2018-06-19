@@ -10,16 +10,16 @@ $TestHelperPath = "$PSScriptRoot\TestHelper"
 Import-Module -Name $ModuleManifestPath -Force
 Import-Module -Name $TestHelperPath -Force
 
-#Get-AzureServicePrincipal
+Get-AzureServicePrincipal
 
-<# if ([String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
+if ([String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
         [String]::IsNullOrEmpty($env:azureApplicationId) -or `
         [String]::IsNullOrEmpty($env:azureApplicationPassword) -or `
         [String]::IsNullOrEmpty($env:azureTenantId))
 {
     Write-Warning -Message 'Integration tests can not be run because one or more Azure connection environment variables are not set.'
     return
-} #>
+}
 
 # Variables for use in tests
 $script:testResourceGroupName = 'cosmosdbpsmoduletestrgp'
