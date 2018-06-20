@@ -660,6 +660,44 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    Context 'Create a new collection with IndexingMode set to None' {
+        It 'Should not throw an exception' {
+            {
+                $script:indexingPolicyNone = New-CosmosDbCollectionIndexingPolicy -Automatic $false -IndexingMode None
+
+                $script:result = New-CosmosDbCollection `
+                    -Context $script:testContext `
+                    -Id $script:testCollection `
+                    -OfferThroughput 400 `
+                    -IndexingPolicy $script:indexingPolicyNone `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Conflicts | Should -BeOfType [System.String]
+            $script:result.Documents | Should -BeOfType [System.String]
+            $script:result.StoredProcedures | Should -BeOfType [System.String]
+            $script:result.Triggers | Should -BeOfType [System.String]
+            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testCollection
+            $script:result.indexingPolicy.indexingMode | Should -Be 'None'
+            $script:result.indexingPolicy.automatic | Should -Be $false
+        }
+    }
+
+    Context 'Remove existing collection with a None indexing Policy' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
+            } | Should -Not -Throw
+        }
+    }
+
     Context 'Remove existing database' {
         It 'Should not throw an exception' {
             {

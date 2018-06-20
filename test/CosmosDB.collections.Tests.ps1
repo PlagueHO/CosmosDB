@@ -293,6 +293,21 @@ InModuleScope CosmosDB {
                 $script:result.ExcludedPaths[0].Path | Should -Be '/*'
             }
         }
+
+        Context 'When called with IndexingMode of None and Automatic set to True parameters' {
+            $script:result = $null
+
+            It 'Should throw expected exception' {
+                $newCosmosDbCollectionIndexingPolicyParameters = @{
+                    Automatic = $true
+                    IndexingMode = 'None'
+                }
+
+                $errorMessage = $($LocalizedData.ErrorNewCollectionIndexingPolicyInvalidMode)
+
+                { $script:result = New-CosmosDbCollectionIndexingPolicy @newCosmosDbCollectionIndexingPolicyParameters } | Should -Throw $errorMessage
+            }
+        }
     }
 
     Describe 'Get-CosmosDbCollection' -Tag 'Unit' {

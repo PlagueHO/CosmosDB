@@ -15,6 +15,12 @@
   my procedure complete
   ```
 
+## What is New in CosmosDB 2.0.16.465
+
+June 20, 2018
+
+- Added None as an IndexingMode - See [Issue #120](https://github.com/PlagueHO/CosmosDB/issues/120)
+
 ## What is New in CosmosDB 2.0.15.454
 
 June 15, 2018

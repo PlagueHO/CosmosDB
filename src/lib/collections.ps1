@@ -175,7 +175,7 @@ function New-CosmosDbCollectionIndexingPolicy
         $Automatic = $true,
 
         [Parameter()]
-        [ValidateSet('Consistent', 'Lazy')]
+        [ValidateSet('Consistent', 'Lazy', 'None')]
         [System.String]
         $IndexingMode = 'Consistent',
 
@@ -187,6 +187,13 @@ function New-CosmosDbCollectionIndexingPolicy
         [CosmosDB.IndexingPolicy.Path.ExcludedPath[]]
         $ExcludedPath = @()
     )
+
+    if ($IndexingMode -eq 'None' -and $Automatic)
+    {
+        New-CosmosDbInvalidArgumentException `
+            -Message $($LocalizedData.ErrorNewCollectionIndexingPolicyInvalidMode) `
+            -ArgumentName 'Automatic'
+    }
 
     $indexingPolicy = [CosmosDB.IndexingPolicy.Policy]::new()
     $indexingPolicy.Automatic = $Automatic
