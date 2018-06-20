@@ -12,4 +12,5 @@ ConvertFrom-StringData -StringData @'
     ErrorNewCollectionParitionKeyRequired = A 'PartitionKey' is required when the 'OfferThroughput' is greater than 10000.
     ErrorNewCollectionIncludedPathIndexInvalidDataType = The DataType '{1}' is invalid for the included path index Kind '{0}'. Please use one of: {2}.
     ErrorNewCollectionIncludedPathIndexPrecisionNotSupported = A Precision value should not be provided for the index Kind '{0}'.
+    ErrorNewCollectionIndexingPolicyInvalidMode = Automatic must be set to 'False' if Indexing Mode of 'None' is used.
 '@

@@ -188,6 +188,13 @@ function New-CosmosDbCollectionIndexingPolicy
         $ExcludedPath = @()
     )
 
+    if ($IndexingMode -eq 'None' -and $Automatic)
+    {
+        New-CosmosDbInvalidArgumentException `
+            -Message $($LocalizedData.ErrorNewCollectionIndexingPolicyInvalidMode) `
+            -ArgumentName 'Automatic'
+    }
+
     $indexingPolicy = [CosmosDB.IndexingPolicy.Policy]::new()
     $indexingPolicy.Automatic = $Automatic
     $indexingPolicy.IndexingMode = $IndexingMode

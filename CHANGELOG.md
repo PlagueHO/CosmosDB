@@ -4,7 +4,6 @@
 
 - Added None as an IndexingMode - See [Issue #120](https://github.com/PlagueHO/CosmosDB/issues/120)
 
-
 ## 2.0.15.454
 
 - Fix creation of spatial index by `New-CosmosDbCollectionIncludedPathIndex`

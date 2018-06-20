@@ -66,7 +66,9 @@ By default, the indexing mode is Consistent.
 This means that indexing occurs synchronously during insertion, replacment or
 deletion of documents.
 To have indexing occur asynchronously, set the indexing mode to lazy.
-A collection that has a None index mode has no index associated with it. This is commonly used if Azure Cosmos DB is used as a key-value storage, and documents are accessed only by their ID property.
+A collection that has an index mode of None has no index associated with it. This
+is commonly used if Azure Cosmos DB is used as a key-value storage, and documents
+are accessed only by their ID property.
 When using None as the indexing mode, automatic must be set to False.
 
 ```yaml
