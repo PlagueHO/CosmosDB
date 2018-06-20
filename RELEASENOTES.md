@@ -1,6 +1,6 @@
 # Release Notes
 
-## What is New in CosmosDB Unreleased
+## What is New in CosmosDB 2.0.16.465
 
 June 20, 2018
 

@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.0.16.465
 
 - Added None as an IndexingMode - See [Issue #120](https://github.com/PlagueHO/CosmosDB/issues/120)
 
