@@ -129,7 +129,11 @@ function Get-CosmosDbDocument
 
         [Parameter()]
         [ref]
-        $ResultHeaders
+        $ResultHeaders,
+
+        [Parameter()]
+        [Switch]
+        $RetryOnRequestRateTooLarge
     )
 
     $null = $PSBoundParameters.Remove('Id')

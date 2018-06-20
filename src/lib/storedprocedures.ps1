@@ -162,7 +162,11 @@ function Invoke-CosmosDbStoredProcedure
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.Object[]]
-        $StoredProcedureParameter
+        $StoredProcedureParameter,
+
+        [Parameter()]
+        [Switch]
+        $RetryOnRequestRateTooLarge
     )
 
     $null = $PSBoundParameters.Remove('CollectionId')
@@ -209,7 +213,7 @@ function Invoke-CosmosDbStoredProcedure
 
     if ($result.Headers.'x-ms-documentdb-script-log-results')
     {
-        Write-Verbose -Message "Script Log Results: $($result.Headers.'x-ms-documentdb-script-log-results')"
+        Write-Verbose -Message "ScriptLogResults:`n$([Uri]::UnescapeDataString($result.Headers.'x-ms-documentdb-script-log-results').Trim())"
     }
 
     if ($result.Content)
