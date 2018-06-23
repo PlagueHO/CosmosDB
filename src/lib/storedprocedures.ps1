@@ -91,10 +91,12 @@ function Get-CosmosDbStoredProcedure
     {
         $null = $PSBoundParameters.Remove('Id')
 
-        $storedProcedure = Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'sprocs' `
             -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
+
+        $storedProcedure = ConvertFrom-Json -InputObject $result.Content
     }
     else
     {
@@ -103,7 +105,8 @@ function Get-CosmosDbStoredProcedure
             -ResourceType 'sprocs' `
             -ResourcePath $resourcePath
 
-        $storedProcedure = $result.StoredProcedures
+        $body = ConvertFrom-Json -InputObject $result.Content
+        $storedProcedure = $body.StoredProcedures
     }
 
     if ($storedProcedure)
@@ -197,28 +200,25 @@ function Invoke-CosmosDbStoredProcedure
         $body = '[]'
     }
 
-    # Because the headers of this request will contain important information
-    # then we need to use a plain web request.
+    <#
+        Because the headers of this request will contain important information
+        then we need to use a plain web request.
+    #>
     $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'sprocs' `
         -ResourcePath $resourcePath `
         -Headers $headers `
-        -Body $body `
-        -UseWebRequest
+        -Body $body
 
     if ($result.Headers.'x-ms-documentdb-script-log-results')
     {
-        Write-Verbose -Message "Script Log Results: $($result.Headers.'x-ms-documentdb-script-log-results')"
+        Write-Verbose -Message $($LocalizedData.StoredProcedureScriptLogResults -f $Id, $result.Headers['x-ms-documentdb-script-log-results'])
     }
 
     if ($result.Content)
     {
-        return (ConvertFrom-JSON -InputObject $result.Content)
-    }
-    else
-    {
-        return $null
+        return (ConvertFrom-Json -InputObject $result.Content)
     }
 }
 
@@ -278,11 +278,13 @@ function New-CosmosDbStoredProcedure
 
     $StoredProcedureBody = ((($StoredProcedureBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
 
-    $storedProcedure = Invoke-CosmosDbRequest @PSBoundParameters `
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'sprocs' `
         -ResourcePath $resourcePath `
         -Body "{ `"id`": `"$id`", `"body`" : `"$StoredProcedureBody`" }"
+
+    $storedProcedure = ConvertFrom-Json -InputObject $result.Content
 
     if ($storedProcedure)
     {
@@ -399,11 +401,13 @@ function Set-CosmosDbStoredProcedure
 
     $StoredProcedureBody = ((($StoredProcedureBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
 
-    $storedProcedure = Invoke-CosmosDbRequest @PSBoundParameters `
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Put' `
         -ResourceType 'sprocs' `
         -ResourcePath $resourcePath `
         -Body "{ `"id`": `"$id`", `"body`" : `"$StoredProcedureBody`" }"
+
+    $storedProcedure = ConvertFrom-Json -InputObject $result.Content
 
     if ($storedProcedure)
     {

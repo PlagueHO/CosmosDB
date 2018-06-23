@@ -51,6 +51,15 @@ PS C:\> Get-CosmosDbOffer -Context $cosmosDbContext -Id '6d9t'
 
 Get the offer with Id '6d9t' from a CosmosDB account.
 
+### Example 3
+
+```powershell
+PS C:\> Get-CosmosDbOffer -Context $cosmosDbContext -Query 'SELECT * FROM root WHERE (root["id"] = "6d9t")'
+```
+
+Get the offer with Id '6d9t' from a CosmosDB account using
+a select query.
+
 ## PARAMETERS
 
 ### -Context

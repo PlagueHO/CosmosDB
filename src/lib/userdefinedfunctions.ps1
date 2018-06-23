@@ -91,10 +91,12 @@ function Get-CosmosDbUserDefinedFunction
     {
         $null = $PSBoundParameters.Remove('Id')
 
-        $userDefinedFunction = Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'udfs' `
             -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
+
+        $userDefinedFunction = ConvertFrom-Json -InputObject $result.Content
     }
     else
     {
@@ -103,7 +105,8 @@ function Get-CosmosDbUserDefinedFunction
             -ResourceType 'udfs' `
             -ResourcePath $resourcePath
 
-        $userDefinedFunction = $result.UserDefinedFunctions
+        $body = ConvertFrom-Json -InputObject $result.Content
+        $userDefinedFunction = $body.UserDefinedFunctions
     }
 
     if ($userDefinedFunction)
@@ -168,11 +171,13 @@ function New-CosmosDbUserDefinedFunction
 
     $UserDefinedFunctionBody = ((($UserDefinedFunctionBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
 
-    $userDefinedFunction = Invoke-CosmosDbRequest @PSBoundParameters `
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'udfs' `
         -ResourcePath $resourcePath `
         -Body "{ `"id`": `"$id`", `"body`" : `"$UserDefinedFunctionBody`" }"
+
+    $userDefinedFunction = ConvertFrom-Json -InputObject $result.Content
 
     if ($userDefinedFunction)
     {
@@ -289,11 +294,13 @@ function Set-CosmosDbUserDefinedFunction
 
     $UserDefinedFunctionBody = ((($UserDefinedFunctionBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
 
-    $userDefinedFunction = Invoke-CosmosDbRequest @PSBoundParameters `
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Put' `
         -ResourceType 'udfs' `
         -ResourcePath $resourcePath `
         -Body "{ `"id`": `"$id`", `"body`" : `"$UserDefinedFunctionBody`" }"
+
+    $userDefinedFunction = ConvertFrom-Json -InputObject $result.Content
 
     if ($userDefinedFunction)
     {

@@ -75,10 +75,12 @@ function Get-CosmosDbUser
     {
         $null = $PSBoundParameters.Remove('Id')
 
-        $user = Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'users' `
             -ResourcePath ('users/{0}' -f $Id)
+
+        $user = ConvertFrom-Json -InputObject $result.Content
     }
     else
     {
@@ -86,7 +88,9 @@ function Get-CosmosDbUser
             -Method 'Get' `
             -ResourceType 'users'
 
-        $user = $result.Users
+        $body = ConvertFrom-Json -InputObject $result.Content
+
+        $user = $body.Users
     }
 
     if ($user)
@@ -135,10 +139,12 @@ function New-CosmosDbUser
 
     $null = $PSBoundParameters.Remove('Id')
 
-    $user = Invoke-CosmosDbRequest @PSBoundParameters `
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'users' `
         -Body "{ `"id`": `"$Id`" }"
+
+    $user = ConvertFrom-Json -InputObject $result.Content
 
     if ($user)
     {
@@ -237,11 +243,13 @@ function Set-CosmosDbUser
     $null = $PSBoundParameters.Remove('Id')
     $null = $PSBoundParameters.Remove('NewId')
 
-    $user = Invoke-CosmosDbRequest @PSBoundParameters `
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Put' `
         -ResourceType 'users' `
         -ResourcePath ('users/{0}' -f $Id) `
         -Body "{ `"id`": `"$NewId`" }"
+
+    $user = ConvertFrom-Json -InputObject $result.Content
 
     if ($user)
     {

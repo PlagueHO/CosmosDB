@@ -164,11 +164,13 @@ function Get-CosmosDbDocument
             $null = $PSBoundParameters.Remove('PartitionKey')
         }
 
-        $document = Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method $method `
             -Headers $headers `
             -ResourceType 'docs' `
             -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
+
+        $document = ConvertFrom-JSON -InputObject $result.Content
     }
     else
     {
@@ -252,12 +254,10 @@ function Get-CosmosDbDocument
             -ResourceType 'docs' `
             -ResourcePath $resourcePath `
             -Headers $headers `
-            -Body $body `
-            -UseWebRequest
+            -Body $body
 
-        $tempObject = (ConvertFrom-JSON -InputObject $result.Content)
-
-        $document = $tempObject.Documents
+        $body = ConvertFrom-JSON -InputObject $result.Content
+        $document = $body.Documents
 
         if ($resultHeadersPassed)
         {
@@ -361,12 +361,14 @@ function New-CosmosDbDocument
         $null = $PSBoundParameters.Remove('PartitionKey')
     }
 
-    $document = Invoke-CosmosDbRequest @PSBoundParameters `
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'docs' `
         -ResourcePath $resourcePath `
         -Body $DocumentBody `
         -Headers $headers
+
+    $document = ConvertFrom-Json -InputObject $result.Content
 
     if ($document)
     {
@@ -525,12 +527,14 @@ function Set-CosmosDbDocument
         $null = $PSBoundParameters.Remove('PartitionKey')
     }
 
-    $document = Invoke-CosmosDbRequest @PSBoundParameters `
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Put' `
         -ResourceType 'docs' `
         -ResourcePath $resourcePath `
         -Body $DocumentBody `
         -Headers $headers
+
+    $document = ConvertFrom-Json -InputObject $result.Content
 
     if ($document)
     {

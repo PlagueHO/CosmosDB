@@ -318,10 +318,6 @@ function Invoke-CosmosDbRequest
         $Headers = @{},
 
         [Parameter()]
-        [Switch]
-        $UseWebRequest,
-
-        [Parameter()]
         [System.String]
         $ContentType = 'application/json'
     )
@@ -484,7 +480,7 @@ function Invoke-CosmosDbRequest
         'x-ms-version'  = $ApiVersion
     }
 
-    $invokeRestMethodParameters = @{
+    $invokeWebRequestParameters = @{
         Uri         = $uri
         Headers     = $Headers
         Method      = $method
@@ -495,24 +491,17 @@ function Invoke-CosmosDbRequest
     {
         if ($Method -eq 'Patch')
         {
-            $invokeRestMethodParameters['contentType'] = 'application/json-patch+json'
+            $invokeWebRequestParameters['contentType'] = 'application/json-patch+json'
         }
 
-        $invokeRestMethodParameters += @{
+        $invokeWebRequestParameters += @{
             Body = $Body
         }
     }
 
     try
     {
-        if ($UseWebRequest)
-        {
-            $restResult = Invoke-WebRequest -UseBasicParsing @invokeRestMethodParameters
-        }
-        else
-        {
-            $restResult = Invoke-RestMethod @invokeRestMethodParameters
-        }
+        $restResult = Invoke-WebRequest -UseBasicParsing @invokeWebRequestParameters
     }
     catch [System.Net.WebException]
     {

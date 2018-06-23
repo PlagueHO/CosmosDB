@@ -42,7 +42,6 @@ InModuleScope CosmosDB {
         BaseUri  = ('https://{0}.documents.azure.com/' -f $script:testAccount)
         Token    = $script:testContextToken
     }
-
     $script:testJson = @'
 {
     "_rid": "2MFbAA==",
@@ -54,6 +53,9 @@ InModuleScope CosmosDB {
     "_count": 1
 }
 '@
+    $script:testInvokeWebRequestResult = @{
+        Content = $script:testJson
+    }
     $script:testResourceGroup = 'testResourceGroup'
 
     Describe 'Custom types' -Tag 'Unit' {
@@ -393,21 +395,21 @@ InModuleScope CosmosDB {
             Mock -CommandName Get-Date -MockWith { $script:testDate }
         }
 
-        $invokeRestMethod_mockwith = {
-            ConvertFrom-Json -InputObject $script:testJson
+        $InvokeWebRequest_mockwith = {
+            $testInvokeWebRequestResult
         }
 
         Context 'When called with context parameter and Get method and ResourceType is ''users''' {
-            $invokeRestMethod_parameterfilter = {
+            $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
                     $ContentType -eq 'application/json' -and `
                     $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
             }
 
             Mock `
-                -CommandName Invoke-RestMethod `
-                -ParameterFilter $invokeRestMethod_parameterfilter `
-                -MockWith $invokeRestMethod_mockwith
+                -CommandName Invoke-WebRequest `
+                -ParameterFilter $InvokeWebRequest_parameterfilter `
+                -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
 
@@ -419,7 +421,7 @@ InModuleScope CosmosDB {
                     Verbose      = $true
                 }
 
-                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -428,24 +430,24 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-RestMethod `
-                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
                     -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
             }
         }
 
         Context 'When called with context parameter and Get method and ResourceType is ''dbs''' {
-            $invokeRestMethod_parameterfilter = {
+            $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
                     $ContentType -eq 'application/json' -and `
                     $Uri -eq ('{0}{1}' -f $script:testContext.BaseUri, 'dbs')
             }
 
             Mock `
-                -CommandName Invoke-RestMethod `
-                -ParameterFilter $invokeRestMethod_parameterfilter `
-                -MockWith $invokeRestMethod_mockwith
+                -CommandName Invoke-WebRequest `
+                -ParameterFilter $InvokeWebRequest_parameterfilter `
+                -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
 
@@ -457,7 +459,7 @@ InModuleScope CosmosDB {
                     Verbose      = $true
                 }
 
-                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -466,24 +468,24 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-RestMethod `
-                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
                     -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
             }
         }
 
         Context 'When called with context parameter and Get method and ResourceType is ''offers''' {
-            $invokeRestMethod_parameterfilter = {
+            $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
                     $ContentType -eq 'application/json' -and `
                     $Uri -eq ('{0}{1}' -f $script:testContext.BaseUri, 'offers')
             }
 
             Mock `
-                -CommandName Invoke-RestMethod `
-                -ParameterFilter $invokeRestMethod_parameterfilter `
-                -MockWith $invokeRestMethod_mockwith
+                -CommandName Invoke-WebRequest `
+                -ParameterFilter $InvokeWebRequest_parameterfilter `
+                -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
 
@@ -495,7 +497,7 @@ InModuleScope CosmosDB {
                     Verbose      = $true
                 }
 
-                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -504,24 +506,24 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-RestMethod `
-                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
                     -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
             }
         }
 
         Context 'When called with context parameter and Get method and ResourceType is ''colls''' {
-            $invokeRestMethod_parameterfilter = {
+            $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
                     $ContentType -eq 'application/json' -and `
                     $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'colls')
             }
 
             Mock `
-                -CommandName Invoke-RestMethod `
-                -ParameterFilter $invokeRestMethod_parameterfilter `
-                -MockWith $invokeRestMethod_mockwith
+                -CommandName Invoke-WebRequest `
+                -ParameterFilter $InvokeWebRequest_parameterfilter `
+                -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
 
@@ -533,7 +535,7 @@ InModuleScope CosmosDB {
                     Verbose      = $true
                 }
 
-                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -542,24 +544,24 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-RestMethod `
-                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
                     -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
             }
         }
 
         Context 'When called with Get method and ResourceType is ''colls'' and a resource token context that matches the resource link' {
-            $invokeRestMethod_parameterfilter = {
+            $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
                 $ContentType -eq 'application/json' -and `
                 $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, $script:testCollection)
             }
 
             Mock `
-                -CommandName Invoke-RestMethod `
-                -ParameterFilter $invokeRestMethod_parameterfilter `
-                -MockWith $invokeRestMethod_mockwith
+                -CommandName Invoke-WebRequest `
+                -ParameterFilter $InvokeWebRequest_parameterfilter `
+                -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
 
@@ -572,7 +574,7 @@ InModuleScope CosmosDB {
                     Verbose      = $true
                 }
 
-                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -581,24 +583,24 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-RestMethod `
-                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
                     -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
             }
         }
 
         Context 'When called with Get method and ResourceType is ''colls'' and a resource token context without matching token and no master key' {
-            $invokeRestMethod_parameterfilter = {
+            $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
                 $ContentType -eq 'application/json' -and `
                 $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'anotherCollection')
             }
 
             Mock `
-                -CommandName Invoke-RestMethod `
-                -ParameterFilter $invokeRestMethod_parameterfilter `
-                -MockWith $invokeRestMethod_mockwith
+                -CommandName Invoke-WebRequest `
+                -ParameterFilter $InvokeWebRequest_parameterfilter `
+                -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
 
@@ -620,24 +622,24 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-RestMethod `
-                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
                     -Exactly -Times 0
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 0
             }
         }
 
         Context 'When called with context parameter and Post method' {
-            $invokeRestMethod_parameterfilter = {
+            $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Post' -and `
                     $ContentType -eq 'application/query+json' -and `
                     $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
             }
 
             Mock `
-                -CommandName Invoke-RestMethod `
-                -ParameterFilter $invokeRestMethod_parameterfilter `
-                -MockWith $invokeRestMethod_mockwith
+                -CommandName Invoke-WebRequest `
+                -ParameterFilter $InvokeWebRequest_parameterfilter `
+                -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
 
@@ -651,7 +653,7 @@ InModuleScope CosmosDB {
                     Verbose      = $true
                 }
 
-                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -660,8 +662,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-RestMethod `
-                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
                     -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
             }

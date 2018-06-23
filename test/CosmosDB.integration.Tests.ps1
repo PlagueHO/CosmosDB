@@ -26,6 +26,7 @@ $script:testResourceGroupName = 'cosmosdbpsmoduletestrgp'
 $script:testAccountName = ('cdbtest{0}' -f [System.IO.Path]::GetRandomFileName() -replace '\.', '')
 $script:testOffer = 'testOffer'
 $script:testDatabase = 'testDatabase'
+$script:testDatabase2 = 'testDatabase2'
 $script:testCollection = 'testCollection'
 $script:testUser = 'testUser'
 $script:testCollectionPermission = 'testCollectionPermission'
@@ -39,6 +40,62 @@ $script:testDocumentBody = @"
     `"more`": `"Some other string`"
 }
 "@
+$script:testAttachmentId = 'testAttachment'
+$script:testAttachmentContentType = 'image/jpg'
+$script:testAttachmentMedia = 'www.bing.com'
+$script:testStoredProcedureId = 'testStoredProcedure'
+$script:testStoredProcedureBody = @'
+function () {
+    var context = getContext();
+    var response = context.getResponse();
+
+    response.setBody("Hello, World");
+}
+'@
+$script:testTriggerId = 'testTrigger'
+$script:testTriggerBody = @'
+function updateMetadata() {
+    var context = getContext();
+    var collection = context.getCollection();
+    var response = context.getResponse();
+    var createdDocument = response.getBody();
+
+    // query for metadata document
+    var filterQuery = 'SELECT * FROM root r WHERE r.id = "_metadata"';
+    var accept = collection.queryDocuments(collection.getSelfLink(), filterQuery, updateMetadataCallback);
+    if(!accept) throw "Unable to update metadata, abort";
+
+    function updateMetadataCallback(err, documents, responseOptions) {
+        if(err) throw new Error("Error" + err.message);
+
+        if(documents.length != 1) throw 'Unable to find metadata document';
+        var metadataDocument = documents[0];
+
+        // update metadata
+        metadataDocument.createdDocuments += 1;
+        metadataDocument.createdNames += " " + createdDocument.id;
+
+        var accept = collection.replaceDocument(metadataDocument._self, metadataDocument, function(err, docReplaced) {
+            if(err) throw "Unable to update metadata, abort";
+        });
+
+        if(!accept) throw "Unable to update metadata, abort";
+        return;
+    }
+}
+'@
+$script:testUserDefinedFunctionId = 'testUserDefinedFunction'
+$script:testUserDefinedFunctionBody = @'
+function tax(income) {
+    if(income == undefined) throw 'no input';
+    if (income < 1000)
+        return income * 0.1;
+    else if (income < 10000)
+        return income * 0.2;
+    else
+        return income * 0.4;
+}
+'@
 
 # Connect to Azure
 Connect-AzureServicePrincipal `
@@ -93,6 +150,44 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Collections | Should -BeOfType [System.String]
             $script:result.Users | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDatabase
+        }
+    }
+
+    Context 'Create second new database' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = New-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase2 -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Collections | Should -BeOfType [System.String]
+            $script:result.Users | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testDatabase2
+        }
+    }
+
+    Context 'Get all existing databases' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Get-CosmosDbDatabase -Context $script:testContext -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Count | Should -Be 2
+        }
+    }
+
+    Context 'Remove second database' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Remove-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase2 -Verbose
+            } | Should -Not -Throw
         }
     }
 
@@ -427,6 +522,54 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    Context 'Add an attachment to the document in a collection' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = New-CosmosDbAttachment `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -DocumentId $script:testDocumentId `
+                    -Id $script:testAttachmentId `
+                    -ContentType $script:testAttachmentContentType `
+                    -Media $script:testAttachmentMedia `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testAttachmentId
+            $script:result.ContentType | Should -Be $script:testAttachmentContentType
+            $script:result.Media | Should -Be $script:testAttachmentMedia
+        }
+    }
+
+    Context 'Get an attachment from the document in a collection' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Get-CosmosDbAttachment `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -DocumentId $script:testDocumentId `
+                    -Id $script:testAttachmentId `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testAttachmentId
+            $script:result.ContentType | Should -Be $script:testAttachmentContentType
+            $script:result.Media | Should -Be $script:testAttachmentMedia
+        }
+    }
+
     Context 'Add a read document permission for a user' {
         It 'Should not throw an exception' {
             {
@@ -514,13 +657,166 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'Remove the existing read document permission for the user' {
+    Context 'Add a stored procedure to the collection' {
         It 'Should not throw an exception' {
             {
-                $script:result = Remove-CosmosDbPermission `
+                $script:result = New-CosmosDbStoredProcedure `
                     -Context $script:testContext `
-                    -UserId $script:testUser `
-                    -Id $script:testDocumentPermission `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testStoredProcedureId `
+                    -StoredProcedureBody $script:testStoredProcedureBody `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testStoredProcedureId
+        }
+    }
+
+    Context 'Get the stored procedure from the collection' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Get-CosmosDbStoredProcedure `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testStoredProcedureId `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testStoredProcedureId
+        }
+    }
+
+    Context 'Remove the stored procedure from the collection' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Remove-CosmosDbStoredProcedure `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testStoredProcedureId `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+    }
+
+    Context 'Add a trigger to the collection' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = New-CosmosDbTrigger `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testTriggerId `
+                    -TriggerBody $script:testTriggerBody `
+                    -TriggerOperation 'All' `
+                    -TriggerType 'Pre' `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testTriggerId
+            $script:result.TriggerOperation | Should -Be 'All'
+            $script:result.TriggerType | Should -Be 'Pre'
+        }
+    }
+
+    Context 'Get the trigger from the collection' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Get-CosmosDbTrigger `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testTriggerId `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testTriggerId
+            $script:result.TriggerOperation | Should -Be 'All'
+            $script:result.TriggerType | Should -Be 'Pre'
+        }
+    }
+
+    Context 'Remove the trigger from the collection' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Remove-CosmosDbTrigger `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testTriggerId `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+    }
+
+    Context 'Add a user defined function to the collection' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = New-CosmosDbUserDefinedFunction `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testUserDefinedFunctionId `
+                    -UserDefinedFunctionBody $script:testUserDefinedFunctionBody `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testUserDefinedFunctionId
+        }
+    }
+
+    Context 'Get the user defined function from the collection' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Get-CosmosDbUserDefinedFunction `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testUserDefinedFunctionId `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testUserDefinedFunctionId
+        }
+    }
+
+    Context 'Remove the user defined function from the collection' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Remove-CosmosDbUserDefinedFunction `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testUserDefinedFunctionId `
                     -Verbose
             } | Should -Not -Throw
         }
@@ -533,6 +829,31 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     -Context $script:testContext `
                     -UserId $script:testUser `
                     -Id $script:testCollectionPermission `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+    }
+
+    Context 'Remove an attachment from the document in a collection' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Remove-CosmosDbAttachment `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -DocumentId $script:testDocumentId `
+                    -Id $script:testAttachmentId `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+    }
+
+    Context 'Remove a document from a collection' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Remove-CosmosDbDocument `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testDocumentId `
                     -Verbose
             } | Should -Not -Throw
         }
