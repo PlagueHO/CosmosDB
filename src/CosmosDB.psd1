@@ -106,6 +106,7 @@
         'Get-CosmosDbUserDefinedFunctionResourcePath'
         'Invoke-CosmosDbStoredProcedure'
         'New-CosmosDbAttachment'
+        'New-CosmosDbBackoffPolicy'
         'New-CosmosDbCollection'
         'New-CosmosDbCollectionIncludedPathIndex'
         'New-CosmosDbCollectionIncludedPath'
@@ -189,6 +190,10 @@ June 23, 2018
 - Added integration tests for stored procedures.
 - Added integration tests for triggers.
 - Added integration tests for user defined functions.
+- Added `New-CosmosDbBackOffPolicy` function for controlling the behaviour
+  of a function when a "Too Many Request" (error code 429) is recieved.
+- Added support for handling a back-off policy to the `Invoke-CosmosDbRequest`
+  function.
 
 ## What is New in CosmosDB 2.0.16.465
 

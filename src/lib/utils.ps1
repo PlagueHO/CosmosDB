@@ -14,7 +14,7 @@ function New-CosmosDbBackoffPolicy
         $Method = 'Linear',
 
         [Parameter()]
-        [ValidateRange(0, 18000)]
+        [ValidateRange(0, 3600000)]
         [System.Int32]
         $Delay = 0
     )
@@ -535,36 +535,144 @@ function Invoke-CosmosDbRequest
         }
     }
 
-    try
-    {
-        $restResult = Invoke-WebRequest -UseBasicParsing @invokeWebRequestParameters
-    }
-    catch [System.Net.WebException]
-    {
-        <#
-            Write out additional exception information into the verbose stream
-            In a future version a custom exception type for CosmosDB that
-            contains this additional information.
-        #>
-        if ($_.Exception.Response)
+    $requestComplete = $false
+    $retry = 0
+
+    do {
+        try
         {
-            $exceptionStream = $_.Exception.Response.GetResponseStream()
-            $streamReader = New-Object -TypeName System.IO.StreamReader -ArgumentList $exceptionStream
-            $exceptionResponse = $streamReader.ReadToEnd()
-            if ($exceptionResponse)
-            {
-                Write-Verbose -Message $exceptionResponse
-            }
+            $requestResult = Invoke-WebRequest -UseBasicParsing @invokeWebRequestParameters
+            $requestComplete = $true
         }
+        catch [System.Net.WebException]
+        {
+            if ($_.Exception.Response.StatusCode -eq 429)
+            {
+                <#
+                    The exception was caused by exceeding provisioned throughput
+                    so determine is we should delay and try again or exit
+                #>
+                $delay = Get-CosmosDbBackoffDelay `
+                    -BackOffPolicy $Context.BackoffPolicy `
+                    -Retry $retry `
+                    -RequestedDelay ([System.Int32] ($_.Exception.Response.Headers['x-ms-retry-after-ms']))
 
-        Throw $_
-    }
-    catch
+                # A null delay means retries have been exceeded or no back-off policy specified
+                if ($null -ne $delay)
+                {
+                    $retry++
+                    Write-Verbose -Message $($LocalizedData.WaitingBackoffPolicyDelay -f $retry, $delay)
+                    Start-Sleep -Milliseconds $delay
+                    continue
+                }
+            }
+
+            if ($_.Exception.Response)
+            {
+                <#
+                    Write out additional exception information into the verbose stream
+                    In a future version a custom exception type for CosmosDB that
+                    contains this additional information.
+                #>
+                $exceptionStream = $_.Exception.Response.GetResponseStream()
+                $streamReader = New-Object -TypeName System.IO.StreamReader -ArgumentList $exceptionStream
+                $exceptionResponse = $streamReader.ReadToEnd()
+
+                if ($exceptionResponse)
+                {
+                    Write-Verbose -Message $exceptionResponse
+                }
+            }
+
+            Throw $_
+        }
+        catch
+        {
+            Throw $_
+        }
+    } while ($requestComplete -eq $false)
+
+    # Display the Request Charge as a verbose message
+    $requestCharge = $requestResult.Headers.'x-ms-request-charge'
+    if ($requestCharge)
     {
-        Throw $_
+        Write-Verbose -Message $($LocalizedData.RequestChargeResults -f $method, $uri, $requestCharge)
     }
 
-    return $restResult
+    return $requestResult
+}
+
+function Get-CosmosDbBackoffDelay
+{
+    [CmdletBinding()]
+    [OutputType([System.Int32])]
+    param
+    (
+        [Parameter()]
+        [CosmosDB.BackoffPolicy]
+        $BackoffPolicy,
+
+        [Parameter()]
+        [System.Int32]
+        $Retry = 0,
+
+        [Parameter()]
+        [System.Int32]
+        $RequestedDelay = 0
+    )
+
+    if ($null -ne $BackoffPolicy)
+    {
+        # A back-off policy has been provided
+        Write-Verbose -Message $($LocalizedData.CollectionProvisionedThroughputExceededWithBackoffPolicy)
+
+        if ($Retry -le $BackoffPolicy.MaxRetries)
+        {
+            switch ($BackoffPolicy.Method)
+            {
+                'Linear'
+                {
+                    $backoffPolicyDelay = $backoffPolicy.Delay
+                }
+
+                'Exponential'
+                {
+                    $backoffPolicyDelay = $backoffPolicy.Delay * [Math]::pow(($Retry + 1),2)
+                }
+
+                'Random'
+                {
+                    $backoffDelayMin = -($backoffPolicy.Delay/2)
+                    $backoffDelayMax = $backoffPolicy.Delay/2
+                    $backoffPolicyDelay = $backoffPolicy.Delay + (Get-Random -Minimum $backoffDelayMin -Maximum $backoffDelayMax)
+                }
+            }
+
+            if ($backoffPolicyDelay -gt $RequestedDelay)
+            {
+                $delay = $backoffPolicyDelay
+                Write-Verbose -Message $($LocalizedData.BackOffPolicyAppliedPolicyDelay -f $BackoffPolicy.Method, $backoffPolicyDelay, $requestedDelay)
+            }
+            else
+            {
+                $delay = $requestedDelay
+                Write-Verbose -Message $($LocalizedData.BackOffPolicyAppliedRequestedDelay -f $BackoffPolicy.Method, $backoffPolicyDelay, $requestedDelay)
+            }
+
+            return $delay
+        }
+        else
+        {
+            Write-Verbose -Message $($LocalizedData.CollectionProvisionedThroughputExceededMaxRetriesHit -f $BackoffPolicy.MaxRetries)
+            return $null
+        }
+    }
+    else
+    {
+        # A back-off policy has not been defined
+        Write-Verbose -Message $($LocalizedData.CollectionProvisionedThroughputExceededNoBackoffPolicy)
+        return $null
+    }
 }
 
 function New-CosmosDbInvalidArgumentException

@@ -39,7 +39,7 @@ the caller.
 
 ```powershell
 PS C:\> $primaryKey = ConvertTo-SecureString -String 'your master key' -AsPlainText -Force
-PS C:\> $backoffPolicy = New-CosmosDBBackoffPolicy -MaxRetries 5 -Delay 2
+PS C:\> $backoffPolicy = New-CosmosDBBackoffPolicy -MaxRetries 5 -Delay 2000
 PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey -BackoffPolicy $backoffPolicy
 PS C:\> $query = "SELECT * FROM customers c WHERE (c.id = 'user@contoso.com')"
 PS C:\> $documents = Get-CosmosDBDocument -Context $cosmosDBContext -CollectionId 'MyNewCollection' -Query $query
@@ -95,11 +95,11 @@ Accept wildcard characters: False
 
 ### -Delay
 
-This is the number of seconds to wait before retrying the
+This is the number of milliseconds to wait before retrying the
 last request.
 
 If a linear back-off method is used then this is the exact
-number of seconds to wait between retries.
+number of milliseconds to wait between retries.
 
 If an exponential back-off method is used then this is the base
 delay to use for the first failure. Further failures will double
@@ -119,7 +119,7 @@ Aliases:
 
 Required: True
 Position: 2
-Default value: 5
+Default value: 5000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

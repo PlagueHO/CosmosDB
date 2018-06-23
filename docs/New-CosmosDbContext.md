@@ -81,7 +81,7 @@ Creates a CosmosDB context by using a local CosmosDB Emulator.
 
 ```powershell
 PS C:\> $primaryKey = ConvertTo-SecureString -String 'your master key' -AsPlainText -Force
-PS C:\> $retryPolicy = New-CosmosDBRetryPolicy -MaxRetries 5 -Delay 2
+PS C:\> $retryPolicy = New-CosmosDBRetryPolicy -MaxRetries 5 -Delay 2000
 PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey -RetryPolicy $retryPolicy
 ```
 

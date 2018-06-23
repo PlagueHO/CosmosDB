@@ -37,6 +37,7 @@
   - [Stored Procedures](#working-with-stored-procedures)
   - [Working with Triggers](#working-with-triggers)
   - [Working with User Defined Functions](#working-with-user-defined-functions)
+  - [How to Handle Exceeding Provisioned Throughput](#how-to-handle-exceeding-provisioned-throughput)
 - [Contributing](#contributing)
 - [Cmdlets](#cmdlets)
 - [Change Log](#change-log)
@@ -682,6 +683,57 @@ Remove a user defined function for a collection from the database:
 ```powershell
 Remove-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'udfTax'
 ```
+
+### How to Handle Exceeding Provisioned Throughput
+
+When using Azure Cosmos DB it is quite common to exceed the throughput
+that has been provisioned against a collection (or accross multiple collections).
+See [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/request-units)
+for more information on request units and throughput provisioning.
+
+When this happens requests will return a `Too Many Request` (error code 429).
+Usually just waiting a small amount of time and trying again will result in the
+request succeeding. However, the Cosmos DB PowerShell module provides a mechanism
+for configuring an automatic back-off and retry policy.
+
+This is configured within the Context object that is usually passed to each
+Cosmos DB module function.
+
+To configure a Back-off Policy, use the `New-CosmosDbBackoffPolicy` function:
+
+```powershell
+$backoffPolicy = New-CosmosDbBackoffPolicy -MaxRetries 5
+$cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey -BackoffPolicy $backoffPolicy
+```
+
+This will cause any functions that use the Context to automatically retry up to
+5 times if a 429 response code is returned. Any other type of response code will
+throw an exception. The number of milliseconds to delay before retrying will be
+determined automatically by using the `x-ms-retry-after-ms` header returned by
+Cosmos DB.
+
+Additional Back-off Policy options can be set to override and extend the value
+returned in the `x-ms-retry-after-ms` header. For example, an exponential
+Back-off Policy can be created by using:
+
+```powershell
+$backoffPolicy = New-CosmosDbBackoffPolicy -MaxRetries 4 -Method Exponential -Delay 1000
+```
+
+This will create a policy that will wait for 1000ms on the first retry, 4000ms on the
+second retry, 9000ms on the 3rd retry and 16000ms on the 4th and final retry.
+
+```powershell
+$backoffPolicy = New-CosmosDbBackoffPolicy -MaxRetries 3 -Method Random -Delay 1000
+```
+
+A policy that adds or subtracts up to 50% of the delay period to the base delay
+each time can also be applied. For example, the first delay might be 850ms, with
+the second delay being 1424ms and the 3rd and final delay being 983ms.
+
+**Note: if the delay calculated by the policy is less than the value returned in
+the `x-ms-retry-after-ms` header, then the `x-ms-retry-after-ms` value will always
+be used.**
 
 ## Contributing
 
