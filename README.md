@@ -712,16 +712,54 @@ throw an exception. The number of milliseconds to delay before retrying will be
 determined automatically by using the `x-ms-retry-after-ms` header returned by
 Cosmos DB.
 
-Additional Back-off Policy options can be set to override and extend the value
-returned in the `x-ms-retry-after-ms` header. For example, an exponential
-Back-off Policy can be created by using:
+Additional Back-off Policy options can be set to override or extend the value
+returned in the `x-ms-retry-after-ms` header.
+
+**Note: if the delay calculated by the policy is less than the value returned in
+the `x-ms-retry-after-ms` header, then the `x-ms-retry-after-ms` value will always
+be used.**
+
+The following show examples of alternative policy back-off types that can
+implemented:
+
+#### Default
+
+```powershell
+$backoffPolicy = New-CosmosDbBackoffPolicy -MaxRetries 10 -Method Default -Delay 100
+```
+
+The delay of 100ms will always be used unless it is less than `x-ms-retry-after-ms`.
+The delay can be set to 0 and will cause the  `x-ms-retry-after-ms` to always be used.
+It is the default Back-off Policy behavior.
+
+#### Additive
+
+```powershell
+$backoffPolicy = New-CosmosDbBackoffPolicy -MaxRetries 10 -Method Additive -Delay 1000
+```
+
+This will create a policy that will retry 10 times with a delay equaling the value of
+the returned `x-ms-retry-after-ms` header plus 1000ms.
+
+#### Linear
+
+```powershell
+$backoffPolicy = New-CosmosDbBackoffPolicy -MaxRetries 3 -Method Linear -Delay 500
+```
+
+This will create a policy that will wait for 500ms on the first retry, 1000ms on the
+second retry, 1500ms on final retry.
+
+#### Exponential
 
 ```powershell
 $backoffPolicy = New-CosmosDbBackoffPolicy -MaxRetries 4 -Method Exponential -Delay 1000
 ```
 
 This will create a policy that will wait for 1000ms on the first retry, 4000ms on the
-second retry, 9000ms on the 3rd retry and 16000ms on the 4th and final retry.
+second retry, 9000ms on the 3rd retry and 16000ms on the final retry.
+
+#### Random
 
 ```powershell
 $backoffPolicy = New-CosmosDbBackoffPolicy -MaxRetries 3 -Method Random -Delay 1000
@@ -729,11 +767,7 @@ $backoffPolicy = New-CosmosDbBackoffPolicy -MaxRetries 3 -Method Random -Delay 1
 
 A policy that adds or subtracts up to 50% of the delay period to the base delay
 each time can also be applied. For example, the first delay might be 850ms, with
-the second delay being 1424ms and the 3rd and final delay being 983ms.
-
-**Note: if the delay calculated by the policy is less than the value returned in
-the `x-ms-retry-after-ms` header, then the `x-ms-retry-after-ms` value will always
-be used.**
+the second delay being 1424ms and final delay being 983ms.
 
 ## Contributing
 

@@ -58,7 +58,7 @@ InModuleScope CosmosDB {
     }
     $script:testResourceGroup = 'testResourceGroup'
     $script:testMaxRetries = 20
-    $script:testMethod = 'Exponential'
+    $script:testMethod = 'Default'
     $script:testDelay = 1
 
     Describe 'Custom types' -Tag 'Unit' {
@@ -730,6 +730,244 @@ InModuleScope CosmosDB {
                     -ParameterFilter $InvokeWebRequest_parameterfilter `
                     -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
+            }
+        }
+    }
+
+    Describe 'Get-CosmosDbBackoffDelay' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Get-CosmosDbBackoffDelay -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with unspecified back-off policy' {
+            Context 'Retry number 1 and RequestedDelay is 100ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 1
+                        RequestedDelay = 100
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return 100ms' {
+                    $script:result | Should -Be 100
+                }
+            }
+
+            Context 'Retry number 11 and RequestedDelay is 100ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 11
+                        RequestedDelay = 100
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return null' {
+                    $script:result | Should -BeNull
+                }
+            }
+        }
+
+        Context 'When called with Default back-off policy and delay 500ms' {
+            Context 'Retry number 1 and RequestedDelay is 100ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $newCosmosDbContextBackoffPolicyParameters = @{
+                        Delay = 500
+                    }
+
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 1
+                        RequestedDelay = 100
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return 500ms' {
+                    $script:result | Should -Be 500
+                }
+            }
+
+            Context 'Retry number 1 and RequestedDelay is 2000ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $newCosmosDbContextBackoffPolicyParameters = @{
+                        Delay = 500
+                    }
+
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 1
+                        RequestedDelay = 2000
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return 2000ms' {
+                    $script:result | Should -Be 2000
+                }
+            }
+        }
+
+        Context 'When called with Additive back-off policy and delay 500ms' {
+            Context 'Retry number 1 and RequestedDelay is 100ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $newCosmosDbContextBackoffPolicyParameters = @{
+                        Method = 'Additive'
+                        Delay  = 500
+                    }
+
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 1
+                        RequestedDelay = 100
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return 600ms' {
+                    $script:result | Should -Be 600
+                }
+            }
+        }
+
+        Context 'When called with Linear back-off policy and delay 500ms' {
+            Context 'Retry number 0 and RequestedDelay is 100ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $newCosmosDbContextBackoffPolicyParameters = @{
+                        Method = 'Linear'
+                        Delay  = 500
+                    }
+
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 0
+                        RequestedDelay = 100
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return 500ms' {
+                    $script:result | Should -Be 500
+                }
+            }
+
+            Context 'Retry number 1 and RequestedDelay is 100ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $newCosmosDbContextBackoffPolicyParameters = @{
+                        Method = 'Linear'
+                        Delay  = 500
+                    }
+
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 1
+                        RequestedDelay = 100
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return 1000ms' {
+                    $script:result | Should -Be 1000
+                }
+            }
+        }
+
+        Context 'When called with Exponential back-off policy and delay 500ms' {
+            Context 'Retry number 0 and RequestedDelay is 100ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $newCosmosDbContextBackoffPolicyParameters = @{
+                        Method = 'Exponential'
+                        Delay  = 500
+                    }
+
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 0
+                        RequestedDelay = 100
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return 500ms' {
+                    $script:result | Should -Be 500
+                }
+            }
+
+            Context 'Retry number 4 and RequestedDelay is 100ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $newCosmosDbContextBackoffPolicyParameters = @{
+                        Method = 'Exponential'
+                        Delay  = 500
+                    }
+
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 4
+                        RequestedDelay = 100
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return 12500msms' {
+                    $script:result | Should -Be 12500
+                }
             }
         }
     }

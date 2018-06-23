@@ -9,9 +9,9 @@ function New-CosmosDbBackoffPolicy
         $MaxRetries = 10,
 
         [Parameter()]
-        [ValidateSet('Linear', 'Exponential', 'Random')]
+        [ValidateSet('Default', 'Additive', 'Linear', 'Exponential', 'Random')]
         [System.String]
-        $Method = 'Linear',
+        $Method = 'Default',
 
         [Parameter()]
         [ValidateRange(0, 3600000)]
@@ -630,9 +630,19 @@ function Get-CosmosDbBackoffDelay
         {
             switch ($BackoffPolicy.Method)
             {
-                'Linear'
+                'Default'
                 {
                     $backoffPolicyDelay = $backoffPolicy.Delay
+                }
+
+                'Additive'
+                {
+                    $backoffPolicyDelay = $RequestedDelay + $backoffPolicy.Delay
+                }
+
+                'Linear'
+                {
+                    $backoffPolicyDelay = $backoffPolicy.Delay * ($Retry + 1)
                 }
 
                 'Exponential'
