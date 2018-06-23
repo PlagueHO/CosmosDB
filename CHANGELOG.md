@@ -11,6 +11,8 @@
 - Added integration tests for stored procedures.
 - Added integration tests for triggers.
 - Added integration tests for user defined functions.
+- Added `New-CosmosDbBackOffPolicy` function for controlling the behaviour
+  of a function when a "Too Many Request" (error code 429) is recieved.
 
 ## 2.0.16.465
 

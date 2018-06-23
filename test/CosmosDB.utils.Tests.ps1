@@ -57,6 +57,9 @@ InModuleScope CosmosDB {
         Content = $script:testJson
     }
     $script:testResourceGroup = 'testResourceGroup'
+    $script:testMaxRetries = 20
+    $script:testMethod = 'Exponential'
+    $script:testDelay = 1
 
     Describe 'Custom types' -Tag 'Unit' {
         Context 'CosmosDB.Context' {
@@ -86,6 +89,61 @@ InModuleScope CosmosDB {
         }
     }
 
+    Describe 'New-CosmosDbBackoffPolicy' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name New-CosmosDbBackoffPolicy -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with paramters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextBackoffPolicyParameters = @{
+                    MaxRetries = $script:testMaxRetries
+                    Method     = $script:testMethod
+                    Delay      = $script:testDelay
+                }
+
+                { $script:result = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.MaxRetries = $script:testMaxRetries
+                $script:result.Method = $script:testMethod
+                $script:result.Delay = $script:testDelay
+            }
+        }
+    }
+
+    Describe 'New-CosmosDbContextToken' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name New-CosmosDbContextToken -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with paramters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextTokenParameters = @{
+                    Resource    = $script:testTokenResource
+                    TimeStamp   = $script:testDate
+                    TokenExpiry = $script:testTokenExpiry
+                    Token       = $script:testTokenSecureString
+                    Verbose     = $true
+                }
+
+                { $script:result = New-CosmosDbContextToken @newCosmosDbContextTokenParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Resource | Should -Be $script:testTokenResource
+                $script:result.TimeStamp | Should -Be $script:testDate
+                $script:result.Expires | Should -Be $script:testDate.AddSeconds($script:testTokenExpiry)
+                $script:result.Token | Should -Be $script:testTokenSecureString
+            }
+        }
+    }
+
     Describe 'New-CosmosDbContext' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name New-CosmosDbContext -ErrorAction Stop } | Should -Not -Throw
@@ -111,6 +169,41 @@ InModuleScope CosmosDB {
                 $script:result.Key | Should -Be $script:testKeySecureString
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
+            }
+        }
+
+        Context 'When called with Account parameters and Back-off Policy' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextBackoffPolicyParameters = @{
+                    MaxRetries = $script:testMaxRetries
+                    Method     = $script:testMethod
+                    Delay      = $script:testDelay
+                }
+
+                $script:backoffPolicy = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters
+
+                $newCosmosDbContextParameters = @{
+                    Account       = $script:testAccount
+                    Database      = $script:testDatabase
+                    Key           = $script:testKeySecureString
+                    KeyType       = 'master'
+                    BackoffPolicy = $script:backoffPolicy
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be $script:testAccount
+                $script:result.Database | Should -Be $script:testDatabase
+                $script:result.Key | Should -Be $script:testKeySecureString
+                $script:result.KeyType | Should -Be 'master'
+                $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
+                $script:result.BackoffPolicy.MaxRetries | Should -Be $script:testMaxRetries
+                $script:result.BackoffPolicy.Method | Should -Be $script:testMethod
+                $script:result.BackoffPolicy.Delay | Should -Be $script:testDelay
             }
         }
 
@@ -237,35 +330,6 @@ InModuleScope CosmosDB {
                 $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($script:result.Token[0].Token)
                 $decryptedToken = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
                 $decryptedToken | Should -Be $script:testToken
-            }
-        }
-    }
-
-    Describe 'New-CosmosDbContextToken' -Tag 'Unit' {
-        It 'Should exist' {
-            { Get-Command -Name New-CosmosDbContextToken -ErrorAction Stop } | Should -Not -Throw
-        }
-
-        Context 'When called with paramters' {
-            $script:result = $null
-
-            It 'Should not throw exception' {
-                $newCosmosDbContextTokenParameters = @{
-                    Resource    = $script:testTokenResource
-                    TimeStamp   = $script:testDate
-                    TokenExpiry = $script:testTokenExpiry
-                    Token       = $script:testTokenSecureString
-                    Verbose     = $true
-                }
-
-                { $script:result = New-CosmosDbContextToken @newCosmosDbContextTokenParameters } | Should -Not -Throw
-            }
-
-            It 'Should return expected result' {
-                $script:result.Resource | Should -Be $script:testTokenResource
-                $script:result.TimeStamp | Should -Be $script:testDate
-                $script:result.Expires | Should -Be $script:testDate.AddSeconds($script:testTokenExpiry)
-                $script:result.Token | Should -Be $script:testTokenSecureString
             }
         }
     }
@@ -554,8 +618,8 @@ InModuleScope CosmosDB {
         Context 'When called with Get method and ResourceType is ''colls'' and a resource token context that matches the resource link' {
             $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
-                $ContentType -eq 'application/json' -and `
-                $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, $script:testCollection)
+                    $ContentType -eq 'application/json' -and `
+                    $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, $script:testCollection)
             }
 
             Mock `
@@ -593,8 +657,8 @@ InModuleScope CosmosDB {
         Context 'When called with Get method and ResourceType is ''colls'' and a resource token context without matching token and no master key' {
             $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
-                $ContentType -eq 'application/json' -and `
-                $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'anotherCollection')
+                    $ContentType -eq 'application/json' -and `
+                    $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'anotherCollection')
             }
 
             Mock `

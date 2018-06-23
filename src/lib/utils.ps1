@@ -1,3 +1,71 @@
+function New-CosmosDbBackoffPolicy
+{
+    [CmdletBinding()]
+    [OutputType([System.Management.Automation.PSCustomObject])]
+    param
+    (
+        [Parameter()]
+        [System.Int32]
+        $MaxRetries = 10,
+
+        [Parameter()]
+        [ValidateSet('Linear', 'Exponential', 'Random')]
+        [System.String]
+        $Method = 'Linear',
+
+        [Parameter()]
+        [ValidateRange(0, 18000)]
+        [System.Int32]
+        $Delay = 0
+    )
+
+    $backoffPolicy = New-Object -TypeName 'CosmosDB.BackoffPolicy' -Property @{
+        MaxRetries = $MaxRetries
+        Method     = $Method
+        Delay      = $Delay
+    }
+
+    return $backoffPolicy
+}
+
+function New-CosmosDbContextToken
+{
+    [CmdletBinding()]
+    [OutputType([System.Management.Automation.PSCustomObject])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Scope = 'Function')]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Resource,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.DateTime]
+        $TimeStamp,
+
+        [Parameter()]
+        [ValidateRange(600, 18000)]
+        [System.Int32]
+        $TokenExpiry = 3600,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.Security.SecureString]
+        $Token
+    )
+
+    $contextToken = New-Object -TypeName 'CosmosDB.ContextToken' -Property @{
+        Resource  = $Resource
+        TimeStamp = $TimeStamp
+        Expires   = $TimeStamp.AddSeconds($TokenExpiry)
+        Token     = $Token
+    }
+
+    return $contextToken
+}
+
 function New-CosmosDbContext
 {
     [CmdletBinding(DefaultParameterSetName = 'Account')]
@@ -49,7 +117,12 @@ function New-CosmosDbContext
         [Parameter(ParameterSetName = 'Emulator')]
         [ValidateNotNullOrEmpty()]
         [CosmosDB.ContextToken[]]
-        $Token
+        $Token,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [CosmosDB.BackoffPolicy]
+        $BackoffPolicy
     )
 
     switch ($PSCmdlet.ParameterSetName)
@@ -114,53 +187,16 @@ function New-CosmosDbContext
     }
 
     $context = New-Object -TypeName 'CosmosDB.Context' -Property @{
-        Account  = $Account
-        Database = $Database
-        Key      = $Key
-        KeyType  = $KeyType
-        BaseUri  = $BaseUri
-        Token    = $Token
+        Account       = $Account
+        Database      = $Database
+        Key           = $Key
+        KeyType       = $KeyType
+        BaseUri       = $BaseUri
+        Token         = $Token
+        BackoffPolicy = $BackoffPolicy
     }
 
     return $context
-}
-
-function New-CosmosDbContextToken
-{
-    [CmdletBinding()]
-    [OutputType([System.Management.Automation.PSCustomObject])]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Scope = 'Function')]
-    param
-    (
-        [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
-        [System.String]
-        $Resource,
-
-        [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
-        [System.DateTime]
-        $TimeStamp,
-
-        [Parameter()]
-        [ValidateRange(600,18000)]
-        [System.Int32]
-        $TokenExpiry = 3600,
-
-        [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
-        [System.Security.SecureString]
-        $Token
-    )
-
-    $contextToken = New-Object -TypeName 'CosmosDB.ContextToken' -Property @{
-        Resource  = $Resource
-        TimeStamp = $TimeStamp
-        Expires   = $TimeStamp.AddSeconds($TokenExpiry)
-        Token     = $Token
-    }
-
-    return $contextToken
 }
 
 function Get-CosmosDbUri

@@ -18,20 +18,21 @@ to connect to a CosmosDB.
 
 ```powershell
 New-CosmosDbContext -Account <String> [-Database <String>] -Key <SecureString> [-KeyType <String>]
- [<CommonParameters>]
+ [-RetryPolicy <CosmosDB.RetryPolicy>] [<CommonParameters>]
 ```
 
 ### Azure
 
 ```powershell
 New-CosmosDbContext -Account <String> [-Database <String>] -ResourceGroup <String> [-MasterKeyType <String>]
- [<CommonParameters>]
+ [-RetryPolicy <CosmosDB.RetryPolicy>] [<CommonParameters>]
 ```
 
 ### Emulator
 
 ```powershell
-New-CosmosDbContext [-Database <String>] [-Emulator] [-Port <Int16>] [<CommonParameters>]
+New-CosmosDbContext [-Database <String>] [-Emulator] [-Port <Int16>] [-RetryPolicy <CosmosDB.RetryPolicy>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -42,6 +43,10 @@ object that can be passed to the CosmosDB cmdlets.
 
 It can also retrieve the CosmosDB primary or secondary key
 from Azure Resource Manager.
+
+A retry policy can be applied to the context to control
+the behavior of "Too Many Request" (error code 429) responses
+from Cosmos DB.
 
 ## EXAMPLES
 
@@ -71,6 +76,18 @@ PS C:\> $cosmosDbContext = New-CosmosDbContext -Emulator
 ```
 
 Creates a CosmosDB context by using a local CosmosDB Emulator.
+
+### EXAMPLE 4
+
+```powershell
+PS C:\> $primaryKey = ConvertTo-SecureString -String 'your master key' -AsPlainText -Force
+PS C:\> $retryPolicy = New-CosmosDBRetryPolicy -MaxRetries 5 -Delay 2
+PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey -RetryPolicy $retryPolicy
+```
+
+Creates a CosmosDB context specifying the master key manually. A
+retry policy will be applied to the context that allows 5 retries
+with a delay of 2 seconds between them.
 
 ## PARAMETERS
 
@@ -217,6 +234,23 @@ retrieving a CosmosDB user account that has had permissions assigned.
 ```yaml
 Type: CosmosDB.Token
 Parameter Sets: Emulator, Token
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BackoffPolicy
+
+This a Back-off Policy object that controls the retry behaviour for
+requests using this context.
+
+```yaml
+Type: CosmosDB.BackoffPolicy
+Parameter Sets:  (All)
 Aliases:
 
 Required: False
