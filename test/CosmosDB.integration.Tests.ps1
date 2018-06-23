@@ -167,14 +167,14 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Uri | Should -BeOfType [System.String]
             $script:result.Collections | Should -BeOfType [System.String]
             $script:result.Users | Should -BeOfType [System.String]
-            $script:result.Id | Should -Be $script:testDatabase
+            $script:result.Id | Should -Be $script:testDatabase2
         }
     }
 
     Context 'Get all existing databases' {
         It 'Should not throw an exception' {
             {
-                $script:result = Get-CosmosDbDatabase -Context $script:testContext -Id -Verbose
+                $script:result = Get-CosmosDbDatabase -Context $script:testContext -Verbose
             } | Should -Not -Throw
         }
 
@@ -550,7 +550,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     Context 'Get an attachment from the document in a collection' {
         It 'Should not throw an exception' {
             {
-                $script:result = New-CosmosDbAttachment `
+                $script:result = Get-CosmosDbAttachment `
                     -Context $script:testContext `
                     -CollectionId $script:testCollection `
                     -DocumentId $script:testDocumentId `
@@ -704,7 +704,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 $script:result = Remove-CosmosDbStoredProcedure `
                     -Context $script:testContext `
                     -CollectionId $script:testCollection `
-                    -Id $script:testStoredProcedureId
+                    -Id $script:testStoredProcedureId `
                     -Verbose
             } | Should -Not -Throw
         }
@@ -763,7 +763,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 $script:result = Remove-CosmosDbTrigger `
                     -Context $script:testContext `
                     -CollectionId $script:testCollection `
-                    -Id $script:testTriggerId
+                    -Id $script:testTriggerId `
                     -Verbose
             } | Should -Not -Throw
         }
@@ -816,7 +816,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 $script:result = Remove-CosmosDbUserDefinedFunction `
                     -Context $script:testContext `
                     -CollectionId $script:testCollection `
-                    -Id $script:testUserDefinedFunctionId
+                    -Id $script:testUserDefinedFunctionId `
                     -Verbose
             } | Should -Not -Throw
         }
