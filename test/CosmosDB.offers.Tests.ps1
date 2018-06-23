@@ -56,6 +56,9 @@ InModuleScope CosmosDB {
     "_count": 2
     }
 '@
+    $script:testGetOfferResultMulti = @{
+        Content = $script:testJsonMulti
+    }
     $script:testJsonSingle = @'
 {
     "offerVersion": "V2",
@@ -72,6 +75,9 @@ InModuleScope CosmosDB {
     "_ts": 1459194239
 }
 '@
+    $script:testGetOfferResultSingle = @{
+        Content = $script:testJsonSingle
+    }
 
     Describe 'Get-CosmosDbOfferResourcePath' -Tag 'Unit' {
         It 'Should exist' {
@@ -110,7 +116,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
+                -MockWith { $script:testGetOfferResultMulti }
 
             It 'Should not throw exception' {
                 $getCosmosDbOfferParameters = @{
@@ -145,7 +151,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetOfferResultSingle }
 
             It 'Should not throw exception' {
                 $getCosmosDbOfferParameters = @{
@@ -181,7 +187,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
+                -MockWith { $script:testGetOfferResultMulti }
 
             It 'Should not throw exception' {
                 $getCosmosDbOfferParameters = @{
@@ -215,18 +221,18 @@ InModuleScope CosmosDB {
             $invokeCosmosDbRequest_parameterfilter = {
                 $Method -eq 'Put' -and `
                     $ResourceType -eq 'offers' -and `
-                    (ConvertFrom-Json -InputObject $Body).content.offerThroughput -eq 10000
+                (ConvertFrom-Json -InputObject $Body).content.offerThroughput -eq 10000
             }
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetOfferResultSingle }
 
             It 'Should not throw exception' {
                 $setCosmosDbOfferParameters = @{
-                    Context = $script:testContext
-                    InputObject = (ConvertFrom-Json -InputObject $script:testJsonSingle)
+                    Context         = $script:testContext
+                    InputObject     = (ConvertFrom-Json -InputObject $script:testJsonSingle)
                     OfferThroughput = 10000
                 }
 
@@ -250,18 +256,18 @@ InModuleScope CosmosDB {
             $invokeCosmosDbRequest_parameterfilter = {
                 $Method -eq 'Put' -and `
                     $ResourceType -eq 'offers' -and `
-                    (ConvertFrom-Json -InputObject $Body).content.offerThroughput -eq 10000
+                (ConvertFrom-Json -InputObject $Body).content.offerThroughput -eq 10000
             }
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetOfferResultSingle }
 
             It 'Should not throw exception' {
                 $setCosmosDbOfferParameters = @{
-                    Context = $script:testContext
-                    InputObject = @(
+                    Context         = $script:testContext
+                    InputObject     = @(
                         (ConvertFrom-Json -InputObject $script:testJsonSingle)
                         (ConvertFrom-Json -InputObject $script:testJsonSingle)
                     )

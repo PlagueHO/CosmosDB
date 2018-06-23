@@ -37,11 +37,17 @@ InModuleScope CosmosDB {
     "_count": 2
 }
 '@
+    $script:testGetUserResultMulti = @{
+        Content = $script:testJsonMulti
+    }
     $script:testJsonSingle = @'
 {
     "id": "testUser1"
 }
 '@
+    $script:testGetUserResultSingle = @{
+        Content = $script:testJsonSingle
+    }
 
     Describe 'Get-CosmosDbUserResourcePath' -Tag 'Unit' {
         It 'Should exist' {
@@ -77,7 +83,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'users' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
+                -MockWith { $script:testGetUserResultMulti }
 
             It 'Should not throw exception' {
                 $getCosmosDbUserParameters = @{
@@ -107,7 +113,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser1) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetUserResultSingle }
 
             It 'Should not throw exception' {
                 $getCosmosDbUserParameters = @{
@@ -142,7 +148,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'users' -and $Body -eq "{ `"id`": `"$($script:testUser1)`" }" } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetUserResultSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbUserParameters = @{
@@ -207,7 +213,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser1) -and $Body -eq "{ `"id`": `"NewId`" }"} `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetUserResultSingle }
 
             It 'Should not throw exception' {
                 $setCosmosDbUserParameters = @{

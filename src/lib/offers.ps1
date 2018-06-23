@@ -72,10 +72,12 @@ function Get-CosmosDbOffer
     {
         $null = $PSBoundParameters.Remove('Id')
 
-        $offer = Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'offers' `
             -ResourcePath ('offers/{0}' -f $Id)
+
+        $offer = ConvertFrom-Json -InputObject $result.Content
     }
     else
     {
@@ -108,7 +110,8 @@ function Get-CosmosDbOffer
                 -ResourceType 'offers'
         }
 
-        $offer = $result.Offers
+        $body = ConvertFrom-Json -InputObject $result.Content
+        $offer = $body.Offers
     }
 
     if ($offer)
@@ -240,11 +243,13 @@ function Set-CosmosDbOffer
                 }
             }
 
-            $offer = Invoke-CosmosDbRequest @invokeCosmosDbRequest `
+            $result = Invoke-CosmosDbRequest @invokeCosmosDbRequest `
                 -Method 'Put' `
                 -ResourceType 'offers' `
                 -ResourcePath ('offers/{0}' -f $bodyObject.id) `
                 -Body (ConvertTo-Json -InputObject $bodyObject)
+
+            $offer = ConvertFrom-Json -InputObject $result.Content
 
             if ($offer)
             {

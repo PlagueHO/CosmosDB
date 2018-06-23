@@ -91,10 +91,12 @@ function Get-CosmosDbTrigger
     {
         $null = $PSBoundParameters.Remove('Id')
 
-        $trigger = Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'triggers' `
             -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
+
+        $trigger = ConvertFrom-Json -InputObject $result.Content
     }
     else
     {
@@ -103,7 +105,8 @@ function Get-CosmosDbTrigger
             -ResourceType 'triggers' `
             -ResourcePath $resourcePath
 
-        $trigger = $result.Triggers
+        $body = ConvertFrom-Json -InputObject $result.Content
+        $trigger = $body.Triggers
     }
 
     if ($trigger)
@@ -180,11 +183,13 @@ function New-CosmosDbTrigger
 
     $TriggerBody = ((($TriggerBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
 
-    $trigger = Invoke-CosmosDbRequest @PSBoundParameters `
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'triggers' `
         -ResourcePath $resourcePath `
         -Body "{ `"id`": `"$id`", `"body`" : `"$TriggerBody`", `"triggerOperation`" : `"$triggerOperation`", `"triggerType`" : `"$triggerType`" }"
+
+    $trigger = ConvertFrom-Json -InputObject $result.Content
 
     if ($trigger)
     {
@@ -313,11 +318,13 @@ function Set-CosmosDbTrigger
 
     $TriggerBody = ((($TriggerBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
 
-    $trigger = Invoke-CosmosDbRequest @PSBoundParameters `
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Put' `
         -ResourceType 'triggers' `
         -ResourcePath $resourcePath `
         -Body "{ `"id`": `"$id`", `"body`" : `"$TriggerBody`", `"triggerOperation`" : `"$triggerOperation`", `"triggerType`" : `"$triggerType`" }"
+
+    $trigger = ConvertFrom-Json -InputObject $result.Content
 
     if ($trigger)
     {

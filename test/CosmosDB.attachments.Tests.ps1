@@ -53,6 +53,9 @@ InModuleScope CosmosDB {
     "_count": 2
 }
 '@
+    $script:testGetAttachmentResultMulti = @{
+        Content = $script:testJsonMulti
+    }
     $script:testJsonSingle = @'
 {
     "contentType": "image/jpg",
@@ -64,6 +67,9 @@ InModuleScope CosmosDB {
     "_etag": "\"06007fe0-0000-0000-0000-566858ac0000\""
 }
 '@
+    $script:testGetAttachmentResultSingle = @{
+        Content = $script:testJsonSingle
+    }
     $script:testResource = 'dbs/testDatabase/colls/testCollection/docs/testDocument/attachment/'
 
     Describe 'Get-CosmosDbAttachmentResourcePath' -Tag 'Unit' {
@@ -102,7 +108,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'Attachments' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
+                -MockWith { $script:testGetAttachmentResultMulti }
 
             It 'Should not throw exception' {
                 $getCosmosDbAttachmentParameters = @{
@@ -134,7 +140,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'Attachments' -and $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testAttachment1) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetAttachmentResultSingle }
 
             It 'Should not throw exception' {
                 $getCosmosDbAttachmentParameters = @{
@@ -171,7 +177,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'Attachments' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetAttachmentResultSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbAttachmentParameters = @{
@@ -242,7 +248,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'attachments' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetAttachmentResultSingle }
 
             It 'Should not throw exception' {
                 $setCosmosDbAttachmentParameters = @{

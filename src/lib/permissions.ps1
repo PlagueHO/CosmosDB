@@ -107,11 +107,13 @@ function Get-CosmosDbPermission
     {
         $null = $PSBoundParameters.Remove('Id')
 
-        $permission = Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'permissions' `
             -ResourcePath ('{0}/{1}' -f $resourcePath, $Id) `
             -Headers $headers
+
+        $permission = ConvertFrom-Json -InputObject $result.Content
     }
     else
     {
@@ -121,7 +123,9 @@ function Get-CosmosDbPermission
             -ResourcePath $resourcePath `
             -Headers $headers
 
-        $permission = $result.Permissions
+        $body = ConvertFrom-Json -InputObject $result.Content
+
+        $permission = $body.Permissions
     }
 
     if ($permission)
@@ -190,11 +194,13 @@ function New-CosmosDbPermission
 
     $resourcePath = ('users/{0}/permissions' -f $UserId)
 
-    $permission = Invoke-CosmosDbRequest @PSBoundParameters `
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'permissions' `
         -ResourcePath $resourcePath `
         -Body "{ `"id`": `"$id`", `"permissionMode`" : `"$PermissionMode`", `"resource`" : `"$Resource`" }"
+
+    $permission = ConvertFrom-Json -InputObject $result.Content
 
     if ($permission)
     {
