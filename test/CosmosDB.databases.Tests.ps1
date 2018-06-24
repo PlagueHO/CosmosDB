@@ -49,6 +49,9 @@ InModuleScope CosmosDB {
     "_count": 2
 }
 '@
+    $script:testGetDatabaseResultMulti = @{
+        Content = $script:testJsonMulti
+    }
     $script:testJsonSingle = @'
 {
     "id": "testdatabase1",
@@ -60,6 +63,9 @@ InModuleScope CosmosDB {
     "_users": "users\/"
 }
 '@
+    $script:testGetDatabaseResultSingle = @{
+        Content = $script:testJsonSingle
+    }
 
     Describe 'Get-CosmosDbDatabaseResourcePath' -Tag 'Unit' {
         It 'Should exist' {
@@ -94,7 +100,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'dbs' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
+                -MockWith { $testGetDatabaseResultMulti }
 
             It 'Should not throw exception' {
                 $getCosmosDbDatabaseParameters = @{
@@ -124,7 +130,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'dbs' -and $ResourcePath -eq ('dbs/{0}' -f $script:testDatabase) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $testGetDatabaseResultSingle }
 
             It 'Should not throw exception' {
                 $getCosmosDbDatabaseParameters = @{
@@ -158,7 +164,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'dbs' -and $Body -eq "{ `"id`": `"$($script:testDatabase)`" }" } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $testGetDatabaseResultSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbDatabaseParameters = @{

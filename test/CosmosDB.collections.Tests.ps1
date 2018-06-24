@@ -37,11 +37,17 @@ InModuleScope CosmosDB {
     "_count": 1
 }
 '@
+    $script:testGetCollectionResultMulti = @{
+        Content = $script:testJsonMulti
+    }
     $script:testJsonSingle = @'
 {
     "id": "testcollection1"
 }
 '@
+    $script:testGetCollectionResultSingle = @{
+        Content = $script:testJsonSingle
+    }
     $script:testIndexingPolicy = New-CosmosDbCollectionIndexingPolicy `
         -Automatic $true `
         -IndexingMode 'Consistent' `
@@ -325,7 +331,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'colls' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
+                -MockWith { $script:testGetCollectionResultMulti }
 
             It 'Should not throw exception' {
                 $getCosmosDbCollectionParameters = @{
@@ -355,7 +361,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'colls' -and $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetCollectionResultSingle }
 
             It 'Should not throw exception' {
                 $getCosmosDbCollectionParameters = @{
@@ -406,7 +412,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter $invokecosmosdbrequest_parameterfilter `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetCollectionResultSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbCollectionParameters = @{
@@ -441,7 +447,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter $invokecosmosdbrequest_parameterfilter `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetCollectionResultSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbCollectionParameters = @{
@@ -476,7 +482,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter $invokecosmosdbrequest_parameterfilter `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetCollectionResultSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbCollectionParameters = @{
@@ -514,7 +520,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter $invokecosmosdbrequest_parameterfilter `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetCollectionResultSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbCollectionParameters = @{
@@ -543,7 +549,7 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
+                -MockWith { $script:testGetCollectionResultMulti }
 
             It 'Should not throw exception' {
                 $newCosmosDbCollectionParameters = @{
@@ -622,7 +628,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter $invokecosmosdbrequest_parameterfilter `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetCollectionResultSingle }
 
             Mock `
                 -CommandName Get-CosmosDbCollection `
@@ -674,7 +680,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter $invokecosmosdbrequest_parameterfilter `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetCollectionResultSingle }
 
             Mock `
                 -CommandName Get-CosmosDbCollection `

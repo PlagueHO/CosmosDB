@@ -67,10 +67,12 @@ function Get-CosmosDbDatabase
     {
         $null = $PSBoundParameters.Remove('Id')
 
-        $database = Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'dbs' `
             -ResourcePath ('dbs/{0}' -f $Id)
+
+        $database = ConvertFrom-Json -InputObject $result.Content
     }
     else
     {
@@ -78,7 +80,9 @@ function Get-CosmosDbDatabase
             -Method 'Get' `
             -ResourceType 'dbs'
 
-        $database = $result.Databases
+        $body = ConvertFrom-Json -InputObject $result.Content
+
+        $database = $body.Databases
     }
 
     if ($database)
@@ -122,10 +126,12 @@ function New-CosmosDbDatabase
 
     $null = $PSBoundParameters.Remove('Id')
 
-    $database = Invoke-CosmosDbRequest @PSBoundParameters `
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'dbs' `
         -Body "{ `"id`": `"$id`" }"
+
+    $database = ConvertFrom-Json -InputObject $result.Content
 
     if ($database)
     {

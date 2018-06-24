@@ -52,6 +52,9 @@ InModuleScope CosmosDB {
     "_count": 2
 }
 '@
+    $script:testGetPermissionResultMulti = @{
+        Content = $script:testJsonMulti
+    }
     $script:testJsonSingle = @'
 {
     "id": "testPermission1",
@@ -64,6 +67,9 @@ InModuleScope CosmosDB {
     "_token": "type=resource&ver=1&sig=lxKlPHeqlIx2\/J02rFs3jw==;20MwFhNUO9xNOuglK9gyL18Mt5xIhbN48pzSq6FaR\/7sKFtGd6GaxCooIoPP6rYxRHUeCabHOFkbIeT4ercXk\/F1FG70QkQTD9CxDqNJx3NImgZJWErK1NlEjxkpFDV5uslhpJ4Y3JBnc72\/vlmR95TibFS0rC\/cdND0uRvoOOWXZYvVAJFKEUKyy3GTlYOxY1nKT313ZCOSUQF7kldjo9DE3XEBf8cct1uNKMILImo=;"
 }
 '@
+    $script:testGetPermissionResultSingle = @{
+        Content = $script:testJsonSingle
+    }
     $script:testResource = 'dbs/testDatabase/colls/testCollection'
 
     Describe 'Get-CosmosDbPermissionResourcePath' -Tag 'Unit' {
@@ -101,7 +107,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
+                -MockWith { $script:testGetPermissionResultMulti }
 
             It 'Should not throw exception' {
                 $getCosmosDbPermissionParameters = @{
@@ -132,7 +138,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission1) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetPermissionResultSingle }
 
             It 'Should not throw exception' {
                 $getCosmosDbPermissionParameters = @{
@@ -162,7 +168,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission1) -and $Headers.'x-ms-documentdb-expiry-seconds' -eq 18000 } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetPermissionResultSingle }
 
             It 'Should not throw exception' {
                 $getCosmosDbPermissionParameters = @{
@@ -199,7 +205,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'permissions' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetPermissionResultSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbPermissionParameters = @{

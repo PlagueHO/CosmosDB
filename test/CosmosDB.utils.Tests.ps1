@@ -42,7 +42,6 @@ InModuleScope CosmosDB {
         BaseUri  = ('https://{0}.documents.azure.com/' -f $script:testAccount)
         Token    = $script:testContextToken
     }
-
     $script:testJson = @'
 {
     "_rid": "2MFbAA==",
@@ -54,7 +53,14 @@ InModuleScope CosmosDB {
     "_count": 1
 }
 '@
+    $script:testInvokeWebRequestResult = @{
+        Content = $script:testJson
+        Headers = @{ 'x-ms-request-charge' = '5' }
+    }
     $script:testResourceGroup = 'testResourceGroup'
+    $script:testMaxRetries = 20
+    $script:testMethod = 'Default'
+    $script:testDelay = 1
 
     Describe 'Custom types' -Tag 'Unit' {
         Context 'CosmosDB.Context' {
@@ -84,6 +90,61 @@ InModuleScope CosmosDB {
         }
     }
 
+    Describe 'New-CosmosDbBackoffPolicy' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name New-CosmosDbBackoffPolicy -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with paramters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextBackoffPolicyParameters = @{
+                    MaxRetries = $script:testMaxRetries
+                    Method     = $script:testMethod
+                    Delay      = $script:testDelay
+                }
+
+                { $script:result = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.MaxRetries = $script:testMaxRetries
+                $script:result.Method = $script:testMethod
+                $script:result.Delay = $script:testDelay
+            }
+        }
+    }
+
+    Describe 'New-CosmosDbContextToken' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name New-CosmosDbContextToken -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with paramters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextTokenParameters = @{
+                    Resource    = $script:testTokenResource
+                    TimeStamp   = $script:testDate
+                    TokenExpiry = $script:testTokenExpiry
+                    Token       = $script:testTokenSecureString
+                    Verbose     = $true
+                }
+
+                { $script:result = New-CosmosDbContextToken @newCosmosDbContextTokenParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Resource | Should -Be $script:testTokenResource
+                $script:result.TimeStamp | Should -Be $script:testDate
+                $script:result.Expires | Should -Be $script:testDate.AddSeconds($script:testTokenExpiry)
+                $script:result.Token | Should -Be $script:testTokenSecureString
+            }
+        }
+    }
+
     Describe 'New-CosmosDbContext' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name New-CosmosDbContext -ErrorAction Stop } | Should -Not -Throw
@@ -109,6 +170,41 @@ InModuleScope CosmosDB {
                 $script:result.Key | Should -Be $script:testKeySecureString
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
+            }
+        }
+
+        Context 'When called with Account parameters and Back-off Policy' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextBackoffPolicyParameters = @{
+                    MaxRetries = $script:testMaxRetries
+                    Method     = $script:testMethod
+                    Delay      = $script:testDelay
+                }
+
+                $script:backoffPolicy = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters
+
+                $newCosmosDbContextParameters = @{
+                    Account       = $script:testAccount
+                    Database      = $script:testDatabase
+                    Key           = $script:testKeySecureString
+                    KeyType       = 'master'
+                    BackoffPolicy = $script:backoffPolicy
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be $script:testAccount
+                $script:result.Database | Should -Be $script:testDatabase
+                $script:result.Key | Should -Be $script:testKeySecureString
+                $script:result.KeyType | Should -Be 'master'
+                $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
+                $script:result.BackoffPolicy.MaxRetries | Should -Be $script:testMaxRetries
+                $script:result.BackoffPolicy.Method | Should -Be $script:testMethod
+                $script:result.BackoffPolicy.Delay | Should -Be $script:testDelay
             }
         }
 
@@ -239,35 +335,6 @@ InModuleScope CosmosDB {
         }
     }
 
-    Describe 'New-CosmosDbContextToken' -Tag 'Unit' {
-        It 'Should exist' {
-            { Get-Command -Name New-CosmosDbContextToken -ErrorAction Stop } | Should -Not -Throw
-        }
-
-        Context 'When called with paramters' {
-            $script:result = $null
-
-            It 'Should not throw exception' {
-                $newCosmosDbContextTokenParameters = @{
-                    Resource    = $script:testTokenResource
-                    TimeStamp   = $script:testDate
-                    TokenExpiry = $script:testTokenExpiry
-                    Token       = $script:testTokenSecureString
-                    Verbose     = $true
-                }
-
-                { $script:result = New-CosmosDbContextToken @newCosmosDbContextTokenParameters } | Should -Not -Throw
-            }
-
-            It 'Should return expected result' {
-                $script:result.Resource | Should -Be $script:testTokenResource
-                $script:result.TimeStamp | Should -Be $script:testDate
-                $script:result.Expires | Should -Be $script:testDate.AddSeconds($script:testTokenExpiry)
-                $script:result.Token | Should -Be $script:testTokenSecureString
-            }
-        }
-    }
-
     Describe 'Get-CosmosDbUri' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name Get-CosmosDbUri -ErrorAction Stop } | Should -Not -Throw
@@ -393,21 +460,21 @@ InModuleScope CosmosDB {
             Mock -CommandName Get-Date -MockWith { $script:testDate }
         }
 
-        $invokeRestMethod_mockwith = {
-            ConvertFrom-Json -InputObject $script:testJson
+        $InvokeWebRequest_mockwith = {
+            $testInvokeWebRequestResult
         }
 
         Context 'When called with context parameter and Get method and ResourceType is ''users''' {
-            $invokeRestMethod_parameterfilter = {
+            $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
                     $ContentType -eq 'application/json' -and `
                     $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
             }
 
             Mock `
-                -CommandName Invoke-RestMethod `
-                -ParameterFilter $invokeRestMethod_parameterfilter `
-                -MockWith $invokeRestMethod_mockwith
+                -CommandName Invoke-WebRequest `
+                -ParameterFilter $InvokeWebRequest_parameterfilter `
+                -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
 
@@ -419,7 +486,7 @@ InModuleScope CosmosDB {
                     Verbose      = $true
                 }
 
-                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -428,24 +495,24 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-RestMethod `
-                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
                     -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
             }
         }
 
         Context 'When called with context parameter and Get method and ResourceType is ''dbs''' {
-            $invokeRestMethod_parameterfilter = {
+            $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
                     $ContentType -eq 'application/json' -and `
                     $Uri -eq ('{0}{1}' -f $script:testContext.BaseUri, 'dbs')
             }
 
             Mock `
-                -CommandName Invoke-RestMethod `
-                -ParameterFilter $invokeRestMethod_parameterfilter `
-                -MockWith $invokeRestMethod_mockwith
+                -CommandName Invoke-WebRequest `
+                -ParameterFilter $InvokeWebRequest_parameterfilter `
+                -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
 
@@ -457,7 +524,7 @@ InModuleScope CosmosDB {
                     Verbose      = $true
                 }
 
-                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -466,24 +533,24 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-RestMethod `
-                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
                     -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
             }
         }
 
         Context 'When called with context parameter and Get method and ResourceType is ''offers''' {
-            $invokeRestMethod_parameterfilter = {
+            $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
                     $ContentType -eq 'application/json' -and `
                     $Uri -eq ('{0}{1}' -f $script:testContext.BaseUri, 'offers')
             }
 
             Mock `
-                -CommandName Invoke-RestMethod `
-                -ParameterFilter $invokeRestMethod_parameterfilter `
-                -MockWith $invokeRestMethod_mockwith
+                -CommandName Invoke-WebRequest `
+                -ParameterFilter $InvokeWebRequest_parameterfilter `
+                -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
 
@@ -495,7 +562,7 @@ InModuleScope CosmosDB {
                     Verbose      = $true
                 }
 
-                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -504,24 +571,24 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-RestMethod `
-                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
                     -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
             }
         }
 
         Context 'When called with context parameter and Get method and ResourceType is ''colls''' {
-            $invokeRestMethod_parameterfilter = {
+            $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
                     $ContentType -eq 'application/json' -and `
                     $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'colls')
             }
 
             Mock `
-                -CommandName Invoke-RestMethod `
-                -ParameterFilter $invokeRestMethod_parameterfilter `
-                -MockWith $invokeRestMethod_mockwith
+                -CommandName Invoke-WebRequest `
+                -ParameterFilter $InvokeWebRequest_parameterfilter `
+                -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
 
@@ -533,7 +600,7 @@ InModuleScope CosmosDB {
                     Verbose      = $true
                 }
 
-                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -542,24 +609,24 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-RestMethod `
-                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
                     -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
             }
         }
 
         Context 'When called with Get method and ResourceType is ''colls'' and a resource token context that matches the resource link' {
-            $invokeRestMethod_parameterfilter = {
+            $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
-                $ContentType -eq 'application/json' -and `
-                $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, $script:testCollection)
+                    $ContentType -eq 'application/json' -and `
+                    $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, $script:testCollection)
             }
 
             Mock `
-                -CommandName Invoke-RestMethod `
-                -ParameterFilter $invokeRestMethod_parameterfilter `
-                -MockWith $invokeRestMethod_mockwith
+                -CommandName Invoke-WebRequest `
+                -ParameterFilter $InvokeWebRequest_parameterfilter `
+                -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
 
@@ -572,7 +639,7 @@ InModuleScope CosmosDB {
                     Verbose      = $true
                 }
 
-                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -581,24 +648,24 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-RestMethod `
-                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
                     -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
             }
         }
 
         Context 'When called with Get method and ResourceType is ''colls'' and a resource token context without matching token and no master key' {
-            $invokeRestMethod_parameterfilter = {
+            $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
-                $ContentType -eq 'application/json' -and `
-                $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'anotherCollection')
+                    $ContentType -eq 'application/json' -and `
+                    $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'anotherCollection')
             }
 
             Mock `
-                -CommandName Invoke-RestMethod `
-                -ParameterFilter $invokeRestMethod_parameterfilter `
-                -MockWith $invokeRestMethod_mockwith
+                -CommandName Invoke-WebRequest `
+                -ParameterFilter $InvokeWebRequest_parameterfilter `
+                -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
 
@@ -620,24 +687,24 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-RestMethod `
-                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
                     -Exactly -Times 0
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 0
             }
         }
 
         Context 'When called with context parameter and Post method' {
-            $invokeRestMethod_parameterfilter = {
+            $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Post' -and `
                     $ContentType -eq 'application/query+json' -and `
                     $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
             }
 
             Mock `
-                -CommandName Invoke-RestMethod `
-                -ParameterFilter $invokeRestMethod_parameterfilter `
-                -MockWith $invokeRestMethod_mockwith
+                -CommandName Invoke-WebRequest `
+                -ParameterFilter $InvokeWebRequest_parameterfilter `
+                -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
 
@@ -651,7 +718,7 @@ InModuleScope CosmosDB {
                     Verbose      = $true
                 }
 
-                { $script:result = Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters } | Should -Not -Throw
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -660,10 +727,248 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-RestMethod `
-                    -ParameterFilter $invokeRestMethod_parameterfilter `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
                     -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
+            }
+        }
+    }
+
+    Describe 'Get-CosmosDbBackoffDelay' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Get-CosmosDbBackoffDelay -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with unspecified back-off policy' {
+            Context 'Retry number 1 and RequestedDelay is 100ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 1
+                        RequestedDelay = 100
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return 100ms' {
+                    $script:result | Should -Be 100
+                }
+            }
+
+            Context 'Retry number 11 and RequestedDelay is 100ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 11
+                        RequestedDelay = 100
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return null' {
+                    $script:result | Should -BeNull
+                }
+            }
+        }
+
+        Context 'When called with Default back-off policy and delay 500ms' {
+            Context 'Retry number 1 and RequestedDelay is 100ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $newCosmosDbContextBackoffPolicyParameters = @{
+                        Delay = 500
+                    }
+
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 1
+                        RequestedDelay = 100
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return 500ms' {
+                    $script:result | Should -Be 500
+                }
+            }
+
+            Context 'Retry number 1 and RequestedDelay is 2000ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $newCosmosDbContextBackoffPolicyParameters = @{
+                        Delay = 500
+                    }
+
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 1
+                        RequestedDelay = 2000
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return 2000ms' {
+                    $script:result | Should -Be 2000
+                }
+            }
+        }
+
+        Context 'When called with Additive back-off policy and delay 500ms' {
+            Context 'Retry number 1 and RequestedDelay is 100ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $newCosmosDbContextBackoffPolicyParameters = @{
+                        Method = 'Additive'
+                        Delay  = 500
+                    }
+
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 1
+                        RequestedDelay = 100
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return 600ms' {
+                    $script:result | Should -Be 600
+                }
+            }
+        }
+
+        Context 'When called with Linear back-off policy and delay 500ms' {
+            Context 'Retry number 0 and RequestedDelay is 100ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $newCosmosDbContextBackoffPolicyParameters = @{
+                        Method = 'Linear'
+                        Delay  = 500
+                    }
+
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 0
+                        RequestedDelay = 100
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return 500ms' {
+                    $script:result | Should -Be 500
+                }
+            }
+
+            Context 'Retry number 1 and RequestedDelay is 100ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $newCosmosDbContextBackoffPolicyParameters = @{
+                        Method = 'Linear'
+                        Delay  = 500
+                    }
+
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 1
+                        RequestedDelay = 100
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return 1000ms' {
+                    $script:result | Should -Be 1000
+                }
+            }
+        }
+
+        Context 'When called with Exponential back-off policy and delay 500ms' {
+            Context 'Retry number 0 and RequestedDelay is 100ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $newCosmosDbContextBackoffPolicyParameters = @{
+                        Method = 'Exponential'
+                        Delay  = 500
+                    }
+
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 0
+                        RequestedDelay = 100
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return 500ms' {
+                    $script:result | Should -Be 500
+                }
+            }
+
+            Context 'Retry number 4 and RequestedDelay is 100ms' {
+                $script:result = $null
+
+                It 'Should not throw exception' {
+                    $newCosmosDbContextBackoffPolicyParameters = @{
+                        Method = 'Exponential'
+                        Delay  = 500
+                    }
+
+                    $script:backoffPolicy = New-CosmosDbBackoffPolicy @newCosmosDbContextBackoffPolicyParameters
+
+                    $getCosmosDbBackoffDelayParameters = @{
+                        BackoffPolicy  = $script:backoffPolicy
+                        Retry          = 4
+                        RequestedDelay = 100
+                        Verbose        = $true
+                    }
+
+                    { $script:result = Get-CosmosDbBackoffDelay @getCosmosDbBackoffDelayParameters } | Should -Not -Throw
+                }
+
+                It 'Should return 12500msms' {
+                    $script:result | Should -Be 12500
+                }
             }
         }
     }

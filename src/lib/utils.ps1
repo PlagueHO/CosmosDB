@@ -1,3 +1,71 @@
+function New-CosmosDbBackoffPolicy
+{
+    [CmdletBinding()]
+    [OutputType([System.Management.Automation.PSCustomObject])]
+    param
+    (
+        [Parameter()]
+        [System.Int32]
+        $MaxRetries = 10,
+
+        [Parameter()]
+        [ValidateSet('Default', 'Additive', 'Linear', 'Exponential', 'Random')]
+        [System.String]
+        $Method = 'Default',
+
+        [Parameter()]
+        [ValidateRange(0, 3600000)]
+        [System.Int32]
+        $Delay = 0
+    )
+
+    $backoffPolicy = New-Object -TypeName 'CosmosDB.BackoffPolicy' -Property @{
+        MaxRetries = $MaxRetries
+        Method     = $Method
+        Delay      = $Delay
+    }
+
+    return $backoffPolicy
+}
+
+function New-CosmosDbContextToken
+{
+    [CmdletBinding()]
+    [OutputType([System.Management.Automation.PSCustomObject])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Scope = 'Function')]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Resource,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.DateTime]
+        $TimeStamp,
+
+        [Parameter()]
+        [ValidateRange(600, 18000)]
+        [System.Int32]
+        $TokenExpiry = 3600,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.Security.SecureString]
+        $Token
+    )
+
+    $contextToken = New-Object -TypeName 'CosmosDB.ContextToken' -Property @{
+        Resource  = $Resource
+        TimeStamp = $TimeStamp
+        Expires   = $TimeStamp.AddSeconds($TokenExpiry)
+        Token     = $Token
+    }
+
+    return $contextToken
+}
+
 function New-CosmosDbContext
 {
     [CmdletBinding(DefaultParameterSetName = 'Account')]
@@ -49,7 +117,12 @@ function New-CosmosDbContext
         [Parameter(ParameterSetName = 'Emulator')]
         [ValidateNotNullOrEmpty()]
         [CosmosDB.ContextToken[]]
-        $Token
+        $Token,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [CosmosDB.BackoffPolicy]
+        $BackoffPolicy
     )
 
     switch ($PSCmdlet.ParameterSetName)
@@ -114,53 +187,16 @@ function New-CosmosDbContext
     }
 
     $context = New-Object -TypeName 'CosmosDB.Context' -Property @{
-        Account  = $Account
-        Database = $Database
-        Key      = $Key
-        KeyType  = $KeyType
-        BaseUri  = $BaseUri
-        Token    = $Token
+        Account       = $Account
+        Database      = $Database
+        Key           = $Key
+        KeyType       = $KeyType
+        BaseUri       = $BaseUri
+        Token         = $Token
+        BackoffPolicy = $BackoffPolicy
     }
 
     return $context
-}
-
-function New-CosmosDbContextToken
-{
-    [CmdletBinding()]
-    [OutputType([System.Management.Automation.PSCustomObject])]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Scope = 'Function')]
-    param
-    (
-        [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
-        [System.String]
-        $Resource,
-
-        [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
-        [System.DateTime]
-        $TimeStamp,
-
-        [Parameter()]
-        [ValidateRange(600,18000)]
-        [System.Int32]
-        $TokenExpiry = 3600,
-
-        [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
-        [System.Security.SecureString]
-        $Token
-    )
-
-    $contextToken = New-Object -TypeName 'CosmosDB.ContextToken' -Property @{
-        Resource  = $Resource
-        TimeStamp = $TimeStamp
-        Expires   = $TimeStamp.AddSeconds($TokenExpiry)
-        Token     = $Token
-    }
-
-    return $contextToken
 }
 
 function Get-CosmosDbUri
@@ -316,10 +352,6 @@ function Invoke-CosmosDbRequest
         [Parameter()]
         [Hashtable]
         $Headers = @{},
-
-        [Parameter()]
-        [Switch]
-        $UseWebRequest,
 
         [Parameter()]
         [System.String]
@@ -484,7 +516,7 @@ function Invoke-CosmosDbRequest
         'x-ms-version'  = $ApiVersion
     }
 
-    $invokeRestMethodParameters = @{
+    $invokeWebRequestParameters = @{
         Uri         = $uri
         Headers     = $Headers
         Method      = $method
@@ -495,51 +527,162 @@ function Invoke-CosmosDbRequest
     {
         if ($Method -eq 'Patch')
         {
-            $invokeRestMethodParameters['contentType'] = 'application/json-patch+json'
+            $invokeWebRequestParameters['contentType'] = 'application/json-patch+json'
         }
 
-        $invokeRestMethodParameters += @{
+        $invokeWebRequestParameters += @{
             Body = $Body
         }
     }
 
-    try
-    {
-        if ($UseWebRequest)
+    $requestComplete = $false
+    $retry = 0
+
+    do {
+        try
         {
-            $restResult = Invoke-WebRequest -UseBasicParsing @invokeRestMethodParameters
+            $requestResult = Invoke-WebRequest -UseBasicParsing @invokeWebRequestParameters
+            $requestComplete = $true
+        }
+        catch [System.Net.WebException]
+        {
+            if ($_.Exception.Response.StatusCode -eq 429)
+            {
+                <#
+                    The exception was caused by exceeding provisioned throughput
+                    so determine is we should delay and try again or exit
+                #>
+                $delay = Get-CosmosDbBackoffDelay `
+                    -BackOffPolicy $Context.BackoffPolicy `
+                    -Retry $retry `
+                    -RequestedDelay ([System.Int32] ($_.Exception.Response.Headers['x-ms-retry-after-ms']))
+
+                # A null delay means retries have been exceeded or no back-off policy specified
+                if ($null -ne $delay)
+                {
+                    $retry++
+                    Write-Verbose -Message $($LocalizedData.WaitingBackoffPolicyDelay -f $retry, $delay)
+                    Start-Sleep -Milliseconds $delay
+                    continue
+                }
+            }
+
+            if ($_.Exception.Response)
+            {
+                <#
+                    Write out additional exception information into the verbose stream
+                    In a future version a custom exception type for CosmosDB that
+                    contains this additional information.
+                #>
+                $exceptionStream = $_.Exception.Response.GetResponseStream()
+                $streamReader = New-Object -TypeName System.IO.StreamReader -ArgumentList $exceptionStream
+                $exceptionResponse = $streamReader.ReadToEnd()
+
+                if ($exceptionResponse)
+                {
+                    Write-Verbose -Message $exceptionResponse
+                }
+            }
+
+            Throw $_
+        }
+        catch
+        {
+            Throw $_
+        }
+    } while ($requestComplete -eq $false)
+
+    # Display the Request Charge as a verbose message
+    $requestCharge = $requestResult.Headers.'x-ms-request-charge'
+    if ($requestCharge)
+    {
+        Write-Verbose -Message $($LocalizedData.RequestChargeResults -f $method, $uri, $requestCharge)
+    }
+
+    return $requestResult
+}
+
+function Get-CosmosDbBackoffDelay
+{
+    [CmdletBinding()]
+    [OutputType([System.Int32])]
+    param
+    (
+        [Parameter()]
+        [CosmosDB.BackoffPolicy]
+        $BackoffPolicy,
+
+        [Parameter()]
+        [System.Int32]
+        $Retry = 0,
+
+        [Parameter()]
+        [System.Int32]
+        $RequestedDelay = 0
+    )
+
+    if ($null -ne $BackoffPolicy)
+    {
+        # A back-off policy has been provided
+        Write-Verbose -Message $($LocalizedData.CollectionProvisionedThroughputExceededWithBackoffPolicy)
+
+        if ($Retry -le $BackoffPolicy.MaxRetries)
+        {
+            switch ($BackoffPolicy.Method)
+            {
+                'Default'
+                {
+                    $backoffPolicyDelay = $backoffPolicy.Delay
+                }
+
+                'Additive'
+                {
+                    $backoffPolicyDelay = $RequestedDelay + $backoffPolicy.Delay
+                }
+
+                'Linear'
+                {
+                    $backoffPolicyDelay = $backoffPolicy.Delay * ($Retry + 1)
+                }
+
+                'Exponential'
+                {
+                    $backoffPolicyDelay = $backoffPolicy.Delay * [Math]::pow(($Retry + 1),2)
+                }
+
+                'Random'
+                {
+                    $backoffDelayMin = -($backoffPolicy.Delay/2)
+                    $backoffDelayMax = $backoffPolicy.Delay/2
+                    $backoffPolicyDelay = $backoffPolicy.Delay + (Get-Random -Minimum $backoffDelayMin -Maximum $backoffDelayMax)
+                }
+            }
+
+            if ($backoffPolicyDelay -gt $RequestedDelay)
+            {
+                $delay = $backoffPolicyDelay
+                Write-Verbose -Message $($LocalizedData.BackOffPolicyAppliedPolicyDelay -f $BackoffPolicy.Method, $backoffPolicyDelay, $requestedDelay)
+            }
+            else
+            {
+                $delay = $requestedDelay
+                Write-Verbose -Message $($LocalizedData.BackOffPolicyAppliedRequestedDelay -f $BackoffPolicy.Method, $backoffPolicyDelay, $requestedDelay)
+            }
+
+            return $delay
         }
         else
         {
-            $restResult = Invoke-RestMethod @invokeRestMethodParameters
+            Write-Verbose -Message $($LocalizedData.CollectionProvisionedThroughputExceededMaxRetriesHit -f $BackoffPolicy.MaxRetries)
+            return $null
         }
     }
-    catch [System.Net.WebException]
+    else
     {
-        <#
-            Write out additional exception information into the verbose stream
-            In a future version a custom exception type for CosmosDB that
-            contains this additional information.
-        #>
-        if ($_.Exception.Response)
-        {
-            $exceptionStream = $_.Exception.Response.GetResponseStream()
-            $streamReader = New-Object -TypeName System.IO.StreamReader -ArgumentList $exceptionStream
-            $exceptionResponse = $streamReader.ReadToEnd()
-            if ($exceptionResponse)
-            {
-                Write-Verbose -Message $exceptionResponse
-            }
-        }
-
-        Throw $_
+        # A back-off policy has not been defined
+        Write-Verbose -Message $($LocalizedData.CollectionProvisionedThroughputExceededNoBackoffPolicy)
+        return $null
     }
-    catch
-    {
-        Throw $_
-    }
-
-    return $restResult
 }
 
 function New-CosmosDbInvalidArgumentException

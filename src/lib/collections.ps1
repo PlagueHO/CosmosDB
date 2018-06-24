@@ -246,10 +246,12 @@ function Get-CosmosDbCollection
     {
         $null = $PSBoundParameters.Remove('Id')
 
-        $collection = Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'colls' `
             -ResourcePath ('colls/{0}' -f $Id)
+
+        $collection = ConvertFrom-Json -InputObject $result.Content
     }
     else
     {
@@ -257,7 +259,8 @@ function Get-CosmosDbCollection
             -Method 'Get' `
             -ResourceType 'colls'
 
-        $collection = $result.DocumentCollections
+        $body = ConvertFrom-Json -InputObject $result.Content
+        $collection = $body.DocumentCollections
     }
 
     if ($collection)
@@ -315,15 +318,16 @@ function Get-CosmosDbCollectionSize
     $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Get' `
         -ResourceType 'colls' `
-        -ResourcePath ('colls/{0}' -f $Id) `
-        -UseWebRequest
+        -ResourcePath ('colls/{0}' -f $Id)
 
     $usageItems = @{}
-    $($result.headers["x-ms-resource-usage"]).Split(';', [System.StringSplitOptions]::RemoveEmptyEntries) |
-        ForEach-Object {
-            $k, $v = $_.Split('=')
-            $usageItems[$k] = $v
-        }
+    $resources = ($result.headers["x-ms-resource-usage"]).Split(';', [System.StringSplitOptions]::RemoveEmptyEntries)
+
+    foreach ($resource in $resources)
+    {
+        [System.String] $k, $v = $resource.Split('=')
+        $usageItems[$k] = $v
+    }
 
     if ($usageItems)
     {
@@ -445,13 +449,18 @@ function New-CosmosDbCollection
 
     $body = ConvertTo-Json -InputObject $bodyObject -Depth 10
 
-    $collection = Invoke-CosmosDbRequest @PSBoundParameters `
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'colls' `
         -Headers $headers `
         -Body $body
 
-    return (Set-CosmosDbCollectionType -Collection $collection)
+    $collection = ConvertFrom-Json -InputObject $result.Content
+
+    if ($collection)
+    {
+        return (Set-CosmosDbCollectionType -Collection $collection)
+    }
 }
 
 function Remove-CosmosDbCollection
@@ -561,6 +570,7 @@ function Set-CosmosDbCollection
         and pass the existing partition key in the body.
     #>
     $existingCollection = Get-CosmosDbCollection @PSBoundParameters -Id $Id
+
     if ($existingCollection.partitionKey)
     {
         $bodyObject += @{
@@ -570,12 +580,14 @@ function Set-CosmosDbCollection
 
     $body = ConvertTo-Json -InputObject $bodyObject -Depth 10
 
-    $collection = Invoke-CosmosDbRequest @PSBoundParameters `
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Put' `
         -ResourceType 'colls' `
         -ResourcePath ('colls/{0}' -f $Id) `
         -Headers $headers `
         -Body $body
+
+    $collection = ConvertFrom-Json -InputObject $result.Content
 
     if ($collection)
     {

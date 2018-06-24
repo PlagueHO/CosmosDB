@@ -53,7 +53,9 @@ InModuleScope CosmosDB {
         "_count": 2
     }
 '@
-
+    $script:testGetTriggerResultMulti = @{
+        Content = $script:testJsonMulti
+    }
     $script:testJsonSingle = @'
 {
     "body": "testTriggerBody",
@@ -66,6 +68,9 @@ InModuleScope CosmosDB {
     "_etag": "\"060022e5-0000-0000-0000-566882360000\""
 }
 '@
+    $script:testGetTriggerResultSingle = @{
+        Content = $script:testJsonSingle
+    }
 
     Describe 'Get-CosmosDbTriggerResourcePath' -Tag 'Unit' {
         It 'Should exist' {
@@ -102,7 +107,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'triggers' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
+                -MockWith { $script:testGetTriggerResultMulti }
 
             It 'Should not throw exception' {
                 $getCosmosDbTriggerParameters = @{
@@ -133,7 +138,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'triggers' -and $ResourcePath -eq ('colls/{0}/triggers/{1}' -f $script:testCollection, $script:testTrigger1) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetTriggerResultSingle }
 
             It 'Should not throw exception' {
                 $getCosmosDbTriggerParameters = @{
@@ -169,7 +174,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'triggers' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetTriggerResultSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbTriggerParameters = @{
@@ -239,7 +244,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'triggers' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetTriggerResultSingle }
 
             It 'Should not throw exception' {
                 $setCosmosDbTriggerParameters = @{

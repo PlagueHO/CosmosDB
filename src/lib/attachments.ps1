@@ -102,18 +102,22 @@ function Get-CosmosDbAttachment
     {
         $null = $PSBoundParameters.Remove('Id')
 
-        $attachment = Invoke-CosmosDbRequest @PSBoundParameters `
+        $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'attachments' `
             -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
+
+        $attachment = ConvertFrom-Json -InputObject $result.Content
     }
-    else {
+    else
+    {
         $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'attachments' `
             -ResourcePath $resourcePath
 
-        $attachment = $result.Attachments
+        $body = ConvertFrom-Json -InputObject $result.Content
+        $attachment = $body.Attachments
     }
 
     if ($attachment)
@@ -221,12 +225,14 @@ function New-CosmosDbAttachment
 
     $body = ConvertTo-Json -InputObject $bodyObject
 
-    $attachment = Invoke-CosmosDbRequest @PSBoundParameters `
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'attachments' `
         -ResourcePath $resourcePath `
         -Body $body `
         -Headers $headers
+
+    $attachment = ConvertFrom-Json -InputObject $result.Content
 
     if ($attachment)
     {
@@ -402,12 +408,14 @@ function Set-CosmosDbAttachment
 
     $body = ConvertTo-Json -InputObject $bodyObject
 
-    $attachment = Invoke-CosmosDbRequest @PSBoundParameters `
+    $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Put' `
         -ResourceType 'attachments' `
         -ResourcePath $resourcePath `
         -Body $body `
         -Headers $headers
+
+    $attachment = ConvertFrom-Json -InputObject $result.Content
 
     if ($attachment)
     {

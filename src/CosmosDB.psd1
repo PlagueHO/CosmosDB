@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.0.16.465'
+    ModuleVersion     = '2.1.0.465'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -106,6 +106,7 @@
         'Get-CosmosDbUserDefinedFunctionResourcePath'
         'Invoke-CosmosDbStoredProcedure'
         'New-CosmosDbAttachment'
+        'New-CosmosDbBackoffPolicy'
         'New-CosmosDbCollection'
         'New-CosmosDbCollectionIncludedPathIndex'
         'New-CosmosDbCollectionIncludedPath'
@@ -176,6 +177,25 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+June 23, 2018
+
+- Removed `UseWebRequest` parameter from `Invoke-CosmosDbReuest` function
+  to refactor out the use of `Invoke-RestMethod`. This is because most
+  Cosmos DB REST requests return additional header information that is
+  lost if using `Invoke-RestMethod`. `Invoke-WebRequest` is used instead
+  so that additional headers can always be retured - See [Issue #125](https://github.com/PlagueHO/CosmosDB/issues/125)
+- Added integration tests for attachments.
+- Added integration tests for stored procedures.
+- Added integration tests for triggers.
+- Added integration tests for user defined functions.
+- Added `New-CosmosDbBackOffPolicy` function for controlling the behaviour
+  of a function when a "Too Many Request" (error code 429) is recieved -
+  See [Issue #87](https://github.com/PlagueHO/CosmosDB/issues/87)
+- Added support for handling a back-off policy to the `Invoke-CosmosDbRequest`
+  function.
+
 ## What is New in CosmosDB 2.0.16.465
 
 June 20, 2018

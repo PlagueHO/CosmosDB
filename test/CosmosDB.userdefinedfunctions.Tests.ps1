@@ -49,6 +49,9 @@ InModuleScope CosmosDB {
         "_count": 2
     }
 '@
+    $script:testGetUserDefinedFunctionResultMulti = @{
+        Content = $script:testJsonMulti
+    }
     $script:testJsonSingle = @'
 {
     "body": "testUserDefinedFunctionBody",
@@ -59,6 +62,9 @@ InModuleScope CosmosDB {
     "_etag": "\"060072e4-0000-0000-0000-56687ce50000\""
 }
 '@
+    $script:testGetUserDefinedFunctionResultSingle = @{
+        Content = $script:testJsonSingle
+    }
 
     Describe 'Get-CosmosDbUserDefinedFunctionResourcePath' -Tag 'Unit' {
         It 'Should exist' {
@@ -95,7 +101,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'udfs' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonMulti }
+                -MockWith { $script:testGetUserDefinedFunctionResultMulti }
 
             It 'Should not throw exception' {
                 $getCosmosDbUserDefinedFunctionParameters = @{
@@ -126,7 +132,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'udfs' -and $ResourcePath -eq ('colls/{0}/udfs/{1}' -f $script:testCollection, $script:testUserDefinedFunction1) } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetUserDefinedFunctionResultSingle }
 
             It 'Should not throw exception' {
                 $getCosmosDbUserDefinedFunctionParameters = @{
@@ -162,7 +168,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'udfs' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetUserDefinedFunctionResultSingle }
 
             It 'Should not throw exception' {
                 $newCosmosDbUserDefinedFunctionParameters = @{
@@ -230,7 +236,7 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'udfs' } `
-                -MockWith { ConvertFrom-Json -InputObject $script:testJsonSingle }
+                -MockWith { $script:testGetUserDefinedFunctionResultSingle }
 
             It 'Should not throw exception' {
                 $setCosmosDbUserDefinedFunctionParameters = @{

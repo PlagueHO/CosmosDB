@@ -1,5 +1,22 @@
 # Change Log
 
+## Unreleased
+
+- Removed `UseWebRequest` parameter from `Invoke-CosmosDbReuest` function
+  to refactor out the use of `Invoke-RestMethod`. This is because most
+  Cosmos DB REST requests return additional header information that is
+  lost if using `Invoke-RestMethod`. `Invoke-WebRequest` is used instead
+  so that additional headers can always be retured - See [Issue #125](https://github.com/PlagueHO/CosmosDB/issues/125)
+- Added integration tests for attachments.
+- Added integration tests for stored procedures.
+- Added integration tests for triggers.
+- Added integration tests for user defined functions.
+- Added `New-CosmosDbBackOffPolicy` function for controlling the behaviour
+  of a function when a "Too Many Request" (error code 429) is recieved -
+  See [Issue #87](https://github.com/PlagueHO/CosmosDB/issues/87)
+- Added support for handling a back-off policy to the `Invoke-CosmosDbRequest`
+  function.
+
 ## 2.0.16.465
 
 - Added None as an IndexingMode - See [Issue #120](https://github.com/PlagueHO/CosmosDB/issues/120)

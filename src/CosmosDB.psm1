@@ -20,6 +20,13 @@ namespace CosmosDB {
         public System.Security.SecureString Token;
     }
 
+    public class BackoffPolicy
+    {
+        public System.Int32 MaxRetries;
+        public System.String Method;
+        public System.Int32 Delay;
+    }
+
     public class Context
     {
         public System.String Account;
@@ -28,6 +35,7 @@ namespace CosmosDB {
         public System.String KeyType;
         public System.String BaseUri;
         public CosmosDB.ContextToken[] Token;
+        public CosmosDB.BackoffPolicy BackoffPolicy;
     }
 
     namespace IndexingPolicy {
