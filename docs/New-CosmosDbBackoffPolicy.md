@@ -83,7 +83,7 @@ Creates a CosmosDB context specifying the master key manually. A
 Back-off Policy will be applied to the context that allows 5 retries
 with a delay of 2 seconds between them.
 
-#### Example 3
+### Example 3
 
 ```powershell
 PS C:\> $primaryKey = ConvertTo-SecureString -String 'your master key' -AsPlainText -Force
@@ -98,7 +98,7 @@ Back-off Policy will be applied to the context that allows 10 retries.
 A delay of 100ms will always be used unless it is less than the
 `x-ms-retry-after-ms` header.
 
-#### Example 4
+### Example 4
 
 ```powershell
 PS C:\> $primaryKey = ConvertTo-SecureString -String 'your master key' -AsPlainText -Force
@@ -113,7 +113,7 @@ Back-off Policy will be applied to the context that allows 10 retries.
 The delay between each retry will be the returned `x-ms-retry-after-ms`
 header value plus 1000ms.
 
-#### Example 5
+### Example 5
 
 ```powershell
 PS C:\> $primaryKey = ConvertTo-SecureString -String 'your master key' -AsPlainText -Force
@@ -128,7 +128,7 @@ Back-off Policy will be applied to the context that allows 3 retries.
 The delay between each retry will wait for 500ms on the first retry,
 1000ms on the second retry, 1500ms on final retry.
 
-#### Example 6
+### Example 6
 
 ```powershell
 PS C:\> $primaryKey = ConvertTo-SecureString -String 'your master key' -AsPlainText -Force
@@ -144,7 +144,7 @@ The delay between each retry will wait for 1000ms on the first retry,
 4000ms on the second retry, 9000ms on the 3rd retry and 16000ms on
 the final retry.
 
-#### Example 7
+### Example 7
 
 ```powershell
 PS C:\> $primaryKey = ConvertTo-SecureString -String 'your master key' -AsPlainText -Force

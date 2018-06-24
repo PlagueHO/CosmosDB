@@ -719,6 +719,14 @@ returned in the `x-ms-retry-after-ms` header.
 the `x-ms-retry-after-ms` header, then the `x-ms-retry-after-ms` value will always
 be used.**
 
+The available Back-off Methods are:
+
+- Default
+- Additive
+- Linear
+- Exponential
+- Random
+
 The following show examples of alternative policy back-off types that can
 implemented:
 
