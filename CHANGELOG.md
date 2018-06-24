@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.1.0.487
 
 - Removed `UseWebRequest` parameter from `Invoke-CosmosDbReuest` function
   to refactor out the use of `Invoke-RestMethod`. This is because most
