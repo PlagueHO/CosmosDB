@@ -55,6 +55,7 @@ InModuleScope CosmosDB {
 '@
     $script:testInvokeWebRequestResult = @{
         Content = $script:testJson
+        Headers = @{ 'x-ms-request-charge' = '5' }
     }
     $script:testResourceGroup = 'testResourceGroup'
     $script:testMaxRetries = 20
