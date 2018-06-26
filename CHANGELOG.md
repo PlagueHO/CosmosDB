@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.1.1.498
 
 - Changed trigger operation type `Insert` to `Create` in `New-CosmosDBTrigger`
   and `Set-CosmosDBTrigger` functions - fixes [Issue #129](https://github.com/PlagueHO/CosmosDB/issues/129)

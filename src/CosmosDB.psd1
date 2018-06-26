@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.1.1.487'
+    ModuleVersion     = '2.1.1.498'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -177,7 +177,7 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
-## What is New in CosmosDB Unreleased
+## What is New in CosmosDB 2.1.1.498
 
 June 26, 2018
 
