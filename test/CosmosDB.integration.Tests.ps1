@@ -720,7 +720,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                         -CollectionId $script:testCollection `
                         -Id $script:testTriggerId `
                         -TriggerBody $script:testTriggerBody `
-                        -TriggerOperation 'Create' `
+                        -TriggerOperation $operation `
                         -TriggerType 'Pre' `
                         -Verbose
                 } | Should -Not -Throw
