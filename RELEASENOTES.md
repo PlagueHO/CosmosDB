@@ -1,5 +1,12 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+June 26, 2018
+
+- Changed trigger operation type `Insert` to `Create` in `New-CosmosDBTrigger`
+  and `Set-CosmosDBTrigger` functions - fixes [Issue #129](https://github.com/PlagueHO/CosmosDB/issues/129)
+
 ## What is New in CosmosDB 2.1.0.487
 
 June 23, 2018

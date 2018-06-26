@@ -163,7 +163,7 @@ function New-CosmosDbTrigger
         $TriggerBody,
 
         [Parameter(Mandatory = $true)]
-        [ValidateSet('All', 'Insert', 'Replace', 'Delete')]
+        [ValidateSet('All', 'Create', 'Replace', 'Delete')]
         [System.String]
         $TriggerOperation,
 
@@ -298,7 +298,7 @@ function Set-CosmosDbTrigger
         $TriggerBody,
 
         [Parameter(Mandatory = $true)]
-        [ValidateSet('All', 'Insert', 'Replace', 'Delete')]
+        [ValidateSet('All', 'Create', 'Replace', 'Delete')]
         [System.String]
         $TriggerOperation,
 
