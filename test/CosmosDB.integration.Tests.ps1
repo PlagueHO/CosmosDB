@@ -710,62 +710,65 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'Add a trigger to the collection' {
-        It 'Should not throw an exception' {
-            {
-                $script:result = New-CosmosDbTrigger `
-                    -Context $script:testContext `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testTriggerId `
-                    -TriggerBody $script:testTriggerBody `
-                    -TriggerOperation 'All' `
-                    -TriggerType 'Pre' `
-                    -Verbose
-            } | Should -Not -Throw
+    foreach ($operation in 'All', 'Create', 'Replace', 'Delete')
+    {
+        Context "Add a $operation trigger to the collection" {
+            It 'Should not throw an exception' {
+                {
+                    $script:result = New-CosmosDbTrigger `
+                        -Context $script:testContext `
+                        -CollectionId $script:testCollection `
+                        -Id $script:testTriggerId `
+                        -TriggerBody $script:testTriggerBody `
+                        -TriggerOperation 'Create' `
+                        -TriggerType 'Pre' `
+                        -Verbose
+                } | Should -Not -Throw
+            }
+
+            It 'Should return expected object' {
+                $script:result.Timestamp | Should -BeOfType [System.DateTime]
+                $script:result.Etag | Should -BeOfType [System.String]
+                $script:result.ResourceId | Should -BeOfType [System.String]
+                $script:result.Uri | Should -BeOfType [System.String]
+                $script:result.Id | Should -Be $script:testTriggerId
+                $script:result.TriggerOperation | Should -Be 'Create'
+                $script:result.TriggerType | Should -Be 'Pre'
+            }
         }
 
-        It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
-            $script:result.Id | Should -Be $script:testTriggerId
-            $script:result.TriggerOperation | Should -Be 'All'
-            $script:result.TriggerType | Should -Be 'Pre'
-        }
-    }
+        Context "Get the $operation trigger from the collection" {
+            It 'Should not throw an exception' {
+                {
+                    $script:result = Get-CosmosDbTrigger `
+                        -Context $script:testContext `
+                        -CollectionId $script:testCollection `
+                        -Id $script:testTriggerId `
+                        -Verbose
+                } | Should -Not -Throw
+            }
 
-    Context 'Get the trigger from the collection' {
-        It 'Should not throw an exception' {
-            {
-                $script:result = Get-CosmosDbTrigger `
-                    -Context $script:testContext `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testTriggerId `
-                    -Verbose
-            } | Should -Not -Throw
+            It 'Should return expected object' {
+                $script:result.Timestamp | Should -BeOfType [System.DateTime]
+                $script:result.Etag | Should -BeOfType [System.String]
+                $script:result.ResourceId | Should -BeOfType [System.String]
+                $script:result.Uri | Should -BeOfType [System.String]
+                $script:result.Id | Should -Be $script:testTriggerId
+                $script:result.TriggerOperation | Should -Be $operation
+                $script:result.TriggerType | Should -Be 'Pre'
+            }
         }
 
-        It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
-            $script:result.Id | Should -Be $script:testTriggerId
-            $script:result.TriggerOperation | Should -Be 'All'
-            $script:result.TriggerType | Should -Be 'Pre'
-        }
-    }
-
-    Context 'Remove the trigger from the collection' {
-        It 'Should not throw an exception' {
-            {
-                $script:result = Remove-CosmosDbTrigger `
-                    -Context $script:testContext `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testTriggerId `
-                    -Verbose
-            } | Should -Not -Throw
+        Context "Remove the $operation trigger from the collection" {
+            It 'Should not throw an exception' {
+                {
+                    $script:result = Remove-CosmosDbTrigger `
+                        -Context $script:testContext `
+                        -CollectionId $script:testCollection `
+                        -Id $script:testTriggerId `
+                        -Verbose
+                } | Should -Not -Throw
+            }
         }
     }
 
