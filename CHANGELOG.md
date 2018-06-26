@@ -1,5 +1,10 @@
 # Change Log
 
+## Unreleased
+
+- Changed trigger operation type `Insert` to `Create` in `New-CosmosDBTrigger`
+  and `Set-CosmosDBTrigger` functions - fixes [Issue #129](https://github.com/PlagueHO/CosmosDB/issues/129)
+
 ## 2.1.0.487
 
 - Removed `UseWebRequest` parameter from `Invoke-CosmosDbReuest` function
