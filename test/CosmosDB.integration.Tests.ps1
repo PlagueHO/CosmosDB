@@ -732,7 +732,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 $script:result.ResourceId | Should -BeOfType [System.String]
                 $script:result.Uri | Should -BeOfType [System.String]
                 $script:result.Id | Should -Be $script:testTriggerId
-                $script:result.TriggerOperation | Should -Be 'Create'
+                $script:result.TriggerOperation | Should -Be $operation
                 $script:result.TriggerType | Should -Be 'Pre'
             }
         }
