@@ -1,5 +1,13 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+July 3, 2018
+
+- Changed `New-CosmosDBContext` so that Read Only keys will use the
+  `readonlykeys` action endpoint instead of the `listKeys` action - fixes
+  [Issue #133](https://github.com/PlagueHO/CosmosDB/issues/133)
+
 ## What is New in CosmosDB 2.1.1.498
 
 June 26, 2018

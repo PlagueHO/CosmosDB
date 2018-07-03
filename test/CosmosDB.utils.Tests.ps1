@@ -208,18 +208,21 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'When called with AzureAccount parameters and not connected to Azure' {
+        Context 'When called with AzureAccount parameters and not connected to Azure and PrimaryMasterKey requested' {
             $script:result = $null
 
             Mock -CommandName Get-AzureRmContext -MockWith { throw }
             Mock -CommandName Add-AzureRmAccount
             Mock `
                 -CommandName Invoke-AzureRmResourceAction `
+                -ParameterFilter { $action -eq 'listKeys' } `
                 -MockWith { @{
                     primaryMasterKey           = 'primaryMasterKey'
                     secondaryMasterKey         = 'secondaryMasterKey'
-                    primaryReadonlyMasterKey   = 'primaryReadonlyMasterKey'
-                    secondaryReadonlyMasterKey = 'secondaryReadonlyMasterKey'
+                    properties = @{
+                        primaryReadonlyMasterKey   = 'primaryReadonlyMasterKey'
+                        secondaryReadonlyMasterKey = 'secondaryReadonlyMasterKey'
+                    }
                 } }
 
             It 'Should not throw exception' {
@@ -227,6 +230,7 @@ InModuleScope CosmosDB {
                     Account       = $script:testAccount
                     Database      = $script:testDatabase
                     ResourceGroup = $script:testResourceGroup
+                    MasterKeyType = 'PrimaryMasterKey'
                 }
 
                 { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
@@ -240,7 +244,49 @@ InModuleScope CosmosDB {
             }
 
             It 'Should call expected mocks' {
-                Assert-MockCalled -CommandName Invoke-AzureRmResourceAction -Exactly -Times 1
+                Assert-MockCalled -CommandName Invoke-AzureRmResourceAction `
+                    -ParameterFilter { $action -eq 'listKeys' } `
+                    -Exactly -Times 1
+                Assert-MockCalled -CommandName Get-AzureRmContext -Exactly -Times 1
+                Assert-MockCalled -CommandName Add-AzureRmAccount -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with AzureAccount parameters and not connected to Azure and PrimaryReadonlyMasterKey requested' {
+            $script:result = $null
+
+            Mock -CommandName Get-AzureRmContext -MockWith { throw }
+            Mock -CommandName Add-AzureRmAccount
+            Mock `
+                -CommandName Invoke-AzureRmResourceAction `
+                -ParameterFilter { $action -eq 'readonlykeys' } `
+                -MockWith { @{
+                    primaryReadonlyMasterKey   = 'primaryReadonlyMasterKey'
+                    secondaryReadonlyMasterKey = 'secondaryReadonlyMasterKey'
+                } }
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Account       = $script:testAccount
+                    Database      = $script:testDatabase
+                    ResourceGroup = $script:testResourceGroup
+                    MasterKeyType = 'PrimaryReadonlyMasterKey'
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be $script:testAccount
+                $script:result.Database | Should -Be $script:testDatabase
+                $script:result.KeyType | Should -Be 'master'
+                $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled -CommandName Invoke-AzureRmResourceAction `
+                    -ParameterFilter { $action -eq 'readonlykeys' } `
+                    -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-AzureRmContext -Exactly -Times 1
                 Assert-MockCalled -CommandName Add-AzureRmAccount -Exactly -Times 1
             }

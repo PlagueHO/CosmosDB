@@ -1,5 +1,11 @@
 # Change Log
 
+## Unreleased
+
+- Changed `New-CosmosDBContext` so that Read Only keys will use the
+  `readonlykeys` action endpoint instead of the `listKeys` action - fixes
+  [Issue #133](https://github.com/PlagueHO/CosmosDB/issues/133)
+
 ## 2.1.1.498
 
 - Changed trigger operation type `Insert` to `Create` in `New-CosmosDBTrigger`
