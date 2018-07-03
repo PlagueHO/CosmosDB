@@ -219,8 +219,10 @@ InModuleScope CosmosDB {
                 -MockWith { @{
                     primaryMasterKey           = 'primaryMasterKey'
                     secondaryMasterKey         = 'secondaryMasterKey'
-                    primaryReadonlyMasterKey   = 'primaryReadonlyMasterKey'
-                    secondaryReadonlyMasterKey = 'secondaryReadonlyMasterKey'
+                    properties = @{
+                        primaryReadonlyMasterKey   = 'primaryReadonlyMasterKey'
+                        secondaryReadonlyMasterKey = 'secondaryReadonlyMasterKey'
+                    }
                 } }
 
             It 'Should not throw exception' {
@@ -259,8 +261,6 @@ InModuleScope CosmosDB {
                 -CommandName Invoke-AzureRmResourceAction `
                 -ParameterFilter { $action -eq 'readonlykeys' } `
                 -MockWith { @{
-                    primaryMasterKey           = 'primaryMasterKey'
-                    secondaryMasterKey         = 'secondaryMasterKey'
                     primaryReadonlyMasterKey   = 'primaryReadonlyMasterKey'
                     secondaryReadonlyMasterKey = 'secondaryReadonlyMasterKey'
                 } }
