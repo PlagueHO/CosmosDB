@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.1.2.514
 
 - Changed `New-CosmosDBContext` so that Read Only keys will use the
   `readonlykeys` action endpoint instead of the `listKeys` action - fixes
