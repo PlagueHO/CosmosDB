@@ -22,7 +22,7 @@ if ([String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
 }
 
 # Variables for use in tests
-$script:testResourceGroupName = 'cosmosdbpsmoduletestrgp'
+$script:testResourceGroupName = ('cdbtestrgp{0}' -f [System.IO.Path]::GetRandomFileName() -replace '\.', '')
 $script:testAccountName = ('cdbtest{0}' -f [System.IO.Path]::GetRandomFileName() -replace '\.', '')
 $script:testOffer = 'testOffer'
 $script:testDatabase = 'testDatabase'
@@ -111,12 +111,39 @@ New-AzureCosmosDbAccount `
     -AccountName $script:testAccountName `
     -Verbose
 
-$script:testContext = New-CosmosDbContext `
-    -Account $script:testAccountName `
-    -Database $script:testDatabase `
-    -ResourceGroup $script:testResourceGroupName
-
 Describe 'Cosmos DB Module' -Tag 'Integration' {
+    Context 'Create a new context from Azure using the PrimaryMasterKey Key' {
+        It 'Should not throw an exception' {
+            {
+                $script:testContext = New-CosmosDbContext `
+                    -Account $script:testAccountName `
+                    -Database $script:testDatabase `
+                    -ResourceGroup $script:testResourceGroupName `
+                    -MasterKeyType 'PrimaryMasterKey'
+            } | Should -Not -Throw
+        }
+    }
+
+    Context 'Create a new context from Azure using the PrimaryReadonlyMasterKey Key' {
+        It 'Should not throw an exception' {
+            {
+                $script:testReadOnlyContext = New-CosmosDbContext `
+                    -Account $script:testAccountName `
+                    -Database $script:testDatabase `
+                    -ResourceGroup $script:testResourceGroupName
+                    -MasterKeyType 'PrimaryReadonlyMasterKey'
+            } | Should -Not -Throw
+        }
+    }
+
+    Context 'Create a new database using a readonly context' {
+        It 'Should throw an exception' {
+            {
+                $script:result = New-CosmosDbDatabase -Context $script:testReadOnlyContext -Id $script:testDatabase -Verbose
+            } | Should -Not -Throw
+        }
+    }
+
     Context 'Create a new database' {
         It 'Should not throw an exception' {
             {
@@ -139,6 +166,24 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         It 'Should not throw an exception' {
             {
                 $script:result = Get-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Collections | Should -BeOfType [System.String]
+            $script:result.Users | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testDatabase
+        }
+    }
+
+    Context 'Get existing database using readonly context' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Get-CosmosDbDatabase -Context $script:testReadOnlyContext -Id $script:testDatabase -Verbose
             } | Should -Not -Throw
         }
 
