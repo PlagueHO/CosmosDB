@@ -136,6 +136,14 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    Context 'Get a database that does not exist with error action set to SilentlyContinue' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Get-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase -ErrorVariable ev -ErrorAction SilentlyContinue -Verbos
+            } | Should -Not -Throw
+        }
+    }
+
     Context 'Create a new database using a readonly context' {
         It 'Should throw an exception' {
             {
