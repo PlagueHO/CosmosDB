@@ -151,12 +151,19 @@ function New-CosmosDbContext
                 $null = Add-AzureRmAccount
             }
 
+            $action = 'listKeys'
+            if ($MasterKeyType -in ('PrimaryReadonlyMasterKey', 'SecondaryReadonlyMasterKey'))
+            {
+                # Use the readonlykey Action if a ReadOnly key is required
+                $action = 'readonlykeys'
+            }
+
             $resource = Invoke-AzureRmResourceAction `
                 -ResourceGroupName $ResourceGroup `
                 -Name $Account `
                 -ResourceType "Microsoft.DocumentDb/databaseAccounts" `
                 -ApiVersion "2015-04-08" `
-                -Action listKeys `
+                -Action $action `
                 -Force `
                 -ErrorAction Stop
 
@@ -537,10 +544,13 @@ function Invoke-CosmosDbRequest
 
     $requestComplete = $false
     $retry = 0
+    $fatal = $true
 
-    do {
+    do
+    {
         try
         {
+
             $requestResult = Invoke-WebRequest -UseBasicParsing @invokeWebRequestParameters
             $requestComplete = $true
         }
@@ -584,13 +594,19 @@ function Invoke-CosmosDbRequest
                 }
             }
 
+            # A non-recoverable exception occurred
+            $fatal = $true
+
             Throw $_
         }
         catch
         {
+            # A non-recoverable exception occurred
+            $fatal = $true
+
             Throw $_
         }
-    } while ($requestComplete -eq $false)
+    } while ($requestComplete -eq $false -and -not $fatal)
 
     # Display the Request Charge as a verbose message
     $requestCharge = $requestResult.Headers.'x-ms-request-charge'

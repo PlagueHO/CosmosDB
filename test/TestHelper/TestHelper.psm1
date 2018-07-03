@@ -155,10 +155,11 @@ function Remove-AzureCosmosDbAccount
     {
         Write-Verbose -Message ('Removing Cosmos DB test account {0}.' -f $AccountName)
 
-        # Create resource group
+        # Remove resource group as
         $null = Remove-AzureRmResourceGroup `
             -Name $ResourceGroupName `
-            -Force
+            -Force `
+            -AsJob
     }
     catch [System.Exception]
     {
