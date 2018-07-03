@@ -544,10 +544,13 @@ function Invoke-CosmosDbRequest
 
     $requestComplete = $false
     $retry = 0
+    $fatal = $true
 
-    do {
+    do
+    {
         try
         {
+
             $requestResult = Invoke-WebRequest -UseBasicParsing @invokeWebRequestParameters
             $requestComplete = $true
         }
@@ -591,13 +594,19 @@ function Invoke-CosmosDbRequest
                 }
             }
 
+            # A non-recoverable exception occurred
+            $fatal = $true
+
             Throw $_
         }
         catch
         {
+            # A non-recoverable exception occurred
+            $fatal = $true
+
             Throw $_
         }
-    } while ($requestComplete -eq $false)
+    } while ($requestComplete -eq $false -and -not $fatal)
 
     # Display the Request Charge as a verbose message
     $requestCharge = $requestResult.Headers.'x-ms-request-charge'
