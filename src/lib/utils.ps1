@@ -151,12 +151,19 @@ function New-CosmosDbContext
                 $null = Add-AzureRmAccount
             }
 
+            $action = 'listKeys'
+            if ($MasterKeyType -in ('PrimaryReadonlyMasterKey', 'SecondaryReadonlyMasterKey'))
+            {
+                # Use the readonlykey Action if a ReadOnly key is required
+                $action = 'readonlykeys'
+            }
+
             $resource = Invoke-AzureRmResourceAction `
                 -ResourceGroupName $ResourceGroup `
                 -Name $Account `
                 -ResourceType "Microsoft.DocumentDb/databaseAccounts" `
                 -ApiVersion "2015-04-08" `
-                -Action listKeys `
+                -Action $action `
                 -Force `
                 -ErrorAction Stop
 
