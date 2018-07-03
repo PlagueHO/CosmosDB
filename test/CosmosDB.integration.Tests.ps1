@@ -130,7 +130,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 $script:testReadOnlyContext = New-CosmosDbContext `
                     -Account $script:testAccountName `
                     -Database $script:testDatabase `
-                    -ResourceGroup $script:testResourceGroupName
+                    -ResourceGroup $script:testResourceGroupName `
                     -MasterKeyType 'PrimaryReadonlyMasterKey'
             } | Should -Not -Throw
         }
@@ -140,7 +140,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         It 'Should throw an exception' {
             {
                 $script:result = New-CosmosDbDatabase -Context $script:testReadOnlyContext -Id $script:testDatabase -Verbose
-            } | Should -Not -Throw
+            } | Should -Throw
         }
     }
 
