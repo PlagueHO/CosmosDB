@@ -61,6 +61,16 @@ InModuleScope CosmosDB {
     $script:testMaxRetries = 20
     $script:testMethod = 'Default'
     $script:testDelay = 1
+    $script:testRequestObject = @{
+        "Tricky Body" = @'
+if (entityAlreadyExists)
+    throw new Error(`root entity # ${entity.id} already created`);
+console.log(`new entity "${entity.id}" is about to be created...`);
+let a = 'some value';
+console.log("done");
+'@
+    }
+    $script:testRequestBodyJson = '{"Tricky Body":"if (entityAlreadyExists)\r\n    throw new Error(`root entity # ${entity.id} already created`);\r\nconsole.log(`new entity \"${entity.id}\" is about to be created...`);\r\nlet a = \u0027some value\u0027;\r\nconsole.log(\"done\");"}'
 
     Describe 'Custom types' -Tag 'Unit' {
         Context 'CosmosDB.Context' {
@@ -1015,6 +1025,29 @@ InModuleScope CosmosDB {
                 It 'Should return 12500msms' {
                     $script:result | Should -Be 12500
                 }
+            }
+        }
+    }
+
+    Describe 'Convert-CosmosDbRequestBody' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Convert-CosmosDbRequestBody -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with paramters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $convertCosmosDbRequestBodyParameters = @{
+                    RequestBodyObject = $script:testRequestObject
+                    Verbose           = $true
+                }
+
+                { $script:result = Convert-CosmosDbRequestBody @convertCosmosDbRequestBodyParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -Be $script:testRequestBodyJson
             }
         }
     }
