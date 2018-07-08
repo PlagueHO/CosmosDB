@@ -1,5 +1,12 @@
 # Change Log
 
+## Unreleased
+
+- Changed `New-CosmosDbStoredProcedure` & `Set-CosmosDbStoredProcedure` to use serialization
+  instead of tricky request body conversion - fixes
+  [Issue #137](https://github.com/PlagueHO/CosmosDB/issues/137)
+
+
 ## 2.1.2.514
 
 - Changed `New-CosmosDBContext` so that Read Only keys will use the
