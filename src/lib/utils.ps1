@@ -768,3 +768,18 @@ function New-CosmosDbInvalidOperationException
     $errorRecordToThrow = New-Object @newObjectParams
     throw $errorRecordToThrow
 }
+
+function Convert-CosmosDbRequestBody
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNull()]
+        [System.Object]
+        $RequestBodyObject
+    )
+
+    return ConvertTo-Json -InputObject $RequestBodyObject -Depth 100 -Compress
+}
