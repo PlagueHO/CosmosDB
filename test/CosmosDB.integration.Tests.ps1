@@ -312,7 +312,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Triggers | Should -BeOfType [System.String]
             $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testCollection
-            $script:result.indexingPolicy.indexingMode | Should -Be 'consistent'
+            $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
             $script:result.indexingPolicy.automatic | Should -Be $true
             $script:result.indexingPolicy.includedPaths.Indexes[0].DataType | Should -Be 'Number'
             $script:result.indexingPolicy.includedPaths.Indexes[0].Kind | Should -Be 'Range'
@@ -346,7 +346,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Triggers | Should -BeOfType [System.String]
             $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testCollection
-            $script:result.indexingPolicy.indexingMode | Should -Be 'consistent'
+            $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
             $script:result.indexingPolicy.automatic | Should -Be $true
             $script:result.indexingPolicy.includedPaths.Indexes[0].DataType | Should -Be 'Number'
             $script:result.indexingPolicy.includedPaths.Indexes[0].Kind | Should -Be 'Range'
@@ -381,7 +381,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Triggers | Should -BeOfType [System.String]
             $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testCollection
-            $script:result.indexingPolicy.indexingMode | Should -Be 'consistent'
+            $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
             $script:result.indexingPolicy.automatic | Should -Be $true
             $script:result.indexingPolicy.includedPaths.Indexes[0].DataType | Should -Be 'Number'
             $script:result.indexingPolicy.includedPaths.Indexes[0].Kind | Should -Be 'Range'
@@ -488,7 +488,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Triggers | Should -BeOfType [System.String]
             $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testCollection
-            $script:result.indexingPolicy.indexingMode | Should -Be 'consistent'
+            $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
             $script:result.indexingPolicy.automatic | Should -Be $true
             $script:result.indexingPolicy.includedPaths.Indexes[0].DataType | Should -Be 'Number'
             $script:result.indexingPolicy.includedPaths.Indexes[0].Kind | Should -Be 'Range'
@@ -1068,11 +1068,9 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'Create a new collection with a DefaultTTL set to 3600' {
+    Context "Create a new collection with a DefaultTTL set to $($script:testDefaultTtl)" {
         It 'Should not throw an exception' {
             {
-                $script:indexingPolicyNone = New-CosmosDbCollectionIndexingPolicy -Automatic $false -IndexingMode None
-
                 $script:result = New-CosmosDbCollection `
                     -Context $script:testContext `
                     -Id $script:testCollection `
@@ -1093,12 +1091,105 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testCollection
             $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
-            $script:result.indexingPolicy.automatic | Should -Be $false
-            $script:result.indexingPolicy.defaultTtl | Should -Be $script:testDefaultTtl
+            $script:result.indexingPolicy.automatic | Should -Be $true
+            $script:result.defaultTtl | Should -Be $script:testDefaultTtl
         }
     }
 
-    Context 'Remove existing collection with a DefaultTTL set to 3600' {
+    Context "Update an existing collection changing the DefaultTTL set to $($script:testDefaultTtl + 1)" {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Set-CosmosDbCollection `
+                    -Context $script:testContext `
+                    -Id $script:testCollection `
+                    -DefaultTtl ($script:testDefaultTtl + 1) `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Conflicts | Should -BeOfType [System.String]
+            $script:result.Documents | Should -BeOfType [System.String]
+            $script:result.StoredProcedures | Should -BeOfType [System.String]
+            $script:result.Triggers | Should -BeOfType [System.String]
+            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testCollection
+            $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
+            $script:result.indexingPolicy.automatic | Should -Be $true
+            $script:result.defaultTtl | Should -Be ($script:testDefaultTtl + 1)
+        }
+    }
+
+    Context "Update an existing collection changing the DefaultTTL set to $($script:testDefaultTtl + 1)" {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Set-CosmosDbCollection `
+                    -Context $script:testContext `
+                    -Id $script:testCollection `
+                    -DefaultTtl ($script:testDefaultTtl + 1) `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Conflicts | Should -BeOfType [System.String]
+            $script:result.Documents | Should -BeOfType [System.String]
+            $script:result.StoredProcedures | Should -BeOfType [System.String]
+            $script:result.Triggers | Should -BeOfType [System.String]
+            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testCollection
+            $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
+            $script:result.indexingPolicy.automatic | Should -Be $true
+            $script:result.defaultTtl | Should -Be ($script:testDefaultTtl + 1)
+        }
+    }
+
+    Context "Update an existing collection changing the DefaultTTL set to $($script:testDefaultTtl + 2) and IndexingPolicy" {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Set-CosmosDbCollection `
+                    -Context $script:testContext `
+                    -Id $script:testCollection `
+                    -IndexingPolicy $script:indexingPolicy `
+                    -DefaultTtl ($script:testDefaultTtl + 2) `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Conflicts | Should -BeOfType [System.String]
+            $script:result.Documents | Should -BeOfType [System.String]
+            $script:result.StoredProcedures | Should -BeOfType [System.String]
+            $script:result.Triggers | Should -BeOfType [System.String]
+            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testCollection
+            $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
+            $script:result.indexingPolicy.automatic | Should -Be $true
+            $script:result.indexingPolicy.includedPaths.Indexes[0].DataType | Should -Be 'Number'
+            $script:result.indexingPolicy.includedPaths.Indexes[0].Kind | Should -Be 'Range'
+            $script:result.indexingPolicy.includedPaths.Indexes[0].Precision | Should -Be -1
+            $script:result.indexingPolicy.includedPaths.Indexes[1].DataType | Should -Be 'String'
+            $script:result.indexingPolicy.includedPaths.Indexes[1].Kind | Should -Be 'Hash'
+            $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
+            $script:result.indexingPolicy.includedPaths.Indexes[2].DataType | Should -Be 'Point'
+            $script:result.indexingPolicy.includedPaths.Indexes[2].Kind | Should -Be 'Spatial'
+            $script:result.defaultTtl | Should -Be ($script:testDefaultTtl + 2)
+        }
+    }
+
+    Context 'Remove existing collection' {
         It 'Should not throw an exception' {
             {
                 $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose

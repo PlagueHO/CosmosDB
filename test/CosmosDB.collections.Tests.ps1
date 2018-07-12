@@ -748,5 +748,60 @@ InModuleScope CosmosDB {
                     -Exactly -Times 1
             }
         }
+
+        Context 'When called with context parameter and an Id and DefaultTtl parameter on a collection with a partition key' {
+            $script:result = $null
+
+            $invokecosmosdbrequest_parameterfilter = {
+                $Method -eq 'Put' -and `
+                    $ResourceType -eq 'colls' -and `
+                    $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
+                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{
+                        id = $script:testCollection1
+                        indexingPolicy = $script:testIndexingPolicy
+                        partitionKey = $script:testPartitionKey
+                        defaultTtl = $script:testDefaultTtl
+                    } )
+            }
+            $getcosmosdbcollection_parameterfilter = {
+                $Id -eq $script:testCollection1
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                -MockWith { $script:testGetCollectionResultSingle }
+
+            Mock `
+                -CommandName Get-CosmosDbCollection `
+                -ParameterFilter $getcosmosdbcollection_parameterfilter `
+                -MockWith { @{ partitionKey = $script:testPartitionKey } }
+
+            It 'Should not throw exception' {
+                $setCosmosDbCollectionParameters = @{
+                    Context         = $script:testContext
+                    Id              = $script:testCollection1
+                    IndexingPolicy  = $script:testIndexingPolicy
+                    DefaultTtl      = $script:testDefaultTtl
+                }
+
+                { $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters } | Should -Not -Throw
+            }
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testCollection1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                    -Exactly -Times 1
+
+                Assert-MockCalled `
+                    -CommandName Get-CosmosDbCollection `
+                    -ParameterFilter $getcosmosdbcollection_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
     }
 }

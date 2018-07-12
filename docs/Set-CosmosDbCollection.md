@@ -17,14 +17,14 @@ Update an existing collection in a CosmosDB database.
 
 ```powershell
 Set-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -Id <String> -IndexingPolicy <Policy> [<CommonParameters>]
+ -Id <String> [-IndexingPolicy <Policy>] [-DefaultTtl <Int32>] [<CommonParameters>]
 ```
 
 ### Account
 
 ```powershell
 Set-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -Id <String> -IndexingPolicy <Policy> [<CommonParameters>]
+ -Id <String> [-IndexingPolicy <Policy>] [-DefaultTtl <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -41,10 +41,19 @@ PS C:\> $indexStringRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range 
 PS C:\> $indexNumberRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType Number -Precision -1
 PS C:\> $indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $indexStringRange, $indexNumberRange
 PS C:\> $newIndexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $indexIncludedPath
-PS C:\> Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -IndexingPolicy $newIndexingPolicy
+PS C:\> Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -IndexingPolicy $newIndexingPolicy
 ```
 
 Update a collection in the database with the a new indexing policy.
+
+### Example 2
+
+```powershell
+PS C:\> Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -DefaultTtl 7200
+```
+
+Update a collection in the database with the a new default time to live
+of 7200 seconds.
 
 ## PARAMETERS
 
@@ -152,6 +161,24 @@ Set-CosmosDbCollectionIndexingPolicy function.
 
 ```yaml
 Type: Policy
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DefaultTtl
+
+Setting this value to a positive integer will enable TTL on
+all documents in this collection. If this is set to -1 then
+the DefaultTtl will be infinite.
+
+```yaml
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 

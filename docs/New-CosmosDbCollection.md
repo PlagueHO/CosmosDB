@@ -52,6 +52,15 @@ PS C:\> New-CosmosDbCollection -Context $cosmosDbContext -Id 'PartitionedCollect
 Create a collection in the database with the partition key 'account' and
 the offer throughput of 50000 RU/s.
 
+### Example 3
+
+```powershell
+PS C:\> New-CosmosDbCollection -Context $cosmosDbContext -Id 'PartitionedCollection' -DefaultTtl 3600
+```
+
+Create a collection in the database with the a default time to live of 3600
+seconds.
+
 ## PARAMETERS
 
 ### -Context
