@@ -276,13 +276,16 @@ function New-CosmosDbStoredProcedure
 
     $resourcePath = ('colls/{0}/sprocs' -f $CollectionId)
 
-    $StoredProcedureBody = ((($StoredProcedureBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
+    $requestBody = Convert-CosmosDbRequestBody -RequestBodyObject @{
+        id = $id
+        body = $StoredProcedureBody
+    }
 
     $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'sprocs' `
         -ResourcePath $resourcePath `
-        -Body "{ `"id`": `"$id`", `"body`" : `"$StoredProcedureBody`" }"
+        -Body $requestBody
 
     $storedProcedure = ConvertFrom-Json -InputObject $result.Content
 
@@ -399,13 +402,16 @@ function Set-CosmosDbStoredProcedure
 
     $resourcePath = ('colls/{0}/sprocs/{1}' -f $CollectionId, $Id)
 
-    $StoredProcedureBody = ((($StoredProcedureBody -replace '`n', '\n') -replace '`r', '\r') -replace '"', '\"')
+    $requestBody = Convert-CosmosDbRequestBody -RequestBodyObject @{
+        id = $id
+        body = $StoredProcedureBody
+    }
 
     $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Put' `
         -ResourceType 'sprocs' `
         -ResourcePath $resourcePath `
-        -Body "{ `"id`": `"$id`", `"body`" : `"$StoredProcedureBody`" }"
+        -Body $requestBody
 
     $storedProcedure = ConvertFrom-Json -InputObject $result.Content
 
