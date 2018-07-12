@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.1.3.528
 
 - Changed `New-CosmosDbStoredProcedure` & `Set-CosmosDbStoredProcedure` to use serialization
   instead of tricky request body conversion - fixes
