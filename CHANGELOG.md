@@ -5,7 +5,8 @@
 - Changed `New-CosmosDbStoredProcedure` & `Set-CosmosDbStoredProcedure` to use serialization
   instead of tricky request body conversion - fixes
   [Issue #137](https://github.com/PlagueHO/CosmosDB/issues/137)
-
+- Added parameter `DefaultTtl` to `New-CosmosDbCollection` - fixes
+  [Issue #139](https://github.com/PlagueHO/CosmosDB/issues/139)
 
 ## 2.1.2.514
 

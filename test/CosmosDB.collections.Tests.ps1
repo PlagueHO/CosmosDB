@@ -63,6 +63,7 @@ InModuleScope CosmosDB {
         paths = @('/partitionkey')
         kind  = 'Hash'
     }
+    $script:testDefaultTtl = 3600
 
     Describe 'Get-CosmosDbCollectionResourcePath' -Tag 'Unit' {
         It 'Should exist' {
@@ -418,6 +419,41 @@ InModuleScope CosmosDB {
                 $newCosmosDbCollectionParameters = @{
                     Context = $script:testContext
                     Id      = $script:testCollection1
+                }
+
+                { $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testCollection1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id and a DefaultTTL' {
+            $invokecosmosdbrequest_parameterfilter = {
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'colls' -and `
+                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{ id = $script:testCollection1; DefaultTTL = $script:testDefaultTtl } )
+            }
+            $script:result = $null
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                -MockWith { $script:testGetCollectionResultSingle }
+
+            It 'Should not throw exception' {
+                $newCosmosDbCollectionParameters = @{
+                    Context    = $script:testContext
+                    Id         = $script:testCollection1
+                    DefaultTtl = $script:testDefaultTtl
                 }
 
                 { $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters } | Should -Not -Throw

@@ -96,6 +96,7 @@ function tax(income) {
         return income * 0.4;
 }
 '@
+$script:testDefaultTtl = 3600
 
 # Connect to Azure
 Connect-AzureServicePrincipal `
@@ -1060,6 +1061,44 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     }
 
     Context 'Remove existing collection with a None indexing Policy' {
+        It 'Should not throw an exception' {
+            {
+                $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
+            } | Should -Not -Throw
+        }
+    }
+
+    Context 'Create a new collection with a DefaultTTL set to 3600' {
+        It 'Should not throw an exception' {
+            {
+                $script:indexingPolicyNone = New-CosmosDbCollectionIndexingPolicy -Automatic $false -IndexingMode None
+
+                $script:result = New-CosmosDbCollection `
+                    -Context $script:testContext `
+                    -Id $script:testCollection `
+                    -DefaultTtl $script:testDefaultTtl `
+                    -Verbose
+            } | Should -Not -Throw
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Conflicts | Should -BeOfType [System.String]
+            $script:result.Documents | Should -BeOfType [System.String]
+            $script:result.StoredProcedures | Should -BeOfType [System.String]
+            $script:result.Triggers | Should -BeOfType [System.String]
+            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testCollection
+            $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
+            $script:result.indexingPolicy.automatic | Should -Be $false
+            $script:result.indexingPolicy.defaultTtl | Should -Be $script:testDefaultTtl
+        }
+    }
+
+    Context 'Remove existing collection with a DefaultTTL set to 3600' {
         It 'Should not throw an exception' {
             {
                 $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose

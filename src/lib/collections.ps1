@@ -390,7 +390,12 @@ function New-CosmosDbCollection
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [CosmosDB.IndexingPolicy.Policy]
-        $IndexingPolicy
+        $IndexingPolicy,
+
+        [Parameter()]
+        [ValidateRange(-1,2147483647)]
+        [System.Int32]
+        $DefaultTtl
     )
 
     $headers = @{}
@@ -445,6 +450,14 @@ function New-CosmosDbCollection
             indexingPolicy = $IndexingPolicy
         }
         $null = $PSBoundParameters.Remove('IndexingPolicy')
+    }
+
+    if ($PSBoundParameters.ContainsKey('DefaultTtl'))
+    {
+        $bodyObject += @{
+            defaultTtl = $DefaultTtl
+        }
+        $null = $PSBoundParameters.Remove('DefaultTtl')
     }
 
     $body = ConvertTo-Json -InputObject $bodyObject -Depth 10

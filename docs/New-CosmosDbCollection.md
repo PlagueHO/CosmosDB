@@ -18,7 +18,7 @@ Create a new collection in a CosmosDB database.
 ```powershell
 New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>]
- [-IndexingPolicy <Policy>] [<CommonParameters>]
+ [-IndexingPolicy <Policy>] [-DefaultTtl <Int32>] [<CommonParameters>]
 ```
 
 ### Account
@@ -26,7 +26,7 @@ New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <Strin
 ```powershell
 New-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>]
- [-IndexingPolicy <Policy>] [<CommonParameters>]
+ [-IndexingPolicy <Policy>] [-DefaultTtl <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -212,6 +212,24 @@ New-CosmosDbCollectionIndexingPolicy function.
 
 ```yaml
 Type: Policy
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DefaultTtl
+
+Setting this value to a positive integer will enable TTL on
+all documents in this collection. If this is set to -1 then
+the DefaultTtl will be infinite.
+
+```yaml
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
