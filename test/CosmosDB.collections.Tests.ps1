@@ -63,7 +63,7 @@ InModuleScope CosmosDB {
         paths = @('/partitionkey')
         kind  = 'Hash'
     }
-    $script:testDefaultTtl = 3600
+    $script:testDefaultTimeToLive = 3600
 
     Describe 'Get-CosmosDbCollectionResourcePath' -Tag 'Unit' {
         It 'Should exist' {
@@ -436,11 +436,11 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'When called with context parameter and an Id and a DefaultTTL' {
+        Context 'When called with context parameter and an Id and a DefaultTimeToLive' {
             $invokecosmosdbrequest_parameterfilter = {
                 $Method -eq 'Post' -and `
                     $ResourceType -eq 'colls' -and `
-                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{ id = $script:testCollection1; DefaultTTL = $script:testDefaultTtl } )
+                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{ id = $script:testCollection1; defaultTTL = $script:testDefaultTimeToLive } )
             }
             $script:result = $null
 
@@ -453,7 +453,7 @@ InModuleScope CosmosDB {
                 $newCosmosDbCollectionParameters = @{
                     Context    = $script:testContext
                     Id         = $script:testCollection1
-                    DefaultTtl = $script:testDefaultTtl
+                    DefaultTimeToLive = $script:testDefaultTimeToLive
                 }
 
                 { $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters } | Should -Not -Throw
@@ -749,7 +749,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'When called with context parameter and an Id and DefaultTtl parameter on a collection with a partition key' {
+        Context 'When called with context parameter and an Id and DefaultTimeToLive parameter on a collection with a partition key' {
             $script:result = $null
 
             $invokecosmosdbrequest_parameterfilter = {
@@ -760,7 +760,7 @@ InModuleScope CosmosDB {
                         id = $script:testCollection1
                         indexingPolicy = $script:testIndexingPolicy
                         partitionKey = $script:testPartitionKey
-                        defaultTtl = $script:testDefaultTtl
+                        defaultTtl = $script:testDefaultTimeToLive
                     } )
             }
             $getcosmosdbcollection_parameterfilter = {
@@ -779,10 +779,10 @@ InModuleScope CosmosDB {
 
             It 'Should not throw exception' {
                 $setCosmosDbCollectionParameters = @{
-                    Context         = $script:testContext
-                    Id              = $script:testCollection1
-                    IndexingPolicy  = $script:testIndexingPolicy
-                    DefaultTtl      = $script:testDefaultTtl
+                    Context           = $script:testContext
+                    Id                = $script:testCollection1
+                    IndexingPolicy    = $script:testIndexingPolicy
+                    DefaultTimeToLive = $script:testDefaultTimeToLive
                 }
 
                 { $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters } | Should -Not -Throw

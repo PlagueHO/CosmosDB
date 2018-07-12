@@ -395,7 +395,7 @@ function New-CosmosDbCollection
         [Parameter()]
         [ValidateRange(-1,2147483647)]
         [System.Int32]
-        $DefaultTtl
+        $DefaultTimeToLive
     )
 
     $headers = @{}
@@ -452,12 +452,12 @@ function New-CosmosDbCollection
         $null = $PSBoundParameters.Remove('IndexingPolicy')
     }
 
-    if ($PSBoundParameters.ContainsKey('DefaultTtl'))
+    if ($PSBoundParameters.ContainsKey('DefaultTimeToLive'))
     {
         $bodyObject += @{
-            defaultTtl = $DefaultTtl
+            defaultTtl = $DefaultTimeToLive
         }
-        $null = $PSBoundParameters.Remove('DefaultTtl')
+        $null = $PSBoundParameters.Remove('DefaultTimeToLive')
     }
 
     $body = ConvertTo-Json -InputObject $bodyObject -Depth 10
@@ -566,7 +566,7 @@ function Set-CosmosDbCollection
         [Parameter()]
         [ValidateRange(-1,2147483647)]
         [System.Int32]
-        $DefaultTtl
+        $DefaultTimeToLive
     )
 
     $headers = @{}
@@ -576,10 +576,10 @@ function Set-CosmosDbCollection
     }
 
     $indexingPolicyIncluded = $PSBoundParameters.ContainsKey('IndexingPolicy')
-    $defaultTtlIncluded = $PSBoundParameters.ContainsKey('DefaultTtl')
+    $defaultTimeToLiveIncluded = $PSBoundParameters.ContainsKey('DefaultTimeToLive')
 
     $null = $PSBoundParameters.Remove('IndexingPolicy')
-    $null = $PSBoundParameters.Remove('DefaultTtl')
+    $null = $PSBoundParameters.Remove('DefaultTimeToLive')
 
     <#
         The partition key on an existing collection can not be changed.
@@ -610,10 +610,10 @@ function Set-CosmosDbCollection
         }
     }
 
-    if ($defaultTtlIncluded)
+    if ($defaultTimeToLiveIncluded)
     {
         $bodyObject += @{
-            defaultTtl = $DefaultTtl
+            defaultTtl = $DefaultTimeToLive
         }
     }
     elseif ($existingCollection.defaultTtl)

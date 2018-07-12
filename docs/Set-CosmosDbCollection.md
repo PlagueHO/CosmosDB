@@ -17,14 +17,14 @@ Update an existing collection in a CosmosDB database.
 
 ```powershell
 Set-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -Id <String> [-IndexingPolicy <Policy>] [-DefaultTtl <Int32>] [<CommonParameters>]
+ -Id <String> [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [<CommonParameters>]
 ```
 
 ### Account
 
 ```powershell
 Set-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -Id <String> [-IndexingPolicy <Policy>] [-DefaultTtl <Int32>] [<CommonParameters>]
+ -Id <String> [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -49,7 +49,7 @@ Update a collection in the database with the a new indexing policy.
 ### Example 2
 
 ```powershell
-PS C:\> Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -DefaultTtl 7200
+PS C:\> Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -DefaultTimeToLive 7200
 ```
 
 Update a collection in the database with the a new default time to live
@@ -171,11 +171,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DefaultTtl
+### -DefaultTimeToLive
 
-Setting this value to a positive integer will enable TTL on
-all documents in this collection. If this is set to -1 then
-the DefaultTtl will be infinite.
+Setting this value to a positive integer will enable the
+time to live on all documents in this collection. If this is
+set to -1 then the default time to live will be infinite.
 
 ```yaml
 Type: Int32

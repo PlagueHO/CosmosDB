@@ -18,7 +18,7 @@ Create a new collection in a CosmosDB database.
 ```powershell
 New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>]
- [-IndexingPolicy <Policy>] [-DefaultTtl <Int32>] [<CommonParameters>]
+ [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [<CommonParameters>]
 ```
 
 ### Account
@@ -26,7 +26,7 @@ New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <Strin
 ```powershell
 New-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>]
- [-IndexingPolicy <Policy>] [-DefaultTtl <Int32>] [<CommonParameters>]
+ [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -55,7 +55,7 @@ the offer throughput of 50000 RU/s.
 ### Example 3
 
 ```powershell
-PS C:\> New-CosmosDbCollection -Context $cosmosDbContext -Id 'PartitionedCollection' -DefaultTtl 3600
+PS C:\> New-CosmosDbCollection -Context $cosmosDbContext -Id 'PartitionedCollection' -DefaultTimeToLive 3600
 ```
 
 Create a collection in the database with the a default time to live of 3600
@@ -231,11 +231,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DefaultTtl
+### -DefaultTimeToLive
 
-Setting this value to a positive integer will enable TTL on
-all documents in this collection. If this is set to -1 then
-the DefaultTtl will be infinite.
+Setting this value to a positive integer will enable the
+time to live on all documents in this collection. If this is
+set to -1 then the default time to live will be infinite.
 
 ```yaml
 Type: Int32
