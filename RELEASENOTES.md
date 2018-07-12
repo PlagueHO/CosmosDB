@@ -1,5 +1,17 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+July 12, 2018
+
+- Changed `New-CosmosDbStoredProcedure` & `Set-CosmosDbStoredProcedure` to use serialization
+  instead of tricky request body conversion - fixes
+  [Issue #137](https://github.com/PlagueHO/CosmosDB/issues/137)
+- Added parameter `DefaultTimeToLive` to `New-CosmosDbCollection` and
+  `Set-CosmosDbCollection` - fixes [Issue #139](https://github.com/PlagueHO/CosmosDB/issues/139)
+- Changed the `IndexingPolicy` parameter on`Set-CosmosDbCollection`
+  to be optional - fixes [Issue #140](https://github.com/PlagueHO/CosmosDB/issues/140)
+
 ## What is New in CosmosDB 2.1.2.514
 
 July 3, 2018
