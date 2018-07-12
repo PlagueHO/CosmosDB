@@ -63,6 +63,7 @@ InModuleScope CosmosDB {
         paths = @('/partitionkey')
         kind  = 'Hash'
     }
+    $script:testDefaultTimeToLive = 3600
 
     Describe 'Get-CosmosDbCollectionResourcePath' -Tag 'Unit' {
         It 'Should exist' {
@@ -435,6 +436,41 @@ InModuleScope CosmosDB {
             }
         }
 
+        Context 'When called with context parameter and an Id and a DefaultTimeToLive' {
+            $invokecosmosdbrequest_parameterfilter = {
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'colls' -and `
+                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{ id = $script:testCollection1; defaultTTL = $script:testDefaultTimeToLive } )
+            }
+            $script:result = $null
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                -MockWith { $script:testGetCollectionResultSingle }
+
+            It 'Should not throw exception' {
+                $newCosmosDbCollectionParameters = @{
+                    Context    = $script:testContext
+                    Id         = $script:testCollection1
+                    DefaultTimeToLive = $script:testDefaultTimeToLive
+                }
+
+                { $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testCollection1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
         Context 'When called with context parameter and an Id and OfferThroughput parameter' {
             $script:result = $null
             $invokecosmosdbrequest_parameterfilter = {
@@ -692,6 +728,61 @@ InModuleScope CosmosDB {
                     Context         = $script:testContext
                     Id              = $script:testCollection1
                     IndexingPolicy  = $script:testIndexingPolicy
+                }
+
+                { $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters } | Should -Not -Throw
+            }
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testCollection1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                    -Exactly -Times 1
+
+                Assert-MockCalled `
+                    -CommandName Get-CosmosDbCollection `
+                    -ParameterFilter $getcosmosdbcollection_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id and DefaultTimeToLive parameter on a collection with a partition key' {
+            $script:result = $null
+
+            $invokecosmosdbrequest_parameterfilter = {
+                $Method -eq 'Put' -and `
+                    $ResourceType -eq 'colls' -and `
+                    $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
+                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{
+                        id = $script:testCollection1
+                        indexingPolicy = $script:testIndexingPolicy
+                        partitionKey = $script:testPartitionKey
+                        defaultTtl = $script:testDefaultTimeToLive
+                    } )
+            }
+            $getcosmosdbcollection_parameterfilter = {
+                $Id -eq $script:testCollection1
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                -MockWith { $script:testGetCollectionResultSingle }
+
+            Mock `
+                -CommandName Get-CosmosDbCollection `
+                -ParameterFilter $getcosmosdbcollection_parameterfilter `
+                -MockWith { @{ partitionKey = $script:testPartitionKey } }
+
+            It 'Should not throw exception' {
+                $setCosmosDbCollectionParameters = @{
+                    Context           = $script:testContext
+                    Id                = $script:testCollection1
+                    IndexingPolicy    = $script:testIndexingPolicy
+                    DefaultTimeToLive = $script:testDefaultTimeToLive
                 }
 
                 { $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters } | Should -Not -Throw

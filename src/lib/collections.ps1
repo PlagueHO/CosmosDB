@@ -390,7 +390,12 @@ function New-CosmosDbCollection
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [CosmosDB.IndexingPolicy.Policy]
-        $IndexingPolicy
+        $IndexingPolicy,
+
+        [Parameter()]
+        [ValidateRange(-1,2147483647)]
+        [System.Int32]
+        $DefaultTimeToLive
     )
 
     $headers = @{}
@@ -445,6 +450,14 @@ function New-CosmosDbCollection
             indexingPolicy = $IndexingPolicy
         }
         $null = $PSBoundParameters.Remove('IndexingPolicy')
+    }
+
+    if ($PSBoundParameters.ContainsKey('DefaultTimeToLive'))
+    {
+        $bodyObject += @{
+            defaultTtl = $DefaultTimeToLive
+        }
+        $null = $PSBoundParameters.Remove('DefaultTimeToLive')
     }
 
     $body = ConvertTo-Json -InputObject $bodyObject -Depth 10
@@ -545,36 +558,68 @@ function Set-CosmosDbCollection
         [System.String]
         $Id,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [CosmosDB.IndexingPolicy.Policy]
-        $IndexingPolicy
+        $IndexingPolicy,
+
+        [Parameter()]
+        [ValidateRange(-1,2147483647)]
+        [System.Int32]
+        $DefaultTimeToLive
     )
 
     $headers = @{}
-
-    $null = $PSBoundParameters.Remove('Id')
-    $null = $PSBoundParameters.Remove('IndexingPolicy')
 
     $bodyObject = @{
         id = $id
     }
 
-    $bodyObject += @{
-        indexingPolicy = $IndexingPolicy
-    }
+    $indexingPolicyIncluded = $PSBoundParameters.ContainsKey('IndexingPolicy')
+    $defaultTimeToLiveIncluded = $PSBoundParameters.ContainsKey('DefaultTimeToLive')
+
+    $null = $PSBoundParameters.Remove('IndexingPolicy')
+    $null = $PSBoundParameters.Remove('DefaultTimeToLive')
 
     <#
         The partition key on an existing collection can not be changed.
         So to ensure an error does not occur, get the current collection
         and pass the existing partition key in the body.
     #>
-    $existingCollection = Get-CosmosDbCollection @PSBoundParameters -Id $Id
+    $existingCollection = Get-CosmosDbCollection @PSBoundParameters
+
+    $null = $PSBoundParameters.Remove('Id')
+
+    if ($indexingPolicyIncluded)
+    {
+        $bodyObject += @{
+            indexingPolicy = $IndexingPolicy
+        }
+    }
+    else
+    {
+        $bodyObject += @{
+            indexingPolicy = $existingCollection.indexingPolicy
+        }
+    }
 
     if ($existingCollection.partitionKey)
     {
         $bodyObject += @{
             partitionKey = $existingCollection.partitionKey
+        }
+    }
+
+    if ($defaultTimeToLiveIncluded)
+    {
+        $bodyObject += @{
+            defaultTtl = $DefaultTimeToLive
+        }
+    }
+    elseif ($existingCollection.defaultTtl)
+    {
+        $bodyObject += @{
+            defaultTtl = $existingCollection.defaultTtl
         }
     }
 

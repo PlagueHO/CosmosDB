@@ -18,7 +18,7 @@ Create a new collection in a CosmosDB database.
 ```powershell
 New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>]
- [-IndexingPolicy <Policy>] [<CommonParameters>]
+ [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [<CommonParameters>]
 ```
 
 ### Account
@@ -26,7 +26,7 @@ New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <Strin
 ```powershell
 New-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>]
- [-IndexingPolicy <Policy>] [<CommonParameters>]
+ [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -51,6 +51,15 @@ PS C:\> New-CosmosDbCollection -Context $cosmosDbContext -Id 'PartitionedCollect
 
 Create a collection in the database with the partition key 'account' and
 the offer throughput of 50000 RU/s.
+
+### Example 3
+
+```powershell
+PS C:\> New-CosmosDbCollection -Context $cosmosDbContext -Id 'PartitionedCollection' -DefaultTimeToLive 3600
+```
+
+Create a collection in the database with the a default time to live of 3600
+seconds.
 
 ## PARAMETERS
 
@@ -212,6 +221,24 @@ New-CosmosDbCollectionIndexingPolicy function.
 
 ```yaml
 Type: Policy
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DefaultTimeToLive
+
+Setting this value to a positive integer will enable the
+time to live on all documents in this collection. If this is
+set to -1 then the default time to live will be infinite.
+
+```yaml
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
