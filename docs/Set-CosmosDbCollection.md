@@ -17,14 +17,14 @@ Update an existing collection in a CosmosDB database.
 
 ```powershell
 Set-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -Id <String> [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [<CommonParameters>]
+ -Id <String> [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [-RemoveDefaultTimeToLive <Switch>] [<CommonParameters>]
 ```
 
 ### Account
 
 ```powershell
 Set-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -Id <String> [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [<CommonParameters>]
+ -Id <String> [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [-RemoveDefaultTimeToLive <Switch>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -54,6 +54,15 @@ PS C:\> Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollecti
 
 Update a collection in the database with the a new default time to live
 of 7200 seconds.
+
+### Example 3
+
+```powershell
+PS C:\> Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -RemoveDefaultTimeToLive
+```
+
+Update a collection in the database by removing the default time to live
+setting.
 
 ## PARAMETERS
 
@@ -179,6 +188,25 @@ set to -1 then the default time to live will be infinite.
 
 ```yaml
 Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -RemoveDefaultTimeToLive
+
+If this switch is set then the default time to live
+setting on the collection will be removed if it is set.
+This switch should not be set if the DefaultTimeToLive
+parameter is specified.
+
+```yaml
+Type: Switch
 Parameter Sets: (All)
 Aliases:
 

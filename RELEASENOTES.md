@@ -1,5 +1,12 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+July 25, 2018
+
+- Added `RemoveDefaultTimeToLive` switch parameter to `Set-CosmosDbCollection`
+  to allow removal of a default time to live setting on a collection - fixes [Issue #144](https://github.com/PlagueHO/CosmosDB/issues/144)
+
 ## What is New in CosmosDB 2.1.3.528
 
 July 12, 2018
