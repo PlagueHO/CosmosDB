@@ -566,8 +566,19 @@ function Set-CosmosDbCollection
         [Parameter()]
         [ValidateRange(-1,2147483647)]
         [System.Int32]
-        $DefaultTimeToLive
+        $DefaultTimeToLive,
+
+        [Parameter()]
+        [Switch]
+        $RemoveDefaultTimeToLive
     )
+
+    if ($PSBoundParameters.ContainsKey('DefaultTimeToLive') -and $RemoveDefaultTimeToLive.IsPresent)
+    {
+        New-CosmosDbInvalidArgumentException `
+            -Message $LocalizedData.ErrorSetCollectionRemoveDefaultTimeToLiveConflict `
+            -ArgumentName 'RemoveDefaultTimeToLive'
+    }
 
     $headers = @{}
 
@@ -580,6 +591,7 @@ function Set-CosmosDbCollection
 
     $null = $PSBoundParameters.Remove('IndexingPolicy')
     $null = $PSBoundParameters.Remove('DefaultTimeToLive')
+    $null = $PSBoundParameters.Remove('RemoveDefaultTimeToLive')
 
     <#
         The partition key on an existing collection can not be changed.
@@ -616,7 +628,7 @@ function Set-CosmosDbCollection
             defaultTtl = $DefaultTimeToLive
         }
     }
-    elseif ($existingCollection.defaultTtl)
+    elseif ($existingCollection.defaultTtl -and -not $RemoveDefaultTimeToLive)
     {
         $bodyObject += @{
             defaultTtl = $existingCollection.defaultTtl
