@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.1.4.536
 
 - Added `RemoveDefaultTimeToLive` switch parameter to `Set-CosmosDbCollection`
   to allow removal of a default time to live setting on a collection - fixes [Issue #144](https://github.com/PlagueHO/CosmosDB/issues/144)
