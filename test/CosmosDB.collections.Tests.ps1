@@ -770,12 +770,18 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter $invokecosmosdbrequest_parameterfilter `
-                -MockWith { $script:testGetCollectionResultSingle }
+                -MockWith {
+                    $script:testGetCollectionResultSingle
+                }
 
             Mock `
                 -CommandName Get-CosmosDbCollection `
                 -ParameterFilter $getcosmosdbcollection_parameterfilter `
-                -MockWith { @{ partitionKey = $script:testPartitionKey } }
+                -MockWith {
+                    @{
+                        partitionKey = $script:testPartitionKey
+                    }
+                }
 
             It 'Should not throw exception' {
                 $setCosmosDbCollectionParameters = @{
@@ -787,6 +793,7 @@ InModuleScope CosmosDB {
 
                 { $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters } | Should -Not -Throw
             }
+
             It 'Should return expected result' {
                 $script:result.id | Should -Be $script:testCollection1
             }
@@ -801,6 +808,85 @@ InModuleScope CosmosDB {
                     -CommandName Get-CosmosDbCollection `
                     -ParameterFilter $getcosmosdbcollection_parameterfilter `
                     -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id and RemoveDefaultTimeToLive parameter on a collection with a partition key' {
+            $script:result = $null
+
+            $invokecosmosdbrequest_parameterfilter = {
+                $Method -eq 'Put' -and `
+                    $ResourceType -eq 'colls' -and `
+                    $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
+                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{
+                        id = $script:testCollection1
+                        indexingPolicy = $script:testIndexingPolicy
+                        partitionKey = $script:testPartitionKey
+                    } )
+            }
+            $getcosmosdbcollection_parameterfilter = {
+                $Id -eq $script:testCollection1
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                -MockWith {
+                    $script:testGetCollectionResultSingle
+                }
+
+            Mock `
+                -CommandName Get-CosmosDbCollection `
+                -ParameterFilter $getcosmosdbcollection_parameterfilter `
+                -MockWith {
+                    @{
+                        partitionKey = $script:testPartitionKey
+                        defaultTtl = $script:testDefaultTimeToLive
+                    }
+                }
+
+            It 'Should not throw exception' {
+                $setCosmosDbCollectionParameters = @{
+                    Context                 = $script:testContext
+                    Id                      = $script:testCollection1
+                    IndexingPolicy          = $script:testIndexingPolicy
+                    RemoveDefaultTimeToLive = $true
+                }
+
+                { $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testCollection1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                    -Exactly -Times 1
+
+                Assert-MockCalled `
+                    -CommandName Get-CosmosDbCollection `
+                    -ParameterFilter $getcosmosdbcollection_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id and DefaultTimeToLive and RemoveDefaultTimeToLive parameter' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $setCosmosDbCollectionParameters = @{
+                    Context                 = $script:testContext
+                    Id                      = $script:testCollection1
+                    DefaultTimeToLive       = $script:testDefaultTimeToLive
+                    RemoveDefaultTimeToLive = $true
+                }
+
+                $errorMessage = $LocalizedData.ErrorSetCollectionRemoveDefaultTimeToLiveConflict
+
+                { $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters } | Should -Throw $errorMessage
             }
         }
     }

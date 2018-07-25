@@ -1096,7 +1096,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context "Update an existing collection changing the DefaultTimeToLive set to $($script:testDefaultTimeToLive + 1)" {
+    Context "Update an existing collection changing the DefaultTimeToLive to $($script:testDefaultTimeToLive + 1)" {
         It 'Should not throw an exception' {
             {
                 $script:result = Set-CosmosDbCollection `
@@ -1124,13 +1124,13 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context "Update an existing collection changing the DefaultTimeToLive set to $($script:testDefaultTimeToLive + 1)" {
+    Context "Update an existing collection removing the DefaultTimeToLive" {
         It 'Should not throw an exception' {
             {
                 $script:result = Set-CosmosDbCollection `
                     -Context $script:testContext `
                     -Id $script:testCollection `
-                    -DefaultTimeToLive ($script:testDefaultTimeToLive + 1) `
+                    -RemoveDefaultTimeToLive `
                     -Verbose
             } | Should -Not -Throw
         }
@@ -1148,7 +1148,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Id | Should -Be $script:testCollection
             $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
             $script:result.indexingPolicy.automatic | Should -Be $true
-            $script:result.defaultTtl | Should -Be ($script:testDefaultTimeToLive + 1)
+            $script:result.defaultTtl | Should -BeNullOrEmpty
         }
     }
 

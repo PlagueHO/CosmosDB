@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.1.3.528'
+    ModuleVersion     = '2.1.4.528'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -177,6 +177,13 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+July 25, 2018
+
+- Added `RemoveDefaultTimeToLive` switch parameter to `Set-CosmosDbCollection`
+  to allow removal of a default time to live setting on a collection - fixes [Issue #144](https://github.com/PlagueHO/CosmosDB/issues/144)
+
 ## What is New in CosmosDB 2.1.3.528
 
 July 12, 2018
@@ -331,37 +338,6 @@ March 8, 2018
 - Converted help to MAML file CosmosDB-help.xml.
 - Updated AppVeyor build to generate MAML help.
 - Added more README.MD badges.
-
-## What is New in CosmosDB 2.0.5.216
-
-March 3, 2018
-
-- Added `*-CosmosDbOffer` cmdlets.
-
-## What is New in CosmosDB 2.0.4.202
-
-February 27, 2018
-
-- Fixed bug in `Get-CosmosDbDocument` when looking up a document in
-  a partitioned collection by adding a `PartitionKey` parameter.
-- Added `Upsert` parameter to `New-CosmosDbDocument` to enable updating
-  a document if it exists.
-- Fixed bug in `New-CosmosDbDocument` when adding document to
-  a partitioned collection but no partition key is specified - See
-  [Issue #48](https://github.com/PlagueHO/CosmosDB/issues/48).
-- Fixed bug in `Set-CosmosDbDocument` when updating a document in
-  a partitioned collection.
-- Fixed bug in `Remove-CosmosDbDocument` when deleting a document in
-  a partitioned collection.
-- Added check to `New-CosmosDbCollection` to ensure `PartitionKey`
-  parameter is passed if `OfferThroughput` is greater than 10000.
-
-## What is New in CosmosDB 2.0.3.190
-
-February 25, 2018
-
-- Added support for creating custom indexing policies when
-  creating a new collection.
             '
         } # End of PSData hashtable
     } # End of PrivateData hashtable
