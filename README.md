@@ -3,6 +3,7 @@
 [![PowerShell Gallery - CosmosDB](https://img.shields.io/badge/PowerShell%20Gallery-CosmosDB-blue.svg)](https://www.powershellgallery.com/packages/CosmosDB)
 [![Minimum Supported PowerShell Version](https://img.shields.io/badge/PowerShell-4.0-blue.svg)](https://github.com/PlagueHO/CosmosDB)
 [![Minimum Supported PowerShell Core Version](https://img.shields.io/badge/PowerShell_Core-6.0-blue.svg)](https://github.com/PlagueHO/CosmosDB)
+[![Join the chat at https://gitter.im/PlagueHO/CosmosDB](https://badges.gitter.im/PlagueHO/CosmosDB.svg)](https://gitter.im/PlagueHO/CosmosDB?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 # CosmosDB PowerShell Module
 
