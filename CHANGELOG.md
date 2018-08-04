@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.1.5.548
 
 - Changed references to `CosmosDB` to `Cosmos DB` in documentation - fixes [Issue #147](https://github.com/PlagueHO/CosmosDB/issues/147)
 
