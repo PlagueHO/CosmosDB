@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Delete a database from a CosmosDB account.
+Delete a database from a Cosmos DB account.
 
 ## SYNTAX
 
@@ -29,7 +29,7 @@ Remove-CosmosDbDatabase -Account <String> [-Key <SecureString>] [-KeyType <Strin
 
 ## DESCRIPTION
 
-This cmdlet will delete a database in CosmosDB.
+This cmdlet will delete a database in Cosmos DB.
 
 ## EXAMPLES
 
@@ -39,13 +39,13 @@ This cmdlet will delete a database in CosmosDB.
 PS C:\> New-CosmosDbDatabase -Context $cosmosDbContext -Id 'AnotherDatabase'
 ```
 
-Delete the database 'AnotherDatabase' the CosmosDB account.
+Delete the database 'AnotherDatabase' the Cosmos DB account.
 
 ## PARAMETERS
 
 ### -Context
 
-This is an object containing the context information of the CosmosDB database
+This is an object containing the context information of the Cosmos DB database
 that will be deleted. It should be created by \`New-CosmosDbContext\`.
 
 ```yaml
@@ -62,7 +62,7 @@ Accept wildcard characters: False
 
 ### -Account
 
-The account name of the CosmosDB to access.
+The account name of the Cosmos DB to access.
 
 ```yaml
 Type: String
@@ -78,7 +78,7 @@ Accept wildcard characters: False
 
 ### -Key
 
-The key to be used to access this CosmosDB.
+The key to be used to access this Cosmos DB.
 
 ```yaml
 Type: SecureString
@@ -94,7 +94,7 @@ Accept wildcard characters: False
 
 ### -KeyType
 
-The type of key that will be used to access ths CosmosDB.
+The type of key that will be used to access ths Cosmos DB.
 
 ```yaml
 Type: String

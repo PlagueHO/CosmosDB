@@ -15,7 +15,7 @@ If you'd like to contribute to this project, there are several different methods
 
 Before working on any enhancement, submit an Issue describing the proposed enhancement. Someone may already be working on the same thing. It also allows other contributors to comment on the proposal.
 
-Alternately, feel free to post on the [CosmosDB Gitter Chat at https://gitter.im/PlagueHO/CosmosDB](https://gitter.im/PlagueHO/CosmosDB). This is also a great place to just say Hi, ask any questions you might have or get help.
+Alternately, feel free to post on the [CosmosDB PowerShell Module Gitter Chat at https://gitter.im/PlagueHO/CosmosDB](https://gitter.im/PlagueHO/CosmosDB). This is also a great place to just say Hi, ask any questions you might have or get help.
 
 If you're new to Git revision control, and the GitHub service, it's suggested that you learn about some basic Git fundamentals, and take an overview of the GitHub service offerings.
 
@@ -50,10 +50,10 @@ For more information, learn about our [branch structure](#branch-structure).
 - When you create a pull request, fill out the description with a summary of what's included in your changes.
   If the changes are related to an existing GitHub issue, please reference the issue in pull request title or description (e.g. ```Closes #11```). See [this](https://help.github.com/articles/closing-issues-via-commit-messages/) for more details.
 
-- Include an update in the [/CosmosDB/Docs/ChangeList.md](/CosmosDB/Docs/ChangeList.md) file in your pull request to reflect changes for future versions changelog. Put them in `Unreleased` section (create one if doesn't exist). This would simplify the release process for Maintainers. Example:
+- Include an update in the [/CHANGELOG.md](/CHANGELOG.md) file in your pull request to reflect changes for future versions changelog. Put them in `Unreleased` section (create one if doesn't exist). This would simplify the release process for Maintainers. Example:
 
   ```
-  ### Unreleased
+  ## Unreleased
 
   - Added support for `-FriendlyName` in `Update-xDscResource`.
   ```

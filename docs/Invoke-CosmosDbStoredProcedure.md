@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Execute a new stored procedure for a collection in a CosmosDB database.
+Execute a new stored procedure for a collection in a Cosmos DB database.
 
 ## SYNTAX
 
@@ -32,7 +32,7 @@ Invoke-CosmosDbStoredProcedure -Account <String> [-KeyType <String>] [-Key <Secu
 ## DESCRIPTION
 
 This cmdlet will execute a stored procedure contained in a collection
-in a CosmosDB.
+in a Cosmos DB.
 
 ## EXAMPLES
 
@@ -42,7 +42,8 @@ in a CosmosDB.
 PS C:\> Invoke-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld'
 ```
 
-Execute a stored procedure called 'spHelloWorld' in a collection in the database.
+Execute a stored procedure called 'spHelloWorld' in a collection in the
+database.
 
 ### Example 2
 
@@ -50,13 +51,14 @@ Execute a stored procedure called 'spHelloWorld' in a collection in the database
 PS C:\> Invoke-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureParameters @('PowerShell')
 ```
 
-Execute a stored procedure called 'spHelloWorld' passing in the parameter 'PowerShell' in a collection in the database.
+Execute a stored procedure called 'spHelloWorld' passing in the parameter
+'PowerShell' in a collection in the database.
 
 ## PARAMETERS
 
 ### -Context
 
-This is an object containing the context information of the CosmosDB database
+This is an object containing the context information of the Cosmos DB database
 that will be deleted. It should be created by \`New-CosmosDbContext\`.
 
 ```yaml
@@ -73,7 +75,7 @@ Accept wildcard characters: False
 
 ### -Account
 
-The account name of the CosmosDB to access.
+The account name of the Cosmos DB to access.
 
 ```yaml
 Type: String
@@ -89,7 +91,7 @@ Accept wildcard characters: False
 
 ### -KeyType
 
-The type of key that will be used to access ths CosmosDB.
+The type of key that will be used to access ths Cosmos DB.
 
 ```yaml
 Type: String
@@ -105,7 +107,7 @@ Accept wildcard characters: False
 
 ### -Key
 
-The key to be used to access this CosmosDB.
+The key to be used to access this Cosmos DB.
 
 ```yaml
 Type: SecureString
@@ -121,7 +123,7 @@ Accept wildcard characters: False
 
 ### -Database
 
-The name of the database to access in the CosmosDB account.
+The name of the database to access in the Cosmos DB account.
 
 ```yaml
 Type: String
