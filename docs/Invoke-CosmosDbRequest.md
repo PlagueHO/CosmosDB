@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Execute a new request to a CosmosDB REST endpoint.
+Execute a new request to a Cosmos DB REST endpoint.
 
 ## SYNTAX
 
@@ -31,7 +31,7 @@ Invoke-CosmosDbRequest -Account <String> [-Database <String>] [-Key <SecureStrin
 
 ## DESCRIPTION
 
-Invokes a REST request against the specified CosmosDB
+Invokes a REST request against the specified Cosmos DB
 context or account.
 
 ## EXAMPLES
@@ -42,7 +42,7 @@ context or account.
 PS C:\> $result = Invoke-CosmosDbRequest -Context $context -ResourceType 'colls' -ResourcePath 'dbs/mydatabase'
 ```
 
-Execute a request to the CosmosDB specified by the context
+Execute a request to the Cosmos DB specified by the context
 $context to Get the collections in the database mydatabase.
 
 ### Example 2
@@ -51,7 +51,7 @@ $context to Get the collections in the database mydatabase.
 PS C:\> $result = Invoke-CosmosDbRequest -Context $context -ResourceType 'docs' -ResourcePath 'dbs/mydatabase/colls/mycollection/docs/ac12345' -Method 'Put' -Body $body
 ```
 
-Execute a request to the CosmosDB specified by the context
+Execute a request to the Cosmos DB specified by the context
 $context to Put document 'ac12345' into collection mycollection
 in database mydatabase.
 
@@ -59,7 +59,7 @@ in database mydatabase.
 
 ### -Context
 
-This is an object containing the context information of the CosmosDB database
+This is an object containing the context information of the Cosmos DB database
 that will be deleted. It should be created by \`New-CosmosDbContext\`.
 
 ```yaml
@@ -76,7 +76,7 @@ Accept wildcard characters: False
 
 ### -Account
 
-The account name of the CosmosDB to access.
+The account name of the Cosmos DB to access.
 
 ```yaml
 Type: String
@@ -111,7 +111,7 @@ Accept wildcard characters: False
 
 ### -Key
 
-The key to be used to access this CosmosDB.
+The key to be used to access this Cosmos DB.
 
 ```yaml
 Type: SecureString
@@ -127,7 +127,7 @@ Accept wildcard characters: False
 
 ### -KeyType
 
-The type of key that will be used to access ths CosmosDB.
+The type of key that will be used to access ths Cosmos DB.
 
 ```yaml
 Type: String
@@ -143,7 +143,7 @@ Accept wildcard characters: False
 
 ### -Method
 
-This is the Rest API method that will be made to the CosmosDB.
+This is the Rest API method that will be made to the Cosmos DB.
 
 ```yaml
 Type: String
@@ -159,7 +159,7 @@ Accept wildcard characters: False
 
 ### -ResourceType
 
-This is type of resource being accessed in the CosmosDB.
+This is type of resource being accessed in the Cosmos DB.
 For example: users, colls
 
 ```yaml
@@ -177,9 +177,9 @@ Accept wildcard characters: False
 ### -ResourcePath
 
 This is the path to the resource that should be accessed in
-the CosmosDB.
-This will be appended to the path after the
-resourceId in the URI that will be used to access the resource.
+the Cosmos DB.
+This will be appended to the path after the resourceId in the URI
+that will be used to access the resource.
 
 ```yaml
 Type: String

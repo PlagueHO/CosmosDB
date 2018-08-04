@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Changed references to `CosmosDB` to `Cosmos DB` in documentation - fixes  [Issue #147](https://github.com/PlagueHO/CosmosDB/issues/147)
+
 ## 2.1.4.536
 
 - Added `RemoveDefaultTimeToLive` switch parameter to `Set-CosmosDbCollection`

@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.1.4.536'
+    ModuleVersion     = '2.1.5.536'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -177,6 +177,12 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+August 4, 2018
+
+- Changed references to `CosmosDB` to `Cosmos DB` in documentation - fixes [Issue #147](https://github.com/PlagueHO/CosmosDB/issues/147)
+
 ## What is New in CosmosDB 2.1.4.536
 
 July 25, 2018

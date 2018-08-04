@@ -3,6 +3,7 @@
 [![PowerShell Gallery - CosmosDB](https://img.shields.io/badge/PowerShell%20Gallery-CosmosDB-blue.svg)](https://www.powershellgallery.com/packages/CosmosDB)
 [![Minimum Supported PowerShell Version](https://img.shields.io/badge/PowerShell-4.0-blue.svg)](https://github.com/PlagueHO/CosmosDB)
 [![Minimum Supported PowerShell Core Version](https://img.shields.io/badge/PowerShell_Core-6.0-blue.svg)](https://github.com/PlagueHO/CosmosDB)
+[![Join the chat at https://gitter.im/PlagueHO/CosmosDB](https://badges.gitter.im/PlagueHO/CosmosDB.svg)](https://gitter.im/PlagueHO/CosmosDB?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 # CosmosDB PowerShell Module
 
@@ -22,7 +23,7 @@
   - [Working with Contexts](#working-with-contexts)
     - [Create a Context specifying the Key Manually](#create-a-context-specifying-the-key-manually)
     - [Use CosmosDB Module to Retrieve Key from Azure Management Portal](#use-cosmosdb-module-to-retrieve-key-from-azure-management-portal)
-    - [Create a Context for a CosmosDB Emulator](#create-a-context-for-a-cosmosdb-emulator)
+    - [Create a Context for a Cosmos DB Emulator](#create-a-context-for-a-cosmos-db-emulator)
     - [Create a Context from Resource Authorization Tokens](#create-a-Context-from-resource-authorization-tokens)
   - [Working with Databases](#working-with-databases)
   - [Working with Offers](#working-with-offers)
@@ -47,7 +48,7 @@
 
 This PowerShell module provides cmdlets for working with Azure Cosmos DB.
 
-The CosmosDB PowerShell module enables management of:
+The _CosmosDB PowerShell module_ enables management of:
 
 - [Attachments](#working-with-attachments)
 - [Collections](#working-with-collections)
@@ -60,9 +61,9 @@ The CosmosDB PowerShell module enables management of:
 - [User Defined Functions](#working-with-user-defined-functions)
 - [Users](#working-with-users)
 
-The module uses the CosmosDB (DocumentDB) Rest APIs.
+The module uses the Cosmos DB (DocumentDB) Rest APIs.
 
-For more information on the CosmosDB Rest APIs, see [this link](https://docs.microsoft.com/en-us/rest/api/documentdb/restful-interactions-with-documentdb-resources).
+For more information on the Cosmos DB Rest APIs, see [this link](https://docs.microsoft.com/en-us/rest/api/documentdb/restful-interactions-with-documentdb-resources).
 
 ## Requirements
 
@@ -90,12 +91,12 @@ Install-Module -Name CosmosDB
 
 The easiest way to use this module is to first create a context
 object using the `New-CosmosDbContext` cmdlet which you can then
-use to pass to the other CosmosDB cmdlets in the module.
+use to pass to the other Cosmos DB cmdlets in the module.
 
 To create the context object you will either need access to the
-primary primary or secondary keys from your CosmosDB account or allow
-the CosmosDB module to retrieve the keys directly from the Azure
-management portal for you.
+primary primary or secondary keys from your Cosmos DB account or allow
+the _CosmosDB Powershell module_ to retrieve the keys directly from
+the Azure management portal for you.
 
 ### Working with Contexts
 
@@ -107,7 +108,7 @@ First convert your key into a secure string:
 $primaryKey = ConvertTo-SecureString -String 'GFJqJesi2Rq910E0G7P4WoZkzowzbj23Sm9DUWFX0l0P8o16mYyuaZBN00Nbtj9F1QQnumzZKSGZwknXGERrlA==' -AsPlainText -Force
 ```
 
-Use the key secure string, Azure CosmosDB account name and database to
+Use the key secure string, Azure Cosmos DB account name and database to
 create a context variable:
 
 ```powershell
@@ -116,9 +117,9 @@ $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyD
 
 #### Use CosmosDB Module to Retrieve Key from Azure Management Portal
 
-To create a context object so that the CosmosDB module retrieves the
-primary or secondary key from the Azure Management Portal, use the
-following command:
+To create a context object so that the _CosmosDB PowerShell module_
+retrieves the primary or secondary key from the Azure Management
+Portal, use the following command:
 
 ```powershell
 $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -ResourceGroup 'MyCosmosDbResourceGroup' -MasterKeyType 'SecondaryMasterKey'
@@ -126,15 +127,15 @@ $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyD
 
 _Note: if PowerShell is not connected to Azure then an interactive
 Azure login will be initiated. If PowerShell is already connected to
-an account that doesn't contain the CosmosDB you wish to connect to then
+an account that doesn't contain the Cosmos DB you wish to connect to then
 you will first need to connect to the correct account using the
 `Add-AzureRmAccount` cmdlet._
 
-#### Create a Context for a CosmosDB Emulator
+#### Create a Context for a Cosmos DB Emulator
 
-Microsoft provides a [CosmosDB emulator](https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator) that
+Microsoft provides a [Cosmos DB emulator](https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator) that
 you can run locally to enable testing and debugging scenarios. To create
-a context for a CosmosDB emulator installed on the localhost use the
+a context for a Cosmos DB emulator installed on the localhost use the
 following command:
 
 ```powershell
@@ -149,19 +150,19 @@ Authorization Tokens_.
 
 ### Working with Databases
 
-Create a new database in the CosmosDB account:
+Create a new database in the Cosmos DB account:
 
 ```powershell
 New-CosmosDbDatabase -Context $cosmosDbContext -Id 'AnotherDatabase'
 ```
 
-Get a list of databases in the CosmosDB account:
+Get a list of databases in the Cosmos DB account:
 
 ```powershell
 Get-CosmosDbDatabase -Context $cosmosDbContext
 ```
 
-Get the specified database from the CosmosDB account:
+Get the specified database from the Cosmos DB account:
 
 ```powershell
 Get-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase'
@@ -169,13 +170,13 @@ Get-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase'
 
 ### Working with Offers
 
-Get a list of offers in the CosmosDB account:
+Get a list of offers in the Cosmos DB account:
 
 ```powershell
 Get-CosmosDbOffer -Context $cosmosDbContext
 ```
 
-Query the offers in the CosmosDB account:
+Query the offers in the Cosmos DB account:
 
 ```powershell
 Get-CosmosDbOffer -Context $cosmosDbContext -Query 'SELECT * FROM root WHERE (root["id"] = "lyiu")'
@@ -233,10 +234,10 @@ Remove-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection'
 You can create a collection with a custom indexing policy by assembling
 an Indexing Policy object using the functions:
 
-- New-CosmosDbCollectionIncludedPathIndex
-- New-CosmosDbCollectionIncludedPath
-- New-CosmosDbCollectionExcludedPath
-- New-CosmosDbCollectionIndexingPolicy
+- `New-CosmosDbCollectionIncludedPathIndex`
+- `New-CosmosDbCollectionIncludedPath`
+- `New-CosmosDbCollectionExcludedPath`
+- `New-CosmosDbCollectionIndexingPolicy`
 
 For example, to create a string range, a number range index and a point
 spatial index on the '/*' path using consistent indexing mode with no
@@ -251,7 +252,7 @@ $indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -Indexin
 New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'account' -IndexingPolicy $indexingPolicy
 ```
 
-For more information on how CosmosDB indexes documents, see [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/indexing-policies).
+For more information on how Cosmos DB indexes documents, see [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/indexing-policies).
 
 #### Update an existing Collection with a new Indexing Policy
 
@@ -464,7 +465,7 @@ The typical pattern for using _resource authorization tokens_ is to
 have a **token broker app** that provides some form of user authentication
 and then returns the _resource authorization tokens_ assigned to that
 user. This removes the requirement for the user to be given access to
-the **master** key for the CosmosDB database.
+the **master** key for the Cosmos DB database.
 
 For more information on using _resource authorization tokens_ or the
 **token broker app* pattern, please see [this document](https://docs.microsoft.com/en-us/azure/cosmos-db/secure-access-to-data#resource-tokens).
@@ -784,11 +785,11 @@ document first. We would be very grateful of any contributions.
 
 ## Cmdlets
 
-A list of Cmdlets in the CosmosDB module can be found by running the
+A list of Cmdlets in the _CosmosDB PowerShell module_ can be found by running the
 following PowerShell commands:
 
 ```PowerShell
-Import-Module CosmosDB
+Import-Module -Name CosmosDB
 Get-Command -Module CosmosDB
 ```
 

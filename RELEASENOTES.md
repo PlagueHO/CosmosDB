@@ -1,5 +1,11 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+August 4, 2018
+
+- Changed references to `CosmosDB` to `Cosmos DB` in documentation - fixes [Issue #147](https://github.com/PlagueHO/CosmosDB/issues/147)
+
 ## What is New in CosmosDB 2.1.4.536
 
 July 25, 2018
