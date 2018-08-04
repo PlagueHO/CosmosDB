@@ -16,11 +16,11 @@ This PowerShell module provides cmdlets for working with Azure Cosmos DB.
 ### [ConvertTo-CosmosDbTokenDateString](ConvertTo-CosmosDbTokenDateString.md)
 
 Convert a DateTime object into the format required for use
-in a CosmosDB Authorization Token and request header.
+in a Cosmos DB Authorization Token and request header.
 
 ### [Get-CosmosDbAttachment](Get-CosmosDbAttachment.md)
 
-Return the attachments for a CosmosDB document.
+Return the attachments for a Cosmos DB document.
 
 ### [Get-CosmosDbAttachmentResourcePath](Get-CosmosDbAttachmentResourcePath.md)
 
@@ -28,7 +28,7 @@ Return the resource path for an attachment object.
 
 ### [Get-CosmosDbCollection](Get-CosmosDbCollection.md)
 
-Return the collections in a CosmosDB database.
+Return the collections in a Cosmos DB database.
 
 ### [Get-CosmosDbCollectionResourcePath](Get-CosmosDbCollectionResourcePath.md)
 
@@ -36,7 +36,7 @@ Return the resource path for a collection object.
 
 ### [Get-CosmosDbDatabase](Get-CosmosDbDatabase.md)
 
-Return the databases in a CosmosDB account.
+Return the databases in a Cosmos DB account.
 
 ### [Get-CosmosDbDatabaseResourcePath](Get-CosmosDbDatabaseResourcePath.md)
 
@@ -44,7 +44,7 @@ Return the resource path for a database object.
 
 ### [Get-CosmosDbDocument](Get-CosmosDbDocument.md)
 
-Return the documents for a CosmosDB database collection.
+Return the documents for a Cosmos DB database collection.
 
 ### [Get-CosmosDbDocumentResourcePath](Get-CosmosDbDocumentResourcePath.md)
 
@@ -52,7 +52,7 @@ Return the resource path for a document object.
 
 ### [Get-CosmosDbOffer](Get-CosmosDbOffer.md)
 
-Return the offers in a CosmosDB account.
+Return the offers in a Cosmos DB account.
 
 ### [Get-CosmosDbOfferResourcePath](Get-CosmosDbOfferResourcePath.md)
 
@@ -60,7 +60,7 @@ Return the resource path for a offer object.
 
 ### [Get-CosmosDbPermission](Get-CosmosDbPermission.md)
 
-Return the permissions for a CosmosDB database user.
+Return the permissions for a Cosmos DB database user.
 
 ### [Get-CosmosDbPermissionResourcePath](Get-CosmosDbPermissionResourcePath.md)
 
@@ -68,16 +68,16 @@ Return the resource path for a permission object.
 
 ### [Get-CosmosDbStoredProcedure](Get-CosmosDbStoredProcedure.md)
 
-Return the stored procedures for a CosmosDB database collection.
+Return the stored procedures for a Cosmos DB database collection.
 
 ### [Get-CosmosDbStoredProcedureResourcePath](Get-CosmosDbStoredProcedureResourcePath.md)
 
-Execute a new stored procedure for a collection in a CosmosDB
+Execute a new stored procedure for a collection in a Cosmos DB
 database.
 
 ### [Get-CosmosDbTrigger](Get-CosmosDbTrigger.md)
 
-Return the triggers for a CosmosDB database collection.
+Return the triggers for a Cosmos DB database collection.
 
 ### [Get-CosmosDbTriggerResourcePath](Get-CosmosDbTriggerResourcePath.md)
 
@@ -85,16 +85,16 @@ Return the resource path for a trigger object.
 
 ### [Get-CosmosDbUri](Get-CosmosDbUri.md)
 
-Return the URI of the CosmosDB that Rest APIs requests will
+Return the URI of the Cosmos DB that Rest APIs requests will
 be sent to.
 
 ### [Get-CosmosDbUser](Get-CosmosDbUser.md)
 
-Return the users in a CosmosDB database.
+Return the users in a Cosmos DB database.
 
 ### [Get-CosmosDbUserDefinedFunction](Get-CosmosDbUserDefinedFunction.md)
 
-Return the user defined functions for a CosmosDB database collection.
+Return the user defined functions for a Cosmos DB database collection.
 
 ### [Get-CosmosDbUserDefinedFunctionResourcePath](Get-CosmosDbUserDefinedFunctionResourcePath.md)
 
@@ -106,24 +106,24 @@ Return the resource path for a user object.
 
 ### [Invoke-CosmosDbRequest](Invoke-CosmosDbRequest.md)
 
-Execute a new request to a CosmosDB REST endpoint.
+Execute a new request to a Cosmos DB REST endpoint.
 
 ### [Invoke-CosmosDbStoredProcedure](Invoke-CosmosDbStoredProcedure.md)
 
-Execute a new stored procedure for a collection in a CosmosDB database.
+Execute a new stored procedure for a collection in a Cosmos DB database.
 
 ### [New-CosmosDbAttachment](New-CosmosDbAttachment.md)
 
-Create a new attachment for a document in a CosmosDB database.
+Create a new attachment for a document in a Cosmos DB database.
 
 ### [New-CosmosDbAuthorizationToken](New-CosmosDbAuthorizationToken.md)
 
 Create a new Authorization Token to be used with in a
-Rest API request to CosmosDB.
+Rest API request to Cosmos DB.
 
 ### [New-CosmosDbCollection](New-CosmosDbCollection.md)
 
-Create a new collection in a CosmosDB database.
+Create a new collection in a Cosmos DB database.
 
 ### [New-CosmosDbCollectionExcludedPath](New-CosmosDbCollectionExcludedPath.md)
 
@@ -148,15 +148,15 @@ New-CosmosDbCollection function.
 ### [New-CosmosDbContext](New-CosmosDbContext.md)
 
 Create a context object containing the information required
-to connect to a CosmosDB.
+to connect to a Cosmos DB.
 
 ### [New-CosmosDbDatabase](New-CosmosDbDatabase.md)
 
-Create a new database in a CosmosDB account.
+Create a new database in a Cosmos DB account.
 
 ### [New-CosmosDbDocument](New-CosmosDbDocument.md)
 
-Create a new document for a collection in a CosmosDB database.
+Create a new document for a collection in a Cosmos DB database.
 
 ### [New-CosmosDbInvalidArgumentException](New-CosmosDbInvalidArgumentException.md)
 
@@ -168,63 +168,63 @@ Creates and throws an invalid operation exception.
 
 ### [New-CosmosDbPermission](New-CosmosDbPermission.md)
 
-Create a new permission for a user in a CosmosDB database.
+Create a new permission for a user in a Cosmos DB database.
 
 ### [New-CosmosDbStoredProcedure](New-CosmosDbStoredProcedure.md)
 
-Create a new stored procedure for a collection in a CosmosDB database.
+Create a new stored procedure for a collection in a Cosmos DB database.
 
 ### [New-CosmosDbTrigger](New-CosmosDbTrigger.md)
 
-Create a new trigger for a collection in a CosmosDB database.
+Create a new trigger for a collection in a Cosmos DB database.
 
 ### [New-CosmosDbUser](New-CosmosDbUser.md)
 
-Create a new user in a CosmosDB database.
+Create a new user in a Cosmos DB database.
 
 ### [New-CosmosDbUserDefinedFunction](New-CosmosDbUserDefinedFunction.md)
 
-Create a new user defined function for a collection in a CosmosDB database.
+Create a new user defined function for a collection in a Cosmos DB database.
 
 ### [Remove-CosmosDbAttachment](Remove-CosmosDbAttachment.md)
 
-Delete an attachment from a CosmosDB document.
+Delete an attachment from a Cosmos DB document.
 
 ### [Remove-CosmosDbCollection](Remove-CosmosDbCollection.md)
 
-Delete a collection from a CosmosDB database.
+Delete a collection from a Cosmos DB database.
 
 ### [Remove-CosmosDbDatabase](Remove-CosmosDbDatabase.md)
 
-Delete a database from a CosmosDB account.
+Delete a database from a Cosmos DB account.
 
 ### [Remove-CosmosDbDocument](Remove-CosmosDbDocument.md)
 
-Delete a document from a CosmosDB collection.
+Delete a document from a Cosmos DB collection.
 
 ### [Remove-CosmosDbPermission](Remove-CosmosDbPermission.md)
 
-Delete a permission from a CosmosDB user.
+Delete a permission from a Cosmos DB user.
 
 ### [Remove-CosmosDbStoredProcedure](Remove-CosmosDbStoredProcedure.md)
 
-Delete a stored procedure from a CosmosDB collection.
+Delete a stored procedure from a Cosmos DB collection.
 
 ### [Remove-CosmosDbTrigger](Remove-CosmosDbTrigger.md)
 
-Delete a trigger from a CosmosDB collection.
+Delete a trigger from a Cosmos DB collection.
 
 ### [Remove-CosmosDbUser](Remove-CosmosDbUser.md)
 
-Delete a user from a CosmosDB database.
+Delete a user from a Cosmos DB database.
 
 ### [Remove-CosmosDbUserDefinedFunction](Remove-CosmosDbUserDefinedFunction.md)
 
-Delete a user defined function from a CosmosDB collection.
+Delete a user defined function from a Cosmos DB collection.
 
 ### [Set-CosmosDbAttachment](Set-CosmosDbAttachment.md)
 
-Update am attachment for a CosmosDB document.
+Update am attachment for a Cosmos DB document.
 
 ### [Set-CosmosDbAttachmentType](Set-CosmosDbAttachmentType.md)
 
@@ -243,7 +243,7 @@ returned by an API call.
 
 ### [Set-CosmosDbDocument](Set-CosmosDbDocument.md)
 
-Update a document from a CosmosDB collection.
+Update a document from a Cosmos DB collection.
 
 ### [Set-CosmosDbDocumentType](Set-CosmosDbDocumentType.md)
 
@@ -252,7 +252,7 @@ by an API call.
 
 ### [Set-CosmosDbOffer](Set-CosmosDbOffer.md)
 
-Update an existing offer in a CosmosDB database.
+Update an existing offer in a Cosmos DB database.
 
 ### [Set-CosmosDbOfferType](Set-CosmosDbOfferType.md)
 
@@ -266,7 +266,7 @@ returned by an API call.
 
 ### [Set-CosmosDbStoredProcedure](Set-CosmosDbStoredProcedure.md)
 
-Update a stored procedure from a CosmosDB collection.
+Update a stored procedure from a Cosmos DB collection.
 
 ### [Set-CosmosDbStoredProcedureType](Set-CosmosDbStoredProcedureType.md)
 
@@ -275,7 +275,7 @@ stored procedure returned by an API call.
 
 ### [Set-CosmosDbTrigger](Set-CosmosDbTrigger.md)
 
-Update a trigger from a CosmosDB collection.
+Update a trigger from a Cosmos DB collection.
 
 ### [Set-CosmosDbTriggerType](Set-CosmosDbTriggerType.md)
 
@@ -284,11 +284,11 @@ by an API call.
 
 ### [Set-CosmosDbUser](Set-CosmosDbUser.md)
 
-Set the user Id of an existing user in a CosmosDB database.
+Set the user Id of an existing user in a Cosmos DB database.
 
 ### [Set-CosmosDbUserDefinedFunction](Set-CosmosDbUserDefinedFunction.md)
 
-Update a user defined function from a CosmosDB collection.
+Update a user defined function from a Cosmos DB collection.
 
 ### [Set-CosmosDbUserDefinedFunctionType](Set-CosmosDbUserDefinedFunctionType.md)
 

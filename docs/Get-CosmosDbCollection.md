@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Return the collections in a CosmosDB database.
+Return the collections in a Cosmos DB database.
 
 ## SYNTAX
 
@@ -29,7 +29,7 @@ Get-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String
 
 ## DESCRIPTION
 
-This cmdlet will return the collections in a CosmosDB database.
+This cmdlet will return the collections in a Cosmos DB database.
 If the Id is specified then only the collection matching this
 Id will be returned, otherwise all collections will be returned.
 
@@ -55,7 +55,7 @@ Get a the MyNewCollection collection from a database.
 
 ### -Context
 
-This is an object containing the context information of the CosmosDB database
+This is an object containing the context information of the Cosmos DB database
 that will be deleted. It should be created by \`New-CosmosDbContext\`.
 
 ```yaml
@@ -72,7 +72,7 @@ Accept wildcard characters: False
 
 ### -Account
 
-The account name of the CosmosDB to access.
+The account name of the Cosmos DB to access.
 
 ```yaml
 Type: String
@@ -88,7 +88,7 @@ Accept wildcard characters: False
 
 ### -Key
 
-The key to be used to access this CosmosDB.
+The key to be used to access this Cosmos DB.
 
 ```yaml
 Type: SecureString
@@ -104,7 +104,7 @@ Accept wildcard characters: False
 
 ### -KeyType
 
-The type of key that will be used to access ths CosmosDB.
+The type of key that will be used to access ths Cosmos DB.
 
 ```yaml
 Type: String
@@ -120,7 +120,7 @@ Accept wildcard characters: False
 
 ### -Database
 
-The name of the database to access in the CosmosDB account.
+The name of the database to access in the Cosmos DB account.
 
 ```yaml
 Type: String

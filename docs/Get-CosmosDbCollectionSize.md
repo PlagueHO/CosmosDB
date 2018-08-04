@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Return the size/usage properties associated with a collection in a CosmosDB database.
+Return the size/usage properties associated with a collection in a Cosmos DB database.
 While not officially documented, the below contains the list of properties and their expected usage:
 
 collectionSize  : Size of the entire collection, including indexes.
@@ -38,7 +38,7 @@ Get-CosmosDbCollectionSize -Account <String> [-Key <SecureString>] [-KeyType <St
 
 ## DESCRIPTION
 
-This cmdlet will return the size properties of a given collection in a CosmosDB database.
+This cmdlet will return the size properties of a given collection in a Cosmos DB database.
 The Id for the collection must be passed.
 
 ## EXAMPLES
@@ -55,7 +55,7 @@ Get the usage properties associated with MyNewCollection collection from a datab
 
 ### -Context
 
-This is an object containing the context information of the CosmosDB database
+This is an object containing the context information of the Cosmos DB database
 containing the collection. It should be created by \`New-CosmosDbContext\`.
 
 ```yaml
@@ -72,7 +72,7 @@ Accept wildcard characters: False
 
 ### -Account
 
-The account name of the CosmosDB to access.
+The account name of the Cosmos DB to access.
 
 ```yaml
 Type: String
@@ -88,7 +88,7 @@ Accept wildcard characters: False
 
 ### -Key
 
-The key to be used to access this CosmosDB.
+The key to be used to access this Cosmos DB.
 
 ```yaml
 Type: SecureString
@@ -104,7 +104,7 @@ Accept wildcard characters: False
 
 ### -KeyType
 
-The type of key that will be used to access ths CosmosDB.
+The type of key that will be used to access ths Cosmos DB.
 
 ```yaml
 Type: String
@@ -120,7 +120,7 @@ Accept wildcard characters: False
 
 ### -Database
 
-The name of the database to access in the CosmosDB account.
+The name of the database to access in the Cosmos DB account.
 
 ```yaml
 Type: String

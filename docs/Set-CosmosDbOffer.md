@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Update an existing offer in a CosmosDB database.
+Update an existing offer in a Cosmos DB database.
 
 ## SYNTAX
 
@@ -31,7 +31,7 @@ Set-CosmosDbOffer -Account <String> [-Database <String>] [-Key <SecureString>] [
 
 ## DESCRIPTION
 
-This cmdlet will update an offer resource in CosmosDB.
+This cmdlet will update an offer resource in Cosmos DB.
 
 ## EXAMPLES
 
@@ -47,7 +47,7 @@ Update an existing V2 offer with the Id 'lyiu' to set a different throughput.
 
 ### -Context
 
-This is an object containing the context information of the CosmosDB database
+This is an object containing the context information of the Cosmos DB database
 that will be deleted. It should be created by \`New-CosmosDbContext\`.
 
 ```yaml
@@ -64,7 +64,7 @@ Accept wildcard characters: False
 
 ### -Account
 
-The account name of the CosmosDB to access.
+The account name of the Cosmos DB to access.
 
 ```yaml
 Type: String
@@ -80,7 +80,7 @@ Accept wildcard characters: False
 
 ### -Key
 
-The key to be used to access this CosmosDB.
+The key to be used to access this Cosmos DB.
 
 ```yaml
 Type: SecureString
@@ -96,7 +96,7 @@ Accept wildcard characters: False
 
 ### -KeyType
 
-The type of key that will be used to access ths CosmosDB.
+The type of key that will be used to access ths Cosmos DB.
 
 ```yaml
 Type: String

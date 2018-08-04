@@ -10,7 +10,7 @@ schema: 2.0.0
 ## SYNOPSIS
 
 Create a new Authorization Token to be used with in a
-Rest API request to CosmosDB.
+Rest API request to Cosmos DB.
 
 ## SYNTAX
 
@@ -23,7 +23,7 @@ New-CosmosDbAuthorizationToken [-Key] <SecureString> [[-KeyType] <String>] [[-Me
 ## DESCRIPTION
 
 This cmdlet is used to create an Authorization Token to
-pass in the header of a Rest API request to an Azure CosmosDB.
+pass in the header of a Rest API request to an Azure Cosmos DB.
 The Authorization token that is generated must match the
 other parameters in the header of the request that is passed.
 
@@ -36,14 +36,14 @@ PS C:\> $dttoken = ConvertTo-CosmosDbTokenDateString -Date (Get-Date)
 PS C:\> $token = New-CosmosDbAuthorizationToken -Key $Key -KeyType master -Method Get -ResourceType 'dbs' -ResourceId 'dbs/mydatabase' -Date ($dttoken)
 ```
 
-Generate a CosmosDB authorization token using a master key $Key
+Generate a Cosmos DB authorization token using a master key $Key
 for issuing a 'Get' request on the dbs (database) 'mydatabase'.
 
 ## PARAMETERS
 
 ### -Key
 
-The key to be used to access this CosmosDB.
+The key to be used to access this Cosmos DB.
 
 ```yaml
 Type: SecureString
@@ -59,7 +59,7 @@ Accept wildcard characters: False
 
 ### -KeyType
 
-The type of key that will be used to access ths CosmosDB.
+The type of key that will be used to access ths Cosmos DB.
 
 ```yaml
 Type: String
@@ -92,7 +92,7 @@ Accept wildcard characters: False
 
 ### -ResourceType
 
-This is type of resource being accessed in the CosmosDB.
+This is type of resource being accessed in the Cosmos DB.
 For example: users, colls
 
 ```yaml
@@ -109,7 +109,7 @@ Accept wildcard characters: False
 
 ### -ResourceId
 
-This is the resource Id of the CosmosDB being accessed.
+This is the resource Id of the Cosmos DB being accessed.
 This is in the format 'dbs/{database}' and must match the
 the value in the path of the URI that the request is made
 to.

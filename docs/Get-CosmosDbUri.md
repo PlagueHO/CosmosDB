@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Return the URI of the CosmosDB that Rest APIs requests will
+Return the URI of the Cosmos DB that Rest APIs requests will
 be sent to.
 
 ## SYNTAX
@@ -20,7 +20,7 @@ Get-CosmosDbUri [-Account] <String> [[-BaseUri] <String>] [<CommonParameters>]
 
 ## DESCRIPTION
 
-This cmdlet returns the root URI of the CosmosDB.
+This cmdlet returns the root URI of the Cosmos DB.
 
 ## EXAMPLES
 
@@ -30,7 +30,7 @@ This cmdlet returns the root URI of the CosmosDB.
 PS C:\> $uri = Get-CosmosDbUri -Account 'MyAzureCosmosDB'
 ```
 
-Generates the URI for accessing an Azure CosmosDB account.
+Generates the URI for accessing an Azure Cosmos DB account.
 
 ### EXAMPLE 2
 
@@ -38,14 +38,14 @@ Generates the URI for accessing an Azure CosmosDB account.
 PS C:\>$uri = Get-CosmosDbUri -Account 'MyAzureCosmosDB' -BaseUri 'localhost'
 ```
 
-Generates the URI for accessing a CosmosDB emulator account
+Generates the URI for accessing a Cosmos DB emulator account
 on the localhost.
 
 ## PARAMETERS
 
 ### -Account
 
-This is the name of the CosmosDB Account to get the URI
+This is the name of the Cosmos DB Account to get the URI
 for.
 
 ```yaml
@@ -62,7 +62,7 @@ Accept wildcard characters: False
 
 ### -BaseUri
 
-This is the base URI of the CosmosDB to use.
+This is the base URI of the Cosmos DB to use.
 If not specified it will default to 'documents.azure.com'.
 
 ```yaml
