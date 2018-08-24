@@ -16,6 +16,8 @@ InModuleScope CosmosDB {
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
     $script:testEmulatorKey = 'C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=='
+    $script:testURI = 'emulatoruri.local'
+    $script:testPort = '9999'
     $script:testBaseUri = 'documents.contoso.com'
     $script:testDate = (Get-Date -Year 2017 -Month 11 -Day 29 -Hour 10 -Minute 45 -Second 10)
     $script:testUniversalDate = 'Tue, 28 Nov 2017 21:45:10 GMT'
@@ -341,7 +343,7 @@ console.log("done");
             }
         }
 
-        Context 'When called with Emulator parameters' {
+        Context 'When called with Emulator switch' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -355,12 +357,62 @@ console.log("done");
             }
 
             It 'Should return expected result' {
-                $script:result.Account | Should -Be 'localhost'
+                $script:result.Account | Should -Be 'emulator'
                 $script:result.Database | Should -Be $script:testDatabase
                 $tempCredential = New-Object System.Net.NetworkCredential("TestUsername", $result.Key, "TestDomain")
                 $tempCredential.Password | Should -Be $script:testEmulatorKey
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.BaseUri | Should -Be ('https://localhost:8081/')
+            }
+        }
+
+        Context 'When called with Emulator switch and URI and Port specified' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Database = $script:testDatabase
+                    Emulator = $true
+                    Port     = $script:testPort
+                    URI      = $script:testURI
+                    Verbose  = $true
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be 'emulator'
+                $script:result.Database | Should -Be $script:testDatabase
+                $tempCredential = New-Object System.Net.NetworkCredential("TestUsername", $result.Key, "TestDomain")
+                $tempCredential.Password | Should -Be $script:testEmulatorKey
+                $script:result.KeyType | Should -Be 'master'
+                $script:result.BaseUri | Should -Be ('https://{0}:{1}/' -f $script:testURI, $script:testPort)
+            }
+        }
+
+        Context 'When called with Emulator switch and URI and Key specified' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Database = $script:testDatabase
+                    Emulator = $true
+                    URI      = $script:testURI
+                    Key      = $script:testKeySecureString
+                    Verbose  = $true
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be 'emulator'
+                $script:result.Database | Should -Be $script:testDatabase
+                $tempCredential = New-Object System.Net.NetworkCredential("TestUsername", $result.Key, "TestDomain")
+                $tempCredential.Password | Should -Be $script:testKey
+                $script:result.KeyType | Should -Be 'master'
+                $script:result.BaseUri | Should -Be ('https://{0}:8081/' -f $script:testURI)
             }
         }
 

@@ -142,6 +142,14 @@ following command:
 $cosmosDbContext = New-CosmosDbContext -Emulator -Database 'MyDatabase'
 ```
 
+You can also provide a custom URI if the emulator is hosted on another
+machine as well as specifying an alternate Key to use:
+
+```powershell
+$primaryKey = ConvertTo-SecureString -String 'GFJqJesi2Rq910E0G7P4WoZkzowzbj23Sm9DUWFX0l0P8o16mYyuaZBN00Nbtj9F1QQnumzZKSGZwknXGERrlA==' -AsPlainText -Force
+$cosmosDbContext = New-CosmosDbContext -Emulator -Database 'MyDatabase' -URI 'myemulator.local' -Key $primaryKey
+```
+
 #### Create a Context from Resource Authorization Tokens
 
 See the section [Using Resource Authorization Tokens](#using-resource-authorization-tokens)

@@ -580,6 +580,44 @@ InModuleScope CosmosDB {
             }
         }
 
+        Context 'When called with context parameter and an Id parameter and PartitionKey parameter starting with ''/''' {
+            $script:result = $null
+            $invokecosmosdbrequest_parameterfilter = {
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'colls' -and `
+                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{
+                        id           = $script:testCollection1
+                        partitionKey = $script:testPartitionKey
+                    })
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                -MockWith { $script:testGetCollectionResultSingle }
+
+            It 'Should not throw exception' {
+                $newCosmosDbCollectionParameters = @{
+                    Context      = $script:testContext
+                    Id           = $script:testCollection1
+                    PartitionKey = '/partitionkey'
+                }
+
+                { $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testCollection1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
         Context 'When called with context parameter and an Id and OfferType and OfferThrougput' {
             $script:result = $null
 
