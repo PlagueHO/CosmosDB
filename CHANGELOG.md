@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.1.6.561
 
 - Updated partition key handling when creating collections to allow for
   leading '/' characters in the partition key - fixes [Issue #153](https://github.com/PlagueHO/CosmosDB/issues/153)
