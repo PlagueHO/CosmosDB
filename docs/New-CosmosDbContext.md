@@ -18,21 +18,28 @@ to connect to a Cosmos DB.
 
 ```powershell
 New-CosmosDbContext -Account <String> [-Database <String>] -Key <SecureString> [-KeyType <String>]
- [-RetryPolicy <CosmosDB.RetryPolicy>] [<CommonParameters>]
+ [-BackoffPolicy <CosmosDB.BackoffPolicy>] [<CommonParameters>]
 ```
 
 ### Azure
 
 ```powershell
 New-CosmosDbContext -Account <String> [-Database <String>] -ResourceGroup <String> [-MasterKeyType <String>]
- [-RetryPolicy <CosmosDB.RetryPolicy>] [<CommonParameters>]
+ [-BackoffPolicy <CosmosDB.BackoffPolicy>] [<CommonParameters>]
 ```
 
 ### Emulator
 
 ```powershell
-New-CosmosDbContext [-Database <String>] [-Emulator] [-Port <Int16>] [-RetryPolicy <CosmosDB.RetryPolicy>]
- [<CommonParameters>]
+New-CosmosDbContext [-Database <String>] [-Emulator] [-Port <Int16>] [-URI <String>]
+ [-Token <CosmosDB.ContextToken[]>] [-BackoffPolicy <CosmosDB.BackoffPolicy>] [<CommonParameters>]
+```
+
+### Token
+
+```powershell
+New-CosmosDbContext -Account <String> [-Database <String>] [-Token <CosmosDB.ContextToken[]>]
+ [-BackoffPolicy <CosmosDB.BackoffPolicy>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -89,6 +96,16 @@ Creates a Cosmos DB context specifying the master key manually. A
 retry policy will be applied to the context that allows 5 retries
 with a delay of 2 seconds between them.
 
+### EXAMPLE 5
+
+```powershell
+PS C:\> $primaryKey = ConvertTo-SecureString -String 'your emulator master key' -AsPlainText -Force
+PS C:\> $cosmosDbContext = New-CosmosDbContext -Emulator -URI 'mycosmosdb' -Key $primaryKey
+```
+
+Creates a Cosmos DB context by using a Cosmos DB Emulator installed onto
+the machine 'mycosmosdb' with a custom key emulator key.
+
 ## PARAMETERS
 
 ### -Account
@@ -125,11 +142,15 @@ Accept wildcard characters: False
 
 ### -Key
 
-The key to be used to access this Cosmos DB.
+The key to be used to access the Cosmos DB account or Cosmos DB emulator.
+
+If a Cosmos DB emulator is specified and this parameter is not passed then
+the Cosmos DB key will default to the value specified on this page:
+https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator#authenticating-requests
 
 ```yaml
 Type: SecureString
-Parameter Sets: Account
+Parameter Sets: Account, Emulator
 Aliases:
 
 Required: True
@@ -222,6 +243,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: 8081
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -URI
+
+This is an optional URI to a Cosmos DB emulator.
+
+```yaml
+Type: String
+Parameter Sets: Emulator
+Aliases:
+
+Required: False
+Position: Named
+Default value: localhost
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

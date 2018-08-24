@@ -1,5 +1,14 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+August 24, 2018
+
+- Updated partition key handling when creating collections to allow for
+  leading '/' characters in the partition key - fixes [Issue #153](https://github.com/PlagueHO/CosmosDB/issues/153)
+- Add support for setting URI and Key when using with a Cosmos DB
+  Emulator - fixes [Issue #155](https://github.com/PlagueHO/CosmosDB/issues/155)
+
 ## What is New in CosmosDB 2.1.5.548
 
 August 4, 2018

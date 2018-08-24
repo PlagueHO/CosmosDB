@@ -86,6 +86,7 @@ function New-CosmosDbContext
         $Database,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter(ParameterSetName = 'Emulator')]
         [ValidateNotNullOrEmpty()]
         [System.Security.SecureString]
         $Key,
@@ -113,6 +114,10 @@ function New-CosmosDbContext
         [System.Int16]
         $Port = 8081,
 
+        [Parameter(ParameterSetName = 'Emulator')]
+        [System.String]
+        $URI = 'localhost',
+
         [Parameter(Mandatory = $true, ParameterSetName = 'Token')]
         [Parameter(ParameterSetName = 'Emulator')]
         [ValidateNotNullOrEmpty()]
@@ -129,15 +134,18 @@ function New-CosmosDbContext
     {
         'Emulator'
         {
-            $Account = 'localhost'
+            $Account = 'emulator'
 
-            # This is a publically known fixed master key (see https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator#authenticating-requests)
-            $Key = ConvertTo-SecureString `
-                -String 'C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==' `
-                -AsPlainText `
-                -Force
+            if (-not ($PSBoundParameters.ContainsKey('Key')))
+            {
+                # This is a publically known fixed master key (see https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator#authenticating-requests)
+                $Key = ConvertTo-SecureString `
+                    -String 'C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==' `
+                    -AsPlainText `
+                    -Force
+            }
 
-            $BaseUri = [uri]::new('https://localhost:{0}' -f $Port)
+            $BaseUri = [uri]::new(('https://{0}:{1}' -f $URI, $Port))
         }
 
         'AzureAccount'
