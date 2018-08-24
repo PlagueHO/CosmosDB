@@ -437,7 +437,7 @@ function New-CosmosDbCollection
     {
         $bodyObject += @{
             partitionKey = @{
-                paths = @('/{0}' -f $PartitionKey.TrimStart("/"))
+                paths = @('/{0}' -f $PartitionKey.TrimStart('/'))
                 kind  = 'Hash'
             }
         }
