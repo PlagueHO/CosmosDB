@@ -1,5 +1,18 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+September 1, 2018
+
+- Added `New-CosmosDbAccount` function for creating a new Cosmos DB
+  account in Azure - fixes [Issue #111](https://github.com/PlagueHO/CosmosDB/issues/111)
+- Added `Get-CosmosDbAccount` function for retrieving the properties
+  of an existing account in Azure - fixes [Issue #159](https://github.com/PlagueHO/CosmosDB/issues/159)
+- Added `Set-CosmosDbAccount` function for updating an existing Cosmos DB
+  account in Azure - fixes [Issue #160](https://github.com/PlagueHO/CosmosDB/issues/160)
+- Added `Remove-CosmosDbAccount` function for removing an existing Cosmos DB
+  account in Azure - fixes [Issue #161](https://github.com/PlagueHO/CosmosDB/issues/161)
+
 ## What is New in CosmosDB 2.1.6.561
 
 August 24, 2018
