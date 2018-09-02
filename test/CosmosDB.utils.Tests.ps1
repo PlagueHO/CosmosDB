@@ -229,9 +229,9 @@ console.log("done");
                 -CommandName Invoke-AzureRmResourceAction `
                 -ParameterFilter { $action -eq 'listKeys' } `
                 -MockWith { @{
-                    primaryMasterKey           = 'primaryMasterKey'
-                    secondaryMasterKey         = 'secondaryMasterKey'
-                    properties = @{
+                    primaryMasterKey   = 'primaryMasterKey'
+                    secondaryMasterKey = 'secondaryMasterKey'
+                    properties         = @{
                         primaryReadonlyMasterKey   = 'primaryReadonlyMasterKey'
                         secondaryReadonlyMasterKey = 'secondaryReadonlyMasterKey'
                     }
