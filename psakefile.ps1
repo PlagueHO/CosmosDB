@@ -35,6 +35,16 @@ Task Init {
 Task Test -Depends Init {
     $separator
 
+    # Prepare test environment by ensuring appropriate version of AzureRM modules are installed
+    if ($PSVersionTable.PSEdition -eq 'Core')
+    {
+        Install-ModuleMultiScoped -Name AzureRM.NetCore
+    }
+    else
+    {
+        Install-ModuleMultiScoped -Name AzureRM
+    }
+
     # Execute tests
     $testResultsFile = Join-Path -Path $ProjectRoot -ChildPath 'test\TestResults.xml'
     $testResults = Invoke-Pester `
@@ -346,5 +356,24 @@ function Invoke-Git
     catch
     {
         Write-Warning -Message $_
+    }
+}
+
+function Install-ModuleMultiScoped
+{
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Name
+    )
+
+    try
+    {
+        Install-Module -Name $Name -Force -AllowClobber
+    }
+    catch
+    {
+        Install-Module -Name $Name -Force -AllowClobber -Scope CurrentUser
     }
 }
