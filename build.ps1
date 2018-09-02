@@ -13,7 +13,20 @@ if ($Deploy)
 
 $null = Get-PackageProvider -Name NuGet -ForceBootstrap
 
-Install-Module -Name PSDepend -Force -AllowClobber
+# Install PSDepend module
+if (-not (Get-Module -Name PSDepend -ListAvailable))
+{
+    try
+    {
+        Install-Module -Name PSDepend -Force -AllowClobber
+    }
+    catch
+    {
+        Install-Module -Name PSDepend -Force -AllowClobber -Scope CurrentUser
+    }
+}
+
+# Install all other build dependencies
 Import-Module -Name PSDepend
 Invoke-PSDepend -Path $PSScriptRoot -Force -Import -Install
 
