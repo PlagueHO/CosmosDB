@@ -9,10 +9,24 @@
 
 ## Module Build Status
 
-| Branch | Build Status | Code Coverage |
-| --- | --- | --- |
-| dev | [![Build status](https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/dev?svg=true)](https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/dev) | [![codecov](https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev/graph/badge.svg)](https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev) |
-| master | [![Build status](https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/master?svg=true)](https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/master) | [![codecov](https://codecov.io/gh/PlagueHO/CosmosDB/branch/master/graph/badge.svg)](https://codecov.io/gh/PlagueHO/CosmosDB/branch/master) |
+| Branch | AppVeyor CI | Travis CI | Code Coverage |
+| --- | --- | --- | --- |
+| dev | [![av-image-dev][]][av-site-dev] | [![tv-image-dev][]][tv-site-dev] | [![cc-image-dev][]][cc-site-dev] |
+| master | [![av-image-master][]][av-site-master] | [![tv-image-master][]][tv-site-master] | [![cc-image-master][]][cc-site-master] |
+
+[av-image-dev]:https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/dev?svg=true
+[av-site-dev]: https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/dev
+[tv-image-dev]: https://travis-ci.org/PlagueHO/CosmosDB.svg?branch=dev
+[tv-site-dev]: https://travis-ci.org/PlagueHO/CosmosDB/branches
+[cc-image-dev]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev/graph/badge.svg
+[cc-site-dev]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev
+
+[av-image-master]: https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/master?svg=true
+[av-site-master]: https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/master
+[tv-image-master]: https://travis-ci.org/PlagueHO/CosmosDB.svg?branch=master
+[tv-site-master]: https://travis-ci.org/PlagueHO/CosmosDB/branches
+[cc-image-master]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/master/graph/badge.svg
+[cc-site-master]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/master
 
 ## Table of Contents
 
