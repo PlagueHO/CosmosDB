@@ -368,12 +368,19 @@ function Install-ModuleMultiScoped
         $Name
     )
 
+    $installModuleParameters = @{
+        Name = $Name
+        Force = $true
+        AllowClobber = $true
+        Repository = 'PSGallery'
+    }
+
     try
     {
-        Install-Module -Name $Name -Force -AllowClobber
+        Install-Module @installModuleParameters
     }
     catch
     {
-        Install-Module -Name $Name -Force -AllowClobber -Scope CurrentUser
+        Install-Module @installModuleParameters -Scope CurrentUser
     }
 }

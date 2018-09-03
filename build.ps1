@@ -16,13 +16,19 @@ $null = Get-PackageProvider -Name NuGet -ForceBootstrap
 # Install PSDepend module
 if (-not (Get-Module -Name PSDepend -ListAvailable))
 {
+    $installModuleParameters = @{
+        Name = 'PSDepend'
+        Force = $true
+        AllowClobber = $true
+        Repository = 'PSGallery'
+    }
     try
     {
-        Install-Module -Name PSDepend -Force -AllowClobber
+        Install-Module @installModuleParameters
     }
     catch
     {
-        Install-Module -Name PSDepend -Force -AllowClobber -Scope CurrentUser
+        Install-Module @installModuleParameters -Scope CurrentUser
     }
 }
 
