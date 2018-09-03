@@ -57,16 +57,17 @@ Task Test -Depends Init {
     # Prepare and uploade code coverage
     if ($testResults.CodeCoverage)
     {
-        'Preparing CodeCoverage'
-        Import-Module `
-            -Name (Join-Path -Path $ProjectRoot -ChildPath '.codecovio\CodeCovio.psm1')
-
-        $jsonPath = Export-CodeCovIoJson `
-            -CodeCoverage $testResults.CodeCoverage `
-            -RepoRoot $ProjectRoot
-
+        # Only bother generating code coverage in AppVeyor
         if ($ENV:BHBuildSystem -eq 'AppVeyor')
         {
+            'Preparing CodeCoverage'
+            Import-Module `
+                -Name (Join-Path -Path $ProjectRoot -ChildPath '.codecovio\CodeCovio.psm1')
+
+            $jsonPath = Export-CodeCovIoJson `
+                -CodeCoverage $testResults.CodeCoverage `
+                -RepoRoot $ProjectRoot
+
             'Uploading CodeCoverage to CodeCov.io'
             try
             {
