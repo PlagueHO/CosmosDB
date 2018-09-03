@@ -183,7 +183,7 @@
             ReleaseNotes = '
 ## What is New in CosmosDB Unreleased
 
-September 1, 2018
+September 3, 2018
 
 - Added `New-CosmosDbAccount` function for creating a new Cosmos DB
   account in Azure - fixes [Issue #111](https://github.com/PlagueHO/CosmosDB/issues/111)
@@ -193,6 +193,13 @@ September 1, 2018
   account in Azure - fixes [Issue #160](https://github.com/PlagueHO/CosmosDB/issues/160)
 - Added `Remove-CosmosDbAccount` function for removing an existing Cosmos DB
   account in Azure - fixes [Issue #161](https://github.com/PlagueHO/CosmosDB/issues/161)
+- Added OSx and Linux PowerShell Core continuous integration using
+  TravisCI.
+- Improved CI/CodeCoverage badges in README.MD.
+- Improved build process to handle build environments that do not
+  have Administrator/Root access.
+- Skip test for `Convert-CosmosDbRequestBody` when run in Linux/OSx using
+  PowerShell Core due to behavior difference - see [PowerShell Core #Issue](https://github.com/PowerShell/PowerShell/issues/7693)
 
 ## What is New in CosmosDB 2.1.6.561
 
