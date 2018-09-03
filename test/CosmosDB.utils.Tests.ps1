@@ -63,15 +63,17 @@ InModuleScope CosmosDB {
     $script:testMaxRetries = 20
     $script:testMethod = 'Default'
     $script:testDelay = 1
-    $script:testRequestObject = @{
-        "Tricky Body" = @'
+    $script:testRequestString = @'
 if (entityAlreadyExists)
     throw new Error(`root entity # ${entity.id} already created`);
 console.log(`new entity "${entity.id}" is about to be created...`);
 let a = 'some value';
 console.log("done");
 '@
+    $script:testRequestObject = @{
+        "Tricky Body" = $script:testRequestString
     }
+
     $script:testRequestBodyJson = '{"Tricky Body":"if (entityAlreadyExists)\r\n    throw new Error(`root entity # ${entity.id} already created`);\r\nconsole.log(`new entity \"${entity.id}\" is about to be created...`);\r\nlet a = \u0027some value\u0027;\r\nconsole.log(\"done\");"}'
 
     Describe 'Custom types' -Tag 'Unit' {
@@ -1098,7 +1100,15 @@ console.log("done");
                 { $script:result = Convert-CosmosDbRequestBody @convertCosmosDbRequestBodyParameters } | Should -Not -Throw
             }
 
-            It 'Should return expected result' {
+            <#
+                This test will only pass on PowerShell 5.x because of
+                a difference in PowerShell Core 6.0.x.
+
+                See https://github.com/PowerShell/PowerShell/issues/7693
+            #>
+            $skip = ($PSVersionTable.PSEdition -eq 'Core')
+
+            It 'Should return expected result' -Skip:$skip {
                 $script:result | Should -Be $script:testRequestBodyJson
             }
         }
