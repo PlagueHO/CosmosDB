@@ -9,10 +9,24 @@
 
 ## Module Build Status
 
-| Branch | Build Status | Code Coverage |
-| --- | --- | --- |
-| dev | [![Build status](https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/dev?svg=true)](https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/dev) | [![codecov](https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev/graph/badge.svg)](https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev) |
-| master | [![Build status](https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/master?svg=true)](https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/master) | [![codecov](https://codecov.io/gh/PlagueHO/CosmosDB/branch/master/graph/badge.svg)](https://codecov.io/gh/PlagueHO/CosmosDB/branch/master) |
+| Branch | AppVeyor CI | Travis CI | Code Coverage |
+| --- | --- | --- | --- |
+| dev | [![av-image-dev][]][av-site-dev] | [![tv-image-dev][]][tv-site-dev] | [![cc-image-dev][]][cc-site-dev] |
+| master | [![av-image-master][]][av-site-master] | [![tv-image-master][]][tv-site-master] | [![cc-image-master][]][cc-site-master] |
+
+[av-image-dev]:https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/dev?svg=true
+[av-site-dev]: https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/dev
+[tv-image-dev]: https://travis-ci.org/PlagueHO/CosmosDB.svg?branch=dev
+[tv-site-dev]: https://travis-ci.org/PlagueHO/CosmosDB/branches
+[cc-image-dev]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev/graph/badge.svg
+[cc-site-dev]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev
+
+[av-image-master]: https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/master?svg=true
+[av-site-master]: https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/master
+[tv-image-master]: https://travis-ci.org/PlagueHO/CosmosDB.svg?branch=master
+[tv-site-master]: https://travis-ci.org/PlagueHO/CosmosDB/branches
+[cc-image-master]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/master/graph/badge.svg
+[cc-site-master]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/master
 
 ## Table of Contents
 
@@ -25,6 +39,7 @@
     - [Use CosmosDB Module to Retrieve Key from Azure Management Portal](#use-cosmosdb-module-to-retrieve-key-from-azure-management-portal)
     - [Create a Context for a Cosmos DB Emulator](#create-a-context-for-a-cosmos-db-emulator)
     - [Create a Context from Resource Authorization Tokens](#create-a-Context-from-resource-authorization-tokens)
+  - [Working with Accounts](#working-with-accounts)
   - [Working with Databases](#working-with-databases)
   - [Working with Offers](#working-with-offers)
   - [Working with Collections](#working-with-collections)
@@ -72,12 +87,14 @@ This module supports the following:
 - Windows PowerShell 5.x:
   - **AzureRM.Profile** and **AzureRM.Resources** PowerShell modules
     are required if using `New-CosmosDbContext -ResourceGroup $resourceGroup`
+    or `*-CosmosDbAccount` functions.
 
 or:
 
 - PowerShell Core 6.x:
   - **AzureRM.NetCore.Profile** and **AzureRM.NetCore.Resources** PowerShell
     modules are required if using `New-CosmosDbContext -ResourceGroup $resourceGroup`
+    or `*-CosmosDbAccount` functions.
 
 ## Installation
 
@@ -155,6 +172,40 @@ $cosmosDbContext = New-CosmosDbContext -Emulator -Database 'MyDatabase' -URI 'my
 See the section [Using Resource Authorization Tokens](#using-resource-authorization-tokens)
 for instructions on how to create a Context object containing one or more _Resource
 Authorization Tokens_.
+
+### Working with Accounts
+
+You can create, retrieve, update and remove Azure Cosmos DB accounts using
+this module. To use these features you will need to ensure the **AzureRM.Profile**
+and **AzureRM.Resources** modules installed - See [Requirements](#requirements)
+above.
+
+_Note: You must have first logged PowerShell into Azure using the
+`Add-AzureRmAccount` function before you can use these functions._
+
+Create a new Cosmos DB account in Azure:
+
+```powershell
+New-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroup 'MyCosmosDbResourceGroup' -Location 'WestUS'
+```
+
+Get the properties of an existing Cosmos DB account in Azure:
+
+```powershell
+Get-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroup 'MyCosmosDbResourceGroup'
+```
+
+Update an existing Cosmos DB account in Azure:
+
+```powershell
+Set-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroup 'MyCosmosDbResourceGroup' -Location 'WestUS' -DefaultConsistencyLevel 'Strong'
+```
+
+Delete an existing Cosmos DB account in Azure:
+
+```powershell
+Remove-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroup 'MyCosmosDbResourceGroup'
+```
 
 ### Working with Databases
 

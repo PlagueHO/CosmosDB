@@ -7,6 +7,10 @@ ConvertFrom-StringData -StringData @'
     NotFoundResourceTokenInContext = Context token with resource '{0}' not found.
     NoMatchingUnexpiredResourceTokenInContext = At least one matching context token with resource '{0}' was found, but all are expired.
     CreateAuthorizationToken = Creating authorization token: Method = '{0}', ResourceType = '{1}', ResourceId = '{2}', Date = '{3}'.
+    GettingAzureCosmosDBAccount = Getting Azure Cosmos DB account '{0}' in resource group '{1}'.
+    CreatingAzureCosmosDBAccount = Creating Azure Cosmos DB account '{0}' in resource group '{1}' located in '{2}'.
+    UpdatingAzureCosmosDBAccount = Updating Azure Cosmos DB account '{0}' in resource group '{1}'.
+    RemovingAzureCosmosDBAccount = Removing Azure Cosmos DB account '{0}' in resource group '{1}'.
     StoredProcedureScriptLogResults = Stored Procedure '{0}' script log results:\n{1}
     RequestChargeResults = Request charge for {0} to '{1}' was {2} RUs.
     CollectionProvisionedThroughputExceededWithBackoffPolicy = The collection has exceeded the provisioned throughput limit but a back-off policy is specified.
@@ -22,4 +26,8 @@ ConvertFrom-StringData -StringData @'
     ErrorNewCollectionIncludedPathIndexPrecisionNotSupported = A Precision value should not be provided for the index Kind '{0}'.
     ErrorNewCollectionIndexingPolicyInvalidMode = Automatic must be set to 'False' if Indexing Mode of 'None' is used.
     ErrorSetCollectionRemoveDefaultTimeToLiveConflict = RemoveDefaultTimeToLive parameter must not be set when DefaultTimeToLive is specified.
+    ErrorAccountDoesNotExist = Cosmos DB account '{0}' in resource group '{1}' does not exist.
+    ShouldCreateAzureCosmosDBAccount = Create an Azure Cosmos DB account '{0}' in resource group '{1}' located in '{2}'
+    ShouldUpdateAzureCosmosDBAccount = Update an Azure Cosmos DB account '{0}' in resource group '{1}'
+    ShouldRemoveAzureCosmosDBAccount = Remove the Azure Cosmos DB account '{0}' in resource group '{1}'
 '@

@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.1.6.561'
+    ModuleVersion     = '2.1.7.561'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -83,6 +83,7 @@
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport = @(
+        'Get-CosmosDbAccount'
         'Get-CosmosDbAttachment'
         'Get-CosmosDbAttachmentResourcePath'
         'Get-CosmosDbCollection'
@@ -105,6 +106,7 @@
         'Get-CosmosDbUserDefinedFunction'
         'Get-CosmosDbUserDefinedFunctionResourcePath'
         'Invoke-CosmosDbStoredProcedure'
+        'New-CosmosDbAccount'
         'New-CosmosDbAttachment'
         'New-CosmosDbBackoffPolicy'
         'New-CosmosDbCollection'
@@ -121,6 +123,7 @@
         'New-CosmosDbTrigger'
         'New-CosmosDbUser'
         'New-CosmosDbUserDefinedFunction'
+        'Remove-CosmosDbAccount'
         'Remove-CosmosDbAttachment'
         'Remove-CosmosDbCollection'
         'Remove-CosmosDbDatabase'
@@ -130,6 +133,7 @@
         'Remove-CosmosDbTrigger'
         'Remove-CosmosDbUser'
         'Remove-CosmosDbUserDefinedFunction'
+        'Set-CosmosDbAccount'
         'Set-CosmosDbAttachment'
         'Set-CosmosDbCollection'
         'Set-CosmosDbDocument'
@@ -177,6 +181,26 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+September 3, 2018
+
+- Added `New-CosmosDbAccount` function for creating a new Cosmos DB
+  account in Azure - fixes [Issue #111](https://github.com/PlagueHO/CosmosDB/issues/111)
+- Added `Get-CosmosDbAccount` function for retrieving the properties
+  of an existing account in Azure - fixes [Issue #159](https://github.com/PlagueHO/CosmosDB/issues/159)
+- Added `Set-CosmosDbAccount` function for updating an existing Cosmos DB
+  account in Azure - fixes [Issue #160](https://github.com/PlagueHO/CosmosDB/issues/160)
+- Added `Remove-CosmosDbAccount` function for removing an existing Cosmos DB
+  account in Azure - fixes [Issue #161](https://github.com/PlagueHO/CosmosDB/issues/161)
+- Added OSx and Linux PowerShell Core continuous integration using
+  TravisCI.
+- Improved CI/CodeCoverage badges in README.MD.
+- Improved build process to handle build environments that do not
+  have Administrator/Root access.
+- Skip test for `Convert-CosmosDbRequestBody` when run in Linux/OSx using
+  PowerShell Core due to behavior difference - see [PowerShell Core #Issue](https://github.com/PowerShell/PowerShell/issues/7693)
+
 ## What is New in CosmosDB 2.1.6.561
 
 August 24, 2018
