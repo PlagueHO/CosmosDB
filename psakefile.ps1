@@ -117,7 +117,7 @@ Task Build -Depends Test {
 
     # Generate the next version by adding the build system build number to the manifest version
     $manifestPath = Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psd1'
-    $newVersion = Get-NewVersionNumber `
+    $newVersion = New-VersionNumber `
         -ManifestPath $manifestPath `
         -Build $ENV:BHBuildNumber
 
@@ -185,7 +185,7 @@ Task Deploy -Depends Build {
 
     # Generate the next version by adding the build system build number to the manifest version
     $manifestPath = Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psd1'
-    $newVersion = Get-NewVersionNumber `
+    $newVersion = New-VersionNumber `
         -ManifestPath $manifestPath `
         -Build $ENV:BHBuildNumber
 
@@ -300,7 +300,11 @@ Task Deploy -Depends Build {
     }
 }
 
-function Get-NewVersionNumber
+<#
+    .SYNOPSIS
+        Generate a new version number.
+#>
+function New-VersionNumber
 {
     param
     (
@@ -339,6 +343,10 @@ function Get-NewVersionNumber
     return $newVersion
 }
 
+<#
+    .SYNOPSIS
+        Safely execute a Git command.
+#>
 function Invoke-Git
 {
     param
@@ -359,6 +367,11 @@ function Invoke-Git
     }
 }
 
+<#
+    .SYNOPSIS
+        Try to install a module to the machine scope, but try the
+        CurrentUser scope if not allowed.
+#>
 function Install-ModuleMultiScoped
 {
     param
