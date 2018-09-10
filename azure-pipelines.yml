@@ -1,12 +1,12 @@
 jobs:
-  - job: Build on PowerShell on Windows Server 2016
+  - job: Build_PS_win2016
     pool:
       vmImage: vs2017-win2016
     steps:
     - script: |
         .\build.ps1
       displayName: 'Install PowerShell Core and Execute Build'
-  - job: Build on PowerShell Core on Ubuntu 16.04
+  - job: Build_PSCore_Ubuntu1604
     pool:
       vmImage: ubuntu-1604
     steps:
@@ -17,7 +17,7 @@ jobs:
         sudo apt-get install -y powershell
         pwsh -c '.\build.ps1'
       displayName: 'Install PowerShell Core and Execute Build'
-  - job: Build on PowerShell Core on MacOS 10.13
+  - job: Build_PSCore_MacOS1013
     pool:
       vmImage: xcode9-macos10.13
     steps:
