@@ -4,7 +4,7 @@ jobs:
       vmImage: vs2017-win2016
     steps:
     - script: |
-        .\build.ps1
+        .\build.ps1 -Verbose
       displayName: 'Build and Test'
     - task: PublishTestResults@2
       inputs:
