@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.1.7.635
 
 - Added `New-CosmosDbAccount` function for creating a new Cosmos DB
   account in Azure - fixes [Issue #111](https://github.com/PlagueHO/CosmosDB/issues/111)
