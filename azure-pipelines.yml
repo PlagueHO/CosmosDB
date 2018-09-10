@@ -1,14 +1,24 @@
 jobs:
-  - job: Build_PS_win2016
+  - job: Build_PS_Win2016
     pool:
       vmImage: vs2017-win2016
     steps:
     - script: |
         .\build.ps1
       displayName: 'Build and Test'
+    - task: PublishTestResults@2
+      inputs:
+        testRunner: 'NUnit'
+        testResultsFiles: '/test/TestResults.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)'
+        testRunTitle: 'PS_Win2016'
+      displayName: 'Publish Test Results'
+
   - job: Build_PSCore_Ubuntu1604
+
     pool:
       vmImage: ubuntu-1604
+
     steps:
     - script: |
         curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
@@ -16,11 +26,19 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y powershell
       displayName: 'Install PowerShell Core'
+
     - script: |
         pwsh -c '.\build.ps1'
-
-
       displayName: 'Build and Test'
+
+    - task: PublishTestResults@2
+      inputs:
+        testRunner: 'NUnit'
+        testResultsFiles: '/test/TestResults.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)'
+        testRunTitle: 'PSCore_Ubuntu1604'
+      displayName: 'Publish Test Results'
+
   - job: Build_PSCore_MacOS1013
     pool:
       vmImage: xcode9-macos10.13
@@ -30,9 +48,15 @@ jobs:
         brew tap caskroom/cask
         brew cask install powershell
       displayName: 'Install PowerShell Core'
+
+    - script: |
+        pwsh -c '.\build.ps1'
+      displayName: 'Build and Test'
+
     - task: PublishTestResults@2
       inputs:
         testRunner: 'NUnit'
-        testResultsFiles: 'test/TestResults.xml'
+        testResultsFiles: '/test/TestResults.xml'
         searchFolder: '$(System.DefaultWorkingDirectory)'
+        testRunTitle: 'PSCore_MacOS1013'
       displayName: 'Publish Test Results'
