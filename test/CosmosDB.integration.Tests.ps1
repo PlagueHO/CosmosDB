@@ -112,9 +112,27 @@ $null = New-AzureRmResourceGroup `
     -Name $script:testResourceGroupName `
     -Location $script:testLocation
 
+$currentIpAddress = (Invoke-RestMethod -Uri 'http://ipinfo.io/json').ip
+
 Describe 'Cosmos DB Module' -Tag 'Integration' {
+    if ($ENV:BHBuildSystem -eq 'AppVeyor')
+    {
+        Write-Warning -Message (@(
+            'New-AzureRmResource and Set-AzureRmResource currently throws the following exception in AppVeyor:'
+            'Method not found: ''Void Newtonsoft.Json.Serialization.JsonDictionaryContract.set_PropertyNameResolver(System.Func`2<System.String,System.String>)'''
+            'due to an older version of Newtonsoft.Json being used.'
+            'Therefore integration tests of New-CosmosDbAccount and Set-CosmosDbAccount are currently skipped when running in AppVeyor environment.'
+        ) -join "`n`r")
+
+        # Create Azure CosmosDB Account to use for testing
+        New-AzureCosmosDbAccount `
+            -ResourceGroupName $script:testResourceGroupName `
+            -AccountName $script:testAccountName `
+            -Verbose
+    }
+
     Context 'When creating a new Azure Cosmos DB Account' {
-        It 'Should not throw an exception' {
+        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
             {
                 New-CosmosDbAccount `
                     -Name $script:testAccountName `
@@ -123,7 +141,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     -DefaultConsistencyLevel 'BoundedStaleness' `
                     -MaxIntervalInSeconds 50 `
                     -MaxStalenessPrefix 50 `
-                    -IpRangeFilter '10.0.0.0/24' `
                     -Verbose
             } | Should -Not -Throw
         }
@@ -147,26 +164,26 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Properties.consistencyPolicy.defaultConsistencyLevel | Should -Be 'BoundedStaleness'
             $script:result.Properties.consistencyPolicy.maxIntervalInSeconds | Should -Be 50
             $script:result.Properties.consistencyPolicy.maxStalenessPrefix | Should -Be 50
-            $script:result.Properties.ipRangeFilter | Should -Be '10.0.0.0/24'
+            $script:result.Properties.ipRangeFilter | Should -BeNullOrEmpty
         }
     }
 
     Context 'When updating the new Azure Cosmos DB Account' {
-        It 'Should not throw an exception' {
+        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
             {
                 $script:result = Set-CosmosDbAccount `
                     -Name $script:testAccountName `
                     -ResourceGroupName $script:testResourceGroupName `
                     -Location $script:testLocation `
                     -DefaultConsistencyLevel 'Session' `
-                    -IpRangeFilter '' `
+                    -IpRangeFilter "$currentIpAddress/32" `
                     -Verbose
             } | Should -Not -Throw
         }
     }
 
     Context 'When getting the new Azure Cosmos DB Account' {
-        It 'Should not throw an exception' {
+        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
             {
                 $script:result = Get-CosmosDbAccount `
                     -Name $script:testAccountName `
@@ -175,7 +192,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             } | Should -Not -Throw
         }
 
-        It 'Should return expected object' {
+        It 'Should return expected object' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
             $script:result.Name | Should -Be $script:testAccountName
             $script:result.ResourceGroupName | Should -Be $script:testResourceGroupName
             $script:result.Location | Should -Be $script:testLocation
@@ -183,7 +200,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Properties.consistencyPolicy.defaultConsistencyLevel | Should -Be 'Session'
             $script:result.Properties.consistencyPolicy.maxIntervalInSeconds | Should -Be 5
             $script:result.Properties.consistencyPolicy.maxStalenessPrefix | Should -Be 100
-            $script:result.Properties.ipRangeFilter | Should -BeNullOrEmpty
+            $script:result.Properties.ipRangeFilter | Should -Be "$currentIpAddress/32"
         }
     }
 
