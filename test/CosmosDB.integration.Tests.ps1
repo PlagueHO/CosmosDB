@@ -112,6 +112,8 @@ $null = New-AzureRmResourceGroup `
     -Name $script:testResourceGroupName `
     -Location $script:testLocation
 
+$currentIpAddress = (Invoke-RestMethod -Uri 'http://ipinfo.io/json').ip
+
 Describe 'Cosmos DB Module' -Tag 'Integration' {
     if ($ENV:BHBuildSystem -eq 'AppVeyor')
     {
@@ -139,7 +141,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     -DefaultConsistencyLevel 'BoundedStaleness' `
                     -MaxIntervalInSeconds 50 `
                     -MaxStalenessPrefix 50 `
-                    -IpRangeFilter '10.0.0.0/24' `
+                    -IpRangeFilter '' `
                     -Verbose
             } | Should -Not -Throw
         }
@@ -163,7 +165,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Properties.consistencyPolicy.defaultConsistencyLevel | Should -Be 'BoundedStaleness'
             $script:result.Properties.consistencyPolicy.maxIntervalInSeconds | Should -Be 50
             $script:result.Properties.consistencyPolicy.maxStalenessPrefix | Should -Be 50
-            $script:result.Properties.ipRangeFilter | Should -Be '10.0.0.0/24'
+            $script:result.Properties.ipRangeFilter | Should -BeNullOrEmpty
         }
     }
 
@@ -175,7 +177,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     -ResourceGroupName $script:testResourceGroupName `
                     -Location $script:testLocation `
                     -DefaultConsistencyLevel 'Session' `
-                    -IpRangeFilter '' `
+                    -IpRangeFilter "$currentIpAddress/32" `
                     -Verbose
             } | Should -Not -Throw
         }
@@ -199,7 +201,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Properties.consistencyPolicy.defaultConsistencyLevel | Should -Be 'Session'
             $script:result.Properties.consistencyPolicy.maxIntervalInSeconds | Should -Be 5
             $script:result.Properties.consistencyPolicy.maxStalenessPrefix | Should -Be 100
-            $script:result.Properties.ipRangeFilter | Should -BeNullOrEmpty
+            $script:result.Properties.ipRangeFilter | Should -Be "$currentIpAddress/32"
         }
     }
 
