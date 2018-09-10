@@ -5,7 +5,7 @@ jobs:
     steps:
     - script: |
         .\build.ps1
-      displayName: 'Install PowerShell Core and Execute Build'
+      displayName: 'Build and Test'
   - job: Build_PSCore_Ubuntu1604
     pool:
       vmImage: ubuntu-1604
@@ -15,8 +15,12 @@ jobs:
         curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
         sudo apt-get update
         sudo apt-get install -y powershell
+      displayName: 'Install PowerShell Core'
+    - script: |
         pwsh -c '.\build.ps1'
-      displayName: 'Install PowerShell Core and Execute Build'
+
+
+      displayName: 'Build and Test'
   - job: Build_PSCore_MacOS1013
     pool:
       vmImage: xcode9-macos10.13
@@ -25,5 +29,10 @@ jobs:
         brew update
         brew tap caskroom/cask
         brew cask install powershell
-        pwsh -c '.\build.ps1'
-      displayName: 'Install PowerShell Core and Execute Build'
+      displayName: 'Install PowerShell Core'
+    - task: PublishTestResults@2
+      inputs:
+        testRunner: 'NUnit'
+        testResultsFiles: 'test/TestResults.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)'
+      displayName: 'Publish Test Results'
