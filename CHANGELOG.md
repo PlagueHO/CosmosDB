@@ -17,6 +17,9 @@
   have Administrator/Root access.
 - Skip test for `Convert-CosmosDbRequestBody` when run in Linux/OSx using
   PowerShell Core due to behavior difference - see [PowerShell Core #Issue](https://github.com/PowerShell/PowerShell/issues/7693)
+- Skip integration tests for `New-CosmosDbAccount` and `Set-CosmosDbAccount`
+  when run in AppVeyor due to exception occuring in `New-AzureRmResource` and
+  `Set-AzureRmResource` cmdlets because of Newtonsoft.Json version conflict.
 
 ## 2.1.6.561
 

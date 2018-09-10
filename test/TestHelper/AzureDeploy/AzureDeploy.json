@@ -23,8 +23,8 @@
                 "databaseAccountOfferType": "Standard",
                 "consistencyPolicy": {
                     "defaultConsistencyLevel": "BoundedStaleness",
-                    "maxIntervalInSeconds": 5,
-                    "maxStalenessPrefix": 100
+                    "maxIntervalInSeconds": 50,
+                    "maxStalenessPrefix": 50
                 },
                 "name": "[parameters('accountName')]"
             },
