@@ -1,11 +1,29 @@
-pool:
-  vmImage: 'Ubuntu 16.04'
-
-steps:
-- script: |
-    curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-    curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
-    sudo apt-get update
-    sudo apt-get install -y powershell
-    pwsh -c '.\build.ps1'
-  displayName: 'Install PowerShell Core and Execute Build'
+jobs:
+  - job: Build on PowerShell on Windows Server 2016
+    pool:
+      vmImage: vs2017-win2016
+    steps:
+    - script: |
+        .\build.ps1
+      displayName: 'Install PowerShell Core and Execute Build'
+  - job: Build on PowerShell Core on Ubuntu 16.04
+    pool:
+      vmImage: ubuntu-1604
+    steps:
+    - script: |
+        curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+        curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
+        sudo apt-get update
+        sudo apt-get install -y powershell
+        pwsh -c '.\build.ps1'
+      displayName: 'Install PowerShell Core and Execute Build'
+  - job: Build on PowerShell Core on MacOS 10.13
+    pool:
+      vmImage: xcode9-macos10.13
+    steps:
+    - script: |
+        brew update
+        brew tap caskroom/cask
+        brew cask install powershell
+        pwsh -c '.\build.ps1'
+      displayName: 'Install PowerShell Core and Execute Build'
