@@ -113,23 +113,23 @@ $null = New-AzureRmResourceGroup `
     -Location $script:testLocation
 
 Describe 'Cosmos DB Module' -Tag 'Integration' {
+    if ($ENV:BHBuildSystem -eq 'AppVeyor')
+    {
+        Write-Warning -Message (@(
+            'New-AzureRmResource and Set-AzureRmResource currently throws the following exception in AppVeyor:'
+            'Method not found: ''Void Newtonsoft.Json.Serialization.JsonDictionaryContract.set_PropertyNameResolver(System.Func`2<System.String,System.String>)'''
+            'due to an older version of Newtonsoft.Json being used.'
+            'Therefore integration tests of New-CosmosDbAccount and Set-CosmosDbAccount are currently skipped when running in AppVeyor environment.'
+        ) -join "`n`r")
+
+        # Create Azure CosmosDB Account to use for testing
+        New-AzureCosmosDbAccount `
+            -ResourceGroupName $script:testResourceGroupName `
+            -AccountName $script:testAccountName `
+            -Verbose
+    }
+
     Context 'When creating a new Azure Cosmos DB Account' {
-        if ($ENV:BHBuildSystem -eq 'AppVeyor')
-        {
-            Write-Warning -Message (@(
-                'New-AzureRmResource currently throws exception:'
-                'Method not found: ''Void Newtonsoft.Json.Serialization.JsonDictionaryContract.set_PropertyNameResolver(System.Func`2<System.String,System.String>)'''
-                'in AppVeyor due to an older version of Newtonsoft.Json being used.'
-                'Therefore tests of New-CosmosDbAccount and Set-CosmosDbAccount are currently skipped when running in AppVeyor environment.'
-            ) -join "`n`r")
-
-            # Create Azure CosmosDB Account to use for testing
-            New-AzureCosmosDbAccount `
-                -ResourceGroupName $script:testResourceGroupName `
-                -AccountName $script:testAccountName `
-                -Verbose
-        }
-
         It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
             {
                 New-CosmosDbAccount `
@@ -168,7 +168,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     }
 
     Context 'When updating the new Azure Cosmos DB Account' {
-        It 'Should not throw an exception' {
+        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
             {
                 $script:result = Set-CosmosDbAccount `
                     -Name $script:testAccountName `
@@ -182,7 +182,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     }
 
     Context 'When getting the new Azure Cosmos DB Account' {
-        It 'Should not throw an exception' {
+        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
             {
                 $script:result = Get-CosmosDbAccount `
                     -Name $script:testAccountName `
@@ -191,7 +191,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             } | Should -Not -Throw
         }
 
-        It 'Should return expected object' {
+        It 'Should return expected object' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
             $script:result.Name | Should -Be $script:testAccountName
             $script:result.ResourceGroupName | Should -Be $script:testResourceGroupName
             $script:result.Location | Should -Be $script:testLocation

@@ -22,7 +22,7 @@
             "properties": {
                 "databaseAccountOfferType": "Standard",
                 "consistencyPolicy": {
-                    "defaultConsistencyLevel": "Session",
+                    "defaultConsistencyLevel": "BoundedStaleness",
                     "maxIntervalInSeconds": 5,
                     "maxStalenessPrefix": 100
                 },
