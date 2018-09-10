@@ -141,7 +141,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     -DefaultConsistencyLevel 'BoundedStaleness' `
                     -MaxIntervalInSeconds 50 `
                     -MaxStalenessPrefix 50 `
-                    -IpRangeFilter '' `
                     -Verbose
             } | Should -Not -Throw
         }
