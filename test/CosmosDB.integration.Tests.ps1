@@ -23,7 +23,7 @@ if ([String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
 
 # Variables for use in tests
 $script:testRandomName = [System.IO.Path]::GetRandomFileName() -replace '\.', ''
-$script:testResourceGroupName = ('cdbtestrgp-{0}-{1}-{2}' -f $script:testRandomName,$ENV:BuildSystem,$ENV:BranchName)
+$script:testResourceGroupName = ('cdbtestrgp-{0}-{1}-{2}' -f $script:testRandomName,$ENV:BHBuildSystem,$ENV:BHBranchName)
 $script:testAccountName = ('cdbtest{0}' -f $script:testRandomName)
 $script:testLocation = 'East US'
 $script:testOffer = 'testOffer'
