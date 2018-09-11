@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.1.7.675
 
 - Added support for running CI in Azure DevOps Pipelines - fixes [Issue #174](https://github.com/PlagueHO/CosmosDB/issues/174)
 
