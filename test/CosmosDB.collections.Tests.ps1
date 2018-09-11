@@ -52,13 +52,13 @@ InModuleScope CosmosDB {
         -Automatic $true `
         -IndexingMode 'Consistent' `
         -IncludedPath (
-            New-CosmosDbCollectionIncludedPath -Path '/*' -Index (
-                New-CosmosDbCollectionIncludedPathIndex -Kind 'Hash' -DataType 'String' -Precision -1
-            )
-        ) `
-        -ExcludedPath (
-            New-CosmosDbCollectionExcludedPath -Path '/exclude/'
+        New-CosmosDbCollectionIncludedPath -Path '/*' -Index (
+            New-CosmosDbCollectionIncludedPathIndex -Kind 'Hash' -DataType 'String' -Precision -1
         )
+    ) `
+        -ExcludedPath (
+        New-CosmosDbCollectionExcludedPath -Path '/exclude/'
+    )
     $script:testPartitionKey = @{
         paths = @(
             '/partitionkey'
@@ -81,6 +81,7 @@ InModuleScope CosmosDB {
                 $getCosmosDbCollectionResourcePathParameters = @{
                     Database = $script:testDatabase
                     Id       = $script:testCollection1
+                    Verbose  = $true
                 }
 
                 $script:result = Get-CosmosDbCollectionResourcePath @getCosmosDbCollectionResourcePathParameters
@@ -107,6 +108,7 @@ InModuleScope CosmosDB {
                     Kind      = 'Hash'
                     DataType  = 'String'
                     Precision = -1
+                    Verbose   = $true
                 }
 
                 $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
@@ -128,10 +130,11 @@ InModuleScope CosmosDB {
                     Kind      = 'Hash'
                     DataType  = 'Point'
                     Precision = -1
+                    Verbose   = $true
                 }
 
                 $errorMessage = $($LocalizedData.ErrorNewCollectionIncludedPathIndexInvalidDataType `
-                    -f $newCosmosDbCollectionIncludedPathIndexParameters.Kind, $newCosmosDbCollectionIncludedPathIndexParameters.DataType, 'String, Number')
+                        -f $newCosmosDbCollectionIncludedPathIndexParameters.Kind, $newCosmosDbCollectionIncludedPathIndexParameters.DataType, 'String, Number')
 
                 {
                     $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
@@ -147,6 +150,7 @@ InModuleScope CosmosDB {
                     Kind      = 'Range'
                     DataType  = 'Number'
                     Precision = 2
+                    Verbose   = $true
                 }
 
                 $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
@@ -168,10 +172,11 @@ InModuleScope CosmosDB {
                     Kind      = 'Range'
                     DataType  = 'Point'
                     Precision = -1
+                    Verbose   = $true
                 }
 
                 $errorMessage = $($LocalizedData.ErrorNewCollectionIncludedPathIndexInvalidDataType `
-                    -f $newCosmosDbCollectionIncludedPathIndexParameters.Kind, $newCosmosDbCollectionIncludedPathIndexParameters.DataType, 'String, Number')
+                        -f $newCosmosDbCollectionIncludedPathIndexParameters.Kind, $newCosmosDbCollectionIncludedPathIndexParameters.DataType, 'String, Number')
 
                 {
                     $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
@@ -184,8 +189,9 @@ InModuleScope CosmosDB {
 
             It 'Should not throw an exception' {
                 $newCosmosDbCollectionIncludedPathIndexParameters = @{
-                    Kind      = 'Spatial'
-                    DataType  = 'Point'
+                    Kind     = 'Spatial'
+                    DataType = 'Point'
+                    Verbose  = $true
                 }
 
                 $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
@@ -204,12 +210,13 @@ InModuleScope CosmosDB {
 
             It 'Should throw expected exception' {
                 $newCosmosDbCollectionIncludedPathIndexParameters = @{
-                    Kind      = 'Spatial'
-                    DataType  = 'Number'
+                    Kind     = 'Spatial'
+                    DataType = 'Number'
+                    Verbose  = $true
                 }
 
                 $errorMessage = $($LocalizedData.ErrorNewCollectionIncludedPathIndexInvalidDataType `
-                    -f $newCosmosDbCollectionIncludedPathIndexParameters.Kind, $newCosmosDbCollectionIncludedPathIndexParameters.DataType, 'Point, Polygon, LineString')
+                        -f $newCosmosDbCollectionIncludedPathIndexParameters.Kind, $newCosmosDbCollectionIncludedPathIndexParameters.DataType, 'Point, Polygon, LineString')
 
                 {
                     $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
@@ -225,10 +232,11 @@ InModuleScope CosmosDB {
                     Kind      = 'Spatial'
                     DataType  = 'Point'
                     Precision = 1
+                    Verbose   = $true
                 }
 
                 $errorMessage = $($LocalizedData.ErrorNewCollectionIncludedPathIndexPrecisionNotSupported `
-                    -f $newCosmosDbCollectionIncludedPathIndexParameters.Kind)
+                        -f $newCosmosDbCollectionIncludedPathIndexParameters.Kind)
 
                 {
                     $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
@@ -249,8 +257,9 @@ InModuleScope CosmosDB {
 
             It 'Should not throw an exception' {
                 $newCosmosDbCollectionIncludedPathParameters = @{
-                    Path  = '/*'
-                    Index = (New-CosmosDbCollectionIncludedPathIndex -Kind 'Hash' -DataType 'String' -Precision -1)
+                    Path    = '/*'
+                    Index   = (New-CosmosDbCollectionIncludedPathIndex -Kind 'Hash' -DataType 'String' -Precision -1)
+                    Verbose = $true
                 }
 
                 $script:result = New-CosmosDbCollectionIncludedPath @newCosmosDbCollectionIncludedPathParameters
@@ -278,7 +287,8 @@ InModuleScope CosmosDB {
 
             It 'Should not throw an exception' {
                 $newCosmosDbCollectionExcludedPathParameters = @{
-                    Path  = '/*'
+                    Path    = '/*'
+                    Verbose = $true
                 }
 
                 $script:result = New-CosmosDbCollectionExcludedPath @newCosmosDbCollectionExcludedPathParameters
@@ -303,10 +313,11 @@ InModuleScope CosmosDB {
 
             It 'Should not throw an exception' {
                 $newCosmosDbCollectionIndexingPolicyParameters = @{
-                    Automatic = $true
+                    Automatic    = $true
                     IndexingMode = 'Consistent'
                     IncludedPath = (New-CosmosDbCollectionIncludedPath -Path '/*' -Index (New-CosmosDbCollectionIncludedPathIndex -Kind 'Hash' -DataType 'String' -Precision -1))
                     ExcludedPath = (New-CosmosDbCollectionExcludedPath -Path '/*')
+                    Verbose      = $true
                 }
 
                 $script:result = New-CosmosDbCollectionIndexingPolicy @newCosmosDbCollectionIndexingPolicyParameters
@@ -326,8 +337,9 @@ InModuleScope CosmosDB {
 
             It 'Should throw expected exception' {
                 $newCosmosDbCollectionIndexingPolicyParameters = @{
-                    Automatic = $true
+                    Automatic    = $true
                     IndexingMode = 'None'
+                    Verbose      = $true
                 }
 
                 $errorMessage = $($LocalizedData.ErrorNewCollectionIndexingPolicyInvalidMode)
@@ -361,6 +373,7 @@ InModuleScope CosmosDB {
             It 'Should not throw an exception' {
                 $getCosmosDbCollectionParameters = @{
                     Context = $script:testContext
+                    Verbose = $true
                 }
 
                 $script:result = Get-CosmosDbCollection @getCosmosDbCollectionParameters
@@ -392,6 +405,7 @@ InModuleScope CosmosDB {
                 $getCosmosDbCollectionParameters = @{
                     Context = $script:testContext
                     Id      = $script:testCollection1
+                    Verbose = $true
                 }
 
                 $script:result = Get-CosmosDbCollection @getCosmosDbCollectionParameters
@@ -447,6 +461,7 @@ InModuleScope CosmosDB {
                 $newCosmosDbCollectionParameters = @{
                     Context = $script:testContext
                     Id      = $script:testCollection1
+                    Verbose = $true
                 }
 
                 $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
@@ -479,9 +494,10 @@ InModuleScope CosmosDB {
 
             It 'Should not throw an exception' {
                 $newCosmosDbCollectionParameters = @{
-                    Context    = $script:testContext
-                    Id         = $script:testCollection1
+                    Context           = $script:testContext
+                    Id                = $script:testCollection1
                     DefaultTimeToLive = $script:testDefaultTimeToLive
+                    Verbose           = $true
                 }
 
                 $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
@@ -518,6 +534,7 @@ InModuleScope CosmosDB {
                     Context         = $script:testContext
                     Id              = $script:testCollection1
                     OfferThroughput = 400
+                    Verbose         = $true
                 }
 
                 $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
@@ -554,6 +571,7 @@ InModuleScope CosmosDB {
                     Context   = $script:testContext
                     Id        = $script:testCollection1
                     OfferType = 'S2'
+                    Verbose   = $true
                 }
 
                 $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
@@ -592,6 +610,7 @@ InModuleScope CosmosDB {
                     Context      = $script:testContext
                     Id           = $script:testCollection1
                     PartitionKey = 'partitionkey'
+                    Verbose      = $true
                 }
 
                 $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
@@ -630,6 +649,7 @@ InModuleScope CosmosDB {
                     Context      = $script:testContext
                     Id           = $script:testCollection1
                     PartitionKey = '/partitionkey'
+                    Verbose      = $true
                 }
 
                 $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
@@ -660,6 +680,7 @@ InModuleScope CosmosDB {
                     Id              = $script:testCollection1
                     OfferThroughput = 400
                     OfferType       = 'S1'
+                    Verbose         = $true
                 }
 
                 $errorMessage = $($LocalizedData.ErrorNewCollectionOfferParameterConflict)
@@ -695,6 +716,7 @@ InModuleScope CosmosDB {
                 $removeCosmosDbCollectionParameters = @{
                     Context = $script:testContext
                     Id      = $script:testCollection1
+                    Verbose = $true
                 }
 
                 $script:result = Remove-CosmosDbCollection @removeCosmosDbCollectionParameters
@@ -728,7 +750,7 @@ InModuleScope CosmosDB {
                     $ResourceType -eq 'colls' -and `
                     $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
                     $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{
-                        id = $script:testCollection1
+                        id             = $script:testCollection1
                         indexingPolicy = $script:testIndexingPolicy
                     } )
             }
@@ -747,9 +769,10 @@ InModuleScope CosmosDB {
 
             It 'Should not throw an exception' {
                 $setCosmosDbCollectionParameters = @{
-                    Context         = $script:testContext
-                    Id              = $script:testCollection1
-                    IndexingPolicy  = $script:testIndexingPolicy
+                    Context        = $script:testContext
+                    Id             = $script:testCollection1
+                    IndexingPolicy = $script:testIndexingPolicy
+                    Verbose        = $true
                 }
 
                 $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
@@ -780,9 +803,9 @@ InModuleScope CosmosDB {
                     $ResourceType -eq 'colls' -and `
                     $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
                     $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{
-                        id = $script:testCollection1
+                        id             = $script:testCollection1
                         indexingPolicy = $script:testIndexingPolicy
-                        partitionKey = $script:testPartitionKey
+                        partitionKey   = $script:testPartitionKey
                     } )
             }
             $getcosmosdbcollection_parameterfilter = {
@@ -801,9 +824,10 @@ InModuleScope CosmosDB {
 
             It 'Should not throw an exception' {
                 $setCosmosDbCollectionParameters = @{
-                    Context         = $script:testContext
-                    Id              = $script:testCollection1
-                    IndexingPolicy  = $script:testIndexingPolicy
+                    Context        = $script:testContext
+                    Id             = $script:testCollection1
+                    IndexingPolicy = $script:testIndexingPolicy
+                    Verbose        = $true
                 }
 
                 $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
@@ -834,10 +858,10 @@ InModuleScope CosmosDB {
                     $ResourceType -eq 'colls' -and `
                     $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
                     $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{
-                        id = $script:testCollection1
+                        id             = $script:testCollection1
                         indexingPolicy = $script:testIndexingPolicy
-                        partitionKey = $script:testPartitionKey
-                        defaultTtl = $script:testDefaultTimeToLive
+                        partitionKey   = $script:testPartitionKey
+                        defaultTtl     = $script:testDefaultTimeToLive
                     } )
             }
             $getcosmosdbcollection_parameterfilter = {
@@ -848,17 +872,17 @@ InModuleScope CosmosDB {
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith {
-                    $script:testGetCollectionResultSingle
-                }
+                $script:testGetCollectionResultSingle
+            }
 
             Mock `
                 -CommandName Get-CosmosDbCollection `
                 -ParameterFilter $getcosmosdbcollection_parameterfilter `
                 -MockWith {
-                    @{
-                        partitionKey = $script:testPartitionKey
-                    }
+                @{
+                    partitionKey = $script:testPartitionKey
                 }
+            }
 
             It 'Should not throw an exception' {
                 $setCosmosDbCollectionParameters = @{
@@ -866,6 +890,7 @@ InModuleScope CosmosDB {
                     Id                = $script:testCollection1
                     IndexingPolicy    = $script:testIndexingPolicy
                     DefaultTimeToLive = $script:testDefaultTimeToLive
+                    Verbose           = $true
                 }
 
                 $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
@@ -896,9 +921,9 @@ InModuleScope CosmosDB {
                     $ResourceType -eq 'colls' -and `
                     $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
                     $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{
-                        id = $script:testCollection1
+                        id             = $script:testCollection1
                         indexingPolicy = $script:testIndexingPolicy
-                        partitionKey = $script:testPartitionKey
+                        partitionKey   = $script:testPartitionKey
                     } )
             }
             $getcosmosdbcollection_parameterfilter = {
@@ -909,18 +934,18 @@ InModuleScope CosmosDB {
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith {
-                    $script:testGetCollectionResultSingle
-                }
+                $script:testGetCollectionResultSingle
+            }
 
             Mock `
                 -CommandName Get-CosmosDbCollection `
                 -ParameterFilter $getcosmosdbcollection_parameterfilter `
                 -MockWith {
-                    @{
-                        partitionKey = $script:testPartitionKey
-                        defaultTtl = $script:testDefaultTimeToLive
-                    }
+                @{
+                    partitionKey = $script:testPartitionKey
+                    defaultTtl   = $script:testDefaultTimeToLive
                 }
+            }
 
             It 'Should not throw an exception' {
                 $setCosmosDbCollectionParameters = @{
@@ -928,6 +953,7 @@ InModuleScope CosmosDB {
                     Id                      = $script:testCollection1
                     IndexingPolicy          = $script:testIndexingPolicy
                     RemoveDefaultTimeToLive = $true
+                    Verbose                 = $true
                 }
 
                 $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
@@ -959,6 +985,7 @@ InModuleScope CosmosDB {
                     Id                      = $script:testCollection1
                     DefaultTimeToLive       = $script:testDefaultTimeToLive
                     RemoveDefaultTimeToLive = $true
+                    Verbose                 = $true
                 }
 
                 $errorMessage = $LocalizedData.ErrorSetCollectionRemoveDefaultTimeToLiveConflict
