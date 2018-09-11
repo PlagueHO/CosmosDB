@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Added support for running CI in Azure Pipelines.
+- Added support for running CI in Azure DevOps Pipelines.
 
 ## 2.1.7.635
 
