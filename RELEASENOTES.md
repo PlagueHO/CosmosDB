@@ -1,5 +1,11 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+September 11, 2018
+
+- Added support for running CI in Azure DevOps Pipelines - fixes [Issue #174](https://github.com/PlagueHO/CosmosDB/issues/174)
+
 ## What is New in CosmosDB 2.1.7.635
 
 September 3, 2018

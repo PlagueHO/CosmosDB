@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Added support for running CI in Azure DevOps Pipelines.
+- Added support for running CI in Azure DevOps Pipelines - fixes [Issue #174](https://github.com/PlagueHO/CosmosDB/issues/174)
 
 ## 2.1.7.635
 
