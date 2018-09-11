@@ -77,15 +77,13 @@ InModuleScope CosmosDB {
         Context 'When called with all parameters' {
             $script:result = $null
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $getCosmosDbCollectionResourcePathParameters = @{
                     Database = $script:testDatabase
                     Id       = $script:testCollection1
                 }
 
-                {
-                    $script:result = Get-CosmosDbCollectionResourcePath @getCosmosDbCollectionResourcePathParameters
-                } | Should -Not -Throw
+                $script:result = Get-CosmosDbCollectionResourcePath @getCosmosDbCollectionResourcePathParameters
             }
 
             It 'Should return expected result' {
@@ -104,16 +102,14 @@ InModuleScope CosmosDB {
         Context 'When called with valid Hash parameters' {
             $script:result = $null
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $newCosmosDbCollectionIncludedPathIndexParameters = @{
                     Kind      = 'Hash'
                     DataType  = 'String'
                     Precision = -1
                 }
 
-                {
-                    $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
-                } | Should -Not -Throw
+                $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
             }
 
             It 'Should return expected result' {
@@ -146,16 +142,14 @@ InModuleScope CosmosDB {
         Context 'When called with valid Range parameters' {
             $script:result = $null
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $newCosmosDbCollectionIncludedPathIndexParameters = @{
                     Kind      = 'Range'
                     DataType  = 'Number'
                     Precision = 2
                 }
 
-                {
-                    $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
-                } | Should -Not -Throw
+                $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
             }
 
             It 'Should return expected result' {
@@ -188,15 +182,13 @@ InModuleScope CosmosDB {
         Context 'When called with valid Spatial parameters' {
             $script:result = $null
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $newCosmosDbCollectionIncludedPathIndexParameters = @{
                     Kind      = 'Spatial'
                     DataType  = 'Point'
                 }
 
-                {
-                    $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
-                } | Should -Not -Throw
+                $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
             }
 
             It 'Should return expected result' {
@@ -255,15 +247,13 @@ InModuleScope CosmosDB {
         Context 'When called with all parameters' {
             $script:result = $null
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $newCosmosDbCollectionIncludedPathParameters = @{
                     Path  = '/*'
                     Index = (New-CosmosDbCollectionIncludedPathIndex -Kind 'Hash' -DataType 'String' -Precision -1)
                 }
 
-                {
-                    $script:result = New-CosmosDbCollectionIncludedPath @newCosmosDbCollectionIncludedPathParameters
-                } | Should -Not -Throw
+                $script:result = New-CosmosDbCollectionIncludedPath @newCosmosDbCollectionIncludedPathParameters
             }
 
             It 'Should return expected result' {
@@ -286,14 +276,12 @@ InModuleScope CosmosDB {
         Context 'When called with all parameters' {
             $script:result = $null
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $newCosmosDbCollectionExcludedPathParameters = @{
                     Path  = '/*'
                 }
 
-                {
-                    $script:result = New-CosmosDbCollectionExcludedPath @newCosmosDbCollectionExcludedPathParameters
-                } | Should -Not -Throw
+                $script:result = New-CosmosDbCollectionExcludedPath @newCosmosDbCollectionExcludedPathParameters
             }
 
             It 'Should return expected result' {
@@ -313,7 +301,7 @@ InModuleScope CosmosDB {
         Context 'When called with all parameters' {
             $script:result = $null
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $newCosmosDbCollectionIndexingPolicyParameters = @{
                     Automatic = $true
                     IndexingMode = 'Consistent'
@@ -321,9 +309,7 @@ InModuleScope CosmosDB {
                     ExcludedPath = (New-CosmosDbCollectionExcludedPath -Path '/*')
                 }
 
-                {
-                    $script:result = New-CosmosDbCollectionIndexingPolicy @newCosmosDbCollectionIndexingPolicyParameters
-                } | Should -Not -Throw
+                $script:result = New-CosmosDbCollectionIndexingPolicy @newCosmosDbCollectionIndexingPolicyParameters
             }
 
             It 'Should return expected result' {
@@ -372,14 +358,12 @@ InModuleScope CosmosDB {
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'colls' } `
                 -MockWith { $script:testGetCollectionResultMulti }
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $getCosmosDbCollectionParameters = @{
                     Context = $script:testContext
                 }
 
-                {
-                    $script:result = Get-CosmosDbCollection @getCosmosDbCollectionParameters
-                } | Should -Not -Throw
+                $script:result = Get-CosmosDbCollection @getCosmosDbCollectionParameters
             }
 
             It 'Should return expected result' {
@@ -404,15 +388,13 @@ InModuleScope CosmosDB {
                 -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'colls' -and $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) } `
                 -MockWith { $script:testGetCollectionResultSingle }
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $getCosmosDbCollectionParameters = @{
                     Context = $script:testContext
                     Id      = $script:testCollection1
                 }
 
-                {
-                    $script:result = Get-CosmosDbCollection @getCosmosDbCollectionParameters
-                } | Should -Not -Throw
+                $script:result = Get-CosmosDbCollection @getCosmosDbCollectionParameters
             }
 
             It 'Should return expected result' {
@@ -461,15 +443,13 @@ InModuleScope CosmosDB {
                 -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { $script:testGetCollectionResultSingle }
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $newCosmosDbCollectionParameters = @{
                     Context = $script:testContext
                     Id      = $script:testCollection1
                 }
 
-                {
-                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
-                } | Should -Not -Throw
+                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
             }
 
             It 'Should return expected result' {
@@ -497,16 +477,14 @@ InModuleScope CosmosDB {
                 -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { $script:testGetCollectionResultSingle }
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $newCosmosDbCollectionParameters = @{
                     Context    = $script:testContext
                     Id         = $script:testCollection1
                     DefaultTimeToLive = $script:testDefaultTimeToLive
                 }
 
-                {
-                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
-                } | Should -Not -Throw
+                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
             }
 
             It 'Should return expected result' {
@@ -535,17 +513,16 @@ InModuleScope CosmosDB {
                 -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { $script:testGetCollectionResultSingle }
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $newCosmosDbCollectionParameters = @{
                     Context         = $script:testContext
                     Id              = $script:testCollection1
                     OfferThroughput = 400
                 }
 
-                {
-                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
-                } | Should -Not -Throw
+                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
             }
+
             It 'Should return expected result' {
                 $script:result.id | Should -Be $script:testCollection1
             }
@@ -572,16 +549,14 @@ InModuleScope CosmosDB {
                 -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { $script:testGetCollectionResultSingle }
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $newCosmosDbCollectionParameters = @{
                     Context   = $script:testContext
                     Id        = $script:testCollection1
                     OfferType = 'S2'
                 }
 
-                {
-                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
-                } | Should -Not -Throw
+                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
             }
 
             It 'Should return expected result' {
@@ -612,16 +587,14 @@ InModuleScope CosmosDB {
                 -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { $script:testGetCollectionResultSingle }
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $newCosmosDbCollectionParameters = @{
                     Context      = $script:testContext
                     Id           = $script:testCollection1
                     PartitionKey = 'partitionkey'
                 }
 
-                {
-                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
-                } | Should -Not -Throw
+                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
             }
 
             It 'Should return expected result' {
@@ -652,16 +625,14 @@ InModuleScope CosmosDB {
                 -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { $script:testGetCollectionResultSingle }
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $newCosmosDbCollectionParameters = @{
                     Context      = $script:testContext
                     Id           = $script:testCollection1
                     PartitionKey = '/partitionkey'
                 }
 
-                {
-                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
-                } | Should -Not -Throw
+                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
             }
 
             It 'Should return expected result' {
@@ -720,15 +691,13 @@ InModuleScope CosmosDB {
                 -CommandName Invoke-CosmosDbRequest `
                 -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'colls' -and $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) }
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $removeCosmosDbCollectionParameters = @{
                     Context = $script:testContext
                     Id      = $script:testCollection1
                 }
 
-                {
-                    $script:result = Remove-CosmosDbCollection @removeCosmosDbCollectionParameters
-                } | Should -Not -Throw
+                $script:result = Remove-CosmosDbCollection @removeCosmosDbCollectionParameters
             }
 
             It 'Should call expected mocks' {
@@ -776,16 +745,14 @@ InModuleScope CosmosDB {
                 -CommandName Get-CosmosDbCollection `
                 -ParameterFilter $getcosmosdbcollection_parameterfilter
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $setCosmosDbCollectionParameters = @{
                     Context         = $script:testContext
                     Id              = $script:testCollection1
                     IndexingPolicy  = $script:testIndexingPolicy
                 }
 
-                {
-                    $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
-                } | Should -Not -Throw
+                $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
             }
 
             It 'Should return expected result' {
@@ -832,16 +799,14 @@ InModuleScope CosmosDB {
                 -ParameterFilter $getcosmosdbcollection_parameterfilter `
                 -MockWith { @{ partitionKey = $script:testPartitionKey } }
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $setCosmosDbCollectionParameters = @{
                     Context         = $script:testContext
                     Id              = $script:testCollection1
                     IndexingPolicy  = $script:testIndexingPolicy
                 }
 
-#                {
-                    $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
-#                } | Should -Not -Throw
+                $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
             }
 
             It 'Should return expected result' {
@@ -895,7 +860,7 @@ InModuleScope CosmosDB {
                     }
                 }
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $setCosmosDbCollectionParameters = @{
                     Context           = $script:testContext
                     Id                = $script:testCollection1
@@ -903,9 +868,7 @@ InModuleScope CosmosDB {
                     DefaultTimeToLive = $script:testDefaultTimeToLive
                 }
 
-                # {
-                    $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
-                #} | Should -Not -Throw
+                $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
             }
 
             It 'Should return expected result' {
@@ -959,7 +922,7 @@ InModuleScope CosmosDB {
                     }
                 }
 
-            It 'Should not throw exception' {
+            It 'Should not throw an exception' {
                 $setCosmosDbCollectionParameters = @{
                     Context                 = $script:testContext
                     Id                      = $script:testCollection1
@@ -967,9 +930,7 @@ InModuleScope CosmosDB {
                     RemoveDefaultTimeToLive = $true
                 }
 
-                {
-                    $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
-                } | Should -Not -Throw
+                $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
             }
 
             It 'Should return expected result' {

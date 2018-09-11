@@ -23,7 +23,12 @@ if ([String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
 
 # Variables for use in tests
 $script:testRandomName = [System.IO.Path]::GetRandomFileName() -replace '\.', ''
-$script:testResourceGroupName = ('cdbtestrgp-{0}-{1}-{2}' -f $script:testRandomName,$ENV:BHBuildSystem.Replace(' ',''),$ENV:BHBranchName)
+$buildSystem = $ENV:BHBuildSystem
+if (-not $buildSystem)
+{
+    $buildSystem = 'local'
+}
+$script:testResourceGroupName = ('cdbtestrgp-{0}-{1}-{2}' -f $script:testRandomName,$buildSystem.Replace(' ',''),$ENV:BHBranchName)
 $script:testAccountName = ('cdbtest{0}' -f $script:testRandomName)
 $script:testLocation = 'East US'
 $script:testOffer = 'testOffer'
@@ -135,27 +140,23 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When creating a new Azure Cosmos DB Account' {
         It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
-            {
-                New-CosmosDbAccount `
-                    -Name $script:testAccountName `
-                    -ResourceGroupName $script:testResourceGroupName `
-                    -Location $script:testLocation `
-                    -DefaultConsistencyLevel 'BoundedStaleness' `
-                    -MaxIntervalInSeconds 50 `
-                    -MaxStalenessPrefix 50 `
-                    -Verbose
-            } | Should -Not -Throw
+            New-CosmosDbAccount `
+                -Name $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName `
+                -Location $script:testLocation `
+                -DefaultConsistencyLevel 'BoundedStaleness' `
+                -MaxIntervalInSeconds 50 `
+                -MaxStalenessPrefix 50 `
+                -Verbose
         }
     }
 
     Context 'When getting the new Azure Cosmos DB Account' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Get-CosmosDbAccount `
-                    -Name $script:testAccountName `
-                    -ResourceGroupName $script:testResourceGroupName `
-                    -Verbose
-                } | Should -Not -Throw
+            $script:result = Get-CosmosDbAccount `
+                -Name $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -172,26 +173,22 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When updating the new Azure Cosmos DB Account' {
         It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
-            {
-                $script:result = Set-CosmosDbAccount `
-                    -Name $script:testAccountName `
-                    -ResourceGroupName $script:testResourceGroupName `
-                    -Location $script:testLocation `
-                    -DefaultConsistencyLevel 'Session' `
-                    -IpRangeFilter "$currentIpAddress/32" `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Set-CosmosDbAccount `
+                -Name $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName `
+                -Location $script:testLocation `
+                -DefaultConsistencyLevel 'Session' `
+                -IpRangeFilter "$currentIpAddress/32" `
+                -Verbose
         }
     }
 
     Context 'When getting the new Azure Cosmos DB Account' {
         It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
-            {
-                $script:result = Get-CosmosDbAccount `
-                    -Name $script:testAccountName `
-                    -ResourceGroupName $script:testResourceGroupName `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Get-CosmosDbAccount `
+                -Name $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName `
+                -Verbose
         }
 
         It 'Should return expected object' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
@@ -208,41 +205,33 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When creating a new context from Azure using the PrimaryMasterKey Key' {
         It 'Should not throw an exception' {
-            {
-                $script:testContext = New-CosmosDbContext `
-                    -Account $script:testAccountName `
-                    -Database $script:testDatabase `
-                    -ResourceGroup $script:testResourceGroupName `
-                    -MasterKeyType 'PrimaryMasterKey'
-            } | Should -Not -Throw
+            $script:testContext = New-CosmosDbContext `
+                -Account $script:testAccountName `
+                -Database $script:testDatabase `
+                -ResourceGroup $script:testResourceGroupName `
+                -MasterKeyType 'PrimaryMasterKey'
         }
     }
 
     Context 'When creating a new context from Azure using the PrimaryReadonlyMasterKey Key' {
         It 'Should not throw an exception' {
-            {
-                $script:testReadOnlyContext = New-CosmosDbContext `
-                    -Account $script:testAccountName `
-                    -Database $script:testDatabase `
-                    -ResourceGroup $script:testResourceGroupName `
-                    -MasterKeyType 'PrimaryReadonlyMasterKey'
-            } | Should -Not -Throw
+            $script:testReadOnlyContext = New-CosmosDbContext `
+                -Account $script:testAccountName `
+                -Database $script:testDatabase `
+                -ResourceGroup $script:testResourceGroupName `
+                -MasterKeyType 'PrimaryReadonlyMasterKey'
         }
     }
 
     Context 'When creating a new database using a readonly context' {
         It 'Should throw an exception' {
-            {
-                $script:result = New-CosmosDbDatabase -Context $script:testReadOnlyContext -Id $script:testDatabase -Verbose
-            } | Should -Throw
+            $script:result = New-CosmosDbDatabase -Context $script:testReadOnlyContext -Id $script:testDatabase -Verbose
         }
     }
 
     Context 'When creating a new database' {
         It 'Should not throw an exception' {
-            #{
-                $script:result = New-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase -Verbose
-            #} | Should -Not -Throw
+            $script:result = New-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase -Verbose
         }
 
         It 'Should return expected object' {
@@ -258,9 +247,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When getting existing database' {
         It 'Should not throw an exception' {
-            #{
-                $script:result = Get-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase -Verbose
-            #} | Should -Not -Throw
+            $script:result = Get-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase -Verbose
         }
 
         It 'Should return expected object' {
@@ -276,9 +263,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When getting existing database using readonly context' {
         It 'Should not throw an exception' {
-            #{
-                $script:result = Get-CosmosDbDatabase -Context $script:testReadOnlyContext -Id $script:testDatabase -Verbose
-            #} | Should -Not -Throw
+            $script:result = Get-CosmosDbDatabase -Context $script:testReadOnlyContext -Id $script:testDatabase -Verbose
         }
 
         It 'Should return expected object' {
@@ -294,9 +279,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When creating second new database' {
         It 'Should not throw an exception' {
-            {
-                $script:result = New-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase2 -Verbose
-            } | Should -Not -Throw
+            $script:result = New-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase2 -Verbose
         }
 
         It 'Should return expected object' {
@@ -312,9 +295,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When getting all existing databases' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Get-CosmosDbDatabase -Context $script:testContext -Verbose
-            } | Should -Not -Throw
+            $script:result = Get-CosmosDbDatabase -Context $script:testContext -Verbose
         }
 
         It 'Should return expected object' {
@@ -324,20 +305,16 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When removing second database' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Remove-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase2 -Verbose
-            } | Should -Not -Throw
+            $script:result = Remove-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase2 -Verbose
         }
     }
 
     Context 'When adding a user to a database' {
         It 'Should not throw an exception' {
-            {
-                $script:result = New-CosmosDbUser `
-                    -Context $script:testContext `
-                    -Id $script:testUser `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = New-CosmosDbUser `
+                -Context $script:testContext `
+                -Id $script:testUser `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -352,12 +329,10 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When getting the user from a database' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Get-CosmosDbUser `
-                    -Context $script:testContext `
-                    -Id $script:testUser `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Get-CosmosDbUser `
+                -Context $script:testContext `
+                -Id $script:testUser `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -372,26 +347,22 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When creating a new indexing policy' {
         It 'Should not throw an exception' {
-            {
-                $script:indexNumberRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType Number -Precision -1
-                $script:indexStringRange = New-CosmosDbCollectionIncludedPathIndex -Kind Hash -DataType String -Precision 3
-                $script:indexSpatialPoint = New-CosmosDbCollectionIncludedPathIndex -Kind Spatial -DataType Point
-                $script:indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $script:indexNumberRange, $script:indexStringRange, $script:indexSpatialPoint
-                $script:indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $script:indexIncludedPath
-            } | Should -Not -Throw
+            $script:indexNumberRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType Number -Precision -1
+            $script:indexStringRange = New-CosmosDbCollectionIncludedPathIndex -Kind Hash -DataType String -Precision 3
+            $script:indexSpatialPoint = New-CosmosDbCollectionIncludedPathIndex -Kind Spatial -DataType Point
+            $script:indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $script:indexNumberRange, $script:indexStringRange, $script:indexSpatialPoint
+            $script:indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $script:indexIncludedPath
         }
     }
 
     Context 'When creating a new collection' {
         It 'Should not throw an exception' {
-            {
-                $script:result = New-CosmosDbCollection `
-                    -Context $script:testContext `
-                    -Id $script:testCollection `
-                    -OfferThroughput 400 `
-                    -IndexingPolicy $script:indexingPolicy `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = New-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id $script:testCollection `
+                -OfferThroughput 400 `
+                -IndexingPolicy $script:indexingPolicy `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -420,12 +391,10 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When getting existing collection' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Get-CosmosDbCollection `
-                    -Context $script:testContext `
-                    -Id $script:testCollection `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Get-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id $script:testCollection `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -454,13 +423,11 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When updating an existing collection' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Set-CosmosDbCollection `
-                    -Context $script:testContext `
-                    -Id $script:testCollection `
-                    -IndexingPolicy $script:indexingPolicy `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Set-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id $script:testCollection `
+                -IndexingPolicy $script:indexingPolicy `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -489,18 +456,16 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When adding a read collection permission for a user' {
         It 'Should not throw an exception' {
-            {
-                $script:collectionResourcePath = Get-CosmosDbCollectionResourcePath `
-                    -Database $script:testDatabase `
-                    -Id $script:testCollection
-                $script:result = New-CosmosDbPermission `
-                    -Context $script:testContext `
-                    -UserId $script:testUser `
-                    -Id $script:testCollectionPermission `
-                    -Resource $script:collectionResourcePath `
-                    -PermissionMode Read `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:collectionResourcePath = Get-CosmosDbCollectionResourcePath `
+                -Database $script:testDatabase `
+                -Id $script:testCollection
+            $script:result = New-CosmosDbPermission `
+                -Context $script:testContext `
+                -UserId $script:testUser `
+                -Id $script:testCollectionPermission `
+                -Resource $script:collectionResourcePath `
+                -PermissionMode Read `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -517,16 +482,14 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When getting the read collection permission for the user' {
         It 'Should not throw an exception' {
-            {
-                $script:collectionResourcePath = Get-CosmosDbCollectionResourcePath `
-                    -Database $script:testDatabase `
-                    -Id $script:testCollection
-                $script:result = Get-CosmosDbPermission `
-                    -Context $script:testContext `
-                    -UserId $script:testUser `
-                    -Id $script:testCollectionPermission `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:collectionResourcePath = Get-CosmosDbCollectionResourcePath `
+                -Database $script:testDatabase `
+                -Id $script:testCollection
+            $script:result = Get-CosmosDbPermission `
+                -Context $script:testContext `
+                -UserId $script:testUser `
+                -Id $script:testCollectionPermission `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -543,31 +506,29 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When getting existing collection using resource token for user permission as context' {
         It 'Should not throw an exception' {
-            {
-                $script:collectionResourcePath = Get-CosmosDbCollectionResourcePath `
-                    -Database $script:testDatabase `
-                    -Id $script:testCollection `
-                    -Verbose
-                $permission = Get-CosmosDbPermission `
-                    -Context $script:testContext `
-                    -UserId $script:testUser `
-                    -Id $script:testCollectionPermission `
-                    -Verbose
-                $contextToken = New-CosmosDbContextToken `
-                    -Resource $script:collectionResourcePath `
-                    -TimeStamp $permission[0].Timestamp `
-                    -Token (ConvertTo-SecureString -String $permission[0].Token -AsPlainText -Force) `
-                    -Verbose
-                $resourceContext = New-CosmosDbContext `
-                    -Account $script:testAccountName `
-                    -Database $script:testDatabase `
-                    -Token $contextToken `
-                    -Verbose
-                $script:result = Get-CosmosDbCollection `
-                    -Context $resourceContext `
-                    -Id $script:testCollection `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:collectionResourcePath = Get-CosmosDbCollectionResourcePath `
+                -Database $script:testDatabase `
+                -Id $script:testCollection `
+                -Verbose
+            $permission = Get-CosmosDbPermission `
+                -Context $script:testContext `
+                -UserId $script:testUser `
+                -Id $script:testCollectionPermission `
+                -Verbose
+            $contextToken = New-CosmosDbContextToken `
+                -Resource $script:collectionResourcePath `
+                -TimeStamp $permission[0].Timestamp `
+                -Token (ConvertTo-SecureString -String $permission[0].Token -AsPlainText -Force) `
+                -Verbose
+            $resourceContext = New-CosmosDbContext `
+                -Account $script:testAccountName `
+                -Database $script:testDatabase `
+                -Token $contextToken `
+                -Verbose
+            $script:result = Get-CosmosDbCollection `
+                -Context $resourceContext `
+                -Id $script:testCollection `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -596,9 +557,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When getting existing offers' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Get-CosmosDbOffer -Context $script:testContext -Verbose
-            } | Should -Not -Throw
+            $script:result = Get-CosmosDbOffer -Context $script:testContext -Verbose
         }
 
         It 'Should return expected object' {
@@ -617,11 +576,9 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When updating existing offer throughput' {
         It 'Should not throw an exception' {
-            {
-                $script:result = `
-                    Get-CosmosDbOffer -Context $script:testContext -Verbose |
-                    Set-CosmosDbOffer -Context $script:testContext -OfferThroughput 800 -Verbose
-            } | Should -Not -Throw
+            $script:result = `
+                Get-CosmosDbOffer -Context $script:testContext -Verbose |
+                Set-CosmosDbOffer -Context $script:testContext -OfferThroughput 800 -Verbose
         }
 
         It 'Should return expected object' {
@@ -640,13 +597,11 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When adding a document to a collection' {
         It 'Should not throw an exception' {
-            {
-                $script:result = New-CosmosDbDocument `
-                    -Context $script:testContext `
-                    -CollectionId $script:testCollection `
-                    -DocumentBody $script:testDocumentBody `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = New-CosmosDbDocument `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -DocumentBody $script:testDocumentBody `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -663,16 +618,14 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When adding an attachment to the document in a collection' {
         It 'Should not throw an exception' {
-            {
-                $script:result = New-CosmosDbAttachment `
-                    -Context $script:testContext `
-                    -CollectionId $script:testCollection `
-                    -DocumentId $script:testDocumentId `
-                    -Id $script:testAttachmentId `
-                    -ContentType $script:testAttachmentContentType `
-                    -Media $script:testAttachmentMedia `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = New-CosmosDbAttachment `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -DocumentId $script:testDocumentId `
+                -Id $script:testAttachmentId `
+                -ContentType $script:testAttachmentContentType `
+                -Media $script:testAttachmentMedia `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -688,14 +641,12 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When getting an attachment from the document in a collection' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Get-CosmosDbAttachment `
-                    -Context $script:testContext `
-                    -CollectionId $script:testCollection `
-                    -DocumentId $script:testDocumentId `
-                    -Id $script:testAttachmentId `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Get-CosmosDbAttachment `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -DocumentId $script:testDocumentId `
+                -Id $script:testAttachmentId `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -711,19 +662,17 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When adding a read document permission for a user' {
         It 'Should not throw an exception' {
-            {
-                $script:documentResourcePath = Get-CosmosDbDocumentResourcePath `
-                    -Database $script:testDatabase `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testDocumentId
-                $script:result = New-CosmosDbPermission `
-                    -Context $script:testContext `
-                    -UserId $script:testUser `
-                    -Id $script:testDocumentPermission `
-                    -Resource $script:documentResourcePath `
-                    -PermissionMode Read `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:documentResourcePath = Get-CosmosDbDocumentResourcePath `
+                -Database $script:testDatabase `
+                -CollectionId $script:testCollection `
+                -Id $script:testDocumentId
+            $script:result = New-CosmosDbPermission `
+                -Context $script:testContext `
+                -UserId $script:testUser `
+                -Id $script:testDocumentPermission `
+                -Resource $script:documentResourcePath `
+                -PermissionMode Read `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -740,17 +689,15 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When getting the read document permission for the user' {
         It 'Should not throw an exception' {
-            {
-                $script:documentResourcePath = Get-CosmosDbDocumentResourcePath `
-                    -Database $script:testDatabase `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testDocumentId
-                $script:result = Get-CosmosDbPermission `
-                    -Context $script:testContext `
-                    -UserId $script:testUser `
-                    -Id $script:testDocumentPermission `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:documentResourcePath = Get-CosmosDbDocumentResourcePath `
+                -Database $script:testDatabase `
+                -CollectionId $script:testCollection `
+                -Id $script:testDocumentId
+            $script:result = Get-CosmosDbPermission `
+                -Context $script:testContext `
+                -UserId $script:testUser `
+                -Id $script:testDocumentPermission `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -767,45 +714,41 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When getting existing document using resource token for user permission as context' {
         It 'Should not throw an exception' {
-            {
-                $script:documentResourcePath = Get-CosmosDbDocumentResourcePath `
-                    -Database $script:testDatabase `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testDocumentId
-                $permission = Get-CosmosDbPermission `
-                    -Context $script:testContext `
-                    -UserId $script:testUser `
-                    -Id $script:testDocumentPermission `
-                    -Verbose
-                $contextToken = New-CosmosDbContextToken `
-                    -Resource $script:documentResourcePath `
-                    -TimeStamp $permission[0].Timestamp `
-                    -Token (ConvertTo-SecureString -String $permission[0].Token -AsPlainText -Force) `
-                    -Verbose
-                $resourceContext = New-CosmosDbContext `
-                    -Account $script:testAccountName `
-                    -Database $script:testDatabase `
-                    -Token $contextToken `
-                    -Verbose
-                $script:result = Get-CosmosDbDocument `
-                    -Context $resourceContext `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testDocumentId `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:documentResourcePath = Get-CosmosDbDocumentResourcePath `
+                -Database $script:testDatabase `
+                -CollectionId $script:testCollection `
+                -Id $script:testDocumentId
+            $permission = Get-CosmosDbPermission `
+                -Context $script:testContext `
+                -UserId $script:testUser `
+                -Id $script:testDocumentPermission `
+                -Verbose
+            $contextToken = New-CosmosDbContextToken `
+                -Resource $script:documentResourcePath `
+                -TimeStamp $permission[0].Timestamp `
+                -Token (ConvertTo-SecureString -String $permission[0].Token -AsPlainText -Force) `
+                -Verbose
+            $resourceContext = New-CosmosDbContext `
+                -Account $script:testAccountName `
+                -Database $script:testDatabase `
+                -Token $contextToken `
+                -Verbose
+            $script:result = Get-CosmosDbDocument `
+                -Context $resourceContext `
+                -CollectionId $script:testCollection `
+                -Id $script:testDocumentId `
+                -Verbose
         }
     }
 
     Context 'When adding a stored procedure to the collection' {
         It 'Should not throw an exception' {
-            {
-                $script:result = New-CosmosDbStoredProcedure `
-                    -Context $script:testContext `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testStoredProcedureId `
-                    -StoredProcedureBody $script:testStoredProcedureBody `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = New-CosmosDbStoredProcedure `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -Id $script:testStoredProcedureId `
+                -StoredProcedureBody $script:testStoredProcedureBody `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -819,13 +762,11 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When getting the stored procedure from the collection' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Get-CosmosDbStoredProcedure `
-                    -Context $script:testContext `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testStoredProcedureId `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Get-CosmosDbStoredProcedure `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -Id $script:testStoredProcedureId `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -839,13 +780,11 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When removing the stored procedure from the collection' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Remove-CosmosDbStoredProcedure `
-                    -Context $script:testContext `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testStoredProcedureId `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Remove-CosmosDbStoredProcedure `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -Id $script:testStoredProcedureId `
+                -Verbose
         }
     }
 
@@ -853,16 +792,14 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     {
         Context "When adding a $operation trigger to the collection" {
             It 'Should not throw an exception' {
-                {
-                    $script:result = New-CosmosDbTrigger `
-                        -Context $script:testContext `
-                        -CollectionId $script:testCollection `
-                        -Id $script:testTriggerId `
-                        -TriggerBody $script:testTriggerBody `
-                        -TriggerOperation $operation `
-                        -TriggerType 'Pre' `
-                        -Verbose
-                } | Should -Not -Throw
+                $script:result = New-CosmosDbTrigger `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testTriggerId `
+                    -TriggerBody $script:testTriggerBody `
+                    -TriggerOperation $operation `
+                    -TriggerType 'Pre' `
+                    -Verbose
             }
 
             It 'Should return expected object' {
@@ -878,13 +815,11 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
         Context "When getting the $operation trigger from the collection" {
             It 'Should not throw an exception' {
-                {
-                    $script:result = Get-CosmosDbTrigger `
-                        -Context $script:testContext `
-                        -CollectionId $script:testCollection `
-                        -Id $script:testTriggerId `
-                        -Verbose
-                } | Should -Not -Throw
+                $script:result = Get-CosmosDbTrigger `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testTriggerId `
+                    -Verbose
             }
 
             It 'Should return expected object' {
@@ -900,27 +835,23 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
         Context "When removing the $operation trigger from the collection" {
             It 'Should not throw an exception' {
-                {
-                    $script:result = Remove-CosmosDbTrigger `
-                        -Context $script:testContext `
-                        -CollectionId $script:testCollection `
-                        -Id $script:testTriggerId `
-                        -Verbose
-                } | Should -Not -Throw
+                $script:result = Remove-CosmosDbTrigger `
+                    -Context $script:testContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testTriggerId `
+                    -Verbose
             }
         }
     }
 
     Context 'When adding a user defined function to the collection' {
         It 'Should not throw an exception' {
-            {
-                $script:result = New-CosmosDbUserDefinedFunction `
-                    -Context $script:testContext `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testUserDefinedFunctionId `
-                    -UserDefinedFunctionBody $script:testUserDefinedFunctionBody `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = New-CosmosDbUserDefinedFunction `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -Id $script:testUserDefinedFunctionId `
+                -UserDefinedFunctionBody $script:testUserDefinedFunctionBody `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -934,13 +865,11 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When getting the user defined function from the collection' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Get-CosmosDbUserDefinedFunction `
-                    -Context $script:testContext `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testUserDefinedFunctionId `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Get-CosmosDbUserDefinedFunction `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -Id $script:testUserDefinedFunctionId `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -954,70 +883,58 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When removing the user defined function from the collection' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Remove-CosmosDbUserDefinedFunction `
-                    -Context $script:testContext `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testUserDefinedFunctionId `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Remove-CosmosDbUserDefinedFunction `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -Id $script:testUserDefinedFunctionId `
+                -Verbose
         }
     }
 
     Context 'When removing the existing read collection permission for the user' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Remove-CosmosDbPermission `
-                    -Context $script:testContext `
-                    -UserId $script:testUser `
-                    -Id $script:testCollectionPermission `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Remove-CosmosDbPermission `
+                -Context $script:testContext `
+                -UserId $script:testUser `
+                -Id $script:testCollectionPermission `
+                -Verbose
         }
     }
 
     Context 'When removing an attachment from the document in a collection' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Remove-CosmosDbAttachment `
-                    -Context $script:testContext `
-                    -CollectionId $script:testCollection `
-                    -DocumentId $script:testDocumentId `
-                    -Id $script:testAttachmentId `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Remove-CosmosDbAttachment `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -DocumentId $script:testDocumentId `
+                -Id $script:testAttachmentId `
+                -Verbose
         }
     }
 
     Context 'When removing a document from a collection' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Remove-CosmosDbDocument `
-                    -Context $script:testContext `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testDocumentId `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Remove-CosmosDbDocument `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -Id $script:testDocumentId `
+                -Verbose
         }
     }
 
     Context 'When removing existing collection' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
-            } | Should -Not -Throw
+            $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
         }
     }
 
     Context 'When creating a new collection with a partition key' {
         It 'Should not throw an exception' {
-            {
-                $script:result = New-CosmosDbCollection `
-                    -Context $script:testContext `
-                    -Id $script:testCollection `
-                    -PartitionKey $script:testPartitionKey `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = New-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id $script:testCollection `
+                -PartitionKey $script:testPartitionKey `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -1038,14 +955,12 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When adding a document to a collection with a partition key' {
         It 'Should not throw an exception' {
-            {
-                $script:result = New-CosmosDbDocument `
-                    -Context $script:testContext `
-                    -CollectionId $script:testCollection `
-                    -DocumentBody $script:testDocumentBody `
-                    -PartitionKey $script:testDocumentId `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = New-CosmosDbDocument `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -DocumentBody $script:testDocumentBody `
+                -PartitionKey $script:testDocumentId `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -1062,14 +977,12 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When getting the document in a collection by using the Id with a partition key' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Get-CosmosDbDocument `
-                    -Context $script:testContext `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testDocumentId `
-                    -PartitionKey $script:testDocumentId `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Get-CosmosDbDocument `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -Id $script:testDocumentId `
+                -PartitionKey $script:testDocumentId `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -1086,13 +999,11 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When getting all the documents in a collection with a partition key' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Get-CosmosDbDocument `
-                    -Context $script:testContext `
-                    -CollectionId $script:testCollection `
-                    -PartitionKey $script:testDocumentId `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Get-CosmosDbDocument `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -PartitionKey $script:testDocumentId `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -1109,32 +1020,26 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When removing existing collection with a partition key' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
-            } | Should -Not -Throw
+            $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
         }
     }
 
     Context 'When removing existing user' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Remove-CosmosDbUser -Context $script:testContext -Id $script:testUser -Verbose
-            } | Should -Not -Throw
+            $script:result = Remove-CosmosDbUser -Context $script:testContext -Id $script:testUser -Verbose
         }
     }
 
     Context 'When creating a new collection with IndexingMode set to None' {
         It 'Should not throw an exception' {
-            {
-                $script:indexingPolicyNone = New-CosmosDbCollectionIndexingPolicy -Automatic $false -IndexingMode None
+            $script:indexingPolicyNone = New-CosmosDbCollectionIndexingPolicy -Automatic $false -IndexingMode None
 
-                $script:result = New-CosmosDbCollection `
-                    -Context $script:testContext `
-                    -Id $script:testCollection `
-                    -OfferThroughput 400 `
-                    -IndexingPolicy $script:indexingPolicyNone `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = New-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id $script:testCollection `
+                -OfferThroughput 400 `
+                -IndexingPolicy $script:indexingPolicyNone `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -1155,21 +1060,17 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When removing existing collection with a None indexing Policy' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
-            } | Should -Not -Throw
+            $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
         }
     }
 
     Context "When creating a new collection with a DefaultTimeToLive set to $($script:testDefaultTimeToLive)" {
         It 'Should not throw an exception' {
-            {
-                $script:result = New-CosmosDbCollection `
-                    -Context $script:testContext `
-                    -Id $script:testCollection `
-                    -DefaultTimeToLive $script:testDefaultTimeToLive `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = New-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id $script:testCollection `
+                -DefaultTimeToLive $script:testDefaultTimeToLive `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -1191,13 +1092,11 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context "When updating an existing collection changing the DefaultTimeToLive to $($script:testDefaultTimeToLive + 1)" {
         It 'Should not throw an exception' {
-            {
-                $script:result = Set-CosmosDbCollection `
-                    -Context $script:testContext `
-                    -Id $script:testCollection `
-                    -DefaultTimeToLive ($script:testDefaultTimeToLive + 1) `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Set-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id $script:testCollection `
+                -DefaultTimeToLive ($script:testDefaultTimeToLive + 1) `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -1219,13 +1118,11 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context "When updating an existing collection removing the DefaultTimeToLive" {
         It 'Should not throw an exception' {
-            {
-                $script:result = Set-CosmosDbCollection `
-                    -Context $script:testContext `
-                    -Id $script:testCollection `
-                    -RemoveDefaultTimeToLive `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Set-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id $script:testCollection `
+                -RemoveDefaultTimeToLive `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -1247,14 +1144,12 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context "When updating an existing collection changing the DefaultTimeToLive set to $($script:testDefaultTimeToLive + 2) and IndexingPolicy" {
         It 'Should not throw an exception' {
-            {
-                $script:result = Set-CosmosDbCollection `
-                    -Context $script:testContext `
-                    -Id $script:testCollection `
-                    -IndexingPolicy $script:indexingPolicy `
-                    -DefaultTimeToLive ($script:testDefaultTimeToLive + 2) `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Set-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id $script:testCollection `
+                -IndexingPolicy $script:indexingPolicy `
+                -DefaultTimeToLive ($script:testDefaultTimeToLive + 2) `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -1282,14 +1177,12 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context "When updating an existing collection changing nothing" {
+    Context 'When updating an existing collection changing nothing' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Set-CosmosDbCollection `
-                    -Context $script:testContext `
-                    -Id $script:testCollection `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Set-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id $script:testCollection `
+                -Verbose
         }
 
         It 'Should return expected object' {
@@ -1319,41 +1212,33 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When removing existing collection' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
-            } | Should -Not -Throw
+            $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
         }
     }
 
     Context 'When removing existing database' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Remove-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase -Verbose
-            } | Should -Not -Throw
+            $script:result = Remove-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase -Verbose
         }
     }
 
     Context 'When removing the Azure Cosmos DB Account' {
         It 'Should not throw an exception' {
-            {
-                Remove-CosmosDbAccount `
-                    -Name $script:testAccountName `
-                    -ResourceGroupName $script:testResourceGroupName `
-                    -Force `
-                    -Verbose
-            } | Should -Not -Throw
+            Remove-CosmosDbAccount `
+                -Name $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName `
+                -Force `
+                -Verbose
         }
     }
 
     Context 'When getting the deleted Azure Cosmos DB Account' {
         It 'Should not throw an exception' {
-            {
-                $script:result = Get-CosmosDbAccount `
-                    -Name $script:testAccountName `
-                    -ResourceGroupName $script:testResourceGroupName `
-                    -ErrorAction SilentlyContinue `
-                    -Verbose
-            } | Should -Not -Throw
+            $script:result = Get-CosmosDbAccount `
+                -Name $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName `
+                -ErrorAction SilentlyContinue `
+                -Verbose
         }
 
         It 'Should return null' {
