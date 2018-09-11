@@ -203,6 +203,18 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    Context 'When updating the new Azure Cosmos DB Account to remove IP Range filter' {
+        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
+            $script:result = Set-CosmosDbAccount `
+                -Name $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName `
+                -Location $script:testLocation `
+                -DefaultConsistencyLevel 'Session' `
+                -IpRangeFilter '' `
+                -Verbose
+        }
+    }
+
     Context 'When creating a new context from Azure using the PrimaryMasterKey Key' {
         It 'Should not throw an exception' {
             $script:testContext = New-CosmosDbContext `
@@ -225,7 +237,9 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When creating a new database using a readonly context' {
         It 'Should throw an exception' {
-            $script:result = New-CosmosDbDatabase -Context $script:testReadOnlyContext -Id $script:testDatabase -Verbose
+            {
+                $script:result = New-CosmosDbDatabase -Context $script:testReadOnlyContext -Id $script:testDatabase -Verbose
+            } | Should -Throw
         }
     }
 
