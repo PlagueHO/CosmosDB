@@ -3,7 +3,7 @@ jobs:
     pool:
       vmImage: vs2017-win2016
     steps:
-    - script: |
+    - powershell: |
         .\build.ps1 -Verbose
       displayName: 'Build and Test'
     - task: PublishTestResults@2
