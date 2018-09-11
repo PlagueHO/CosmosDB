@@ -8,9 +8,8 @@ jobs:
       displayName: 'Build and Test'
     - task: PublishTestResults@2
       inputs:
-        testRunner: 'NUnit'
-        testResultsFiles: '/test/TestResults.xml'
-        searchFolder: '$(System.DefaultWorkingDirectory)'
+        testRunner: 'XUnit'
+        testResultsFiles: '**/TestResults.xml'
         testRunTitle: 'PS_Win2016'
       displayName: 'Publish Test Results'
 
@@ -33,9 +32,8 @@ jobs:
 
     - task: PublishTestResults@2
       inputs:
-        testRunner: 'NUnit'
-        testResultsFiles: '/test/TestResults.xml'
-        searchFolder: '$(System.DefaultWorkingDirectory)'
+        testRunner: 'XUnit'
+        testResultsFiles: '**/TestResults.xml'
         testRunTitle: 'PSCore_Ubuntu1604'
       displayName: 'Publish Test Results'
 
@@ -55,8 +53,7 @@ jobs:
 
     - task: PublishTestResults@2
       inputs:
-        testRunner: 'NUnit'
-        testResultsFiles: '/test/TestResults.xml'
-        searchFolder: '$(System.DefaultWorkingDirectory)'
+        testRunner: 'XUnit'
+        testResultsFiles: '**/TestResults.xml'
         testRunTitle: 'PSCore_MacOS1013'
       displayName: 'Publish Test Results'

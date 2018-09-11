@@ -258,9 +258,9 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When getting existing database' {
         It 'Should not throw an exception' {
-            {
+            #{
                 $script:result = Get-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase -Verbose
-            } | Should -Not -Throw
+            #} | Should -Not -Throw
         }
 
         It 'Should return expected object' {
@@ -276,9 +276,9 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When getting existing database using readonly context' {
         It 'Should not throw an exception' {
-            {
+            #{
                 $script:result = Get-CosmosDbDatabase -Context $script:testReadOnlyContext -Id $script:testDatabase -Verbose
-            } | Should -Not -Throw
+            #} | Should -Not -Throw
         }
 
         It 'Should return expected object' {
