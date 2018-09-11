@@ -215,7 +215,6 @@ function Remove-AzureTestCosmosDbResourceGroup
     }
 }
 
-
 Export-ModuleMember -Function `
     Get-AzureServicePrincipal, `
     Connect-AzureServicePrincipal, `

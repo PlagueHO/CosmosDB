@@ -857,7 +857,7 @@ InModuleScope CosmosDB {
                 $Method -eq 'Put' -and `
                     $ResourceType -eq 'colls' -and `
                     $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
-                    $Body -eq (ConvertFrom-Json -Depth 10 -InputObject @{
+                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{
                         id             = $script:testCollection1
                         indexingPolicy = $script:testIndexingPolicy
                         partitionKey   = $script:testPartitionKey
