@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Added support for running CI in Azure Pipelines.
+
 ## 2.1.7.635
 
 - Added `New-CosmosDbAccount` function for creating a new Cosmos DB

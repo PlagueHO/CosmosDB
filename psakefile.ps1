@@ -20,15 +20,21 @@ Properties {
 Task Default -Depends Build
 
 Task Init {
-    $separator
-
     Set-Location -Path $ProjectRoot
+
+    $separator
     'Build System Details:'
     Get-Item -Path ENV:BH*
     "`n"
+
+    $separator
+    'Other Environment Variables:'
+    Get-ChildItem -Path ENV:
+    "`n"
+
+    $separator
     'PowerShell Details:'
     $PSVersionTable
-
     "`n"
 }
 
