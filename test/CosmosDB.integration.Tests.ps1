@@ -109,9 +109,10 @@ Connect-AzureServicePrincipal `
     -Verbose
 
 # Create resource group
-$null = New-AzureRmResourceGroup `
-    -Name $script:testResourceGroupName `
-    -Location $script:testLocation
+$null = New-AzureTestCosmosDbResourceGroup `
+    -ResourceGroupName $script:testResourceGroupName `
+    -Location $script:testLocation `
+    -Verbose
 
 $currentIpAddress = (Invoke-RestMethod -Uri 'http://ipinfo.io/json').ip
 
@@ -126,7 +127,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         ) -join "`n`r")
 
         # Create Azure CosmosDB Account to use for testing
-        New-AzureCosmosDbAccount `
+        New-AzureTestCosmosDbAccount `
             -ResourceGroupName $script:testResourceGroupName `
             -AccountName $script:testAccountName `
             -Verbose
@@ -1362,7 +1363,5 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 }
 
 # Remove test Resource Group
-$null = Remove-AzureRmResourceGroup `
-    -Name $script:testResourceGroupName `
-    -Force `
-    -AsJob
+Remove-AzureTestCosmosDbResourceGroup `
+    -ResourceGroupName $script:testResourceGroupName
