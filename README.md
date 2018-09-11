@@ -9,11 +9,13 @@
 
 ## Module Build Status
 
-| Branch | AppVeyor CI | Travis CI | Code Coverage |
-| --- | --- | --- | --- |
-| dev | [![av-image-dev][]][av-site-dev] | [![tv-image-dev][]][tv-site-dev] | [![cc-image-dev][]][cc-site-dev] |
-| master | [![av-image-master][]][av-site-master] | [![tv-image-master][]][tv-site-master] | [![cc-image-master][]][cc-site-master] |
+| Branch | AzurePipelines CI | AppVeyor CI | Travis CI | Code Coverage |
+| --- | --- | --- | --- | --- |
+| dev | [![ap-image-dev][]][ap-site-dev] | [![av-image-dev][]][av-site-dev] | [![tv-image-dev][]][tv-site-dev] | [![cc-image-dev][]][cc-site-dev] |
+| master | [![ap-image-master][]][ap-site-master] | [![av-image-master][]][av-site-master] | [![tv-image-master][]][tv-site-master] | [![cc-image-master][]][cc-site-master] |
 
+[ap-image-dev]: https://dev.azure.com/dscottraynsford/GitHub/_apis/build/status/PlagueHO.CosmosDB?branchName=dev
+[ap-site-dev]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4
 [av-image-dev]:https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/dev?svg=true
 [av-site-dev]: https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/dev
 [tv-image-dev]: https://travis-ci.org/PlagueHO/CosmosDB.svg?branch=dev
@@ -21,6 +23,8 @@
 [cc-image-dev]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev/graph/badge.svg
 [cc-site-dev]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev
 
+[ap-image-master]: https://dev.azure.com/dscottraynsford/GitHub/_apis/build/status/PlagueHO.CosmosDB?branchName=master
+[ap-site-master]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4
 [av-image-master]: https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/master?svg=true
 [av-site-master]: https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/master
 [tv-image-master]: https://travis-ci.org/PlagueHO/CosmosDB.svg?branch=master

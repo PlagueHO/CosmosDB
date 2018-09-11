@@ -5,6 +5,8 @@ param (
     $Deploy
 )
 
+Write-Verbose -Message 'Beginning build process...'
+
 $task = 'Default'
 if ($Deploy)
 {
