@@ -903,9 +903,9 @@ InModuleScope CosmosDB {
                     DefaultTimeToLive = $script:testDefaultTimeToLive
                 }
 
-                {
+                # {
                     $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
-                } | Should -Not -Throw
+                #} | Should -Not -Throw
             }
 
             It 'Should return expected result' {
