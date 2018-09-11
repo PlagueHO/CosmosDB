@@ -205,7 +205,7 @@ function Remove-AzureTestCosmosDbResourceGroup
         Write-Verbose -Message ('Removing test Azure Resource Group {0}.' -f $ResourceGroupName)
 
         $null = Remove-AzureRmResourceGroup `
-            -Name $script:testResourceGroupName `
+            -Name $ResourceGroupName `
             -Force `
             -AsJob
     }
