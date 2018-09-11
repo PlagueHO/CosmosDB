@@ -853,6 +853,13 @@ InModuleScope CosmosDB {
         Context 'When called with context parameter and an Id and DefaultTimeToLive parameter on a collection with a partition key' {
             $script:result = $null
 
+            Write-Verbose -Message (ConvertTo-Json -Depth 10 -InputObject @{
+                id             = $script:testCollection1
+                indexingPolicy = $script:testIndexingPolicy
+                partitionKey   = $script:testPartitionKey
+                defaultTtl     = $script:testDefaultTimeToLive
+            } | Out-String) -Verbose
+
             $invokecosmosdbrequest_parameterfilter = {
                 $Method -eq 'Put' -and `
                     $ResourceType -eq 'colls' -and `

@@ -637,6 +637,8 @@ function Set-CosmosDbCollection
 
     $body = ConvertTo-Json -InputObject $bodyObject -Depth 10
 
+    Write-Verbose -Message ($body | Out-String) -Verbose
+
     $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Put' `
         -ResourceType 'colls' `
