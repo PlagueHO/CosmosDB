@@ -60,14 +60,18 @@ InModuleScope CosmosDB {
             New-CosmosDbCollectionExcludedPath -Path '/exclude/'
         )
     $script:testPartitionKey = @{
-        paths = @('/partitionkey')
+        paths = @(
+            '/partitionkey'
+        )
         kind  = 'Hash'
     }
     $script:testDefaultTimeToLive = 3600
 
     Describe 'Get-CosmosDbCollectionResourcePath' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Get-CosmosDbCollectionResourcePath  -ErrorAction Stop } | Should -Not -Throw
+            {
+                Get-Command -Name Get-CosmosDbCollectionResourcePath  -ErrorAction Stop
+            } | Should -Not -Throw
         }
 
         Context 'When called with all parameters' {
@@ -79,7 +83,9 @@ InModuleScope CosmosDB {
                     Id       = $script:testCollection1
                 }
 
-                { $script:result = Get-CosmosDbCollectionResourcePath @getCosmosDbCollectionResourcePathParameters } | Should -Not -Throw
+                {
+                    $script:result = Get-CosmosDbCollectionResourcePath @getCosmosDbCollectionResourcePathParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -90,7 +96,9 @@ InModuleScope CosmosDB {
 
     Describe 'New-CosmosDbCollectionIncludedPathIndex' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name New-CosmosDbCollectionIncludedPathIndex  -ErrorAction Stop } | Should -Not -Throw
+            {
+                Get-Command -Name New-CosmosDbCollectionIncludedPathIndex -ErrorAction Stop
+            } | Should -Not -Throw
         }
 
         Context 'When called with valid Hash parameters' {
@@ -103,7 +111,9 @@ InModuleScope CosmosDB {
                     Precision = -1
                 }
 
-                { $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters } | Should -Not -Throw
+                {
+                    $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -127,7 +137,9 @@ InModuleScope CosmosDB {
                 $errorMessage = $($LocalizedData.ErrorNewCollectionIncludedPathIndexInvalidDataType `
                     -f $newCosmosDbCollectionIncludedPathIndexParameters.Kind, $newCosmosDbCollectionIncludedPathIndexParameters.DataType, 'String, Number')
 
-                { $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters } | Should -Throw $errorMessage
+                {
+                    $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
+                } | Should -Throw $errorMessage
             }
         }
 
@@ -141,7 +153,9 @@ InModuleScope CosmosDB {
                     Precision = 2
                 }
 
-                { $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters } | Should -Not -Throw
+                {
+                    $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -165,7 +179,9 @@ InModuleScope CosmosDB {
                 $errorMessage = $($LocalizedData.ErrorNewCollectionIncludedPathIndexInvalidDataType `
                     -f $newCosmosDbCollectionIncludedPathIndexParameters.Kind, $newCosmosDbCollectionIncludedPathIndexParameters.DataType, 'String, Number')
 
-                { $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters } | Should -Throw $errorMessage
+                {
+                    $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
+                } | Should -Throw $errorMessage
             }
         }
 
@@ -178,7 +194,9 @@ InModuleScope CosmosDB {
                     DataType  = 'Point'
                 }
 
-                { $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters } | Should -Not -Throw
+                {
+                    $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -201,7 +219,9 @@ InModuleScope CosmosDB {
                 $errorMessage = $($LocalizedData.ErrorNewCollectionIncludedPathIndexInvalidDataType `
                     -f $newCosmosDbCollectionIncludedPathIndexParameters.Kind, $newCosmosDbCollectionIncludedPathIndexParameters.DataType, 'Point, Polygon, LineString')
 
-                { $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters } | Should -Throw $errorMessage
+                {
+                    $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
+                } | Should -Throw $errorMessage
             }
         }
 
@@ -218,14 +238,18 @@ InModuleScope CosmosDB {
                 $errorMessage = $($LocalizedData.ErrorNewCollectionIncludedPathIndexPrecisionNotSupported `
                     -f $newCosmosDbCollectionIncludedPathIndexParameters.Kind)
 
-                { $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters } | Should -Throw $errorMessage
+                {
+                    $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
+                } | Should -Throw $errorMessage
             }
         }
     }
 
     Describe 'New-CosmosDbCollectionIncludedPath' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name New-CosmosDbCollectionIncludedPath  -ErrorAction Stop } | Should -Not -Throw
+            {
+                Get-Command -Name New-CosmosDbCollectionIncludedPath  -ErrorAction Stop
+            } | Should -Not -Throw
         }
 
         Context 'When called with all parameters' {
@@ -237,7 +261,9 @@ InModuleScope CosmosDB {
                     Index = (New-CosmosDbCollectionIncludedPathIndex -Kind 'Hash' -DataType 'String' -Precision -1)
                 }
 
-                { $script:result = New-CosmosDbCollectionIncludedPath @newCosmosDbCollectionIncludedPathParameters } | Should -Not -Throw
+                {
+                    $script:result = New-CosmosDbCollectionIncludedPath @newCosmosDbCollectionIncludedPathParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -252,7 +278,9 @@ InModuleScope CosmosDB {
 
     Describe 'New-CosmosDbCollectionExcludedPath' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name New-CosmosDbCollectionExcludedPath  -ErrorAction Stop } | Should -Not -Throw
+            {
+                Get-Command -Name New-CosmosDbCollectionExcludedPath  -ErrorAction Stop
+            } | Should -Not -Throw
         }
 
         Context 'When called with all parameters' {
@@ -263,7 +291,9 @@ InModuleScope CosmosDB {
                     Path  = '/*'
                 }
 
-                { $script:result = New-CosmosDbCollectionExcludedPath @newCosmosDbCollectionExcludedPathParameters } | Should -Not -Throw
+                {
+                    $script:result = New-CosmosDbCollectionExcludedPath @newCosmosDbCollectionExcludedPathParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -275,7 +305,9 @@ InModuleScope CosmosDB {
 
     Describe 'New-CosmosDbCollectionIndexingPolicy' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name New-CosmosDbCollectionIndexingPolicy  -ErrorAction Stop } | Should -Not -Throw
+            {
+                Get-Command -Name New-CosmosDbCollectionIndexingPolicy -ErrorAction Stop
+            } | Should -Not -Throw
         }
 
         Context 'When called with all parameters' {
@@ -289,7 +321,9 @@ InModuleScope CosmosDB {
                     ExcludedPath = (New-CosmosDbCollectionExcludedPath -Path '/*')
                 }
 
-                { $script:result = New-CosmosDbCollectionIndexingPolicy @newCosmosDbCollectionIndexingPolicyParameters } | Should -Not -Throw
+                {
+                    $script:result = New-CosmosDbCollectionIndexingPolicy @newCosmosDbCollectionIndexingPolicyParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -312,14 +346,18 @@ InModuleScope CosmosDB {
 
                 $errorMessage = $($LocalizedData.ErrorNewCollectionIndexingPolicyInvalidMode)
 
-                { $script:result = New-CosmosDbCollectionIndexingPolicy @newCosmosDbCollectionIndexingPolicyParameters } | Should -Throw $errorMessage
+                {
+                    $script:result = New-CosmosDbCollectionIndexingPolicy @newCosmosDbCollectionIndexingPolicyParameters
+                } | Should -Throw $errorMessage
             }
         }
     }
 
     Describe 'Get-CosmosDbCollection' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Get-CosmosDbCollection -ErrorAction Stop } | Should -Not -Throw
+            {
+                Get-Command -Name Get-CosmosDbCollection -ErrorAction Stop
+            } | Should -Not -Throw
         }
 
         BeforeEach {
@@ -339,7 +377,9 @@ InModuleScope CosmosDB {
                     Context = $script:testContext
                 }
 
-                { $script:result = Get-CosmosDbCollection @getCosmosDbCollectionParameters } | Should -Not -Throw
+                {
+                    $script:result = Get-CosmosDbCollection @getCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -370,7 +410,9 @@ InModuleScope CosmosDB {
                     Id      = $script:testCollection1
                 }
 
-                { $script:result = Get-CosmosDbCollection @getCosmosDbCollectionParameters } | Should -Not -Throw
+                {
+                    $script:result = Get-CosmosDbCollection @getCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -388,14 +430,18 @@ InModuleScope CosmosDB {
 
     Describe 'Get-CosmosDbCollectionSize' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Get-CosmosDbCollectionSize -ErrorAction Stop } | Should -Not -Throw
+            {
+                Get-Command -Name Get-CosmosDbCollectionSize -ErrorAction Stop
+            } | Should -Not -Throw
         }
     }
 
 
     Describe 'New-CosmosDbCollection' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name New-CosmosDbCollection -ErrorAction Stop } | Should -Not -Throw
+            {
+                Get-Command -Name New-CosmosDbCollection -ErrorAction Stop
+            } | Should -Not -Throw
         }
 
         BeforeEach {
@@ -421,7 +467,9 @@ InModuleScope CosmosDB {
                     Id      = $script:testCollection1
                 }
 
-                { $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters } | Should -Not -Throw
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -456,7 +504,9 @@ InModuleScope CosmosDB {
                     DefaultTimeToLive = $script:testDefaultTimeToLive
                 }
 
-                { $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters } | Should -Not -Throw
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -492,7 +542,9 @@ InModuleScope CosmosDB {
                     OfferThroughput = 400
                 }
 
-                { $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters } | Should -Not -Throw
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
             It 'Should return expected result' {
                 $script:result.id | Should -Be $script:testCollection1
@@ -527,7 +579,9 @@ InModuleScope CosmosDB {
                     OfferType = 'S2'
                 }
 
-                { $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters } | Should -Not -Throw
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -565,7 +619,9 @@ InModuleScope CosmosDB {
                     PartitionKey = 'partitionkey'
                 }
 
-                { $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters } | Should -Not -Throw
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -603,7 +659,9 @@ InModuleScope CosmosDB {
                     PartitionKey = '/partitionkey'
                 }
 
-                { $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters } | Should -Not -Throw
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -625,7 +683,7 @@ InModuleScope CosmosDB {
                 -CommandName Invoke-CosmosDbRequest `
                 -MockWith { $script:testGetCollectionResultMulti }
 
-            It 'Should not throw exception' {
+            It 'Should throw expected exception' {
                 $newCosmosDbCollectionParameters = @{
                     Context         = $script:testContext
                     Id              = $script:testCollection1
@@ -633,7 +691,11 @@ InModuleScope CosmosDB {
                     OfferType       = 'S1'
                 }
 
-                { $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters } | Should -Throw
+                $errorMessage = $($LocalizedData.ErrorNewCollectionOfferParameterConflict)
+
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Throw $errorMessage
             }
 
             It 'Should call expected mocks' {
@@ -646,7 +708,9 @@ InModuleScope CosmosDB {
 
     Describe 'Remove-CosmosDbCollection' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Remove-CosmosDbCollection -ErrorAction Stop } | Should -Not -Throw
+            {
+                Get-Command -Name Remove-CosmosDbCollection -ErrorAction Stop
+            } | Should -Not -Throw
         }
 
         Context 'When called with context parameter and an Id' {
@@ -662,7 +726,9 @@ InModuleScope CosmosDB {
                     Id      = $script:testCollection1
                 }
 
-                { $script:result = Remove-CosmosDbCollection @removeCosmosDbCollectionParameters } | Should -Not -Throw
+                {
+                    $script:result = Remove-CosmosDbCollection @removeCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should call expected mocks' {
@@ -676,7 +742,9 @@ InModuleScope CosmosDB {
 
     Describe 'Set-CosmosDbCollection' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name Set-CosmosDbCollection -ErrorAction Stop } | Should -Not -Throw
+            {
+                Get-Command -Name Set-CosmosDbCollection -ErrorAction Stop
+            } | Should -Not -Throw
         }
 
         BeforeEach {
@@ -715,8 +783,11 @@ InModuleScope CosmosDB {
                     IndexingPolicy  = $script:testIndexingPolicy
                 }
 
-                { $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters } | Should -Not -Throw
+                {
+                    $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
+
             It 'Should return expected result' {
                 $script:result.id | Should -Be $script:testCollection1
             }
@@ -768,8 +839,11 @@ InModuleScope CosmosDB {
                     IndexingPolicy  = $script:testIndexingPolicy
                 }
 
-                { $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters } | Should -Not -Throw
+#                {
+                    $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
+#                } | Should -Not -Throw
             }
+
             It 'Should return expected result' {
                 $script:result.id | Should -Be $script:testCollection1
             }
@@ -829,7 +903,9 @@ InModuleScope CosmosDB {
                     DefaultTimeToLive = $script:testDefaultTimeToLive
                 }
 
-                { $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters } | Should -Not -Throw
+                {
+                    $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -891,7 +967,9 @@ InModuleScope CosmosDB {
                     RemoveDefaultTimeToLive = $true
                 }
 
-                { $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters } | Should -Not -Throw
+                {
+                    $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -914,7 +992,7 @@ InModuleScope CosmosDB {
         Context 'When called with context parameter and an Id and DefaultTimeToLive and RemoveDefaultTimeToLive parameter' {
             $script:result = $null
 
-            It 'Should not throw exception' {
+            It 'Should throw exepected exception' {
                 $setCosmosDbCollectionParameters = @{
                     Context                 = $script:testContext
                     Id                      = $script:testCollection1
@@ -924,7 +1002,9 @@ InModuleScope CosmosDB {
 
                 $errorMessage = $LocalizedData.ErrorSetCollectionRemoveDefaultTimeToLiveConflict
 
-                { $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters } | Should -Throw $errorMessage
+                {
+                    $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
+                } | Should -Throw $errorMessage
             }
         }
     }
