@@ -232,9 +232,9 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When creating a new database using a readonly context' {
         It 'Should throw an exception' {
-            #{
+            {
                 $script:result = New-CosmosDbDatabase -Context $script:testReadOnlyContext -Id $script:testDatabase -Verbose
-            #} | Should -Throw
+            } | Should -Throw
         }
     }
 
