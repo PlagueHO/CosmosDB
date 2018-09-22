@@ -7,17 +7,18 @@ jobs:
     - powershell: |
         .\build.ps1 -Verbose
       displayName: 'Build and Test'
+      env:
+        azureApplicationId: $(azureApplicationId)
+        azureApplicationPassword: $(azureApplicationPassword)
+        azureSubscriptionId: $(azureSubscriptionId)
+        azureTenantId: $(azureTenantId)
+
     - task: PublishTestResults@2
       inputs:
         testRunner: 'NUnit'
         testResultsFiles: '**/TestResults.xml'
         testRunTitle: 'PS_Win2016'
       displayName: 'Publish Test Results'
-      env:
-        azureApplicationId: $(azureApplicationId)
-        azureApplicationPassword: $(azureApplicationPassword)
-        azureSubscriptionId: $(azureSubscriptionId)
-        azureTenantId: $(azureTenantId)
 
   - job: Build_PSCore_Ubuntu1604
 
