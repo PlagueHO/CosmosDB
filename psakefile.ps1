@@ -284,7 +284,7 @@ Task Build -Depends Init {
 Task Deploy -Depends Build {
     $separator
 
-    # Install any dependencies required for the Build stage
+    # Install any dependencies required for the Deploy stage
     Invoke-PSDepend `
         -Path $PSScriptRoot `
         -Force `
@@ -386,36 +386,5 @@ function Invoke-Git
     catch
     {
         Write-Warning -Message $_
-    }
-}
-
-<#
-    .SYNOPSIS
-        Try to install a module to the machine scope, but try the
-        CurrentUser scope if not allowed.
-#>
-function Install-ModuleMultiScoped
-{
-    param
-    (
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $Name
-    )
-
-    $installModuleParameters = @{
-        Name = $Name
-        Force = $true
-        AllowClobber = $true
-        Repository = 'PSGallery'
-    }
-
-    try
-    {
-        Install-Module @installModuleParameters
-    }
-    catch
-    {
-        Install-Module @installModuleParameters -Scope CurrentUser
     }
 }
