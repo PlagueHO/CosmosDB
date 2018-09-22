@@ -13,7 +13,7 @@ $null = Get-PackageProvider -Name NuGet -ForceBootstrap
 # Install PSake module if it is not already installed
 if (-not (Get-Module -Name PSDepend -ListAvailable))
 {
-    Install-Module -Name PSDepend -Scope CurrentUser
+    Install-Module -Name PSDepend -Scope CurrentUser -Force -Confirm:$false
 }
 
 # Install build dependencies required for Init task
