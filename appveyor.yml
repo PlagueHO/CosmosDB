@@ -10,4 +10,4 @@ environment:
     secure: b/CtRX2iDdREmV5mOgoqK9g6HObrPhjNkjeTxrYMgJbiYYmzvivV1Xp52M79NxDN
 
 build_script:
-  - ps: . .\build.ps1 -Deploy
+  - ps: . .\build.ps1
