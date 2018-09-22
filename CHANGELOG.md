@@ -12,6 +12,7 @@
 - Added support for running CI in Azure DevOps Pipelines - fixes [Issue #174](https://github.com/PlagueHO/CosmosDB/issues/174)
 - Rework CI process to simplify code.
 - Enabled integration test execution in Azure DevOps Pipelines - fixes [Issue #179](https://github.com/PlagueHO/CosmosDB/issues/179)
+- Added artifact publish tasks for Azure Pipeline.
 
 ## 2.1.7.635
 
