@@ -34,7 +34,7 @@ jobs:
 
     - task: PublishBuildArtifacts@1
       inputs:
-        pathtoPublish: 'cosmosdb.depend.ps1'
+        pathtoPublish: 'cosmosdb.depend.psd1'
         artifactName: 'scripts'
       displayName: 'Publish PSDepend File'
 
