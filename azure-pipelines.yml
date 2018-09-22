@@ -24,7 +24,7 @@ jobs:
     - task: PublishBuildArtifacts@1
       inputs:
         pathtoPublish: 'staging/CosmosDB'
-        artifactName: 'module'
+        artifactName: 'CosmosDB'
       displayName: 'Publish Module'
 
     - task: PublishBuildArtifacts@1
