@@ -17,10 +17,20 @@ Properties {
     $separator = '----------------------------------------------------------------------'
 }
 
-Task Default -Depends Build
+Task Default -Depends Test,Build
 
 Task Init {
     Set-Location -Path $ProjectRoot
+
+    # Install any dependencies required for the Init stage
+    Invoke-PSDepend `
+        -Path $PSScriptRoot `
+        -Force `
+        -Import `
+        -Install `
+        -Tags 'Init'
+
+    Set-BuildEnvironment -Force
 
     $separator
     'Build System Details:'
@@ -41,15 +51,13 @@ Task Init {
 Task Test -Depends Init {
     $separator
 
-    # Prepare test environment by ensuring appropriate version of AzureRM modules are installed
-    if ($PSVersionTable.PSEdition -eq 'Core')
-    {
-        Install-ModuleMultiScoped -Name AzureRM.NetCore
-    }
-    else
-    {
-        Install-ModuleMultiScoped -Name AzureRM
-    }
+    # Install any dependencies required for the Test stage
+    Invoke-PSDepend `
+        -Path $PSScriptRoot `
+        -Force `
+        -Import `
+        -Install `
+        -Tags 'Test',('Test_{0}' -f $PSVersionTable.PSEdition)
 
     # Execute tests
     $testResultsFile = Join-Path -Path $ProjectRoot -ChildPath 'test\TestResults.xml'
@@ -119,12 +127,20 @@ Task Test -Depends Init {
     "`n"
 }
 
-Task Build -Depends Test {
+Task Build -Depends Init {
     $separator
+
+    # Install any dependencies required for the Build stage
+    Invoke-PSDepend `
+        -Path $PSScriptRoot `
+        -Force `
+        -Import `
+        -Install `
+        -Tags 'Build'
 
     # Generate the next version by adding the build system build number to the manifest version
     $manifestPath = Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psd1'
-    $newVersion = New-VersionNumber `
+    $newVersion = Get-VersionNumber `
         -ManifestPath $manifestPath `
         -Build $ENV:BHBuildNumber
 
@@ -190,9 +206,17 @@ Task Build -Depends Test {
 Task Deploy -Depends Build {
     $separator
 
+    # Install any dependencies required for the Build stage
+    Invoke-PSDepend `
+        -Path $PSScriptRoot `
+        -Force `
+        -Import `
+        -Install `
+        -Tags 'Deploy'
+
     # Generate the next version by adding the build system build number to the manifest version
     $manifestPath = Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psd1'
-    $newVersion = New-VersionNumber `
+    $newVersion = Get-VersionNumber `
         -ManifestPath $manifestPath `
         -Build $ENV:BHBuildNumber
 
@@ -311,7 +335,7 @@ Task Deploy -Depends Build {
     .SYNOPSIS
         Generate a new version number.
 #>
-function New-VersionNumber
+function Get-VersionNumber
 {
     param
     (

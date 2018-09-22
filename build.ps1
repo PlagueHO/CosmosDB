@@ -1,45 +1,34 @@
 [CmdletBinding()]
 param (
     [Parameter()]
-    [Switch]
-    $Deploy
+    [System.String[]]
+    $TaskList = 'Default'
 )
 
-Write-Verbose -Message 'Beginning build process...'
+Write-Verbose -Message ('Beginning ''{0}'' process...' -f ($TaskList -join ','))
 
-$task = 'Default'
-if ($Deploy)
-{
-    $task = 'Deploy'
-}
-
+# Bootstrap the environment
 $null = Get-PackageProvider -Name NuGet -ForceBootstrap
 
-# Install PSDepend module
+# Install PSake module if it is not already installed
 if (-not (Get-Module -Name PSDepend -ListAvailable))
 {
-    $installModuleParameters = @{
-        Name = 'PSDepend'
-        Force = $true
-        AllowClobber = $true
-        Repository = 'PSGallery'
-    }
-    try
-    {
-        Install-Module @installModuleParameters
-    }
-    catch
-    {
-        Install-Module @installModuleParameters -Scope CurrentUser
-    }
+    Install-Module -Name PSDepend -Scope CurrentUser
 }
 
-# Install all other build dependencies
+# Install build dependencies required for Init task
 Import-Module -Name PSDepend
-Invoke-PSDepend -Path $PSScriptRoot -Force -Import -Install
+Invoke-PSDepend `
+    -Path $PSScriptRoot `
+    -Force `
+    -Import `
+    -Install `
+    -Tags 'Bootstrap'
 
-Set-BuildEnvironment -Force
-
-Invoke-Psake -buildFile $ENV:BHProjectPath\psakefile.ps1 -taskList $task -nologo
+# Execute the PSake tasts from the psakefile.ps1
+Invoke-Psake `
+    -buildFile (Join-Path -Path $PSScriptRoot -ChildPath 'psakefile.ps1') `
+    -taskList $TaskList `
+    -nologo
 
 exit ( [int]( -not $psake.build_success ) )

@@ -2,6 +2,7 @@ jobs:
   - job: Build_PS_Win2016
     pool:
       vmImage: vs2017-win2016
+
     steps:
     - powershell: |
         .\build.ps1 -Verbose
@@ -12,6 +13,11 @@ jobs:
         testResultsFiles: '**/TestResults.xml'
         testRunTitle: 'PS_Win2016'
       displayName: 'Publish Test Results'
+      env:
+        azureApplicationId: $(azureApplicationId)
+        azureApplicationPassword: $(azureApplicationPassword)
+        azureSubscriptionId: $(azureSubscriptionId)
+        azureTenantId: $(azureTenantId)
 
   - job: Build_PSCore_Ubuntu1604
 
@@ -29,6 +35,11 @@ jobs:
     - script: |
         pwsh -c '.\build.ps1'
       displayName: 'Build and Test'
+      env:
+        azureApplicationId: $(azureApplicationId)
+        azureApplicationPassword: $(azureApplicationPassword)
+        azureSubscriptionId: $(azureSubscriptionId)
+        azureTenantId: $(azureTenantId)
 
     - task: PublishTestResults@2
       inputs:
@@ -40,6 +51,7 @@ jobs:
   - job: Build_PSCore_MacOS1013
     pool:
       vmImage: xcode9-macos10.13
+
     steps:
     - script: |
         brew update
@@ -50,6 +62,11 @@ jobs:
     - script: |
         pwsh -c '.\build.ps1'
       displayName: 'Build and Test'
+      env:
+        azureApplicationId: $(azureApplicationId)
+        azureApplicationPassword: $(azureApplicationPassword)
+        azureSubscriptionId: $(azureSubscriptionId)
+        azureTenantId: $(azureTenantId)
 
     - task: PublishTestResults@2
       inputs:

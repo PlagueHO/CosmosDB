@@ -1,5 +1,5 @@
 @{
-    psake            = @{
+    psake             = @{
         Name           = 'psake'
         DependencyType = 'PSGalleryModule'
         Parameters     = @{
@@ -7,10 +7,11 @@
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '4.7.0'
+        Version        = '4.7.4'
+        Tags           = 'Bootstrap'
     }
 
-    Pester           = @{
+    Pester            = @{
         Name           = 'Pester'
         DependencyType = 'PSGalleryModule'
         Parameters     = @{
@@ -18,10 +19,11 @@
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '4.3.1'
+        Version        = '4.4.0'
+        Tags           = 'Test'
     }
 
-    PSScriptAnalyzer = @{
+    PSScriptAnalyzer  = @{
         Name           = 'PSScriptAnalyzer'
         DependencyType = 'PSGalleryModule'
         Parameters     = @{
@@ -29,10 +31,11 @@
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '1.16.1'
+        Version        = '1.17.1'
+        Tags           = 'Test'
     }
 
-    BuildHelpers     = @{
+    BuildHelpers      = @{
         Name           = 'BuildHelpers'
         DependencyType = 'PSGalleryModule'
         Parameters     = @{
@@ -40,10 +43,11 @@
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '1.0.0'
+        Version        = '2.0.0'
+        Tags           = 'Init'
     }
 
-    PSDeploy         = @{
+    PSDeploy          = @{
         Name           = 'PSDeploy'
         DependencyType = 'PSGalleryModule'
         Parameters     = @{
@@ -51,10 +55,11 @@
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '0.2.3'
+        Version        = '1.0'
+        Tags           = 'Deploy'
     }
 
-    Platyps          = @{
+    Platyps           = @{
         Name           = 'Platyps'
         DependencyType = 'PSGalleryModule'
         Parameters     = @{
@@ -62,6 +67,31 @@
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '0.9.0'
+        Version        = '0.11.1'
+        Tags           = 'Build'
+    }
+
+    'AzureRM'         = @{
+        Name           = 'AzureRM'
+        DependencyType = 'PSGalleryModule'
+        Parameters     = @{
+            Repository         = 'PSGallery'
+            SkipPublisherCheck = $true
+        }
+        Target         = 'CurrentUser'
+        Version        = '6.8.1'
+        Tags           = 'Test_Desktop'
+    }
+
+    'AzureRM.NetCore' = @{
+        Name           = 'AzureRM.NetCore'
+        DependencyType = 'PSGalleryModule'
+        Parameters     = @{
+            Repository         = 'PSGallery'
+            SkipPublisherCheck = $true
+        }
+        Target         = 'CurrentUser'
+        Version        = '0.13.1'
+        Tags           = 'Test_Core'
     }
 }
