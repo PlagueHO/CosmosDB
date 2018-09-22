@@ -200,6 +200,13 @@ Task Build -Depends Init {
     $stagedReleaseNotesContent = $stagedReleaseNotesContent -replace '## What is New in CosmosDB Unreleased', "## What is New in CosmosDB $newVersion"
     Set-Content -Path $stagedReleaseNotesPath -Value $stagedReleaseNotesContent -NoNewLine -Force
 
+    # Create zip artifact
+    $zipFilePath = Join-Path `
+        -Path $StagingFolder `
+        -ChildPath "${ENV:BHProjectName}_$newVersion.zip"
+    $null = Add-Type -assemblyname System.IO.Compression.FileSystem
+    [System.IO.Compression.ZipFile]::CreateFromDirectory($ModuleFolder, $zipFilePath)
+
     # Update the Git Repo if this is the master branch build in VSTS
     if ($ENV:BHBuildSystem -eq 'VSTS')
     {
@@ -279,66 +286,33 @@ Task Deploy -Depends Build {
         -Install `
         -Tags 'Deploy'
 
-    # Determine the folder names for staging the module
-    $versionFolder = Join-Path -Path $ModuleFolder -ChildPath $newVersion
-
-    # Copy the module to the PSModulePath
-    $PSModulePath = ($ENV:PSModulePath -split ';')[0]
-
-    "Copying Module to $PSModulePath"
-    Copy-Item `
-        -Path $ModuleFolder `
-        -Destination $PSModulePath `
-        -Recurse `
-        -Force
-
-    # Create zip artifact
-    $zipFilePath = Join-Path `
-        -Path $StagingFolder `
-        -ChildPath "${ENV:BHProjectName}_${ENV:BHBuildNumber}.zip"
-    $null = Add-Type -assemblyname System.IO.Compression.FileSystem
-    [System.IO.Compression.ZipFile]::CreateFromDirectory($ModuleFolder, $zipFilePath)
-
     if ($ENV:BHBuildSystem -eq 'VSTS')
     {
-        # If VSTS, publish the deploy artefacts for debug purposes
-        "Pushing package $zipFilePath as Appveyor artifact"
-        Push-AppveyorArtifact $zipFilePath
-        Remove-Item -Path $zipFilePath -Force
+        # Copy the module to the PSModulePath
+        $PSModulePath = ($ENV:PSModulePath -split ';')[0]
 
-        <#
-            If this is a build of the Master branch and not a PR push
-            then publish the Module to the PowerShell Gallery.
-        #>
-        if ($ENV:BHBranchName -eq 'master')
-        {
-            $commitMessage = $ENV:BHCommitMessage.TrimEnd()
-            "Commit to Master branch detected with commit message: '$commitMessage'"
+        "Copying Module to $PSModulePath"
+        Copy-Item `
+            -Path $ModuleFolder `
+            -Destination $PSModulePath `
+            -Recurse `
+            -Force
 
-            if ($commitMessage -match ' Deploy!$')
-            {
-                # This was a deploy commit so no need to do anything
-                'Skipping deployment because this was a commit triggered by a deployment'
-            }
-            elseif ($ENV:APPVEYOR_PULL_REQUEST_NUMBER)
-            {
-                # This is a PR so do nothing
-                'Skipping deployment because this is a Pull Request'
-            }
-            else
-            {
-                # This is a commit to Master
-                'Publishing Module to PowerShell Gallery'
-                Get-PackageProvider `
-                    -Name NuGet `
-                    -ForceBootstrap
-                Publish-Module `
-                    -Name 'CosmosDB' `
-                    -RequiredVersion $newVersion `
-                    -NuGetApiKey $ENV:PowerShellGalleryApiKey `
-                    -Confirm:$false
-            }
-        }
+        $versionNumber = (Get-Module -Name Pester -ListAvailable).Version |
+            Sort-Object -Descending |
+            Select-Object -First 1
+
+        # This is a deploy from the staging folder
+        "Publishing CosmosDB Module version '$versionNumber' to PowerShell Gallery"
+        Get-PackageProvider `
+            -Name NuGet `
+            -ForceBootstrap
+
+        Publish-Module `
+            -Name 'CosmosDB' `
+            -RequiredVersion $versionNumber `
+            -NuGetApiKey $ENV:PowerShellGalleryApiKey `
+            -Confirm:$false
     }
 }
 
