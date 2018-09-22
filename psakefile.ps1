@@ -151,36 +151,36 @@ Task Build -Depends Init {
     }
 
     # Determine the folder names for staging the module
-    $VersionFolder = Join-Path -Path $ModuleFolder -ChildPath $newVersion
+    $versionFolder = Join-Path -Path $ModuleFolder -ChildPath $newVersion
 
     # Stage the module
     $null = New-Item -Path $StagingFolder -Type directory -ErrorAction SilentlyContinue
     $null = New-Item -Path $ModuleFolder -Type directory -ErrorAction SilentlyContinue
-    Remove-Item -Path $VersionFolder -Recurse -Force -ErrorAction SilentlyContinue
-    $null = New-Item -Path $VersionFolder -Type directory
+    Remove-Item -Path $versionFolder -Recurse -Force -ErrorAction SilentlyContinue
+    $null = New-Item -Path $versionFolder -Type directory
 
     # Populate Version Folder
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psd1') -Destination $VersionFolder
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psm1') -Destination $VersionFolder
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/lib') -Destination $VersionFolder -Recurse
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/formats') -Destination $VersionFolder -Recurse
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/types') -Destination $VersionFolder -Recurse
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/en-US') -Destination $VersionFolder -Recurse
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'LICENSE') -Destination $VersionFolder
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'README.md') -Destination $VersionFolder
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'CHANGELOG.md') -Destination $VersionFolder
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'RELEASENOTES.md') -Destination $VersionFolder
+    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psd1') -Destination $versionFolder
+    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psm1') -Destination $versionFolder
+    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/lib') -Destination $versionFolder -Recurse
+    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/formats') -Destination $versionFolder -Recurse
+    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/types') -Destination $versionFolder -Recurse
+    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/en-US') -Destination $versionFolder -Recurse
+    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'LICENSE') -Destination $versionFolder
+    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'README.md') -Destination $versionFolder
+    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'CHANGELOG.md') -Destination $versionFolder
+    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'RELEASENOTES.md') -Destination $versionFolder
 
     # Prepare external help
     'Building external help file'
     New-ExternalHelp `
         -Path (Join-Path -Path $ProjectRoot -ChildPath 'docs\') `
-        -OutputPath $VersionFolder `
+        -OutputPath $versionFolder `
         -Force
 
     # Set the new version number in the staged Module Manifest
     'Updating module manifest'
-    $stagedManifestPath = Join-Path -Path $VersionFolder -ChildPath 'CosmosDB.psd1'
+    $stagedManifestPath = Join-Path -Path $versionFolder -ChildPath 'CosmosDB.psd1'
     $stagedManifestContent = Get-Content -Path $stagedManifestPath -Raw
     $stagedManifestContent = $stagedManifestContent -replace '(?<=ModuleVersion\s+=\s+'')(?<ModuleVersion>.*)(?='')', $newVersion
     $stagedManifestContent = $stagedManifestContent -replace '## What is New in CosmosDB Unreleased', "## What is New in CosmosDB $newVersion"
@@ -188,18 +188,83 @@ Task Build -Depends Init {
 
     # Set the new version number in the staged CHANGELOG.md
     'Updating CHANGELOG.MD'
-    $stagedChangeLogPath = Join-Path -Path $VersionFolder -ChildPath 'CHANGELOG.md'
+    $stagedChangeLogPath = Join-Path -Path $versionFolder -ChildPath 'CHANGELOG.md'
     $stagedChangeLogContent = Get-Content -Path $stagedChangeLogPath -Raw
     $stagedChangeLogContent = $stagedChangeLogContent -replace '# Unreleased', "# $newVersion"
     Set-Content -Path $stagedChangeLogPath -Value $stagedChangeLogContent -NoNewLine -Force
 
     # Set the new version number in the staged RELEASENOTES.md
     'Updating RELEASENOTES.MD'
-    $stagedReleaseNotesPath = Join-Path -Path $VersionFolder -ChildPath 'RELEASENOTES.md'
+    $stagedReleaseNotesPath = Join-Path -Path $versionFolder -ChildPath 'RELEASENOTES.md'
     $stagedReleaseNotesContent = Get-Content -Path $stagedReleaseNotesPath -Raw
     $stagedReleaseNotesContent = $stagedReleaseNotesContent -replace '## What is New in CosmosDB Unreleased', "## What is New in CosmosDB $newVersion"
     Set-Content -Path $stagedReleaseNotesPath -Value $stagedReleaseNotesContent -NoNewLine -Force
 
+    # Update the Git Repo if this is the master branch build in VSTS
+    if ($ENV:BHBuildSystem -eq 'VSTS')
+    {
+        if ($ENV:BHBranchName -eq 'master')
+        {
+            # This is a push to master so update GitHub with release info
+            'Beginning update to master branch with deployed information'
+
+            $commitMessage = $ENV:BHCommitMessage.TrimEnd()
+            "Commit to master branch triggered with commit message: '$commitMessage'"
+
+            if ($commitMessage -match '^Azure DevOps Deploy updating Version Number to [0-9/.]*')
+            {
+                # This was a deploy commit so no need to do anything
+                'Skipping update to master branch with deployed information because this was triggered by Azure DevOps Updating the Version Number'
+            }
+            else
+            {
+                # Pull the master branch, update the readme.md and manifest
+                Set-Location -Path $ProjectRoot
+                Invoke-Git -GitParameters @('config', '--global', 'credential.helper', 'store')
+
+                # Replace the manifest with the one that was published
+                'Updating files changed during deployment'
+                Copy-Item `
+                    -Path $stagedManifestPath `
+                    -Destination (Join-Path -Path $ProjectRoot -ChildPath 'src') `
+                    -Force
+                Copy-Item `
+                    -Path $stagedChangeLogPath `
+                    -Destination $ProjectRoot `
+                    -Force
+                Copy-Item `
+                    -Path $stagedReleaseNotesPath `
+                    -Destination $ProjectRoot `
+                    -Force
+
+                # Update the master branch
+                'Pushing deployment changes to Master'
+                Invoke-Git -GitParameters @('add', '.')
+                Invoke-Git -GitParameters @('commit', '-m', "Azure DevOps Deploy updating Version Number to $NewVersion")
+                Invoke-Git -GitParameters @('status')
+                Invoke-Git -GitParameters @('push', 'origin', 'master')
+
+                # Create the version tag and push it
+                "Pushing $newVersion tag to Master"
+                Invoke-Git -GitParameters @('tag', '-a', $newVersion, '-m', $newVersion)
+                Invoke-Git -GitParameters @('push', 'origin', $newVersion)
+
+                # Merge the changes to the Dev branch as well
+                'Pushing deployment changes to Dev'
+                Invoke-Git -GitParameters @('checkout', '-f', 'dev')
+                Invoke-Git -GitParameters @('merge', 'master')
+                Invoke-Git -GitParameters @('push', 'origin', 'dev')
+            }
+        }
+        else
+        {
+            "Skipping update to master branch with deployed information because branch is: '$ENV:BHBranchName'"
+        }
+    }
+    else
+    {
+        "Skipping update to master branch with deployed information because build system is: '$ENV:BHBuildSystem'"
+    }
     "`n"
 }
 
@@ -214,14 +279,8 @@ Task Deploy -Depends Build {
         -Install `
         -Tags 'Deploy'
 
-    # Generate the next version by adding the build system build number to the manifest version
-    $manifestPath = Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psd1'
-    $newVersion = Get-VersionNumber `
-        -ManifestPath $manifestPath `
-        -Build $ENV:BHBuildNumber
-
     # Determine the folder names for staging the module
-    $VersionFolder = Join-Path -Path $ModuleFolder -ChildPath $newVersion
+    $versionFolder = Join-Path -Path $ModuleFolder -ChildPath $newVersion
 
     # Copy the module to the PSModulePath
     $PSModulePath = ($ENV:PSModulePath -split ';')[0]
@@ -240,9 +299,9 @@ Task Deploy -Depends Build {
     $null = Add-Type -assemblyname System.IO.Compression.FileSystem
     [System.IO.Compression.ZipFile]::CreateFromDirectory($ModuleFolder, $zipFilePath)
 
-    if ($ENV:BHBuildSystem -eq 'AppVeyor')
+    if ($ENV:BHBuildSystem -eq 'VSTS')
     {
-        # If AppVeyor, publish the deploy artefacts for debug purposes
+        # If VSTS, publish the deploy artefacts for debug purposes
         "Pushing package $zipFilePath as Appveyor artifact"
         Push-AppveyorArtifact $zipFilePath
         Remove-Item -Path $zipFilePath -Force
@@ -278,54 +337,6 @@ Task Deploy -Depends Build {
                     -RequiredVersion $newVersion `
                     -NuGetApiKey $ENV:PowerShellGalleryApiKey `
                     -Confirm:$false
-
-                # This is not a PR so deploy
-                'Beginning update to master branch with deployed information'
-
-                # Pull the master branch, update the readme.md and manifest
-                Set-Location -Path $ProjectRoot
-                Invoke-Git -GitParameters @('config', '--global', 'credential.helper', 'store')
-
-                Add-Content `
-                    -Path "$env:USERPROFILE\.git-credentials" `
-                    -Value "https://$($env:GitHubPushFromPlagueHO):x-oauth-basic@github.com`n"
-
-                Invoke-Git -GitParameters @('config', '--global', 'user.email', 'plagueho@gmail.com')
-                Invoke-Git -GitParameters @('config', '--global', 'user.name', 'Daniel Scott-Raynsford')
-                Invoke-Git -GitParameters @('checkout', '-f', 'master')
-
-                # Replace the manifest with the one that was published
-                'Updating files changed during deployment.='
-                Copy-Item `
-                    -Path (Join-Path -Path $VersionFolder -ChildPath 'CosmosDB.psd1') `
-                    -Destination (Join-Path -Path $ProjectRoot -ChildPath 'src') `
-                    -Force
-                Copy-Item `
-                    -Path (Join-Path -Path $VersionFolder -ChildPath 'CHANGELOG.MD') `
-                    -Destination $ProjectRoot `
-                    -Force
-                Copy-Item `
-                    -Path (Join-Path -Path $VersionFolder -ChildPath 'RELEASENOTES.MD') `
-                    -Destination $ProjectRoot `
-                    -Force
-
-                # Update the master branch
-                'Pushing deployment changes to Master'
-                Invoke-Git -GitParameters @('add', '.')
-                Invoke-Git -GitParameters @('commit', '-m', "$NewVersion Deploy!")
-                Invoke-Git -GitParameters @('status')
-                Invoke-Git -GitParameters @('push', 'origin', 'master')
-
-                # Create the version tag and push it
-                "Pushing $newVersion tag to Master"
-                Invoke-Git -GitParameters @('tag', '-a', $newVersion, '-m', $newVersion)
-                Invoke-Git -GitParameters @('push', 'origin', $newVersion)
-
-                # Merge the changes to the Dev branch as well
-                'Pushing deployment changes to Dev'
-                Invoke-Git -GitParameters @('checkout', '-f', 'dev')
-                Invoke-Git -GitParameters @('merge', 'master')
-                Invoke-Git -GitParameters @('push', 'origin', 'dev')
             }
         }
     }
