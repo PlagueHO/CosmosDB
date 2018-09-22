@@ -201,8 +201,14 @@ Task Build -Depends Init {
     Set-Content -Path $stagedReleaseNotesPath -Value $stagedReleaseNotesContent -NoNewLine -Force
 
     # Create zip artifact
-    $zipFilePath = Join-Path `
+    $zipFileFolder = Join-Path `
         -Path $StagingFolder `
+        -ChildPath 'zip'
+
+    $null = New-Item -Path $zipFileFolder -Type directory -ErrorAction SilentlyContinue
+
+    $zipFilePath = Join-Path `
+        -Path $zipFileFolder `
         -ChildPath "${ENV:BHProjectName}_$newVersion.zip"
     $null = Add-Type -assemblyname System.IO.Compression.FileSystem
     [System.IO.Compression.ZipFile]::CreateFromDirectory($ModuleFolder, $zipFilePath)

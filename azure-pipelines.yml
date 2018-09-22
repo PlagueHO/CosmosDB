@@ -28,7 +28,7 @@ jobs:
 
     - task: PublishBuildArtifacts@1
       inputs:
-        pathtoPublish: 'staging/CosmosDB_*.zip'
+        pathtoPublish: 'staging/zip'
         artifactName: 'zip'
       displayName: 'Publish Module'
 
