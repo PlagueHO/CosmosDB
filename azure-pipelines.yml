@@ -29,14 +29,20 @@ jobs:
     - task: PublishBuildArtifacts@1
       inputs:
         pathtoPublish: 'psakefile.ps1'
-        artifactName: 'PSakefile'
+        artifactName: 'scripts'
       displayName: 'Publish PSake File'
 
     - task: PublishBuildArtifacts@1
       inputs:
         pathtoPublish: 'cosmosdb.depend.ps1'
-        artifactName: 'PSDependfile'
+        artifactName: 'scripts'
       displayName: 'Publish PSDepend File'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: 'build.ps1'
+        artifactName: 'scripts'
+      displayName: 'Publish Build File'
 
   - job: Build_PSCore_Ubuntu1604
     pool:
