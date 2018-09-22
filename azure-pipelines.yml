@@ -24,8 +24,15 @@ jobs:
       inputs:
         pathtoPublish: 'staging'
         artifactName: 'module'
+      displayName: 'Publish Module'
 
-  - job: Build_PSCore_Ubuntu1604
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: 'psakefile.ps1'
+        artifactName: 'PSakefile'
+      displayName: 'Publish PSake File'
+
+    - job: Build_PSCore_Ubuntu1604
 
     pool:
       vmImage: ubuntu-16.04
