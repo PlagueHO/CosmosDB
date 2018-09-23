@@ -281,7 +281,7 @@ Task Build -Depends Init {
     "`n"
 }
 
-Task Deploy -Depends Build {
+Task Deploy {
     $separator
 
     # Install any dependencies required for the Deploy stage
@@ -296,17 +296,26 @@ Task Deploy -Depends Build {
     {
         # Copy the module to the PSModulePath
         $PSModulePath = ($ENV:PSModulePath -split ';')[0]
+        $destinationPath = Join-Path -Path $PSModulePath -ChildPath 'CosmosDB'
 
-        "Copying Module to $PSModulePath"
+        "Copying Module to $destinationPath"
         Copy-Item `
             -Path $ModuleFolder `
-            -Destination $PSModulePath `
+            -Destination $destinationPath `
+            -Container `
             -Recurse `
             -Force
 
-        $versionNumber = (Get-Module -Name Pester -ListAvailable).Version |
+        $installedModule = Get-Module -Name CosmosDB -ListAvailable
+
+        $versionNumber = $installedModule.Version |
             Sort-Object -Descending |
             Select-Object -First 1
+
+        if (-not $versionNumber)
+        {
+            Throw "CosmosDB Module could not be found after copying to $PSModulePath"
+        }
 
         # This is a deploy from the staging folder
         "Publishing CosmosDB Module version '$versionNumber' to PowerShell Gallery"

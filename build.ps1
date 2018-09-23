@@ -2,7 +2,15 @@
 param (
     [Parameter()]
     [System.String[]]
-    $TaskList = 'Default'
+    $TaskList = 'Default',
+
+    [Parameter()]
+    [System.Collections.Hashtable]
+    $Parameters,
+
+    [Parameter()]
+    [System.Collections.Hashtable]
+    $Properties
 )
 
 Write-Verbose -Message ('Beginning ''{0}'' process...' -f ($TaskList -join ','))
@@ -28,7 +36,7 @@ Invoke-PSDepend `
 # Execute the PSake tasts from the psakefile.ps1
 Invoke-Psake `
     -buildFile (Join-Path -Path $PSScriptRoot -ChildPath 'psakefile.ps1') `
-    -taskList $TaskList `
-    -nologo
+    -nologo `
+    @PSBoundParameters
 
 exit ( [int]( -not $psake.build_success ) )
