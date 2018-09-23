@@ -292,43 +292,40 @@ Task Deploy {
         -Install `
         -Tags 'Deploy'
 
-    if ($ENV:BHBuildSystem -eq 'VSTS')
+    # Copy the module to the PSModulePath
+    $PSModulePath = ($ENV:PSModulePath -split ';')[0]
+    $destinationPath = Join-Path -Path $PSModulePath -ChildPath 'CosmosDB'
+
+    "Copying Module to $destinationPath"
+    Copy-Item `
+        -Path $ModuleFolder `
+        -Destination $destinationPath `
+        -Container `
+        -Recurse `
+        -Force
+
+    $installedModule = Get-Module -Name CosmosDB -ListAvailable
+
+    $versionNumber = $installedModule.Version |
+        Sort-Object -Descending |
+        Select-Object -First 1
+
+    if (-not $versionNumber)
     {
-        # Copy the module to the PSModulePath
-        $PSModulePath = ($ENV:PSModulePath -split ';')[0]
-        $destinationPath = Join-Path -Path $PSModulePath -ChildPath 'CosmosDB'
-
-        "Copying Module to $destinationPath"
-        Copy-Item `
-            -Path $ModuleFolder `
-            -Destination $destinationPath `
-            -Container `
-            -Recurse `
-            -Force
-
-        $installedModule = Get-Module -Name CosmosDB -ListAvailable
-
-        $versionNumber = $installedModule.Version |
-            Sort-Object -Descending |
-            Select-Object -First 1
-
-        if (-not $versionNumber)
-        {
-            Throw "CosmosDB Module could not be found after copying to $PSModulePath"
-        }
-
-        # This is a deploy from the staging folder
-        "Publishing CosmosDB Module version '$versionNumber' to PowerShell Gallery"
-        Get-PackageProvider `
-            -Name NuGet `
-            -ForceBootstrap
-
-        Publish-Module `
-            -Name 'CosmosDB' `
-            -RequiredVersion $versionNumber `
-            -NuGetApiKey $ENV:PowerShellGalleryApiKey `
-            -Confirm:$false
+        Throw "CosmosDB Module could not be found after copying to $PSModulePath"
     }
+
+    # This is a deploy from the staging folder
+    "Publishing CosmosDB Module version '$versionNumber' to PowerShell Gallery"
+    Get-PackageProvider `
+        -Name NuGet `
+        -ForceBootstrap
+
+    Publish-Module `
+        -Name 'CosmosDB' `
+        -RequiredVersion $versionNumber `
+        -NuGetApiKey $ENV:PowerShellGalleryApiKey `
+        -Confirm:$false
 }
 
 <#
