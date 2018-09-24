@@ -552,7 +552,8 @@ function Invoke-CosmosDbRequest
 
     $requestComplete = $false
     $retry = 0
-    $fatal = $true
+    # this should initially be set to $false and $true when fatal error is caught otherwise retry is not working
+    $fatal = $false
 
     do
     {
@@ -562,7 +563,7 @@ function Invoke-CosmosDbRequest
             $requestResult = Invoke-WebRequest -UseBasicParsing @invokeWebRequestParameters
             $requestComplete = $true
         }
-        catch [System.Net.WebException]
+        catch [System.Net.WebException],[Microsoft.PowerShell.Commands.HttpResponseException]
         {
             if ($_.Exception.Response.StatusCode -eq 429)
             {
@@ -570,10 +571,12 @@ function Invoke-CosmosDbRequest
                     The exception was caused by exceeding provisioned throughput
                     so determine is we should delay and try again or exit
                 #>
+                [System.Int32] $retryAfter = ($_.Exception.Response.Headers | Where-Object Key -eq 'x-ms-retry-after-ms').Value[0]
+
                 $delay = Get-CosmosDbBackoffDelay `
                     -BackOffPolicy $Context.BackoffPolicy `
                     -Retry $retry `
-                    -RequestedDelay ([System.Int32] ($_.Exception.Response.Headers['x-ms-retry-after-ms']))
+                    -RequestedDelay $retryAfter
 
                 # A null delay means retries have been exceeded or no back-off policy specified
                 if ($null -ne $delay)
@@ -592,9 +595,18 @@ function Invoke-CosmosDbRequest
                     In a future version a custom exception type for CosmosDB that
                     contains this additional information.
                 #>
-                $exceptionStream = $_.Exception.Response.GetResponseStream()
-                $streamReader = New-Object -TypeName System.IO.StreamReader -ArgumentList $exceptionStream
-                $exceptionResponse = $streamReader.ReadToEnd()
+
+                if($PSEdition -eq 'Core')
+                {
+                    #https://get-powershellblog.blogspot.com/2017/11/powershell-core-web-cmdlets-in-depth.html#L13
+                    $exceptionResponse = $_.ErrorDetails
+                }
+                else
+                {
+                    $exceptionStream = $_.Exception.Response.GetResponseStream()
+                    $streamReader = New-Object -TypeName System.IO.StreamReader -ArgumentList $exceptionStream
+                    $exceptionResponse = $streamReader.ReadToEnd()
+                }
 
                 if ($exceptionResponse)
                 {
@@ -617,7 +629,7 @@ function Invoke-CosmosDbRequest
     } while ($requestComplete -eq $false -and -not $fatal)
 
     # Display the Request Charge as a verbose message
-    $requestCharge = $requestResult.Headers.'x-ms-request-charge'
+    $requestCharge = [Uri]::UnescapeDataString($requestResult.Headers.'x-ms-request-charge').Trim()
     if ($requestCharge)
     {
         Write-Verbose -Message $($LocalizedData.RequestChargeResults -f $method, $uri, $requestCharge)
