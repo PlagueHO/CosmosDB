@@ -15,12 +15,26 @@ Properties {
     $Timestamp = Get-Date -uformat "%Y%m%d-%H%M%S"
     $PSVersion = $PSVersionTable.PSVersion.Major
     $separator = '----------------------------------------------------------------------'
+
+    $separator
+    'StagingFolder:'
+    $StagingFolder
+
+    'ModuleFolder:'
+    $ModuleFolder
 }
 
 Task Default -Depends Test,Build
 
 Task Init {
     Set-Location -Path $ProjectRoot
+
+    $separator
+    'StagingFolder:'
+    $StagingFolder
+
+    'ModuleFolder:'
+    $ModuleFolder
 
     # Install any dependencies required for the Init stage
     Invoke-PSDepend `

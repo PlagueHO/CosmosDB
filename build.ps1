@@ -33,6 +33,9 @@ Invoke-PSDepend `
     -Install `
     -Tags 'Bootstrap'
 
+Write-Verbose -Message ($Parameters | Out-String) -Verbose
+Write-Verbose -Message ($Properties | Out-String) -Verbose
+
 # Execute the PSake tasts from the psakefile.ps1
 Invoke-Psake `
     -buildFile (Join-Path -Path $PSScriptRoot -ChildPath 'psakefile.ps1') `
