@@ -20,6 +20,7 @@ jobs:
         testResultsFiles: '**/TestResults.xml'
         testRunTitle: 'PS_Win2016'
       displayName: 'Publish Test Results'
+      condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
     - task: PublishBuildArtifacts@1
       inputs:
@@ -78,6 +79,7 @@ jobs:
         testResultsFiles: '**/TestResults.xml'
         testRunTitle: 'PSCore_Ubuntu1604'
       displayName: 'Publish Test Results'
+      condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
   - job: Build_PSCore_MacOS1013
     pool:
@@ -105,3 +107,4 @@ jobs:
         testResultsFiles: '**/TestResults.xml'
         testRunTitle: 'PSCore_MacOS1013'
       displayName: 'Publish Test Results'
+      condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
