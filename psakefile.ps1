@@ -8,33 +8,15 @@ Properties {
         $ProjectRoot = $PSScriptRoot
     }
 
-    # Determine the folder names for staging the module
-    $StagingFolder = Join-Path -Path $ProjectRoot -ChildPath 'staging'
-    $ModuleFolder = Join-Path -Path $StagingFolder -ChildPath 'CosmosDB'
-
     $Timestamp = Get-Date -uformat "%Y%m%d-%H%M%S"
     $PSVersion = $PSVersionTable.PSVersion.Major
     $separator = '----------------------------------------------------------------------'
-
-    $separator
-    'StagingFolder:'
-    $StagingFolder
-
-    'ModuleFolder:'
-    $ModuleFolder
 }
 
 Task Default -Depends Test,Build
 
 Task Init {
     Set-Location -Path $ProjectRoot
-
-    $separator
-    'StagingFolder:'
-    $StagingFolder
-
-    'ModuleFolder:'
-    $ModuleFolder
 
     # Install any dependencies required for the Init stage
     Invoke-PSDepend `
@@ -167,6 +149,10 @@ Task Build -Depends Init {
     # Determine the folder names for staging the module
     $versionFolder = Join-Path -Path $ModuleFolder -ChildPath $newVersion
 
+    # Determine the folder names for staging the module
+    $StagingFolder = Join-Path -Path $ProjectRoot -ChildPath 'staging'
+    $ModuleFolder = Join-Path -Path $StagingFolder -ChildPath 'CosmosDB'
+
     # Stage the module
     $null = New-Item -Path $StagingFolder -Type directory -ErrorAction SilentlyContinue
     $null = New-Item -Path $ModuleFolder -Type directory -ErrorAction SilentlyContinue
@@ -297,6 +283,10 @@ Task Build -Depends Init {
 
 Task Deploy {
     $separator
+
+    # Determine the folder names for staging the module
+    $StagingFolder = Join-Path -Path $ProjectRoot -ChildPath 'staging'
+    $ModuleFolder = Join-Path -Path $StagingFolder -ChildPath 'CosmosDB'
 
     # Install any dependencies required for the Deploy stage
     Invoke-PSDepend `
