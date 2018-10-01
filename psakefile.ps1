@@ -147,11 +147,11 @@ Task Build -Depends Init {
     }
 
     # Determine the folder names for staging the module
-    $versionFolder = Join-Path -Path $ModuleFolder -ChildPath $newVersion
-
-    # Determine the folder names for staging the module
     $StagingFolder = Join-Path -Path $ProjectRoot -ChildPath 'staging'
     $ModuleFolder = Join-Path -Path $StagingFolder -ChildPath 'CosmosDB'
+
+    # Determine the folder names for staging the module
+    $versionFolder = Join-Path -Path $ModuleFolder -ChildPath $newVersion
 
     # Stage the module
     $null = New-Item -Path $StagingFolder -Type directory -ErrorAction SilentlyContinue
