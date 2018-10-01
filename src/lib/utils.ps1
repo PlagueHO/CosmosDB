@@ -571,7 +571,7 @@ function Invoke-CosmosDbRequest
                     The exception was caused by exceeding provisioned throughput
                     so determine is we should delay and try again or exit
                 #>
-                [System.Int32] $retryAfter = ($_.Exception.Response.Headers | Where-Object Key -eq 'x-ms-retry-after-ms').Value[0]
+                [System.Int32] $retryAfter = ($_.Exception.Response.Headers | Where-Object -Property Key -eq 'x-ms-retry-after-ms').Value[0]
 
                 $delay = Get-CosmosDbBackoffDelay `
                     -BackOffPolicy $Context.BackoffPolicy `
@@ -598,7 +598,7 @@ function Invoke-CosmosDbRequest
 
                 if($PSEdition -eq 'Core')
                 {
-                    #https://get-powershellblog.blogspot.com/2017/11/powershell-core-web-cmdlets-in-depth.html#L13
+                    # https://get-powershellblog.blogspot.com/2017/11/powershell-core-web-cmdlets-in-depth.html#L13
                     $exceptionResponse = $_.ErrorDetails
                 }
                 else
