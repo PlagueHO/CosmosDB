@@ -1,5 +1,12 @@
 # Change Log
 
+## Unreleased
+
+- Fixed RU Display [Issue #168](https://github.com/PlagueHO/CosmosDB/issues/168)
+- Fixed Powershell Core `Invoke-WebRequest` error handling
+- Fixed retry logic bug (`$fatal` initially set to `$true` instead of `$false`)
+- Fixed stored procedure debug logging output
+
 ## 2.1.7.675
 
 - Added support for running CI in Azure DevOps Pipelines - fixes [Issue #174](https://github.com/PlagueHO/CosmosDB/issues/174)
