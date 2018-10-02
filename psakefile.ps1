@@ -284,9 +284,8 @@ Task Build -Depends Init {
 Task Deploy {
     $separator
 
-    # Determine the folder names for staging the module
-    $StagingFolder = Join-Path -Path $ProjectRoot -ChildPath 'staging'
-    $ModuleFolder = Join-Path -Path $StagingFolder -ChildPath 'CosmosDB'
+    # Determine the folder name for the Module
+    $ModuleFolder = Join-Path -Path $ProjectRoot -ChildPath 'CosmosDB'
 
     # Install any dependencies required for the Deploy stage
     Invoke-PSDepend `
