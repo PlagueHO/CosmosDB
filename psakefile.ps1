@@ -299,7 +299,7 @@ Task Deploy {
     $PSModulePath = ($ENV:PSModulePath -split ';')[0]
     $destinationPath = Join-Path -Path $PSModulePath -ChildPath 'CosmosDB'
 
-    "Copying Module to $destinationPath"
+    "Copying Module from $ModuleFolder to $destinationPath"
     Copy-Item `
         -Path $ModuleFolder `
         -Destination $destinationPath `
