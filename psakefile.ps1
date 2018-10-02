@@ -320,7 +320,7 @@ Task Deploy {
 
     # This is a deploy from the staging folder
     "Publishing CosmosDB Module version '$versionNumber' to PowerShell Gallery"
-    Get-PackageProvider `
+    $null = Get-PackageProvider `
         -Name NuGet `
         -ForceBootstrap
 
