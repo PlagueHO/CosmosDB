@@ -1,20 +1,58 @@
+name: $(rev:r)
 jobs:
   - job: Build_PS_Win2016
     pool:
       vmImage: vs2017-win2016
+
     steps:
     - powershell: |
         .\build.ps1 -Verbose
       displayName: 'Build and Test'
+      env:
+        azureApplicationId: $(azureApplicationId)
+        azureApplicationPassword: $(azureApplicationPassword)
+        azureSubscriptionId: $(azureSubscriptionId)
+        azureTenantId: $(azureTenantId)
+
     - task: PublishTestResults@2
       inputs:
         testRunner: 'NUnit'
         testResultsFiles: '**/TestResults.xml'
         testRunTitle: 'PS_Win2016'
       displayName: 'Publish Test Results'
+      condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: 'staging/CosmosDB'
+        artifactName: 'CosmosDB'
+      displayName: 'Publish Module'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: 'staging/zip'
+        artifactName: 'zip'
+      displayName: 'Publish Module'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: 'psakefile.ps1'
+        artifactName: 'scripts'
+      displayName: 'Publish PSake File'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: 'cosmosdb.depend.psd1'
+        artifactName: 'scripts'
+      displayName: 'Publish PSDepend File'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: 'build.ps1'
+        artifactName: 'scripts'
+      displayName: 'Publish Build File'
 
   - job: Build_PSCore_Ubuntu1604
-
     pool:
       vmImage: ubuntu-16.04
 
@@ -29,6 +67,11 @@ jobs:
     - script: |
         pwsh -c '.\build.ps1'
       displayName: 'Build and Test'
+      env:
+        azureApplicationId: $(azureApplicationId)
+        azureApplicationPassword: $(azureApplicationPassword)
+        azureSubscriptionId: $(azureSubscriptionId)
+        azureTenantId: $(azureTenantId)
 
     - task: PublishTestResults@2
       inputs:
@@ -36,10 +79,12 @@ jobs:
         testResultsFiles: '**/TestResults.xml'
         testRunTitle: 'PSCore_Ubuntu1604'
       displayName: 'Publish Test Results'
+      condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
   - job: Build_PSCore_MacOS1013
     pool:
       vmImage: xcode9-macos10.13
+
     steps:
     - script: |
         brew update
@@ -50,6 +95,11 @@ jobs:
     - script: |
         pwsh -c '.\build.ps1'
       displayName: 'Build and Test'
+      env:
+        azureApplicationId: $(azureApplicationId)
+        azureApplicationPassword: $(azureApplicationPassword)
+        azureSubscriptionId: $(azureSubscriptionId)
+        azureTenantId: $(azureTenantId)
 
     - task: PublishTestResults@2
       inputs:
@@ -57,3 +107,4 @@ jobs:
         testResultsFiles: '**/TestResults.xml'
         testRunTitle: 'PSCore_MacOS1013'
       displayName: 'Publish Test Results'
+      condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')

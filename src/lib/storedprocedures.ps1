@@ -213,7 +213,8 @@ function Invoke-CosmosDbStoredProcedure
 
     if ($result.Headers.'x-ms-documentdb-script-log-results')
     {
-        Write-Verbose -Message $($LocalizedData.StoredProcedureScriptLogResults -f $Id, $result.Headers['x-ms-documentdb-script-log-results'])
+        $logs = [Uri]::UnescapeDataString($result.Headers.'x-ms-documentdb-script-log-results').Trim()
+        Write-Verbose -Message $($LocalizedData.StoredProcedureScriptLogResults -f $Id, $logs)
     }
 
     if ($result.Content)
