@@ -1,5 +1,18 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+October 3, 2018
+
+- Fixed RU display - fixes [Issue #168](https://github.com/PlagueHO/CosmosDB/issues/168)
+- Fixed Powershell Core `Invoke-WebRequest` error handling.
+- Fixed retry logic bug (`$fatal` initially set to `$true` instead of `$false`).
+- Fixed stored procedure debug logging output.
+- Rework CI process to simplify code.
+- Enabled integration test execution in Azure DevOps Pipelines - fixes [Issue #179](https://github.com/PlagueHO/CosmosDB/issues/179)
+- Added artifact publish tasks for Azure Pipeline.
+- Refactored module deployment process to occur in Azure DevOps pipeline - fixes [Issue #181](https://github.com/PlagueHO/CosmosDB/issues/181)
+
 ## What is New in CosmosDB 2.1.7.675
 
 September 11, 2018
