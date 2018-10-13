@@ -91,7 +91,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Get-AzureRmResource `
-                -ParameterFilter $getAzurRmResource_parameterFilter `
                 -MockWith { 'Account' } `
                 -Verifiable
 
@@ -150,7 +149,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName New-AzureRmResource `
-                -ParameterFilter $newAzurRmResource_parameterFilter `
                 -MockWith { 'Account' } `
                 -Verifiable
 
@@ -205,7 +203,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName New-AzureRmResource `
-                -ParameterFilter $newAzurRmResource_parameterFilter `
                 -MockWith { 'Account' } `
                 -Verifiable
 
@@ -264,7 +261,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName New-AzureRmResource `
-                -ParameterFilter $newAzurRmResource_parameterFilter `
                 -MockWith { 'Account' } `
                 -Verifiable
 
@@ -327,7 +323,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName New-AzureRmResource `
-                -ParameterFilter $newAzurRmResource_parameterFilter `
                 -MockWith { 'Account' } `
                 -Verifiable
 
@@ -382,7 +377,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName New-AzureRmResource `
-                -ParameterFilter $newAzurRmResource_parameterFilter `
                 -MockWith { 'Account' } `
                 -Verifiable
 
@@ -437,7 +431,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName New-AzureRmResource `
-                -ParameterFilter $newAzurRmResource_parameterFilter `
                 -MockWith { 'Account' } `
                 -Verifiable
 
@@ -499,7 +492,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Set-AzureRmResource `
-                -ParameterFilter $setAzurRmResource_parameterFilter `
                 -MockWith { 'Account' } `
                 -Verifiable
 
@@ -565,7 +557,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Set-AzureRmResource `
-                -ParameterFilter $setAzurRmResource_parameterFilter `
                 -MockWith { 'Account' } `
                 -Verifiable
 
@@ -576,7 +567,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Get-CosmosDbAccount `
-                -ParameterFilter $getCosmosDbAccount_parameterFilter `
                 -MockWith { $script:mockGetAzureRmResource } `
                 -Verifiable
 
@@ -635,7 +625,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Set-AzureRmResource `
-                -ParameterFilter $setAzurRmResource_parameterFilter `
                 -MockWith { 'Account' } `
                 -Verifiable
 
@@ -646,7 +635,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Get-CosmosDbAccount `
-                -ParameterFilter $getCosmosDbAccount_parameterFilter `
                 -MockWith { $script:mockGetAzureRmResource } `
                 -Verifiable
 
@@ -709,7 +697,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Set-AzureRmResource `
-                -ParameterFilter $setAzurRmResource_parameterFilter `
                 -MockWith { 'Account' } `
                 -Verifiable
 
@@ -720,7 +707,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Get-CosmosDbAccount `
-                -ParameterFilter $getCosmosDbAccount_parameterFilter `
                 -MockWith { $script:mockGetAzureRmResource } `
                 -Verifiable
 
@@ -775,7 +761,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Set-AzureRmResource `
-                -ParameterFilter $setAzurRmResource_parameterFilter `
                 -MockWith { 'Account' } `
                 -Verifiable
 
@@ -786,7 +771,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Get-CosmosDbAccount `
-                -ParameterFilter $getCosmosDbAccount_parameterFilter `
                 -MockWith { $script:mockGetAzureRmResource } `
                 -Verifiable
 
@@ -840,7 +824,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Set-AzureRmResource `
-                -ParameterFilter $setAzurRmResource_parameterFilter `
                 -MockWith { 'Account' } `
                 -Verifiable
 
@@ -851,7 +834,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Get-CosmosDbAccount `
-                -ParameterFilter $getCosmosDbAccount_parameterFilter `
                 -MockWith { $script:mockGetAzureRmResource } `
                 -Verifiable
 
@@ -898,7 +880,6 @@ InModuleScope CosmosDB {
 
                 Mock `
                     -CommandName Set-AzureRmResource `
-                    -ParameterFilter $setAzurRmResource_parameterFilter `
                     -MockWith { 'Account' } `
                     -Verifiable
 
@@ -909,7 +890,6 @@ InModuleScope CosmosDB {
 
                 Mock `
                     -CommandName Get-CosmosDbAccount `
-                    -ParameterFilter $getCosmosDbAccount_parameterFilter `
                     -MockWith { $script:mockGetAzureRmResource } `
                     -Verifiable
 
@@ -964,7 +944,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Set-AzureRmResource `
-                -ParameterFilter $setAzurRmResource_parameterFilter `
                 -MockWith { 'Account' } `
                 -Verifiable
 
@@ -975,7 +954,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Get-CosmosDbAccount `
-                -ParameterFilter $getCosmosDbAccount_parameterFilter `
                 -MockWith { $script:mockGetAzureRmResource } `
                 -Verifiable
 
@@ -1011,7 +989,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Remove-AzureRmResource `
-                -ParameterFilter $removeAzurRmResource_parameterFilter `
                 -Verifiable
 
             It 'Should not throw exception' {
@@ -1044,7 +1021,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Remove-AzureRmResource `
-                -ParameterFilter $removeAzurRmResource_parameterFilter `
                 -Verifiable
 
             It 'Should not throw exception' {

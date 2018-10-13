@@ -359,7 +359,9 @@ InModuleScope CosmosDB {
         }
 
         BeforeEach {
-            Mock -CommandName Set-CosmosDbCollectionType -MockWith { $Collection }
+            Mock `
+                -CommandName Set-CosmosDbCollectionType `
+                -MockWith { $Collection }
         }
 
         Context 'When called with context parameter and no Id' {
@@ -367,7 +369,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'colls' } `
                 -MockWith { $script:testGetCollectionResultMulti }
 
             It 'Should not throw an exception' {
@@ -398,7 +399,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'colls' -and $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) } `
                 -MockWith { $script:testGetCollectionResultSingle }
 
             It 'Should not throw an exception' {
@@ -454,7 +454,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { $script:testGetCollectionResultSingle }
 
             It 'Should not throw an exception' {
@@ -489,7 +488,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { $script:testGetCollectionResultSingle }
 
             It 'Should not throw an exception' {
@@ -526,7 +524,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { $script:testGetCollectionResultSingle }
 
             It 'Should not throw an exception' {
@@ -563,7 +560,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { $script:testGetCollectionResultSingle }
 
             It 'Should not throw an exception' {
@@ -602,7 +598,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { $script:testGetCollectionResultSingle }
 
             It 'Should not throw an exception' {
@@ -641,7 +636,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { $script:testGetCollectionResultSingle }
 
             It 'Should not throw an exception' {
@@ -709,8 +703,7 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             Mock `
-                -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'colls' -and $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) }
+                -CommandName Invoke-CosmosDbRequest
 
             It 'Should not throw an exception' {
                 $removeCosmosDbCollectionParameters = @{
@@ -739,7 +732,9 @@ InModuleScope CosmosDB {
         }
 
         BeforeEach {
-            Mock -CommandName Set-CosmosDbCollectionType -MockWith { $Collection }
+            Mock `
+                -CommandName Set-CosmosDbCollectionType `
+                -MockWith { $Collection }
         }
 
         Context 'When called with context parameter and an Id and IndexingPolicy parameter on a collection with no partition key' {
@@ -760,12 +755,10 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { $script:testGetCollectionResultSingle }
 
             Mock `
-                -CommandName Get-CosmosDbCollection `
-                -ParameterFilter $getcosmosdbcollection_parameterfilter
+                -CommandName Get-CosmosDbCollection
 
             It 'Should not throw an exception' {
                 $setCosmosDbCollectionParameters = @{
@@ -814,12 +807,10 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                 -MockWith { $script:testGetCollectionResultSingle }
 
             Mock `
                 -CommandName Get-CosmosDbCollection `
-                -ParameterFilter $getcosmosdbcollection_parameterfilter `
                 -MockWith { @{ partitionKey = $script:testPartitionKey } }
 
             It 'Should not throw an exception' {
@@ -870,19 +861,11 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
-                -MockWith {
-                $script:testGetCollectionResultSingle
-            }
+                -MockWith { $script:testGetCollectionResultSingle }
 
             Mock `
                 -CommandName Get-CosmosDbCollection `
-                -ParameterFilter $getcosmosdbcollection_parameterfilter `
-                -MockWith {
-                @{
-                    partitionKey = $script:testPartitionKey
-                }
-            }
+                -MockWith { @{ partitionKey = $script:testPartitionKey } }
 
             It 'Should not throw an exception' {
                 $setCosmosDbCollectionParameters = @{
@@ -932,20 +915,16 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokecosmosdbrequest_parameterfilter `
-                -MockWith {
-                $script:testGetCollectionResultSingle
-            }
+                -MockWith { $script:testGetCollectionResultSingle }
 
             Mock `
                 -CommandName Get-CosmosDbCollection `
-                -ParameterFilter $getcosmosdbcollection_parameterfilter `
                 -MockWith {
-                @{
-                    partitionKey = $script:testPartitionKey
-                    defaultTtl   = $script:testDefaultTimeToLive
+                    @{
+                        partitionKey = $script:testPartitionKey
+                        defaultTtl   = $script:testDefaultTimeToLive
+                    }
                 }
-            }
 
             It 'Should not throw an exception' {
                 $setCosmosDbCollectionParameters = @{

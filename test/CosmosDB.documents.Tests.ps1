@@ -113,7 +113,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith { $script:testGetDocumentResultMulti }
 
             It 'Should not throw exception' {
@@ -153,7 +152,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith { $script:testGetDocumentResultMulti }
 
             It 'Should not throw exception' {
@@ -192,7 +190,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith { $script:testGetDocumentResultSingle }
 
             It 'Should not throw exception' {
@@ -228,7 +225,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith { $script:testGetDocumentResultSingle }
 
             It 'Should not throw exception' {
@@ -269,7 +265,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith { $script:testGetDocumentResultSingle }
 
             It 'Should not throw exception' {
@@ -304,7 +299,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith { $script:testGetDocumentResultSingle }
 
             It 'Should not throw exception' {
@@ -345,8 +339,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokeCosmosDbRequest_parameterfilter
+                -CommandName Invoke-CosmosDbRequest
 
             It 'Should not throw exception' {
                 $removeCosmosDbDocumentParameters = @{
@@ -376,8 +369,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokeCosmosDbRequest_parameterfilter
+                -CommandName Invoke-CosmosDbRequest
 
             It 'Should not throw exception' {
                 $removeCosmosDbDocumentParameters = @{
@@ -413,7 +405,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith { $script:testGetDocumentResultSingle }
 
             It 'Should not throw exception' {
@@ -449,7 +440,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith { $script:testGetDocumentResultSingle }
 
             It 'Should not throw exception' {

@@ -82,7 +82,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'users' } `
                 -MockWith { $script:testGetUserResultMulti }
 
             It 'Should not throw exception' {
@@ -102,7 +101,10 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'users' } `
+                    -ParameterFilter {
+                        $Method -eq 'Get' -and `
+                        $ResourceType -eq 'users'
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -112,7 +114,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser1) } `
                 -MockWith { $script:testGetUserResultSingle }
 
             It 'Should not throw exception' {
@@ -131,7 +132,11 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser1) } `
+                    -ParameterFilter {
+                        $Method -eq 'Get' -and `
+                        $ResourceType -eq 'users' -and `
+                        $ResourcePath -eq ('users/{0}' -f $script:testUser1)
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -147,7 +152,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'users' -and $Body -eq "{ `"id`": `"$($script:testUser1)`" }" } `
                 -MockWith { $script:testGetUserResultSingle }
 
             It 'Should not throw exception' {
@@ -166,7 +170,11 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'users' -and $Body -eq "{ `"id`": `"$($script:testUser1)`" }" } `
+                    -ParameterFilter {
+                        $Method -eq 'Post' -and `
+                        $ResourceType -eq 'users' -and `
+                        $Body -eq "{ `"id`": `"$($script:testUser1)`" }"
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -181,8 +189,7 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             Mock `
-                -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser1) }
+                -CommandName Invoke-CosmosDbRequest
 
             It 'Should not throw exception' {
                 $removeCosmosDbUserParameters = @{
@@ -196,7 +203,11 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser1) } `
+                    -ParameterFilter {
+                        $Method -eq 'Delete' -and `
+                        $ResourceType -eq 'users' -and `
+                        $ResourcePath -eq ('users/{0}' -f $script:testUser1)
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -212,7 +223,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser1) -and $Body -eq "{ `"id`": `"NewId`" }"} `
                 -MockWith { $script:testGetUserResultSingle }
 
             It 'Should not throw exception' {
@@ -232,7 +242,12 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'users' -and $ResourcePath -eq ('users/{0}' -f $script:testUser1) -and $Body -eq "{ `"id`": `"NewId`" }"} `
+                    -ParameterFilter {
+                        $Method -eq 'Put' -and `
+                        $ResourceType -eq 'users' -and `
+                        $ResourcePath -eq ('users/{0}' -f $script:testUser1) -and `
+                        $Body -eq "{ `"id`": `"NewId`" }"
+                    } `
                     -Exactly -Times 1
             }
         }
