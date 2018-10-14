@@ -100,7 +100,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'udfs' } `
                 -MockWith { $script:testGetUserDefinedFunctionResultMulti }
 
             It 'Should not throw exception' {
@@ -121,7 +120,10 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'udfs' } `
+                    -ParameterFilter {
+                        $Method -eq 'Get' -and `
+                        $ResourceType -eq 'udfs'
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -131,7 +133,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'udfs' -and $ResourcePath -eq ('colls/{0}/udfs/{1}' -f $script:testCollection, $script:testUserDefinedFunction1) } `
                 -MockWith { $script:testGetUserDefinedFunctionResultSingle }
 
             It 'Should not throw exception' {
@@ -151,7 +152,11 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'udfs' -and $ResourcePath -eq ('colls/{0}/udfs/{1}' -f $script:testCollection, $script:testUserDefinedFunction1) } `
+                    -ParameterFilter {
+                        $Method -eq 'Get' -and `
+                        $ResourceType -eq 'udfs' -and `
+                        $ResourcePath -eq ('colls/{0}/udfs/{1}' -f $script:testCollection, $script:testUserDefinedFunction1)
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -167,7 +172,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'udfs' } `
                 -MockWith { $script:testGetUserDefinedFunctionResultSingle }
 
             It 'Should not throw exception' {
@@ -188,7 +192,10 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'udfs' } `
+                    -ParameterFilter {`
+                        $Method -eq 'Post' -and `
+                        $ResourceType -eq 'udfs'
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -203,8 +210,7 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             Mock `
-                -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'udfs' -and $ResourcePath -eq ('colls/{0}/udfs/{1}' -f $script:testCollection, $script:testUserDefinedFunction1) }
+                -CommandName Invoke-CosmosDbRequest
 
             It 'Should not throw exception' {
                 $removeCosmosDbUserDefinedFunctionParameters = @{
@@ -219,7 +225,11 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'udfs' -and $ResourcePath -eq ('colls/{0}/udfs/{1}' -f $script:testCollection, $script:testUserDefinedFunction1) } `
+                    -ParameterFilter {
+                        $Method -eq 'Delete' -and `
+                        $ResourceType -eq 'udfs' -and `
+                        $ResourcePath -eq ('colls/{0}/udfs/{1}' -f $script:testCollection, $script:testUserDefinedFunction1)
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -235,7 +245,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'udfs' } `
                 -MockWith { $script:testGetUserDefinedFunctionResultSingle }
 
             It 'Should not throw exception' {
@@ -256,7 +265,10 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'udfs' } `
+                    -ParameterFilter {
+                        $Method -eq 'Put' -and `
+                        $ResourceType -eq 'udfs'
+                    } `
                     -Exactly -Times 1
             }
         }

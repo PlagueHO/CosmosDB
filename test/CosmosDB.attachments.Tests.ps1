@@ -107,7 +107,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'Attachments' } `
                 -MockWith { $script:testGetAttachmentResultMulti }
 
             It 'Should not throw exception' {
@@ -129,7 +128,10 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'Attachments' } `
+                    -ParameterFilter {
+                        $Method -eq 'Get' -and `
+                        $ResourceType -eq 'Attachments'
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -139,7 +141,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'Attachments' -and $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testAttachment1) } `
                 -MockWith { $script:testGetAttachmentResultSingle }
 
             It 'Should not throw exception' {
@@ -160,7 +161,11 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'Attachments' -and $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testAttachment1) } `
+                    -ParameterFilter {
+                        $Method -eq 'Get' -and `
+                        $ResourceType -eq 'Attachments' -and `
+                        $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testAttachment1)
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -176,7 +181,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'Attachments' } `
                 -MockWith { $script:testGetAttachmentResultSingle }
 
             It 'Should not throw exception' {
@@ -199,7 +203,10 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'Attachments' } `
+                    -ParameterFilter {
+                        $Method -eq 'Post' -and `
+                        $ResourceType -eq 'Attachments'
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -214,8 +221,7 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             Mock `
-                -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'Attachments' -and $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testAttachment1) }
+                -CommandName Invoke-CosmosDbRequest
 
             It 'Should not throw exception' {
                 $removeCosmosDbAttachmentParameters = @{
@@ -231,7 +237,11 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'Attachments' -and $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testAttachment1) } `
+                    -ParameterFilter {
+                    $Method -eq 'Delete' -and `
+                        $ResourceType -eq 'Attachments' -and `
+                        $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testAttachment1)
+                } `
                     -Exactly -Times 1
             }
         }
@@ -247,7 +257,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'attachments' } `
                 -MockWith { $script:testGetAttachmentResultSingle }
 
             It 'Should not throw exception' {

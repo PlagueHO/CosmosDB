@@ -229,7 +229,6 @@ console.log("done");
             Mock -CommandName Add-AzureRmAccount
             Mock `
                 -CommandName Invoke-AzureRmResourceAction `
-                -ParameterFilter { $action -eq 'listKeys' } `
                 -MockWith { @{
                     primaryMasterKey   = 'primaryMasterKey'
                     secondaryMasterKey = 'secondaryMasterKey'
@@ -273,7 +272,6 @@ console.log("done");
             Mock -CommandName Add-AzureRmAccount
             Mock `
                 -CommandName Invoke-AzureRmResourceAction `
-                -ParameterFilter { $action -eq 'readonlykeys' } `
                 -MockWith { @{
                     primaryReadonlyMasterKey   = 'primaryReadonlyMasterKey'
                     secondaryReadonlyMasterKey = 'secondaryReadonlyMasterKey'
@@ -583,7 +581,6 @@ console.log("done");
 
             Mock `
                 -CommandName Invoke-WebRequest `
-                -ParameterFilter $InvokeWebRequest_parameterfilter `
                 -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
@@ -621,7 +618,6 @@ console.log("done");
 
             Mock `
                 -CommandName Invoke-WebRequest `
-                -ParameterFilter $InvokeWebRequest_parameterfilter `
                 -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
@@ -659,7 +655,6 @@ console.log("done");
 
             Mock `
                 -CommandName Invoke-WebRequest `
-                -ParameterFilter $InvokeWebRequest_parameterfilter `
                 -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
@@ -697,7 +692,6 @@ console.log("done");
 
             Mock `
                 -CommandName Invoke-WebRequest `
-                -ParameterFilter $InvokeWebRequest_parameterfilter `
                 -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
@@ -735,7 +729,6 @@ console.log("done");
 
             Mock `
                 -CommandName Invoke-WebRequest `
-                -ParameterFilter $InvokeWebRequest_parameterfilter `
                 -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
@@ -774,7 +767,6 @@ console.log("done");
 
             Mock `
                 -CommandName Invoke-WebRequest `
-                -ParameterFilter $InvokeWebRequest_parameterfilter `
                 -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
@@ -813,7 +805,6 @@ console.log("done");
 
             Mock `
                 -CommandName Invoke-WebRequest `
-                -ParameterFilter $InvokeWebRequest_parameterfilter `
                 -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null

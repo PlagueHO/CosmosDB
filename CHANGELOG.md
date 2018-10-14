@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Improved unit test reliability on MacOS and Linux.
+
+## 2.1.8.59
+
 - Fixed RU display - fixes [Issue #168](https://github.com/PlagueHO/CosmosDB/issues/168)
 - Fixed Powershell Core `Invoke-WebRequest` error handling.
 - Fixed retry logic bug (`$fatal` initially set to `$true` instead of `$false`).
