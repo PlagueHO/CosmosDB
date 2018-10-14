@@ -446,9 +446,10 @@ InModuleScope CosmosDB {
 
         Context 'When called with context parameter and an Id' {
             $invokecosmosdbrequest_parameterfilter = {
+                $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Post' -and `
-                    $ResourceType -eq 'colls' -and `
-                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{ id = $script:testCollection1 } )
+                $ResourceType -eq 'colls' -and `
+                $BodyObject.id -eq $script:testCollection1
             }
             $script:result = $null
 
@@ -480,9 +481,11 @@ InModuleScope CosmosDB {
 
         Context 'When called with context parameter and an Id and a DefaultTimeToLive' {
             $invokecosmosdbrequest_parameterfilter = {
+                $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Post' -and `
-                    $ResourceType -eq 'colls' -and `
-                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{ id = $script:testCollection1; defaultTTL = $script:testDefaultTimeToLive } )
+                $ResourceType -eq 'colls' -and `
+                $BodyObject.id -eq $script:testCollection1 -and `
+                $BodyObject.defaultTtl -eq $script:testDefaultTimeToLive
             }
             $script:result = $null
 
@@ -516,10 +519,11 @@ InModuleScope CosmosDB {
         Context 'When called with context parameter and an Id and OfferThroughput parameter' {
             $script:result = $null
             $invokecosmosdbrequest_parameterfilter = {
+                $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Post' -and `
-                    $ResourceType -eq 'colls' -and `
-                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{ id = $script:testCollection1 } ) -and `
-                    $Headers['x-ms-offer-throughput'] -eq 400
+                $ResourceType -eq 'colls' -and `
+                $BodyObject.id -eq $script:testCollection1 -and `
+                $Headers['x-ms-offer-throughput'] -eq 400
             }
 
             Mock `
@@ -552,10 +556,11 @@ InModuleScope CosmosDB {
         Context 'When called with context parameter and an Id and OfferType parameter' {
             $script:result = $null
             $invokecosmosdbrequest_parameterfilter = {
+                $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Post' -and `
-                    $ResourceType -eq 'colls' -and `
-                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{ id = $script:testCollection1 } ) -and `
-                    $Headers['x-ms-offer-type'] -eq 'S2'
+                $ResourceType -eq 'colls' -and `
+                $BodyObject.id -eq $script:testCollection1 -and `
+                $Headers['x-ms-offer-type'] -eq 'S2'
             }
 
             Mock `
@@ -588,12 +593,12 @@ InModuleScope CosmosDB {
         Context 'When called with context parameter and an Id and PartitionKey parameter' {
             $script:result = $null
             $invokecosmosdbrequest_parameterfilter = {
+                $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Post' -and `
-                    $ResourceType -eq 'colls' -and `
-                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{
-                        id           = $script:testCollection1
-                        partitionKey = $script:testPartitionKey
-                    })
+                $ResourceType -eq 'colls' -and `
+                $BodyObject.id -eq $script:testCollection1 -and `
+                $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
+                $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind
             }
 
             Mock `
@@ -626,12 +631,12 @@ InModuleScope CosmosDB {
         Context 'When called with context parameter and an Id parameter and PartitionKey parameter starting with ''/''' {
             $script:result = $null
             $invokecosmosdbrequest_parameterfilter = {
+                $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Post' -and `
-                    $ResourceType -eq 'colls' -and `
-                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{
-                        id           = $script:testCollection1
-                        partitionKey = $script:testPartitionKey
-                    })
+                $ResourceType -eq 'colls' -and `
+                $BodyObject.id -eq $script:testCollection1 -and `
+                $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
+                $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind
             }
 
             Mock `
@@ -741,13 +746,13 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             $invokecosmosdbrequest_parameterfilter = {
+                $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Put' -and `
-                    $ResourceType -eq 'colls' -and `
-                    $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
-                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{
-                        id             = $script:testCollection1
-                        indexingPolicy = $script:testIndexingPolicy
-                    } )
+                $ResourceType -eq 'colls' -and `
+                $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
+                $BodyObject.id -eq $script:testCollection1 -and `
+                $BodyObject.indexingPolicy.automatic -eq $script:testIndexingPolicy.automatic -and `
+                $BodyObject.indexingPolicy.indexingMode -eq $script:testIndexingPolicy.indexingMode
             }
             $getcosmosdbcollection_parameterfilter = {
                 $Id -eq $script:testCollection1
@@ -792,14 +797,15 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             $invokecosmosdbrequest_parameterfilter = {
+                $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Put' -and `
-                    $ResourceType -eq 'colls' -and `
-                    $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
-                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{
-                        id             = $script:testCollection1
-                        indexingPolicy = $script:testIndexingPolicy
-                        partitionKey   = $script:testPartitionKey
-                    } )
+                $ResourceType -eq 'colls' -and `
+                $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
+                $BodyObject.id -eq $script:testCollection1 -and `
+                $BodyObject.indexingPolicy.automatic -eq $script:testIndexingPolicy.automatic -and `
+                $BodyObject.indexingPolicy.indexingMode -eq $script:testIndexingPolicy.indexingMode -and `
+                $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
+                $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind
             }
             $getcosmosdbcollection_parameterfilter = {
                 $Id -eq $script:testCollection1
@@ -845,15 +851,16 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             $invokecosmosdbrequest_parameterfilter = {
+                $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Put' -and `
-                    $ResourceType -eq 'colls' -and `
-                    $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
-                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{
-                        id             = $script:testCollection1
-                        indexingPolicy = $script:testIndexingPolicy
-                        partitionKey   = $script:testPartitionKey
-                        defaultTtl     = $script:testDefaultTimeToLive
-                    } )
+                $ResourceType -eq 'colls' -and `
+                $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
+                $BodyObject.id -eq $script:testCollection1 -and `
+                $BodyObject.indexingPolicy.automatic -eq $script:testIndexingPolicy.automatic -and `
+                $BodyObject.indexingPolicy.indexingMode -eq $script:testIndexingPolicy.indexingMode -and `
+                $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
+                $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind -and `
+                $BodyObject.defaultTtl -eq $script:testDefaultTimeToLive
             }
             $getcosmosdbcollection_parameterfilter = {
                 $Id -eq $script:testCollection1
@@ -900,15 +907,16 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             $invokecosmosdbrequest_parameterfilter = {
+                $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Put' -and `
-                    $ResourceType -eq 'colls' -and `
-                    $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
-                    $Body -eq (ConvertTo-Json -Depth 10 -InputObject @{
-                        id             = $script:testCollection1
-                        indexingPolicy = $script:testIndexingPolicy
-                        partitionKey   = $script:testPartitionKey
-                    } )
+                $ResourceType -eq 'colls' -and `
+                $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
+                $BodyObject.indexingPolicy.automatic -eq $script:testIndexingPolicy.automatic -and `
+                $BodyObject.indexingPolicy.indexingMode -eq $script:testIndexingPolicy.indexingMode -and `
+                $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
+                $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind
             }
+
             $getcosmosdbcollection_parameterfilter = {
                 $Id -eq $script:testCollection1
             }
