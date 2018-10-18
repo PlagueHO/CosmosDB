@@ -5,39 +5,39 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-CosmosDbAccount
+# Get-CosmosDbAccountConnectionString
 
 ## SYNOPSIS
 
-Get the properties of a Cosmos DB account in Azure.
+Get the connection strings for a Cosmos DB account in Azure.
 
 ## SYNTAX
 
 ```powershell
-Get-CosmosDbAccount [-Name] <String> [-ResourceGroupName] <String> [<CommonParameters>]
+Get-CosmosDbAccountConnectionString [-Name] <String> [-ResourceGroupName] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-This will return the properties of an existing Cosmos DB
-account in Azure.
+This will return the connection strings for using to connect to an existing
+Cosmos DB account in Azure.
 
 ## EXAMPLES
 
 ### Example 1
 
 ```powershell
-PS C:\> Get-CosmosDbAccount -Name 'MyCosmosDBAccount' -ResourceGroupName 'MyResourceGroup'
+PS C:\> Get-CosmosDbAccountConnectionString -Name 'MyCosmosDBAccount' -ResourceGroupName 'MyResourceGroup'
 ```
 
-Return the properties of a Cosmos DB account named 'MyCosmosDBAccount' in
+Return the connection strings for a Cosmos DB account named 'MyCosmosDBAccount' in
 the resource group 'MyResourceGroup'.
 
 ## PARAMETERS
 
 ### -Name
 
-The name of the Cosmos DB account to return the properties for.
+The name of the Cosmos DB account to return the connection strings for.
 
 ```yaml
 Type: String

@@ -8,6 +8,7 @@ ConvertFrom-StringData -StringData @'
     NoMatchingUnexpiredResourceTokenInContext = At least one matching context token with resource '{0}' was found, but all are expired.
     CreateAuthorizationToken = Creating authorization token: Method = '{0}', ResourceType = '{1}', ResourceId = '{2}', Date = '{3}'.
     GettingAzureCosmosDBAccount = Getting Azure Cosmos DB account '{0}' in resource group '{1}'.
+    GettingAzureCosmosDBAccountConnectionString = Getting connection string for Azure Cosmos DB account '{0}' in resource group '{1}'.
     CreatingAzureCosmosDBAccount = Creating Azure Cosmos DB account '{0}' in resource group '{1}' located in '{2}'.
     UpdatingAzureCosmosDBAccount = Updating Azure Cosmos DB account '{0}' in resource group '{1}'.
     RemovingAzureCosmosDBAccount = Removing Azure Cosmos DB account '{0}' in resource group '{1}'.
@@ -30,4 +31,5 @@ ConvertFrom-StringData -StringData @'
     ShouldCreateAzureCosmosDBAccount = Create an Azure Cosmos DB account '{0}' in resource group '{1}' located in '{2}'
     ShouldUpdateAzureCosmosDBAccount = Update an Azure Cosmos DB account '{0}' in resource group '{1}'
     ShouldRemoveAzureCosmosDBAccount = Remove the Azure Cosmos DB account '{0}' in resource group '{1}'
+    GettingAzureCosmosDBAccountConnectionStringWarning = The Get-CosmosDbAccountConnectionString function does not currently work due to an issue with the Microsoft/DocumentDB provider. The connection strings will not be returned.
 '@

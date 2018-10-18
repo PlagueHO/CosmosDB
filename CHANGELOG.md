@@ -3,6 +3,11 @@
 ## Unreleased
 
 - Improved unit test reliability on MacOS and Linux.
+- Improved unit tests for account functions to include parameter filters on mock assertions.
+- Added `Get-CosmosDbAccountConnectionString` function for retrieving the connection strings
+  of an existing account in Azure - fixes [Issue #163](https://github.com/PlagueHO/CosmosDB/issues/163).
+  This function is not currently working due to an issue with the Microsoft\DocumentDB provider
+  in Azure - see [this issue](https://github.com/Azure/azure-powershell/issues/3650) for more information.
 
 ## 2.1.8.59
 
