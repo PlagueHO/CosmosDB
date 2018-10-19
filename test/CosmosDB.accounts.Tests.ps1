@@ -82,6 +82,10 @@ InModuleScope CosmosDB {
         Context 'When called with a Name and ResourceGroupName' {
             $script:result = $null
 
+            <#
+                Due to the inconsistent name of the ResourceName parameter in Get-CosmosDbAccount
+                in different versions we need to look for both in the mock.
+            #>
             $getAzureRmResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
