@@ -215,6 +215,18 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    Context 'When getting the new Azure Cosmos DB Account Connection Strings' {
+        It 'Should not throw an exception' {
+            $script:result = Get-CosmosDbAccountConnectionString `
+                -Name $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+        }
+    }
+
     Context 'When creating a new context from Azure using the PrimaryMasterKey Key' {
         It 'Should not throw an exception' {
             $script:testContext = New-CosmosDbContext `

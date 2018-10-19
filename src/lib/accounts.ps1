@@ -16,15 +16,14 @@ function Get-CosmosDbAccount
     )
 
     $getAzureRmResource_parameters = $PSBoundParameters + @{
-        ResourceType      = 'Microsoft.DocumentDb/databaseAccounts'
-        ApiVersion        = '2015-04-08'
+        ResourceType = 'Microsoft.DocumentDb/databaseAccounts'
+        ApiVersion   = '2015-04-08'
     }
 
     Write-Verbose -Message $($LocalizedData.GettingAzureCosmosDBAccount -f $Name, $ResourceGroupName)
 
     return Get-AzureRmResource @getAzureRmResource_parameters
 }
-
 
 function New-CosmosDbAccount
 {
@@ -120,9 +119,9 @@ function New-CosmosDbAccount
     $null = $PSBoundParameters.Remove('IpRangeFilter')
 
     $newAzureRmResource_parameters = $PSBoundParameters + @{
-        ResourceType      = 'Microsoft.DocumentDb/databaseAccounts'
-        ApiVersion        = '2015-04-08'
-        Properties        = $cosmosDBProperties
+        ResourceType = 'Microsoft.DocumentDb/databaseAccounts'
+        ApiVersion   = '2015-04-08'
+        Properties   = $cosmosDBProperties
     }
 
     if ($PSCmdlet.ShouldProcess('Azure', ($LocalizedData.ShouldCreateAzureCosmosDBAccount -f $Name, $ResourceGroupName, $Location)))
@@ -274,9 +273,9 @@ function Set-CosmosDbAccount
     $null = $PSBoundParameters.Remove('IpRangeFilter')
 
     $setAzureRmResource_parameters = $PSBoundParameters + @{
-        ResourceType      = 'Microsoft.DocumentDb/databaseAccounts'
-        ApiVersion        = '2015-04-08'
-        Properties        = $cosmosDBProperties
+        ResourceType = 'Microsoft.DocumentDb/databaseAccounts'
+        ApiVersion   = '2015-04-08'
+        Properties   = $cosmosDBProperties
     }
 
     if ($PSCmdlet.ShouldProcess('Azure', ($LocalizedData.ShouldUpdateAzureCosmosDBAccount -f $Name, $ResourceGroupName)))
@@ -315,8 +314,8 @@ function Remove-CosmosDbAccount
     )
 
     $removeAzureRmResource_parameters = $PSBoundParameters + @{
-        ResourceType      = 'Microsoft.DocumentDb/databaseAccounts'
-        ApiVersion        = '2015-04-08'
+        ResourceType = 'Microsoft.DocumentDb/databaseAccounts'
+        ApiVersion   = '2015-04-08'
     }
 
     if ($Force -or `
@@ -326,4 +325,34 @@ function Remove-CosmosDbAccount
 
         $null = Remove-AzureRmResource @removeAzureRmResource_parameters
     }
+}
+
+function Get-CosmosDbAccountConnectionString
+{
+    [CmdletBinding()]
+    [OutputType([Object])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Name,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $ResourceGroupName
+    )
+
+    $invokeAzureRmResourceAction_parameters = $PSBoundParameters + @{
+        ResourceType = 'Microsoft.DocumentDb/databaseAccounts'
+        ApiVersion   = '2015-04-08'
+        Action       = 'listConnectionStrings'
+        Force        = $true
+    }
+
+    Write-Verbose -Message $($LocalizedData.GettingAzureCosmosDBAccountConnectionString -f $Name, $ResourceGroupName)
+    Write-Warning -Message $LocalizedData.GettingAzureCosmosDBAccountConnectionStringWarning
+
+    return Invoke-AzureRmResourceAction @invokeAzureRmResourceAction_parameters
 }
