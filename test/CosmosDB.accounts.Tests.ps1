@@ -85,7 +85,7 @@ InModuleScope CosmosDB {
             $getAzureRmResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
-                ($ResourceName -eq $script:testName) -and `
+                (($ResourceName -eq $script:testName) -or ($Name -eq $script:testName)) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName)
             }
 
