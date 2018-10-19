@@ -8,6 +8,9 @@
   of an existing account in Azure - fixes [Issue #163](https://github.com/PlagueHO/CosmosDB/issues/163).
   This function is not currently working due to an issue with the Microsoft\DocumentDB provider
   in Azure - see [this issue](https://github.com/Azure/azure-powershell/issues/3650) for more information.
+- Fixed 'Unable to find type \[Microsoft.PowerShell.Commands.HttpResponseException\]' exception
+  being thrown in `Invoke-CosmosDbRequest` when error is returned by Cosmos DB in PowerShell 5.x
+  or earlier - fixes [Issue #186](https://github.com/PlagueHO/CosmosDB/issues/186).
 
 ## 2.1.8.59
 
