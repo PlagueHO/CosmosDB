@@ -294,6 +294,9 @@ Task Build -Depends Init {
                 Invoke-Git -GitParameters @('config', '--global', 'user.email', 'plagueho@gmail.com')
                 Invoke-Git -GitParameters @('config', '--global', 'user.name', 'Daniel Scott-Raynsford')
 
+                'Display list of Git Remotes'
+                Invoke-Git -GitParameters @('remote', '-v')
+
                 # Replace the manifest with the one that was published
                 'Updating files changed during deployment'
                 Copy-Item `
