@@ -11,6 +11,8 @@
 - Fixed 'Unable to find type \[Microsoft.PowerShell.Commands.HttpResponseException\]' exception
   being thrown in `Invoke-CosmosDbRequest` when error is returned by Cosmos DB in PowerShell 5.x
   or earlier - fixes [Issue #186](https://github.com/PlagueHO/CosmosDB/issues/186).
+- Split unit and integration test execution in CI process so that integration tests do
+  not run when unit tests fail - fixes [Issue #184](https://github.com/PlagueHO/CosmosDB/issues/184).
 
 ## 2.1.8.59
 

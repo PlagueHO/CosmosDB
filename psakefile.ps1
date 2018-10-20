@@ -13,7 +13,7 @@ Properties {
     $separator = '----------------------------------------------------------------------'
 }
 
-Task Default -Depends Test,Build
+Task Default -Depends Test, Build
 
 Task Init {
     Set-Location -Path $ProjectRoot
@@ -44,7 +44,19 @@ Task Init {
     "`n"
 }
 
-Task Test -Depends Init {
+Task PrepareTest -Depends Init {
+    # Install any dependencies required for testing
+    Invoke-PSDepend `
+        -Path $PSScriptRoot `
+        -Force `
+        -Import `
+        -Install `
+        -Tags 'Test',('Test_{0}' -f $PSVersionTable.PSEdition)
+}
+
+Task Test -Depends UnitTest, IntegrationTest
+
+Task UnitTest -Depends Init, PrepareTest {
     $separator
 
     # Install any dependencies required for the Test stage
@@ -56,8 +68,10 @@ Task Test -Depends Init {
         -Tags 'Test',('Test_{0}' -f $PSVersionTable.PSEdition)
 
     # Execute tests
-    $testResultsFile = Join-Path -Path $ProjectRoot -ChildPath 'test\TestResults.xml'
+    $testScriptsPath = Join-Path -Path $ProjectRoot -ChildPath 'test\Unit'
+    $testResultsFile = Join-Path -Path $testScriptsPath -ChildPath 'TestResults.unit.xml'
     $testResults = Invoke-Pester `
+        -Script $testScriptsPath `
         -OutputFormat NUnitXml `
         -OutputFile $testResultsFile `
         -PassThru `
@@ -109,14 +123,54 @@ Task Test -Depends Init {
 
         if ($testResults.FailedCount -gt 0)
         {
-            throw "$($testResults.FailedCount) tests failed."
+            throw "$($testResults.FailedCount) unit tests failed."
         }
     }
     else
     {
         if ($testResults.FailedCount -gt 0)
         {
-            Write-Error -Exception "$($testResults.FailedCount) tests failed."
+            Write-Error -Exception "$($testResults.FailedCount) unit tests failed."
+        }
+    }
+
+    "`n"
+}
+
+Task IntegrationTest -Depends Init, PrepareTest {
+    $separator
+
+    # Execute tests
+    $testScriptsPath = Join-Path -Path $ProjectRoot -ChildPath 'test\Integration'
+    $testResultsFile = Join-Path -Path $testScriptsPath -ChildPath 'TestResults.integration.xml'
+    $testResults = Invoke-Pester `
+        -Script $testScriptsPath `
+        -OutputFormat NUnitXml `
+        -OutputFile $testResultsFile `
+        -PassThru `
+        -ExcludeTag Incomplete
+
+    # Upload tests
+    if ($ENV:BHBuildSystem -eq 'AppVeyor')
+    {
+        'Publishing test results to AppVeyor'
+        (New-Object 'System.Net.WebClient').UploadFile(
+            "https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)",
+            (Resolve-Path $testResultsFile))
+
+        "Publishing test results to AppVeyor as Artifact"
+        Push-AppveyorArtifact $testResultsFile
+
+        if ($testResults.FailedCount -gt 0)
+        {
+            throw "$($testResults.FailedCount) integration tests failed."
+        }
+    }
+    else
+    {
+        if ($testResults.FailedCount -gt 0)
+        {
+            Write-Error -Exception "$($testResults.FailedCount) integration tests failed."
         }
     }
 

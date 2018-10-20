@@ -17,9 +17,17 @@ jobs:
     - task: PublishTestResults@2
       inputs:
         testRunner: 'NUnit'
-        testResultsFiles: '**/TestResults.xml'
-        testRunTitle: 'PS_Win2016'
-      displayName: 'Publish Test Results'
+        testResultsFiles: '**/Unit/TestResults.unit.xml'
+        testRunTitle: 'PS_Win2016_Unit'
+      displayName: 'Publish Unit Test Results'
+      condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
+
+    - task: PublishTestResults@2
+      inputs:
+        testRunner: 'NUnit'
+        testResultsFiles: '**/Integration/TestResults.integration.xml'
+        testRunTitle: 'PS_Win2016_Integration'
+      displayName: 'Publish Integration Test Results'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
     - task: PublishBuildArtifacts@1
@@ -76,9 +84,17 @@ jobs:
     - task: PublishTestResults@2
       inputs:
         testRunner: 'NUnit'
-        testResultsFiles: '**/TestResults.xml'
-        testRunTitle: 'PSCore_Ubuntu1604'
-      displayName: 'Publish Test Results'
+        testResultsFiles: '**/Unit/TestResults.unit.xml'
+        testRunTitle: 'PSCore_Ubuntu1604_Unit'
+      displayName: 'Publish Unit Test Results'
+      condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
+
+    - task: PublishTestResults@2
+      inputs:
+        testRunner: 'NUnit'
+        testResultsFiles: '**/Integration/TestResults.integration.xml'
+        testRunTitle: 'PSCore_Ubuntu1604_Integration'
+      displayName: 'Publish Integration Test Results'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
   - job: Build_PSCore_MacOS1013
@@ -104,7 +120,15 @@ jobs:
     - task: PublishTestResults@2
       inputs:
         testRunner: 'NUnit'
-        testResultsFiles: '**/TestResults.xml'
-        testRunTitle: 'PSCore_MacOS1013'
-      displayName: 'Publish Test Results'
+        testResultsFiles: '**/TestResults.unit.xml'
+        testRunTitle: 'PSCore_MacOS1013_Unit'
+      displayName: 'Publish Unit Test Results'
+      condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
+
+    - task: PublishTestResults@2
+      inputs:
+        testRunner: 'NUnit'
+        testResultsFiles: '**/TestResults.integration.xml'
+        testRunTitle: 'PSCore_MacOS1013_Integration'
+      displayName: 'Publish Integration Test Results'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')

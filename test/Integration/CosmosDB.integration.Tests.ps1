@@ -4,8 +4,8 @@ param (
 )
 
 $ModuleManifestName = 'CosmosDB.psd1'
-$ModuleManifestPath = "$PSScriptRoot\..\src\$ModuleManifestName"
-$TestHelperPath = "$PSScriptRoot\TestHelper"
+$ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
+$TestHelperPath = "$PSScriptRoot\..\TestHelper"
 
 Import-Module -Name $ModuleManifestPath -Force
 Import-Module -Name $TestHelperPath -Force
