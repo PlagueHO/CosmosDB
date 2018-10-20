@@ -5,6 +5,9 @@ jobs:
       vmImage: vs2017-win2016
 
     steps:
+    - checkout: self
+      persistCredentials: true
+
     - powershell: |
         .\build.ps1 -Verbose
       displayName: 'Build and Test'
