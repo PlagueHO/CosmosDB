@@ -70,13 +70,16 @@ Task UnitTest -Depends Init, PrepareTest {
     # Execute tests
     $testScriptsPath = Join-Path -Path $ProjectRoot -ChildPath 'test\Unit'
     $testResultsFile = Join-Path -Path $testScriptsPath -ChildPath 'TestResults.unit.xml'
+    $codeCoverageFile = Join-Path -Path $testScriptsPath -ChildPath 'CodeCoverage.xml'
     $testResults = Invoke-Pester `
         -Script $testScriptsPath `
         -OutputFormat NUnitXml `
         -OutputFile $testResultsFile `
         -PassThru `
         -ExcludeTag Incomplete `
-        -CodeCoverage @( Join-Path -Path $ProjectRoot -ChildPath 'src\lib\*.ps1' )
+        -CodeCoverage @( Join-Path -Path $ProjectRoot -ChildPath 'src\lib\*.ps1' ) `
+        -CodeCoverageOutputFile $codeCoverageFile `
+        -CodeCoverageOutputFileFormat JaCoCo
 
     # Prepare and uploade code coverage
     if ($testResults.CodeCoverage)
