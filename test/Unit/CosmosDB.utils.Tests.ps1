@@ -4,7 +4,7 @@ param (
 )
 
 $ModuleManifestName = 'CosmosDB.psd1'
-$ModuleManifestPath = "$PSScriptRoot\..\src\$ModuleManifestName"
+$ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
 
 Import-Module -Name $ModuleManifestPath -Force
 
@@ -229,7 +229,6 @@ console.log("done");
             Mock -CommandName Add-AzureRmAccount
             Mock `
                 -CommandName Invoke-AzureRmResourceAction `
-                -ParameterFilter { $action -eq 'listKeys' } `
                 -MockWith { @{
                     primaryMasterKey   = 'primaryMasterKey'
                     secondaryMasterKey = 'secondaryMasterKey'
@@ -273,7 +272,6 @@ console.log("done");
             Mock -CommandName Add-AzureRmAccount
             Mock `
                 -CommandName Invoke-AzureRmResourceAction `
-                -ParameterFilter { $action -eq 'readonlykeys' } `
                 -MockWith { @{
                     primaryReadonlyMasterKey   = 'primaryReadonlyMasterKey'
                     secondaryReadonlyMasterKey = 'secondaryReadonlyMasterKey'
@@ -583,7 +581,6 @@ console.log("done");
 
             Mock `
                 -CommandName Invoke-WebRequest `
-                -ParameterFilter $InvokeWebRequest_parameterfilter `
                 -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
@@ -621,7 +618,6 @@ console.log("done");
 
             Mock `
                 -CommandName Invoke-WebRequest `
-                -ParameterFilter $InvokeWebRequest_parameterfilter `
                 -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
@@ -659,7 +655,6 @@ console.log("done");
 
             Mock `
                 -CommandName Invoke-WebRequest `
-                -ParameterFilter $InvokeWebRequest_parameterfilter `
                 -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
@@ -697,7 +692,6 @@ console.log("done");
 
             Mock `
                 -CommandName Invoke-WebRequest `
-                -ParameterFilter $InvokeWebRequest_parameterfilter `
                 -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
@@ -735,7 +729,6 @@ console.log("done");
 
             Mock `
                 -CommandName Invoke-WebRequest `
-                -ParameterFilter $InvokeWebRequest_parameterfilter `
                 -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
@@ -774,7 +767,6 @@ console.log("done");
 
             Mock `
                 -CommandName Invoke-WebRequest `
-                -ParameterFilter $InvokeWebRequest_parameterfilter `
                 -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
@@ -813,7 +805,6 @@ console.log("done");
 
             Mock `
                 -CommandName Invoke-WebRequest `
-                -ParameterFilter $InvokeWebRequest_parameterfilter `
                 -MockWith $InvokeWebRequest_mockwith
 
             $script:result = $null
@@ -833,6 +824,39 @@ console.log("done");
 
             It 'Should return expected result' {
                 $script:result._count | Should -Be 1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
+                    -Exactly -Times 1
+                Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and Get method but System.Net.WebException exception is thrown' {
+            $InvokeWebRequest_parameterfilter = {
+                $Method -eq 'Get' -and `
+                    $ContentType -eq 'application/json' -and `
+                    $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
+            }
+
+            Mock `
+                -CommandName Invoke-WebRequest `
+                -MockWith { throw [System.Net.WebException] 'Test Exception'}
+
+            $script:result = $null
+
+            It 'Should throw exception expected exception' {
+                $invokeCosmosDbRequestparameters = @{
+                    Context      = $script:testContext
+                    Method       = 'Get'
+                    ResourceType = 'users'
+                    Verbose      = $true
+                }
+
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Throw 'Test Exception'
             }
 
             It 'Should call expected mocks' {

@@ -4,8 +4,8 @@ param (
 )
 
 $ModuleManifestName = 'CosmosDB.psd1'
-$ModuleManifestPath = "$PSScriptRoot\..\src\$ModuleManifestName"
-$TestHelperPath = "$PSScriptRoot\TestHelper"
+$ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
+$TestHelperPath = "$PSScriptRoot\..\TestHelper"
 
 Import-Module -Name $ModuleManifestPath -Force
 Import-Module -Name $TestHelperPath -Force
@@ -212,6 +212,18 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -DefaultConsistencyLevel 'Session' `
                 -IpRangeFilter '' `
                 -Verbose
+        }
+    }
+
+    Context 'When getting the new Azure Cosmos DB Account Connection Strings' {
+        It 'Should not throw an exception' {
+            $script:result = Get-CosmosDbAccountConnectionString `
+                -Name $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
         }
     }
 

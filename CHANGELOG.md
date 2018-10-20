@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+- Improved unit test reliability on MacOS and Linux.
+- Improved unit tests for account functions to include parameter filters on mock assertions.
+- Added `Get-CosmosDbAccountConnectionString` function for retrieving the connection strings
+  of an existing account in Azure - fixes [Issue #163](https://github.com/PlagueHO/CosmosDB/issues/163).
+  This function is not currently working due to an issue with the Microsoft\DocumentDB provider
+  in Azure - see [this issue](https://github.com/Azure/azure-powershell/issues/3650) for more information.
+- Fixed 'Unable to find type \[Microsoft.PowerShell.Commands.HttpResponseException\]' exception
+  being thrown in `Invoke-CosmosDbRequest` when error is returned by Cosmos DB in PowerShell 5.x
+  or earlier - fixes [Issue #186](https://github.com/PlagueHO/CosmosDB/issues/186).
+- Split unit and integration test execution in CI process so that integration tests do
+  not run when unit tests fail - fixes [Issue #184](https://github.com/PlagueHO/CosmosDB/issues/184).
+
+## 2.1.8.59
+
 - Fixed RU display - fixes [Issue #168](https://github.com/PlagueHO/CosmosDB/issues/168)
 - Fixed Powershell Core `Invoke-WebRequest` error handling.
 - Fixed retry logic bug (`$fatal` initially set to `$true` instead of `$false`).

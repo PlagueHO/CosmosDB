@@ -199,6 +199,16 @@ Get the properties of an existing Cosmos DB account in Azure:
 Get-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroup 'MyCosmosDbResourceGroup'
 ```
 
+Get the connection strings used to connect to an existing Cosmos DB
+account in Azure:
+
+| Note: This function is not currently working due to an issue in the Microsoft/DocumentDB
+| Provider. See [this issue](https://github.com/Azure/azure-powershell/issues/3650) for more information.
+
+```powershell
+Get-CosmosDbAccountConnectionString -Name 'MyAzureCosmosDB' -ResourceGroup 'MyCosmosDbResourceGroup'
+```
+
 Update an existing Cosmos DB account in Azure:
 
 ```powershell

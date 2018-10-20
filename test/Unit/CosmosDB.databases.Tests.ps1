@@ -4,7 +4,7 @@ param (
 )
 
 $ModuleManifestName = 'CosmosDB.psd1'
-$ModuleManifestPath = "$PSScriptRoot\..\src\$ModuleManifestName"
+$ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
 
 Import-Module -Name $ModuleManifestPath -Force
 
@@ -99,7 +99,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'dbs' } `
                 -MockWith { $testGetDatabaseResultMulti }
 
             It 'Should not throw exception' {
@@ -119,7 +118,10 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'dbs' } `
+                    -ParameterFilter {
+                        $Method -eq 'Get' -and `
+                        $ResourceType -eq 'dbs'
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -129,7 +131,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'dbs' -and $ResourcePath -eq ('dbs/{0}' -f $script:testDatabase) } `
                 -MockWith { $testGetDatabaseResultSingle }
 
             It 'Should not throw exception' {
@@ -148,7 +149,11 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'dbs' -and $ResourcePath -eq ('dbs/{0}' -f $script:testDatabase) } `
+                    -ParameterFilter {
+                        $Method -eq 'Get' -and `
+                        $ResourceType -eq 'dbs' -and `
+                        $ResourcePath -eq ('dbs/{0}' -f $script:testDatabase)
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -163,7 +168,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'dbs' -and $Body -eq "{ `"id`": `"$($script:testDatabase)`" }" } `
                 -MockWith { $testGetDatabaseResultSingle }
 
             It 'Should not throw exception' {
@@ -182,7 +186,11 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'dbs' -and $Body -eq "{ `"id`": `"$($script:testDatabase)`" }" } `
+                    -ParameterFilter {
+                        $Method -eq 'Post' -and `
+                        $ResourceType -eq 'dbs' -and `
+                        $Body -eq "{ `"id`": `"$($script:testDatabase)`" }"
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -197,8 +205,7 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             Mock `
-                -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'dbs' -and $ResourcePath -eq ('dbs/{0}' -f $script:testDatabase) }
+                -CommandName Invoke-CosmosDbRequest
 
             It 'Should not throw exception' {
                 $removeCosmosDbDatabaseParameters = @{
@@ -212,7 +219,11 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'dbs' -and $ResourcePath -eq ('dbs/{0}' -f $script:testDatabase) } `
+                    -ParameterFilter {
+                        $Method -eq 'Delete' -and `
+                        $ResourceType -eq 'dbs' -and `
+                        $ResourcePath -eq ('dbs/{0}' -f $script:testDatabase)
+                    } `
                     -Exactly -Times 1
             }
         }

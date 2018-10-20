@@ -4,7 +4,7 @@ param (
 )
 
 $moduleManifestName = 'CosmosDB.psd1'
-$moduleRootPath = "$PSScriptRoot\..\src\"
+$moduleRootPath = "$PSScriptRoot\..\..\src\"
 $moduleManifestPath = Join-Path -Path $moduleRootPath -ChildPath $moduleManifestName
 
 Describe 'Module Manifest Tests' {

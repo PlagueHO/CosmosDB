@@ -4,7 +4,7 @@ param (
 )
 
 $ModuleManifestName = 'CosmosDB.psd1'
-$ModuleManifestPath = "$PSScriptRoot\..\src\$ModuleManifestName"
+$ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
 
 Import-Module -Name $ModuleManifestPath -Force
 
@@ -115,7 +115,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith { $script:testGetOfferResultMulti }
 
             It 'Should not throw exception' {
@@ -150,7 +149,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith { $script:testGetOfferResultSingle }
 
             It 'Should not throw exception' {
@@ -186,7 +184,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith { $script:testGetOfferResultMulti }
 
             It 'Should not throw exception' {
@@ -226,7 +223,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith { $script:testGetOfferResultSingle }
 
             It 'Should not throw exception' {
@@ -261,7 +257,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
                 -MockWith { $script:testGetOfferResultSingle }
 
             It 'Should not throw exception' {

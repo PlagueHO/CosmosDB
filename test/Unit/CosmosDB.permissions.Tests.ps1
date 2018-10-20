@@ -4,7 +4,7 @@ param (
 )
 
 $ModuleManifestName = 'CosmosDB.psd1'
-$ModuleManifestPath = "$PSScriptRoot\..\src\$ModuleManifestName"
+$ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
 
 Import-Module -Name $ModuleManifestPath -Force
 
@@ -106,7 +106,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' } `
                 -MockWith { $script:testGetPermissionResultMulti }
 
             It 'Should not throw exception' {
@@ -127,7 +126,10 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' } `
+                    -ParameterFilter {
+                        $Method -eq 'Get' -and `
+                        $ResourceType -eq 'permissions'
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -137,7 +139,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission1) } `
                 -MockWith { $script:testGetPermissionResultSingle }
 
             It 'Should not throw exception' {
@@ -157,7 +158,11 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission1) } `
+                    -ParameterFilter {
+                        $Method -eq 'Get' -and `
+                        $ResourceType -eq 'permissions' -and `
+                        $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission1)
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -167,7 +172,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission1) -and $Headers.'x-ms-documentdb-expiry-seconds' -eq 18000 } `
                 -MockWith { $script:testGetPermissionResultSingle }
 
             It 'Should not throw exception' {
@@ -188,7 +192,12 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission1) -and $Headers.'x-ms-documentdb-expiry-seconds' -eq 18000 } `
+                    -ParameterFilter {
+                        $Method -eq 'Get' -and `
+                        $ResourceType -eq 'permissions' -and `
+                        $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission1) -and `
+                        $Headers.'x-ms-documentdb-expiry-seconds' -eq 18000
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -204,7 +213,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'permissions' } `
                 -MockWith { $script:testGetPermissionResultSingle }
 
             It 'Should not throw exception' {
@@ -225,7 +233,10 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'permissions' } `
+                    -ParameterFilter {
+                        $Method -eq 'Post' -and `
+                        $ResourceType -eq 'permissions'
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -240,8 +251,7 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             Mock `
-                -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission1) }
+                -CommandName Invoke-CosmosDbRequest
 
             It 'Should not throw exception' {
                 $removeCosmosDbPermissionParameters = @{
@@ -256,7 +266,11 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'permissions' -and $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission1) } `
+                    -ParameterFilter {
+                        $Method -eq 'Delete' -and `
+                        $ResourceType -eq 'permissions' -and `
+                        $ResourcePath -eq ('users/{0}/permissions/{1}' -f $script:testUser, $script:testPermission1)
+                    } `
                     -Exactly -Times 1
             }
         }

@@ -4,7 +4,7 @@ param (
 )
 
 $ModuleManifestName = 'CosmosDB.psd1'
-$ModuleManifestPath = "$PSScriptRoot\..\src\$ModuleManifestName"
+$ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
 
 Import-Module -Name $ModuleManifestPath -Force
 
@@ -106,7 +106,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'triggers' } `
                 -MockWith { $script:testGetTriggerResultMulti }
 
             It 'Should not throw exception' {
@@ -127,7 +126,10 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'triggers' } `
+                    -ParameterFilter {
+                        $Method -eq 'Get' -and `
+                        $ResourceType -eq 'triggers'
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -137,7 +139,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'triggers' -and $ResourcePath -eq ('colls/{0}/triggers/{1}' -f $script:testCollection, $script:testTrigger1) } `
                 -MockWith { $script:testGetTriggerResultSingle }
 
             It 'Should not throw exception' {
@@ -157,7 +158,11 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'triggers' -and $ResourcePath -eq ('colls/{0}/triggers/{1}' -f $script:testCollection, $script:testTrigger1) } `
+                    -ParameterFilter {
+                        $Method -eq 'Get' -and `
+                        $ResourceType -eq 'triggers' -and `
+                        $ResourcePath -eq ('colls/{0}/triggers/{1}' -f $script:testCollection, $script:testTrigger1)
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -173,7 +178,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'triggers' } `
                 -MockWith { $script:testGetTriggerResultSingle }
 
             It 'Should not throw exception' {
@@ -196,7 +200,10 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'triggers' } `
+                    -ParameterFilter { `
+                        $Method -eq 'Post' -and `
+                        $ResourceType -eq 'triggers'
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -211,8 +218,7 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             Mock `
-                -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'triggers' -and $ResourcePath -eq ('colls/{0}/triggers/{1}' -f $script:testCollection, $script:testTrigger1) }
+                -CommandName Invoke-CosmosDbRequest
 
             It 'Should not throw exception' {
                 $removeCosmosDbTriggerParameters = @{
@@ -227,7 +233,11 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'triggers' -and $ResourcePath -eq ('colls/{0}/triggers/{1}' -f $script:testCollection, $script:testTrigger1) } `
+                    -ParameterFilter {
+                        $Method -eq 'Delete' -and `
+                        $ResourceType -eq 'triggers' -and `
+                        $ResourcePath -eq ('colls/{0}/triggers/{1}' -f $script:testCollection, $script:testTrigger1)
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -243,7 +253,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'triggers' } `
                 -MockWith { $script:testGetTriggerResultSingle }
 
             It 'Should not throw exception' {
@@ -266,7 +275,10 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'triggers' } `
+                    -ParameterFilter {
+                        $Method -eq 'Put' -and `
+                        $ResourceType -eq 'triggers'
+                    } `
                     -Exactly -Times 1
             }
         }

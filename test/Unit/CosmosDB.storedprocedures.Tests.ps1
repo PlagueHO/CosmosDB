@@ -4,7 +4,7 @@ param (
 )
 
 $ModuleManifestName = 'CosmosDB.psd1'
-$ModuleManifestPath = "$PSScriptRoot\..\src\$ModuleManifestName"
+$ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
 
 Import-Module -Name $ModuleManifestPath -Force
 
@@ -100,7 +100,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'sprocs' } `
                 -MockWith { $script:testGetStoredProcedureResultMulti }
 
             It 'Should not throw exception' {
@@ -121,7 +120,10 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'sprocs' } `
+                    -ParameterFilter {
+                        $Method -eq 'Get' -and `
+                        $ResourceType -eq 'sprocs'
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -131,7 +133,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'sprocs' -and $ResourcePath -eq ('colls/{0}/sprocs/{1}' -f $script:testCollection, $script:testStoredProcedure1) } `
                 -MockWith { $script:testGetStoredProcedureResultSingle }
 
             It 'Should not throw exception' {
@@ -151,7 +152,11 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'sprocs' -and $ResourcePath -eq ('colls/{0}/sprocs/{1}' -f $script:testCollection, $script:testStoredProcedure1) } `
+                    -ParameterFilter {
+                        $Method -eq 'Get' -and `
+                        $ResourceType -eq 'sprocs' -and `
+                        $ResourcePath -eq ('colls/{0}/sprocs/{1}' -f $script:testCollection, $script:testStoredProcedure1)
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -167,7 +172,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'sprocs' -and $body -eq '["testParameter1","testParameter2"]'} `
                 -MockWith { $script:testGetStoredProcedureResultSingle }
 
             It 'Should not throw exception' {
@@ -188,7 +192,11 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'sprocs' -and $body -eq '["testParameter1","testParameter2"]' } `
+                    -ParameterFilter {
+                        $Method -eq 'Post' -and `
+                        $ResourceType -eq 'sprocs' -and `
+                        $body -eq '["testParameter1","testParameter2"]'
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -204,7 +212,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'sprocs' } `
                 -MockWith { $script:testGetStoredProcedureResultSingle }
 
             It 'Should not throw exception' {
@@ -225,7 +232,10 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Post' -and $ResourceType -eq 'sprocs' } `
+                    -ParameterFilter {
+                        $Method -eq 'Post' -and `
+                        $ResourceType -eq 'sprocs'
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -240,8 +250,7 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             Mock `
-                -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'sprocs' -and $ResourcePath -eq ('colls/{0}/sprocs/{1}' -f $script:testCollection, $script:testStoredProcedure1) }
+                -CommandName Invoke-CosmosDbRequest
 
             It 'Should not throw exception' {
                 $removeCosmosDbStoredProcedureParameters = @{
@@ -256,7 +265,11 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Delete' -and $ResourceType -eq 'sprocs' -and $ResourcePath -eq ('colls/{0}/sprocs/{1}' -f $script:testCollection, $script:testStoredProcedure1) } `
+                    -ParameterFilter {
+                        $Method -eq 'Delete' -and `
+                        $ResourceType -eq 'sprocs' -and `
+                        $ResourcePath -eq ('colls/{0}/sprocs/{1}' -f $script:testCollection, $script:testStoredProcedure1)
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -272,7 +285,6 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-CosmosDbRequest `
-                -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'sprocs' } `
                 -MockWith { $script:testGetStoredProcedureResultSingle }
 
             It 'Should not throw exception' {
@@ -293,7 +305,10 @@ InModuleScope CosmosDB {
             It 'Should call expected mocks' {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
-                    -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'sprocs' } `
+                    -ParameterFilter {
+                        $Method -eq 'Put' -and `
+                        $ResourceType -eq 'sprocs'
+                    } `
                     -Exactly -Times 1
             }
         }
