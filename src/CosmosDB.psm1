@@ -80,6 +80,25 @@ namespace CosmosDB {
 '@
     Add-Type -TypeDefinition $typeDefinition
 }
+
+<#
+    This type is available in PowerShell Core, but it is not available in
+    Windows PowerShell. It is needed to check the exception type within the
+    Invoke-CosmosDbRequest function.
+#>
+if (-not ([System.Management.Automation.PSTypeName]'Microsoft.PowerShell.Commands.HttpResponseException').Type)
+{
+    $httpResponseExceptionClassDefinition = @'
+namespace Microsoft.PowerShell.Commands
+{
+    public class HttpResponseException : System.Net.WebException
+    {
+    }
+}
+'@
+
+    Add-Type -TypeDefinition $httpResponseExceptionClassDefinition
+}
 #endregion
 
 #region LocalizedData

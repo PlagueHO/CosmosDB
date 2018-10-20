@@ -834,6 +834,39 @@ console.log("done");
                 Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
             }
         }
+
+        Context 'When called with context parameter and Get method but System.Net.WebException exception is thrown' {
+            $InvokeWebRequest_parameterfilter = {
+                $Method -eq 'Get' -and `
+                    $ContentType -eq 'application/json' -and `
+                    $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
+            }
+
+            Mock `
+                -CommandName Invoke-WebRequest `
+                -MockWith { throw [System.Net.WebException] 'Test Exception'}
+
+            $script:result = $null
+
+            It 'Should throw exception expected exception' {
+                $invokeCosmosDbRequestparameters = @{
+                    Context      = $script:testContext
+                    Method       = 'Get'
+                    ResourceType = 'users'
+                    Verbose      = $true
+                }
+
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Throw 'Test Exception'
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
+                    -Exactly -Times 1
+                Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
+            }
+        }
     }
 
     Describe 'Get-CosmosDbBackoffDelay' -Tag 'Unit' {
