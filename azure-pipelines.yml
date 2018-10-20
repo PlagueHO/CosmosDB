@@ -16,6 +16,7 @@ jobs:
         azureApplicationPassword: $(azureApplicationPassword)
         azureSubscriptionId: $(azureSubscriptionId)
         azureTenantId: $(azureTenantId)
+        githubRepoToken: $(githubRepoToken)
 
     - task: PublishTestResults@2
       inputs:
