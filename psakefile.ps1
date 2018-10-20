@@ -291,6 +291,8 @@ Task Build -Depends Init {
                 # Pull the master branch, update the readme.md and manifest
                 Set-Location -Path $ProjectRoot
                 Invoke-Git -GitParameters @('config', '--global', 'credential.helper', 'store')
+                Invoke-Git -GitParameters @('config', '--global', 'user.email', 'plagueho@gmail.com')
+                Invoke-Git -GitParameters @('config', '--global', 'user.name', 'Daniel Scott-Raynsford')
 
                 # Replace the manifest with the one that was published
                 'Updating files changed during deployment'

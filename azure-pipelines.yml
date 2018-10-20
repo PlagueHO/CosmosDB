@@ -47,7 +47,7 @@ jobs:
       inputs:
         pathtoPublish: 'staging/zip'
         artifactName: 'zip'
-      displayName: 'Publish Module'
+      displayName: 'Publish Module Zip'
 
     - task: PublishBuildArtifacts@1
       inputs:
