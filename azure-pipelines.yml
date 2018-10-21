@@ -9,8 +9,8 @@ jobs:
       persistCredentials: true
 
     - powershell: |
-        .\build.ps1 -Verbose
-      displayName: 'Test and Build'
+        .\build.ps1 -TaskList Test -Verbose
+      displayName: 'Execute Tests'
       env:
         azureApplicationId: $(azureApplicationId)
         azureApplicationPassword: $(azureApplicationPassword)
@@ -40,6 +40,16 @@ jobs:
         testRunTitle: 'PS_Win2016_Integration'
       displayName: 'Publish Integration Test Results'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
+
+    - powershell: |
+        .\build.ps1 -TaskList Build -Verbose
+      displayName: 'Build and Stage Module'
+      env:
+        azureApplicationId: $(azureApplicationId)
+        azureApplicationPassword: $(azureApplicationPassword)
+        azureSubscriptionId: $(azureSubscriptionId)
+        azureTenantId: $(azureTenantId)
+        githubRepoToken: $(githubRepoToken)
 
     - task: PublishBuildArtifacts@1
       inputs:
@@ -85,7 +95,7 @@ jobs:
 
     - script: |
         pwsh -c '.\build.ps1 -TaskList Test -Verbose'
-      displayName: 'Test'
+      displayName: 'Execute Tests'
       env:
         azureApplicationId: $(azureApplicationId)
         azureApplicationPassword: $(azureApplicationPassword)
@@ -121,7 +131,7 @@ jobs:
 
     - script: |
         pwsh -c '.\build.ps1 -TaskList Test -Verbose'
-      displayName: 'Test'
+      displayName: 'Execute Tests'
       env:
         azureApplicationId: $(azureApplicationId)
         azureApplicationPassword: $(azureApplicationPassword)

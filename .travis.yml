@@ -20,4 +20,4 @@ matrix:
             - powershell
 
 script:
-- pwsh -c '.\build.ps1'
+- pwsh -c '.\build.ps1 -TaskList Test -Verbose'
