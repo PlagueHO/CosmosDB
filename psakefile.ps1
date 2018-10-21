@@ -325,18 +325,19 @@ Task Build -Depends Init {
                 Invoke-Git -GitParameters @('add', '.')
                 Invoke-Git -GitParameters @('commit', '-m', "Azure DevOps Deploy updating Version Number to $NewVersion")
                 Invoke-Git -GitParameters @('status')
-                Invoke-Git -GitParameters @('push', 'master')
+                Invoke-Git -GitParameters @('push')
 
                 # Create the version tag and push it
                 "Pushing $newVersion tag to Master"
                 Invoke-Git -GitParameters @('tag', '-a', $newVersion, '-m', $newVersion)
-                Invoke-Git -GitParameters @('push', $newVersion)
+                Invoke-Git -GitParameters @('status')
+                Invoke-Git -GitParameters @('push')
 
                 # Merge the changes to the Dev branch as well
                 'Pushing deployment changes to Dev'
                 Invoke-Git -GitParameters @('checkout', '-f', 'dev')
                 Invoke-Git -GitParameters @('merge', 'origin/master')
-                Invoke-Git -GitParameters @('push', 'dev')
+                Invoke-Git -GitParameters @('push')
             }
         }
         else
