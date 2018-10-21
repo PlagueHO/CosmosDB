@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.1.9.92
 
 - Improved unit test reliability on MacOS and Linux.
 - Improved unit tests for account functions to include parameter filters on mock assertions.
