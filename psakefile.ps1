@@ -303,6 +303,7 @@ Task Build -Depends Init {
 
                 'Display list of Git Remotes'
                 Invoke-Git -GitParameters @('remote', '-v')
+                Invoke-Git -GitParameters @('checkout', '-f', 'master')
 
                 # Replace the manifest with the one that was published
                 'Updating files changed during deployment'
@@ -324,18 +325,18 @@ Task Build -Depends Init {
                 Invoke-Git -GitParameters @('add', '.')
                 Invoke-Git -GitParameters @('commit', '-m', "Azure DevOps Deploy updating Version Number to $NewVersion")
                 Invoke-Git -GitParameters @('status')
-                Invoke-Git -GitParameters @('push', 'origin', 'master')
+                Invoke-Git -GitParameters @('push', 'master')
 
                 # Create the version tag and push it
                 "Pushing $newVersion tag to Master"
                 Invoke-Git -GitParameters @('tag', '-a', $newVersion, '-m', $newVersion)
-                Invoke-Git -GitParameters @('push', 'origin', $newVersion)
+                Invoke-Git -GitParameters @('push', $newVersion)
 
                 # Merge the changes to the Dev branch as well
                 'Pushing deployment changes to Dev'
                 Invoke-Git -GitParameters @('checkout', '-f', 'dev')
-                Invoke-Git -GitParameters @('merge', 'master')
-                Invoke-Git -GitParameters @('push', 'origin', 'dev')
+                Invoke-Git -GitParameters @('merge', 'origin/master')
+                Invoke-Git -GitParameters @('push', 'dev')
             }
         }
         else

@@ -10,7 +10,7 @@ jobs:
 
     - powershell: |
         .\build.ps1 -Verbose
-      displayName: 'Build and Test'
+      displayName: 'Test and Build'
       env:
         azureApplicationId: $(azureApplicationId)
         azureApplicationPassword: $(azureApplicationPassword)
@@ -84,8 +84,8 @@ jobs:
       displayName: 'Install PowerShell Core'
 
     - script: |
-        pwsh -c '.\build.ps1'
-      displayName: 'Build and Test'
+        pwsh -c '.\build.ps1 -TaskList Test -Verbose'
+      displayName: 'Test'
       env:
         azureApplicationId: $(azureApplicationId)
         azureApplicationPassword: $(azureApplicationPassword)
@@ -120,8 +120,8 @@ jobs:
       displayName: 'Install PowerShell Core'
 
     - script: |
-        pwsh -c '.\build.ps1'
-      displayName: 'Build and Test'
+        pwsh -c '.\build.ps1 -TaskList Test -Verbose'
+      displayName: 'Test'
       env:
         azureApplicationId: $(azureApplicationId)
         azureApplicationPassword: $(azureApplicationPassword)
