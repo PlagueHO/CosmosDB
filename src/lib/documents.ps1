@@ -507,7 +507,12 @@ function Set-CosmosDbDocument
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String]
-        $PartitionKey
+        $PartitionKey,
+
+        [Parameter()]
+        [ValidateSet('Default', 'UTF-8')]
+        [System.String]
+        $Encoding = 'Default'
     )
 
     $null = $PSBoundParameters.Remove('CollectionId')

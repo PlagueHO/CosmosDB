@@ -18,7 +18,7 @@ Update a document from a Cosmos DB collection.
 ```powershell
 Set-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString>] -CollectionId <String>
  -Id <String> -DocumentBody <String> [-IndexingDirective <String>] [-PartitionKey <String>]
- [<CommonParameters>]
+ [-Encoding <String>] [<CommonParameters>]
 ```
 
 ### Account
@@ -26,7 +26,7 @@ Set-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString
 ```powershell
 Set-CosmosDbDocument -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  -CollectionId <String> -Id <String> -DocumentBody <String> [-IndexingDirective <String>]
- [-PartitionKey <String>] [<CommonParameters>]
+ [-PartitionKey <String>] [-Encoding <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -50,6 +50,21 @@ PS C:\> Set-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewColle
 
 Replace the content of a document in a collection in the database.
 
+### Example 2
+
+```powershell
+PS C:\> $newDocument = @"
+{
+    `"id`": `"ac12345`",
+    `"content`": `"杉本 司`"
+}
+"@
+PS C:\> Set-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'ac12345' -DocumentBody $newDocument -Encoding 'UTF-8'
+```
+
+Replace the content of a document in a collection in the database with a
+document using UTF-8 encoding.
+
 ## PARAMETERS
 
 ### -Context
@@ -70,6 +85,7 @@ Accept wildcard characters: False
 ```
 
 ### -Account
+
 The account name of the Cosmos DB to access.
 
 ```yaml
@@ -85,6 +101,7 @@ Accept wildcard characters: False
 ```
 
 ### -Database
+
 The name of the database to access in the Cosmos DB account.
 
 ```yaml
@@ -100,6 +117,7 @@ Accept wildcard characters: False
 ```
 
 ### -Key
+
 The key to be used to access this Cosmos DB.
 
 ```yaml
@@ -115,6 +133,7 @@ Accept wildcard characters: False
 ```
 
 ### -KeyType
+
 The type of key that will be used to access ths Cosmos DB.
 
 ```yaml
@@ -130,6 +149,7 @@ Accept wildcard characters: False
 ```
 
 ### -CollectionId
+
 This is the Id of the collection to update the document for.
 
 ```yaml
@@ -145,6 +165,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
+
 This is the Id of the document to update.
 
 ```yaml
@@ -160,6 +181,7 @@ Accept wildcard characters: False
 ```
 
 ### -DocumentBody
+
 This is the body of the document to update.
 It must be
 formatted as a JSON string and contain the Id value of the
@@ -178,6 +200,7 @@ Accept wildcard characters: False
 ```
 
 ### -IndexingDirective
+
 Include includes the document in the indexing path while
 Exclude omits the document from indexing.
 
@@ -194,9 +217,28 @@ Accept wildcard characters: False
 ```
 
 ### -PartitionKey
+
 The partition key value for the document to be deleted.
 Required if and must be specified only if the collection is
 created with a partitionKey definition.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Encoding
+
+This parameter allows the Encoding to be set to UTF-8 for documents that contain
+non-ASCII characters. If this parameter is not specified the default encoding is
+used.
 
 ```yaml
 Type: String
