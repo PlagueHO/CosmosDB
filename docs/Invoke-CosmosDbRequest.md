@@ -18,7 +18,7 @@ Execute a new request to a Cosmos DB REST endpoint.
 ```powershell
 Invoke-CosmosDbRequest -Context <Context> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
- [-Headers <Hashtable>] [-ContentType <String>] [<CommonParameters>]
+ [-Headers <Hashtable>] [-ContentType <String>] [-Encoding <String>] [<CommonParameters>]
 ```
 
 ### Account
@@ -26,7 +26,7 @@ Invoke-CosmosDbRequest -Context <Context> [-Database <String>] [-Key <SecureStri
 ```powershell
 Invoke-CosmosDbRequest -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
- [-Headers <Hashtable>] [-ContentType <String>] [<CommonParameters>]
+ [-Headers <Hashtable>] [-ContentType <String>] [-Encoding <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -256,6 +256,24 @@ Aliases:
 Required: False
 Position: Named
 Default value: Application/json
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Encoding
+
+This parameter allows the Encoding to be set in the ContentType of the
+request to allow other encoding formats. Currently only UTF-8 is supported.
+If this parameter is not specified the default encoding is used.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

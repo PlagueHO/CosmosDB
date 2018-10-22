@@ -761,8 +761,8 @@ console.log("done");
         Context 'When called with Get method and ResourceType is ''colls'' and a resource token context without matching token and no master key' {
             $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
-                    $ContentType -eq 'application/json' -and `
-                    $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'anotherCollection')
+                $ContentType -eq 'application/json' -and `
+                $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'anotherCollection')
             }
 
             Mock `
@@ -799,8 +799,8 @@ console.log("done");
         Context 'When called with context parameter and Post method' {
             $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Post' -and `
-                    $ContentType -eq 'application/query+json' -and `
-                    $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
+                $ContentType -eq 'application/query+json' -and `
+                $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
             }
 
             Mock `
@@ -816,6 +816,47 @@ console.log("done");
                     ResourceType = 'users'
                     ContentType  = 'application/query+json'
                     Body         = '{ "id": "daniel" }'
+                    Verbose      = $true
+                }
+
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result._count | Should -Be 1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
+                    -Exactly -Times 1
+                Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and Post method and Encoding set to UTF-8' {
+            $InvokeWebRequest_parameterfilter = {
+                $Method -eq 'Post' -and `
+                $ContentType -eq 'application/json; charset=UTF-8' -and `
+                $Uri -eq ('{0}dbs/{1}/colls/{2}/docs' -f $script:testContext.BaseUri, $script:testContext.Database, 'anotherCollection')
+            }
+
+            Mock `
+                -CommandName Invoke-WebRequest `
+                -MockWith $InvokeWebRequest_mockwith
+
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $invokeCosmosDbRequestparameters = @{
+                    Context      = $script:testContext
+                    Method       = 'Post'
+                    ResourceType = 'docs'
+                    ResourcePath = ('colls/{0}/docs' -f 'anotherCollection')
+                    ContentType  = 'application/json'
+                    Body         = "{ `"id`": `"daniel`", `"content`": `"我能吞下玻璃而不伤身`" }"
+                    Encoding     = 'UTF-8'
                     Verbose      = $true
                 }
 

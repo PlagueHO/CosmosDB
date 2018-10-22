@@ -18,7 +18,7 @@ Create a new document for a collection in a Cosmos DB database.
 ```powershell
 New-CosmosDbDocument -Context <Context> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
  -CollectionId <String> -DocumentBody <String> [-IndexingDirective <String>] [-Upsert <Boolean>]
- [-PartitionKey <String[]>] [<CommonParameters>]
+ [-PartitionKey <String[]>] [-Encoding <String>] [<CommonParameters>]
 ```
 
 ### Account
@@ -26,7 +26,7 @@ New-CosmosDbDocument -Context <Context> [-KeyType <String>] [-Key <SecureString>
 ```powershell
 New-CosmosDbDocument -Account <String> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
  -CollectionId <String> -DocumentBody <String> [-IndexingDirective <String>] [-Upsert <Boolean>]
- [-PartitionKey <String[]>] [<CommonParameters>]
+ [-PartitionKey <String[]>] [-Encoding <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -64,6 +64,21 @@ PS C:\> New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'Partitione
 ```
 
 Create a new document in the 'en-us' in a partitioned collection in a database.
+
+### Example 3
+
+```powershell
+PS C:\> $document = @"
+{
+    `"id`": `"en-us`",
+    `"content`": `"杉本 司`"
+}
+"@
+PS C:\> New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'PartitionedCollection' -DocumentBody $document -Encoding 'UTF-8'
+```
+
+Create a new document containing UTF-8 encoded strings in a non-partitioned collection
+in a database.
 
 ## PARAMETERS
 
@@ -230,6 +245,24 @@ definition.
 
 ```yaml
 Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Encoding
+
+This parameter allows the Encoding to be set to UTF-8 for documents that contain
+non-ASCII characters. If this parameter is not specified the default encoding is
+used.
+
+```yaml
+Type: String
 Parameter Sets: (All)
 Aliases:
 

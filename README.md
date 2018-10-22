@@ -42,7 +42,7 @@
     - [Create a Context specifying the Key Manually](#create-a-context-specifying-the-key-manually)
     - [Use CosmosDB Module to Retrieve Key from Azure Management Portal](#use-cosmosdb-module-to-retrieve-key-from-azure-management-portal)
     - [Create a Context for a Cosmos DB Emulator](#create-a-context-for-a-cosmos-db-emulator)
-    - [Create a Context from Resource Authorization Tokens](#create-a-Context-from-resource-authorization-tokens)
+    - [Create a Context from Resource Authorization Tokens](#create-a-context-from-resource-authorization-tokens)
   - [Working with Accounts](#working-with-accounts)
   - [Working with Databases](#working-with-databases)
   - [Working with Offers](#working-with-offers)
@@ -354,6 +354,20 @@ Create 10 new documents in a collection in the database:
 }
 "@
 New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentBody $document
+}
+```
+
+Create a new document containing non-ASCII characters in a collection in the
+database:
+
+```powershell
+$document = @"
+{
+    `"id`": `"$([Guid]::NewGuid().ToString())`",
+    `"content`": `"杉本 司`"
+}
+"@
+New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentBody $document -Encoding 'UTF-8'
 }
 ```
 

@@ -247,8 +247,10 @@ function Get-CosmosDbDocument
             }
         }
 
-        # Because the headers of this request will contain important information
-        # then we need to use a plain web request.
+        <#
+            Because the headers of this request will contain important information
+            then we need to use a plain web request.
+        #>
         $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method $method `
             -ResourceType 'docs' `
@@ -326,7 +328,12 @@ function New-CosmosDbDocument
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String[]]
-        $PartitionKey
+        $PartitionKey,
+
+        [Parameter()]
+        [ValidateSet('Default', 'UTF-8')]
+        [System.String]
+        $Encoding = 'Default'
     )
 
     $null = $PSBoundParameters.Remove('CollectionId')
@@ -500,7 +507,12 @@ function Set-CosmosDbDocument
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String]
-        $PartitionKey
+        $PartitionKey,
+
+        [Parameter()]
+        [ValidateSet('Default', 'UTF-8')]
+        [System.String]
+        $Encoding = 'Default'
     )
 
     $null = $PSBoundParameters.Remove('CollectionId')

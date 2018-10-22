@@ -370,7 +370,12 @@ function Invoke-CosmosDbRequest
 
         [Parameter()]
         [System.String]
-        $ContentType = 'application/json'
+        $ContentType = 'application/json',
+
+        [Parameter()]
+        [ValidateSet('Default', 'UTF-8')]
+        [System.String]
+        $Encoding = 'Default'
     )
 
     if ($PSCmdlet.ParameterSetName -eq 'Account')
@@ -532,27 +537,46 @@ function Invoke-CosmosDbRequest
     }
 
     $invokeWebRequestParameters = @{
-        Uri         = $uri
-        Headers     = $Headers
-        Method      = $method
-        ContentType = $ContentType
+        Uri             = $uri
+        Headers         = $Headers
+        Method          = $method
+        ContentType     = $ContentType
+        UseBasicParsing = $true
     }
 
     if ($Method -in ('Put', 'Post', 'Patch'))
     {
         if ($Method -eq 'Patch')
         {
-            $invokeWebRequestParameters['contentType'] = 'application/json-patch+json'
+            $invokeWebRequestParameters['ContentType'] = 'application/json-patch+json'
         }
 
-        $invokeWebRequestParameters += @{
-            Body = $Body
+        if ($Encoding -eq 'UTF-8')
+        {
+            <#
+                An encoding type of UTF-8 was passed so explictly set this in the
+                request and convert to the body string to UTF8 bytes.
+            #>
+            $invokeWebRequestParameters['ContentType'] = ('{0}; charset={1}' -f $invokeWebRequestParameters['ContentType'], $Encoding)
+            $invokeWebRequestParameters += @{
+                Body = [System.Text.Encoding]::UTF8.GetBytes($Body)
+            }
+        }
+        else
+        {
+            $invokeWebRequestParameters += @{
+                Body = $Body
+            }
         }
     }
 
     $requestComplete = $false
     $retry = 0
-    # this should initially be set to $false and $true when fatal error is caught otherwise retry is not working
+
+    <#
+        This should initially be set to $false and changed to $true when fatal error
+        is caught
+    #>
     $fatal = $false
 
     do
@@ -560,7 +584,7 @@ function Invoke-CosmosDbRequest
         try
         {
 
-            $requestResult = Invoke-WebRequest -UseBasicParsing @invokeWebRequestParameters
+            $requestResult = Invoke-WebRequest @invokeWebRequestParameters
             $requestComplete = $true
         }
         catch [System.Net.WebException],[Microsoft.PowerShell.Commands.HttpResponseException]
