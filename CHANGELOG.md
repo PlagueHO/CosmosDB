@@ -1,5 +1,12 @@
 # Change Log
 
+## Unreleased
+
+- Added support for creating and updating documents containing
+  non-ASCII characters by adding Encoding parameter to `New-CosmosDbDocument`
+  and `Set-CosmosDbDocument` functions - fixes [Issue #151](https://github.com/PlagueHO/CosmosDB/issues/151).
+- Fix table of contents link in README.MD.
+
 ## 2.1.9.92
 
 - Improved unit test reliability on MacOS and Linux.

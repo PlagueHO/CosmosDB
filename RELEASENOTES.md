@@ -1,5 +1,14 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+October 22, 2018
+
+- Added support for creating and updating documents containing
+  non-ASCII characters by adding Encoding parameter to `New-CosmosDbDocument`
+  and `Set-CosmosDbDocument` functions - fixes [Issue #151](https://github.com/PlagueHO/CosmosDB/issues/151).
+- Fix table of contents link in README.MD.
+
 ## What is New in CosmosDB 2.1.9.92
 
 October 20, 2018

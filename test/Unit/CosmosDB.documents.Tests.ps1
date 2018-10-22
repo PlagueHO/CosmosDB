@@ -289,6 +289,41 @@ InModuleScope CosmosDB {
             }
         }
 
+        Context 'When called with context parameter and an Id and Encoding is UTF-8' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Post' -and `
+                $ResourceType -eq 'docs' -and `
+                $Encoding -eq 'UTF-8'
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultSingle }
+
+            It 'Should not throw exception' {
+                $newCosmosDbDocumentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    DocumentBody = $script:testDocumentBody
+                    Encoding     = 'UTF-8'
+                }
+
+                { $script:result = New-CosmosDbDocument @newCosmosDbDocumentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testDocument1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
         Context 'When called with context parameter and an Id and Partition Key' {
             $script:result = $null
             $invokeCosmosDbRequest_parameterfilter = {
@@ -449,6 +484,42 @@ InModuleScope CosmosDB {
                     Id           = $script:testDocument1
                     DocumentBody = $script:testDocumentBody
                     PartitionKey = $script:testPartitionKey
+                }
+
+                { $script:result = Set-CosmosDbDocument @setCosmosDbDocumentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testDocument1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id and Encoding is UTF-8' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Put' -and `
+                $ResourceType -eq 'docs' -and `
+                $Encoding -eq 'UTF-8'
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultSingle }
+
+            It 'Should not throw exception' {
+                $setCosmosDbDocumentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    Id           = $script:testDocument1
+                    DocumentBody = $script:testDocumentBody
+                    Encoding     = 'UTF-8'
                 }
 
                 { $script:result = Set-CosmosDbDocument @setCosmosDbDocumentParameters } | Should -Not -Throw
