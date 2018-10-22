@@ -1,5 +1,10 @@
 # Change Log
 
+## Unreleased
+
+- Added support for creating documents containing UTF - fixes [Issue #151](https://github.com/PlagueHO/CosmosDB/issues/151).
+- Fix table of contents link in README.MD.
+
 ## 2.1.9.92
 
 - Improved unit test reliability on MacOS and Linux.
