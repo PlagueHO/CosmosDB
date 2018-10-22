@@ -58,7 +58,7 @@ $script:testDocumentUTF8Body = @"
 $script:testDocumentUTF8UpdateContent = "我能吞下玻璃而不伤身"
 $script:testDocumentUTF8UpdateBody = @"
 {
-    `"id`": `"$script:testDocumentUTF8UpdateId`",
+    `"id`": `"$script:testDocumentUTF8Id`",
     `"content`": `"$script:testDocumentUTF8UpdateContent`"
 }
 "@
