@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.1.10.103
 
 - Added support for creating and updating documents containing
   non-ASCII characters by adding Encoding parameter to `New-CosmosDbDocument`
