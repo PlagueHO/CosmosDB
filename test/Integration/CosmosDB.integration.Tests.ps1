@@ -47,12 +47,19 @@ $script:testDocumentBody = @"
     `"more`": `"Some other string`"
 }
 "@
-$script:testDocumentUTFId = [Guid]::NewGuid().ToString()
-$script:testDocumentUTFContent = "我能吞下玻璃而不伤身"
-$script:testDocumentUTFBody = @"
+$script:testDocumentUTF8Id = [Guid]::NewGuid().ToString()
+$script:testDocumentUTF8Content = "我能吞下玻璃而不伤身"
+$script:testDocumentUTF8Body = @"
 {
-    `"id`": `"$script:testDocumentUTFId`",
-    `"content`": `"$script:testDocumentUTFContent`"
+    `"id`": `"$script:testDocumentUTF8Id`",
+    `"content`": `"$script:testDocumentUTF8Content`"
+}
+"@
+$script:testDocumentUTF8UpdateContent = "我能吞下玻璃而不伤身"
+$script:testDocumentUTF8UpdateBody = @"
+{
+    `"id`": `"$script:testDocumentUTF8UpdateId`",
+    `"content`": `"$script:testDocumentUTF8UpdateContent`"
 }
 "@
 $script:testAttachmentId = 'testAttachment'
@@ -956,12 +963,12 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When adding a UTF document to a collection' {
+    Context 'When adding a UTF-8 document to a collection' {
         It 'Should not throw an exception' {
             $script:result = New-CosmosDbDocument `
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
-                -DocumentBody $script:testDocumentUTFBody `
+                -DocumentBody $script:testDocumentUTF8Body `
                 -Encoding 'UTF-8' `
                 -Verbose
         }
@@ -972,16 +979,16 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.ResourceId | Should -BeOfType [System.String]
             $script:result.Uri | Should -BeOfType [System.String]
             $script:result.Attachments | Should -BeOfType [System.String]
-            $script:result.Id | Should -Be $script:testDocumentUTFId
+            $script:result.Id | Should -Be $script:testDocumentUTF8Id
         }
     }
 
-    Context 'When getting a UTF document in a collection by using the Id' {
+    Context 'When getting newly created UTF-8 document from a collection by using the Id' {
         It 'Should not throw an exception' {
             $script:result = Get-CosmosDbDocument `
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
-                -Id $script:testDocumentUTFId `
+                -Id $script:testDocumentUTF8Id `
                 -Verbose
         }
 
@@ -991,16 +998,56 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.ResourceId | Should -BeOfType [System.String]
             $script:result.Uri | Should -BeOfType [System.String]
             $script:result.Attachments | Should -BeOfType [System.String]
-            $script:result.Id | Should -Be $script:testDocumentUTFId
+            $script:result.Id | Should -Be $script:testDocumentUTF8Id
         }
     }
 
-    Context 'When removing a UTF document from a collection' {
+    Context 'When updating an existing UTF-8 document to a collection' {
+        It 'Should not throw an exception' {
+            $script:result = Set-CosmosDbDocument `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -Id $script:testDocumentUTF8Id `
+                -DocumentBody $script:testDocumentUTF8UpdateBody `
+                -Encoding 'UTF-8' `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Attachments | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testDocumentUTF8Id
+        }
+    }
+
+    Context 'When getting updated UTF-8 document from a collection by using the Id' {
+        It 'Should not throw an exception' {
+            $script:result = Get-CosmosDbDocument `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -Id $script:testDocumentUTF8Id `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Attachments | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testDocumentUTF8Id
+        }
+    }
+
+    Context 'When removing a existing UTF-8 document from a collection' {
         It 'Should not throw an exception' {
             $script:result = Remove-CosmosDbDocument `
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
-                -Id $script:testDocumentUTFId `
+                -Id $script:testDocumentUTF8Id `
                 -Verbose
         }
     }
