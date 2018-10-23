@@ -90,14 +90,14 @@ This module supports the following:
 
 - Windows PowerShell 5.x:
   - **AzureRM.Profile** and **AzureRM.Resources** PowerShell modules
-    are required if using `New-CosmosDbContext -ResourceGroup $resourceGroup`
+    are required if using `New-CosmosDbContext -ResourceGroupName $resourceGroup`
     or `*-CosmosDbAccount` functions.
 
 or:
 
 - PowerShell Core 6.x:
   - **AzureRM.NetCore.Profile** and **AzureRM.NetCore.Resources** PowerShell
-    modules are required if using `New-CosmosDbContext -ResourceGroup $resourceGroup`
+    modules are required if using `New-CosmosDbContext -ResourceGroupName $resourceGroup`
     or `*-CosmosDbAccount` functions.
 
 ## Installation
@@ -143,7 +143,7 @@ retrieves the primary or secondary key from the Azure Management
 Portal, use the following command:
 
 ```powershell
-$cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -ResourceGroup 'MyCosmosDbResourceGroup' -MasterKeyType 'SecondaryMasterKey'
+$cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -ResourceGroupName 'MyCosmosDbResourceGroup' -MasterKeyType 'SecondaryMasterKey'
 ```
 
 _Note: if PowerShell is not connected to Azure then an interactive
@@ -190,13 +190,13 @@ _Note: You must have first logged PowerShell into Azure using the
 Create a new Cosmos DB account in Azure:
 
 ```powershell
-New-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroup 'MyCosmosDbResourceGroup' -Location 'WestUS'
+New-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup' -Location 'WestUS'
 ```
 
 Get the properties of an existing Cosmos DB account in Azure:
 
 ```powershell
-Get-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroup 'MyCosmosDbResourceGroup'
+Get-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup'
 ```
 
 Get the connection strings used to connect to an existing Cosmos DB
@@ -206,19 +206,19 @@ account in Azure:
 | Provider. See [this issue](https://github.com/Azure/azure-powershell/issues/3650) for more information.
 
 ```powershell
-Get-CosmosDbAccountConnectionString -Name 'MyAzureCosmosDB' -ResourceGroup 'MyCosmosDbResourceGroup'
+Get-CosmosDbAccountConnectionString -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup'
 ```
 
 Update an existing Cosmos DB account in Azure:
 
 ```powershell
-Set-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroup 'MyCosmosDbResourceGroup' -Location 'WestUS' -DefaultConsistencyLevel 'Strong'
+Set-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup' -Location 'WestUS' -DefaultConsistencyLevel 'Strong'
 ```
 
 Delete an existing Cosmos DB account in Azure:
 
 ```powershell
-Remove-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroup 'MyCosmosDbResourceGroup'
+Remove-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup'
 ```
 
 ### Working with Databases
