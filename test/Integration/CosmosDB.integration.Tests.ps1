@@ -247,7 +247,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:testContext = New-CosmosDbContext `
                 -Account $script:testAccountName `
                 -Database $script:testDatabase `
-                -ResourceGroup $script:testResourceGroupName `
+                -ResourceGroupName $script:testResourceGroupName `
                 -MasterKeyType 'PrimaryMasterKey'
         }
     }
@@ -257,7 +257,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:testReadOnlyContext = New-CosmosDbContext `
                 -Account $script:testAccountName `
                 -Database $script:testDatabase `
-                -ResourceGroup $script:testResourceGroupName `
+                -ResourceGroupName $script:testResourceGroupName `
                 -MasterKeyType 'PrimaryReadonlyMasterKey'
         }
     }

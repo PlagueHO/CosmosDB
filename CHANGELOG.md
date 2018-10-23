@@ -1,5 +1,10 @@
 # Change Log
 
+## Unreleased
+
+- Renamed `ResourceGroup` parameter to `ResourceGroupName` in
+  `New-CosmosDbContext` function - fixes [Issue #158](https://github.com/PlagueHO/CosmosDB/issues/158).
+
 ## 2.1.10.103
 
 - Added support for creating and updating documents containing
