@@ -24,7 +24,7 @@ New-CosmosDbContext -Account <String> [-Database <String>] -Key <SecureString> [
 ### Azure
 
 ```powershell
-New-CosmosDbContext -Account <String> [-Database <String>] -ResourceGroup <String> [-MasterKeyType <String>]
+New-CosmosDbContext -Account <String> [-Database <String>] -ResourceGroupName <String> [-MasterKeyType <String>]
  [-BackoffPolicy <CosmosDB.BackoffPolicy>] [<CommonParameters>]
 ```
 
@@ -70,7 +70,7 @@ Creates a CosmosDB context specifying the master key manually.
 
 ```powershell
 PS C:\> Add-AzureRmAccount
-PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -ResourceGroup 'MyCosmosDbResourceGroup' -MasterKeyType 'PrimaryMasterKey'
+PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -ResourceGroupName 'MyCosmosDbResourceGroup' -MasterKeyType 'PrimaryMasterKey'
 ```
 
 Creates a Cosmos DB context by logging into Azure and getting
@@ -179,7 +179,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ResourceGroup
+### -ResourceGroupName
 
 This is the name of the Azure Resouce Group containing the
 Cosmos DB.
@@ -187,7 +187,7 @@ Cosmos DB.
 ```yaml
 Type: String
 Parameter Sets: AzureAccount
-Aliases:
+Aliases: ResourceGroup
 
 Required: True
 Position: Named

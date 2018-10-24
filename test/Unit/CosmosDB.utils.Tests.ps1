@@ -59,7 +59,7 @@ InModuleScope CosmosDB {
         Content = $script:testJson
         Headers = @{ 'x-ms-request-charge' = '5' }
     }
-    $script:testResourceGroup = 'testResourceGroup'
+    $script:testResourceGroupName = 'testResourceGroup'
     $script:testMaxRetries = 20
     $script:testMethod = 'Default'
     $script:testDelay = 1
@@ -240,10 +240,10 @@ console.log("done");
 
             It 'Should not throw exception' {
                 $newCosmosDbContextParameters = @{
-                    Account       = $script:testAccount
-                    Database      = $script:testDatabase
-                    ResourceGroup = $script:testResourceGroup
-                    MasterKeyType = 'PrimaryMasterKey'
+                    Account           = $script:testAccount
+                    Database          = $script:testDatabase
+                    ResourceGroupName = $script:testResourceGroupName
+                    MasterKeyType     = 'PrimaryMasterKey'
                 }
 
                 { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
@@ -279,10 +279,10 @@ console.log("done");
 
             It 'Should not throw exception' {
                 $newCosmosDbContextParameters = @{
-                    Account       = $script:testAccount
-                    Database      = $script:testDatabase
-                    ResourceGroup = $script:testResourceGroup
-                    MasterKeyType = 'PrimaryReadonlyMasterKey'
+                    Account           = $script:testAccount
+                    Database          = $script:testDatabase
+                    ResourceGroupName = $script:testResourceGroupName
+                    MasterKeyType     = 'PrimaryReadonlyMasterKey'
                 }
 
                 { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
@@ -321,9 +321,9 @@ console.log("done");
 
             It 'Should not throw exception' {
                 $newCosmosDbContextParameters = @{
-                    Account       = $script:testAccount
-                    Database      = $script:testDatabase
-                    ResourceGroup = $script:testResourceGroup
+                    Account           = $script:testAccount
+                    Database          = $script:testDatabase
+                    ResourceGroupName = $script:testResourceGroupName
                 }
 
                 { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
@@ -761,8 +761,8 @@ console.log("done");
         Context 'When called with Get method and ResourceType is ''colls'' and a resource token context without matching token and no master key' {
             $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
-                $ContentType -eq 'application/json' -and `
-                $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'anotherCollection')
+                    $ContentType -eq 'application/json' -and `
+                    $Uri -eq ('{0}dbs/{1}/colls/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'anotherCollection')
             }
 
             Mock `
@@ -799,8 +799,8 @@ console.log("done");
         Context 'When called with context parameter and Post method' {
             $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Post' -and `
-                $ContentType -eq 'application/query+json' -and `
-                $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
+                    $ContentType -eq 'application/query+json' -and `
+                    $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
             }
 
             Mock `
@@ -838,8 +838,8 @@ console.log("done");
         Context 'When called with context parameter and Post method and Encoding set to UTF-8' {
             $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Post' -and `
-                $ContentType -eq 'application/json; charset=UTF-8' -and `
-                $Uri -eq ('{0}dbs/{1}/colls/{2}/docs' -f $script:testContext.BaseUri, $script:testContext.Database, 'anotherCollection')
+                    $ContentType -eq 'application/json; charset=UTF-8' -and `
+                    $Uri -eq ('{0}dbs/{1}/colls/{2}/docs' -f $script:testContext.BaseUri, $script:testContext.Database, 'anotherCollection')
             }
 
             Mock `

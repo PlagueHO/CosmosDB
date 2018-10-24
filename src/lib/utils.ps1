@@ -96,10 +96,11 @@ function New-CosmosDbContext
         [System.String]
         $KeyType = 'master',
 
+        [Alias("ResourceGroup")]
         [Parameter(Mandatory = $true, ParameterSetName = 'AzureAccount')]
         [ValidateNotNullOrEmpty()]
         [System.String]
-        $ResourceGroup,
+        $ResourceGroupName,
 
         [Parameter(ParameterSetName = 'AzureAccount')]
         [ValidateSet('PrimaryMasterKey', 'SecondaryMasterKey', 'PrimaryReadonlyMasterKey', 'SecondaryReadonlyMasterKey')]
@@ -167,7 +168,7 @@ function New-CosmosDbContext
             }
 
             $resource = Invoke-AzureRmResourceAction `
-                -ResourceGroupName $ResourceGroup `
+                -ResourceGroupName $ResourceGroupName `
                 -Name $Account `
                 -ResourceType "Microsoft.DocumentDb/databaseAccounts" `
                 -ApiVersion "2015-04-08" `
