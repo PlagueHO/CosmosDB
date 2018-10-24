@@ -215,10 +215,25 @@ function Remove-AzureTestCosmosDbResourceGroup
     }
 }
 
+function ConvertFrom-SecureStringEx
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [SecureString]
+        $SecureString
+    )
+
+    $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecureString)
+    return [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+}
+
 Export-ModuleMember -Function `
     Get-AzureServicePrincipal, `
     Connect-AzureServicePrincipal, `
     New-AzureTestCosmosDbAccount, `
     Remove-AzureTestCosmosDbAccount, `
     New-AzureTestCosmosDbResourceGroup, `
-    Remove-AzureTestCosmosDbResourceGroup
+    Remove-AzureTestCosmosDbResourceGroup,
+    ConvertFrom-SecureStringEx

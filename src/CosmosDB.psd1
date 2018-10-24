@@ -85,6 +85,7 @@
     FunctionsToExport = @(
         'Get-CosmosDbAccount'
         'Get-CosmosDbAccountConnectionString'
+        'Get-CosmosDbAccountMasterKey'
         'Get-CosmosDbAttachment'
         'Get-CosmosDbAttachmentResourcePath'
         'Get-CosmosDbCollection'
