@@ -5,12 +5,13 @@ param (
 
 $ModuleManifestName = 'CosmosDB.psd1'
 $ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
-$TestHelperPath = "$PSScriptRoot\..\TestHelper"
 
 Import-Module -Name $ModuleManifestPath -Force
-Import-Module -Name $TestHelperPath -Force
 
 InModuleScope CosmosDB {
+    $TestHelperPath = "$PSScriptRoot\..\TestHelper"
+    Import-Module -Name $TestHelperPath -Force
+
     # Variables for use in tests
     $script:testAccount = 'testAccount'
     $script:testDatabase = 'testDatabase'
@@ -252,7 +253,7 @@ console.log("done");
                 $script:result.Account | Should -Be $script:testAccount
                 $script:result.Database | Should -Be $script:testDatabase
                 $script:result.KeyType | Should -Be 'master'
-                $script:result.Key | ConvertFrom-SecureStringEx | Should -Be $script:testKey
+                $script:result.Key | Convert-SecureStringToString | Should -Be $script:testKey
                 $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
             }
 
@@ -288,7 +289,7 @@ console.log("done");
                 $script:result.Account | Should -Be $script:testAccount
                 $script:result.Database | Should -Be $script:testDatabase
                 $script:result.KeyType | Should -Be 'master'
-                $script:result.Key | ConvertFrom-SecureStringEx | Should -Be $script:testKey
+                $script:result.Key | Convert-SecureStringToString | Should -Be $script:testKey
                 $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
             }
 

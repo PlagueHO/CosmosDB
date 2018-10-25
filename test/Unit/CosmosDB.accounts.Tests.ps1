@@ -5,12 +5,13 @@ param (
 
 $ModuleManifestName = 'CosmosDB.psd1'
 $ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
-$TestHelperPath = "$PSScriptRoot\..\TestHelper"
 
 Import-Module -Name $ModuleManifestPath -Force
-Import-Module -Name $TestHelperPath -Force
 
 InModuleScope CosmosDB {
+    $TestHelperPath = "$PSScriptRoot\..\TestHelper"
+    Import-Module -Name $TestHelperPath -Force
+
     # Variables for use in tests
     $script:testName = 'testName'
     $script:testResourceGroupName = 'testResourceGroupName'
@@ -1198,7 +1199,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result | ConvertFrom-SecureStringEx | Should -Be $script:testKey
+                $script:result | Convert-SecureStringToString | Should -Be $script:testKey
             }
 
             It 'Should call expected mocks' {
@@ -1239,7 +1240,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result | ConvertFrom-SecureStringEx | Should -Be $script:testKey
+                $script:result | Convert-SecureStringToString | Should -Be $script:testKey
             }
 
             It 'Should call expected mocks' {
@@ -1280,7 +1281,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result | ConvertFrom-SecureStringEx | Should -Be $script:testKey
+                $script:result | Convert-SecureStringToString | Should -Be $script:testKey
             }
 
             It 'Should call expected mocks' {

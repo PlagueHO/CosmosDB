@@ -215,7 +215,7 @@ function Remove-AzureTestCosmosDbResourceGroup
     }
 }
 
-function ConvertFrom-SecureStringEx
+function Convert-SecureStringToString
 {
     [CmdletBinding()]
     param
@@ -236,4 +236,4 @@ Export-ModuleMember -Function `
     Remove-AzureTestCosmosDbAccount, `
     New-AzureTestCosmosDbResourceGroup, `
     Remove-AzureTestCosmosDbResourceGroup,
-    ConvertFrom-SecureStringEx
+    Convert-SecureStringToString
