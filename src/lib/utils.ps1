@@ -160,33 +160,10 @@ function New-CosmosDbContext
                 $null = Add-AzureRmAccount
             }
 
-            $action = 'listKeys'
-            if ($MasterKeyType -in ('PrimaryReadonlyMasterKey', 'SecondaryReadonlyMasterKey'))
-            {
-                # Use the readonlykey Action if a ReadOnly key is required
-                $action = 'readonlykeys'
-            }
-
-            $resource = Invoke-AzureRmResourceAction `
+            $Key = Get-CosmosDbAccountMasterKey `
                 -ResourceGroupName $ResourceGroupName `
                 -Name $Account `
-                -ResourceType "Microsoft.DocumentDb/databaseAccounts" `
-                -ApiVersion "2015-04-08" `
-                -Action $action `
-                -Force `
-                -ErrorAction Stop
-
-            if ($resource)
-            {
-                $Key = ConvertTo-SecureString `
-                    -String ($resource.$MasterKeyType) `
-                    -AsPlainText `
-                    -Force
-            }
-            else
-            {
-                return
-            }
+                -MasterKeyType $MasterKeyType
 
             $BaseUri = (Get-CosmosDbUri -Account $Account)
         }

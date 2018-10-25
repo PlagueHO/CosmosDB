@@ -9,6 +9,9 @@ $ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
 Import-Module -Name $ModuleManifestPath -Force
 
 InModuleScope CosmosDB {
+    $TestHelperPath = "$PSScriptRoot\..\TestHelper"
+    Import-Module -Name $TestHelperPath -Force
+
     # Variables for use in tests
     $script:testAccount = 'testAccount'
     $script:testDatabase = 'testDatabase'
@@ -82,21 +85,25 @@ console.log("done");
                 ([System.Management.Automation.PSTypeName]'CosmosDB.Context').Type | Should -Be $True
             }
         }
+
         Context 'CosmosDB.IndexingPolicy.Policy' {
             It 'Should exist' {
                 ([System.Management.Automation.PSTypeName]'CosmosDB.IndexingPolicy.Policy').Type | Should -Be $True
             }
         }
+
         Context 'CosmosDB.IndexingPolicy.Path.Index' {
             It 'Should exist' {
                 ([System.Management.Automation.PSTypeName]'CosmosDB.IndexingPolicy.Path.Index').Type | Should -Be $True
             }
         }
+
         Context 'CosmosDB.IndexingPolicy.Path.IncludedPath' {
             It 'Should exist' {
                 ([System.Management.Automation.PSTypeName]'CosmosDB.IndexingPolicy.Path.IncludedPath').Type | Should -Be $True
             }
         }
+
         Context 'CosmosDB.IndexingPolicy.Path.ExcludedPath' {
             It 'Should exist' {
                 ([System.Management.Automation.PSTypeName]'CosmosDB.IndexingPolicy.Path.ExcludedPath').Type | Should -Be $True
@@ -228,15 +235,8 @@ console.log("done");
             Mock -CommandName Get-AzureRmContext -MockWith { throw }
             Mock -CommandName Add-AzureRmAccount
             Mock `
-                -CommandName Invoke-AzureRmResourceAction `
-                -MockWith { @{
-                    primaryMasterKey   = 'primaryMasterKey'
-                    secondaryMasterKey = 'secondaryMasterKey'
-                    properties         = @{
-                        primaryReadonlyMasterKey   = 'primaryReadonlyMasterKey'
-                        secondaryReadonlyMasterKey = 'secondaryReadonlyMasterKey'
-                    }
-                } }
+                -CommandName Get-CosmosDbAccountMasterKey `
+                -MockWith { $script:testKeySecureString }
 
             It 'Should not throw exception' {
                 $newCosmosDbContextParameters = @{
@@ -253,71 +253,27 @@ console.log("done");
                 $script:result.Account | Should -Be $script:testAccount
                 $script:result.Database | Should -Be $script:testDatabase
                 $script:result.KeyType | Should -Be 'master'
+                $script:result.Key | Convert-SecureStringToString | Should -Be $script:testKey
                 $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
             }
 
             It 'Should call expected mocks' {
-                Assert-MockCalled -CommandName Invoke-AzureRmResourceAction `
-                    -ParameterFilter { $action -eq 'listKeys' } `
-                    -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-AzureRmContext -Exactly -Times 1
                 Assert-MockCalled -CommandName Add-AzureRmAccount -Exactly -Times 1
-            }
-        }
-
-        Context 'When called with AzureAccount parameters and not connected to Azure and PrimaryReadonlyMasterKey requested' {
-            $script:result = $null
-
-            Mock -CommandName Get-AzureRmContext -MockWith { throw }
-            Mock -CommandName Add-AzureRmAccount
-            Mock `
-                -CommandName Invoke-AzureRmResourceAction `
-                -MockWith { @{
-                    primaryReadonlyMasterKey   = 'primaryReadonlyMasterKey'
-                    secondaryReadonlyMasterKey = 'secondaryReadonlyMasterKey'
-                } }
-
-            It 'Should not throw exception' {
-                $newCosmosDbContextParameters = @{
-                    Account           = $script:testAccount
-                    Database          = $script:testDatabase
-                    ResourceGroupName = $script:testResourceGroupName
-                    MasterKeyType     = 'PrimaryReadonlyMasterKey'
-                }
-
-                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
-            }
-
-            It 'Should return expected result' {
-                $script:result.Account | Should -Be $script:testAccount
-                $script:result.Database | Should -Be $script:testDatabase
-                $script:result.KeyType | Should -Be 'master'
-                $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
-            }
-
-            It 'Should call expected mocks' {
-                Assert-MockCalled -CommandName Invoke-AzureRmResourceAction `
-                    -ParameterFilter { $action -eq 'readonlykeys' } `
+                Assert-MockCalled -CommandName Get-CosmosDbAccountMasterKey `
+                    -ParameterFilter { $MasterKeyType -eq 'PrimaryMasterKey' } `
                     -Exactly -Times 1
-                Assert-MockCalled -CommandName Get-AzureRmContext -Exactly -Times 1
-                Assert-MockCalled -CommandName Add-AzureRmAccount -Exactly -Times 1
             }
         }
 
         Context 'When called with AzureAccount parameters and connected to Azure' {
             $script:result = $null
 
-            Mock `
-                -CommandName Invoke-AzureRmResourceAction `
-                -MockWith { @{
-                    primaryMasterKey           = 'primaryMasterKey'
-                    secondaryMasterKey         = 'secondaryMasterKey'
-                    primaryReadonlyMasterKey   = 'primaryReadonlyMasterKey'
-                    secondaryReadonlyMasterKey = 'secondaryReadonlyMasterKey'
-                } }
-
             Mock -CommandName Get-AzureRmContext -MockWith { $true }
             Mock -CommandName Add-AzureRmAccount
+            Mock `
+                -CommandName Get-CosmosDbAccountMasterKey `
+                -MockWith { $script:testKeySecureString }
 
             It 'Should not throw exception' {
                 $newCosmosDbContextParameters = @{
@@ -333,13 +289,16 @@ console.log("done");
                 $script:result.Account | Should -Be $script:testAccount
                 $script:result.Database | Should -Be $script:testDatabase
                 $script:result.KeyType | Should -Be 'master'
+                $script:result.Key | Convert-SecureStringToString | Should -Be $script:testKey
                 $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
             }
 
             It 'Should call expected mocks' {
-                Assert-MockCalled -CommandName Invoke-AzureRmResourceAction -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-AzureRmContext -Exactly -Times 1
                 Assert-MockCalled -CommandName Add-AzureRmAccount -Exactly -Times 0
+                Assert-MockCalled -CommandName Get-CosmosDbAccountMasterKey `
+                    -ParameterFilter { $MasterKeyType -eq 'PrimaryMasterKey' } `
+                    -Exactly -Times 1
             }
         }
 

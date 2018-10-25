@@ -199,6 +199,20 @@ Get the properties of an existing Cosmos DB account in Azure:
 Get-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup'
 ```
 
+Get a Secure String containing the Primary Master Key for an
+account in Azure:
+
+```powershell
+$key = Get-CosmosDbAccountMasterKey -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup'
+```
+
+Get a Secure String containing the Secondary Readonly Master Key for an
+account in Azure:
+
+```powershell
+$key = Get-CosmosDbAccountMasterKey -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup' -MasterKeyType 'SecondaryReadonlyMasterKey'
+```
+
 Get the connection strings used to connect to an existing Cosmos DB
 account in Azure:
 

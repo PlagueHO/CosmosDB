@@ -239,6 +239,35 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
+            # Currently returns an empty string due to a bug in the Provider
+        }
+    }
+
+    Context 'When getting the new Azure Cosmos DB Account Primary Master Key' {
+        It 'Should not throw an exception' {
+            $script:result = Get-CosmosDbAccountMasterKey `
+                -Name $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName `
+                -MasterKeyType 'PrimaryMasterKey' `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            $script:result | Should -BeOfType [SecureString]
+        }
+    }
+
+    Context 'When getting the new Azure Cosmos DB Account Primary Readonly Master Key' {
+        It 'Should not throw an exception' {
+            $script:result = Get-CosmosDbAccountMasterKey `
+                -Name $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName `
+                -MasterKeyType 'PrimaryReadonlyMasterKey' `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            $script:result | Should -BeOfType [SecureString]
         }
     }
 

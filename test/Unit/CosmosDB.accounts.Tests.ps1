@@ -9,6 +9,9 @@ $ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
 Import-Module -Name $ModuleManifestPath -Force
 
 InModuleScope CosmosDB {
+    $TestHelperPath = "$PSScriptRoot\..\TestHelper"
+    Import-Module -Name $TestHelperPath -Force
+
     # Variables for use in tests
     $script:testName = 'testName'
     $script:testResourceGroupName = 'testResourceGroupName'
@@ -73,6 +76,8 @@ InModuleScope CosmosDB {
             Type                          = 'Microsoft.DocumentDB/databaseAccounts'
         }
     }
+    $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
+    $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
 
     Describe 'Get-CosmosDbAccount' -Tag 'Unit' {
         It 'Should exist' {
@@ -1149,6 +1154,134 @@ InModuleScope CosmosDB {
 
             It 'Should return expected result' {
                 $script:result | Should -Be 'ConnectionString'
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-AzureRmResourceAction `
+                    -ParameterFilter $invokeAzureRmResourceAction_parameterFilter `
+                    -Exactly -Times 1
+            }
+        }
+    }
+
+    Describe 'Get-CosmosDbAccountMasterKey' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Get-CosmosDbAccountMasterKey -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with a Name and ResourceGroupName with a MasterKeyType is Default' {
+            $script:result = $null
+
+            $invokeAzureRmResourceAction_parameterFilter = {
+                ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
+                ($ApiVersion -eq '2015-04-08') -and `
+                ($ResourceName -eq $script:testName) -and `
+                ($ResourceGroupName -eq $script:testResourceGroupName) -and `
+                ($Action -eq 'listKeys') -and `
+                ($Force -eq $true)
+            }
+
+            Mock `
+                -CommandName Invoke-AzureRmResourceAction `
+                -MockWith {
+                [PSCustomObject] @{ PrimaryMasterKey = $script:testKey}
+            }
+
+            It 'Should not throw exception' {
+                $getCosmosDbAccountMasterKeyParameters = @{
+                    Name              = $script:testName
+                    ResourceGroupName = $script:testResourceGroupName
+                    Verbose           = $true
+                }
+
+                { $script:result = Get-CosmosDbAccountMasterKey @getCosmosDbAccountMasterKeyParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Convert-SecureStringToString | Should -Be $script:testKey
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-AzureRmResourceAction `
+                    -ParameterFilter $invokeAzureRmResourceAction_parameterFilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with a Name and ResourceGroupName with a MasterKeyType is SecondaryMasterKey' {
+            $script:result = $null
+
+            $invokeAzureRmResourceAction_parameterFilter = {
+                ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
+                ($ApiVersion -eq '2015-04-08') -and `
+                ($ResourceName -eq $script:testName) -and `
+                ($ResourceGroupName -eq $script:testResourceGroupName) -and `
+                ($Action -eq 'listKeys') -and `
+                ($Force -eq $true)
+            }
+
+            Mock `
+                -CommandName Invoke-AzureRmResourceAction `
+                -MockWith {
+                [PSCustomObject] @{ SecondaryMasterKey = $script:testKey}
+            }
+
+            It 'Should not throw exception' {
+                $getCosmosDbAccountMasterKeyParameters = @{
+                    Name              = $script:testName
+                    ResourceGroupName = $script:testResourceGroupName
+                    MasterKeyType     = 'SecondaryMasterKey'
+                    Verbose           = $true
+                }
+
+                { $script:result = Get-CosmosDbAccountMasterKey @getCosmosDbAccountMasterKeyParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Convert-SecureStringToString | Should -Be $script:testKey
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-AzureRmResourceAction `
+                    -ParameterFilter $invokeAzureRmResourceAction_parameterFilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with a Name and ResourceGroupName with a MasterKeyType is PrimaryReadonlyMasterKey' {
+            $script:result = $null
+
+            $invokeAzureRmResourceAction_parameterFilter = {
+                ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
+                ($ApiVersion -eq '2015-04-08') -and `
+                ($ResourceName -eq $script:testName) -and `
+                ($ResourceGroupName -eq $script:testResourceGroupName) -and `
+                ($Action -eq 'readonlykeys') -and `
+                ($Force -eq $true)
+            }
+
+            Mock `
+                -CommandName Invoke-AzureRmResourceAction `
+                -MockWith {
+                [PSCustomObject] @{ PrimaryReadonlyMasterKey = $script:testKey}
+            }
+
+            It 'Should not throw exception' {
+                $getCosmosDbAccountMasterKeyParameters = @{
+                    Name              = $script:testName
+                    ResourceGroupName = $script:testResourceGroupName
+                    MasterKeyType     = 'PrimaryReadonlyMasterKey'
+                    Verbose           = $true
+                }
+
+                { $script:result = Get-CosmosDbAccountMasterKey @getCosmosDbAccountMasterKeyParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Convert-SecureStringToString | Should -Be $script:testKey
             }
 
             It 'Should call expected mocks' {

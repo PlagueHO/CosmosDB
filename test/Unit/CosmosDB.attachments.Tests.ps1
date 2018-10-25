@@ -9,6 +9,9 @@ $ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
 Import-Module -Name $ModuleManifestPath -Force
 
 InModuleScope CosmosDB {
+    $TestHelperPath = "$PSScriptRoot\..\TestHelper"
+    Import-Module -Name $TestHelperPath -Force
+
     # Variables for use in tests
     $script:testAccount = 'testAccount'
     $script:testDatabase = 'testDatabase'

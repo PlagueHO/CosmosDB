@@ -6,6 +6,8 @@
   `New-CosmosDbContext` function - fixes [Issue #158](https://github.com/PlagueHO/CosmosDB/issues/158).
 - Correct `*-CosmosDbAccount` functions examples in README.MD to show
   `ResourceGroupName` parameter.
+- Added `Get-CosmosDbAccountMasterKey` function for retrieving the keys
+  of an existing account in Azure - fixes [Issue #162](https://github.com/PlagueHO/CosmosDB/issues/162).
 
 ## 2.1.10.103
 
