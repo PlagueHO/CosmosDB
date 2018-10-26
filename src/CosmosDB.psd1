@@ -109,6 +109,7 @@
         'Get-CosmosDbUserDefinedFunctionResourcePath'
         'Invoke-CosmosDbStoredProcedure'
         'New-CosmosDbAccount'
+        'New-CosmosDbAccountMasterKey'
         'New-CosmosDbAttachment'
         'New-CosmosDbBackoffPolicy'
         'New-CosmosDbCollection'
