@@ -277,7 +277,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Name $script:testAccountName `
                 -ResourceGroupName $script:testResourceGroupName `
                 -MasterKeyType 'PrimaryMasterKey' `
-                -Force `
                 -Verbose
         }
     }
