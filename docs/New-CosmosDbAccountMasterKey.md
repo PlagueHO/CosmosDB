@@ -49,18 +49,6 @@ Regenerate the Secondary Readonly Master Key for the 'MyCosmosDBAccount' in the 
 
 ## PARAMETERS
 
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -MasterKeyType
 
 The master key type to regenerate.
