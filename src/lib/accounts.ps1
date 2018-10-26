@@ -435,7 +435,9 @@ function New-CosmosDbAccountMasterKey
 
     Write-Verbose -Message $($LocalizedData.RegeneratingAzureCosmosDBAccountMasterKey -f $Name, $ResourceGroupName, $MasterKeyType)
 
-    $invokeAzureRmResourceAction_parameters = $PSBoundParameters + @{
+    $invokeAzureRmResourceAction_parameters = @{
+        Name              = $Name
+        ResourceGroupName = $ResourceGroupName
         ResourceType      = 'Microsoft.DocumentDb/databaseAccounts'
         ApiVersion        = '2015-04-08'
         Action            = 'regenerateKey'
