@@ -140,7 +140,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     if ($ENV:BHBuildSystem -eq 'AppVeyor')
     {
         Write-Warning -Message (@(
-            'New-AzureRmResource and Set-AzureRmResource currently throws the following exception in AppVeyor:'
+            'New-AzureRmResource, Set-AzureRmResource and some Invoke-AzureRmResourceAction calls currently throws the following exception in AppVeyor:'
             'Method not found: ''Void Newtonsoft.Json.Serialization.JsonDictionaryContract.set_PropertyNameResolver(System.Func`2<System.String,System.String>)'''
             'due to an older version of Newtonsoft.Json being used.'
             'Therefore integration tests of New-CosmosDbAccount and Set-CosmosDbAccount are currently skipped when running in AppVeyor environment.'
@@ -239,6 +239,45 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
+            # Currently returns an empty string due to a bug in the Provider
+        }
+    }
+
+    Context 'When getting the new Azure Cosmos DB Account Primary Master Key' {
+        It 'Should not throw an exception' {
+            $script:result = Get-CosmosDbAccountMasterKey `
+                -Name $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName `
+                -MasterKeyType 'PrimaryMasterKey' `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            $script:result | Should -BeOfType [SecureString]
+        }
+    }
+
+    Context 'When getting the new Azure Cosmos DB Account Primary Readonly Master Key' {
+        It 'Should not throw an exception' {
+            $script:result = Get-CosmosDbAccountMasterKey `
+                -Name $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName `
+                -MasterKeyType 'PrimaryReadonlyMasterKey' `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            $script:result | Should -BeOfType [SecureString]
+        }
+    }
+
+    Context 'When regenerating the new Azure Cosmos DB Account Primary Master Key' {
+        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
+            $script:result = New-CosmosDbAccountMasterKey `
+                -Name $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName `
+                -MasterKeyType 'PrimaryMasterKey' `
+                -Verbose
         }
     }
 
@@ -247,7 +286,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:testContext = New-CosmosDbContext `
                 -Account $script:testAccountName `
                 -Database $script:testDatabase `
-                -ResourceGroup $script:testResourceGroupName `
+                -ResourceGroupName $script:testResourceGroupName `
                 -MasterKeyType 'PrimaryMasterKey'
         }
     }
@@ -257,7 +296,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:testReadOnlyContext = New-CosmosDbContext `
                 -Account $script:testAccountName `
                 -Database $script:testDatabase `
-                -ResourceGroup $script:testResourceGroupName `
+                -ResourceGroupName $script:testResourceGroupName `
                 -MasterKeyType 'PrimaryReadonlyMasterKey'
         }
     }
@@ -265,7 +304,10 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     Context 'When creating a new database using a readonly context' {
         It 'Should throw an exception' {
             {
-                $script:result = New-CosmosDbDatabase -Context $script:testReadOnlyContext -Id $script:testDatabase -Verbose
+                $script:result = New-CosmosDbDatabase `
+                    -Context $script:testReadOnlyContext `
+                    -Id $script:testDatabase `
+                    -Verbose
             } | Should -Throw
         }
     }

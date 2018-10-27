@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.1.10.103'
+    ModuleVersion     = '2.1.11.103'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -85,6 +85,7 @@
     FunctionsToExport = @(
         'Get-CosmosDbAccount'
         'Get-CosmosDbAccountConnectionString'
+        'Get-CosmosDbAccountMasterKey'
         'Get-CosmosDbAttachment'
         'Get-CosmosDbAttachmentResourcePath'
         'Get-CosmosDbCollection'
@@ -108,6 +109,7 @@
         'Get-CosmosDbUserDefinedFunctionResourcePath'
         'Invoke-CosmosDbStoredProcedure'
         'New-CosmosDbAccount'
+        'New-CosmosDbAccountMasterKey'
         'New-CosmosDbAttachment'
         'New-CosmosDbBackoffPolicy'
         'New-CosmosDbCollection'
@@ -182,6 +184,19 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+October 27, 2018
+
+- Renamed `ResourceGroup` parameter to `ResourceGroupName` in
+    `New-CosmosDbContext` function - fixes [Issue #158](https://github.com/PlagueHO/CosmosDB/issues/158).
+- Correct `*-CosmosDbAccount` functions examples in README.MD to show
+    `ResourceGroupName` parameter.
+- Added `Get-CosmosDbAccountMasterKey` function for retrieving the keys
+    of an existing account in Azure - fixes [Issue #162](https://github.com/PlagueHO/CosmosDB/issues/162).
+- Added `New-CosmosDbAccountMasterKey` function for regenerating the keys
+    of an existing account in Azure - fixes [Issue #164](https://github.com/PlagueHO/CosmosDB/issues/164).
+
 ## What is New in CosmosDB 2.1.10.103
 
 October 22, 2018
@@ -349,21 +364,6 @@ June 03, 2018
   [Issue #104](https://github.com/PlagueHO/CosmosDB/issues/104).
 - Updated `Invoke-CosmosDbRequest` function to output additional exception
   information to the Verbose stream - See [Issue #103](https://github.com/PlagueHO/CosmosDB/issues/103).
-
-## What is New in CosmosDB 2.0.12.418
-
-May 19, 2018
-
-- Changed Id parameter in `Get-CosmosDbCollectionSize` to be mandatory.
-- Added documentation for creating a resource token context - See
-  [Issue #33](https://github.com/PlagueHO/CosmosDB/issues/33).
-- Added `New-CosmosDbContextToken` to create a resource token context
-  object that can be passed to `New-CosmosDbContext` to support working
-  with resource level access controls - See
-  [Issue #33](https://github.com/PlagueHO/CosmosDB/issues/33).
-- Added support to `New-CosmosDbContext` for creating a context object
-  with resource tokens from permissions - See
-  [Issue #33](https://github.com/PlagueHO/CosmosDB/issues/33).
             '
         } # End of PSData hashtable
     } # End of PrivateData hashtable

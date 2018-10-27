@@ -9,6 +9,8 @@ ConvertFrom-StringData -StringData @'
     CreateAuthorizationToken = Creating authorization token: Method = '{0}', ResourceType = '{1}', ResourceId = '{2}', Date = '{3}'.
     GettingAzureCosmosDBAccount = Getting Azure Cosmos DB account '{0}' in resource group '{1}'.
     GettingAzureCosmosDBAccountConnectionString = Getting connection string for Azure Cosmos DB account '{0}' in resource group '{1}'.
+    GettingAzureCosmosDBAccountMasterKey = Getting '{2}' for Azure Cosmos DB account '{0}' in resource group '{1}'.
+    RegeneratingAzureCosmosDBAccountMasterKey = Regenerating '{2}' for Azure Cosmos DB account '{0}' in resource group '{1}'.
     CreatingAzureCosmosDBAccount = Creating Azure Cosmos DB account '{0}' in resource group '{1}' located in '{2}'.
     UpdatingAzureCosmosDBAccount = Updating Azure Cosmos DB account '{0}' in resource group '{1}'.
     RemovingAzureCosmosDBAccount = Removing Azure Cosmos DB account '{0}' in resource group '{1}'.
