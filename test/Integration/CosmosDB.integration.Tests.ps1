@@ -140,7 +140,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     if ($ENV:BHBuildSystem -eq 'AppVeyor')
     {
         Write-Warning -Message (@(
-            'New-AzureRmResource and Set-AzureRmResource currently throws the following exception in AppVeyor:'
+            'New-AzureRmResource, Set-AzureRmResource and some Invoke-AzureRmResourceAction calls currently throws the following exception in AppVeyor:'
             'Method not found: ''Void Newtonsoft.Json.Serialization.JsonDictionaryContract.set_PropertyNameResolver(System.Func`2<System.String,System.String>)'''
             'due to an older version of Newtonsoft.Json being used.'
             'Therefore integration tests of New-CosmosDbAccount and Set-CosmosDbAccount are currently skipped when running in AppVeyor environment.'
@@ -272,7 +272,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     }
 
     Context 'When regenerating the new Azure Cosmos DB Account Primary Master Key' {
-        It 'Should not throw an exception' {
+        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
             $script:result = New-CosmosDbAccountMasterKey `
                 -Name $script:testAccountName `
                 -ResourceGroupName $script:testResourceGroupName `
