@@ -1,5 +1,18 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+October 27, 2018
+
+- Renamed `ResourceGroup` parameter to `ResourceGroupName` in
+  `New-CosmosDbContext` function - fixes [Issue #158](https://github.com/PlagueHO/CosmosDB/issues/158).
+- Correct `*-CosmosDbAccount` functions examples in README.MD to show
+  `ResourceGroupName` parameter.
+- Added `Get-CosmosDbAccountMasterKey` function for retrieving the keys
+  of an existing account in Azure - fixes [Issue #162](https://github.com/PlagueHO/CosmosDB/issues/162).
+- Added `New-CosmosDbAccountMasterKey` function for regenerating the keys
+  of an existing account in Azure - fixes [Issue #164](https://github.com/PlagueHO/CosmosDB/issues/164).
+
 ## What is New in CosmosDB 2.1.10.103
 
 October 22, 2018
