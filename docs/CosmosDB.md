@@ -13,10 +13,23 @@ Locale: en-US
 This PowerShell module provides cmdlets for working with Azure Cosmos DB.
 
 ## CosmosDB Cmdlets
+
 ### [ConvertTo-CosmosDbTokenDateString](ConvertTo-CosmosDbTokenDateString.md)
 
 Convert a DateTime object into the format required for use
 in a Cosmos DB Authorization Token and request header.
+
+### [Get-CosmosDbAccount](Get-CosmosDbAccount.md)
+
+Get the properties of a Cosmos DB account in Azure.
+
+### [Get-CosmosDbAccountConnectionString](Get-CosmosDbAccountConnectionString.md)
+
+Get the connection strings for a Cosmos DB account in Azure.
+
+### [Get-CosmosDbAccountMasterKey](Get-CosmosDbAccountMasterKey.md)
+
+Get a master key for a Cosmos DB account in Azure.
 
 ### [Get-CosmosDbAttachment](Get-CosmosDbAttachment.md)
 
@@ -111,6 +124,15 @@ Execute a new request to a Cosmos DB REST endpoint.
 ### [Invoke-CosmosDbStoredProcedure](Invoke-CosmosDbStoredProcedure.md)
 
 Execute a new stored procedure for a collection in a Cosmos DB database.
+
+### [New-CosmosDbAccount](New-CosmosDbAccount.md)
+
+Create a new Cosmos DB account in Azure.
+
+### [New-CosmosDbAccountMasterKey](New-CosmosDbAccountMasterKey.md)
+
+This will regenerate a specific master key for an existing Cosmos DB account
+in Azure.
 
 ### [New-CosmosDbAttachment](New-CosmosDbAttachment.md)
 
@@ -221,6 +243,10 @@ Delete a user from a Cosmos DB database.
 ### [Remove-CosmosDbUserDefinedFunction](Remove-CosmosDbUserDefinedFunction.md)
 
 Delete a user defined function from a Cosmos DB collection.
+
+### [Set-CosmosDbAccount](Set-CosmosDbAccount.md)
+
+Update the properties of an existing Azure Cosmos DB account.
 
 ### [Set-CosmosDbAttachment](Set-CosmosDbAttachment.md)
 
