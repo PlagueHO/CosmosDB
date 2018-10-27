@@ -5,33 +5,37 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-CosmosDbAccountMasterKey
+# New-CosmosDbAccountMasterKey
 
 ## SYNOPSIS
 
-Get a master key for a Cosmos DB account in Azure.
+This will regenerate a specific master key for an existing Cosmos DB account
+in Azure.
 
 ## SYNTAX
 
 ```powershell
-Get-CosmosDbAccountMasterKey -Name <String> -ResourceGroupName <String> [-MasterKeyType <String>]
+New-CosmosDbAccountMasterKey -Name <String> -ResourceGroupName <String> [-MasterKeyType <String>]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-This will return a specific master key for an existing Cosmos DB account
-in Azure.
+You should change the access keys to your Azure Cosmos DB account periodically to help keep
+your connections more secure. Two access keys are assigned to enable you to maintain connections
+to the Azure Cosmos DB account using one access key while you regenerate the other access key.
+
+This function will enable you to regenerate the master keys.
 
 ## EXAMPLES
 
 ### Example 1
 
 ```powershell
-PS C:\> Get-CosmosDbAccountMasterKey -Name 'MyCosmosDBAccount' -ResourceGroupName 'MyResourceGroup'
+PS C:\> New-CosmosDbAccountMasterKey -Name 'MyCosmosDBAccount' -ResourceGroupName 'MyResourceGroup'
 ```
 
-Retrun the Primary Master Key for the 'MyCosmosDBAccount' in the resource group
+Regenerate the Primary Master Key for the 'MyCosmosDBAccount' in the resource group
 'MyResourceGroup'.
 
 ### Example 2
@@ -40,14 +44,14 @@ Retrun the Primary Master Key for the 'MyCosmosDBAccount' in the resource group
 PS C:\> Get-CosmosDbAccountMasterKey -Name 'MyCosmosDBAccount' -ResourceGroupName 'MyResourceGroup' -MasterKeyType 'SecondaryReadonlyMasterKey'
 ```
 
-Retrun the Secondary Readonly Master Key for the 'MyCosmosDBAccount' in the resource group
+Regenerate the Secondary Readonly Master Key for the 'MyCosmosDBAccount' in the resource group
 'MyResourceGroup'.
 
 ## PARAMETERS
 
 ### -MasterKeyType
 
-The type of Master Key to return.
+The master key type to regenerate.
 
 ```yaml
 Type: String

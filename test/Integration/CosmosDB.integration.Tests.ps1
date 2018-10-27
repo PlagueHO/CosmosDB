@@ -271,6 +271,16 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    Context 'When regenerating the new Azure Cosmos DB Account Primary Master Key' {
+        It 'Should not throw an exception' {
+            $script:result = New-CosmosDbAccountMasterKey `
+                -Name $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName `
+                -MasterKeyType 'PrimaryMasterKey' `
+                -Verbose
+        }
+    }
+
     Context 'When creating a new context from Azure using the PrimaryMasterKey Key' {
         It 'Should not throw an exception' {
             $script:testContext = New-CosmosDbContext `
@@ -294,7 +304,10 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     Context 'When creating a new database using a readonly context' {
         It 'Should throw an exception' {
             {
-                $script:result = New-CosmosDbDatabase -Context $script:testReadOnlyContext -Id $script:testDatabase -Verbose
+                $script:result = New-CosmosDbDatabase `
+                    -Context $script:testReadOnlyContext `
+                    -Id $script:testDatabase `
+                    -Verbose
             } | Should -Throw
         }
     }

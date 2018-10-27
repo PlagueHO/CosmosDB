@@ -8,6 +8,8 @@
   `ResourceGroupName` parameter.
 - Added `Get-CosmosDbAccountMasterKey` function for retrieving the keys
   of an existing account in Azure - fixes [Issue #162](https://github.com/PlagueHO/CosmosDB/issues/162).
+- Added `New-CosmosDbAccountMasterKey` function for regenerating the keys
+  of an existing account in Azure - fixes [Issue #164](https://github.com/PlagueHO/CosmosDB/issues/164).
 
 ## 2.1.10.103
 
