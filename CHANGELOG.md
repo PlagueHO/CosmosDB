@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.1.11.130
 
 - Renamed `ResourceGroup` parameter to `ResourceGroupName` in
   `New-CosmosDbContext` function - fixes [Issue #158](https://github.com/PlagueHO/CosmosDB/issues/158).
