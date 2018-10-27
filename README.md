@@ -216,7 +216,7 @@ $key = Get-CosmosDbAccountMasterKey -Name 'MyAzureCosmosDB' -ResourceGroupName '
 Regenerate the Primary Readonly Master Key for an account in Azure:
 
 ```powershell
-$key = New-CosmosDbAccountMasterKey -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup' -MasterKeyType 'PrimaryReadonlyMasterKey'
+New-CosmosDbAccountMasterKey -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup' -MasterKeyType 'PrimaryReadonlyMasterKey'
 ```
 
 Get the connection strings used to connect to an existing Cosmos DB
