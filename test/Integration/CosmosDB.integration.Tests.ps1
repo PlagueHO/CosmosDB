@@ -44,7 +44,8 @@ $script:testDocumentBody = @"
 {
     `"id`": `"$script:testDocumentId`",
     `"content`": `"Some string`",
-    `"more`": `"Some other string`"
+    `"more`": `"Some other string`",
+    `"uniquekey`": `"$([Guid]::NewGuid().ToString())`"
 }
 "@
 $script:testDocumentUTF8Id = [Guid]::NewGuid().ToString()
@@ -438,13 +439,21 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When creating a new collection' {
+    Context 'When creating a new unique key policy' {
+        It 'Should not throw an exception' {
+            $script:uniqueKey = New-CosmosDbCollectionUniqueKey -Path '/uniquekey'
+            $script:uniqueKeyPolicy = New-CosmosDbCollectionUniqueKeyPolicy -UniqueKey $script:uniqueKey
+        }
+    }
+
+    Context 'When creating a new collection with an IndexingPolicy and UniqueKeyPolicy' {
         It 'Should not throw an exception' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
                 -OfferThroughput 400 `
                 -IndexingPolicy $script:indexingPolicy `
+                -UniqueKeyPolicy $script:uniqueKeyPolicy `
                 -Verbose
         }
 
@@ -469,10 +478,11 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
             $script:result.indexingPolicy.includedPaths.Indexes[2].DataType | Should -Be 'Point'
             $script:result.indexingPolicy.includedPaths.Indexes[2].Kind | Should -Be 'Spatial'
+            $script:result.uniqueKeyPolicy.uniqueKeys[0].paths[0] | Should -Be '/uniquekey'
         }
     }
 
-    Context 'When getting existing collection' {
+    Context 'When getting existing collection with an IndexingPolicy and UniqueKeyPolicy' {
         It 'Should not throw an exception' {
             $script:result = Get-CosmosDbCollection `
                 -Context $script:testContext `
@@ -501,15 +511,17 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
             $script:result.indexingPolicy.includedPaths.Indexes[2].DataType | Should -Be 'Point'
             $script:result.indexingPolicy.includedPaths.Indexes[2].Kind | Should -Be 'Spatial'
+            $script:result.uniqueKeyPolicy.uniqueKeys[0].paths[0] | Should -Be '/uniquekey'
         }
     }
 
-    Context 'When updating an existing collection' {
+    Context 'When updating an existing collection with an IndexingPolicy and UniqueKeyPolicy' {
         It 'Should not throw an exception' {
             $script:result = Set-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
                 -IndexingPolicy $script:indexingPolicy `
+                -UniqueKeyPolicy $script:uniqueKeyPolicy `
                 -Verbose
         }
 
@@ -534,6 +546,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
             $script:result.indexingPolicy.includedPaths.Indexes[2].DataType | Should -Be 'Point'
             $script:result.indexingPolicy.includedPaths.Indexes[2].Kind | Should -Be 'Spatial'
+            $script:result.uniqueKeyPolicy.uniqueKeys[0].paths[0] | Should -Be '/uniquekey'
         }
     }
 
@@ -1094,7 +1107,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When removing existing collection' {
+    Context 'When removing existing collection with an IndexingPolicy and UniqueKeyPolicy' {
         It 'Should not throw an exception' {
             $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
         }

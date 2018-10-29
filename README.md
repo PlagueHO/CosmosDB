@@ -49,6 +49,8 @@
   - [Working with Collections](#working-with-collections)
     - [Creating a Collection with a custom Indexing Policy](#creating-a-collection-with-a-custom-indexing-policy)
     - [Update an existing Collection with a new Indexing Policy](#update-an-existing-collection-with-a-new-indexing-policy)
+    - [Creating a Collection with a custom Unique Key Policy](#creating-a-collection-with-a-custom-unique-key-policy)
+    - [Update an existing Collection with a new Unique Key Policy](#update-an-existing-collection-with-a-new-unique-key-policy)
   - [Working with Documents](#working-with-documents)
     - [Working with Documents in a Partitioned Collection](#working-with-documents-in-a-partitioned-collection)
   - [Using Resource Authorization Tokens](#using-resource-authorization-tokens)
@@ -357,7 +359,41 @@ and then applying it using the `Set-CosmosDbCollection` function:
 $indexStringRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType String -Precision -1
 $indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $indexStringRange
 $indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $indexIncludedPath
-Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -IndexingPolicy $indexingPolicy
+Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -IndexingPolicy $indexingPolicy
+```
+
+#### Creating a Collection with a custom Unique Key Policy
+
+You can create a collection with a custom unique key policy by assembling
+a Unique Key Policy object using the functions:
+
+- `New-CosmosDbCollectionUniqueKey`
+- `New-CosmosDbCollectionUniqueKeyPolicy`
+
+For example, to create a unique key policy that contains two unique keys,
+with the first unique key combining '/name' and '/address' and the second
+unique key is set to '/email'.
+
+```powershell
+$uniqueKeyNameAddress = New-CosmosDbCollectionUniqueKey -Path '/name', '/address'
+$uniqueKeyEmail = New-CosmosDbCollectionUniqueKey -Path '/email'
+$uniqueKeyPolicy = New-CosmosDbCollectionUniqueKeyPolicy -UniqueKey $uniqueKeyNameAddress, $uniqueKeyEmail
+New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'account' -UniqueKeyPolicy $uniqueKeyPolicy
+```
+
+For more information on how Cosmos DB indexes documents, see [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/unique-keys).
+
+#### Update an existing Collection with a new Unique Key Policy
+
+You can update an existing collection with a custom unique key policy by
+assembling a Unique Key Policy using the method in the previous section
+and then applying it using the `Set-CosmosDbCollection` function:
+
+```powershell
+$uniqueKeyNameAddress = New-CosmosDbCollectionUniqueKey -Path '/name', '/address'
+$uniqueKeyEmail = New-CosmosDbCollectionUniqueKey -Path '/email'
+$uniqueKeyPolicy = New-CosmosDbCollectionUniqueKeyPolicy -UniqueKey $uniqueKeyNameAddress, $uniqueKeyEmail
+Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -IndexingPolicy $indexingPolicy
 ```
 
 ### Working with Documents
