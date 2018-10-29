@@ -76,6 +76,17 @@ namespace CosmosDB {
             public CosmosDB.IndexingPolicy.Path.ExcludedPath[] excludedPaths;
         }
     }
+
+    namespace UniqueKeyPolicy {
+        public class UniqueKey {
+            public System.String[] paths;
+        }
+
+        public class Policy
+        {
+            public CosmosDB.UniqueKeyPolicy.UniqueKey[] uniqueKeys;
+        }
+    }
 }
 '@
     Add-Type -TypeDefinition $typeDefinition

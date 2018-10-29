@@ -109,6 +109,18 @@ console.log("done");
                 ([System.Management.Automation.PSTypeName]'CosmosDB.IndexingPolicy.Path.ExcludedPath').Type | Should -Be $True
             }
         }
+
+        Context 'CosmosDB.UniqueKeyPolicy.UniqueKey' {
+            It 'Should exist' {
+                ([System.Management.Automation.PSTypeName]'CosmosDB.UniqueKeyPolicy.UniqueKey').Type | Should -Be $True
+            }
+        }
+
+        Context 'CosmosDB.UniqueKeyPolicy.Policy' {
+            It 'Should exist' {
+                ([System.Management.Automation.PSTypeName]'CosmosDB.UniqueKeyPolicy.Policy').Type | Should -Be $True
+            }
+        }
     }
 
     Describe 'New-CosmosDbBackoffPolicy' -Tag 'Unit' {

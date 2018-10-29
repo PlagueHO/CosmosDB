@@ -1,5 +1,12 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+October 30, 2018
+
+- Added support for setting Collection uniqueKeyPolicy in
+  `New-CosmosDbCollection` and `Set-CosmosDbCollection` - fixes [Issue #197](https://github.com/PlagueHO/CosmosDB/issues/197).
+
 ## What is New in CosmosDB 2.1.11.130
 
 October 27, 2018

@@ -17,14 +17,16 @@ Update an existing collection in a Cosmos DB database.
 
 ```powershell
 Set-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -Id <String> [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [-RemoveDefaultTimeToLive <Switch>] [<CommonParameters>]
+ -Id <String> [-IndexingPolicy <CosmosDB.IndexingPolicy.Policy>] [-DefaultTimeToLive <Int32>]
+ [-RemoveDefaultTimeToLive <Switch>] [-UniqueKeyPolicy <CosmosDB.UniqueKeyPolicy.Policy>] [<CommonParameters>]
 ```
 
 ### Account
 
 ```powershell
 Set-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -Id <String> [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [-RemoveDefaultTimeToLive <Switch>] [<CommonParameters>]
+ -Id <String> [-IndexingPolicy <CosmosDB.IndexingPolicy.Policy>] [-DefaultTimeToLive <Int32>]
+ [-RemoveDefaultTimeToLive <Switch>] [-UniqueKeyPolicy <CosmosDB.UniqueKeyPolicy.Policy>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -169,7 +171,7 @@ This is an Indexing Policy object that was created by the
 Set-CosmosDbCollectionIndexingPolicy function.
 
 ```yaml
-Type: Policy
+Type: CosmosDB.IndexingPolicy.Policy
 Parameter Sets: (All)
 Aliases:
 
@@ -207,6 +209,23 @@ parameter is specified.
 
 ```yaml
 Type: Switch
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UniqueKeyPolicy
+
+This is a Unique Key Policy object that was created by the
+New-CosmosDbCollectionUniquePolicy function.
+
+```yaml
+Type: CosmosDB.UniqueKeyPolicy.Policy
 Parameter Sets: (All)
 Aliases:
 
