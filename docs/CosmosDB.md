@@ -162,6 +162,17 @@ added to an Indexing Policy.
 Creates an indexing policy included path index object that
 can be added to an Included Path of an Indexing Policy.
 
+### [New-CosmosDbCollectionUniqueKey](New-CosmosDbCollectionUniqueKey.md)
+
+Creates a unique key object that can be passed to the
+New-CosmosDbCollectionUniqueKeyPolicy function when generating a unique key
+policy.
+
+### [New-CosmosDbCollectionUniqueKeyPolicy](New-CosmosDbCollectionUniqueKeyPolicy.md)
+
+Creates a unique key policy object that can be passed to the
+New-CosmosDbCollection function.
+
 ### [New-CosmosDbCollectionIndexingPolicy](New-CosmosDbCollectionIndexingPolicy.md)
 
 Creates an indexing policy object that can be passed to the

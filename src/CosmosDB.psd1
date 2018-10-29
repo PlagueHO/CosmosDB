@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.1.11.130'
+    ModuleVersion     = '2.1.12.130'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -117,6 +117,8 @@
         'New-CosmosDbCollectionIncludedPath'
         'New-CosmosDbCollectionExcludedPath'
         'New-CosmosDbCollectionIndexingPolicy'
+        'New-CosmosDbCollectionUniqueKey'
+        'New-CosmosDbCollectionUniqueKeyPolicy'
         'New-CosmosDbDatabase'
         'New-CosmosDbDocument'
         'New-CosmosDbContext'
@@ -184,6 +186,13 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+October 30, 2018
+
+- Added support for setting Collection uniqueKeyPolicy in
+    `New-CosmosDbCollection` and `Set-CosmosDbCollection` - fixes [Issue #197](https://github.com/PlagueHO/CosmosDB/issues/197).
+
 ## What is New in CosmosDB 2.1.11.130
 
 October 27, 2018

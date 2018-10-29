@@ -1,5 +1,10 @@
 # Change Log
 
+## Unreleased
+
+- Added support for setting Collection uniqueKeyPolicy in
+  `New-CosmosDbCollection` and `Set-CosmosDbCollection` - fixes [Issue #197](https://github.com/PlagueHO/CosmosDB/issues/197).
+
 ## 2.1.11.130
 
 - Renamed `ResourceGroup` parameter to `ResourceGroupName` in

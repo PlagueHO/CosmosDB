@@ -18,7 +18,8 @@ Create a new collection in a Cosmos DB database.
 ```powershell
 New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>]
- [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [<CommonParameters>]
+ [-IndexingPolicy <CosmosDB.IndexingPolicy.Policy>] [-DefaultTimeToLive <Int32>]
+ [-UniqueKeyPolicy <CosmosDB.UniqueKeyPolicy.Policy>] [<CommonParameters>]
 ```
 
 ### Account
@@ -26,7 +27,8 @@ New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <Strin
 ```powershell
 New-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>]
- [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [<CommonParameters>]
+ [-IndexingPolicy <CosmosDB.IndexingPolicy.Policy>] [-DefaultTimeToLive <Int32>]
+ [-UniqueKeyPolicy <CosmosDB.UniqueKeyPolicy.Policy>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -220,7 +222,7 @@ This is an Indexing Policy object that was created by the
 New-CosmosDbCollectionIndexingPolicy function.
 
 ```yaml
-Type: Policy
+Type: CosmosDB.IndexingPolicy.Policy
 Parameter Sets: (All)
 Aliases:
 
@@ -239,6 +241,23 @@ set to -1 then the default time to live will be infinite.
 
 ```yaml
 Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UniqueKeyPolicy
+
+This is a Unique Key Policy object that was created by the
+New-CosmosDbCollectionUniquePolicy function.
+
+```yaml
+Type: CosmosDB.UniqueKeyPolicy.Policy
 Parameter Sets: (All)
 Aliases:
 

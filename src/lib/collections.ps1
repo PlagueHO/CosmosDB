@@ -204,6 +204,40 @@ function New-CosmosDbCollectionIndexingPolicy
     return $indexingPolicy
 }
 
+function New-CosmosDbCollectionUniqueKey
+{
+    [CmdletBinding()]
+    [OutputType([CosmosDB.UniqueKeyPolicy.UniqueKey])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String[]]
+        $Path
+    )
+
+    $uniqueKey = [CosmosDB.UniqueKeyPolicy.UniqueKey]::new()
+    $uniqueKey.paths = $Path
+
+    return $uniqueKey
+}
+
+function New-CosmosDbCollectionUniqueKeyPolicy
+{
+    [CmdletBinding()]
+    [OutputType([CosmosDB.UniqueKeyPolicy.Policy])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [CosmosDb.UniqueKeyPolicy.UniqueKey[]]
+        $UniqueKey
+    )
+
+    $uniqueKeyPolicy = [CosmosDB.UniqueKeyPolicy.Policy]::new()
+    $uniqueKeyPolicy.uniqueKeys = $UniqueKey
+
+    return $uniqueKeyPolicy
+}
+
 function Get-CosmosDbCollection
 {
     [CmdletBinding(DefaultParameterSetName = 'Context')]
@@ -395,7 +429,12 @@ function New-CosmosDbCollection
         [Parameter()]
         [ValidateRange(-1,2147483647)]
         [System.Int32]
-        $DefaultTimeToLive
+        $DefaultTimeToLive,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [CosmosDB.UniqueKeyPolicy.Policy]
+        $UniqueKeyPolicy
     )
 
     $headers = @{}
@@ -458,6 +497,14 @@ function New-CosmosDbCollection
             defaultTtl = $DefaultTimeToLive
         }
         $null = $PSBoundParameters.Remove('DefaultTimeToLive')
+    }
+
+    if ($PSBoundParameters.ContainsKey('UniqueKeyPolicy'))
+    {
+        $bodyObject += @{
+            uniqueKeyPolicy = $UniqueKeyPolicy
+        }
+        $null = $PSBoundParameters.Remove('UniqueKeyPolicy')
     }
 
     $body = ConvertTo-Json -InputObject $bodyObject -Depth 10
@@ -570,7 +617,12 @@ function Set-CosmosDbCollection
 
         [Parameter()]
         [Switch]
-        $RemoveDefaultTimeToLive
+        $RemoveDefaultTimeToLive,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [CosmosDB.UniqueKeyPolicy.Policy]
+        $UniqueKeyPolicy
     )
 
     if ($PSBoundParameters.ContainsKey('DefaultTimeToLive') -and $RemoveDefaultTimeToLive.IsPresent)
@@ -588,10 +640,12 @@ function Set-CosmosDbCollection
 
     $indexingPolicyIncluded = $PSBoundParameters.ContainsKey('IndexingPolicy')
     $defaultTimeToLiveIncluded = $PSBoundParameters.ContainsKey('DefaultTimeToLive')
+    $uniqueKeyPolicyIncluded = $PSBoundParameters.ContainsKey('UniqueKeyPolicy')
 
     $null = $PSBoundParameters.Remove('IndexingPolicy')
     $null = $PSBoundParameters.Remove('DefaultTimeToLive')
     $null = $PSBoundParameters.Remove('RemoveDefaultTimeToLive')
+    $null = $PSBoundParameters.Remove('UniqueKeyPolicy')
 
     <#
         The partition key on an existing collection can not be changed.
@@ -632,6 +686,19 @@ function Set-CosmosDbCollection
     {
         $bodyObject += @{
             defaultTtl = $existingCollection.defaultTtl
+        }
+    }
+
+    if ($uniqueKeyPolicyIncluded)
+    {
+        $bodyObject += @{
+            uniqueKeyPolicy = $UniqueKeyPolicy
+        }
+    }
+    elseif ($existingCollection.uniqueKeyPolicy)
+    {
+        $bodyObject += @{
+            uniqueKeyPolicy = $existingCollection.uniqueKeyPolicy
         }
     }
 

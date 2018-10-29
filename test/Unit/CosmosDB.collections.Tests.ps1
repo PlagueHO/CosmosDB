@@ -70,6 +70,10 @@ InModuleScope CosmosDB {
     }
     $script:testDefaultTimeToLive = 3600
 
+    $script:testUniqueKeyA = New-CosmosDbCollectionUniqueKey -Path @('/uniquekey1', '/uniquekey2')
+    $script:testUniqueKeyB = New-CosmosDbCollectionUniqueKey -Path '/uniquekey3'
+    $script:testUniqueKeyPolicy = New-CosmosDbCollectionUniqueKeyPolicy -UniqueKey $script:testUniqueKeyA, $script:testUniqueKeyB
+
     Describe 'Get-CosmosDbCollectionResourcePath' -Tag 'Unit' {
         It 'Should exist' {
             {
@@ -251,7 +255,7 @@ InModuleScope CosmosDB {
     Describe 'New-CosmosDbCollectionIncludedPath' -Tag 'Unit' {
         It 'Should exist' {
             {
-                Get-Command -Name New-CosmosDbCollectionIncludedPath  -ErrorAction Stop
+                Get-Command -Name New-CosmosDbCollectionIncludedPath -ErrorAction Stop
             } | Should -Not -Throw
         }
 
@@ -281,7 +285,7 @@ InModuleScope CosmosDB {
     Describe 'New-CosmosDbCollectionExcludedPath' -Tag 'Unit' {
         It 'Should exist' {
             {
-                Get-Command -Name New-CosmosDbCollectionExcludedPath  -ErrorAction Stop
+                Get-Command -Name New-CosmosDbCollectionExcludedPath -ErrorAction Stop
             } | Should -Not -Throw
         }
 
@@ -350,6 +354,64 @@ InModuleScope CosmosDB {
                 {
                     $script:result = New-CosmosDbCollectionIndexingPolicy @newCosmosDbCollectionIndexingPolicyParameters
                 } | Should -Throw $errorMessage
+            }
+        }
+    }
+
+    Describe 'New-CosmosDbCollectionUniqueKey' -Tag 'Unit' {
+        It 'Should exist' {
+            {
+                Get-Command -Name New-CosmosDbCollectionUniqueKey -ErrorAction Stop
+            } | Should -Not -Throw
+        }
+
+        Context 'When called with all parameters' {
+            $script:result = $null
+
+            It 'Should not throw an exception' {
+                $newCosmosDbCollectionUniqueKeyParameters = @{
+                    Path    = @('/uniquekey1', '/uniquekey2')
+                    Verbose = $true
+                }
+
+                $script:result = New-CosmosDbCollectionUniqueKey @newCosmosDbCollectionUniqueKeyParameters
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -BeOfType 'CosmosDB.UniqueKeyPolicy.UniqueKey'
+                $script:result.paths[0] | Should -Be '/uniquekey1'
+                $script:result.paths[1] | Should -Be '/uniquekey2'
+            }
+        }
+    }
+
+    Describe 'New-CosmosDbCollectionUniqueKeyPolicy' -Tag 'Unit' {
+        It 'Should exist' {
+            {
+                Get-Command -Name New-CosmosDbCollectionUniqueKeyPolicy -ErrorAction Stop
+            } | Should -Not -Throw
+        }
+
+        Context 'When called with all parameters' {
+            $script:result = $null
+
+            It 'Should not throw an exception' {
+                $newCosmosDbCollectionUniqueKeyPolicyParameters = @{
+                    UniqueKey = @(
+                        New-CosmosDbCollectionUniqueKey -Path @('/uniquekey1', '/uniquekey2')
+                        New-CosmosDbCollectionUniqueKey -Path '/uniquekey3'
+                    )
+                    Verbose   = $true
+                }
+
+                $script:result = New-CosmosDbCollectionUniqueKeyPolicy @newCosmosDbCollectionUniqueKeyPolicyParameters
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -BeOfType 'CosmosDB.UniqueKeyPolicy.Policy'
+                $script:result.uniqueKeys[0].paths[0] | Should -Be '/uniquekey1'
+                $script:result.uniqueKeys[0].paths[1] | Should -Be '/uniquekey2'
+                $script:result.uniqueKeys[1].paths[0] | Should -Be '/uniquekey3'
             }
         }
     }
@@ -451,8 +513,8 @@ InModuleScope CosmosDB {
             $invokecosmosdbrequest_parameterfilter = {
                 $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Post' -and `
-                $ResourceType -eq 'colls' -and `
-                $BodyObject.id -eq $script:testCollection1
+                    $ResourceType -eq 'colls' -and `
+                    $BodyObject.id -eq $script:testCollection1
             }
             $script:result = $null
 
@@ -486,9 +548,9 @@ InModuleScope CosmosDB {
             $invokecosmosdbrequest_parameterfilter = {
                 $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Post' -and `
-                $ResourceType -eq 'colls' -and `
-                $BodyObject.id -eq $script:testCollection1 -and `
-                $BodyObject.defaultTtl -eq $script:testDefaultTimeToLive
+                    $ResourceType -eq 'colls' -and `
+                    $BodyObject.id -eq $script:testCollection1 -and `
+                    $BodyObject.defaultTtl -eq $script:testDefaultTimeToLive
             }
             $script:result = $null
 
@@ -524,9 +586,9 @@ InModuleScope CosmosDB {
             $invokecosmosdbrequest_parameterfilter = {
                 $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Post' -and `
-                $ResourceType -eq 'colls' -and `
-                $BodyObject.id -eq $script:testCollection1 -and `
-                $Headers['x-ms-offer-throughput'] -eq 400
+                    $ResourceType -eq 'colls' -and `
+                    $BodyObject.id -eq $script:testCollection1 -and `
+                    $Headers['x-ms-offer-throughput'] -eq 400
             }
 
             Mock `
@@ -561,9 +623,9 @@ InModuleScope CosmosDB {
             $invokecosmosdbrequest_parameterfilter = {
                 $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Post' -and `
-                $ResourceType -eq 'colls' -and `
-                $BodyObject.id -eq $script:testCollection1 -and `
-                $Headers['x-ms-offer-type'] -eq 'S2'
+                    $ResourceType -eq 'colls' -and `
+                    $BodyObject.id -eq $script:testCollection1 -and `
+                    $Headers['x-ms-offer-type'] -eq 'S2'
             }
 
             Mock `
@@ -593,15 +655,92 @@ InModuleScope CosmosDB {
             }
         }
 
+        Context 'When called with context parameter and an Id and an IndexingPolicy parameter' {
+            $script:result = $null
+            $invokecosmosdbrequest_parameterfilter = {
+                $BodyObject = $Body | ConvertFrom-Json
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'colls' -and `
+                    $BodyObject.id -eq $script:testCollection1 -and `
+                    $BodyObject.indexingPolicy.automatic -eq $script:testIndexingPolicy.automatic -and `
+                    $BodyObject.indexingPolicy.indexingMode -eq $script:testIndexingPolicy.indexingMode
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetCollectionResultSingle }
+
+            It 'Should not throw an exception' {
+                $newCosmosDbCollectionParameters = @{
+                    Context        = $script:testContext
+                    Id             = $script:testCollection1
+                    IndexingPolicy = $script:testIndexingPolicy
+                    Verbose        = $true
+                }
+
+                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testCollection1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id and a UniqueKeyPolicy parameter' {
+            $script:result = $null
+            $invokecosmosdbrequest_parameterfilter = {
+                $BodyObject = $Body | ConvertFrom-Json
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'colls' -and `
+                    $BodyObject.id -eq $script:testCollection1 -and `
+                    $BodyObject.uniqueKeyPolicy.uniqueKeys[0].paths[0] -eq $script:testUniqueKeyA.paths[0] -and `
+                    $BodyObject.uniqueKeyPolicy.uniqueKeys[0].paths[1] -eq $script:testUniqueKeyA.paths[1] -and `
+                    $BodyObject.uniqueKeyPolicy.uniqueKeys[1].paths[0] -eq $script:testUniqueKeyB.paths[0]
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetCollectionResultSingle }
+
+            It 'Should not throw an exception' {
+                $newCosmosDbCollectionParameters = @{
+                    Context         = $script:testContext
+                    Id              = $script:testCollection1
+                    UniqueKeyPolicy = $script:testUniqueKeyPolicy
+                    Verbose         = $true
+                }
+
+                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testCollection1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
         Context 'When called with context parameter and an Id and PartitionKey parameter' {
             $script:result = $null
             $invokecosmosdbrequest_parameterfilter = {
                 $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Post' -and `
-                $ResourceType -eq 'colls' -and `
-                $BodyObject.id -eq $script:testCollection1 -and `
-                $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
-                $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind
+                    $ResourceType -eq 'colls' -and `
+                    $BodyObject.id -eq $script:testCollection1 -and `
+                    $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
+                    $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind
             }
 
             Mock `
@@ -636,10 +775,10 @@ InModuleScope CosmosDB {
             $invokecosmosdbrequest_parameterfilter = {
                 $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Post' -and `
-                $ResourceType -eq 'colls' -and `
-                $BodyObject.id -eq $script:testCollection1 -and `
-                $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
-                $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind
+                    $ResourceType -eq 'colls' -and `
+                    $BodyObject.id -eq $script:testCollection1 -and `
+                    $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
+                    $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind
             }
 
             Mock `
@@ -751,11 +890,11 @@ InModuleScope CosmosDB {
             $invokecosmosdbrequest_parameterfilter = {
                 $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Put' -and `
-                $ResourceType -eq 'colls' -and `
-                $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
-                $BodyObject.id -eq $script:testCollection1 -and `
-                $BodyObject.indexingPolicy.automatic -eq $script:testIndexingPolicy.automatic -and `
-                $BodyObject.indexingPolicy.indexingMode -eq $script:testIndexingPolicy.indexingMode
+                    $ResourceType -eq 'colls' -and `
+                    $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
+                    $BodyObject.id -eq $script:testCollection1 -and `
+                    $BodyObject.indexingPolicy.automatic -eq $script:testIndexingPolicy.automatic -and `
+                    $BodyObject.indexingPolicy.indexingMode -eq $script:testIndexingPolicy.indexingMode
             }
             $getcosmosdbcollection_parameterfilter = {
                 $Id -eq $script:testCollection1
@@ -802,13 +941,13 @@ InModuleScope CosmosDB {
             $invokecosmosdbrequest_parameterfilter = {
                 $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Put' -and `
-                $ResourceType -eq 'colls' -and `
-                $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
-                $BodyObject.id -eq $script:testCollection1 -and `
-                $BodyObject.indexingPolicy.automatic -eq $script:testIndexingPolicy.automatic -and `
-                $BodyObject.indexingPolicy.indexingMode -eq $script:testIndexingPolicy.indexingMode -and `
-                $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
-                $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind
+                    $ResourceType -eq 'colls' -and `
+                    $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
+                    $BodyObject.id -eq $script:testCollection1 -and `
+                    $BodyObject.indexingPolicy.automatic -eq $script:testIndexingPolicy.automatic -and `
+                    $BodyObject.indexingPolicy.indexingMode -eq $script:testIndexingPolicy.indexingMode -and `
+                    $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
+                    $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind
             }
             $getcosmosdbcollection_parameterfilter = {
                 $Id -eq $script:testCollection1
@@ -850,20 +989,75 @@ InModuleScope CosmosDB {
             }
         }
 
+        Context 'When called with context parameter and an Id and UniqueKeyPolicy parameter on a collection with a partition key' {
+            $script:result = $null
+
+            $invokecosmosdbrequest_parameterfilter = {
+                $BodyObject = $Body | ConvertFrom-Json;
+                $Method -eq 'Put' -and `
+                    $ResourceType -eq 'colls' -and `
+                    $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
+                    $BodyObject.id -eq $script:testCollection1 -and `
+                    $BodyObject.uniqueKeyPolicy.uniqueKeys[0].paths[0] -eq $script:testUniqueKeyA.paths[0] -and `
+                    $BodyObject.uniqueKeyPolicy.uniqueKeys[0].paths[1] -eq $script:testUniqueKeyA.paths[1] -and `
+                    $BodyObject.uniqueKeyPolicy.uniqueKeys[1].paths[0] -eq $script:testUniqueKeyB.paths[0] -and 1
+                    $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
+                    $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind
+            }
+            $getcosmosdbcollection_parameterfilter = {
+                $Id -eq $script:testCollection1
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetCollectionResultSingle }
+
+            Mock `
+                -CommandName Get-CosmosDbCollection `
+                -MockWith { @{ partitionKey = $script:testPartitionKey } }
+
+            It 'Should not throw an exception' {
+                $setCosmosDbCollectionParameters = @{
+                    Context        = $script:testContext
+                    Id             = $script:testCollection1
+                    UniqueKeyPolicy = $script:testUniqueKeyPolicy
+                    Verbose        = $true
+                }
+
+                $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testCollection1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                    -Exactly -Times 1
+
+                Assert-MockCalled `
+                    -CommandName Get-CosmosDbCollection `
+                    -ParameterFilter $getcosmosdbcollection_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
         Context 'When called with context parameter and an Id and DefaultTimeToLive parameter on a collection with a partition key' {
             $script:result = $null
 
             $invokecosmosdbrequest_parameterfilter = {
                 $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Put' -and `
-                $ResourceType -eq 'colls' -and `
-                $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
-                $BodyObject.id -eq $script:testCollection1 -and `
-                $BodyObject.indexingPolicy.automatic -eq $script:testIndexingPolicy.automatic -and `
-                $BodyObject.indexingPolicy.indexingMode -eq $script:testIndexingPolicy.indexingMode -and `
-                $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
-                $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind -and `
-                $BodyObject.defaultTtl -eq $script:testDefaultTimeToLive
+                    $ResourceType -eq 'colls' -and `
+                    $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
+                    $BodyObject.id -eq $script:testCollection1 -and `
+                    $BodyObject.indexingPolicy.automatic -eq $script:testIndexingPolicy.automatic -and `
+                    $BodyObject.indexingPolicy.indexingMode -eq $script:testIndexingPolicy.indexingMode -and `
+                    $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
+                    $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind -and `
+                    $BodyObject.defaultTtl -eq $script:testDefaultTimeToLive
             }
             $getcosmosdbcollection_parameterfilter = {
                 $Id -eq $script:testCollection1
@@ -912,12 +1106,12 @@ InModuleScope CosmosDB {
             $invokecosmosdbrequest_parameterfilter = {
                 $BodyObject = $Body | ConvertFrom-Json;
                 $Method -eq 'Put' -and `
-                $ResourceType -eq 'colls' -and `
-                $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
-                $BodyObject.indexingPolicy.automatic -eq $script:testIndexingPolicy.automatic -and `
-                $BodyObject.indexingPolicy.indexingMode -eq $script:testIndexingPolicy.indexingMode -and `
-                $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
-                $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind
+                    $ResourceType -eq 'colls' -and `
+                    $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
+                    $BodyObject.indexingPolicy.automatic -eq $script:testIndexingPolicy.automatic -and `
+                    $BodyObject.indexingPolicy.indexingMode -eq $script:testIndexingPolicy.indexingMode -and `
+                    $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
+                    $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind
             }
 
             $getcosmosdbcollection_parameterfilter = {
@@ -931,11 +1125,11 @@ InModuleScope CosmosDB {
             Mock `
                 -CommandName Get-CosmosDbCollection `
                 -MockWith {
-                    @{
-                        partitionKey = $script:testPartitionKey
-                        defaultTtl   = $script:testDefaultTimeToLive
-                    }
+                @{
+                    partitionKey = $script:testPartitionKey
+                    defaultTtl   = $script:testDefaultTimeToLive
                 }
+            }
 
             It 'Should not throw an exception' {
                 $setCosmosDbCollectionParameters = @{
