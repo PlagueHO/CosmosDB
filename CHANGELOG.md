@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.1.12.137
 
 - Added support for setting Collection uniqueKeyPolicy in
   `New-CosmosDbCollection` and `Set-CosmosDbCollection` - fixes [Issue #197](https://github.com/PlagueHO/CosmosDB/issues/197).
