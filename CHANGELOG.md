@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Added new integration tests for testing simple index policies.
+
 ## 2.1.12.137
 
 - Added support for setting Collection uniqueKeyPolicy in
