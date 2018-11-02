@@ -59,6 +59,8 @@ Task Test -Depends UnitTest, IntegrationTest
 Task UnitTest -Depends Init, PrepareTest {
     $separator
 
+    Get-Module -ListAvailable
+
     # Install any dependencies required for the Test stage
     Invoke-PSDepend `
         -Path $PSScriptRoot `
