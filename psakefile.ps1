@@ -77,7 +77,7 @@ Task UnitTest -Depends Init, PrepareTest {
         -OutputFile $testResultsFile `
         -PassThru `
         -ExcludeTag Incomplete `
-        -CodeCoverage @( Join-Path -Path $ProjectRoot -ChildPath 'src\lib\*.ps1' ) `
+        -CodeCoverage @( Join-Path -Path $ProjectRoot -ChildPath 'src\lib\*.ps1' -Recurse ) `
         -CodeCoverageOutputFile $codeCoverageFile `
         -CodeCoverageOutputFileFormat JaCoCo
 
