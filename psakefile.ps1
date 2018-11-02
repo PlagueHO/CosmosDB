@@ -45,7 +45,19 @@ Task Init {
 }
 
 Task PrepareTest -Depends Init {
-    Get-Module -ListAvailable
+    <#
+        If Az module is installed we must remove them because
+        we have not converted to use them yet and causes errors
+    #>
+    $azModules = Get-Module -Name Az,Az.* -ListAvailable
+    if ($azModules)
+    {
+        Write-Warning -Message (@(
+            'The Az PowerShell modules were found on this system. They are not yet compatible with the '
+            'CosmosDB module and cause errors when testing so will be uninstalled for testing.'
+        ) -join "`n`r")
+        $azModules | Uninstall-Module -Force
+    }
 
     # Install any dependencies required for testing
     Invoke-PSDepend `
@@ -60,14 +72,6 @@ Task Test -Depends UnitTest, IntegrationTest
 
 Task UnitTest -Depends Init, PrepareTest {
     $separator
-
-    # Install any dependencies required for the Test stage
-    Invoke-PSDepend `
-        -Path $PSScriptRoot `
-        -Force `
-        -Import `
-        -Install `
-        -Tags 'Test',('Test_{0}' -f $PSVersionTable.PSEdition)
 
     # Execute tests
     $testScriptsPath = Join-Path -Path $ProjectRoot -ChildPath 'test\Unit'
