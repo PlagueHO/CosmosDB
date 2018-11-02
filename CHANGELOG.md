@@ -3,6 +3,8 @@
 ## Unreleased
 
 - Added new integration tests for testing simple index policies.
+- Split the multiple functions scripts into single functions and
+  change the build pipeline to combine them all during staging - fixes [Issue #201](https://github.com/PlagueHO/CosmosDB/issues/201).
 
 ## 2.1.12.137
 

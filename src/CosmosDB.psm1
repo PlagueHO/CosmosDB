@@ -104,6 +104,7 @@ namespace Microsoft.PowerShell.Commands
 {
     public class HttpResponseException : System.Net.WebException
     {
+        public System.Int32 dummy;
     }
 }
 '@
@@ -128,15 +129,15 @@ Import-LocalizedData `
 
 #region ImportFunctions
 # Dot source any functions in the libs folder
-$libs = Get-ChildItem `
+$libFiles = Get-ChildItem `
     -Path (Join-Path -Path $moduleRoot -ChildPath 'lib') `
     -Include '*.ps1' `
     -Recurse
 
-Foreach ($lib in $libs)
+Foreach ($libFile in $libFiles)
 {
-    Write-Verbose -Message $($LocalizedData.ImportingLibFileMessage -f $lib.Fullname)
-    . $lib.Fullname
+    Write-Verbose -Message $($LocalizedData.ImportingLibFileMessage -f $libFile.Fullname)
+    . $libFile.Fullname
 }
 #endregion
 
