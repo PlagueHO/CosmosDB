@@ -45,22 +45,6 @@ Task Init {
 }
 
 Task PrepareTest -Depends Init {
-    <#
-        If Az module is installed we must remove it and all dependencies because
-        we have not converted the Cosmos DB module to use them yet and this causes
-        errors when the AzureRM/AzureRM.NetCore Modules are installed.
-    #>
-    $azModule = Get-Module -Name Az -ListAvailable
-    if ($azModule)
-    {
-        Write-Warning -Message (@(
-            'The Az PowerShell modules were found on this system. They are not yet compatible with the '
-            'CosmosDB module and cause errors when testing so will be uninstalled for testing.'
-        ) -join "`n`r")
-
-        Uninstall-AllModules -TargetModule 'Az' -Version ($azModule.Version.ToString()) -Force -Verbose
-    }
-
     # Install any dependencies required for testing
     Invoke-PSDepend `
         -Path $PSScriptRoot `
@@ -530,61 +514,5 @@ function Invoke-Git
     catch
     {
         Write-Warning -Message $_
-    }
-}
-
-<#
-    .SYNOPSIS
-        Uninstall a module and all dependencies
-#>
-function Uninstall-AllModules
-{
-    [CmdLetBinding()]
-    param
-    (
-      [Parameter(Mandatory = $true)]
-      [System.String]
-      $TargetModule,
-
-      [Parameter(Mandatory = $true)]
-      [System.String]
-      $Version,
-
-      [Parameter(Mandatory = $true)]
-      [Switch]
-      $Force
-    )
-
-    $allModules = @()
-
-    Write-Verbose -Message ('Creating list of dependencies of module {0} version {1}' -f $module.name, $module.version)
-    $target = Find-Module -Name $TargetModule -RequiredVersion $Version
-    $target.Dependencies | ForEach-Object {
-      $allModules += New-Object -TypeName psobject -Property @{
-          name = $_.name
-          version = $_.requiredversion}
-    }
-    $allModules += New-Object -TypeName psobject -Property @{
-        name = $TargetModule
-        version = $Version
-    }
-
-    foreach ($module in $AllModules)
-    {
-        Write-Verbose -Message ('Removing module {0}' -f $module.name)
-        Remove-Module -Name $module.name -Force
-    }
-
-    foreach ($module in $AllModules)
-    {
-        Write-Verbose -Message ('Uninstalling module {0} version {1}' -f $module.name, $module.version)
-        try
-        {
-            Uninstall-Module -Name $module.name -RequiredVersion $module.version -Force:$Force -ErrorAction Stop
-        }
-        catch
-        {
-            Write-Warning -Message $_.Exception.Message
-        }
     }
 }
