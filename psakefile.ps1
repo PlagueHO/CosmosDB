@@ -71,13 +71,14 @@ Task UnitTest -Depends Init, PrepareTest {
     $testScriptsPath = Join-Path -Path $ProjectRoot -ChildPath 'test\Unit'
     $testResultsFile = Join-Path -Path $testScriptsPath -ChildPath 'TestResults.unit.xml'
     $codeCoverageFile = Join-Path -Path $testScriptsPath -ChildPath 'CodeCoverage.xml'
+    $codeCoverageSource = Get-ChildItem -Path (Join-Path -Path $ProjectRoot -ChildPath 'src\lib\*.ps1') -Recurse
     $testResults = Invoke-Pester `
         -Script $testScriptsPath `
         -OutputFormat NUnitXml `
         -OutputFile $testResultsFile `
         -PassThru `
         -ExcludeTag Incomplete `
-        -CodeCoverage @( Join-Path -Path $ProjectRoot -ChildPath 'src\lib\*.ps1' -Recurse ) `
+        -CodeCoverage $codeCoverageSource `
         -CodeCoverageOutputFile $codeCoverageFile `
         -CodeCoverageOutputFileFormat JaCoCo
 
