@@ -11,6 +11,11 @@
   AzureRM.NetCore modules from being installed.
 - Improved validation on Name and ResourceGroupName parameters on
   `*-CosmosDBAccount*` functions - fixes [Issue #211](https://github.com/PlagueHO/CosmosDB/issues/211).
+- Improved validation on Account parameter on `*-CosmosDBDatabase*` functions.
+- Improved validation on Account and ResourceGroupName parameter on
+  `New-CosmosDbContext` function.
+- Improved validation on Database Id parameter on
+ `*-CosmosDBDatabase*` functions - fixes [Issue #212](https://github.com/PlagueHO/CosmosDB/issues/212).
 
 ## 2.1.12.137
 

@@ -9,12 +9,12 @@ function New-CosmosDbContext
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Token')]
         [Parameter(Mandatory = $true, ParameterSetName = 'AzureAccount')]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ })]
         [System.String]
         $Account,
 
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ })]
         [System.String]
         $Database,
 
@@ -31,7 +31,7 @@ function New-CosmosDbContext
 
         [Alias("ResourceGroup")]
         [Parameter(Mandatory = $true, ParameterSetName = 'AzureAccount')]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbResourceGroupNameValid -ResourceGroupName $_ })]
         [System.String]
         $ResourceGroupName,
 
