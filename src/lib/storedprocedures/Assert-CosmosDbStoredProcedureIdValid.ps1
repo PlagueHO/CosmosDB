@@ -1,8 +1,8 @@
 <#
     .SYNOPSIS
-    Helper function that asserts a Cosmos DB Collection Id is valid.
+    Helper function that asserts a Cosmos DB StoredProcedure Id is valid.
 #>
-function Assert-CosmosDbCollectionIdValid
+function Assert-CosmosDbStoredProcedureIdValid
 {
 
     [CmdletBinding()]
@@ -18,7 +18,7 @@ function Assert-CosmosDbCollectionIdValid
     $matches = [regex]::Match($Id,"[^\\/#?]{1,255}(?<!\s)")
     if ($matches.value -ne $Id)
     {
-        Throw $($LocalizedData.CollectionIdInvalid -f $Id)
+        Throw $($LocalizedData.StoredProcedureIdInvalid -f $Id)
     }
 
     return $true

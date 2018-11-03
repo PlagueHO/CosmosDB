@@ -6,17 +6,17 @@ function Get-CosmosDbStoredProcedureResourcePath
     param
     (
         [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ })]
         [System.String]
         $Database,
 
         [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbCollectionIdValid -Id $_ })]
         [System.String]
         $CollectionId,
 
         [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbStoredProcedureIdValid -Id $_ })]
         [System.String]
         $Id
     )

@@ -70,6 +70,50 @@ InModuleScope CosmosDB {
         Content = $script:testJsonSingle
     }
 
+    Describe 'Assert-CosmosDbStoredProcedureIdValid' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Assert-CosmosDbStoredProcedureIdValid -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with a valid Id' {
+            It 'Should return $true' {
+                Assert-CosmosDbStoredProcedureIdValid -Id 'This is a valid stored procedure ID..._-99!' | Should -Be $true
+            }
+        }
+
+        Context 'When called with a 256 character Id' {
+            It 'Should throw expected exception' {
+                {
+                    Assert-CosmosDbStoredProcedureIdValid -Id ('a' * 256)
+                } | Should -Throw ($LocalizedData.StoredProcedureIdInvalid -f ('a' * 256))
+            }
+        }
+
+        Context 'When called with an Id containing invalid characters' {
+            $testCases = @{ Id = 'a\b' }, @{ Id = 'a/b' }, @{ Id = 'a#b' }, @{ Id = 'a?b' }
+
+            It 'Should throw expected exception when called with "<Id>"' -TestCases $testCases {
+                param
+                (
+                    [System.String]
+                    $Id
+                )
+
+                {
+                    Assert-CosmosDbStoredProcedureIdValid -Id $Id
+                } | Should -Throw ($LocalizedData.StoredProcedureIdInvalid -f $Id)
+            }
+        }
+
+        Context 'When called with an Id ending with a space' {
+            It 'Should throw expected exception' {
+                {
+                    Assert-CosmosDbStoredProcedureIdValid -Id ('a ')
+                } | Should -Throw ($LocalizedData.StoredProcedureIdInvalid -f ('a '))
+            }
+        }
+    }
+
     Describe 'Get-CosmosDbStoredProcedureResourcePath' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name Get-CosmosDbStoredProcedureResourcePath -ErrorAction Stop } | Should -Not -Throw

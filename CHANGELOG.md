@@ -20,6 +20,11 @@
  `*-CosmosDBCollection*` functions - fixes [Issue #213](https://github.com/PlagueHO/CosmosDB/issues/213).
 - Improved validation on Account parameter on `*-CosmosDBCollection*` functions.
 - Improved validation on Database parameter on `*-CosmosDBCollection*` functions.
+- Improved validation on Stored Procedure Id parameter on
+ `*-CosmosDBStoredProcedure*` functions - fixes [Issue #214](https://github.com/PlagueHO/CosmosDB/issues/214).
+- Improved validation on Account parameter on `*-CosmosDBStoredProcedure*` functions.
+- Improved validation on Database parameter on `*-CosmosDBStoredProcedure*` functions.
+- Improved validation on Collection parameter on `*-CosmosDBStoredProcedure*` functions.
 
 ## 2.1.12.137
 
