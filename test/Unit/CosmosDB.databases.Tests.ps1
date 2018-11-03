@@ -90,7 +90,7 @@ InModuleScope CosmosDB {
         }
 
         Context 'When called with an Id containing invalid characters' {
-            $testCases = @{ Id = 'a\b' }, @{ Id = 'a/b' }, @{ Id = 'a#b' }, @{ Id = 'a?b' }
+            $testCases = @{ Id = 'a\b' }, @{ Id = 'a/b' }, @{ Id = 'a#b' }, @{ Id = 'a?b' }, @{ Id = 'a=b' }
 
             It 'Should throw expected exception when called with "<Id>"' -TestCases $testCases {
                 param

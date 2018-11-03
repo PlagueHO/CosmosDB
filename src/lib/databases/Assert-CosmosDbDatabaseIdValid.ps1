@@ -15,7 +15,7 @@ function Assert-CosmosDbDatabaseIdValid
         $Id
     )
 
-    $matches = [regex]::Match($Id,"[^\\/#?=]{1,255}(?<!\s)")
+    $matches = [regex]::Match($Id,"[^\\/#?]{1,255}(?<!\s)")
     if ($matches.value -ne $Id)
     {
         Throw $($LocalizedData.DatabaseIdInvalid -f $Id)
