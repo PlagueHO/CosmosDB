@@ -9,6 +9,8 @@
 - Temporarily suppressed running tests using MacOS in Azure Pipelines
   because the Hosted Agent has been updated with Az, preventing the
   AzureRM.NetCore modules from being installed.
+- Improved validation on Name and ResourceGroupName parameters on
+  `*-CosmosDBAccount*` functions - fixes [Issue #211](https://github.com/PlagueHO/CosmosDB/issues/211).
 
 ## 2.1.12.137
 

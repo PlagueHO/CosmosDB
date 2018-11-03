@@ -79,6 +79,86 @@ InModuleScope CosmosDB {
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
 
+    Describe 'Assert-CosmosDbAccountNameValid' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Assert-CosmosDbAccountNameValid -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with a valid name' {
+            It 'Should return $true' {
+                Assert-CosmosDbAccountNameValid -Name 'validaccountname' | Should -Be $true
+            }
+        }
+
+        Context 'When called with a 2 character name' {
+            It 'Should throw expected exception' {
+                {
+                    Assert-CosmosDbAccountNameValid -Name ('a' * 2)
+                } | Should -Throw ($LocalizedData.AccountNameInvalid -f ('a' * 2))
+            }
+        }
+
+        Context 'When called with a 32 character name' {
+            It 'Should throw expected exception' {
+                {
+                    Assert-CosmosDbAccountNameValid -Name ('a' * 32)
+                } | Should -Throw ($LocalizedData.AccountNameInvalid -f ('a' * 32))
+            }
+        }
+
+        Context 'When called containing an underscore' {
+            It 'Should throw expected exception' {
+                {
+                    Assert-CosmosDbAccountNameValid -Name ('a_b')
+                } | Should -Throw ($LocalizedData.AccountNameInvalid -f ('a_b'))
+            }
+        }
+
+        Context 'When called containing a period' {
+            It 'Should throw expected exception' {
+                {
+                    Assert-CosmosDbAccountNameValid -Name ('a.b')
+                } | Should -Throw ($LocalizedData.AccountNameInvalid -f ('a.b'))
+            }
+        }
+    }
+
+    Describe 'Assert-CosmosDbResourceGroupNameValid' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Assert-CosmosDbResourceGroupNameValid -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with a valid resource group name' {
+            It 'Should return $true' {
+                Assert-CosmosDbResourceGroupNameValid -ResourceGroupName 'valid_resource-group.name123' | Should -Be $true
+            }
+        }
+
+        Context 'When called with a 91 character resource group name' {
+            It 'Should throw expected exception' {
+                {
+                    Assert-CosmosDbResourceGroupNameValid -ResourceGroupName ('a' * 91)
+                } | Should -Throw ($LocalizedData.ResourceGroupNameInvalid -f ('a' * 91))
+            }
+        }
+
+        Context 'When called with resource group name containing an exclamation' {
+            It 'Should throw expected exception' {
+                {
+                    Assert-CosmosDbResourceGroupNameValid -ResourceGroupName ('a!')
+                } | Should -Throw ($LocalizedData.ResourceGroupNameInvalid -f ('a!'))
+            }
+        }
+
+        Context 'When called with resource group name ending in a period' {
+            It 'Should throw expected exception' {
+                {
+                    Assert-CosmosDbResourceGroupNameValid -ResourceGroupName ('a.')
+                } | Should -Throw ($LocalizedData.ResourceGroupNameInvalid -f ('a.'))
+            }
+        }
+    }
+
     Describe 'Get-CosmosDbAccount' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name Get-CosmosDbAccount -ErrorAction Stop } | Should -Not -Throw

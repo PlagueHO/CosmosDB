@@ -34,4 +34,6 @@ ConvertFrom-StringData -StringData @'
     ShouldUpdateAzureCosmosDBAccount = Update an Azure Cosmos DB account '{0}' in resource group '{1}'
     ShouldRemoveAzureCosmosDBAccount = Remove the Azure Cosmos DB account '{0}' in resource group '{1}'
     GettingAzureCosmosDBAccountConnectionStringWarning = The Get-CosmosDbAccountConnectionString function does not currently work due to an issue with the Microsoft/DocumentDB provider. The connection strings will not be returned.
+    AccountNameInvalid = The Account Name '{0}' is invalid. The name can contain only lowercase letters, numbers and the '-' character, and must be between 3 and 31 characters.
+    ResourceGroupNameInvalid = The Resource Group Name '{0}' is invalid. AccountNameInvalid = The Account Name '{0}' is invalid. The name can contain only lowercase letters, numbers and the '-' character, and must be between 3 and 31 characters.
 '@
