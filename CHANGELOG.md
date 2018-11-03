@@ -25,6 +25,11 @@
 - Improved validation on Account parameter on `*-CosmosDBStoredProcedure*` functions.
 - Improved validation on Database parameter on `*-CosmosDBStoredProcedure*` functions.
 - Improved validation on Collection parameter on `*-CosmosDBStoredProcedure*` functions.
+- Improved validation on Trigger Id parameter on
+ `*-CosmosDBTrigger*` functions - fixes [Issue #215](https://github.com/PlagueHO/CosmosDB/issues/215).
+- Improved validation on Account parameter on `*-CosmosDBTrigger*` functions.
+- Improved validation on Database parameter on `*-CosmosDBTrigger*` functions.
+- Improved validation on Collection parameter on `*-CosmosDBTrigger*` functions.
 
 ## 2.1.12.137
 
