@@ -130,7 +130,7 @@ jobs:
       displayName: 'Install PowerShell Core'
 
     - script: |
-        pwsh -c 'Write-Verbose -Message ($ENV:PSModulePath) -Verbose; .\build.ps1 -TaskList Test -Verbose'
+        pwsh -c '$ENV:PSModulePath = "/usr/local/microsoft/powershell/6/Modules"; Write-Verbose -Message ($ENV:PSModulePath) -Verbose; Get-Module -ListAvailable; .\build.ps1 -TaskList Test -Verbose'
       displayName: 'Execute Tests'
       env:
         azureApplicationId: $(azureApplicationId)
