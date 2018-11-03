@@ -31,7 +31,7 @@ function New-CosmosDbContext
 
         [Alias("ResourceGroup")]
         [Parameter(Mandatory = $true, ParameterSetName = 'AzureAccount')]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbResourceGroupNameValid -ResourceGroupName $_ })]
         [System.String]
         $ResourceGroupName,
 
