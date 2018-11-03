@@ -6,6 +6,9 @@
 - Split the multiple functions scripts into single functions and
   change the build pipeline to combine them all during
   staging - fixes [Issue #201](https://github.com/PlagueHO/CosmosDB/issues/201).
+- Temporarily suppressed running tests using MacOS in Azure Pipelines
+  because the Hosted Agent has been updated with Az, preventing the
+  AzureRM.NetCore modules from being installed.
 
 ## 2.1.12.137
 
