@@ -12,7 +12,7 @@ function Invoke-CosmosDbStoredProcedure
         $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ })]
         [System.String]
         $Account,
 
@@ -27,12 +27,12 @@ function Invoke-CosmosDbStoredProcedure
         $Key,
 
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ })]
         [System.String]
         $Database,
 
         [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbCollectionIdValid -Id $_ })]
         [System.String]
         $CollectionId,
 
@@ -42,7 +42,7 @@ function Invoke-CosmosDbStoredProcedure
         $PartitionKey,
 
         [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbStoredProcedureIdValid -Id $_ })]
         [System.String]
         $Id,
 

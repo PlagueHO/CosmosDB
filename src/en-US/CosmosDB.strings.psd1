@@ -38,4 +38,5 @@ ConvertFrom-StringData -StringData @'
     ResourceGroupNameInvalid = The Resource Group Name '{0}' is invalid. Resource group names only allow alphanumeric characters, periods, underscores, hyphens and parenthesis, cannot end in a period and must be 90 characters or less.
     DatabaseIdInvalid = The Database Id '{0}' is invalid. A Database Id must not contain characters '\','/','#','?' or '=', end with a space and must be 255 characters or less.
     CollectionIdInvalid = The Collection Id '{0}' is invalid. A Collection Id must not contain characters '\','/','#','?' or '=', end with a space and must be 255 characters or less.
+    StoredProcedureIdInvalid = The Stored Procedure Id '{0}' is invalid. A Stored Procedure Id must not contain characters '\','/','#','?' or '=', end with a space and must be 255 characters or less.
 '@
