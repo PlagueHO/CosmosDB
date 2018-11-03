@@ -16,6 +16,10 @@
   `New-CosmosDbContext` function.
 - Improved validation on Database Id parameter on
  `*-CosmosDBDatabase*` functions - fixes [Issue #212](https://github.com/PlagueHO/CosmosDB/issues/212).
+- Improved validation on Collection Id parameter on
+ `*-CosmosDBCollection*` functions - fixes [Issue #213](https://github.com/PlagueHO/CosmosDB/issues/213).
+- Improved validation on Account parameter on `*-CosmosDBCollection*` functions.
+- Improved validation on Database parameter on `*-CosmosDBCollection*` functions.
 
 ## 2.1.12.137
 
