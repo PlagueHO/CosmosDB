@@ -11,12 +11,12 @@ function Remove-CosmosDbTrigger
         $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ })]
         [System.String]
         $Account,
 
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ })]
         [System.String]
         $Database,
 
@@ -31,12 +31,12 @@ function Remove-CosmosDbTrigger
         $KeyType = 'master',
 
         [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbCollectionIdValid -Id $_ })]
         [System.String]
         $CollectionId,
 
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbTriggerIdValid -Id $_ })]
         [System.String]
         $Id
     )
