@@ -74,6 +74,50 @@ InModuleScope CosmosDB {
     $script:testUniqueKeyB = New-CosmosDbCollectionUniqueKey -Path '/uniquekey3'
     $script:testUniqueKeyPolicy = New-CosmosDbCollectionUniqueKeyPolicy -UniqueKey $script:testUniqueKeyA, $script:testUniqueKeyB
 
+    Describe 'Assert-CosmosDbCollectionIdValid' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Assert-CosmosDbCollectionIdValid -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with a valid Id' {
+            It 'Should return $true' {
+                Assert-CosmosDbCollectionIdValid -Id 'This is a valid collection ID..._-99!' | Should -Be $true
+            }
+        }
+
+        Context 'When called with a 256 character Id' {
+            It 'Should throw expected exception' {
+                {
+                    Assert-CosmosDbCollectionIdValid -Id ('a' * 256)
+                } | Should -Throw ($LocalizedData.CollectionIdInvalid -f ('a' * 256))
+            }
+        }
+
+        Context 'When called with an Id containing invalid characters' {
+            $testCases = @{ Id = 'a\b' }, @{ Id = 'a/b' }, @{ Id = 'a#b' }, @{ Id = 'a?b' }
+
+            It 'Should throw expected exception when called with "<Id>"' -TestCases $testCases {
+                param
+                (
+                    [System.String]
+                    $Id
+                )
+
+                {
+                    Assert-CosmosDbCollectionIdValid -Id $Id
+                } | Should -Throw ($LocalizedData.CollectionIdInvalid -f $Id)
+            }
+        }
+
+        Context 'When called with an Id ending with a space' {
+            It 'Should throw expected exception' {
+                {
+                    Assert-CosmosDbCollectionIdValid -Id ('a ')
+                } | Should -Throw ($LocalizedData.CollectionIdInvalid -f ('a '))
+            }
+        }
+    }
+
     Describe 'Get-CosmosDbCollectionResourcePath' -Tag 'Unit' {
         It 'Should exist' {
             {
