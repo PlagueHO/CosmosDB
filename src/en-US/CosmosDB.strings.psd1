@@ -40,4 +40,5 @@ ConvertFrom-StringData -StringData @'
     CollectionIdInvalid = The Collection Id '{0}' is invalid. A Collection Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
     StoredProcedureIdInvalid = The Stored Procedure Id '{0}' is invalid. A Stored Procedure Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
     TriggerIdInvalid = The Trigger Id '{0}' is invalid. A Trigger Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
+    UserDefinedFunctionIdInvalid = The User Defined Function Id '{0}' is invalid. A User Defined Function Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
 '@

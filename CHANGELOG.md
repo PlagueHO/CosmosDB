@@ -30,6 +30,11 @@
 - Improved validation on Account parameter on `*-CosmosDBTrigger*` functions.
 - Improved validation on Database parameter on `*-CosmosDBTrigger*` functions.
 - Improved validation on Collection parameter on `*-CosmosDBTrigger*` functions.
+- Improved validation on User Defined Function Id parameter on
+ `*-CosmosDBUserDefinedFunction*` functions - fixes [Issue #216](https://github.com/PlagueHO/CosmosDB/issues/216).
+- Improved validation on Account parameter on `*-CosmosDBUserDefinedFunction*` functions.
+- Improved validation on Database parameter on `*-CosmosDBUserDefinedFunction*` functions.
+- Improved validation on Collection parameter on `*-CosmosDBUserDefinedFunction*` functions.
 
 ## 2.1.12.137
 
