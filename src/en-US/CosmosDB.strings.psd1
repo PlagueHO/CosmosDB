@@ -42,4 +42,5 @@ ConvertFrom-StringData -StringData @'
     TriggerIdInvalid = The Trigger Id '{0}' is invalid. A Trigger Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
     UserDefinedFunctionIdInvalid = The User Defined Function Id '{0}' is invalid. A User Defined Function Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
     UserIdInvalid = The User Id '{0}' is invalid. A User Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
+    DocumentIdInvalid = The Document Id '{0}' is invalid. A Document Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
 '@
