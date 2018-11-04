@@ -39,6 +39,11 @@
  `*-CosmosDBUser*` functions - fixes [Issue #217](https://github.com/PlagueHO/CosmosDB/issues/217).
 - Improved validation on Account parameter on `*-CosmosDBUser*` functions.
 - Improved validation on Database parameter on `*-CosmosDBUser*` functions.
+- Improved validation on Document Id parameter on
+ `*-CosmosDBDocument*` functions - fixes [Issue #227](https://github.com/PlagueHO/CosmosDB/issues/227).
+- Improved validation on Account parameter on `*-CosmosDBDocument*` functions.
+- Improved validation on Database parameter on `*-CosmosDBDocument*` functions.
+- Improved validation on Collection parameter on `*-CosmosDBDocument*` functions.
 
 ## 2.1.12.137
 
