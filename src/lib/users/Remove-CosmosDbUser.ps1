@@ -11,12 +11,12 @@ function Remove-CosmosDbUser
         $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ })]
         [System.String]
         $Account,
 
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ })]
         [System.String]
         $Database,
 
@@ -31,7 +31,7 @@ function Remove-CosmosDbUser
         $KeyType = 'master',
 
         [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbUserIdValid -Id $_ })]
         [System.String]
         $Id
     )

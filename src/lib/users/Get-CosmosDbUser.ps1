@@ -12,12 +12,12 @@ function Get-CosmosDbUser
         $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ })]
         [System.String]
         $Account,
 
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ })]
         [System.String]
         $Database,
 
@@ -32,7 +32,7 @@ function Get-CosmosDbUser
         $KeyType = 'master',
 
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbUserIdValid -Id $_ })]
         [System.String]
         $Id
     )

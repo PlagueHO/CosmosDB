@@ -6,10 +6,12 @@ function Get-CosmosDbUserResourcePath
     param
     (
         [Parameter(Mandatory = $true)]
+        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ })]
         [System.String]
         $Database,
 
         [Parameter(Mandatory = $true)]
+        [ValidateScript({ Assert-CosmosDbUserIdValid -Id $_ })]
         [System.String]
         $Id
     )
