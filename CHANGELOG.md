@@ -49,6 +49,12 @@
 - Improved validation on Account parameter on `*-CosmosDBPermission*` functions.
 - Improved validation on Database parameter on `*-CosmosDBPermission*` functions.
 - Improved validation on User parameter on `*-CosmosDBPermission*` functions.
+- Improved validation on Attachment Id parameter on
+ `*-CosmosDBAttachment*` functions - fixes [Issue #228](https://github.com/PlagueHO/CosmosDB/issues/228).
+- Improved validation on Account parameter on `*-CosmosDBAttachment*` functions.
+- Improved validation on Database parameter on `*-CosmosDBAttachment*` functions.
+- Improved validation on Collection parameter on `*-CosmosDBAttachment*` functions.
+- Improved validation on Document parameter on `*-CosmosDBAttachment*` functions.
 
 ## 2.1.12.137
 

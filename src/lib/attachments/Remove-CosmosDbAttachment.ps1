@@ -11,12 +11,12 @@ function Remove-CosmosDbAttachment
         $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ })]
         [System.String]
         $Account,
 
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ })]
         [System.String]
         $Database,
 
@@ -31,17 +31,17 @@ function Remove-CosmosDbAttachment
         $KeyType = 'master',
 
         [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbCollectionIdValid -Id $_ })]
         [System.String]
         $CollectionId,
 
         [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbDocumentIdValid -Id $_ })]
         [System.String]
         $DocumentId,
 
         [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Assert-CosmosDbAttachmentIdValid -Id $_ })]
         [System.String]
         $Id
     )

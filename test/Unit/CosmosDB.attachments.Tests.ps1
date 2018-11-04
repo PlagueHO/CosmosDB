@@ -75,6 +75,50 @@ InModuleScope CosmosDB {
     }
     $script:testResource = 'dbs/testDatabase/colls/testCollection/docs/testDocument/attachment/'
 
+    Describe 'Assert-CosmosDbAttachmentIdValid' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Assert-CosmosDbAttachmentIdValid -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with a valid Id' {
+            It 'Should return $true' {
+                Assert-CosmosDbAttachmentIdValid -Id 'This is a valid attachment ID..._-99!' | Should -Be $true
+            }
+        }
+
+        Context 'When called with a 256 character Id' {
+            It 'Should throw expected exception' {
+                {
+                    Assert-CosmosDbAttachmentIdValid -Id ('a' * 256)
+                } | Should -Throw ($LocalizedData.AttachmentIdInvalid -f ('a' * 256))
+            }
+        }
+
+        Context 'When called with an Id containing invalid characters' {
+            $testCases = @{ Id = 'a\b' }, @{ Id = 'a/b' }, @{ Id = 'a#b' }, @{ Id = 'a?b' }
+
+            It 'Should throw expected exception when called with "<Id>"' -TestCases $testCases {
+                param
+                (
+                    [System.String]
+                    $Id
+                )
+
+                {
+                    Assert-CosmosDbAttachmentIdValid -Id $Id
+                } | Should -Throw ($LocalizedData.AttachmentIdInvalid -f $Id)
+            }
+        }
+
+        Context 'When called with an Id ending with a space' {
+            It 'Should throw expected exception' {
+                {
+                    Assert-CosmosDbAttachmentIdValid -Id ('a ')
+                } | Should -Throw ($LocalizedData.AttachmentIdInvalid -f ('a '))
+            }
+        }
+    }
+
     Describe 'Get-CosmosDbAttachmentResourcePath' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name Get-CosmosDbAttachmentResourcePath -ErrorAction Stop } | Should -Not -Throw

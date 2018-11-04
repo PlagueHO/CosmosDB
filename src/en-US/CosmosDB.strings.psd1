@@ -36,6 +36,7 @@ ConvertFrom-StringData -StringData @'
     GettingAzureCosmosDBAccountConnectionStringWarning = The Get-CosmosDbAccountConnectionString function does not currently work due to an issue with the Microsoft/DocumentDB provider. The connection strings will not be returned.
     AccountNameInvalid = The Account Name '{0}' is invalid. The name can contain only lowercase letters, numbers and the '-' character, and must be between 3 and 31 characters.
     ResourceGroupNameInvalid = The Resource Group Name '{0}' is invalid. Resource group names only allow alphanumeric characters, periods, underscores, hyphens and parenthesis, cannot end in a period and must be 90 characters or less.
+    AttachmentIdInvalid = The Attachment Id '{0}' is invalid. An Attachment Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
     CollectionIdInvalid = The Collection Id '{0}' is invalid. A Collection Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
     DatabaseIdInvalid = The Database Id '{0}' is invalid. A Database Id must not contain characters '\','/','#','?' or '=', end with a space or be longer than 255 characters.
     DocumentIdInvalid = The Document Id '{0}' is invalid. A Document Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
