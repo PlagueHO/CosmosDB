@@ -12,7 +12,7 @@ function Set-CosmosDbCollection
         $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
-        [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ })]
+        [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ -ArgumentName 'Account' })]
         [System.String]
         $Account,
 
@@ -27,7 +27,7 @@ function Set-CosmosDbCollection
         $KeyType = 'master',
 
         [Parameter()]
-        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ })]
+        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ -ArgumentName 'Database' })]
         [System.String]
         $Database,
 

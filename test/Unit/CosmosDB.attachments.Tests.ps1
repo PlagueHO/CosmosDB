@@ -88,9 +88,13 @@ InModuleScope CosmosDB {
 
         Context 'When called with a 256 character Id' {
             It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.AttachmentIdInvalid -f ('a' * 256)) `
+                    -ArgumentName 'Id'
+
                 {
                     Assert-CosmosDbAttachmentIdValid -Id ('a' * 256)
-                } | Should -Throw ($LocalizedData.AttachmentIdInvalid -f ('a' * 256))
+                } | Should -Throw $errorRecord
             }
         }
 
@@ -104,17 +108,37 @@ InModuleScope CosmosDB {
                     $Id
                 )
 
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.AttachmentIdInvalid -f $Id) `
+                    -ArgumentName 'Id'
+
                 {
                     Assert-CosmosDbAttachmentIdValid -Id $Id
-                } | Should -Throw ($LocalizedData.AttachmentIdInvalid -f $Id)
+                } | Should -Throw $errorRecord
             }
         }
 
         Context 'When called with an Id ending with a space' {
             It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.AttachmentIdInvalid -f 'a ') `
+                    -ArgumentName 'Id'
+
                 {
-                    Assert-CosmosDbAttachmentIdValid -Id ('a ')
-                } | Should -Throw ($LocalizedData.AttachmentIdInvalid -f ('a '))
+                    Assert-CosmosDbAttachmentIdValid -Id 'a '
+                } | Should -Throw $errorRecord
+            }
+        }
+
+        Context 'When called with an invalid Id and an argument name is specified' {
+            It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.AttachmentIdInvalid -f 'a ') `
+                    -ArgumentName 'Test'
+
+                {
+                    Assert-CosmosDbAttachmentIdValid -Id 'a ' -ArgumentName 'Test'
+                } | Should -Throw $errorRecord
             }
         }
     }

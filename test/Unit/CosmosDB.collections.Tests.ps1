@@ -87,9 +87,13 @@ InModuleScope CosmosDB {
 
         Context 'When called with a 256 character Id' {
             It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.CollectionIdInvalid -f ('a' * 256)) `
+                    -ArgumentName 'Id'
+
                 {
                     Assert-CosmosDbCollectionIdValid -Id ('a' * 256)
-                } | Should -Throw ($LocalizedData.CollectionIdInvalid -f ('a' * 256))
+                } | Should -Throw $errorRecord
             }
         }
 
@@ -103,17 +107,37 @@ InModuleScope CosmosDB {
                     $Id
                 )
 
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.CollectionIdInvalid -f $Id) `
+                    -ArgumentName 'Id'
+
                 {
                     Assert-CosmosDbCollectionIdValid -Id $Id
-                } | Should -Throw ($LocalizedData.CollectionIdInvalid -f $Id)
+                } | Should -Throw $errorRecord
             }
         }
 
         Context 'When called with an Id ending with a space' {
             It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.CollectionIdInvalid -f 'a ') `
+                    -ArgumentName 'Id'
+
                 {
-                    Assert-CosmosDbCollectionIdValid -Id ('a ')
-                } | Should -Throw ($LocalizedData.CollectionIdInvalid -f ('a '))
+                    Assert-CosmosDbCollectionIdValid -Id 'a '
+                } | Should -Throw $errorRecord
+            }
+        }
+
+        Context 'When called with an invalid Id and an argument name is specified' {
+            It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.CollectionIdInvalid -f 'a ') `
+                    -ArgumentName 'Test'
+
+                {
+                    Assert-CosmosDbCollectionIdValid -Id 'a ' -ArgumentName 'Test'
+                } | Should -Throw $errorRecord
             }
         }
     }

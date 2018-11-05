@@ -65,9 +65,13 @@ InModuleScope CosmosDB {
 
         Context 'When called with a 256 character Id' {
             It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.UserIdInvalid -f ('a' * 256)) `
+                    -ArgumentName 'Id'
+
                 {
                     Assert-CosmosDbUserIdValid -Id ('a' * 256)
-                } | Should -Throw ($LocalizedData.UserIdInvalid -f ('a' * 256))
+                } | Should -Throw $errorRecord
             }
         }
 
@@ -81,17 +85,37 @@ InModuleScope CosmosDB {
                     $Id
                 )
 
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.UserIdInvalid -f $Id) `
+                    -ArgumentName 'Id'
+
                 {
                     Assert-CosmosDbUserIdValid -Id $Id
-                } | Should -Throw ($LocalizedData.UserIdInvalid -f $Id)
+                } | Should -Throw $errorRecord
             }
         }
 
         Context 'When called with an Id ending with a space' {
             It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.UserIdInvalid -f 'a ') `
+                    -ArgumentName 'Id'
+
                 {
-                    Assert-CosmosDbUserIdValid -Id ('a ')
-                } | Should -Throw ($LocalizedData.UserIdInvalid -f ('a '))
+                    Assert-CosmosDbUserIdValid -Id 'a '
+                } | Should -Throw $errorRecord
+            }
+        }
+
+        Context 'When called with an invalid Id and an argument name is specified' {
+            It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.UserIdInvalid -f 'a ') `
+                    -ArgumentName 'Test'
+
+                {
+                    Assert-CosmosDbUserIdValid -Id 'a ' -ArgumentName 'Test'
+                } | Should -Throw $errorRecord
             }
         }
     }

@@ -82,9 +82,13 @@ InModuleScope CosmosDB {
 
         Context 'When called with a 256 character Id' {
             It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.UserDefinedFunctionIdInvalid -f ('a' * 256)) `
+                    -ArgumentName 'Id'
+
                 {
                     Assert-CosmosDbUserDefinedFunctionIdValid -Id ('a' * 256)
-                } | Should -Throw ($LocalizedData.UserDefinedFunctionIdInvalid -f ('a' * 256))
+                } | Should -Throw $errorRecord
             }
         }
 
@@ -98,17 +102,37 @@ InModuleScope CosmosDB {
                     $Id
                 )
 
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.UserDefinedFunctionIdInvalid -f $Id) `
+                    -ArgumentName 'Id'
+
                 {
                     Assert-CosmosDbUserDefinedFunctionIdValid -Id $Id
-                } | Should -Throw ($LocalizedData.UserDefinedFunctionIdInvalid -f $Id)
+                } | Should -Throw $errorRecord
             }
         }
 
         Context 'When called with an Id ending with a space' {
             It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.UserDefinedFunctionIdInvalid -f 'a ') `
+                    -ArgumentName 'Id'
+
                 {
-                    Assert-CosmosDbUserDefinedFunctionIdValid -Id ('a ')
-                } | Should -Throw ($LocalizedData.UserDefinedFunctionIdInvalid -f ('a '))
+                    Assert-CosmosDbUserDefinedFunctionIdValid -Id 'a '
+                } | Should -Throw $errorRecord
+            }
+        }
+
+        Context 'When called with an invalid Id and an argument name is specified' {
+            It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.UserDefinedFunctionIdInvalid -f 'a ') `
+                    -ArgumentName 'Test'
+
+                {
+                    Assert-CosmosDbUserDefinedFunctionIdValid -Id 'a ' -ArgumentName 'Test'
+                } | Should -Throw $errorRecord
             }
         }
     }

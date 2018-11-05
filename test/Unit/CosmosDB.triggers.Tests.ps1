@@ -88,9 +88,13 @@ InModuleScope CosmosDB {
 
         Context 'When called with a 256 character Id' {
             It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.TriggerIdInvalid -f ('a' * 256)) `
+                    -ArgumentName 'Id'
+
                 {
                     Assert-CosmosDbTriggerIdValid -Id ('a' * 256)
-                } | Should -Throw ($LocalizedData.TriggerIdInvalid -f ('a' * 256))
+                } | Should -Throw $errorRecord
             }
         }
 
@@ -104,17 +108,37 @@ InModuleScope CosmosDB {
                     $Id
                 )
 
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.TriggerIdInvalid -f $Id) `
+                    -ArgumentName 'Id'
+
                 {
                     Assert-CosmosDbTriggerIdValid -Id $Id
-                } | Should -Throw ($LocalizedData.TriggerIdInvalid -f $Id)
+                } | Should -Throw $errorRecord
             }
         }
 
         Context 'When called with an Id ending with a space' {
             It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.TriggerIdInvalid -f 'a ') `
+                    -ArgumentName 'Id'
+
                 {
-                    Assert-CosmosDbTriggerIdValid -Id ('a ')
-                } | Should -Throw ($LocalizedData.TriggerIdInvalid -f ('a '))
+                    Assert-CosmosDbTriggerIdValid -Id 'a '
+                } | Should -Throw $errorRecord
+            }
+        }
+
+        Context 'When called with an invalid Id and an argument name is specified' {
+            It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.TriggerIdInvalid -f 'a ') `
+                    -ArgumentName 'Test'
+
+                {
+                    Assert-CosmosDbTriggerIdValid -Id 'a ' -ArgumentName 'Test'
+                } | Should -Throw $errorRecord
             }
         }
     }

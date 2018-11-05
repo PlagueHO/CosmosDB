@@ -6,17 +6,17 @@ function Get-CosmosDbAttachmentResourcePath
     param
     (
         [Parameter(Mandatory = $true)]
-        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ })]
+        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ -ArgumentName 'Database' })]
         [System.String]
         $Database,
 
         [Parameter(Mandatory = $true)]
-        [ValidateScript({ Assert-CosmosDbCollectionIdValid -Id $_ })]
+        [ValidateScript({ Assert-CosmosDbCollectionIdValid -Id $_ -ArgumentName 'CollectionId' })]
         [System.String]
         $CollectionId,
 
         [Parameter(Mandatory = $true)]
-        [ValidateScript({ Assert-CosmosDbDocumentIdValid -Id $_ })]
+        [ValidateScript({ Assert-CosmosDbDocumentIdValid -Id $_ -ArgumentName 'DocumentId' })]
         [System.String]
         $DocumentId,
 

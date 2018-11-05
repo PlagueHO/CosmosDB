@@ -12,7 +12,7 @@ function Get-CosmosDbPermission
         $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
-        [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ })]
+        [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ -ArgumentName 'Account' })]
         [System.String]
         $Account,
 
@@ -27,12 +27,12 @@ function Get-CosmosDbPermission
         $KeyType = 'master',
 
         [Parameter()]
-        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ })]
+        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ -ArgumentName 'Database' })]
         [System.String]
         $Database,
 
         [Parameter(Mandatory = $true)]
-        [ValidateScript({ Assert-CosmosDbUserIdValid -Id $_ })]
+        [ValidateScript({ Assert-CosmosDbUserIdValid -Id $_ -ArgumentName 'UserId' })]
         [System.String]
         $UserId,
 

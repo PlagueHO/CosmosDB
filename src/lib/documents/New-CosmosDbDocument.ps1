@@ -12,7 +12,7 @@ function New-CosmosDbDocument
         $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
-        [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ })]
+        [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ -ArgumentName 'Account' })]
         [System.String]
         $Account,
 
@@ -27,12 +27,12 @@ function New-CosmosDbDocument
         $Key,
 
         [Parameter()]
-        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ })]
+        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ -ArgumentName 'Database' })]
         [System.String]
         $Database,
 
         [Parameter(Mandatory = $true)]
-        [ValidateScript({ Assert-CosmosDbCollectionIdValid -Id $_ })]
+        [ValidateScript({ Assert-CosmosDbCollectionIdValid -Id $_ -ArgumentName 'CollectionId' })]
         [System.String]
         $CollectionId,
 
