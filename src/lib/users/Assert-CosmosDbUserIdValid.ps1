@@ -12,13 +12,20 @@ function Assert-CosmosDbUserIdValid
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [System.String]
-        $Id
+        $Id,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $ArgumentName = 'Id'
     )
 
     $matches = [regex]::Match($Id,"[^\\/#?]{1,255}(?<!\s)")
     if ($matches.value -ne $Id)
     {
-        Throw $($LocalizedData.UserIdInvalid -f $Id)
+        New-CosmosDbInvalidArgumentException `
+            -Message $($LocalizedData.UserIdInvalid -f $Id) `
+            -ArgumentName $ArgumentName
     }
 
     return $true

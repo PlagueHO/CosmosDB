@@ -12,13 +12,20 @@ function Assert-CosmosDbAccountNameValid
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [System.String]
-        $Name
+        $Name,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $ArgumentName = 'Name'
     )
 
     $matches = [regex]::Match($Name,"[A-Za-z0-9\-]{3,31}")
     if ($matches.value -ne $Name)
     {
-        Throw $($LocalizedData.AccountNameInvalid -f $Name)
+        New-CosmosDbInvalidArgumentException `
+            -Message $($LocalizedData.AccountNameInvalid -f $Name) `
+            -ArgumentName $ArgumentName
     }
 
     return $true

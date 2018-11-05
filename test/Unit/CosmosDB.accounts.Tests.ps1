@@ -92,33 +92,61 @@ InModuleScope CosmosDB {
 
         Context 'When called with a 2 character name' {
             It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.AccountNameInvalid -f ('a' * 2)) `
+                    -ArgumentName 'Name'
+
                 {
                     Assert-CosmosDbAccountNameValid -Name ('a' * 2)
-                } | Should -Throw ($LocalizedData.AccountNameInvalid -f ('a' * 2))
+                } | Should -Throw $errorRecord
             }
         }
 
         Context 'When called with a 32 character name' {
             It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.AccountNameInvalid -f ('a' * 32)) `
+                    -ArgumentName 'Name'
+
                 {
                     Assert-CosmosDbAccountNameValid -Name ('a' * 32)
-                } | Should -Throw ($LocalizedData.AccountNameInvalid -f ('a' * 32))
+                } | Should -Throw $errorRecord
             }
         }
 
         Context 'When called containing an underscore' {
             It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.AccountNameInvalid -f 'a_b') `
+                    -ArgumentName 'Name'
+
                 {
-                    Assert-CosmosDbAccountNameValid -Name ('a_b')
-                } | Should -Throw ($LocalizedData.AccountNameInvalid -f ('a_b'))
+                    Assert-CosmosDbAccountNameValid -Name 'a_b'
+                } | Should -Throw $errorRecord
             }
         }
 
         Context 'When called containing a period' {
             It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.AccountNameInvalid -f 'a.b') `
+                    -ArgumentName 'Name'
+
                 {
-                    Assert-CosmosDbAccountNameValid -Name ('a.b')
-                } | Should -Throw ($LocalizedData.AccountNameInvalid -f ('a.b'))
+                    Assert-CosmosDbAccountNameValid -Name 'a.b'
+                } | Should -Throw $errorRecord
+            }
+        }
+
+        Context 'When called with an invalid name and an argument is specified' {
+            It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.AccountNameInvalid -f 'a.b') `
+                    -ArgumentName 'Test'
+
+                {
+                    Assert-CosmosDbAccountNameValid -Name 'a.b' -ArgumentName 'Test'
+                } | Should -Throw $errorRecord
             }
         }
     }
@@ -136,25 +164,49 @@ InModuleScope CosmosDB {
 
         Context 'When called with a 91 character resource group name' {
             It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.ResourceGroupNameInvalid -f ('a' * 91)) `
+                    -ArgumentName 'ResourceGroupName'
+
                 {
                     Assert-CosmosDbResourceGroupNameValid -ResourceGroupName ('a' * 91)
-                } | Should -Throw ($LocalizedData.ResourceGroupNameInvalid -f ('a' * 91))
+                } | Should -Throw $errorRecord
             }
         }
 
         Context 'When called with resource group name containing an exclamation' {
             It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.ResourceGroupNameInvalid -f 'a!') `
+                    -ArgumentName 'ResourceGroupName'
+
                 {
-                    Assert-CosmosDbResourceGroupNameValid -ResourceGroupName ('a!')
-                } | Should -Throw ($LocalizedData.ResourceGroupNameInvalid -f ('a!'))
+                    Assert-CosmosDbResourceGroupNameValid -ResourceGroupName 'a!'
+                } | Should -Throw $errorRecord
             }
         }
 
         Context 'When called with resource group name ending in a period' {
             It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.ResourceGroupNameInvalid -f 'a.') `
+                    -ArgumentName 'ResourceGroupName'
+
                 {
-                    Assert-CosmosDbResourceGroupNameValid -ResourceGroupName ('a.')
-                } | Should -Throw ($LocalizedData.ResourceGroupNameInvalid -f ('a.'))
+                    Assert-CosmosDbResourceGroupNameValid -ResourceGroupName 'a.'
+                } | Should -Throw $errorRecord
+            }
+        }
+
+        Context 'When called with an invalid resource group name and an argument is specified' {
+            It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.ResourceGroupNameInvalid -f 'a.') `
+                    -ArgumentName 'Test'
+
+                {
+                    Assert-CosmosDbResourceGroupNameValid -ResourceGroupName 'a.' -ArgumentName 'Test'
+                } | Should -Throw $errorRecord
             }
         }
     }
