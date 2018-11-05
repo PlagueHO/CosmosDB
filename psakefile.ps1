@@ -59,25 +59,18 @@ Task Test -Depends UnitTest, IntegrationTest
 Task UnitTest -Depends Init, PrepareTest {
     $separator
 
-    # Install any dependencies required for the Test stage
-    Invoke-PSDepend `
-        -Path $PSScriptRoot `
-        -Force `
-        -Import `
-        -Install `
-        -Tags 'Test',('Test_{0}' -f $PSVersionTable.PSEdition)
-
     # Execute tests
     $testScriptsPath = Join-Path -Path $ProjectRoot -ChildPath 'test\Unit'
     $testResultsFile = Join-Path -Path $testScriptsPath -ChildPath 'TestResults.unit.xml'
     $codeCoverageFile = Join-Path -Path $testScriptsPath -ChildPath 'CodeCoverage.xml'
+    $codeCoverageSource = Get-ChildItem -Path (Join-Path -Path $ProjectRoot -ChildPath 'src\lib\*.ps1') -Recurse
     $testResults = Invoke-Pester `
         -Script $testScriptsPath `
         -OutputFormat NUnitXml `
         -OutputFile $testResultsFile `
         -PassThru `
         -ExcludeTag Incomplete `
-        -CodeCoverage @( Join-Path -Path $ProjectRoot -ChildPath 'src\lib\*.ps1' ) `
+        -CodeCoverage $codeCoverageSource `
         -CodeCoverageOutputFile $codeCoverageFile `
         -CodeCoverageOutputFileFormat JaCoCo
 
@@ -219,7 +212,6 @@ Task Build -Depends Init {
     # Populate Version Folder
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psd1') -Destination $versionFolder
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psm1') -Destination $versionFolder
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/lib') -Destination $versionFolder -Recurse
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/formats') -Destination $versionFolder -Recurse
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/types') -Destination $versionFolder -Recurse
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/en-US') -Destination $versionFolder -Recurse
@@ -227,6 +219,56 @@ Task Build -Depends Init {
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'README.md') -Destination $versionFolder
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'CHANGELOG.md') -Destination $versionFolder
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'RELEASENOTES.md') -Destination $versionFolder
+
+    # Load the Libs files into the PSM1
+    $libFiles = Get-ChildItem `
+        -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/lib') `
+        -Include '*.ps1' `
+        -Recurse
+
+    # Assemble all the libs content into a single string
+    $libFilesStringBuilder = [System.Text.StringBuilder]::new()
+    foreach ($libFile in $libFiles)
+    {
+        $libContent = Get-Content -Path $libFile -Raw
+        $null = $libFilesStringBuilder.AppendLine($libContent)
+    }
+
+    <#
+        Load the PSM1 file into an array of lines and step through each line
+        adding it to a string builder if the line is not part of the ImportFunctions
+        Region. Then add the content of the $libFilesStringBuilder string builder
+        immediately following the end of the region.
+    #>
+    $modulePath = Join-Path -Path $versionFolder -ChildPath 'CosmosDB.psm1'
+    $moduleContent = Get-Content -Path $modulePath
+    $moduleStringBuilder = [System.Text.StringBuilder]::new()
+    $importFunctionsRegionFound = $false
+    foreach ($moduleLine in $moduleContent)
+    {
+        if ($importFunctionsRegionFound)
+        {
+            if ($moduleLine -eq '#endregion')
+            {
+                $null = $moduleStringBuilder.AppendLine('#region Functions')
+                $null = $moduleStringBuilder.AppendLine($libFilesStringBuilder)
+                $null = $moduleStringBuilder.AppendLine('#endregion')
+                $importFunctionsRegionFound = $false
+            }
+        }
+        else
+        {
+            if ($moduleLine -eq '#region ImportFunctions')
+            {
+                $importFunctionsRegionFound = $true
+            }
+            else
+            {
+                $null = $moduleStringBuilder.AppendLine($moduleLine)
+            }
+        }
+    }
+    Set-Content -Path $modulePath -Value $moduleStringBuilder -Force
 
     # Prepare external help
     'Building external help file'
@@ -267,6 +309,10 @@ Task Build -Depends Init {
     $zipFilePath = Join-Path `
         -Path $zipFileFolder `
         -ChildPath "${ENV:BHProjectName}_$newVersion.zip"
+    if (Test-Path -Path $zipFilePath)
+    {
+        $null = Remove-Item -Path $zipFilePath
+    }
     $null = Add-Type -assemblyname System.IO.Compression.FileSystem
     [System.IO.Compression.ZipFile]::CreateFromDirectory($ModuleFolder, $zipFilePath)
 
@@ -408,6 +454,7 @@ Task Deploy {
 #>
 function Get-VersionNumber
 {
+    [CmdLetBinding()]
     param
     (
         [Parameter(Mandatory = $true)]
@@ -451,6 +498,7 @@ function Get-VersionNumber
 #>
 function Invoke-Git
 {
+    [CmdLetBinding()]
     param
     (
         [Parameter(Mandatory = $true)]

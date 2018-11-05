@@ -34,4 +34,15 @@ ConvertFrom-StringData -StringData @'
     ShouldUpdateAzureCosmosDBAccount = Update an Azure Cosmos DB account '{0}' in resource group '{1}'
     ShouldRemoveAzureCosmosDBAccount = Remove the Azure Cosmos DB account '{0}' in resource group '{1}'
     GettingAzureCosmosDBAccountConnectionStringWarning = The Get-CosmosDbAccountConnectionString function does not currently work due to an issue with the Microsoft/DocumentDB provider. The connection strings will not be returned.
+    AccountNameInvalid = The Account Name '{0}' is invalid. The name can contain only lowercase letters, numbers and the '-' character, and must be between 3 and 31 characters.
+    ResourceGroupNameInvalid = The Resource Group Name '{0}' is invalid. Resource group names only allow alphanumeric characters, periods, underscores, hyphens and parenthesis, cannot end in a period and must be 90 characters or less.
+    AttachmentIdInvalid = The Attachment Id '{0}' is invalid. An Attachment Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
+    CollectionIdInvalid = The Collection Id '{0}' is invalid. A Collection Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
+    DatabaseIdInvalid = The Database Id '{0}' is invalid. A Database Id must not contain characters '\','/','#','?' or '=', end with a space or be longer than 255 characters.
+    DocumentIdInvalid = The Document Id '{0}' is invalid. A Document Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
+    PermissionIdInvalid = The Permission Id '{0}' is invalid. A Permission Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
+    StoredProcedureIdInvalid = The Stored Procedure Id '{0}' is invalid. A Stored Procedure Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
+    TriggerIdInvalid = The Trigger Id '{0}' is invalid. A Trigger Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
+    UserDefinedFunctionIdInvalid = The User Defined Function Id '{0}' is invalid. A User Defined Function Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
+    UserIdInvalid = The User Id '{0}' is invalid. A User Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
 '@

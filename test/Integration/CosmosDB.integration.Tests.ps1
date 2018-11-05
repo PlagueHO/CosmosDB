@@ -429,6 +429,44 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    Context 'When creating a new simple indexing policy' {
+        It 'Should not throw an exception' {
+            $script:indexingPolicySimple = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent
+        }
+    }
+
+    Context 'When creating a new collection with a simple IndexingPolicy' {
+        It 'Should not throw an exception' {
+            $script:result = New-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id $script:testCollection `
+                -OfferThroughput 400 `
+                -IndexingPolicy $script:indexingPolicySimple `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Conflicts | Should -BeOfType [System.String]
+            $script:result.Documents | Should -BeOfType [System.String]
+            $script:result.StoredProcedures | Should -BeOfType [System.String]
+            $script:result.Triggers | Should -BeOfType [System.String]
+            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testCollection
+            $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
+            $script:result.indexingPolicy.automatic | Should -Be $true
+        }
+    }
+
+    Context 'When removing existing collection with a simple indexing policy' {
+        It 'Should not throw an exception' {
+            $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
+        }
+    }
+
     Context 'When creating a new indexing policy' {
         It 'Should not throw an exception' {
             $script:indexNumberRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType Number -Precision -1

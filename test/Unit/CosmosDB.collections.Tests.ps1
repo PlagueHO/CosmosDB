@@ -74,6 +74,74 @@ InModuleScope CosmosDB {
     $script:testUniqueKeyB = New-CosmosDbCollectionUniqueKey -Path '/uniquekey3'
     $script:testUniqueKeyPolicy = New-CosmosDbCollectionUniqueKeyPolicy -UniqueKey $script:testUniqueKeyA, $script:testUniqueKeyB
 
+    Describe 'Assert-CosmosDbCollectionIdValid' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Assert-CosmosDbCollectionIdValid -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with a valid Id' {
+            It 'Should return $true' {
+                Assert-CosmosDbCollectionIdValid -Id 'This is a valid collection ID..._-99!' | Should -Be $true
+            }
+        }
+
+        Context 'When called with a 256 character Id' {
+            It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.CollectionIdInvalid -f ('a' * 256)) `
+                    -ArgumentName 'Id'
+
+                {
+                    Assert-CosmosDbCollectionIdValid -Id ('a' * 256)
+                } | Should -Throw $errorRecord
+            }
+        }
+
+        Context 'When called with an Id containing invalid characters' {
+            $testCases = @{ Id = 'a\b' }, @{ Id = 'a/b' }, @{ Id = 'a#b' }, @{ Id = 'a?b' }
+
+            It 'Should throw expected exception when called with "<Id>"' -TestCases $testCases {
+                param
+                (
+                    [System.String]
+                    $Id
+                )
+
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.CollectionIdInvalid -f $Id) `
+                    -ArgumentName 'Id'
+
+                {
+                    Assert-CosmosDbCollectionIdValid -Id $Id
+                } | Should -Throw $errorRecord
+            }
+        }
+
+        Context 'When called with an Id ending with a space' {
+            It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.CollectionIdInvalid -f 'a ') `
+                    -ArgumentName 'Id'
+
+                {
+                    Assert-CosmosDbCollectionIdValid -Id 'a '
+                } | Should -Throw $errorRecord
+            }
+        }
+
+        Context 'When called with an invalid Id and an argument name is specified' {
+            It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.CollectionIdInvalid -f 'a ') `
+                    -ArgumentName 'Test'
+
+                {
+                    Assert-CosmosDbCollectionIdValid -Id 'a ' -ArgumentName 'Test'
+                } | Should -Throw $errorRecord
+            }
+        }
+    }
+
     Describe 'Get-CosmosDbCollectionResourcePath' -Tag 'Unit' {
         It 'Should exist' {
             {

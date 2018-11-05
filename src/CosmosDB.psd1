@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.1.12.137'
+    ModuleVersion     = '2.1.13.137'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -186,6 +186,64 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+November 4, 2018
+
+- Added new integration tests for testing simple index policies.
+- Split the multiple functions scripts into single functions and
+    change the build pipeline to combine them all during
+    staging - fixes [Issue #201](https://github.com/PlagueHO/CosmosDB/issues/201).
+- Temporarily suppressed running tests using MacOS in Azure Pipelines
+    because the Hosted Agent has been updated with Az, preventing the
+    AzureRM.NetCore modules from being installed.
+- Improved validation on Name and ResourceGroupName parameters on
+    `*-CosmosDBAccount*` functions - fixes [Issue #211](https://github.com/PlagueHO/CosmosDB/issues/211).
+- Improved validation on Account parameter on `*-CosmosDBDatabase*` functions.
+- Improved validation on Account and ResourceGroupName parameter on
+    `New-CosmosDbContext` function.
+- Improved validation on Database Id parameter on
+    `*-CosmosDBDatabase*` functions - fixes [Issue #212](https://github.com/PlagueHO/CosmosDB/issues/212).
+- Improved validation on Collection Id parameter on
+    `*-CosmosDBCollection*` functions - fixes [Issue #213](https://github.com/PlagueHO/CosmosDB/issues/213).
+- Improved validation on Account parameter on `*-CosmosDBCollection*` functions.
+- Improved validation on Database parameter on `*-CosmosDBCollection*` functions.
+- Improved validation on Stored Procedure Id parameter on
+    `*-CosmosDBStoredProcedure*` functions - fixes [Issue #214](https://github.com/PlagueHO/CosmosDB/issues/214).
+- Improved validation on Account parameter on `*-CosmosDBStoredProcedure*` functions.
+- Improved validation on Database parameter on `*-CosmosDBStoredProcedure*` functions.
+- Improved validation on Collection parameter on `*-CosmosDBStoredProcedure*` functions.
+- Improved validation on Trigger Id parameter on
+    `*-CosmosDBTrigger*` functions - fixes [Issue #215](https://github.com/PlagueHO/CosmosDB/issues/215).
+- Improved validation on Account parameter on `*-CosmosDBTrigger*` functions.
+- Improved validation on Database parameter on `*-CosmosDBTrigger*` functions.
+- Improved validation on Collection parameter on `*-CosmosDBTrigger*` functions.
+- Improved validation on User Defined Function Id parameter on
+    `*-CosmosDBUserDefinedFunction*` functions - fixes [Issue #216](https://github.com/PlagueHO/CosmosDB/issues/216).
+- Improved validation on Account parameter on `*-CosmosDBUserDefinedFunction*` functions.
+- Improved validation on Database parameter on `*-CosmosDBUserDefinedFunction*` functions.
+- Improved validation on Collection parameter on `*-CosmosDBUserDefinedFunction*` functions.
+- Improved validation on User Id parameter on
+    `*-CosmosDBUser*` functions - fixes [Issue #217](https://github.com/PlagueHO/CosmosDB/issues/217).
+- Improved validation on Account parameter on `*-CosmosDBUser*` functions.
+- Improved validation on Database parameter on `*-CosmosDBUser*` functions.
+- Improved validation on Document Id parameter on
+    `*-CosmosDBDocument*` functions - fixes [Issue #227](https://github.com/PlagueHO/CosmosDB/issues/227).
+- Improved validation on Account parameter on `*-CosmosDBDocument*` functions.
+- Improved validation on Database parameter on `*-CosmosDBDocument*` functions.
+- Improved validation on Collection parameter on `*-CosmosDBDocument*` functions.
+- Improved validation on Permission Id parameter on
+    `*-CosmosDBPermission*` functions - fixes [Issue #218](https://github.com/PlagueHO/CosmosDB/issues/218).
+- Improved validation on Account parameter on `*-CosmosDBPermission*` functions.
+- Improved validation on Database parameter on `*-CosmosDBPermission*` functions.
+- Improved validation on User parameter on `*-CosmosDBPermission*` functions.
+- Improved validation on Attachment Id parameter on
+    `*-CosmosDBAttachment*` functions - fixes [Issue #228](https://github.com/PlagueHO/CosmosDB/issues/228).
+- Improved validation on Account parameter on `*-CosmosDBAttachment*` functions.
+- Improved validation on Database parameter on `*-CosmosDBAttachment*` functions.
+- Improved validation on Collection parameter on `*-CosmosDBAttachment*` functions.
+- Improved validation on Document parameter on `*-CosmosDBAttachment*` functions.
+
 ## What is New in CosmosDB 2.1.12.137
 
 October 30, 2018
@@ -339,40 +397,6 @@ June 23, 2018
   See [Issue #87](https://github.com/PlagueHO/CosmosDB/issues/87)
 - Added support for handling a back-off policy to the `Invoke-CosmosDbRequest`
   function.
-
-## What is New in CosmosDB 2.0.16.465
-
-June 20, 2018
-
-- Added None as an IndexingMode - See [Issue #120](https://github.com/PlagueHO/CosmosDB/issues/120)
-
-## What is New in CosmosDB 2.0.15.454
-
-June 15, 2018
-
-- Fix creation of spatial index by `New-CosmosDbCollectionIncludedPathIndex`
-  so that precision is not used when passing to `New-CosmosDbCollection`.
-- Added support for `-PartitionKey` in `Invoke-CosmosDbStoredProcedure` - See [Issue #116](https://github.com/PlagueHO/CosmosDB/issues/116)
-- Changed -StoredProcedureParameter from string[] to object[] in `Invoke-CosmosDbStoredProcedure` - See [Issue #116](https://github.com/PlagueHO/CosmosDB/issues/116)
-- Updated `Invoke-CosmosDbStoredProcedure` to set `x-ms-documentdb-script-enable-logging: true` header and write stored procedure logs to the Verbose Stream when `-Debug` is set - See [Issue #116](https://github.com/PlagueHO/CosmosDB/issues/116)
-
-## What is New in CosmosDB 2.0.14.439
-
-June 12, 2018
-
-- Fixed Code Coverage upload to CodeCov.io.
-- Fix `New-CosmosDbCollectionIncludedPathIndex` Kind parameter spelling
-  of spacial - See [Issue #112](https://github.com/PlagueHO/CosmosDB/issues/112).
-- Added parameter validation to `New-CosmosDbCollectionIncludedPathIndex`.
-
-## What is New in CosmosDB 2.0.13.427
-
-June 03, 2018
-
-- Added `Set-CosmosDbCollection` function for updating a collection - See
-  [Issue #104](https://github.com/PlagueHO/CosmosDB/issues/104).
-- Updated `Invoke-CosmosDbRequest` function to output additional exception
-  information to the Verbose stream - See [Issue #103](https://github.com/PlagueHO/CosmosDB/issues/103).
             '
         } # End of PSData hashtable
     } # End of PrivateData hashtable
@@ -383,12 +407,3 @@ June 03, 2018
     # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
     # DefaultCommandPrefix = ''
 }
-
-
-
-
-
-
-
-
-

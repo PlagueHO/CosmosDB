@@ -69,6 +69,74 @@ InModuleScope CosmosDB {
         Content = $script:testJsonSingle
     }
 
+    Describe 'Assert-CosmosDbUserDefinedFunctionIdValid' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Assert-CosmosDbUserDefinedFunctionIdValid -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with a valid Id' {
+            It 'Should return $true' {
+                Assert-CosmosDbUserDefinedFunctionIdValid -Id 'This is a valid user defined function ID..._-99!' | Should -Be $true
+            }
+        }
+
+        Context 'When called with a 256 character Id' {
+            It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.UserDefinedFunctionIdInvalid -f ('a' * 256)) `
+                    -ArgumentName 'Id'
+
+                {
+                    Assert-CosmosDbUserDefinedFunctionIdValid -Id ('a' * 256)
+                } | Should -Throw $errorRecord
+            }
+        }
+
+        Context 'When called with an Id containing invalid characters' {
+            $testCases = @{ Id = 'a\b' }, @{ Id = 'a/b' }, @{ Id = 'a#b' }, @{ Id = 'a?b' }
+
+            It 'Should throw expected exception when called with "<Id>"' -TestCases $testCases {
+                param
+                (
+                    [System.String]
+                    $Id
+                )
+
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.UserDefinedFunctionIdInvalid -f $Id) `
+                    -ArgumentName 'Id'
+
+                {
+                    Assert-CosmosDbUserDefinedFunctionIdValid -Id $Id
+                } | Should -Throw $errorRecord
+            }
+        }
+
+        Context 'When called with an Id ending with a space' {
+            It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.UserDefinedFunctionIdInvalid -f 'a ') `
+                    -ArgumentName 'Id'
+
+                {
+                    Assert-CosmosDbUserDefinedFunctionIdValid -Id 'a '
+                } | Should -Throw $errorRecord
+            }
+        }
+
+        Context 'When called with an invalid Id and an argument name is specified' {
+            It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.UserDefinedFunctionIdInvalid -f 'a ') `
+                    -ArgumentName 'Test'
+
+                {
+                    Assert-CosmosDbUserDefinedFunctionIdValid -Id 'a ' -ArgumentName 'Test'
+                } | Should -Throw $errorRecord
+            }
+        }
+    }
+
     Describe 'Get-CosmosDbUserDefinedFunctionResourcePath' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name Get-CosmosDbUserDefinedFunctionResourcePath -ErrorAction Stop } | Should -Not -Throw
