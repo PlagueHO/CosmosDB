@@ -186,7 +186,7 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
-## What is New in CosmosDB 2.1.13.204
+## What is New in CosmosDB Unreleased
 
 November 4, 2018
 
@@ -361,42 +361,6 @@ July 12, 2018
   `Set-CosmosDbCollection` - fixes [Issue #139](https://github.com/PlagueHO/CosmosDB/issues/139)
 - Changed the `IndexingPolicy` parameter on`Set-CosmosDbCollection`
   to be optional - fixes [Issue #140](https://github.com/PlagueHO/CosmosDB/issues/140)
-
-## What is New in CosmosDB 2.1.2.514
-
-July 3, 2018
-
-- Changed `New-CosmosDBContext` so that Read Only keys will use the
-  `readonlykeys` action endpoint instead of the `listKeys` action - fixes
-  [Issue #133](https://github.com/PlagueHO/CosmosDB/issues/133)
-- Fixed freeze occuring in functions when `-ErrorAction SilentlyContinue`
-  parameter was used and error is returned - fixes [Issue #132](https://github.com/PlagueHO/CosmosDB/issues/132)
-
-## What is New in CosmosDB 2.1.1.498
-
-June 26, 2018
-
-- Changed trigger operation type `Insert` to `Create` in `New-CosmosDBTrigger`
-  and `Set-CosmosDBTrigger` functions - fixes [Issue #129](https://github.com/PlagueHO/CosmosDB/issues/129)
-
-## What is New in CosmosDB 2.1.0.487
-
-June 23, 2018
-
-- Removed `UseWebRequest` parameter from `Invoke-CosmosDbReuest` function
-  to refactor out the use of `Invoke-RestMethod`. This is because most
-  Cosmos DB REST requests return additional header information that is
-  lost if using `Invoke-RestMethod`. `Invoke-WebRequest` is used instead
-  so that additional headers can always be retured - See [Issue #125](https://github.com/PlagueHO/CosmosDB/issues/125)
-- Added integration tests for attachments.
-- Added integration tests for stored procedures.
-- Added integration tests for triggers.
-- Added integration tests for user defined functions.
-- Added `New-CosmosDbBackOffPolicy` function for controlling the behaviour
-  of a function when a "Too Many Request" (error code 429) is recieved -
-  See [Issue #87](https://github.com/PlagueHO/CosmosDB/issues/87)
-- Added support for handling a back-off policy to the `Invoke-CosmosDbRequest`
-  function.
             '
         } # End of PSData hashtable
     } # End of PrivateData hashtable
