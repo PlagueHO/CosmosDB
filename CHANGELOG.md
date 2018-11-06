@@ -1,6 +1,6 @@
 # Change Log
 
-## 2.1.13.208
+## Unreleased
 
 - Added new integration tests for testing simple index policies.
 - Split the multiple functions scripts into single functions and
@@ -55,6 +55,7 @@
 - Improved validation on Database parameter on `*-CosmosDBAttachment*` functions.
 - Improved validation on Collection parameter on `*-CosmosDBAttachment*` functions.
 - Improved validation on Document parameter on `*-CosmosDBAttachment*` functions.
+- Added tests to validate module manifest is valud - fixes [Issue #236](https://github.com/PlagueHO/CosmosDB/issues/236).
 
 ## 2.1.12.137
 
