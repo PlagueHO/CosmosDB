@@ -1,6 +1,6 @@
 # Release Notes
 
-## What is New in CosmosDB 2.1.13.208
+## What is New in CosmosDB Unreleased
 
 November 4, 2018
 
@@ -57,6 +57,7 @@ November 4, 2018
 - Improved validation on Database parameter on `*-CosmosDBAttachment*` functions.
 - Improved validation on Collection parameter on `*-CosmosDBAttachment*` functions.
 - Improved validation on Document parameter on `*-CosmosDBAttachment*` functions.
+- Added tests to validate module manifest is valud - fixes [Issue #236](https://github.com/PlagueHO/CosmosDB/issues/236).
 
 ## What is New in CosmosDB 2.1.12.137
 

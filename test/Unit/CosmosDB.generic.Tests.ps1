@@ -18,19 +18,26 @@ Describe 'PSScriptAnalyzer' -Tag 'PSScriptAnalyzer' {
     Import-Module -Name 'PSScriptAnalyzer'
 
     Context 'CosmosDB Module code and CosmosDB Lib Functions' {
-        It 'Passes Invoke-ScriptAnalyzer' {
+        $modulePath = Join-Path -Path $moduleRootPath -ChildPath 'CosmosDB.psm1'
+        $moduleManifestPath = Join-Path -Path $moduleRootPath -ChildPath 'CosmosDB.psd1'
+
+        It 'Should have no Error level PowerShell Script Analyzer violations' {
             # Perform PSScriptAnalyzer scan.
             $PSScriptAnalyzerResult = Invoke-ScriptAnalyzer `
-                -path "$moduleRootPath\CosmosDB.psm1" `
+                -path $modulePath `
                 -Severity Warning `
                 -ErrorAction SilentlyContinue
             $PSScriptAnalyzerResult += Invoke-ScriptAnalyzer `
-                -path "$moduleRootPath\lib\*.ps1" `
+                -path (Join-Path -Path $moduleRootPath -ChildPath 'lib\*.ps1') `
                 -excluderule "PSAvoidUsingUserNameAndPassWordParams" `
                 -Severity Warning `
                 -ErrorAction SilentlyContinue
-            $PSScriptAnalyzerErrors = $PSScriptAnalyzerResult | Where-Object { $_.Severity -eq 'Error' }
-            $PSScriptAnalyzerWarnings = $PSScriptAnalyzerResult | Where-Object { $_.Severity -eq 'Warning' }
+            $PSScriptAnalyzerErrors = $PSScriptAnalyzerResult | Where-Object {
+                $_.Severity -eq 'Error'
+            }
+            $PSScriptAnalyzerWarnings = $PSScriptAnalyzerResult | Where-Object {
+                $_.Severity -eq 'Warning'
+            }
 
             if ($PSScriptAnalyzerErrors -ne $null)
             {
@@ -49,6 +56,16 @@ Describe 'PSScriptAnalyzer' -Tag 'PSScriptAnalyzer' {
                     Write-Warning -Message "$($_.Scriptname) (Line $($_.Line)): $($_.Message)"
                 } )
             }
+        }
+
+        $script:moduleManifest = Test-ModuleManifest -Path $moduleManifestPath -ErrorAction SilentlyContinue
+
+        It 'Should have a valid manifest' {
+            $script:moduleManifest | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should have less than 10000 characters in the release notes of the module manifest' {
+            $script:moduleManifest.ReleaseNotes.Length | Should -BeLessThan 10000
         }
     }
 }
