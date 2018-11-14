@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.1.13.214'
+    ModuleVersion     = '2.1.14.214'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -186,6 +186,13 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+November 15, 2018
+
+- Extended maximum length of Account Name parameter to be 50 characters - fixes
+    [Issue #201](https://github.com/PlagueHO/CosmosDB/issues/201).
+
 ## What is New in CosmosDB 2.1.13.214
 
 November 4, 2018

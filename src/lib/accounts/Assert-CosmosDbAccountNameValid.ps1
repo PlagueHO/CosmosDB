@@ -20,7 +20,7 @@ function Assert-CosmosDbAccountNameValid
         $ArgumentName = 'Name'
     )
 
-    $matches = [regex]::Match($Name,"[A-Za-z0-9\-]{3,31}")
+    $matches = [regex]::Match($Name,"[A-Za-z0-9\-]{3,50}")
     if ($matches.value -ne $Name)
     {
         New-CosmosDbInvalidArgumentException `
