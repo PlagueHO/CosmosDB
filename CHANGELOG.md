@@ -1,5 +1,10 @@
 # Change Log
 
+## Unreleased
+
+- Extended maximum length of Account Name parameter to be 50 characters - fixes
+  [Issue #201](https://github.com/PlagueHO/CosmosDB/issues/201).
+
 ## 2.1.13.214
 
 - Added new integration tests for testing simple index policies.
