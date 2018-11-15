@@ -102,14 +102,14 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'When called with a 32 character name' {
+        Context 'When called with a 51 character name' {
             It 'Should throw expected exception' {
                 $errorRecord = Get-InvalidArgumentRecord `
-                    -Message ($LocalizedData.AccountNameInvalid -f ('a' * 32)) `
+                    -Message ($LocalizedData.AccountNameInvalid -f ('a' * 51)) `
                     -ArgumentName 'Name'
 
                 {
-                    Assert-CosmosDbAccountNameValid -Name ('a' * 32)
+                    Assert-CosmosDbAccountNameValid -Name ('a' * 51)
                 } | Should -Throw $errorRecord
             }
         }
