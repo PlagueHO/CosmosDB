@@ -67,7 +67,7 @@
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '0.12'
+        Version        = '0.12.0'
         Tags           = 'Build'
     }
 
