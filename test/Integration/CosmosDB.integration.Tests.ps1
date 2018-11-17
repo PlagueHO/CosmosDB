@@ -1466,7 +1466,11 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Id | Should -Be "$($script:testCollection)2"
+            <#
+                The order of the collections will be returned in is non-deterministic.
+                Make sure we got one of them.
+            #>
+            $script:result.Id | Should -BeIn @("$($script:testCollection)1", "$($script:testCollection)2")
         }
 
         It 'Should have a continuation token in headers' {
@@ -1485,7 +1489,11 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Id | Should -Be "$($script:testCollection)1"
+            <#
+                The order of the collections will be returned in is non-deterministic.
+                Make sure we got one of them.
+            #>
+            $script:result.Id | Should -BeIn @("$($script:testCollection)1", "$($script:testCollection)2")
         }
     }
 
