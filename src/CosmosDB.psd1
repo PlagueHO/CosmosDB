@@ -191,7 +191,7 @@
 November 17, 2018
 
 - Added support for Continuation Tokens to `Get-CosmosDbCollection`
-    to support getting more than 100 collections - fixes   [Issue #244](https://github.com/PlagueHO/CosmosDB/issues/244).
+    to support getting more than 100 collections - fixes [Issue #244](https://github.com/PlagueHO/CosmosDB/issues/244).
 - Updated markdown documentation with PlatyPs 0.11.1.
 - Corrected markdown documentation for `Get-CosmosDbCollectionSize`.
 - Corrected continuation token examples for `Get-CosmosDbDocument`.
