@@ -356,19 +356,6 @@ August 24, 2018
   leading ''/'' characters in the partition key - fixes [Issue #153](https://github.com/PlagueHO/CosmosDB/issues/153)
 - Add support for setting URI and Key when using with a Cosmos DB
   Emulator - fixes [Issue #155](https://github.com/PlagueHO/CosmosDB/issues/155)
-
-  ## What is New in CosmosDB 2.1.5.548
-
-August 4, 2018
-
-- Changed references to `CosmosDB` to `Cosmos DB` in documentation - fixes [Issue #147](https://github.com/PlagueHO/CosmosDB/issues/147)
-
-## What is New in CosmosDB 2.1.4.536
-
-July 25, 2018
-
-- Added `RemoveDefaultTimeToLive` switch parameter to `Set-CosmosDbCollection`
-  to allow removal of a default time to live setting on a collection - fixes [Issue #144](https://github.com/PlagueHO/CosmosDB/issues/144)
             '
         } # End of PSData hashtable
     } # End of PrivateData hashtable
