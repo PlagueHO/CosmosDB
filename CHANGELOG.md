@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 2.1.15.237
 
 - Added support for Continuation Tokens to `Get-CosmosDbCollection`
   to support getting more than 100 collections - fixes [Issue #244](https://github.com/PlagueHO/CosmosDB/issues/244).
