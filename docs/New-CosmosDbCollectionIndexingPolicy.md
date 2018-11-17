@@ -54,8 +54,42 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: 0
 Default value: True
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ExcludedPath
+
+The array containing document paths to be excluded from indexing.
+
+```yaml
+Type: ExcludedPath[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
+Default value: @()
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IncludedPath
+
+The array containing document paths to be indexed.
+By default, two paths are included: the / path which specifies that all document
+paths be indexed, and the _ts path, which indexes for a timestamp range comparison.
+
+```yaml
+Type: IncludedPath[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
+Default value: @()
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -75,52 +109,18 @@ When using None as the indexing mode, automatic must be set to False.
 Type: String
 Parameter Sets: (All)
 Aliases:
+Accepted values: Consistent, Lazy, None
 
 Required: False
-Position: 2
+Position: 1
 Default value: Consistent
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IncludedPath
-
-The array containing document paths to be indexed.
-By default, two paths are included: the / path which specifies that all document
-paths be indexed, and the _ts path, which indexes for a timestamp range comparison.
-
-```yaml
-Type: IncludedPath[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: @()
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ExcludedPath
-
-The array containing document paths to be excluded from indexing.
-
-```yaml
-Type: ExcludedPath[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 4
-Default value: @()
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

@@ -18,8 +18,7 @@ Create a new collection in a Cosmos DB database.
 ```powershell
 New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>]
- [-IndexingPolicy <CosmosDB.IndexingPolicy.Policy>] [-DefaultTimeToLive <Int32>]
- [-UniqueKeyPolicy <CosmosDB.UniqueKeyPolicy.Policy>] [<CommonParameters>]
+ [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [-UniqueKeyPolicy <Policy>] [<CommonParameters>]
 ```
 
 ### Account
@@ -27,8 +26,7 @@ New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <Strin
 ```powershell
 New-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
  -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>]
- [-IndexingPolicy <CosmosDB.IndexingPolicy.Policy>] [-DefaultTimeToLive <Int32>]
- [-UniqueKeyPolicy <CosmosDB.UniqueKeyPolicy.Policy>] [<CommonParameters>]
+ [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [-UniqueKeyPolicy <Policy>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -65,6 +63,22 @@ seconds.
 
 ## PARAMETERS
 
+### -Account
+
+The account name of the Cosmos DB to access.
+
+```yaml
+Type: String
+Parameter Sets: Account
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Context
 
 This is an object containing the context information of the Cosmos DB database
@@ -82,16 +96,67 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Account
+### -Database
 
-The account name of the Cosmos DB to access.
+The name of the database to access in the Cosmos DB account.
 
 ```yaml
 Type: String
-Parameter Sets: Account
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DefaultTimeToLive
+
+Setting this value to a positive integer will enable the
+time to live on all documents in this collection. If this is
+set to -1 then the default time to live will be infinite.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+
+This is the Id of the collection to create.
+
+```yaml
+Type: String
+Parameter Sets: (All)
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IndexingPolicy
+
+This is an Indexing Policy object that was created by the
+New-CosmosDbCollectionIndexingPolicy function.
+
+```yaml
+Type: Policy
+Parameter Sets: (All)
+Aliases:
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -122,42 +187,11 @@ The type of key that will be used to access ths Cosmos DB.
 Type: String
 Parameter Sets: (All)
 Aliases:
+Accepted values: master, resource
 
 Required: False
 Position: Named
 Default value: Master
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Database
-
-The name of the database to access in the Cosmos DB account.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-
-This is the Id of the collection to create.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -191,6 +225,7 @@ If specified OfferThroughput should not be specified.
 Type: String
 Parameter Sets: (All)
 Aliases:
+Accepted values: S1, S2, S3
 
 Required: False
 Position: Named
@@ -216,48 +251,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IndexingPolicy
-
-This is an Indexing Policy object that was created by the
-New-CosmosDbCollectionIndexingPolicy function.
-
-```yaml
-Type: CosmosDB.IndexingPolicy.Policy
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DefaultTimeToLive
-
-Setting this value to a positive integer will enable the
-time to live on all documents in this collection. If this is
-set to -1 then the default time to live will be infinite.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -UniqueKeyPolicy
 
 This is a Unique Key Policy object that was created by the
 New-CosmosDbCollectionUniquePolicy function.
 
 ```yaml
-Type: CosmosDB.UniqueKeyPolicy.Policy
+Type: Policy
 Parameter Sets: (All)
 Aliases:
 
@@ -270,8 +270,7 @@ Accept wildcard characters: False
 
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

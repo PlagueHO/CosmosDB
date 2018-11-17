@@ -1439,6 +1439,78 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    # Test retrieval of collections using maximum item count and continuation token
+    Context 'When creating two new collections' {
+        It 'Should not throw an exception' {
+            $null = New-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id "$($script:testCollection)1" `
+                -Verbose
+
+            $null = New-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id "$($script:testCollection)2" `
+                -Verbose
+        }
+    }
+
+    $script:ResponseHeader = $null
+
+    Context 'When getting collections using a maximum item count of 1' {
+        It 'Should not throw an exception' {
+            $script:result = Get-CosmosDbCollection `
+                -Context $script:testContext `
+                -MaxItemCount 1 `
+                -ResponseHeader ([ref] $script:ResponseHeader) `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            <#
+                The order of the collections will be returned in is non-deterministic.
+                Make sure we got one of them.
+            #>
+            $script:result.Id | Should -BeIn @("$($script:testCollection)1", "$($script:testCollection)2")
+        }
+
+        It 'Should have a continuation token in headers' {
+            $script:ResponseHeader.'x-ms-continuation' | Should -Not -BeNullOrEmpty
+        }
+
+    }
+
+    Context 'When getting collections using a maximum item count of 1 and a continuation token' {
+        It 'Should not throw an exception' {
+            $script:result = Get-CosmosDbCollection `
+                -Context $script:testContext `
+                -MaxItemCount 1 `
+                -ContinuationToken ([String] $script:ResponseHeader.'x-ms-continuation') `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            <#
+                The order of the collections will be returned in is non-deterministic.
+                Make sure we got one of them.
+            #>
+            $script:result.Id | Should -BeIn @("$($script:testCollection)1", "$($script:testCollection)2")
+        }
+    }
+
+    Context 'When removing the two new collections' {
+        It 'Should not throw an exception' {
+            Remove-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id "$($script:testCollection)1" `
+                -Verbose
+
+            Remove-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id "$($script:testCollection)2" `
+                -Verbose
+        }
+    }
+
     Context 'When removing existing database' {
         It 'Should not throw an exception' {
             $script:result = Remove-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase -Verbose

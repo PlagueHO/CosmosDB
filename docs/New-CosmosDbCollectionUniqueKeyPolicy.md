@@ -15,7 +15,7 @@ New-CosmosDbCollection function.
 ## SYNTAX
 
 ```powershell
-New-CosmosDbCollectionUniqueKeyPolicy [-UniqueKey] <CosmosDB.UniqueKeyPolicy.UniqueKey[]> [<CommonParameters>]
+New-CosmosDbCollectionUniqueKeyPolicy [-UniqueKey] <UniqueKey[]> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -47,7 +47,7 @@ The array containing unique keys that will be enforced in the policy.
 The New-CosmosDbCollectionUniqueKey function should be used to generate the unique key.
 
 ```yaml
-Type: CosmosDB.UniqueKeyPolicy.UniqueKey[]
+Type: UniqueKey[]
 Parameter Sets: (All)
 Aliases:
 
@@ -60,8 +60,7 @@ Accept wildcard characters: False
 
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

@@ -24,6 +24,9 @@ InModuleScope CosmosDB {
         KeyType  = 'master'
         BaseUri  = ('https://{0}.documents.azure.com/' -f $script:testAccount)
     }
+    $script:testHeaders = [PSObject] @{
+        'x-ms-continuation' = 'test'
+    }
     $script:testCollection1 = 'testCollection1'
     $script:testCollection2 = 'testCollection2'
     $script:testJsonMulti = @'
@@ -42,6 +45,7 @@ InModuleScope CosmosDB {
 '@
     $script:testGetCollectionResultMulti = @{
         Content = $script:testJsonMulti
+        Headers = $script:testHeaders
     }
     $script:testJsonSingle = @'
 {
@@ -552,6 +556,42 @@ InModuleScope CosmosDB {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
                     -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'colls' -and $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) } `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and no Id but with MaxItemCount and ContinuationToken and with headers returned' {
+            $script:result = $null
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetCollectionResultMulti }
+
+            It 'Should not throw an exception' {
+                $script:ResponseHeader = $null
+
+                $getCosmosDbCollectionParameters = @{
+                    Context           = $script:testContext
+                    MaxItemCount      = 5
+                    ContinuationToken = 'token'
+                    ResponseHeader     = [ref] $script:ResponseHeader
+                    Verbose           = $true
+                }
+
+                $script:result = Get-CosmosDbCollection @getCosmosDbCollectionParameters
+            }
+
+            It 'Should return expected result' {
+                $script:result.Count | Should -Be 2
+                $script:result[0].id | Should -Be $script:testCollection1
+                $script:result[1].id | Should -Be $script:testCollection2
+                $script:ResponseHeader.'x-ms-continuation' | Should -Be 'test'
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter { $Method -eq 'Get' -and $ResourceType -eq 'colls' -and $Headers['x-ms-continuation'] -eq 'token' -and $Headers['x-ms-max-item-count'] -eq 5 } `
                     -Exactly -Times 1
             }
         }
@@ -1069,7 +1109,7 @@ InModuleScope CosmosDB {
                     $BodyObject.uniqueKeyPolicy.uniqueKeys[0].paths[0] -eq $script:testUniqueKeyA.paths[0] -and `
                     $BodyObject.uniqueKeyPolicy.uniqueKeys[0].paths[1] -eq $script:testUniqueKeyA.paths[1] -and `
                     $BodyObject.uniqueKeyPolicy.uniqueKeys[1].paths[0] -eq $script:testUniqueKeyB.paths[0] -and 1
-                    $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
+                $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
                     $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind
             }
             $getcosmosdbcollection_parameterfilter = {
@@ -1086,10 +1126,10 @@ InModuleScope CosmosDB {
 
             It 'Should not throw an exception' {
                 $setCosmosDbCollectionParameters = @{
-                    Context        = $script:testContext
-                    Id             = $script:testCollection1
+                    Context         = $script:testContext
+                    Id              = $script:testCollection1
                     UniqueKeyPolicy = $script:testUniqueKeyPolicy
-                    Verbose        = $true
+                    Verbose         = $true
                 }
 
                 $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters

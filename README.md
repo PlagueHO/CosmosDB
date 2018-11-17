@@ -318,6 +318,21 @@ Get a specified collection from a database:
 Get-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection'
 ```
 
+Get the first 5 collections from a database with a continuation token to
+allow retrieval of further collections:
+
+```powershell
+$ResponseHeader = $null
+$collections = Get-CosmosDbCollection -Context $cosmosDbContext -MaxItemCount 5 -ResponseHeader ([ref] $ResponseHeader)
+$continuationToken = [String] $ResponseHeader.'x-ms-continuation'
+```
+
+Get the next 5 collections from a database using a continuation token:
+
+```powershell
+$collections = Get-CosmosDbCollection -Context $cosmosDbContext -MaxItemCount 5 -ContinuationToken $continuationToken
+```
+
 Delete a collection from the database:
 
 ```powershell
@@ -430,9 +445,9 @@ New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -
 Get the first 5 documents from the collection in the database:
 
 ```powershell
-$resultHeaders = ''
-$documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -MaxItemCount 5 -ResultHeaders $resultHeaders
-$continuationToken = $resultHeaders.value.'x-ms-continuation'
+$ResponseHeader = $null
+$documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -MaxItemCount 5 -ResponseHeader ([ref] $ResponseHeader)
+$continuationToken = [String] $ResponseHeader.'x-ms-continuation'
 ```
 
 Get the next 5 documents from a collection in the database using
