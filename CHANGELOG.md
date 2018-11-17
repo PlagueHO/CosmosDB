@@ -9,6 +9,9 @@
 - Corrected continuation token examples for `Get-CosmosDbDocument`.
 - Updated CI pipeline to use Pester 4.4.2.
 - Updated CI pipeline to use PlatyPS 0.12.
+- Renamed `ResultHeaders` parameter to `ResponseHeader` in
+  `Get-CosmosDbDocuments` function to adhere to PowerShell standards,
+  but included alias for `ResultHeaders` to prevent breaking change.
 
 ## 2.1.14.220
 

@@ -1454,14 +1454,14 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    $script:resultHeaders = $null
+    $script:ResponseHeader = $null
 
     Context 'When getting collections using a maximum item count of 1' {
         It 'Should not throw an exception' {
             $script:result = Get-CosmosDbCollection `
                 -Context $script:testContext `
                 -MaxItemCount 1 `
-                -ResultHeaders ([ref] $script:resultHeaders) `
+                -ResponseHeader ([ref] $script:ResponseHeader) `
                 -Verbose
         }
 
@@ -1474,7 +1474,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should have a continuation token in headers' {
-            $script:resultHeaders.'x-ms-continuation' | Should -Not -BeNullOrEmpty
+            $script:ResponseHeader.'x-ms-continuation' | Should -Not -BeNullOrEmpty
         }
 
     }
@@ -1484,7 +1484,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result = Get-CosmosDbCollection `
                 -Context $script:testContext `
                 -MaxItemCount 1 `
-                -ContinuationToken $script:resultHeaders.'x-ms-continuation' `
+                -ContinuationToken ([String] $script:ResponseHeader.'x-ms-continuation') `
                 -Verbose
         }
 

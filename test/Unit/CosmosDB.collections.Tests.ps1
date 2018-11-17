@@ -568,13 +568,13 @@ InModuleScope CosmosDB {
                 -MockWith { $script:testGetCollectionResultMulti }
 
             It 'Should not throw an exception' {
-                $script:resultHeaders = $null
+                $script:ResponseHeader = $null
 
                 $getCosmosDbCollectionParameters = @{
                     Context           = $script:testContext
                     MaxItemCount      = 5
                     ContinuationToken = 'token'
-                    ResultHeaders     = [ref] $script:resultHeaders
+                    ResponseHeader     = [ref] $script:ResponseHeader
                     Verbose           = $true
                 }
 
@@ -585,7 +585,7 @@ InModuleScope CosmosDB {
                 $script:result.Count | Should -Be 2
                 $script:result[0].id | Should -Be $script:testCollection1
                 $script:result[1].id | Should -Be $script:testCollection2
-                $script:resultHeaders.'x-ms-continuation' | Should -Be 'test'
+                $script:ResponseHeader.'x-ms-continuation' | Should -Be 'test'
             }
 
             It 'Should call expected mocks' {

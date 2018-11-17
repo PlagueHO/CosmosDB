@@ -226,12 +226,12 @@ InModuleScope CosmosDB {
                 -MockWith { $script:testGetDocumentResultMulti }
 
             It 'Should not throw exception' {
-                $script:resultHeaders = $null
+                $script:ResponseHeader = $null
 
                 $getCosmosDbDocumentParameters = @{
                     Context       = $script:testContext
                     CollectionId  = $script:testCollection
-                    ResultHeaders = [ref] $script:resultHeaders
+                    ResponseHeader = [ref] $script:ResponseHeader
                 }
 
                 { $script:result = Get-CosmosDbDocument @getCosmosDbDocumentParameters } | Should -Not -Throw
@@ -241,7 +241,7 @@ InModuleScope CosmosDB {
                 $script:result.Count | Should -Be 2
                 $script:result[0].id | Should -Be $script:testDocument1
                 $script:result[1].id | Should -Be $script:testDocument2
-                $script:resultHeaders.'x-ms-continuation' | Should -Be 'test'
+                $script:ResponseHeader.'x-ms-continuation' | Should -Be 'test'
             }
 
             It 'Should call expected mocks' {

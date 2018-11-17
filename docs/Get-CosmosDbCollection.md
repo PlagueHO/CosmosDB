@@ -17,7 +17,7 @@ Return the collections in a Cosmos DB database.
 
 ```powershell
 Get-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- [-Id <String>] [-MaxItemCount <Int32>] [-ContinuationToken <String>] [-ResultHeaders <PSReference>]
+ [-Id <String>] [-MaxItemCount <Int32>] [-ContinuationToken <String>] [-ResponseHeader <PSReference>]
  [<CommonParameters>]
 ```
 
@@ -25,7 +25,7 @@ Get-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <Strin
 
 ```powershell
 Get-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- [-Id <String>] [-MaxItemCount <Int32>] [-ContinuationToken <String>] [-ResultHeaders <PSReference>]
+ [-Id <String>] [-MaxItemCount <Int32>] [-ContinuationToken <String>] [-ResponseHeader <PSReference>]
  [<CommonParameters>]
 ```
 
@@ -60,9 +60,9 @@ Get a the MyNewCollection collection from a database.
 ### Example 3
 
 ```powershell
-PS C:\> $resultHeaders = $null
-PS C:\> $collections = Get-CosmosDbCollection -Context $cosmosDbContext -MaxItemCount 5 -ResultHeaders ([ref] $resultHeaders)
-PS C:\> $continuationToken = $resultHeaders.'x-ms-continuation'
+PS C:\> $ResponseHeader = $null
+PS C:\> $collections = Get-CosmosDbCollection -Context $cosmosDbContext -MaxItemCount 5 -ResponseHeader ([ref] $ResponseHeader)
+PS C:\> $continuationToken = [String] $ResponseHeader.'x-ms-continuation'
 ```
 
 Get the first 5 collection from the the database storing a continuation
@@ -214,7 +214,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ResultHeaders
+### -ResponseHeader
 
 This is a reference variable that will be used to return the
 hashtable that contains any headers returned by the request.

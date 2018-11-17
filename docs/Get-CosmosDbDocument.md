@@ -20,7 +20,7 @@ Get-CosmosDbDocument -Context <Context> [-Key <SecureString>] [-KeyType <String>
  -CollectionId <String> [-Id <String>] [-PartitionKey <String[]>] [-MaxItemCount <Int32>]
  [-ContinuationToken <String>] [-ConsistencyLevel <String>] [-SessionToken <String>]
  [-PartitionKeyRangeId <String>] [-Query <String>] [-QueryParameters <Hashtable[]>]
- [-QueryEnableCrossPartition <Boolean>] [-ResultHeaders <PSReference>] [<CommonParameters>]
+ [-QueryEnableCrossPartition <Boolean>] [-ResponseHeader <PSReference>] [<CommonParameters>]
 ```
 
 ### Account
@@ -30,7 +30,7 @@ Get-CosmosDbDocument -Account <String> [-Key <SecureString>] [-KeyType <String>]
  -CollectionId <String> [-Id <String>] [-PartitionKey <String[]>] [-MaxItemCount <Int32>]
  [-ContinuationToken <String>] [-ConsistencyLevel <String>] [-SessionToken <String>]
  [-PartitionKeyRangeId <String>] [-Query <String>] [-QueryParameters <Hashtable[]>]
- [-QueryEnableCrossPartition <Boolean>] [-ResultHeaders <PSReference>] [<CommonParameters>]
+ [-QueryEnableCrossPartition <Boolean>] [-ResponseHeader <PSReference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -56,9 +56,9 @@ Return a document with a Id 'ac12345' from a collection in the database.
 ### Example 2
 
 ```powershell
-PS C:\> $resultHeaders = $null
-PS C:\> $documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -MaxItemCount 5 -ResultHeaders ([ref] $resultHeaders)
-PS C:\> $continuationToken = $resultHeaders.'x-ms-continuation'
+PS C:\> $ResponseHeader = $null
+PS C:\> $documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -MaxItemCount 5 -ResponseHeader ([ref] $ResponseHeader)
+PS C:\> $continuationToken = [String] $ResponseHeader.'x-ms-continuation'
 ```
 
 Get the first 5 documents from the collection in the database
@@ -353,7 +353,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ResultHeaders
+### -ResponseHeader
 
 This is a reference variable that will be used to return the
 hashtable that contains any headers returned by the request.

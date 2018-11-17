@@ -48,16 +48,16 @@ function Get-CosmosDbCollection
 
         [Parameter()]
         [ref]
-        $ResultHeaders
+        $ResponseHeader
     )
 
     $null = $PSBoundParameters.Remove('MaxItemCount')
     $null = $PSBoundParameters.Remove('ContinuationToken')
 
-    if ($PSBoundParameters.ContainsKey('ResultHeaders'))
+    if ($PSBoundParameters.ContainsKey('ResponseHeader'))
     {
-        $resultHeadersPassed = $true
-        $null = $PSBoundParameters.Remove('ResultHeaders')
+        $ResponseHeaderPassed = $true
+        $null = $PSBoundParameters.Remove('ResponseHeader')
     }
 
     if ($PSBoundParameters.ContainsKey('Id'))
@@ -94,10 +94,10 @@ function Get-CosmosDbCollection
     }
 
 
-    if ($resultHeadersPassed)
+    if ($ResponseHeaderPassed)
     {
         # Return the result headers
-        $ResultHeaders.value = $result.Headers
+        $ResponseHeader.value = $result.Headers
     }
 
     if ($collection)

@@ -322,9 +322,9 @@ Get the first 5 collections from a database with a continuation token to
 allow retrieval of further collections:
 
 ```powershell
-$resultHeaders = $null
-$collections = Get-CosmosDbCollection -Context $cosmosDbContext -MaxItemCount 5 -ResultHeaders ([ref] $resultHeaders)
-$continuationToken = $resultHeaders.'x-ms-continuation'
+$ResponseHeader = $null
+$collections = Get-CosmosDbCollection -Context $cosmosDbContext -MaxItemCount 5 -ResponseHeader ([ref] $ResponseHeader)
+$continuationToken = [String] $ResponseHeader.'x-ms-continuation'
 ```
 
 Get the next 5 collections from a database using a continuation token:
@@ -445,9 +445,9 @@ New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -
 Get the first 5 documents from the collection in the database:
 
 ```powershell
-$resultHeaders = $null
-$documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -MaxItemCount 5 -ResultHeaders ([ref] $resultHeaders)
-$continuationToken = $resultHeaders.'x-ms-continuation'
+$ResponseHeader = $null
+$documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -MaxItemCount 5 -ResponseHeader ([ref] $ResponseHeader)
+$continuationToken = [String] $ResponseHeader.'x-ms-continuation'
 ```
 
 Get the next 5 documents from a collection in the database using
