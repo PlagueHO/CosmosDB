@@ -16,8 +16,7 @@ are recieved.
 ## SYNTAX
 
 ```powershell
-New-CosmosDbBackoffPolicy [-MaxRetries] <Int32> [-Method] <String> [-Delay] <Int32>
- [<CommonParameters>]
+New-CosmosDbBackoffPolicy [[-MaxRetries] <Int32>] [[-Method] <String>] [[-Delay] <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -163,6 +162,24 @@ being 983ms.
 
 ## PARAMETERS
 
+### -Delay
+
+This is the number of milliseconds to wait before retrying the
+last request. The behavior of this value depends on the method.
+See the description of this function for more detail.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
+Default value: 5000
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -MaxRetries
 
 This is the number of times to retry the request if a 429 error
@@ -173,7 +190,7 @@ Type: Int32
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 0
 Default value: 10
 Accept pipeline input: False
@@ -188,46 +205,26 @@ This is the back-off method of the policy.
 Type: String
 Parameter Sets: (All)
 Aliases:
+Accepted values: Default, Additive, Linear, Exponential, Random
 
-Required: True
+Required: False
 Position: 1
 Default value: Default
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Delay
-
-This is the number of milliseconds to wait before retrying the
-last request. The behavior of this value depends on the method.
-See the description of this function for more detail.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 2
-Default value: 5000
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None
 
-
 ## OUTPUTS
 
 ### System.Management.Automation.PSCustomObject
-
 
 ## NOTES
 

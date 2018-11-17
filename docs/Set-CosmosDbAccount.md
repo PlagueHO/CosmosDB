@@ -14,7 +14,7 @@ Update the properties of an existing Azure Cosmos DB account.
 ## SYNTAX
 
 ```powershell
-Set-CosmosDbAccount [-Name] <String> [-ResourceGroupName] <String> [-Location] <String>
+Set-CosmosDbAccount [-Name] <String> [-ResourceGroupName] <String> [[-Location] <String>]
  [[-LocationRead] <String[]>] [[-DefaultConsistencyLevel] <String>] [[-MaxIntervalInSeconds] <Int32>]
  [[-MaxStalenessPrefix] <Int32>] [[-IpRangeFilter] <String[]>] [-AsJob] [-WhatIf] [-Confirm]
  [<CommonParameters>]
@@ -131,7 +131,7 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 2
 Default value: None
 Accept pipeline input: False
@@ -181,7 +181,7 @@ Accept wildcard characters: False
 
 When used with Bounded Staleness consistency, this value represents
 the number of stale requests tolerated. Accepted range for this value
-is 1 – 2,147,483,647. This value should only be set when the
+is 1 - 2,147,483,647. This value should only be set when the
 DefaultConsistencyLevel is BoundedStaleness.
 
 If not specified th value 100 will be used.
@@ -250,18 +250,15 @@ Accept wildcard characters: False
 
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None
 
-
 ## OUTPUTS
 
 ### System.Object
-
 
 ## NOTES
 

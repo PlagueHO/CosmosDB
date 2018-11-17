@@ -67,6 +67,38 @@ document using UTF-8 encoding.
 
 ## PARAMETERS
 
+### -Account
+
+The account name of the Cosmos DB to access.
+
+```yaml
+Type: String
+Parameter Sets: Account
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CollectionId
+
+This is the Id of the collection to update the document for.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Context
 
 This is an object containing the context information of the Cosmos DB database
@@ -84,13 +116,32 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Account
+### -Database
 
-The account name of the Cosmos DB to access.
+The name of the database to access in the Cosmos DB account.
 
 ```yaml
 Type: String
-Parameter Sets: Account
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DocumentBody
+
+This is the body of the document to update.
+It must be
+formatted as a JSON string and contain the Id value of the
+document to create.
+
+```yaml
+Type: String
+Parameter Sets: (All)
 Aliases:
 
 Required: True
@@ -100,14 +151,51 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Database
+### -Encoding
 
-The name of the database to access in the Cosmos DB account.
+This parameter allows the Encoding to be set to UTF-8 for documents that contain
+non-ASCII characters. If this parameter is not specified the default encoding is
+used.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
+Accepted values: Default, UTF-8
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+
+This is the Id of the document to update.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IndexingDirective
+
+Include includes the document in the indexing path while
+Exclude omits the document from indexing.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+Accepted values: Include, Exclude
 
 Required: False
 Position: Named
@@ -140,78 +228,11 @@ The type of key that will be used to access ths Cosmos DB.
 Type: String
 Parameter Sets: Account
 Aliases:
+Accepted values: master, resource
 
 Required: False
 Position: Named
 Default value: Master
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CollectionId
-
-This is the Id of the collection to update the document for.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-
-This is the Id of the document to update.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DocumentBody
-
-This is the body of the document to update.
-It must be
-formatted as a JSON string and contain the Id value of the
-document to create.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IndexingDirective
-
-Include includes the document in the indexing path while
-Exclude omits the document from indexing.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -234,27 +255,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Encoding
-
-This parameter allows the Encoding to be set to UTF-8 for documents that contain
-non-ASCII characters. If this parameter is not specified the default encoding is
-used.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

@@ -17,16 +17,16 @@ Update an existing collection in a Cosmos DB database.
 
 ```powershell
 Set-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -Id <String> [-IndexingPolicy <CosmosDB.IndexingPolicy.Policy>] [-DefaultTimeToLive <Int32>]
- [-RemoveDefaultTimeToLive <Switch>] [-UniqueKeyPolicy <CosmosDB.UniqueKeyPolicy.Policy>] [<CommonParameters>]
+ -Id <String> [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [-RemoveDefaultTimeToLive]
+ [-UniqueKeyPolicy <Policy>] [<CommonParameters>]
 ```
 
 ### Account
 
 ```powershell
 Set-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -Id <String> [-IndexingPolicy <CosmosDB.IndexingPolicy.Policy>] [-DefaultTimeToLive <Int32>]
- [-RemoveDefaultTimeToLive <Switch>] [-UniqueKeyPolicy <CosmosDB.UniqueKeyPolicy.Policy>] [<CommonParameters>]
+ -Id <String> [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [-RemoveDefaultTimeToLive]
+ [-UniqueKeyPolicy <Policy>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -68,6 +68,22 @@ setting.
 
 ## PARAMETERS
 
+### -Account
+
+The account name of the Cosmos DB to access.
+
+```yaml
+Type: String
+Parameter Sets: Account
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Context
 
 This is an object containing the context information of the Cosmos DB database
@@ -85,60 +101,30 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Account
-
-The account name of the Cosmos DB to access.
-
-```yaml
-Type: String
-Parameter Sets: Account
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Key
-
-The key to be used to access this Cosmos DB.
-
-```yaml
-Type: SecureString
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -KeyType
-
-The type of key that will be used to access ths Cosmos DB.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: Master
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Database
 
 The name of the database to access in the Cosmos DB account.
 
 ```yaml
 Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DefaultTimeToLive
+
+Setting this value to a positive integer will enable the
+time to live on all documents in this collection. If this is
+set to -1 then the default time to live will be infinite.
+
+```yaml
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
@@ -171,7 +157,7 @@ This is an Indexing Policy object that was created by the
 Set-CosmosDbCollectionIndexingPolicy function.
 
 ```yaml
-Type: CosmosDB.IndexingPolicy.Policy
+Type: Policy
 Parameter Sets: (All)
 Aliases:
 
@@ -182,20 +168,35 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DefaultTimeToLive
+### -Key
 
-Setting this value to a positive integer will enable the
-time to live on all documents in this collection. If this is
-set to -1 then the default time to live will be infinite.
+The key to be used to access this Cosmos DB.
 
 ```yaml
-Type: Int32
+Type: SecureString
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -KeyType
+
+The type of key that will be used to access ths Cosmos DB.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+Accepted values: master, resource
+
+Required: False
+Position: Named
+Default value: Master
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -208,7 +209,7 @@ This switch should not be set if the DefaultTimeToLive
 parameter is specified.
 
 ```yaml
-Type: Switch
+Type: SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
@@ -225,7 +226,7 @@ This is a Unique Key Policy object that was created by the
 New-CosmosDbCollectionUniquePolicy function.
 
 ```yaml
-Type: CosmosDB.UniqueKeyPolicy.Policy
+Type: Policy
 Parameter Sets: (All)
 Aliases:
 
@@ -238,8 +239,7 @@ Accept wildcard characters: False
 
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

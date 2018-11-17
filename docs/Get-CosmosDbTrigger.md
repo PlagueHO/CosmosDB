@@ -53,6 +53,38 @@ Get the 'eventhub' trigger from a collection in the database.
 
 ## PARAMETERS
 
+### -Account
+
+The account name of the Cosmos DB to access.
+
+```yaml
+Type: String
+Parameter Sets: Account
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CollectionId
+
+This is the id of the collection to get the triggers for.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Context
 
 This is an object containing the context information of the Cosmos DB database
@@ -70,16 +102,32 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Account
+### -Database
 
-The account name of the Cosmos DB to access.
+The name of the database to access in the Cosmos DB account.
 
 ```yaml
 Type: String
-Parameter Sets: Account
+Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+
+This is the id of the trigger to return.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -110,6 +158,7 @@ The type of key that will be used to access ths Cosmos DB.
 Type: String
 Parameter Sets: (All)
 Aliases:
+Accepted values: master, resource
 
 Required: False
 Position: Named
@@ -118,58 +167,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Database
-
-The name of the database to access in the Cosmos DB account.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CollectionId
-
-This is the id of the collection to get the triggers for.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-
-This is the id of the trigger to return.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
