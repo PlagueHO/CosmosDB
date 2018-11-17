@@ -347,15 +347,6 @@ September 3, 2018
   have Administrator/Root access.
 - Skip test for `Convert-CosmosDbRequestBody` when run in Linux/OSx using
   PowerShell Core due to behavior difference - see [PowerShell Core #Issue](https://github.com/PowerShell/PowerShell/issues/7693)
-
-## What is New in CosmosDB 2.1.6.561
-
-August 24, 2018
-
-- Updated partition key handling when creating collections to allow for
-  leading ''/'' characters in the partition key - fixes [Issue #153](https://github.com/PlagueHO/CosmosDB/issues/153)
-- Add support for setting URI and Key when using with a Cosmos DB
-  Emulator - fixes [Issue #155](https://github.com/PlagueHO/CosmosDB/issues/155)
             '
         } # End of PSData hashtable
     } # End of PrivateData hashtable
