@@ -34,8 +34,31 @@ function Get-CosmosDbCollection
         [Parameter()]
         [ValidateScript({ Assert-CosmosDbCollectionIdValid -Id $_ })]
         [System.String]
-        $Id
+        $Id,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.Int32]
+        $MaxItemCount = -1,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $ContinuationToken,
+
+        [Parameter()]
+        [ref]
+        $ResponseHeader
     )
+
+    $null = $PSBoundParameters.Remove('MaxItemCount')
+    $null = $PSBoundParameters.Remove('ContinuationToken')
+
+    if ($PSBoundParameters.ContainsKey('ResponseHeader'))
+    {
+        $ResponseHeaderPassed = $true
+        $null = $PSBoundParameters.Remove('ResponseHeader')
+    }
 
     if ($PSBoundParameters.ContainsKey('Id'))
     {
@@ -50,12 +73,31 @@ function Get-CosmosDbCollection
     }
     else
     {
+        $headers = @{
+            'x-ms-max-item-count' = $MaxItemCount
+        }
+
+        if (-not [String]::IsNullOrEmpty($ContinuationToken))
+        {
+            $headers += @{
+                'x-ms-continuation' = $ContinuationToken
+            }
+        }
+
         $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
-            -ResourceType 'colls'
+            -ResourceType 'colls' `
+            -Headers $headers
 
         $body = ConvertFrom-Json -InputObject $result.Content
         $collection = $body.DocumentCollections
+    }
+
+
+    if ($ResponseHeaderPassed)
+    {
+        # Return the result headers
+        $ResponseHeader.value = $result.Headers
     }
 
     if ($collection)

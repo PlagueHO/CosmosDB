@@ -15,8 +15,8 @@ context.
 ## SYNTAX
 
 ```powershell
-New-CosmosDbContextToken [-Resource] <String> [-TimeStamp] <DateTime> [-Token] <SecureString>
- [<CommonParameters>]
+New-CosmosDbContextToken [-Resource] <String> [-TimeStamp] <DateTime> [[-TokenExpiry] <Int32>]
+ [-Token] <SecureString> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -75,24 +75,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -TokenExpiry
-
-This is the number of seconds the token will be valid for. It is
-added to the TimeStamp parameter to calculate the expected expiration
-date/time of the token.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 2
-Default value: 3600
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Token
 
 This is the token retrieved from a Cosmos DB user permission for
@@ -110,20 +92,35 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -TokenExpiry
+
+This is the number of seconds the token will be valid for. It is
+added to the TimeStamp parameter to calculate the expected expiration
+date/time of the token.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
+Default value: 3600
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None
 
-
 ## OUTPUTS
 
 ### System.Management.Automation.PSCustomObject
-
 
 ## NOTES
 

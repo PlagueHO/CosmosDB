@@ -41,6 +41,23 @@ the path '/*'.
 
 ## PARAMETERS
 
+### -Index
+
+This is an array of included path index objects that were created by
+New-CosmosDbCollectionIncludedPath.
+
+```yaml
+Type: Index[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Path
 
 Path for which the indexing behavior applies to.
@@ -61,33 +78,15 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: 0
 Default value: /*
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Index
-
-This is an array of included path index objects that were created by
-New-CosmosDbCollectionIncludedPath.
-
-```yaml
-Type: Index[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 2
-Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

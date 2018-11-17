@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.1.14.220'
+    ModuleVersion     = '2.1.15.220'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -186,6 +186,21 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+November 17, 2018
+
+- Added support for Continuation Tokens to `Get-CosmosDbCollection`
+    to support getting more than 100 collections - fixes [Issue #244](https://github.com/PlagueHO/CosmosDB/issues/244).
+- Updated markdown documentation with PlatyPs 0.11.1.
+- Corrected markdown documentation for `Get-CosmosDbCollectionSize`.
+- Corrected continuation token examples for `Get-CosmosDbDocument`.
+- Updated CI pipeline to use Pester 4.4.2.
+- Updated CI pipeline to use PlatyPS 0.12.
+- Renamed `ResultHeaders` parameter to `ResponseHeader` in
+  `Get-CosmosDbDocuments` function to adhere to PowerShell standards,
+  but included alias for `ResultHeaders` to prevent breaking change.
+
 ## What is New in CosmosDB 2.1.14.220
 
 November 15, 2018
@@ -335,28 +350,6 @@ September 3, 2018
   have Administrator/Root access.
 - Skip test for `Convert-CosmosDbRequestBody` when run in Linux/OSx using
   PowerShell Core due to behavior difference - see [PowerShell Core #Issue](https://github.com/PowerShell/PowerShell/issues/7693)
-
-## What is New in CosmosDB 2.1.6.561
-
-August 24, 2018
-
-- Updated partition key handling when creating collections to allow for
-  leading ''/'' characters in the partition key - fixes [Issue #153](https://github.com/PlagueHO/CosmosDB/issues/153)
-- Add support for setting URI and Key when using with a Cosmos DB
-  Emulator - fixes [Issue #155](https://github.com/PlagueHO/CosmosDB/issues/155)
-
-  ## What is New in CosmosDB 2.1.5.548
-
-August 4, 2018
-
-- Changed references to `CosmosDB` to `Cosmos DB` in documentation - fixes [Issue #147](https://github.com/PlagueHO/CosmosDB/issues/147)
-
-## What is New in CosmosDB 2.1.4.536
-
-July 25, 2018
-
-- Added `RemoveDefaultTimeToLive` switch parameter to `Set-CosmosDbCollection`
-  to allow removal of a default time to live setting on a collection - fixes [Issue #144](https://github.com/PlagueHO/CosmosDB/issues/144)
             '
         } # End of PSData hashtable
     } # End of PrivateData hashtable

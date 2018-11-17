@@ -14,8 +14,8 @@ Delete a Cosmos DB account from Azure.
 ## SYNTAX
 
 ```powershell
-Remove-CosmosDbAccount [-Name] <String> [-ResourceGroupName] <String> [-Force] [-WhatIf] [-Confirm]
-[-AsJob] [<CommonParameters>]
+Remove-CosmosDbAccount [-Name] <String> [-ResourceGroupName] <String> [-AsJob] [-Force] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -138,13 +138,11 @@ Accept wildcard characters: False
 
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None
-
 
 ## OUTPUTS
 

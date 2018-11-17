@@ -46,6 +46,56 @@ Rename the Id of an attachment for a document in a collection.
 
 ## PARAMETERS
 
+### -Account
+
+The account name of the Cosmos DB to access.
+
+```yaml
+Type: String
+Parameter Sets: Account
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CollectionId
+
+This is the Id of the collection to update the attachment for.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ContentType
+
+Not Required to be set when attaching raw media.
+This is a user settable property.
+It notes the content type of the attachment.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Context
 
 This is an object containing the context information of the Cosmos DB database
@@ -55,22 +105,6 @@ that will be deleted. It should be created by \`New-CosmosDbContext\`.
 Type: Context
 Parameter Sets: Context
 Aliases: Connection
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Account
-
-The account name of the Cosmos DB to access.
-
-```yaml
-Type: String
-Parameter Sets: Account
-Aliases:
 
 Required: True
 Position: Named
@@ -89,54 +123,6 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Key
-
-The key to be used to access this Cosmos DB.
-
-```yaml
-Type: SecureString
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -KeyType
-
-The type of key that will be used to access ths Cosmos DB.
-
-```yaml
-Type: String
-Parameter Sets: Account
-Aliases:
-
-Required: False
-Position: Named
-Default value: Master
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CollectionId
-
-This is the Id of the collection to update the attachment for.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -175,12 +161,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -NewId
+### -Key
 
-This is the new Id of the attachment if renaming the attachment.
+The key to be used to access this Cosmos DB.
 
 ```yaml
-Type: String
+Type: SecureString
 Parameter Sets: (All)
 Aliases:
 
@@ -191,20 +177,19 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ContentType
+### -KeyType
 
-Not Required to be set when attaching raw media.
-This is a user settable property.
-It notes the content type of the attachment.
+The type of key that will be used to access ths Cosmos DB.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Account
 Aliases:
+Accepted values: master, resource
 
 Required: False
 Position: Named
-Default value: None
+Default value: Master
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -213,6 +198,22 @@ Accept wildcard characters: False
 
 Not Required to be set when attaching raw media.
 This is the URL link or file path where the attachment resides.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -NewId
+
+This is the new Id of the attachment if renaming the attachment.
 
 ```yaml
 Type: String
@@ -245,8 +246,7 @@ Accept wildcard characters: False
 
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

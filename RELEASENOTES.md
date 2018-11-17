@@ -1,5 +1,20 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+November 17, 2018
+
+- Added support for Continuation Tokens to `Get-CosmosDbCollection`
+  to support getting more than 100 collections - fixes [Issue #244](https://github.com/PlagueHO/CosmosDB/issues/244).
+- Updated markdown documentation with PlatyPs 0.11.1.
+- Corrected markdown documentation for `Get-CosmosDbCollectionSize`.
+- Corrected continuation token examples for `Get-CosmosDbDocument`.
+- Updated CI pipeline to use Pester 4.4.2.
+- Updated CI pipeline to use PlatyPS 0.12.
+- Renamed `ResultHeaders` parameter to `ResponseHeader` in
+  `Get-CosmosDbDocuments` function to adhere to PowerShell standards,
+  but included alias for `ResultHeaders` to prevent breaking change.
+
 ## What is New in CosmosDB 2.1.14.220
 
 November 15, 2018

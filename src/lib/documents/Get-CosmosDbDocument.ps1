@@ -86,9 +86,10 @@ function Get-CosmosDbDocument
         [System.Boolean]
         $QueryEnableCrossPartition = $False,
 
+        [Alias("ResultHeaders")]
         [Parameter()]
         [ref]
-        $ResultHeaders
+        $ResponseHeader
     )
 
     $null = $PSBoundParameters.Remove('Id')
@@ -102,10 +103,10 @@ function Get-CosmosDbDocument
     $null = $PSBoundParameters.Remove('QueryParameters')
     $null = $PSBoundParameters.Remove('QueryEnableCrossPartition')
 
-    if ($PSBoundParameters.ContainsKey('ResultHeaders'))
+    if ($PSBoundParameters.ContainsKey('ResponseHeader'))
     {
-        $resultHeadersPassed = $true
-        $null = $PSBoundParameters.Remove('ResultHeaders')
+        $ResponseHeaderPassed = $true
+        $null = $PSBoundParameters.Remove('ResponseHeader')
     }
 
     $resourcePath = ('colls/{0}/docs' -f $CollectionId)
@@ -220,10 +221,10 @@ function Get-CosmosDbDocument
         $body = ConvertFrom-JSON -InputObject $result.Content
         $document = $body.Documents
 
-        if ($resultHeadersPassed)
+        if ($ResponseHeaderPassed)
         {
             # Return the result headers
-            $ResultHeaders.value = $result.Headers
+            $ResponseHeader.value = $result.Headers
         }
     }
 

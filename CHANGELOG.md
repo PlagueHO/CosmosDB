@@ -1,5 +1,18 @@
 # Change Log
 
+## Unreleased
+
+- Added support for Continuation Tokens to `Get-CosmosDbCollection`
+  to support getting more than 100 collections - fixes [Issue #244](https://github.com/PlagueHO/CosmosDB/issues/244).
+- Updated markdown documentation with PlatyPs 0.11.1.
+- Corrected markdown documentation for `Get-CosmosDbCollectionSize`.
+- Corrected continuation token examples for `Get-CosmosDbDocument`.
+- Updated CI pipeline to use Pester 4.4.2.
+- Updated CI pipeline to use PlatyPS 0.12.
+- Renamed `ResultHeaders` parameter to `ResponseHeader` in
+  `Get-CosmosDbDocuments` function to adhere to PowerShell standards,
+  but included alias for `ResultHeaders` to prevent breaking change.
+
 ## 2.1.14.220
 
 - Extended maximum length of Account Name parameter to be 50 characters - fixes
