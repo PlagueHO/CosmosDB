@@ -204,21 +204,21 @@ Task Build -Depends Init {
     $versionFolder = Join-Path -Path $ModuleFolder -ChildPath $newVersion
 
     # Stage the module
-    $null = New-Item -Path $StagingFolder -Type directory -ErrorAction SilentlyContinue
-    $null = New-Item -Path $ModuleFolder -Type directory -ErrorAction SilentlyContinue
+    New-Item -Path $StagingFolder -Type directory -ErrorAction SilentlyContinue | Out-Null
+    New-Item -Path $ModuleFolder -Type directory -ErrorAction SilentlyContinue | Out-Null
     Remove-Item -Path $versionFolder -Recurse -Force -ErrorAction SilentlyContinue
-    $null = New-Item -Path $versionFolder -Type directory
+    New-Item -Path $versionFolder -Type directory | Out-Null
 
     # Populate Version Folder
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psd1') -Destination $versionFolder
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psm1') -Destination $versionFolder
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/formats') -Destination $versionFolder -Recurse
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/types') -Destination $versionFolder -Recurse
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/en-US') -Destination $versionFolder -Recurse
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'LICENSE') -Destination $versionFolder
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'README.md') -Destination $versionFolder
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'CHANGELOG.md') -Destination $versionFolder
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'RELEASENOTES.md') -Destination $versionFolder
+    Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psd1') -Destination $versionFolder | Out-Null
+    Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psm1') -Destination $versionFolder | Out-Null
+    Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/formats') -Destination $versionFolder -Recurse | Out-Null
+    Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/types') -Destination $versionFolder -Recurse | Out-Null
+    Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/en-US') -Destination $versionFolder -Recurse | Out-Null
+    Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'LICENSE') -Destination $versionFolder | Out-Null
+    Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'README.md') -Destination $versionFolder | Out-Null
+    Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'CHANGELOG.md') -Destination $versionFolder | Out-Null
+    Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'RELEASENOTES.md') -Destination $versionFolder | Out-Null
 
     # Load the Libs files into the PSM1
     $libFiles = Get-ChildItem `
@@ -231,7 +231,7 @@ Task Build -Depends Init {
     foreach ($libFile in $libFiles)
     {
         $libContent = Get-Content -Path $libFile -Raw
-        $null = $libFilesStringBuilder.AppendLine($libContent)
+        $libFilesStringBuilder.AppendLine($libContent) | Out-Null
     }
 
     <#
@@ -250,9 +250,9 @@ Task Build -Depends Init {
         {
             if ($moduleLine -eq '#endregion')
             {
-                $null = $moduleStringBuilder.AppendLine('#region Functions')
-                $null = $moduleStringBuilder.AppendLine($libFilesStringBuilder)
-                $null = $moduleStringBuilder.AppendLine('#endregion')
+                $moduleStringBuilder.AppendLine('#region Functions') | Out-Null
+                $moduleStringBuilder.AppendLine($libFilesStringBuilder) | Out-Null
+                $moduleStringBuilder.AppendLine('#endregion') | Out-Null
                 $importFunctionsRegionFound = $false
             }
         }
@@ -264,7 +264,7 @@ Task Build -Depends Init {
             }
             else
             {
-                $null = $moduleStringBuilder.AppendLine($moduleLine)
+                $moduleStringBuilder.AppendLine($moduleLine) | Out-Null
             }
         }
     }
@@ -304,16 +304,16 @@ Task Build -Depends Init {
         -Path $StagingFolder `
         -ChildPath 'zip'
 
-    $null = New-Item -Path $zipFileFolder -Type directory -ErrorAction SilentlyContinue
+    New-Item -Path $zipFileFolder -Type directory -ErrorAction SilentlyContinue | Out-Null
 
     $zipFilePath = Join-Path `
         -Path $zipFileFolder `
         -ChildPath "${ENV:BHProjectName}_$newVersion.zip"
     if (Test-Path -Path $zipFilePath)
     {
-        $null = Remove-Item -Path $zipFilePath
+        Remove-Item -Path $zipFilePath | Out-Null
     }
-    $null = Add-Type -assemblyname System.IO.Compression.FileSystem
+    Add-Type -assemblyname System.IO.Compression.FileSystem | Out-Null
     [System.IO.Compression.ZipFile]::CreateFromDirectory($ModuleFolder, $zipFilePath)
 
     # Update the Git Repo if this is the master branch build in VSTS
@@ -437,9 +437,9 @@ Task Deploy {
 
     # This is a deploy from the staging folder
     "Publishing CosmosDB Module version '$versionNumber' to PowerShell Gallery"
-    $null = Get-PackageProvider `
+    Get-PackageProvider `
         -Name NuGet `
-        -ForceBootstrap
+        -ForceBootstrap | Out-Null
 
     Publish-Module `
         -Name 'CosmosDB' `
