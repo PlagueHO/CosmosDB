@@ -16,7 +16,7 @@ param (
 Write-Verbose -Message ('Beginning ''{0}'' process...' -f ($TaskList -join ','))
 
 # Bootstrap the environment
-$null = Get-PackageProvider -Name NuGet -ForceBootstrap
+Get-PackageProvider -Name NuGet -ForceBootstrap | Out-Null
 
 # Install PSake module if it is not already installed
 if (-not (Get-Module -Name PSDepend -ListAvailable))

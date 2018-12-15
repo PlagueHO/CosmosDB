@@ -62,8 +62,8 @@ function New-CosmosDbAttachment
         $Slug
     )
 
-    $null = $PSBoundParameters.Remove('CollectionId')
-    $null = $PSBoundParameters.Remove('DocumentId')
+    $PSBoundParameters.Remove('CollectionId') | Out-Null
+    $PSBoundParameters.Remove('DocumentId') | Out-Null
 
     $resourcePath = ('colls/{0}/docs/{1}/attachments' -f $CollectionId, $DocumentId)
 
@@ -72,19 +72,19 @@ function New-CosmosDbAttachment
 
     if ($PSBoundParameters.ContainsKey('Id'))
     {
-        $null = $PSBoundParameters.Remove('Id')
+        $PSBoundParameters.Remove('Id') | Out-Null
         $bodyObject += @{ id = $Id }
     }
 
     if ($PSBoundParameters.ContainsKey('ContentType'))
     {
-        $null = $PSBoundParameters.Remove('ContentType')
+        $PSBoundParameters.Remove('ContentType') | Out-Null
         $bodyObject += @{ contentType = $ContentType }
     }
 
     if ($PSBoundParameters.ContainsKey('Media'))
     {
-        $null = $PSBoundParameters.Remove('Media')
+        $PSBoundParameters.Remove('Media') | Out-Null
         $bodyObject += @{ media = $Media }
     }
 
@@ -93,7 +93,7 @@ function New-CosmosDbAttachment
         $headers += @{
             'Slug' = $Slug
         }
-        $null = $PSBoundParameters.Remove('Slug')
+        $PSBoundParameters.Remove('Slug') | Out-Null
     }
 
     $body = ConvertTo-Json -InputObject $bodyObject

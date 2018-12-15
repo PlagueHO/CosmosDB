@@ -85,7 +85,7 @@ function New-CosmosDbCollection
         $headers += @{
             'x-ms-offer-throughput' = $OfferThroughput
         }
-        $null = $PSBoundParameters.Remove('OfferThroughput')
+        $PSBoundParameters.Remove('OfferThroughput') | Out-Null
     }
 
     if ($PSBoundParameters.ContainsKey('OfferType'))
@@ -93,10 +93,10 @@ function New-CosmosDbCollection
         $headers += @{
             'x-ms-offer-type' = $OfferType
         }
-        $null = $PSBoundParameters.Remove('OfferType')
+        $PSBoundParameters.Remove('OfferType') | Out-Null
     }
 
-    $null = $PSBoundParameters.Remove('Id')
+    $PSBoundParameters.Remove('Id') | Out-Null
 
     $bodyObject = @{
         id = $id
@@ -110,7 +110,7 @@ function New-CosmosDbCollection
                 kind  = 'Hash'
             }
         }
-        $null = $PSBoundParameters.Remove('PartitionKey')
+        $PSBoundParameters.Remove('PartitionKey') | Out-Null
     }
 
     if ($PSBoundParameters.ContainsKey('IndexingPolicy'))
@@ -118,7 +118,7 @@ function New-CosmosDbCollection
         $bodyObject += @{
             indexingPolicy = $IndexingPolicy
         }
-        $null = $PSBoundParameters.Remove('IndexingPolicy')
+        $PSBoundParameters.Remove('IndexingPolicy') | Out-Null
     }
 
     if ($PSBoundParameters.ContainsKey('DefaultTimeToLive'))
@@ -126,7 +126,7 @@ function New-CosmosDbCollection
         $bodyObject += @{
             defaultTtl = $DefaultTimeToLive
         }
-        $null = $PSBoundParameters.Remove('DefaultTimeToLive')
+        $PSBoundParameters.Remove('DefaultTimeToLive') | Out-Null
     }
 
     if ($PSBoundParameters.ContainsKey('UniqueKeyPolicy'))
@@ -134,7 +134,7 @@ function New-CosmosDbCollection
         $bodyObject += @{
             uniqueKeyPolicy = $UniqueKeyPolicy
         }
-        $null = $PSBoundParameters.Remove('UniqueKeyPolicy')
+        $PSBoundParameters.Remove('UniqueKeyPolicy') | Out-Null
     }
 
     $body = ConvertTo-Json -InputObject $bodyObject -Depth 10

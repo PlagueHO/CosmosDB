@@ -52,10 +52,10 @@ function New-CosmosDbPermission
         $PermissionMode = 'All'
     )
 
-    $null = $PSBoundParameters.Remove('UserId')
-    $null = $PSBoundParameters.Remove('Id')
-    $null = $PSBoundParameters.Remove('Resource')
-    $null = $PSBoundParameters.Remove('PermissionMode')
+    $PSBoundParameters.Remove('UserId') | Out-Null
+    $PSBoundParameters.Remove('Id') | Out-Null
+    $PSBoundParameters.Remove('Resource') | Out-Null
+    $PSBoundParameters.Remove('PermissionMode') | Out-Null
 
     $resourcePath = ('users/{0}/permissions' -f $UserId)
 

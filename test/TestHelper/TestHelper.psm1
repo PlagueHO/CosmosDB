@@ -59,7 +59,7 @@ function Connect-AzureServicePrincipal
         $path = "$Home\AppData\Roaming\Windows Azure Powershell\"
         if (-not (Test-Path -Path $Path))
         {
-            $null = New-Item -Path $Path -ItemType Directory
+            New-Item -Path $Path -ItemType Directory | Out-Null
         }
         $azureProfileFilename = Join-Path `
             -Path $Path `
@@ -69,12 +69,13 @@ function Connect-AzureServicePrincipal
             -Path $azureProfileFilename
 
         # Handle login
-        $null = Add-AzureRmAccount `
+        Add-AzureRmAccount `
             -ServicePrincipal `
             -SubscriptionId $SubscriptionId `
             -TenantId $TenantId `
             -Credential $azureCredential `
-            -ErrorAction SilentlyContinue
+            -ErrorAction SilentlyContinue `
+            | Out-Null
 
         # Validate login
         $loginSuccessful = Get-AzureRmSubscription `
@@ -151,10 +152,11 @@ function Remove-AzureTestCosmosDbAccount
         Write-Verbose -Message ('Removing Cosmos DB test account {0}.' -f $AccountName)
 
         # Remove resource group as
-        $null = Remove-AzureRmResourceGroup `
+        Remove-AzureRmResourceGroup `
             -Name $ResourceGroupName `
             -Force `
-            -AsJob
+            -AsJob `
+            | Out-Null
     }
     catch [System.Exception]
     {
@@ -180,9 +182,10 @@ function New-AzureTestCosmosDbResourceGroup
     {
         Write-Verbose -Message ('Creating test Azure Resource Group {0} in {1}.' -f $ResourceGroupName,$Location)
 
-        $null = New-AzureRmResourceGroup `
+        New-AzureRmResourceGroup `
             -Name $ResourceGroupName `
-            -Location $Location
+            -Location $Location `
+            | Out-Null
     }
     catch [System.Exception]
     {
@@ -204,10 +207,11 @@ function Remove-AzureTestCosmosDbResourceGroup
     {
         Write-Verbose -Message ('Removing test Azure Resource Group {0}.' -f $ResourceGroupName)
 
-        $null = Remove-AzureRmResourceGroup `
+        Remove-AzureRmResourceGroup `
             -Name $ResourceGroupName `
             -Force `
-            -AsJob
+            -AsJob `
+            | Out-Null
     }
     catch [System.Exception]
     {

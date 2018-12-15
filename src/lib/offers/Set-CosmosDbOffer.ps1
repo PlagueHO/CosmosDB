@@ -55,7 +55,7 @@ function Set-CosmosDbOffer
     }
 
     process {
-        $null = $invokeCosmosDbRequest.Remove('InputObject')
+        $invokeCosmosDbRequest.Remove('InputObject') | Out-Null
 
         foreach ($object in $InputObject)
         {
@@ -73,13 +73,13 @@ function Set-CosmosDbOffer
 
             if ($PSBoundParameters.ContainsKey('OfferVersion'))
             {
-                $null = $invokeCosmosDbRequest.Remove('OfferVersion')
+                $invokeCosmosDbRequest.Remove('OfferVersion') | Out-Null
                 $bodyObject.offerVersion = $OfferVersion
             }
 
             if ($PSBoundParameters.ContainsKey('OfferType'))
             {
-                $null = $invokeCosmosDbRequest.Remove('OfferType')
+                $invokeCosmosDbRequest.Remove('OfferType') | Out-Null
                 $bodyObject.offerType = $OfferType
             }
 
@@ -96,7 +96,7 @@ function Set-CosmosDbOffer
 
                 if ($PSBoundParameters.ContainsKey('OfferThroughput'))
                 {
-                    $null = $invokeCosmosDbRequest.Remove('OfferThroughput')
+                    $invokeCosmosDbRequest.Remove('OfferThroughput') | Out-Null
                     $content.offerThroughput = $OfferThroughput
                 }
                 else
@@ -113,7 +113,7 @@ function Set-CosmosDbOffer
 
                 if ($PSBoundParameters.ContainsKey('OfferIsRUPerMinuteThroughputEnabled'))
                 {
-                    $null = $invokeCosmosDbRequest.Remove('OfferIsRUPerMinuteThroughputEnabled')
+                    $invokeCosmosDbRequest.Remove('OfferIsRUPerMinuteThroughputEnabled') | Out-Null
                     $content.offerIsRUPerMinuteThroughputEnabled = $OfferIsRUPerMinuteThroughputEnabled
                 }
 

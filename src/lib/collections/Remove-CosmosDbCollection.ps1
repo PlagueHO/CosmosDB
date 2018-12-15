@@ -36,10 +36,11 @@ function Remove-CosmosDbCollection
         $Id
     )
 
-    $null = $PSBoundParameters.Remove('Id')
+    $PSBoundParameters.Remove('Id') | Out-Null
 
-    $null = Invoke-CosmosDbRequest @PSBoundParameters `
+    Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
         -ResourceType 'colls' `
-        -ResourcePath ('colls/{0}' -f $Id)
+        -ResourcePath ('colls/{0}' -f $Id) `
+        | Out-Null
 }

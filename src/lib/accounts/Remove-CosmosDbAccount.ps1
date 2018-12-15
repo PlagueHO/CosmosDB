@@ -36,6 +36,6 @@ function Remove-CosmosDbAccount
     {
         Write-Verbose -Message $($LocalizedData.RemovingAzureCosmosDBAccount -f $Name, $ResourceGroupName)
 
-        $null = Remove-AzureRmResource @removeAzureRmResource_parameters
+        Remove-AzureRmResource @removeAzureRmResource_parameters | Out-Null
     }
 }

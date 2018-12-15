@@ -51,18 +51,18 @@ function Get-CosmosDbCollection
         $ResponseHeader
     )
 
-    $null = $PSBoundParameters.Remove('MaxItemCount')
-    $null = $PSBoundParameters.Remove('ContinuationToken')
+    $PSBoundParameters.Remove('MaxItemCount') | Out-Null
+    $PSBoundParameters.Remove('ContinuationToken') | Out-Null
 
     if ($PSBoundParameters.ContainsKey('ResponseHeader'))
     {
         $ResponseHeaderPassed = $true
-        $null = $PSBoundParameters.Remove('ResponseHeader')
+        $PSBoundParameters.Remove('ResponseHeader') | Out-Null
     }
 
     if ($PSBoundParameters.ContainsKey('Id'))
     {
-        $null = $PSBoundParameters.Remove('Id')
+        $PSBoundParameters.Remove('Id') | Out-Null
 
         $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `

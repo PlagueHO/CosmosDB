@@ -92,21 +92,21 @@ function Get-CosmosDbDocument
         $ResponseHeader
     )
 
-    $null = $PSBoundParameters.Remove('Id')
-    $null = $PSBoundParameters.Remove('CollectionId')
-    $null = $PSBoundParameters.Remove('MaxItemCount')
-    $null = $PSBoundParameters.Remove('ContinuationToken')
-    $null = $PSBoundParameters.Remove('ConsistencyLevel')
-    $null = $PSBoundParameters.Remove('SessionToken')
-    $null = $PSBoundParameters.Remove('PartitionKeyRangeId')
-    $null = $PSBoundParameters.Remove('Query')
-    $null = $PSBoundParameters.Remove('QueryParameters')
-    $null = $PSBoundParameters.Remove('QueryEnableCrossPartition')
+    $PSBoundParameters.Remove('Id') | Out-Null
+    $PSBoundParameters.Remove('CollectionId') | Out-Null
+    $PSBoundParameters.Remove('MaxItemCount') | Out-Null
+    $PSBoundParameters.Remove('ContinuationToken') | Out-Null
+    $PSBoundParameters.Remove('ConsistencyLevel') | Out-Null
+    $PSBoundParameters.Remove('SessionToken') | Out-Null
+    $PSBoundParameters.Remove('PartitionKeyRangeId') | Out-Null
+    $PSBoundParameters.Remove('Query') | Out-Null
+    $PSBoundParameters.Remove('QueryParameters') | Out-Null
+    $PSBoundParameters.Remove('QueryEnableCrossPartition') | Out-Null
 
     if ($PSBoundParameters.ContainsKey('ResponseHeader'))
     {
         $ResponseHeaderPassed = $true
-        $null = $PSBoundParameters.Remove('ResponseHeader')
+        $PSBoundParameters.Remove('ResponseHeader') | Out-Null
     }
 
     $resourcePath = ('colls/{0}/docs' -f $CollectionId)
@@ -121,7 +121,7 @@ function Get-CosmosDbDocument
             $headers += @{
                 'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
             }
-            $null = $PSBoundParameters.Remove('PartitionKey')
+            $PSBoundParameters.Remove('PartitionKey') | Out-Null
         }
 
         $result = Invoke-CosmosDbRequest @PSBoundParameters `
@@ -153,7 +153,7 @@ function Get-CosmosDbDocument
             }
 
             # Set the content type to application/query+json for querying
-            $null = $PSBoundParameters.Add('ContentType', 'application/query+json')
+            $PSBoundParameters.Add('ContentType', 'application/query+json') | Out-Null
 
             # Create the body JSON for the query
             $bodyObject = @{ query = $Query }
@@ -179,7 +179,7 @@ function Get-CosmosDbDocument
             $headers += @{
                 'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
             }
-            $null = $PSBoundParameters.Remove('PartitionKey')
+            $PSBoundParameters.Remove('PartitionKey') | Out-Null
         }
 
         $headers += @{

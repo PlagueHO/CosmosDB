@@ -130,10 +130,11 @@ Connect-AzureServicePrincipal `
     -Verbose
 
 # Create resource group
-$null = New-AzureTestCosmosDbResourceGroup `
+New-AzureTestCosmosDbResourceGroup `
     -ResourceGroupName $script:testResourceGroupName `
     -Location $script:testLocation `
-    -Verbose
+    -Verbose `
+    | Out-Null
 
 $currentIpAddress = (Invoke-RestMethod -Uri 'http://ipinfo.io/json').ip
 
@@ -1442,15 +1443,17 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     # Test retrieval of collections using maximum item count and continuation token
     Context 'When creating two new collections' {
         It 'Should not throw an exception' {
-            $null = New-CosmosDbCollection `
+            New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id "$($script:testCollection)1" `
-                -Verbose
+                -Verbose `
+                | Out-Null
 
-            $null = New-CosmosDbCollection `
+            New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id "$($script:testCollection)2" `
-                -Verbose
+                -Verbose `
+                | Out-Null
         }
     }
 

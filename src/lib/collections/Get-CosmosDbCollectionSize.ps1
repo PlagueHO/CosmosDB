@@ -43,7 +43,7 @@ function Get-CosmosDbCollectionSize
         x-ms-resource-quota and x-ms-resource-usage headers in the response.
     #>
 
-    $null = $PSBoundParameters.Remove('Id')
+    $PSBoundParameters.Remove('Id') | Out-Null
 
     $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Get' `

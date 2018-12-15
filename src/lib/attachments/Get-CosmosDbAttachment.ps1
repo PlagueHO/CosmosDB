@@ -47,14 +47,14 @@ function Get-CosmosDbAttachment
         $Id
     )
 
-    $null = $PSBoundParameters.Remove('CollectionId')
-    $null = $PSBoundParameters.Remove('DocumentId')
+    $PSBoundParameters.Remove('CollectionId') | Out-Null
+    $PSBoundParameters.Remove('DocumentId') | Out-Null
 
     $resourcePath = ('colls/{0}/docs/{1}/attachments' -f $CollectionId, $DocumentId)
 
     if (-not [String]::IsNullOrEmpty($Id))
     {
-        $null = $PSBoundParameters.Remove('Id')
+        $PSBoundParameters.Remove('Id') | Out-Null
 
         $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `

@@ -73,10 +73,10 @@ function Set-CosmosDbCollection
     $defaultTimeToLiveIncluded = $PSBoundParameters.ContainsKey('DefaultTimeToLive')
     $uniqueKeyPolicyIncluded = $PSBoundParameters.ContainsKey('UniqueKeyPolicy')
 
-    $null = $PSBoundParameters.Remove('IndexingPolicy')
-    $null = $PSBoundParameters.Remove('DefaultTimeToLive')
-    $null = $PSBoundParameters.Remove('RemoveDefaultTimeToLive')
-    $null = $PSBoundParameters.Remove('UniqueKeyPolicy')
+    $PSBoundParameters.Remove('IndexingPolicy') | Out-Null
+    $PSBoundParameters.Remove('DefaultTimeToLive') | Out-Null
+    $PSBoundParameters.Remove('RemoveDefaultTimeToLive') | Out-Null
+    $PSBoundParameters.Remove('UniqueKeyPolicy') | Out-Null
 
     <#
         The partition key on an existing collection can not be changed.
@@ -85,7 +85,7 @@ function Set-CosmosDbCollection
     #>
     $existingCollection = Get-CosmosDbCollection @PSBoundParameters
 
-    $null = $PSBoundParameters.Remove('Id')
+    $PSBoundParameters.Remove('Id') | Out-Null
 
     if ($indexingPolicyIncluded)
     {

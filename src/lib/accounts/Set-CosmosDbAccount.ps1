@@ -52,13 +52,13 @@ function Set-CosmosDbAccount
 
     # Get the existing Cosmos DB Account
     $getCosmosDbAccount_parameters = @{} + $PSBoundParameters
-    $null = $getCosmosDbAccount_parameters.Remove('Location')
-    $null = $getCosmosDbAccount_parameters.Remove('LocationRead')
-    $null = $getCosmosDbAccount_parameters.Remove('DefaultConsistencyLevel')
-    $null = $getCosmosDbAccount_parameters.Remove('MaxIntervalInSeconds')
-    $null = $getCosmosDbAccount_parameters.Remove('MaxStalenessPrefix')
-    $null = $getCosmosDbAccount_parameters.Remove('IpRangeFilter')
-    $null = $getCosmosDbAccount_parameters.Remove('AsJob')
+    $getCosmosDbAccount_parameters.Remove('Location') | Out-Null
+    $getCosmosDbAccount_parameters.Remove('LocationRead') | Out-Null
+    $getCosmosDbAccount_parameters.Remove('DefaultConsistencyLevel') | Out-Null
+    $getCosmosDbAccount_parameters.Remove('MaxIntervalInSeconds') | Out-Null
+    $getCosmosDbAccount_parameters.Remove('MaxStalenessPrefix') | Out-Null
+    $getCosmosDbAccount_parameters.Remove('IpRangeFilter') | Out-Null
+    $getCosmosDbAccount_parameters.Remove('AsJob') | Out-Null
     $existingAccount = Get-CosmosDbAccount @getCosmosDbAccount_parameters
 
     if (-not $existingAccount)
@@ -132,12 +132,12 @@ function Set-CosmosDbAccount
         ipRangeFilter            = $ipRangeFilterString
     }
 
-    $null = $PSBoundParameters.Remove('Location')
-    $null = $PSBoundParameters.Remove('LocationRead')
-    $null = $PSBoundParameters.Remove('DefaultConsistencyLevel')
-    $null = $PSBoundParameters.Remove('MaxIntervalInSeconds')
-    $null = $PSBoundParameters.Remove('MaxStalenessPrefix')
-    $null = $PSBoundParameters.Remove('IpRangeFilter')
+    $PSBoundParameters.Remove('Location') | Out-Null
+    $PSBoundParameters.Remove('LocationRead') | Out-Null
+    $PSBoundParameters.Remove('DefaultConsistencyLevel') | Out-Null
+    $PSBoundParameters.Remove('MaxIntervalInSeconds') | Out-Null
+    $PSBoundParameters.Remove('MaxStalenessPrefix') | Out-Null
+    $PSBoundParameters.Remove('IpRangeFilter') | Out-Null
 
     $setAzureRmResource_parameters = $PSBoundParameters + @{
         ResourceType = 'Microsoft.DocumentDb/databaseAccounts'

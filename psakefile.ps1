@@ -206,7 +206,7 @@ Task Build -Depends Init {
     # Stage the module
     New-Item -Path $StagingFolder -Type directory -ErrorAction SilentlyContinue | Out-Null
     New-Item -Path $ModuleFolder -Type directory -ErrorAction SilentlyContinue | Out-Null
-    Remove-Item -Path $versionFolder -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item -Path $versionFolder -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
     New-Item -Path $versionFolder -Type directory | Out-Null
 
     # Populate Version Folder

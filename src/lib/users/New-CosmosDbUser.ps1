@@ -37,7 +37,7 @@ function New-CosmosDbUser
         $Id
     )
 
-    $null = $PSBoundParameters.Remove('Id')
+    $PSBoundParameters.Remove('Id') | Out-Null
 
     $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `

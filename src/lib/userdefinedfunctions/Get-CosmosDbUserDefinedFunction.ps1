@@ -42,13 +42,13 @@ function Get-CosmosDbUserDefinedFunction
         $Id
     )
 
-    $null = $PSBoundParameters.Remove('CollectionId')
+    $PSBoundParameters.Remove('CollectionId') | Out-Null
 
     $resourcePath = ('colls/{0}/udfs' -f $CollectionId)
 
     if ($PSBoundParameters.ContainsKey('Id'))
     {
-        $null = $PSBoundParameters.Remove('Id')
+        $PSBoundParameters.Remove('Id') | Out-Null
 
         $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `

@@ -41,13 +41,14 @@ function Remove-CosmosDbTrigger
         $Id
     )
 
-    $null = $PSBoundParameters.Remove('CollectionId')
-    $null = $PSBoundParameters.Remove('Id')
+    $PSBoundParameters.Remove('CollectionId') | Out-Null
+    $PSBoundParameters.Remove('Id') | Out-Null
 
     $resourcePath = ('colls/{0}/triggers/{1}' -f $CollectionId, $Id)
 
-    $null = Invoke-CosmosDbRequest @PSBoundParameters `
+    Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
         -ResourceType 'triggers' `
-        -ResourcePath $resourcePath
+        -ResourcePath $resourcePath `
+        | Out-Null
 }

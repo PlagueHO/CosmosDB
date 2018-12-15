@@ -34,7 +34,7 @@ function Get-CosmosDbDatabase
 
     if ($PSBoundParameters.ContainsKey('Id'))
     {
-        $null = $PSBoundParameters.Remove('Id')
+        $PSBoundParameters.Remove('Id') | Out-Null
 
         $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `

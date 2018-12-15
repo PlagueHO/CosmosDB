@@ -61,9 +61,9 @@ function New-CosmosDbDocument
         $Encoding = 'Default'
     )
 
-    $null = $PSBoundParameters.Remove('CollectionId')
-    $null = $PSBoundParameters.Remove('Id')
-    $null = $PSBoundParameters.Remove('DocumentBody')
+    $PSBoundParameters.Remove('CollectionId') | Out-Null
+    $PSBoundParameters.Remove('Id') | Out-Null
+    $PSBoundParameters.Remove('DocumentBody') | Out-Null
 
     $resourcePath = ('colls/{0}/docs' -f $CollectionId)
 
@@ -74,7 +74,7 @@ function New-CosmosDbDocument
         $headers += @{
             'x-ms-documentdb-is-upsert' = $Upsert
         }
-        $null = $PSBoundParameters.Remove('Upsert')
+        $PSBoundParameters.Remove('Upsert') | Out-Null
     }
 
     if ($PSBoundParameters.ContainsKey('IndexingDirective'))
@@ -82,7 +82,7 @@ function New-CosmosDbDocument
         $headers += @{
             'x-ms-indexing-directive' = $IndexingDirective
         }
-        $null = $PSBoundParameters.Remove('IndexingDirective')
+        $PSBoundParameters.Remove('IndexingDirective') | Out-Null
     }
 
     if ($PSBoundParameters.ContainsKey('PartitionKey'))
@@ -90,7 +90,7 @@ function New-CosmosDbDocument
         $headers += @{
             'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
         }
-        $null = $PSBoundParameters.Remove('PartitionKey')
+        $PSBoundParameters.Remove('PartitionKey') | Out-Null
     }
 
     $result = Invoke-CosmosDbRequest @PSBoundParameters `

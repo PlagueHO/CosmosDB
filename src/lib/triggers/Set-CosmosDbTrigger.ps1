@@ -57,11 +57,11 @@ function Set-CosmosDbTrigger
         $TriggerType
     )
 
-    $null = $PSBoundParameters.Remove('CollectionId')
-    $null = $PSBoundParameters.Remove('Id')
-    $null = $PSBoundParameters.Remove('TriggerBody')
-    $null = $PSBoundParameters.Remove('TriggerOperation')
-    $null = $PSBoundParameters.Remove('TriggerType')
+    $PSBoundParameters.Remove('CollectionId') | Out-Null
+    $PSBoundParameters.Remove('Id') | Out-Null
+    $PSBoundParameters.Remove('TriggerBody') | Out-Null
+    $PSBoundParameters.Remove('TriggerOperation') | Out-Null
+    $PSBoundParameters.Remove('TriggerType') | Out-Null
 
     $resourcePath = ('colls/{0}/triggers/{1}' -f $CollectionId, $Id)
 

@@ -86,11 +86,11 @@ function New-CosmosDbAccount
         ipRangeFilter            = ($IpRangeFilter -join ',')
     }
 
-    $null = $PSBoundParameters.Remove('LocationRead')
-    $null = $PSBoundParameters.Remove('DefaultConsistencyLevel')
-    $null = $PSBoundParameters.Remove('MaxIntervalInSeconds')
-    $null = $PSBoundParameters.Remove('MaxStalenessPrefix')
-    $null = $PSBoundParameters.Remove('IpRangeFilter')
+    $PSBoundParameters.Remove('LocationRead') | Out-Null
+    $PSBoundParameters.Remove('DefaultConsistencyLevel') | Out-Null
+    $PSBoundParameters.Remove('MaxIntervalInSeconds') | Out-Null
+    $PSBoundParameters.Remove('MaxStalenessPrefix') | Out-Null
+    $PSBoundParameters.Remove('IpRangeFilter') | Out-Null
 
     $newAzureRmResource_parameters = $PSBoundParameters + @{
         ResourceType = 'Microsoft.DocumentDb/databaseAccounts'

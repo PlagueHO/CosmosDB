@@ -52,8 +52,8 @@ function Invoke-CosmosDbStoredProcedure
         $StoredProcedureParameter
     )
 
-    $null = $PSBoundParameters.Remove('CollectionId')
-    $null = $PSBoundParameters.Remove('Id')
+    $PSBoundParameters.Remove('CollectionId') | Out-Null
+    $PSBoundParameters.Remove('Id') | Out-Null
 
     $resourcePath = ('colls/{0}/sprocs/{1}' -f $CollectionId, $Id)
 
@@ -63,7 +63,7 @@ function Invoke-CosmosDbStoredProcedure
         $headers += @{
             'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
         }
-        $null = $PSBoundParameters.Remove('PartitionKey')
+        $PSBoundParameters.Remove('PartitionKey') | Out-Null
     }
 
     if ($PSBoundParameters.ContainsKey('Debug'))
@@ -71,13 +71,13 @@ function Invoke-CosmosDbStoredProcedure
         $headers += @{
             'x-ms-documentdb-script-enable-logging' = $true
         }
-        $null = $PSBoundParameters.Remove('Debug')
+        $PSBoundParameters.Remove('Debug') | Out-Null
     }
 
     if ($PSBoundParameters.ContainsKey('StoredProcedureParameter'))
     {
         $body = ConvertTo-Json -InputObject $StoredProcedureParameter -Depth 10 -Compress
-        $null = $PSBoundParameters.Remove('StoredProcedureParameter')
+        $PSBoundParameters.Remove('StoredProcedureParameter') | Out-Null
     }
     else
     {

@@ -46,14 +46,15 @@ function Remove-CosmosDbAttachment
         $Id
     )
 
-    $null = $PSBoundParameters.Remove('CollectionId')
-    $null = $PSBoundParameters.Remove('DocumentId')
-    $null = $PSBoundParameters.Remove('Id')
+    $PSBoundParameters.Remove('CollectionId') | Out-Null
+    $PSBoundParameters.Remove('DocumentId') | Out-Null
+    $PSBoundParameters.Remove('Id') | Out-Null
 
     $resourcePath = ('colls/{0}/docs/{1}/attachments/{2}' -f $CollectionId, $DocumentId, $Id)
 
-    $null = Invoke-CosmosDbRequest @PSBoundParameters `
+    Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
         -ResourceType 'attachments' `
-        -ResourcePath $resourcePath
+        -ResourcePath $resourcePath `
+        | Out-Null
 }

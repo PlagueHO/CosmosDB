@@ -46,8 +46,8 @@ function Remove-CosmosDbDocument
         $PartitionKey
     )
 
-    $null = $PSBoundParameters.Remove('CollectionId')
-    $null = $PSBoundParameters.Remove('Id')
+    $PSBoundParameters.Remove('CollectionId')| Out-Null
+    $PSBoundParameters.Remove('Id') | Out-Null
 
     $resourcePath = ('colls/{0}/docs/{1}' -f $CollectionId, $Id)
 
@@ -58,12 +58,13 @@ function Remove-CosmosDbDocument
         $headers += @{
             'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
         }
-        $null = $PSBoundParameters.Remove('PartitionKey')
+        $PSBoundParameters.Remove('PartitionKey') | Out-Null
     }
 
-    $null = Invoke-CosmosDbRequest @PSBoundParameters `
+    Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
         -ResourceType 'docs' `
         -ResourcePath $resourcePath `
-        -Headers $headers
+        -Headers $headers `
+        | Out-Null
 }

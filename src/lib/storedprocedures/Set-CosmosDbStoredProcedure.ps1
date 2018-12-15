@@ -47,9 +47,9 @@ function Set-CosmosDbStoredProcedure
         $StoredProcedureBody
     )
 
-    $null = $PSBoundParameters.Remove('CollectionId')
-    $null = $PSBoundParameters.Remove('Id')
-    $null = $PSBoundParameters.Remove('StoredProcedureBody')
+    $PSBoundParameters.Remove('CollectionId') | Out-Null
+    $PSBoundParameters.Remove('Id') | Out-Null
+    $PSBoundParameters.Remove('StoredProcedureBody') | Out-Null
 
     $resourcePath = ('colls/{0}/sprocs/{1}' -f $CollectionId, $Id)
 

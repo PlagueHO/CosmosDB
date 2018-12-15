@@ -41,13 +41,14 @@ function Remove-CosmosDbPermission
         $Id
     )
 
-    $null = $PSBoundParameters.Remove('UserId')
-    $null = $PSBoundParameters.Remove('Id')
+    $PSBoundParameters.Remove('UserId') | Out-Null
+    $PSBoundParameters.Remove('Id') | Out-Null
 
     $resourcePath = ('users/{0}/permissions/{1}' -f $UserId,$Id)
 
-    $null = Invoke-CosmosDbRequest @PSBoundParameters `
+    Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
         -ResourceType 'permissions' `
-        -ResourcePath $resourcePath
+        -ResourcePath $resourcePath `
+        | Out-Null
 }

@@ -47,9 +47,9 @@ function New-CosmosDbUserDefinedFunction
         $UserDefinedFunctionBody
     )
 
-    $null = $PSBoundParameters.Remove('CollectionId')
-    $null = $PSBoundParameters.Remove('Id')
-    $null = $PSBoundParameters.Remove('UserDefinedFunctionBody')
+    PSBoundParameters.Remove('CollectionId') | Out-Null
+    $PSBoundParameters.Remove('Id') | Out-Null
+    $PSBoundParameters.Remove('UserDefinedFunctionBody') | Out-Null
 
     $resourcePath = ('colls/{0}/udfs' -f $CollectionId)
 

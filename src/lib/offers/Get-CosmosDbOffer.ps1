@@ -39,7 +39,7 @@ function Get-CosmosDbOffer
 
     if ($PSBoundParameters.ContainsKey('Id'))
     {
-        $null = $PSBoundParameters.Remove('Id')
+        $PSBoundParameters.Remove('Id') | Out-Null
 
         $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
@@ -52,7 +52,7 @@ function Get-CosmosDbOffer
     {
         if (-not [String]::IsNullOrEmpty($Query))
         {
-            $null = $PSBoundParameters.Remove('Query')
+            $PSBoundParameters.Remove('Query') | Out-Null
 
             # A query has been specified
             $headers += @{
@@ -60,7 +60,7 @@ function Get-CosmosDbOffer
             }
 
             # Set the content type to application/query+json for querying
-            $null = $PSBoundParameters.Add('ContentType', 'application/query+json')
+            $PSBoundParameters.Add('ContentType', 'application/query+json')  | Out-Null
 
             # Create the body JSON for the query
             $bodyObject = @{ query = $Query }

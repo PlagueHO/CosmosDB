@@ -47,7 +47,7 @@ function Get-CosmosDbPermission
         $TokenExpiry
     )
 
-    $null = $PSBoundParameters.Remove('UserId')
+    $PSBoundParameters.Remove('UserId') | Out-Null
 
     $resourcePath = ('users/{0}/permissions' -f $UserId)
 
@@ -55,7 +55,7 @@ function Get-CosmosDbPermission
 
     if ($PSBoundParameters.ContainsKey('TokenExpiry'))
     {
-        $null = $PSBoundParameters.Remove('TokenExpiry')
+        $PSBoundParameters.Remove('TokenExpiry') | Out-Null
 
         $headers += @{
             'x-ms-documentdb-expiry-seconds' = $TokenExpiry
@@ -64,7 +64,7 @@ function Get-CosmosDbPermission
 
     if ($PSBoundParameters.ContainsKey('Id'))
     {
-        $null = $PSBoundParameters.Remove('Id')
+        $PSBoundParameters.Remove('Id') | Out-Null
 
         $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
