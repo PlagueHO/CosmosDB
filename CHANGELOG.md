@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Replacing $Null variable by Out-Null to follow a best practice
+
 ## 2.1.15.237
 
 - Added support for Continuation Tokens to `Get-CosmosDbCollection`
