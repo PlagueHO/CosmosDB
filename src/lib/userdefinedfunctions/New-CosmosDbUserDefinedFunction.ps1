@@ -47,7 +47,7 @@ function New-CosmosDbUserDefinedFunction
         $UserDefinedFunctionBody
     )
 
-    PSBoundParameters.Remove('CollectionId') | Out-Null
+    $PSBoundParameters.Remove('CollectionId') | Out-Null
     $PSBoundParameters.Remove('Id') | Out-Null
     $PSBoundParameters.Remove('UserDefinedFunctionBody') | Out-Null
 
