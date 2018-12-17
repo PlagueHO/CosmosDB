@@ -26,7 +26,7 @@ function Remove-CosmosDbAccount
         $Force
     )
 
-    $removeAzureRmResource_parameters = $PSBoundParameters + @{
+    $removeAzResource_parameters = $PSBoundParameters + @{
         ResourceType = 'Microsoft.DocumentDb/databaseAccounts'
         ApiVersion   = '2015-04-08'
     }
@@ -36,6 +36,6 @@ function Remove-CosmosDbAccount
     {
         Write-Verbose -Message $($LocalizedData.RemovingAzureCosmosDBAccount -f $Name, $ResourceGroupName)
 
-        $null = Remove-AzureRmResource @removeAzureRmResource_parameters
+        $null = Remove-AzResource @removeAzResource_parameters
     }
 }

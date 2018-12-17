@@ -9,7 +9,7 @@ jobs:
       persistCredentials: true
 
     - powershell: |
-        .\build.ps1 -TaskList Test -Verbose
+        .\psake.ps1 -TaskList Test -Verbose
       displayName: 'Execute Tests'
       env:
         azureApplicationId: $(azureApplicationId)
@@ -42,7 +42,7 @@ jobs:
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
     - powershell: |
-        .\build.ps1 -TaskList Build -Verbose
+        .\psake.ps1 -TaskList Build -Verbose
       displayName: 'Build and Stage Module'
       env:
         azureApplicationId: $(azureApplicationId)
@@ -77,7 +77,7 @@ jobs:
 
     - task: PublishBuildArtifacts@1
       inputs:
-        pathtoPublish: 'build.ps1'
+        pathtoPublish: 'psake.ps1'
         artifactName: 'scripts'
       displayName: 'Publish Build File'
 
@@ -94,7 +94,7 @@ jobs:
       displayName: 'Install PowerShell Core'
 
     - script: |
-        pwsh -c '.\build.ps1 -TaskList Test -Verbose'
+        pwsh -c '.\psake.ps1 -TaskList Test -Verbose'
       displayName: 'Execute Tests'
       env:
         azureApplicationId: $(azureApplicationId)
@@ -131,7 +131,7 @@ jobs:
       displayName: 'Install PowerShell Core'
 
     - script: |
-        pwsh -c '.\build.ps1 -TaskList Test -Verbose'
+        pwsh -c '.\psake.ps1 -TaskList Test -Verbose'
       displayName: 'Execute Tests'
       env:
         azureApplicationId: $(azureApplicationId)

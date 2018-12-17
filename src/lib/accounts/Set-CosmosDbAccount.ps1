@@ -139,7 +139,7 @@ function Set-CosmosDbAccount
     $null = $PSBoundParameters.Remove('MaxStalenessPrefix')
     $null = $PSBoundParameters.Remove('IpRangeFilter')
 
-    $setAzureRmResource_parameters = $PSBoundParameters + @{
+    $setAzResource_parameters = $PSBoundParameters + @{
         ResourceType = 'Microsoft.DocumentDb/databaseAccounts'
         ApiVersion   = '2015-04-08'
         Properties   = $cosmosDBProperties
@@ -149,6 +149,6 @@ function Set-CosmosDbAccount
     {
         Write-Verbose -Message $($LocalizedData.UpdatingAzureCosmosDBAccount -f $Name, $ResourceGroupName)
 
-        return (Set-AzureRmResource @setAzureRmResource_parameters -Force)
+        return (Set-AzResource @setAzResource_parameters -Force)
     }
 }
