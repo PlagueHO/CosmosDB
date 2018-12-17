@@ -6,6 +6,7 @@
   `AzureRm` and `AzureRm.NetCore` PowerShell Module - fixes [Issue #190](https://github.com/PlagueHO/CosmosDB/issues/190).
 - Renamed `build.ps1` to `psake.ps1` to indicate that it is used
   to execute `Psake` tasks.
+- Add Codacy Code Quality badge to `README.MD`.
 
 ## 2.1.15.237
 
