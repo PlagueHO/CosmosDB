@@ -25,7 +25,7 @@ New-CosmosDbAccount [-Name] <String> [-ResourceGroupName] <String> [-Location] <
 Use this function to create a new Cosmos DB account resource in
 Azure.
 
-You must have the AzureRM.Resources PowerShell module installed
+You must have the Az.Resources PowerShell module installed
 and must also be authenticated to Azure. The Resource Group that
 the Cosmos DB is created in must also exist.
 

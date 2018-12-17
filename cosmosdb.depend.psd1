@@ -71,27 +71,15 @@
         Tags           = 'Build'
     }
 
-    'AzureRM'         = @{
-        Name           = 'AzureRM'
+    'Az' = @{
+        Name           = 'Az'
         DependencyType = 'PSGalleryModule'
         Parameters     = @{
             Repository         = 'PSGallery'
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '6.8.1'
-        Tags           = 'Test_Desktop'
-    }
-
-    'AzureRM.NetCore' = @{
-        Name           = 'AzureRM.NetCore'
-        DependencyType = 'PSGalleryModule'
-        Parameters     = @{
-            Repository         = 'PSGallery'
-            SkipPublisherCheck = $true
-        }
-        Target         = 'CurrentUser'
-        Version        = '0.13.1'
-        Tags           = 'Test_Core'
+        Version        = '0.7.0'
+        Tags           = 'Test'
     }
 }

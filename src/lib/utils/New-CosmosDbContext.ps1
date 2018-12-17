@@ -86,11 +86,11 @@ function New-CosmosDbContext
         {
             try
             {
-                $null = Get-AzureRmContext -ErrorAction SilentlyContinue
+                $null = Get-AzContext -ErrorAction SilentlyContinue
             }
             catch
             {
-                $null = Add-AzureRmAccount
+                $null = Add-AzAccount
             }
 
             $Key = Get-CosmosDbAccountMasterKey `

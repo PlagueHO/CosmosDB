@@ -1,5 +1,12 @@
 # Change Log
 
+## Unreleased
+
+- BREAKING CHANGE: Converted to use `Az` PowerShell Module from
+  `AzureRm` and `AzureRm.NetCore` PowerShell Module - fixes [Issue #190](https://github.com/PlagueHO/CosmosDB/issues/190).
+- Renamed `build.ps1` to `psake.ps1` to indicate that it is used
+  to execute `Psake` tasks.
+
 ## 2.1.15.237
 
 - Added support for Continuation Tokens to `Get-CosmosDbCollection`

@@ -31,7 +31,7 @@ function Get-CosmosDbAccountMasterKey
         $action = 'readonlykeys'
     }
 
-    $invokeAzureRmResourceAction_parameters = @{
+    $invokeAzResourceAction_parameters = @{
         Name              = $Name
         ResourceGroupName = $ResourceGroupName
         ResourceType      = 'Microsoft.DocumentDb/databaseAccounts'
@@ -41,7 +41,7 @@ function Get-CosmosDbAccountMasterKey
         ErrorAction       = 'Stop'
     }
 
-    $resource = Invoke-AzureRmResourceAction @invokeAzureRmResourceAction_parameters
+    $resource = Invoke-AzResourceAction @invokeAzResourceAction_parameters
 
     if ($resource)
     {

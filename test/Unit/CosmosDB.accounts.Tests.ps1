@@ -22,7 +22,7 @@ InModuleScope CosmosDB {
     $script:testConsistencyLevel = 'Strong'
     $script:testMaxIntervalInSeconds = 60
     $script:testMaxStalenessPrefix = 900
-    $script:mockGetAzureRmResource = @{
+    $script:mockGetAzResource = @{
         ResourceId = 'ignore'
         Id         = 'ignore'
         Kind       = 'GlobalDocumentDB'
@@ -223,7 +223,7 @@ InModuleScope CosmosDB {
                 Due to the inconsistent name of the ResourceName parameter in Get-CosmosDbAccount
                 in different versions we need to look for both in the mock.
             #>
-            $getAzureRmResource_parameterFilter = {
+            $getAzResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 (($ResourceName -eq $script:testName) -or ($Name -eq $script:testName)) -and `
@@ -231,7 +231,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName Get-AzureRmResource `
+                -CommandName Get-AzResource `
                 -MockWith { 'Account' }
 
             It 'Should not throw exception' {
@@ -250,8 +250,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Get-AzureRmResource `
-                    -ParameterFilter $getAzureRmResource_parameterFilter `
+                    -CommandName Get-AzResource `
+                    -ParameterFilter $getAzResource_parameterFilter `
                     -Exactly -Times 1
             }
         }
@@ -280,7 +280,7 @@ InModuleScope CosmosDB {
                 ipRangeFilter            = ''
             }
 
-            $newAzurRmResource_parameterFilter = {
+            $newAzResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -291,7 +291,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName New-AzureRmResource `
+                -CommandName New-AzResource `
                 -MockWith { 'Account' }
 
             It 'Should not throw exception' {
@@ -311,8 +311,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName New-AzureRmResource `
-                    -ParameterFilter $newAzurRmResource_parameterFilter `
+                    -CommandName New-AzResource `
+                    -ParameterFilter $newAzResource_parameterFilter `
                     -Exactly -Times 1
             }
         }
@@ -335,7 +335,7 @@ InModuleScope CosmosDB {
                 ipRangeFilter            = ''
             }
 
-            $newAzurRmResource_parameterFilter = {
+            $newAzResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -347,7 +347,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName New-AzureRmResource `
+                -CommandName New-AzResource `
                 -MockWith { 'Account' }
 
             It 'Should not throw exception' {
@@ -368,8 +368,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName New-AzureRmResource `
-                    -ParameterFilter $newAzurRmResource_parameterFilter `
+                    -CommandName New-AzResource `
+                    -ParameterFilter $newAzResource_parameterFilter `
                     -Exactly -Times 1
             }
         }
@@ -396,7 +396,7 @@ InModuleScope CosmosDB {
                 ipRangeFilter            = ''
             }
 
-            $newAzurRmResource_parameterFilter = {
+            $newAzResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -407,7 +407,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName New-AzureRmResource `
+                -CommandName New-AzResource `
                 -MockWith { 'Account' }
 
             It 'Should not throw exception' {
@@ -428,8 +428,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName New-AzureRmResource `
-                    -ParameterFilter $newAzurRmResource_parameterFilter `
+                    -CommandName New-AzResource `
+                    -ParameterFilter $newAzResource_parameterFilter `
                     -Exactly -Times 1
             }
         }
@@ -460,7 +460,7 @@ InModuleScope CosmosDB {
                 ipRangeFilter            = ''
             }
 
-            $newAzurRmResource_parameterFilter = {
+            $newAzResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -471,7 +471,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName New-AzureRmResource `
+                -CommandName New-AzResource `
                 -MockWith { 'Account' }
 
             It 'Should not throw exception' {
@@ -492,8 +492,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName New-AzureRmResource `
-                    -ParameterFilter $newAzurRmResource_parameterFilter `
+                    -CommandName New-AzResource `
+                    -ParameterFilter $newAzResource_parameterFilter `
                     -Exactly -Times 1
             }
         }
@@ -516,7 +516,7 @@ InModuleScope CosmosDB {
                 ipRangeFilter            = ($script:testIpRangeFilter -join ',')
             }
 
-            $newAzurRmResource_parameterFilter = {
+            $newAzResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -527,7 +527,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName New-AzureRmResource `
+                -CommandName New-AzResource `
                 -MockWith { 'Account' }
 
             It 'Should not throw exception' {
@@ -548,8 +548,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName New-AzureRmResource `
-                    -ParameterFilter $newAzurRmResource_parameterFilter `
+                    -CommandName New-AzResource `
+                    -ParameterFilter $newAzResource_parameterFilter `
                     -Exactly -Times 1
             }
         }
@@ -572,7 +572,7 @@ InModuleScope CosmosDB {
                 ipRangeFilter            = ''
             }
 
-            $newAzurRmResource_parameterFilter = {
+            $newAzResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -583,7 +583,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName New-AzureRmResource `
+                -CommandName New-AzResource `
                 -MockWith { 'Account' }
 
             It 'Should not throw exception' {
@@ -606,8 +606,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName New-AzureRmResource `
-                    -ParameterFilter $newAzurRmResource_parameterFilter `
+                    -CommandName New-AzResource `
+                    -ParameterFilter $newAzResource_parameterFilter `
                     -Exactly -Times 1
             }
         }
@@ -636,7 +636,7 @@ InModuleScope CosmosDB {
                 ipRangeFilter            = ''
             }
 
-            $setAzurRmResource_parameterFilter = {
+            $setAzResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -646,7 +646,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName Set-AzureRmResource `
+                -CommandName Set-AzResource `
                 -MockWith { 'Account' }
 
             $getCosmosDbAccount_parameterFilter = {
@@ -656,7 +656,7 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Get-CosmosDbAccount `
-                -MockWith { $script:mockGetAzureRmResource }
+                -MockWith { $script:mockGetAzResource }
 
             It 'Should not throw exception' {
                 $setCosmosDbAccountParameters = @{
@@ -675,8 +675,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Set-AzureRmResource `
-                    -ParameterFilter $setAzurRmResource_parameterFilter `
+                    -CommandName Set-AzResource `
+                    -ParameterFilter $setAzResource_parameterFilter `
                     -Exactly -Times 1
 
                 Assert-MockCalled `
@@ -704,7 +704,7 @@ InModuleScope CosmosDB {
                 ipRangeFilter            = ''
             }
 
-            $setAzurRmResource_parameterFilter = {
+            $setAzResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -715,7 +715,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName Set-AzureRmResource `
+                -CommandName Set-AzResource `
                 -MockWith { 'Account' }
 
             $getCosmosDbAccount_parameterFilter = {
@@ -725,7 +725,7 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Get-CosmosDbAccount `
-                -MockWith { $script:mockGetAzureRmResource }
+                -MockWith { $script:mockGetAzResource }
 
             It 'Should not throw exception' {
                 $setCosmosDbAccountParameters = @{
@@ -745,8 +745,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Set-AzureRmResource `
-                    -ParameterFilter $setAzurRmResource_parameterFilter `
+                    -CommandName Set-AzResource `
+                    -ParameterFilter $setAzResource_parameterFilter `
                     -Exactly -Times 1
 
                 Assert-MockCalled `
@@ -778,7 +778,7 @@ InModuleScope CosmosDB {
                 ipRangeFilter            = ''
             }
 
-            $setAzurRmResource_parameterFilter = {
+            $setAzResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -788,7 +788,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName Set-AzureRmResource `
+                -CommandName Set-AzResource `
                 -MockWith { 'Account' }
 
             $getCosmosDbAccount_parameterFilter = {
@@ -798,7 +798,7 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Get-CosmosDbAccount `
-                -MockWith { $script:mockGetAzureRmResource }
+                -MockWith { $script:mockGetAzResource }
 
             It 'Should not throw exception' {
                 $setCosmosDbAccountParameters = @{
@@ -818,8 +818,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Set-AzureRmResource `
-                    -ParameterFilter $setAzurRmResource_parameterFilter `
+                    -CommandName Set-AzResource `
+                    -ParameterFilter $setAzResource_parameterFilter `
                     -Exactly -Times 1
 
                 Assert-MockCalled `
@@ -855,7 +855,7 @@ InModuleScope CosmosDB {
                 ipRangeFilter            = ''
             }
 
-            $setAzurRmResource_parameterFilter = {
+            $setAzResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -865,7 +865,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName Set-AzureRmResource `
+                -CommandName Set-AzResource `
                 -MockWith { 'Account' }
 
             $getCosmosDbAccount_parameterFilter = {
@@ -875,7 +875,7 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Get-CosmosDbAccount `
-                -MockWith { $script:mockGetAzureRmResource }
+                -MockWith { $script:mockGetAzResource }
 
             It 'Should not throw exception' {
                 $setCosmosDbAccountParameters = @{
@@ -895,8 +895,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Set-AzureRmResource `
-                    -ParameterFilter $setAzurRmResource_parameterFilter `
+                    -CommandName Set-AzResource `
+                    -ParameterFilter $setAzResource_parameterFilter `
                     -Exactly -Times 1
 
                 Assert-MockCalled `
@@ -924,7 +924,7 @@ InModuleScope CosmosDB {
                 ipRangeFilter            = ($script:testIpRangeFilter -join ',')
             }
 
-            $setAzurRmResource_parameterFilter = {
+            $setAzResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -934,7 +934,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName Set-AzureRmResource `
+                -CommandName Set-AzResource `
                 -MockWith { 'Account' }
 
             $getCosmosDbAccount_parameterFilter = {
@@ -944,7 +944,7 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Get-CosmosDbAccount `
-                -MockWith { $script:mockGetAzureRmResource }
+                -MockWith { $script:mockGetAzResource }
 
             It 'Should not throw exception' {
                 $setCosmosDbAccountParameters = @{
@@ -964,8 +964,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Set-AzureRmResource `
-                    -ParameterFilter $setAzurRmResource_parameterFilter `
+                    -CommandName Set-AzResource `
+                    -ParameterFilter $setAzResource_parameterFilter `
                     -Exactly -Times 1
 
                 Assert-MockCalled `
@@ -993,7 +993,7 @@ InModuleScope CosmosDB {
                 ipRangeFilter            = ''
             }
 
-            $setAzurRmResource_parameterFilter = {
+            $setAzResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -1003,7 +1003,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName Set-AzureRmResource `
+                -CommandName Set-AzResource `
                 -MockWith { 'Account' }
 
             $getCosmosDbAccount_parameterFilter = {
@@ -1013,7 +1013,7 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Get-CosmosDbAccount `
-                -MockWith { $script:mockGetAzureRmResource }
+                -MockWith { $script:mockGetAzResource }
 
             It 'Should not throw exception' {
                 $setCosmosDbAccountParameters = @{
@@ -1031,8 +1031,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Set-AzureRmResource `
-                    -ParameterFilter $setAzurRmResource_parameterFilter `
+                    -CommandName Set-AzResource `
+                    -ParameterFilter $setAzResource_parameterFilter `
                     -Exactly -Times 1
 
                 Assert-MockCalled `
@@ -1060,7 +1060,7 @@ InModuleScope CosmosDB {
                 ipRangeFilter            = ''
             }
 
-            $setAzurRmResource_parameterFilter = {
+            $setAzResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -1070,7 +1070,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName Set-AzureRmResource `
+                -CommandName Set-AzResource `
                 -MockWith { 'Account' }
 
             $getCosmosDbAccount_parameterFilter = {
@@ -1080,7 +1080,7 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Get-CosmosDbAccount `
-                -MockWith { $script:mockGetAzureRmResource }
+                -MockWith { $script:mockGetAzResource }
 
             It 'Should not throw exception' {
                 $setCosmosDbAccountParameters = @{
@@ -1100,8 +1100,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Set-AzureRmResource `
-                    -ParameterFilter $setAzurRmResource_parameterFilter `
+                    -CommandName Set-AzResource `
+                    -ParameterFilter $setAzResource_parameterFilter `
                     -Exactly -Times 1
 
                 Assert-MockCalled `
@@ -1129,7 +1129,7 @@ InModuleScope CosmosDB {
                 ipRangeFilter            = ''
             }
 
-            $setAzurRmResource_parameterFilter = {
+            $setAzResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -1139,7 +1139,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName Set-AzureRmResource `
+                -CommandName Set-AzResource `
                 -MockWith { 'Account' } `
                 -Verifiable
 
@@ -1150,7 +1150,7 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Get-CosmosDbAccount `
-                -MockWith { $script:mockGetAzureRmResource } `
+                -MockWith { $script:mockGetAzResource } `
                 -Verifiable
 
             It 'Should not throw exception' {
@@ -1167,8 +1167,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Set-AzureRmResource `
-                    -ParameterFilter $setAzurRmResource_parameterFilter `
+                    -CommandName Set-AzResource `
+                    -ParameterFilter $setAzResource_parameterFilter `
                     -Exactly -Times 1
 
                 Assert-MockCalled `
@@ -1187,7 +1187,7 @@ InModuleScope CosmosDB {
         Context 'When called with a Name and ResourceGroupName' {
             $script:result = $null
 
-            $removeAzurRmResource_parameterFilter = {
+            $removeAzResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -1196,7 +1196,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName Remove-AzureRmResource
+                -CommandName Remove-AzResource
 
             It 'Should not throw exception' {
                 $removeCosmosDbAccountParameters = @{
@@ -1211,8 +1211,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Remove-AzureRmResource `
-                    -ParameterFilter $removeAzurRmResource_parameterFilter `
+                    -CommandName Remove-AzResource `
+                    -ParameterFilter $removeAzResource_parameterFilter `
                     -Exactly -Times 1
             }
         }
@@ -1220,7 +1220,7 @@ InModuleScope CosmosDB {
         Context 'When called with a Name and ResourceGroupName and AsJob' {
             $script:result = $null
 
-            $removeAzurRmResource_parameterFilter = {
+            $removeAzResource_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -1230,7 +1230,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName Remove-AzureRmResource
+                -CommandName Remove-AzResource
 
             It 'Should not throw exception' {
                 $removeCosmosDbAccountParameters = @{
@@ -1246,8 +1246,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Remove-AzureRmResource `
-                    -ParameterFilter $removeAzurRmResource_parameterFilter `
+                    -CommandName Remove-AzResource `
+                    -ParameterFilter $removeAzResource_parameterFilter `
                     -Exactly -Times 1
             }
         }
@@ -1261,7 +1261,7 @@ InModuleScope CosmosDB {
         Context 'When called with a Name and ResourceGroupName' {
             $script:result = $null
 
-            $invokeAzureRmResourceAction_parameterFilter = {
+            $invokeAzResourceAction_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -1271,7 +1271,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName Invoke-AzureRmResourceAction `
+                -CommandName Invoke-AzResourceAction `
                 -MockWith { 'ConnectionString' }
 
             It 'Should not throw exception' {
@@ -1290,8 +1290,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-AzureRmResourceAction `
-                    -ParameterFilter $invokeAzureRmResourceAction_parameterFilter `
+                    -CommandName Invoke-AzResourceAction `
+                    -ParameterFilter $invokeAzResourceAction_parameterFilter `
                     -Exactly -Times 1
             }
         }
@@ -1305,7 +1305,7 @@ InModuleScope CosmosDB {
         Context 'When called with a Name and ResourceGroupName with a MasterKeyType is Default' {
             $script:result = $null
 
-            $invokeAzureRmResourceAction_parameterFilter = {
+            $invokeAzResourceAction_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -1315,7 +1315,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName Invoke-AzureRmResourceAction `
+                -CommandName Invoke-AzResourceAction `
                 -MockWith {
                 [PSCustomObject] @{ PrimaryMasterKey = $script:testKey}
             }
@@ -1336,8 +1336,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-AzureRmResourceAction `
-                    -ParameterFilter $invokeAzureRmResourceAction_parameterFilter `
+                    -CommandName Invoke-AzResourceAction `
+                    -ParameterFilter $invokeAzResourceAction_parameterFilter `
                     -Exactly -Times 1
             }
         }
@@ -1345,7 +1345,7 @@ InModuleScope CosmosDB {
         Context 'When called with a Name and ResourceGroupName with a MasterKeyType is SecondaryMasterKey' {
             $script:result = $null
 
-            $invokeAzureRmResourceAction_parameterFilter = {
+            $invokeAzResourceAction_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -1355,7 +1355,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName Invoke-AzureRmResourceAction `
+                -CommandName Invoke-AzResourceAction `
                 -MockWith {
                 [PSCustomObject] @{ SecondaryMasterKey = $script:testKey}
             }
@@ -1377,8 +1377,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-AzureRmResourceAction `
-                    -ParameterFilter $invokeAzureRmResourceAction_parameterFilter `
+                    -CommandName Invoke-AzResourceAction `
+                    -ParameterFilter $invokeAzResourceAction_parameterFilter `
                     -Exactly -Times 1
             }
         }
@@ -1386,7 +1386,7 @@ InModuleScope CosmosDB {
         Context 'When called with a Name and ResourceGroupName with a MasterKeyType is PrimaryReadonlyMasterKey' {
             $script:result = $null
 
-            $invokeAzureRmResourceAction_parameterFilter = {
+            $invokeAzResourceAction_parameterFilter = {
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
@@ -1396,7 +1396,7 @@ InModuleScope CosmosDB {
             }
 
             Mock `
-                -CommandName Invoke-AzureRmResourceAction `
+                -CommandName Invoke-AzResourceAction `
                 -MockWith {
                 [PSCustomObject] @{ PrimaryReadonlyMasterKey = $script:testKey}
             }
@@ -1418,8 +1418,8 @@ InModuleScope CosmosDB {
 
             It 'Should call expected mocks' {
                 Assert-MockCalled `
-                    -CommandName Invoke-AzureRmResourceAction `
-                    -ParameterFilter $invokeAzureRmResourceAction_parameterFilter `
+                    -CommandName Invoke-AzResourceAction `
+                    -ParameterFilter $invokeAzResourceAction_parameterFilter `
                     -Exactly -Times 1
             }
         }
@@ -1432,7 +1432,7 @@ InModuleScope CosmosDB {
             Context 'When called with a Name and ResourceGroupName with a MasterKeyType is Default' {
                 $script:result = $null
 
-                $invokeAzureRmResourceAction_parameterFilter = {
+                $invokeAzResourceAction_parameterFilter = {
                     ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                     ($ApiVersion -eq '2015-04-08') -and `
                     ($ResourceName -eq $script:testName) -and `
@@ -1443,7 +1443,7 @@ InModuleScope CosmosDB {
                 }
 
                 Mock `
-                    -CommandName Invoke-AzureRmResourceAction `
+                    -CommandName Invoke-AzResourceAction `
                     -MockWith {
                     [PSCustomObject] @{ PrimaryMasterKey = $script:testKey}
                 }
@@ -1460,8 +1460,8 @@ InModuleScope CosmosDB {
 
                 It 'Should call expected mocks' {
                     Assert-MockCalled `
-                        -CommandName Invoke-AzureRmResourceAction `
-                        -ParameterFilter $invokeAzureRmResourceAction_parameterFilter `
+                        -CommandName Invoke-AzResourceAction `
+                        -ParameterFilter $invokeAzResourceAction_parameterFilter `
                         -Exactly -Times 1
                 }
             }
@@ -1469,7 +1469,7 @@ InModuleScope CosmosDB {
             Context 'When called with a Name and ResourceGroupName with a MasterKeyType is SecondaryMasterKey' {
                 $script:result = $null
 
-                $invokeAzureRmResourceAction_parameterFilter = {
+                $invokeAzResourceAction_parameterFilter = {
                     ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                     ($ApiVersion -eq '2015-04-08') -and `
                     ($ResourceName -eq $script:testName) -and `
@@ -1480,7 +1480,7 @@ InModuleScope CosmosDB {
                 }
 
                 Mock `
-                    -CommandName Invoke-AzureRmResourceAction `
+                    -CommandName Invoke-AzResourceAction `
                     -MockWith {
                     [PSCustomObject] @{ PrimaryMasterKey = $script:testKey}
                 }
@@ -1497,8 +1497,8 @@ InModuleScope CosmosDB {
 
                 It 'Should call expected mocks' {
                     Assert-MockCalled `
-                        -CommandName Invoke-AzureRmResourceAction `
-                        -ParameterFilter $invokeAzureRmResourceAction_parameterFilter `
+                        -CommandName Invoke-AzResourceAction `
+                        -ParameterFilter $invokeAzResourceAction_parameterFilter `
                         -Exactly -Times 1
                 }
             }
@@ -1506,7 +1506,7 @@ InModuleScope CosmosDB {
             Context 'When called with a Name and ResourceGroupName with a MasterKeyType is PrimaryReadonlyMasterKey' {
                 $script:result = $null
 
-                $invokeAzureRmResourceAction_parameterFilter = {
+                $invokeAzResourceAction_parameterFilter = {
                     ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                     ($ApiVersion -eq '2015-04-08') -and `
                     ($ResourceName -eq $script:testName) -and `
@@ -1517,7 +1517,7 @@ InModuleScope CosmosDB {
                 }
 
                 Mock `
-                    -CommandName Invoke-AzureRmResourceAction `
+                    -CommandName Invoke-AzResourceAction `
                     -MockWith {
                     [PSCustomObject] @{ PrimaryMasterKey = $script:testKey}
                 }
@@ -1534,8 +1534,8 @@ InModuleScope CosmosDB {
 
                 It 'Should call expected mocks' {
                     Assert-MockCalled `
-                        -CommandName Invoke-AzureRmResourceAction `
-                        -ParameterFilter $invokeAzureRmResourceAction_parameterFilter `
+                        -CommandName Invoke-AzResourceAction `
+                        -ParameterFilter $invokeAzResourceAction_parameterFilter `
                         -Exactly -Times 1
                 }
             }

@@ -88,19 +88,18 @@ For more information on the Cosmos DB Rest APIs, see [this link](https://docs.mi
 
 ## Requirements
 
-This module supports the following:
+This module requires the following:
 
-- Windows PowerShell 5.x:
-  - **AzureRM.Profile** and **AzureRM.Resources** PowerShell modules
+- Windows PowerShell 5.x or PowerShell 6.x:
+  - **Az.Profile** and **Az.Resources** PowerShell modules
     are required if using `New-CosmosDbContext -ResourceGroupName $resourceGroup`
     or `*-CosmosDbAccount` functions.
 
-or:
-
-- PowerShell Core 6.x:
-  - **AzureRM.NetCore.Profile** and **AzureRM.NetCore.Resources** PowerShell
-    modules are required if using `New-CosmosDbContext -ResourceGroupName $resourceGroup`
-    or `*-CosmosDbAccount` functions.
+| Note: As of 3.0.0.0 of the CosmosDB module, support for **AzureRm** and
+| **AzureRm.NetCore** PowerShell modules has been deprecated due to being
+| superceeded by the **Az** modules. If it is a requirement that **AzureRm**
+| or **AzureRm.NetCore** modules are used then you will need to remain on
+| CosmosDB module 2.x.
 
 ## Installation
 
@@ -152,7 +151,7 @@ _Note: if PowerShell is not connected to Azure then an interactive
 Azure login will be initiated. If PowerShell is already connected to
 an account that doesn't contain the Cosmos DB you wish to connect to then
 you will first need to connect to the correct account using the
-`Add-AzureRmAccount` cmdlet._
+`Add-AzAccount` cmdlet._
 
 #### Create a Context for a Cosmos DB Emulator
 
@@ -182,12 +181,12 @@ Authorization Tokens_.
 ### Working with Accounts
 
 You can create, retrieve, update and remove Azure Cosmos DB accounts using
-this module. To use these features you will need to ensure the **AzureRM.Profile**
-and **AzureRM.Resources** modules installed - See [Requirements](#requirements)
+this module. To use these features you will need to ensure the **Az.Profile**
+and **Az.Resources** modules installed - See [Requirements](#requirements)
 above.
 
 _Note: You must have first logged PowerShell into Azure using the
-`Add-AzureRmAccount` function before you can use these functions._
+`Add-AzAccount` function before you can use these functions._
 
 Create a new Cosmos DB account in Azure:
 

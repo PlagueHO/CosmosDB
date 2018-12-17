@@ -16,7 +16,7 @@ function Get-CosmosDbAccountConnectionString
         $ResourceGroupName
     )
 
-    $invokeAzureRmResourceAction_parameters = $PSBoundParameters + @{
+    $invokeAzResourceAction_parameters = $PSBoundParameters + @{
         ResourceType = 'Microsoft.DocumentDb/databaseAccounts'
         ApiVersion   = '2015-04-08'
         Action       = 'listConnectionStrings'
@@ -26,5 +26,5 @@ function Get-CosmosDbAccountConnectionString
     Write-Verbose -Message $($LocalizedData.GettingAzureCosmosDBAccountConnectionString -f $Name, $ResourceGroupName)
     Write-Warning -Message $LocalizedData.GettingAzureCosmosDBAccountConnectionStringWarning
 
-    return Invoke-AzureRmResourceAction @invokeAzureRmResourceAction_parameters
+    return Invoke-AzResourceAction @invokeAzResourceAction_parameters
 }

@@ -51,7 +51,7 @@ Task PrepareTest -Depends Init {
         -Force `
         -Import `
         -Install `
-        -Tags 'Test',('Test_{0}' -f $PSVersionTable.PSEdition)
+        -Tags 'Test'
 }
 
 Task Test -Depends UnitTest, IntegrationTest

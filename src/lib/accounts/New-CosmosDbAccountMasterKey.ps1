@@ -24,7 +24,7 @@ function New-CosmosDbAccountMasterKey
 
     Write-Verbose -Message $($LocalizedData.RegeneratingAzureCosmosDBAccountMasterKey -f $Name, $ResourceGroupName, $MasterKeyType)
 
-    $invokeAzureRmResourceAction_parameters = @{
+    $invokeAzResourceAction_parameters = @{
         Name              = $Name
         ResourceGroupName = $ResourceGroupName
         ResourceType      = 'Microsoft.DocumentDb/databaseAccounts'
@@ -35,5 +35,5 @@ function New-CosmosDbAccountMasterKey
         ErrorAction       = 'Stop'
     }
 
-    Invoke-AzureRmResourceAction @invokeAzureRmResourceAction_parameters
+    Invoke-AzResourceAction @invokeAzResourceAction_parameters
 }
