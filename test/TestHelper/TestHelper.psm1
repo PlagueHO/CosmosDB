@@ -65,7 +65,7 @@ function Connect-AzureServicePrincipal
             -Path $azureProfileFilename
 
         # Handle login
-        $null = Add-AzureRmAccount `
+        $null = Connect-AzAccount `
             -ServicePrincipal `
             -SubscriptionId $SubscriptionId `
             -TenantId $TenantId `
