@@ -79,7 +79,7 @@
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '0.7.0'
+        Version        = '1.0.0'
         Tags           = 'Test'
     }
 }

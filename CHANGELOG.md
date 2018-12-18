@@ -7,6 +7,12 @@
 - Renamed `build.ps1` to `psake.ps1` to indicate that it is used
   to execute `Psake` tasks.
 - Add Codacy Code Quality badge to `README.MD`.
+- Configure PSScriptAnalyzer to show errors, warnings and informational
+  violations in Visual Studio Code.
+- Fix generic tests to validate PSScriptAnalyzer errors, warnings and
+  informational rules.
+- Converted use of alias `Add-AzAccount` to `Connect-AzAccount`.
+- Updated to use `Az` PowerShell Module 1.0.0.0.
 
 ## 2.1.15.237
 

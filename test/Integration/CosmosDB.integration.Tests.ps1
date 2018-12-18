@@ -1,4 +1,5 @@
 [System.Diagnostics.CodeAnalysis.SuppressMessage('PSAvoidUsingConvertToSecureStringWithPlainText', '')]
+[System.Diagnostics.CodeAnalysis.SuppressMessage('PSAvoidUsingConvertToSecureStringWithPlainText', '')]
 [CmdletBinding()]
 param (
 )
@@ -122,10 +123,15 @@ function tax(income) {
 $script:testDefaultTimeToLive = 3600
 
 # Connect to Azure
+$secureStringAzureApplicationPassword = ConvertTo-SecureString `
+    -String $env:azureApplicationPassword `
+    -AsPlainText `
+    -Force
+
 Connect-AzureServicePrincipal `
     -SubscriptionId $env:azureSubscriptionId `
     -ApplicationId $env:azureApplicationId `
-    -ApplicationPassword $env:azureApplicationPassword `
+    -ApplicationPassword $secureStringAzureApplicationPassword `
     -TenantId $env:azureTenantId `
     -Verbose
 
