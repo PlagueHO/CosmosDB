@@ -7,13 +7,6 @@ $moduleManifestName = 'CosmosDB.psd1'
 $moduleRootPath = "$PSScriptRoot\..\..\src\"
 $moduleManifestPath = Join-Path -Path $moduleRootPath -ChildPath $moduleManifestName
 
-Describe 'Module Manifest Tests' {
-    It 'Passes Test-ModuleManifest' {
-        Test-ModuleManifest -Path $moduleManifestPath | Should -Not -BeNullOrEmpty
-        $? | Should -Be $true
-    }
-}
-
 Describe 'CosmosDB Module'{
     Context 'PSScriptAnalyzer' {
         Import-Module -Name 'PSScriptAnalyzer'
@@ -24,12 +17,14 @@ Describe 'CosmosDB Module'{
         $PSScriptAnalyzerResult = Invoke-ScriptAnalyzer `
             -Path $modulePath `
             -Settings (Join-Path -Path $moduleRootPath -ChildPath '..\PSScriptAnalyzerSettings.psd1') `
-            -ErrorAction SilentlyContinue
+            -ErrorAction SilentlyContinue `
+            -Verbose:$false
         $PSScriptAnalyzerResult += Invoke-ScriptAnalyzer `
             -Path (Join-Path -Path $moduleRootPath -ChildPath 'lib') `
             -Recurse `
             -Settings (Join-Path -Path $moduleRootPath -ChildPath '..\PSScriptAnalyzerSettings.psd1') `
-            -ErrorAction SilentlyContinue
+            -ErrorAction SilentlyContinue `
+            -Verbose:$false
 
         $PSScriptAnalyzerErrors = $PSScriptAnalyzerResult | Where-Object {
             $_.Severity -eq 'Error'
