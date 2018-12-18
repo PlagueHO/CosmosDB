@@ -119,7 +119,6 @@ jobs:
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
   - job: Build_PSCore_MacOS1013
-    condition: eq(true, false) # Suppress running on MacOS host on 2018-11-03 because Az Module is installed here. Once moved to Az we can continue to use this.
     pool:
       vmImage: xcode9-macos10.13
 
