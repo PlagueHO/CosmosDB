@@ -245,7 +245,7 @@ console.log("done");
             $script:result = $null
 
             Mock -CommandName Get-AzContext -MockWith { throw }
-            Mock -CommandName Add-AzAccount
+            Mock -CommandName Connect-AzAccount
             Mock `
                 -CommandName Get-CosmosDbAccountMasterKey `
                 -MockWith { $script:testKeySecureString }
@@ -271,7 +271,7 @@ console.log("done");
 
             It 'Should call expected mocks' {
                 Assert-MockCalled -CommandName Get-AzContext -Exactly -Times 1
-                Assert-MockCalled -CommandName Add-AzAccount -Exactly -Times 1
+                Assert-MockCalled -CommandName Connect-AzAccount -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-CosmosDbAccountMasterKey `
                     -ParameterFilter { $MasterKeyType -eq 'PrimaryMasterKey' } `
                     -Exactly -Times 1
@@ -282,7 +282,7 @@ console.log("done");
             $script:result = $null
 
             Mock -CommandName Get-AzContext -MockWith { $true }
-            Mock -CommandName Add-AzAccount
+            Mock -CommandName Connect-AzAccount
             Mock `
                 -CommandName Get-CosmosDbAccountMasterKey `
                 -MockWith { $script:testKeySecureString }
@@ -307,7 +307,7 @@ console.log("done");
 
             It 'Should call expected mocks' {
                 Assert-MockCalled -CommandName Get-AzContext -Exactly -Times 1
-                Assert-MockCalled -CommandName Add-AzAccount -Exactly -Times 0
+                Assert-MockCalled -CommandName Connect-AzAccount -Exactly -Times 0
                 Assert-MockCalled -CommandName Get-CosmosDbAccountMasterKey `
                     -ParameterFilter { $MasterKeyType -eq 'PrimaryMasterKey' } `
                     -Exactly -Times 1

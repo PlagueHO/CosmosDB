@@ -1,4 +1,5 @@
 [System.Diagnostics.CodeAnalysis.SuppressMessage('PSAvoidUsingConvertToSecureStringWithPlainText', '')]
+[System.Diagnostics.CodeAnalysis.SuppressMessage('PSAvoidUsingConvertToSecureStringWithPlainText', '')]
 [CmdletBinding()]
 param (
 )
@@ -122,10 +123,15 @@ function tax(income) {
 $script:testDefaultTimeToLive = 3600
 
 # Connect to Azure
+$secureStringAzureApplicationPassword = ConvertTo-SecureString `
+    -String $env:azureApplicationPassword `
+    -AsPlainText `
+    -Force
+
 Connect-AzureServicePrincipal `
     -SubscriptionId $env:azureSubscriptionId `
     -ApplicationId $env:azureApplicationId `
-    -ApplicationPassword $env:azureApplicationPassword `
+    -ApplicationPassword $secureStringAzureApplicationPassword `
     -TenantId $env:azureTenantId `
     -Verbose
 
@@ -141,7 +147,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     if ($ENV:BHBuildSystem -eq 'AppVeyor')
     {
         Write-Warning -Message (@(
-            'New-AzResource, Set-AzResource and some Invoke-AzResourceAction calls currently throws the following exception in AppVeyor:'
+            'New-AzureRmResource, Set-AzureRmResource and some Invoke-AzureRmResourceAction calls currently throws the following exception in AppVeyor:'
             'Method not found: ''Void Newtonsoft.Json.Serialization.JsonDictionaryContract.set_PropertyNameResolver(System.Func`2<System.String,System.String>)'''
             'due to an older version of Newtonsoft.Json being used.'
             'Therefore integration tests of New-CosmosDbAccount and Set-CosmosDbAccount are currently skipped when running in AppVeyor environment.'

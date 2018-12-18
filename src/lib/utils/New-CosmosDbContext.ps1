@@ -90,7 +90,7 @@ function New-CosmosDbContext
             }
             catch
             {
-                $null = Add-AzAccount
+                $null = Connect-AzAccount
             }
 
             $Key = Get-CosmosDbAccountMasterKey `

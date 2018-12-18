@@ -152,7 +152,7 @@ _Note: if PowerShell is not connected to Azure then an interactive
 Azure login will be initiated. If PowerShell is already connected to
 an account that doesn't contain the Cosmos DB you wish to connect to then
 you will first need to connect to the correct account using the
-`Add-AzAccount` cmdlet._
+`Connect-AzAccount` cmdlet._
 
 #### Create a Context for a Cosmos DB Emulator
 
@@ -187,7 +187,7 @@ and **Az.Resources** modules installed - See [Requirements](#requirements)
 above.
 
 _Note: You must have first logged PowerShell into Azure using the
-`Add-AzAccount` function before you can use these functions._
+`Connect-AzAccount` function before you can use these functions._
 
 Create a new Cosmos DB account in Azure:
 

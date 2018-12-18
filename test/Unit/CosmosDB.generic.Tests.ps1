@@ -14,39 +14,42 @@ Describe 'Module Manifest Tests' {
     }
 }
 
-Describe 'PSScriptAnalyzer' -Tag 'PSScriptAnalyzer' {
-    Import-Module -Name 'PSScriptAnalyzer'
+Describe 'CosmosDB Module'{
+    Context 'PSScriptAnalyzer' {
+        Import-Module -Name 'PSScriptAnalyzer'
 
-    Context 'CosmosDB Module code and CosmosDB Lib Functions' {
         $modulePath = Join-Path -Path $moduleRootPath -ChildPath 'CosmosDB.psm1'
-        $moduleManifestPath = Join-Path -Path $moduleRootPath -ChildPath 'CosmosDB.psd1'
+
+        # Perform PSScriptAnalyzer scan
+        $PSScriptAnalyzerResult = Invoke-ScriptAnalyzer `
+            -Path $modulePath `
+            -Settings (Join-Path -Path $moduleRootPath -ChildPath '..\PSScriptAnalyzerSettings.psd1') `
+            -ErrorAction SilentlyContinue
+        $PSScriptAnalyzerResult += Invoke-ScriptAnalyzer `
+            -Path (Join-Path -Path $moduleRootPath -ChildPath 'lib') `
+            -Recurse `
+            -Settings (Join-Path -Path $moduleRootPath -ChildPath '..\PSScriptAnalyzerSettings.psd1') `
+            -ErrorAction SilentlyContinue
+
+        $PSScriptAnalyzerErrors = $PSScriptAnalyzerResult | Where-Object {
+            $_.Severity -eq 'Error'
+        }
 
         It 'Should have no Error level PowerShell Script Analyzer violations' {
-            # Perform PSScriptAnalyzer scan.
-            $PSScriptAnalyzerResult = Invoke-ScriptAnalyzer `
-                -path $modulePath `
-                -Severity Warning `
-                -ErrorAction SilentlyContinue
-            $PSScriptAnalyzerResult += Invoke-ScriptAnalyzer `
-                -path (Join-Path -Path $moduleRootPath -ChildPath 'lib\*.ps1') `
-                -excluderule "PSAvoidUsingUserNameAndPassWordParams" `
-                -Severity Warning `
-                -ErrorAction SilentlyContinue
-            $PSScriptAnalyzerErrors = $PSScriptAnalyzerResult | Where-Object {
-                $_.Severity -eq 'Error'
-            }
-            $PSScriptAnalyzerWarnings = $PSScriptAnalyzerResult | Where-Object {
-                $_.Severity -eq 'Warning'
-            }
-
             if ($PSScriptAnalyzerErrors -ne $null)
             {
-                Write-Warning -Message 'There are PSScriptAnalyzer errors that need to be fixed:'
+                Write-Warning -Message 'There are PSScriptAnalyzer errors that must be fixed:'
                 @($PSScriptAnalyzerErrors).Foreach( {
                     Write-Warning -Message "$($_.Scriptname) (Line $($_.Line)): $($_.Message)"
                 } )
                 Write-Warning -Message  'For instructions on how to run PSScriptAnalyzer on your own machine, please go to https://github.com/powershell/psscriptAnalyzer/'
                 $PSScriptAnalyzerErrors.Count | Should -Be $null
+            }
+        }
+
+        It 'Should have no Warning level PowerShell Script Analyzer violations' {
+            $PSScriptAnalyzerWarnings = $PSScriptAnalyzerResult | Where-Object {
+                $_.Severity -eq 'Warning'
             }
 
             if ($PSScriptAnalyzerWarnings -ne $null)
@@ -58,9 +61,27 @@ Describe 'PSScriptAnalyzer' -Tag 'PSScriptAnalyzer' {
             }
         }
 
-        $script:moduleManifest = Test-ModuleManifest -Path $moduleManifestPath -ErrorAction SilentlyContinue
+        It 'Should have no Information level PowerShell Script Analyzer violations' -Skip:$true {
+            Write-Verbose -Message 'Hello' -Verbose
+            $PSScriptAnalyzerInformation = $PSScriptAnalyzerResult | Where-Object {
+                $_.Severity -eq 'Information'
+            }
+
+            if ($PSScriptAnalyzerInformation -ne $null)
+            {
+                Write-Warning -Message 'There are PSScriptAnalyzer informational issues that should be fixed:'
+                @($PSScriptAnalyzerInformation).Foreach( {
+                    Write-Warning -Message "$($_.Scriptname) (Line $($_.Line)): $($_.Message)"
+                } )
+            }
+        }
+    }
+
+    Context 'Manifest' {
+        $moduleManifestPath = Join-Path -Path $moduleRootPath -ChildPath 'CosmosDB.psd1'
 
         It 'Should have a valid manifest' {
+            $script:moduleManifest = Test-ModuleManifest -Path $moduleManifestPath
             $script:moduleManifest | Should -Not -BeNullOrEmpty
         }
 
