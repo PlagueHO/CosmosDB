@@ -12,6 +12,7 @@
 - Fix generic tests to validate PSScriptAnalyzer errors, warnings and
   informational rules.
 - Converted use of alias `Add-AzAccount` to `Connect-AzAccount`.
+- Updated to use `Az` PowerShell Module 1.0.0.0.
 
 ## 2.1.15.237
 

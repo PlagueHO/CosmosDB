@@ -38,11 +38,15 @@ Describe 'CosmosDB Module'{
         It 'Should have no Error level PowerShell Script Analyzer violations' {
             if ($PSScriptAnalyzerErrors -ne $null)
             {
-                Write-Warning -Message 'There are PSScriptAnalyzer errors that must be fixed:'
-                @($PSScriptAnalyzerErrors).Foreach( {
-                    Write-Warning -Message "$($_.Scriptname) (Line $($_.Line)): $($_.Message)"
-                } )
+                Write-Warning -Message 'There are Error level PowerShell Script Analyzer violations that must be fixed:'
+
+                foreach ($violation in $PSScriptAnalyzerErrors)
+                {
+                    Write-Warning -Message "$($violation.Scriptname) (Line $($violation.Line)): $($violation.Message)"
+                }
+
                 Write-Warning -Message  'For instructions on how to run PSScriptAnalyzer on your own machine, please go to https://github.com/powershell/psscriptAnalyzer/'
+
                 $PSScriptAnalyzerErrors.Count | Should -Be $null
             }
         }
@@ -54,25 +58,34 @@ Describe 'CosmosDB Module'{
 
             if ($PSScriptAnalyzerWarnings -ne $null)
             {
-                Write-Warning -Message 'There are PSScriptAnalyzer warnings that should be fixed:'
-                @($PSScriptAnalyzerWarnings).Foreach( {
-                    Write-Warning -Message "$($_.Scriptname) (Line $($_.Line)): $($_.Message)"
-                } )
+                Write-Warning -Message 'There are Warning level PowerShell Script Analyzer violations that should be fixed:'
+
+                foreach ($violation in $PSScriptAnalyzerWarnings)
+                {
+                    Write-Warning -Message "$($violation.Scriptname) (Line $($violation.Line)): $($violation.Message)"
+                }
+
+                Write-Warning -Message  'For instructions on how to run PSScriptAnalyzer on your own machine, please go to https://github.com/powershell/psscriptAnalyzer/'
             }
         }
 
-        It 'Should have no Information level PowerShell Script Analyzer violations' -Skip:$true {
-            Write-Verbose -Message 'Hello' -Verbose
+        It 'Should have no Information level PowerShell Script Analyzer violations' {
             $PSScriptAnalyzerInformation = $PSScriptAnalyzerResult | Where-Object {
                 $_.Severity -eq 'Information'
             }
 
             if ($PSScriptAnalyzerInformation -ne $null)
             {
-                Write-Warning -Message 'There are PSScriptAnalyzer informational issues that should be fixed:'
-                @($PSScriptAnalyzerInformation).Foreach( {
-                    Write-Warning -Message "$($_.Scriptname) (Line $($_.Line)): $($_.Message)"
-                } )
+                Write-Warning -Message 'There are Information level PowerShell Script Analyzer violations that must be fixed:'
+
+                foreach ($violation in $PSScriptAnalyzerInformation)
+                {
+                    Write-Warning -Message "$($violation.Scriptname) (Line $($violation.Line)): $($violation.Message)"
+                }
+
+                Write-Warning -Message  'For instructions on how to run PSScriptAnalyzer on your own machine, please go to https://github.com/powershell/psscriptAnalyzer/'
+
+                $PSScriptAnalyzerErrors.Count | Should -Be $null
             }
         }
     }
