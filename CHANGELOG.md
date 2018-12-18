@@ -13,6 +13,7 @@
   informational rules.
 - Converted use of alias `Add-AzAccount` to `Connect-AzAccount`.
 - Updated to use `Az` PowerShell Module 1.0.0.0.
+- Enabled CI to run on Azure Pipelines MacOS agent.
 
 ## 2.1.15.237
 
