@@ -12,11 +12,14 @@
 - Fix generic tests to validate PSScriptAnalyzer errors, warnings and
   informational rules.
 - Converted use of alias `Add-AzAccount` to `Connect-AzAccount`.
-- Updated to use `Az` PowerShell Module 1.0.0.0.
+- Updated to use `Az` PowerShell Module 1.0.1.
 - Correct `AliasesToExport` in manifest.
 - Minor corrections to markdown to improve best practice adherence.
 - Minor corrections to CI support files to improve best practice
   adherence.
+- Added ShouldProcess support to `New-CosmosDbAccountMasterKey` and
+  `New-CosmosDbContext`.
+- Added ShouldProcess support TestHelper functions.
 
 ## 2.1.15.237
 
