@@ -39,42 +39,42 @@ November 4, 2018
 - Improved validation on Account and ResourceGroupName parameter on
   `New-CosmosDbContext` function.
 - Improved validation on Database Id parameter on
- `*-CosmosDBDatabase*` functions - fixes [Issue #212](https://github.com/PlagueHO/CosmosDB/issues/212).
+  `*-CosmosDBDatabase*` functions - fixes [Issue #212](https://github.com/PlagueHO/CosmosDB/issues/212).
 - Improved validation on Collection Id parameter on
- `*-CosmosDBCollection*` functions - fixes [Issue #213](https://github.com/PlagueHO/CosmosDB/issues/213).
+  `*-CosmosDBCollection*` functions - fixes [Issue #213](https://github.com/PlagueHO/CosmosDB/issues/213).
 - Improved validation on Account parameter on `*-CosmosDBCollection*` functions.
 - Improved validation on Database parameter on `*-CosmosDBCollection*` functions.
 - Improved validation on Stored Procedure Id parameter on
- `*-CosmosDBStoredProcedure*` functions - fixes [Issue #214](https://github.com/PlagueHO/CosmosDB/issues/214).
+  `*-CosmosDBStoredProcedure*` functions - fixes [Issue #214](https://github.com/PlagueHO/CosmosDB/issues/214).
 - Improved validation on Account parameter on `*-CosmosDBStoredProcedure*` functions.
 - Improved validation on Database parameter on `*-CosmosDBStoredProcedure*` functions.
 - Improved validation on Collection parameter on `*-CosmosDBStoredProcedure*` functions.
 - Improved validation on Trigger Id parameter on
- `*-CosmosDBTrigger*` functions - fixes [Issue #215](https://github.com/PlagueHO/CosmosDB/issues/215).
+  `*-CosmosDBTrigger*` functions - fixes [Issue #215](https://github.com/PlagueHO/CosmosDB/issues/215).
 - Improved validation on Account parameter on `*-CosmosDBTrigger*` functions.
 - Improved validation on Database parameter on `*-CosmosDBTrigger*` functions.
 - Improved validation on Collection parameter on `*-CosmosDBTrigger*` functions.
 - Improved validation on User Defined Function Id parameter on
- `*-CosmosDBUserDefinedFunction*` functions - fixes [Issue #216](https://github.com/PlagueHO/CosmosDB/issues/216).
+  `*-CosmosDBUserDefinedFunction*` functions - fixes [Issue #216](https://github.com/PlagueHO/CosmosDB/issues/216).
 - Improved validation on Account parameter on `*-CosmosDBUserDefinedFunction*` functions.
 - Improved validation on Database parameter on `*-CosmosDBUserDefinedFunction*` functions.
 - Improved validation on Collection parameter on `*-CosmosDBUserDefinedFunction*` functions.
 - Improved validation on User Id parameter on
- `*-CosmosDBUser*` functions - fixes [Issue #217](https://github.com/PlagueHO/CosmosDB/issues/217).
+  `*-CosmosDBUser*` functions - fixes [Issue #217](https://github.com/PlagueHO/CosmosDB/issues/217).
 - Improved validation on Account parameter on `*-CosmosDBUser*` functions.
 - Improved validation on Database parameter on `*-CosmosDBUser*` functions.
 - Improved validation on Document Id parameter on
- `*-CosmosDBDocument*` functions - fixes [Issue #227](https://github.com/PlagueHO/CosmosDB/issues/227).
+  `*-CosmosDBDocument*` functions - fixes [Issue #227](https://github.com/PlagueHO/CosmosDB/issues/227).
 - Improved validation on Account parameter on `*-CosmosDBDocument*` functions.
 - Improved validation on Database parameter on `*-CosmosDBDocument*` functions.
 - Improved validation on Collection parameter on `*-CosmosDBDocument*` functions.
 - Improved validation on Permission Id parameter on
- `*-CosmosDBPermission*` functions - fixes [Issue #218](https://github.com/PlagueHO/CosmosDB/issues/218).
+  `*-CosmosDBPermission*` functions - fixes [Issue #218](https://github.com/PlagueHO/CosmosDB/issues/218).
 - Improved validation on Account parameter on `*-CosmosDBPermission*` functions.
 - Improved validation on Database parameter on `*-CosmosDBPermission*` functions.
 - Improved validation on User parameter on `*-CosmosDBPermission*` functions.
 - Improved validation on Attachment Id parameter on
- `*-CosmosDBAttachment*` functions - fixes [Issue #228](https://github.com/PlagueHO/CosmosDB/issues/228).
+  `*-CosmosDBAttachment*` functions - fixes [Issue #228](https://github.com/PlagueHO/CosmosDB/issues/228).
 - Improved validation on Account parameter on `*-CosmosDBAttachment*` functions.
 - Improved validation on Database parameter on `*-CosmosDBAttachment*` functions.
 - Improved validation on Collection parameter on `*-CosmosDBAttachment*` functions.

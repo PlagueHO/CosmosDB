@@ -214,6 +214,7 @@ function Remove-AzureTestCosmosDbResourceGroup
 function Convert-SecureStringToString
 {
     [CmdletBinding()]
+    [OutputType([System.String])]
     param
     (
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
