@@ -156,7 +156,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         # Create Azure CosmosDB Account to use for testing
         New-AzureTestCosmosDbAccount `
             -ResourceGroupName $script:testResourceGroupName `
-            -AccountName $script:testAccountName `
+            -Name $script:testAccountName `
             -Verbose
     }
 
