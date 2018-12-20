@@ -1,7 +1,9 @@
 function New-CosmosDbAccountMasterKey
 {
 
-    [CmdletBinding()]
+    [CmdletBinding(
+        SupportsShouldProcess = $true
+    )]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Scope = 'Function')]
     [OutputType([SecureString])]
     param
@@ -35,5 +37,8 @@ function New-CosmosDbAccountMasterKey
         ErrorAction       = 'Stop'
     }
 
-    Invoke-AzResourceAction @invokeAzResourceAction_parameters
+    if ($PSCmdlet.ShouldProcess('Azure', ($LocalizedData.ShouldCreateAzureCosmosDBAccountMasterKey -f $Name, $ResourceGroupName, $MasterKeyType)))
+    {
+        Invoke-AzResourceAction @invokeAzResourceAction_parameters
+    }
 }

@@ -30,9 +30,11 @@ ConvertFrom-StringData -StringData @'
     ErrorNewCollectionIndexingPolicyInvalidMode = Automatic must be set to 'False' if Indexing Mode of 'None' is used.
     ErrorSetCollectionRemoveDefaultTimeToLiveConflict = RemoveDefaultTimeToLive parameter must not be set when DefaultTimeToLive is specified.
     ErrorAccountDoesNotExist = Cosmos DB account '{0}' in resource group '{1}' does not exist.
+    ShouldCreateAzureCosmosDBContext = Create an Azure Cosmos DB context for accessing account '{0}' database '{1}' on URI '{2}'
     ShouldCreateAzureCosmosDBAccount = Create an Azure Cosmos DB account '{0}' in resource group '{1}' located in '{2}'
     ShouldUpdateAzureCosmosDBAccount = Update an Azure Cosmos DB account '{0}' in resource group '{1}'
     ShouldRemoveAzureCosmosDBAccount = Remove the Azure Cosmos DB account '{0}' in resource group '{1}'
+    ShouldCreateAzureCosmosDBAccountMasterKey = Create a new Azure Cosmos DB account '{0}' '{2}' in resource group '{1}'
     GettingAzureCosmosDBAccountConnectionStringWarning = The Get-CosmosDbAccountConnectionString function does not currently work due to an issue with the Microsoft/DocumentDB provider. The connection strings will not be returned.
     AccountNameInvalid = The Account Name '{0}' is invalid. The name can contain only lowercase letters, numbers and the '-' character, and must be between 3 and 50 characters.
     ResourceGroupNameInvalid = The Resource Group Name '{0}' is invalid. Resource group names only allow alphanumeric characters, periods, underscores, hyphens and parenthesis, cannot end in a period and must be 90 characters or less.

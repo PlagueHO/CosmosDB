@@ -43,8 +43,8 @@ Our open source communities strive to:
 Harassment includes, but is not limited to:
 
 - Offensive comments related to gender, gender identity and expression, sexual
-   orientation, disability, mental illness, neuro(a)typicality, physical appearance,
-   body size, race, age, regional discrimination, political or religious affiliation
+  orientation, disability, mental illness, neuro(a)typicality, physical appearance,
+  body size, race, age, regional discrimination, political or religious affiliation
 - Unwelcome comments regarding a person's lifestyle choices and practices,
   including those related to food, health, parenting, drugs, and employment
 - Deliberate misgendering. This includes deadnaming or persistently using a
