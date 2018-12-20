@@ -20,6 +20,9 @@
 - Added ShouldProcess support to `New-CosmosDbAccountMasterKey` and
   `New-CosmosDbContext`.
 - Added ShouldProcess support TestHelper functions.
+- Updated CONTRIBUTING.MD to more accurately reflect current process of
+  contributing to the module.
+- Updated STYLEGUIDELINES.MD to match current standards and best practices.
 
 ## 2.1.15.237
 
