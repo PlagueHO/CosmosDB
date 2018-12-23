@@ -145,23 +145,6 @@ $null = New-AzureTestCosmosDbResourceGroup `
 $currentIpAddress = (Invoke-RestMethod -Uri 'http://ipinfo.io/json').ip
 
 Describe 'Cosmos DB Module' -Tag 'Integration' {
-<#
-    if ($ENV:BHBuildSystem -eq 'AppVeyor')
-    {
-        Write-Warning -Message (@(
-            'New-AzResource, Set-AzResource and some Invoke-AzResourceAction calls currently throws the following exception in AppVeyor:'
-            'Method not found: ''Void Newtonsoft.Json.Serialization.JsonDictionaryContract.set_PropertyNameResolver(System.Func`2<System.String,System.String>)'''
-            'due to an older version of Newtonsoft.Json being used.'
-            'Therefore integration tests of New-CosmosDbAccount and Set-CosmosDbAccount are currently skipped when running in AppVeyor environment.'
-        ) -join "`n`r")
-
-        # Create Azure CosmosDB Account to use for testing
-        New-AzureTestCosmosDbAccount `
-            -ResourceGroupName $script:testResourceGroupName `
-            -Name $script:testAccountName `
-            -Verbose
-    }
-#>
     Context 'When creating a new Azure Cosmos DB Account' {
         It 'Should not throw an exception' {
             New-CosmosDbAccount `
