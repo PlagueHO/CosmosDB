@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 3.0.0.279
 
 - BREAKING CHANGE: Converted to use `Az` PowerShell Module from
   `AzureRm` and `AzureRm.NetCore` PowerShell Module - fixes [Issue #190](https://github.com/PlagueHO/CosmosDB/issues/190).
