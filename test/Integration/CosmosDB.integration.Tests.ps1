@@ -285,7 +285,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     }
 
     Context 'When regenerating the new Azure Cosmos DB Account Primary Master Key' {
-        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
+        It 'Should not throw an exception' {
             $script:result = New-CosmosDbAccountMasterKey `
                 -Name $script:testAccountName `
                 -ResourceGroupName $script:testResourceGroupName `
