@@ -642,16 +642,20 @@ InModuleScope CosmosDB {
             }
 
             $newAzResource_parameterFilter = {
-                Write-Verbose -Message (ConvertTo-Json -InputObject $Properties) -Verbose;
-                Write-Verbose -Message (ConvertTo-Json -InputObject $testCosmosDBProperties) -Verbose;
-                Write-Verbose -Message ((ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)) -Verbose;
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Location -eq $script:testLocation) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
@@ -717,7 +721,14 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
@@ -791,7 +802,14 @@ InModuleScope CosmosDB {
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
                 ($AsJob -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
@@ -869,7 +887,14 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
@@ -951,7 +976,14 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
@@ -1025,7 +1057,14 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
@@ -1099,7 +1138,14 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
@@ -1171,7 +1217,14 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
@@ -1245,7 +1298,14 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
@@ -1317,7 +1377,14 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
