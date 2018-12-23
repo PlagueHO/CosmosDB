@@ -145,6 +145,7 @@ $null = New-AzureTestCosmosDbResourceGroup `
 $currentIpAddress = (Invoke-RestMethod -Uri 'http://ipinfo.io/json').ip
 
 Describe 'Cosmos DB Module' -Tag 'Integration' {
+<#
     if ($ENV:BHBuildSystem -eq 'AppVeyor')
     {
         Write-Warning -Message (@(
@@ -160,9 +161,9 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             -Name $script:testAccountName `
             -Verbose
     }
-
+#>
     Context 'When creating a new Azure Cosmos DB Account' {
-        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
+        It 'Should not throw an exception' {
             New-CosmosDbAccount `
                 -Name $script:testAccountName `
                 -ResourceGroupName $script:testResourceGroupName `
@@ -197,7 +198,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     }
 
     Context 'When updating the new Azure Cosmos DB Account' {
-        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
+        It 'Should not throw an exception' {
             $script:result = Set-CosmosDbAccount `
                 -Name $script:testAccountName `
                 -ResourceGroupName $script:testResourceGroupName `
@@ -210,14 +211,14 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     }
 
     Context 'When getting the new Azure Cosmos DB Account' {
-        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
+        It 'Should not throw an exception' {
             $script:result = Get-CosmosDbAccount `
                 -Name $script:testAccountName `
                 -ResourceGroupName $script:testResourceGroupName `
                 -Verbose
         }
 
-        It 'Should return expected object' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
+        It 'Should return expected object' {
             $script:result.Name | Should -Be $script:testAccountName
             $script:result.ResourceGroupName | Should -Be $script:testResourceGroupName
             $script:result.Location | Should -Be $script:testLocation
@@ -231,7 +232,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     }
 
     Context 'When updating the new Azure Cosmos DB Account to remove IP Range filter' {
-        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
+        It 'Should not throw an exception' {
             $script:result = Set-CosmosDbAccount `
                 -Name $script:testAccountName `
                 -ResourceGroupName $script:testResourceGroupName `
