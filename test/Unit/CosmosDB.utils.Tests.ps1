@@ -244,8 +244,8 @@ console.log("done");
         Context 'When called with AzureAccount parameters and not connected to Azure and PrimaryMasterKey requested' {
             $script:result = $null
 
-            Mock -CommandName Get-AzureRmContext -MockWith { throw }
-            Mock -CommandName Add-AzureRmAccount
+            Mock -CommandName Get-AzContext -MockWith { throw }
+            Mock -CommandName Connect-AzAccount
             Mock `
                 -CommandName Get-CosmosDbAccountMasterKey `
                 -MockWith { $script:testKeySecureString }
@@ -270,8 +270,8 @@ console.log("done");
             }
 
             It 'Should call expected mocks' {
-                Assert-MockCalled -CommandName Get-AzureRmContext -Exactly -Times 1
-                Assert-MockCalled -CommandName Add-AzureRmAccount -Exactly -Times 1
+                Assert-MockCalled -CommandName Get-AzContext -Exactly -Times 1
+                Assert-MockCalled -CommandName Connect-AzAccount -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-CosmosDbAccountMasterKey `
                     -ParameterFilter { $MasterKeyType -eq 'PrimaryMasterKey' } `
                     -Exactly -Times 1
@@ -281,8 +281,8 @@ console.log("done");
         Context 'When called with AzureAccount parameters and connected to Azure' {
             $script:result = $null
 
-            Mock -CommandName Get-AzureRmContext -MockWith { $true }
-            Mock -CommandName Add-AzureRmAccount
+            Mock -CommandName Get-AzContext -MockWith { $true }
+            Mock -CommandName Connect-AzAccount
             Mock `
                 -CommandName Get-CosmosDbAccountMasterKey `
                 -MockWith { $script:testKeySecureString }
@@ -306,8 +306,8 @@ console.log("done");
             }
 
             It 'Should call expected mocks' {
-                Assert-MockCalled -CommandName Get-AzureRmContext -Exactly -Times 1
-                Assert-MockCalled -CommandName Add-AzureRmAccount -Exactly -Times 0
+                Assert-MockCalled -CommandName Get-AzContext -Exactly -Times 1
+                Assert-MockCalled -CommandName Connect-AzAccount -Exactly -Times 0
                 Assert-MockCalled -CommandName Get-CosmosDbAccountMasterKey `
                     -ParameterFilter { $MasterKeyType -eq 'PrimaryMasterKey' } `
                     -Exactly -Times 1

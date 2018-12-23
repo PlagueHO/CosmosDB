@@ -1,6 +1,5 @@
 function Get-CosmosDbUser
 {
-
     [CmdletBinding(DefaultParameterSetName = 'Context')]
     [OutputType([Object])]
     param

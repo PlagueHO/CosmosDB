@@ -1,8 +1,10 @@
+# Pull Request
+
 Thanks for submitting a Pull Request to the CosmosDB project!
 
 Please make sure you have read the [Contributing.md](\.github\CONTRIBUTING.md) document.
 
-# Bug Fixes
+## Bug Fixes
 
 Use the pound / hash sign to indicate which GitHub issues this Pull Request fixes, if applicable.
 
@@ -10,7 +12,7 @@ Use the pound / hash sign to indicate which GitHub issues this Pull Request fixe
 - Fixes #2
 - Fixes #3
 
-# Improvements / Enhancements
+## Improvements / Enhancements
 
 List out any code changes or enhancements you've made. This includes refactoring and removal of extraneous code. :)
 

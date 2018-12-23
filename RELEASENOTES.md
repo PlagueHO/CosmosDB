@@ -1,5 +1,37 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+December 23, 2018
+
+- BREAKING CHANGE: Converted to use `Az` PowerShell Module from
+  `AzureRm` and `AzureRm.NetCore` PowerShell Module - fixes [Issue #190](https://github.com/PlagueHO/CosmosDB/issues/190).
+- Renamed `build.ps1` to `psake.ps1` to indicate that it is used
+  to execute `Psake` tasks.
+- Add Codacy Code Quality badge to `README.MD`.
+- Configure PSScriptAnalyzer to show errors, warnings and informational
+  violations in Visual Studio Code.
+- Fix generic tests to validate PSScriptAnalyzer errors, warnings and
+  informational rules.
+- Converted use of alias `Add-AzAccount` to `Connect-AzAccount`.
+- Updated to use `Az` PowerShell Module 1.0.1.
+- Correct `AliasesToExport` in manifest.
+- Minor corrections to markdown to improve best practice adherence.
+- Minor corrections to CI support files to improve best practice
+  adherence.
+- Added ShouldProcess support to `New-CosmosDbAccountMasterKey` and
+  `New-CosmosDbContext`.
+- Added ShouldProcess support TestHelper functions.
+- Updated CONTRIBUTING.MD to more accurately reflect current process of
+  contributing to the module.
+- Updated STYLEGUIDELINES.MD to match current standards and best practices.
+- Added support for setting and updating Cross-Origin Resource Sharing (CORS)
+  allowed origins in `New-CosmosDbAccount` and `Set-CosmosDbAccount`
+  respectively - fixes [Issue #249](https://github.com/PlagueHO/CosmosDB/issues/249).
+- Changed `Remove-CosmosDbAccount` to prevent second confirmation prompt
+  when removing account.
+- Enabled `*-CosmosDbAccount` tests to run in AppVeyor.
+
 ## What is New in CosmosDB 2.1.15.237
 
 November 17, 2018
@@ -39,42 +71,42 @@ November 4, 2018
 - Improved validation on Account and ResourceGroupName parameter on
   `New-CosmosDbContext` function.
 - Improved validation on Database Id parameter on
- `*-CosmosDBDatabase*` functions - fixes [Issue #212](https://github.com/PlagueHO/CosmosDB/issues/212).
+  `*-CosmosDBDatabase*` functions - fixes [Issue #212](https://github.com/PlagueHO/CosmosDB/issues/212).
 - Improved validation on Collection Id parameter on
- `*-CosmosDBCollection*` functions - fixes [Issue #213](https://github.com/PlagueHO/CosmosDB/issues/213).
+  `*-CosmosDBCollection*` functions - fixes [Issue #213](https://github.com/PlagueHO/CosmosDB/issues/213).
 - Improved validation on Account parameter on `*-CosmosDBCollection*` functions.
 - Improved validation on Database parameter on `*-CosmosDBCollection*` functions.
 - Improved validation on Stored Procedure Id parameter on
- `*-CosmosDBStoredProcedure*` functions - fixes [Issue #214](https://github.com/PlagueHO/CosmosDB/issues/214).
+  `*-CosmosDBStoredProcedure*` functions - fixes [Issue #214](https://github.com/PlagueHO/CosmosDB/issues/214).
 - Improved validation on Account parameter on `*-CosmosDBStoredProcedure*` functions.
 - Improved validation on Database parameter on `*-CosmosDBStoredProcedure*` functions.
 - Improved validation on Collection parameter on `*-CosmosDBStoredProcedure*` functions.
 - Improved validation on Trigger Id parameter on
- `*-CosmosDBTrigger*` functions - fixes [Issue #215](https://github.com/PlagueHO/CosmosDB/issues/215).
+  `*-CosmosDBTrigger*` functions - fixes [Issue #215](https://github.com/PlagueHO/CosmosDB/issues/215).
 - Improved validation on Account parameter on `*-CosmosDBTrigger*` functions.
 - Improved validation on Database parameter on `*-CosmosDBTrigger*` functions.
 - Improved validation on Collection parameter on `*-CosmosDBTrigger*` functions.
 - Improved validation on User Defined Function Id parameter on
- `*-CosmosDBUserDefinedFunction*` functions - fixes [Issue #216](https://github.com/PlagueHO/CosmosDB/issues/216).
+  `*-CosmosDBUserDefinedFunction*` functions - fixes [Issue #216](https://github.com/PlagueHO/CosmosDB/issues/216).
 - Improved validation on Account parameter on `*-CosmosDBUserDefinedFunction*` functions.
 - Improved validation on Database parameter on `*-CosmosDBUserDefinedFunction*` functions.
 - Improved validation on Collection parameter on `*-CosmosDBUserDefinedFunction*` functions.
 - Improved validation on User Id parameter on
- `*-CosmosDBUser*` functions - fixes [Issue #217](https://github.com/PlagueHO/CosmosDB/issues/217).
+  `*-CosmosDBUser*` functions - fixes [Issue #217](https://github.com/PlagueHO/CosmosDB/issues/217).
 - Improved validation on Account parameter on `*-CosmosDBUser*` functions.
 - Improved validation on Database parameter on `*-CosmosDBUser*` functions.
 - Improved validation on Document Id parameter on
- `*-CosmosDBDocument*` functions - fixes [Issue #227](https://github.com/PlagueHO/CosmosDB/issues/227).
+  `*-CosmosDBDocument*` functions - fixes [Issue #227](https://github.com/PlagueHO/CosmosDB/issues/227).
 - Improved validation on Account parameter on `*-CosmosDBDocument*` functions.
 - Improved validation on Database parameter on `*-CosmosDBDocument*` functions.
 - Improved validation on Collection parameter on `*-CosmosDBDocument*` functions.
 - Improved validation on Permission Id parameter on
- `*-CosmosDBPermission*` functions - fixes [Issue #218](https://github.com/PlagueHO/CosmosDB/issues/218).
+  `*-CosmosDBPermission*` functions - fixes [Issue #218](https://github.com/PlagueHO/CosmosDB/issues/218).
 - Improved validation on Account parameter on `*-CosmosDBPermission*` functions.
 - Improved validation on Database parameter on `*-CosmosDBPermission*` functions.
 - Improved validation on User parameter on `*-CosmosDBPermission*` functions.
 - Improved validation on Attachment Id parameter on
- `*-CosmosDBAttachment*` functions - fixes [Issue #228](https://github.com/PlagueHO/CosmosDB/issues/228).
+  `*-CosmosDBAttachment*` functions - fixes [Issue #228](https://github.com/PlagueHO/CosmosDB/issues/228).
 - Improved validation on Account parameter on `*-CosmosDBAttachment*` functions.
 - Improved validation on Database parameter on `*-CosmosDBAttachment*` functions.
 - Improved validation on Collection parameter on `*-CosmosDBAttachment*` functions.

@@ -1,7 +1,9 @@
 function New-CosmosDbContext
 {
-
-    [CmdletBinding(DefaultParameterSetName = 'Account')]
+    [CmdletBinding(
+        SupportsShouldProcess = $true,
+        DefaultParameterSetName = 'Account'
+    )]
     [OutputType([System.Management.Automation.PSCustomObject])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Scope = 'Function')]
     param
@@ -86,11 +88,11 @@ function New-CosmosDbContext
         {
             try
             {
-                $null = Get-AzureRmContext -ErrorAction SilentlyContinue
+                $null = Get-AzContext -ErrorAction SilentlyContinue
             }
             catch
             {
-                $null = Add-AzureRmAccount
+                $null = Connect-AzAccount
             }
 
             $Key = Get-CosmosDbAccountMasterKey `
@@ -112,15 +114,18 @@ function New-CosmosDbContext
         }
     }
 
-    $context = New-Object -TypeName 'CosmosDB.Context' -Property @{
-        Account       = $Account
-        Database      = $Database
-        Key           = $Key
-        KeyType       = $KeyType
-        BaseUri       = $BaseUri
-        Token         = $Token
-        BackoffPolicy = $BackoffPolicy
-    }
+    if ($PSCmdlet.ShouldProcess('Azure', ($LocalizedData.ShouldCreateAzureCosmosDBContext -f $Account, $Database, $BaseUri)))
+    {
+        $context = New-Object -TypeName 'CosmosDB.Context' -Property @{
+            Account       = $Account
+            Database      = $Database
+            Key           = $Key
+            KeyType       = $KeyType
+            BaseUri       = $BaseUri
+            Token         = $Token
+            BackoffPolicy = $BackoffPolicy
+        }
 
-    return $context
+        return $context
+    }
 }

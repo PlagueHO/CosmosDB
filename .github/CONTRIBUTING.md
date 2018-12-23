@@ -19,23 +19,29 @@ Alternately, feel free to post on the [CosmosDB PowerShell Module Gitter Chat at
 
 If you're new to Git revision control, and the GitHub service, it's suggested that you learn about some basic Git fundamentals, and take an overview of the GitHub service offerings.
 
-## Guidelines
+## Style guidelines
 
-Different software developers have different styles. If you're interested in contributing to this project, please review the following guidelines.
-While these guidelines aren't necessarily "set in stone," they should help guide the essence of the project, to ensure quality, user satisfaction (*delight*, even), and success.
+Different software developers have different styles. If you're interested in
+contributing to this project, please review the [Style Guidelines](/STYLEGUIDELINES.md).
+While these guidelines aren't necessarily "set in stone," they should help guide
+the essence of the project, to ensure quality, user satisfaction (*delight*, even),
+and success.
 
 ## Project Structure
 
-- The module manifest (`.psd1` file) must explicitly denote which functions are being exported. No wildcards allowed.
-- Private, helper functions should exist under `/CosmosDB/Libs/`.
-- Publicly accessible functions should exist in `/CosmosDB/CosmosDB.psm1`.
-  - This may get broken down into separate files in future.
-- Use comment-based help inside the function definition, before the `[CmdletBinding()]` attribute and parameter block
+- The module manifest (`.psd1` file) must explicitly denote which functions are
+  being exported. Wildcards are not allowed.
+- All functions should exist in individual files under `/CosmosDB/Libs/` in the
+  folder related to the purpose of the function.
+- Use markdown-based help inside the `/docs` folder which can be automatically generated
+  by using the [PlatyPS PowerShell Module](https://github.com/PowerShell/platyPS):
+
+  ```powershell
+  Import-Module -Name .\src\CosmosDB.psd1
+  New-MarkdownHelp -Module CosmosDB -OutputFolder .\docs\
+  ```
+
 - All functions must declare the `[CmdletBinding()]` attribute.
-
-## Style guidelines
-
-When contributing to any PowerShell repositories, please follow the following [Style Guidelines](/.github/STYLEGUIDELINES.md)
 
 ## Lifecycle of a pull request
 
@@ -45,48 +51,85 @@ For more information, learn about our [branch structure](#branch-structure).
 
 ![Github-PR-dev.png](Images/Github-PR-dev.png)
 
-- Add meaningful title of the PR describing what change you want to check in. Don't simply put: "Fixes issue #5". Better example is: "Added Ensure parameter to xFile resource. Fixes #5".
+- Add meaningful title of the PR describing what change you want to check in. Don't simply put: "Fixes issue #5".
+  Better example is: "Added All parameter to Get-CosmosDbDatabase - Fixes #5".
 
 - When you create a pull request, fill out the description with a summary of what's included in your changes.
   If the changes are related to an existing GitHub issue, please reference the issue in pull request title or description (e.g. ```Closes #11```). See [this](https://help.github.com/articles/closing-issues-via-commit-messages/) for more details.
 
 - Include an update in the [/CHANGELOG.md](/CHANGELOG.md) file in your pull request to reflect changes for future versions changelog. Put them in `Unreleased` section (create one if doesn't exist). This would simplify the release process for Maintainers. Example:
 
-  ```
-  ## Unreleased
+```text
+## Unreleased
 
-  - Added support for `-FriendlyName` in `Update-xDscResource`.
-  ```
+- Added support for ...
+```
 
-  Please use past tense when describing your changes:
+Please use past tense when describing your changes:
 
-  - Instead of "Adding support for Windows Server 2012 R2", write "Added support for Windows Server 2012 R2".
+- Instead of "Adding support for Windows Server 2012 R2", write "Added support for Windows Server 2012 R2".
+- Instead of "Fix for server connection issue", write "Fixed server connection issue".
 
-  - Instead of "Fix for server connection issue", write "Fixed server connection issue".
+## Code Review Process
 
-  Also, if change is related to specific resource, please prefix the description with the resource name:
+- After submitting your pull request, our CI systems will run various tests
+  and automatically update the status of the pull request.
+- After all successful test pass, the module's maintainers will do a code review,
+  commenting on any changes that might need to be made. If you are not designated
+  as a module's maintainer, feel free to review others' Pull Requests as well,
+  additional feedback is always welcome (leave your comments even if everything looks
+  good - simple "Looks good to me" or "LGTM" will suffice, so that we know someone
+  has already taken a look at it)!
+- Once the code review is done, all merge conflicts are resolved, and the Appveyor
+  build status is passing, a maintainer will merge your changes.
 
-  - Instead of "New parameter 'ConnectionCredential' in MEMBER_WEBSERVER.DSC.PS1", write "DSCLibrary\MEMBER_WEBSERVER.DSC.PS1: added parameter 'ConnectionCredential'"
+## CI Systems
 
-- After submitting your pull request, our CI system (Appveyor) [will run a suite of tests](#appveyor) and automatically update the status of the pull request.
-- After a successful test pass, the module's maintainers will do a code review, commenting on any changes that might need to be made. If you are not designated as a module's maintainer, feel free to review others' Pull Requests as well, additional feedback is always welcome (leave your comments even if everything looks good - simple "Looks good to me" or "LGTM" will suffice, so that we know someone has already taken a look at it)!
-- Once the code review is done, all merge conflicts are resolved, and the Appveyor build status is passing, a maintainer will merge your changes.
+We use multiple CI systems and evaluation systems to test the Pull Request and
+branches to ensure quality of the project is maintained.
 
-## AppVeyor
+### Azure DevOps
+
+We use [Azure DevOps](http://dev.azure.com/) as a continuous integration (CI) system.
+
+![AzureDevOps-Badge-Green.png](Images/AzureDevOps-Badge-Green.png)
+
+This badge is **clickable**, you can open corresponding build page with logs, artifacts
+and tests results.
+From there you can easily navigate to the whole build history.
+
+AppVeyor builds and runs tests on every pull request and provides quick feedback
+about it.
+
+This is used to test the module on PowerShell on Windows and PowerShell Core on Linux.
+
+### AppVeyor
 
 We use [AppVeyor](http://www.appveyor.com/) as a continuous integration (CI) system.
 
 ![AppVeyor-Badge-Green.png](Images/AppVeyor-Badge-Green.png)
 
-This badge is **clickable**, you can open corresponding build page with logs, artifacts and tests results.
+This badge is **clickable**, you can open corresponding build page with logs, artifacts
+and tests results.
 From there you can easily navigate to the whole build history.
 
-AppVeyor builds and runs tests on every pull request and provides quick feedback about it.
+AppVeyor builds and runs tests on every pull request and provides quick feedback
+about it.
 
-![AppVeyor-Github](Images/AppVeyor-Github.png)
+This is used to test the module on PowerShell on Windows.
 
-These green checkboxes and red crosses are **clickable** as well.
-They will bring you to the corresponding page with details.
+### TravisCI
+
+We use [TravisCI](http://travis-ci.org/) as a continuous integration (CI) system.
+
+![TravisCI-Badge-Green.png](Images/TravisCI-Badge-Green.png)
+
+This badge is **clickable**, you can open corresponding build page with logs, artifacts
+and tests results.
+From there you can easily navigate to the whole build history.
+
+TravisCI builds and runs tests on every pull request and provides quick feedback
+about it.
 
 ## Testing
 
@@ -94,12 +137,13 @@ They will bring you to the corresponding page with details.
 - Any new code should have Unit tests created for it.
 - Unit Test files should exist under `/Tests/Unit`.
 - Integration Test files should exist under `/Tests/Integration'.
-  - There are currently no integration tests (but there will be at some point).
 
 ## Branch structure
 
-We are using a [git flow](http://nvie.com/posts/a-successful-git-branching-model/) model for development.
+We are using a [git flow](http://nvie.com/posts/a-successful-git-branching-model/) model
+for development.
 We recommend that you create local working branches that target a specific scope of change.
-Each branch should be limited to a single feature/bugfix both to streamline workflows and reduce the possibility of merge conflicts.
+Each branch should be limited to a single feature/bugfix both to streamline workflows
+and reduce the possibility of merge conflicts.
 
 ![git flow picture](http://nvie.com/img/git-model@2x.png)

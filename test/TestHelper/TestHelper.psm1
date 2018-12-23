@@ -1,4 +1,12 @@
 # This module provides helper functions for executing tests
+
+<#
+    .SYNOPSIS
+        Get an Azure service principal details from a settings file.
+
+    .PARAMETER SettingsFilePath
+        The path to the settings file containing the service principal details.
+#>
 function Get-AzureServicePrincipal
 {
     [CmdletBinding()]
@@ -20,6 +28,10 @@ function Get-AzureServicePrincipal
     }
 }
 
+<#
+    .SYNOPSIS
+        Connect to Azure using a servince principal.
+#>
 function Connect-AzureServicePrincipal
 {
     [CmdletBinding()]
@@ -34,7 +46,7 @@ function Connect-AzureServicePrincipal
         $ApplicationId,
 
         [Parameter(Mandatory = $true)]
-        [System.String]
+        [System.Security.SecureString]
         $ApplicationPassword,
 
         [Parameter(Mandatory = $true)]
@@ -47,13 +59,9 @@ function Connect-AzureServicePrincipal
         Write-Verbose -Message "Logging in to Azure using Service Principal $ApplicationId"
 
         # Build platform (AppVeyor) does not offer solution for passing secure strings
-        $secureStringPassword = ConvertTo-SecureString `
-            -String $ApplicationPassword `
-            -AsPlainText `
-            -Force
         $azureCredential = New-Object `
             -Typename System.Management.Automation.PSCredential `
-            -Argumentlist $ApplicationId, $secureStringPassword
+            -Argumentlist $ApplicationId, $applicationPassword
 
         # Suppress request to share usage information
         $path = "$Home\AppData\Roaming\Windows Azure Powershell\"
@@ -64,12 +72,12 @@ function Connect-AzureServicePrincipal
         $azureProfileFilename = Join-Path `
             -Path $Path `
             -ChildPath 'AzureDataCollectionProfile.json'
-        $azureProfileContent = Set-Content `
+        $null = Set-Content `
             -Value '{"enableAzureDataCollection":true}' `
             -Path $azureProfileFilename
 
         # Handle login
-        $null = Add-AzureRmAccount `
+        $null = Connect-AzAccount `
             -ServicePrincipal `
             -SubscriptionId $SubscriptionId `
             -TenantId $TenantId `
@@ -77,7 +85,7 @@ function Connect-AzureServicePrincipal
             -ErrorAction SilentlyContinue
 
         # Validate login
-        $loginSuccessful = Get-AzureRmSubscription `
+        $loginSuccessful = Get-AzSubscription `
             -SubscriptionId $SubscriptionId `
             -TenantId $TenantId
 
@@ -92,23 +100,29 @@ function Connect-AzureServicePrincipal
     }
 }
 
+<#
+    .SYNOPSIS
+        Create a new Azure Cosmos DB Account for use with testing.
+#>
 function New-AzureTestCosmosDbAccount
 {
-    [CmdletBinding()]
+    [CmdletBinding(
+        SupportsShouldProcess = $true
+    )]
     param
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        $ResourceGroupName,
+        $Name,
 
         [Parameter(Mandatory = $true)]
         [System.String]
-        $AccountName
+        $ResourceGroupName
     )
 
     try
     {
-        Write-Verbose -Message ('Creating Cosmos DB test account {0}.' -f $AccountName)
+        Write-Verbose -Message ('Creating Cosmos DB test account {0}.' -f $Name)
 
         # Build hashtable of deployment parameters
         $azureDeployFolder = Join-Path -Path $PSScriptRoot -ChildPath 'AzureDeploy'
@@ -118,13 +132,16 @@ function New-AzureTestCosmosDbAccount
             ResourceGroupName       = $ResourceGroupName
             TemplateFile            = Join-Path -Path $azureDeployFolder -ChildPath 'AzureDeploy.json'
             TemplateParameterObject = @{
-                AccountName = $AccountName
+                AccountName = $Name
             }
         }
 
-        # Deploy ARM template
-        New-AzureRmResourceGroupDeployment `
-            @deploymentParameters
+        if ($PSCmdlet.ShouldProcess('Azure', ("Create an Azure Cosmos DB test account '{0}' in resource group '{1}'" -f $Name, $ResourceGroupName)))
+        {
+            # Deploy ARM template
+            New-AzResourceGroupDeployment `
+                @deploymentParameters
+        }
     }
     catch [System.Exception]
     {
@@ -132,9 +149,15 @@ function New-AzureTestCosmosDbAccount
     }
 }
 
+<#
+    .SYNOPSIS
+        Remove an existing Azure Cosmos DB Account that was used for testing.
+#>
 function Remove-AzureTestCosmosDbAccount
 {
-    [CmdletBinding()]
+    [CmdletBinding(
+        SupportsShouldProcess = $true
+    )]
     param
     (
         [Parameter(Mandatory = $true)]
@@ -143,18 +166,22 @@ function Remove-AzureTestCosmosDbAccount
 
         [Parameter(Mandatory = $true)]
         [System.String]
-        $AccountName
+        $Name
     )
 
     try
     {
-        Write-Verbose -Message ('Removing Cosmos DB test account {0}.' -f $AccountName)
+        Write-Verbose -Message ('Removing Cosmos DB test account {0}.' -f $Name)
 
-        # Remove resource group as
-        $null = Remove-AzureRmResourceGroup `
-            -Name $ResourceGroupName `
-            -Force `
-            -AsJob
+        if ($PSCmdlet.ShouldProcess('Azure', ("Remove Azure Cosmos DB test account '{0}' from resource group '{1}'" -f $Name, $ResourceGroupName)))
+        {
+            # Remove resource group
+            $null = Remove-AzResource `
+                -ResourceName $Name `
+                -Name $ResourceGroupName `
+                -Force `
+                -AsJob
+        }
     }
     catch [System.Exception]
     {
@@ -162,9 +189,15 @@ function Remove-AzureTestCosmosDbAccount
     }
 }
 
+<#
+    .SYNOPSIS
+        Create a new Azure resource group for use with testing.
+#>
 function New-AzureTestCosmosDbResourceGroup
 {
-    [CmdletBinding()]
+    [CmdletBinding(
+        SupportsShouldProcess = $true
+    )]
     param
     (
         [Parameter(Mandatory = $true)]
@@ -180,9 +213,12 @@ function New-AzureTestCosmosDbResourceGroup
     {
         Write-Verbose -Message ('Creating test Azure Resource Group {0} in {1}.' -f $ResourceGroupName,$Location)
 
-        $null = New-AzureRmResourceGroup `
-            -Name $ResourceGroupName `
-            -Location $Location
+        if ($PSCmdlet.ShouldProcess('Azure', ("Create Azure Cosmos DB resource group '{0}'" -f $ResourceGroupName)))
+        {
+            $null = New-AzResourceGroup `
+                -Name $ResourceGroupName `
+                -Location $Location
+        }
     }
     catch [System.Exception]
     {
@@ -190,9 +226,15 @@ function New-AzureTestCosmosDbResourceGroup
     }
 }
 
+<#
+    .SYNOPSIS
+        Remove an existing Azure resource group that was used with testing.
+#>
 function Remove-AzureTestCosmosDbResourceGroup
 {
-    [CmdletBinding()]
+    [CmdletBinding(
+        SupportsShouldProcess = $true
+    )]
     param
     (
         [Parameter(Mandatory = $true)]
@@ -204,10 +246,13 @@ function Remove-AzureTestCosmosDbResourceGroup
     {
         Write-Verbose -Message ('Removing test Azure Resource Group {0}.' -f $ResourceGroupName)
 
-        $null = Remove-AzureRmResourceGroup `
-            -Name $ResourceGroupName `
-            -Force `
-            -AsJob
+        if ($PSCmdlet.ShouldProcess('Azure', ("Remove Azure Cosmos DB resource group '{0}'" -f $ResourceGroupName)))
+        {
+            $null = Remove-AzResourceGroup `
+                -Name $ResourceGroupName `
+                -Force `
+                -AsJob
+        }
     }
     catch [System.Exception]
     {
@@ -215,13 +260,18 @@ function Remove-AzureTestCosmosDbResourceGroup
     }
 }
 
+<#
+    .SYNOPSIS
+        Decrypt a Secure String back to a string.
+#>
 function Convert-SecureStringToString
 {
     [CmdletBinding()]
+    [OutputType([System.String])]
     param
     (
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [SecureString]
+        [System.Security.SecureString]
         $SecureString
     )
 

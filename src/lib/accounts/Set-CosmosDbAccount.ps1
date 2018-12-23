@@ -46,6 +46,10 @@ function Set-CosmosDbAccount
         $IpRangeFilter,
 
         [Parameter()]
+        [System.String[]]
+        $AllowedOrigin,
+
+        [Parameter()]
         [Switch]
         $AsJob
     )
@@ -58,6 +62,7 @@ function Set-CosmosDbAccount
     $null = $getCosmosDbAccount_parameters.Remove('MaxIntervalInSeconds')
     $null = $getCosmosDbAccount_parameters.Remove('MaxStalenessPrefix')
     $null = $getCosmosDbAccount_parameters.Remove('IpRangeFilter')
+    $null = $getCosmosDbAccount_parameters.Remove('AllowedOrigin')
     $null = $getCosmosDbAccount_parameters.Remove('AsJob')
     $existingAccount = Get-CosmosDbAccount @getCosmosDbAccount_parameters
 
@@ -132,14 +137,37 @@ function Set-CosmosDbAccount
         ipRangeFilter            = $ipRangeFilterString
     }
 
+    if ($PSBoundParameters.ContainsKey('AllowedOrigin'))
+    {
+        $allowedOriginString = ($AllowedOrigin -join ',')
+    }
+    else
+    {
+        $allowedOriginString = $existingAccount.Properties.cors.allowedOrigins
+    }
+
+    if (-not ([System.String]::IsNullOrEmpty($allowedOriginString)))
+    {
+        $corsObject = @(
+            @{
+                allowedOrigins = $allowedOriginString
+            }
+        )
+
+        $cosmosDBProperties += @{
+            cors = $corsObject
+        }
+    }
+
     $null = $PSBoundParameters.Remove('Location')
     $null = $PSBoundParameters.Remove('LocationRead')
     $null = $PSBoundParameters.Remove('DefaultConsistencyLevel')
     $null = $PSBoundParameters.Remove('MaxIntervalInSeconds')
     $null = $PSBoundParameters.Remove('MaxStalenessPrefix')
     $null = $PSBoundParameters.Remove('IpRangeFilter')
+    $null = $PSBoundParameters.Remove('AllowedOrigin')
 
-    $setAzureRmResource_parameters = $PSBoundParameters + @{
+    $setAzResource_parameters = $PSBoundParameters + @{
         ResourceType = 'Microsoft.DocumentDb/databaseAccounts'
         ApiVersion   = '2015-04-08'
         Properties   = $cosmosDBProperties
@@ -149,6 +177,6 @@ function Set-CosmosDbAccount
     {
         Write-Verbose -Message $($LocalizedData.UpdatingAzureCosmosDBAccount -f $Name, $ResourceGroupName)
 
-        return (Set-AzureRmResource @setAzureRmResource_parameters -Force)
+        return (Set-AzResource @setAzResource_parameters -Force)
     }
 }

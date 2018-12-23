@@ -51,7 +51,7 @@ Task PrepareTest -Depends Init {
         -Force `
         -Import `
         -Install `
-        -Tags 'Test',('Test_{0}' -f $PSVersionTable.PSEdition)
+        -Tags 'Test'
 }
 
 Task Test -Depends UnitTest, IntegrationTest
@@ -455,6 +455,7 @@ Task Deploy {
 function Get-VersionNumber
 {
     [CmdLetBinding()]
+    [OutputType([System.String])]
     param
     (
         [Parameter(Mandatory = $true)]
@@ -471,6 +472,7 @@ function Get-VersionNumber
     $regex = '(?<=ModuleVersion\s+=\s+'')(?<ModuleVersion>.*)(?='')'
     $matches = @([regex]::matches($manifestContent, $regex, 'IgnoreCase'))
     $version = $null
+
     if ($matches)
     {
         $version = $matches[0].Value
@@ -479,15 +481,19 @@ function Get-VersionNumber
     # Determine the new version number
     $versionArray = $version -split '\.'
     $newVersion = ''
-    Foreach ($ver in (0..2))
+
+    foreach ($ver in (0..2))
     {
         $sem = $versionArray[$ver]
+
         if ([String]::IsNullOrEmpty($sem))
         {
             $sem = '0'
         }
+
         $newVersion += "$sem."
     }
+
     $newVersion += $Build
     return $newVersion
 }
@@ -499,6 +505,7 @@ function Get-VersionNumber
 function Invoke-Git
 {
     [CmdLetBinding()]
+    [OutputType([System.String])]
     param
     (
         [Parameter(Mandatory = $true)]

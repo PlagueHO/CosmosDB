@@ -69,7 +69,7 @@ Creates a CosmosDB context specifying the master key manually.
 ### EXAMPLE 2
 
 ```powershell
-PS C:\> Add-AzureRmAccount
+PS C:\> Connect-AzAccount
 PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -ResourceGroupName 'MyCosmosDbResourceGroup' -MasterKeyType 'PrimaryMasterKey'
 ```
 

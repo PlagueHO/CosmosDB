@@ -48,6 +48,11 @@ function New-CosmosDbAccount
         $IpRangeFilter = @(),
 
         [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String[]]
+        $AllowedOrigin,
+
+        [Parameter()]
         [Switch]
         $AsJob
     )
@@ -86,13 +91,27 @@ function New-CosmosDbAccount
         ipRangeFilter            = ($IpRangeFilter -join ',')
     }
 
+    if ($PSBoundParameters.ContainsKey('AllowedOrigin'))
+    {
+        $corsObject = @(
+            @{
+                allowedOrigins = ($AllowedOrigin -join ',')
+            }
+        )
+
+        $cosmosDBProperties += @{
+            cors = $corsObject
+        }
+    }
+
     $null = $PSBoundParameters.Remove('LocationRead')
     $null = $PSBoundParameters.Remove('DefaultConsistencyLevel')
     $null = $PSBoundParameters.Remove('MaxIntervalInSeconds')
     $null = $PSBoundParameters.Remove('MaxStalenessPrefix')
     $null = $PSBoundParameters.Remove('IpRangeFilter')
+    $null = $PSBoundParameters.Remove('AllowedOrigin')
 
-    $newAzureRmResource_parameters = $PSBoundParameters + @{
+    $newAzResource_parameters = $PSBoundParameters + @{
         ResourceType = 'Microsoft.DocumentDb/databaseAccounts'
         ApiVersion   = '2015-04-08'
         Properties   = $cosmosDBProperties
@@ -102,6 +121,6 @@ function New-CosmosDbAccount
     {
         Write-Verbose -Message $($LocalizedData.CreatingAzureCosmosDBAccount -f $Name, $ResourceGroupName, $Location)
 
-        return (New-AzureRmResource @newAzureRmResource_parameters -Force)
+        return (New-AzResource @newAzResource_parameters -Force)
     }
 }
