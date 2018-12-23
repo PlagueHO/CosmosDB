@@ -293,7 +293,7 @@ InModuleScope CosmosDB {
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Location -eq $script:testLocation) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                (ConvertTo-Json -InputObject $Properties -Depth 20) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties -Depth 20)
             }
 
             Mock `
@@ -349,7 +349,7 @@ InModuleScope CosmosDB {
                 ($Location -eq $script:testLocation) -and `
                 ($Force -eq $true) -and `
                 ($AsJob -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                (ConvertTo-Json -InputObject $Properties -Depth 20) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties -Depth 20)
             }
 
             Mock `
@@ -409,7 +409,7 @@ InModuleScope CosmosDB {
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Location -eq $script:testLocation) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                (ConvertTo-Json -InputObject $Properties -Depth 20) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties -Depth 20)
             }
 
             Mock `
@@ -473,7 +473,7 @@ InModuleScope CosmosDB {
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Location -eq $script:testLocation) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                (ConvertTo-Json -InputObject $Properties -Depth 20) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties -Depth 20)
             }
 
             Mock `
@@ -529,7 +529,7 @@ InModuleScope CosmosDB {
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Location -eq $script:testLocation) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                (ConvertTo-Json -InputObject $Properties -Depth 20) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties -Depth 20)
             }
 
             Mock `
@@ -585,7 +585,7 @@ InModuleScope CosmosDB {
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Location -eq $script:testLocation) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                (ConvertTo-Json -InputObject $Properties -Depth 20) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties -Depth 20)
             }
 
             Mock `
@@ -648,7 +648,7 @@ InModuleScope CosmosDB {
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Location -eq $script:testLocation) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                (ConvertTo-Json -InputObject $Properties -Depth 20) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties -Depth 20)
             }
 
             Mock `
@@ -714,7 +714,7 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                (ConvertTo-Json -InputObject $Properties -Depth 20) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties -Depth 20)
             }
 
             Mock `
@@ -788,7 +788,7 @@ InModuleScope CosmosDB {
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
                 ($AsJob -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                (ConvertTo-Json -InputObject $Properties -Depth 20) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties -Depth 20)
             }
 
             Mock `
@@ -866,7 +866,7 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                (ConvertTo-Json -InputObject $Properties -Depth 20) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties -Depth 20)
             }
 
             Mock `
@@ -948,7 +948,7 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                (ConvertTo-Json -InputObject $Properties -Depth 20) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties -Depth 20)
             }
 
             Mock `
@@ -1022,7 +1022,7 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                (ConvertTo-Json -InputObject $Properties -Depth 20) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties -Depth 20)
             }
 
             Mock `
@@ -1096,7 +1096,7 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                (ConvertTo-Json -InputObject $Properties -Depth 20) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties -Depth 20)
             }
 
             Mock `
@@ -1168,7 +1168,7 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                (ConvertTo-Json -InputObject $Properties -Depth 20) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties -Depth 20)
             }
 
             Mock `
@@ -1242,7 +1242,7 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                (ConvertTo-Json -InputObject $Properties -Depth 20) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties -Depth 20)
             }
 
             Mock `
@@ -1314,7 +1314,7 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                (ConvertTo-Json -InputObject $Properties -Depth 20) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties -Depth 20)
             }
 
             Mock `
