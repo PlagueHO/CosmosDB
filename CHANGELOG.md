@@ -7,6 +7,8 @@
 - Updated manifest to include `CompatiblePSEditions` of 'Desktop' and
   'Core'.
 - Updated minimum supported PowerShell version to 5.1.
+- Updated `cosmosdb.depend.psd1` to ensure `Az` modules are installed
+  when running 'Deploy' PSake task.
 
 ## 3.0.0.279
 
