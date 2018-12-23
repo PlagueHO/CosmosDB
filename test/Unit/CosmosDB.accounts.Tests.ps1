@@ -642,6 +642,9 @@ InModuleScope CosmosDB {
             }
 
             $newAzResource_parameterFilter = {
+                Write-Verbose -Message (ConvertTo-Json -InputObject $Properties) -Verbose;
+                Write-Verbose -Message (ConvertTo-Json -InputObject $testCosmosDBProperties) -Verbose;
+                Write-Verbose -Message ((ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)) -Verbose;
                 ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
                 ($ApiVersion -eq '2015-04-08') -and `
                 ($ResourceName -eq $script:testName) -and `
