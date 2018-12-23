@@ -1,5 +1,13 @@
 # Change Log
 
+## Unreleased
+
+- Updated manifest to include required modules `Az.Accounts` 1.0.0
+  and `Az.Resources` 1.0.0.
+- Updated manifest to include `CompatiblePSEditions` of 'Desktop' and
+  'Core'.
+- Updated minimum supported PowerShell version to 5.1.
+
 ## 3.0.0.279
 
 - BREAKING CHANGE: Converted to use `Az` PowerShell Module from
