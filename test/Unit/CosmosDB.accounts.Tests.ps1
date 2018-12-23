@@ -22,6 +22,7 @@ InModuleScope CosmosDB {
     $script:testConsistencyLevel = 'Strong'
     $script:testMaxIntervalInSeconds = 60
     $script:testMaxStalenessPrefix = 900
+    $script:testCorsAllowedOrigins = @('https://www.contoso.com', 'https://www.fabrikam.com')
     $script:mockGetAzResource = @{
         ResourceId = 'ignore'
         Id         = 'ignore'
@@ -66,6 +67,11 @@ InModuleScope CosmosDB {
                     id               = "$script:testLocation-northcentralus"
                     locationName     = $script:testLocation
                     failoverPriority = 0
+                }
+            )
+            cors                          = @(
+                @{
+                    allowedOrigins = ($script:testCorsAllowedOrigins -join ',')
                 }
             )
             capabilities                  = @()
@@ -611,6 +617,74 @@ InModuleScope CosmosDB {
                     -Exactly -Times 1
             }
         }
+
+        Context 'When called with a Location and AllowedOrigin specified and other parameters default' {
+            $script:result = $null
+            $testCosmosDBProperties = @{
+                databaseAccountOfferType = 'Standard'
+                locations                = @(
+                    @{
+                        locationName     = $script:testLocation
+                        failoverPriority = 0
+                    }
+                )
+                consistencyPolicy        = @{
+                    defaultConsistencyLevel = 'Session'
+                    maxIntervalInSeconds    = 5
+                    maxStalenessPrefix      = 100
+                }
+                ipRangeFilter            = ''
+                cors                     = @(
+                    @{
+                        allowedOrigins = ($script:testCorsAllowedOrigins -join ',')
+                    }
+                )
+            }
+
+            $newAzResource_parameterFilter = {
+                ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
+                ($ApiVersion -eq '2015-04-08') -and `
+                ($ResourceName -eq $script:testName) -and `
+                ($ResourceGroupName -eq $script:testResourceGroupName) -and `
+                ($Location -eq $script:testLocation) -and `
+                ($Force -eq $true) -and `
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
+            }
+
+            Mock `
+                -CommandName New-AzResource `
+                -MockWith { 'Account' }
+
+            It 'Should not throw exception' {
+                $newCosmosDbAccountParameters = @{
+                    Name              = $script:testName
+                    ResourceGroupName = $script:testResourceGroupName
+                    Location          = $script:testLocation
+                    AllowedOrigin     = $script:testCorsAllowedOrigins
+                    Verbose           = $true
+                }
+
+                { $script:result = New-CosmosDbAccount @newCosmosDbAccountParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -Be 'Account'
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName New-AzResource `
+                    -ParameterFilter $newAzResource_parameterFilter `
+                    -Exactly -Times 1
+            }
+        }
     }
 
     Describe 'Set-CosmosDbAccount' -Tag 'Unit' {
@@ -634,6 +708,11 @@ InModuleScope CosmosDB {
                     maxStalenessPrefix      = 100
                 }
                 ipRangeFilter            = ''
+                cors                     = @(
+                    @{
+                        allowedOrigins = ($script:testCorsAllowedOrigins -join ',')
+                    }
+                )
             }
 
             $setAzResource_parameterFilter = {
@@ -642,7 +721,14 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
@@ -702,6 +788,11 @@ InModuleScope CosmosDB {
                     maxStalenessPrefix      = 100
                 }
                 ipRangeFilter            = ''
+                cors                     = @(
+                    @{
+                        allowedOrigins = ($script:testCorsAllowedOrigins -join ',')
+                    }
+                )
             }
 
             $setAzResource_parameterFilter = {
@@ -711,7 +802,14 @@ InModuleScope CosmosDB {
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
                 ($AsJob -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
@@ -776,6 +874,11 @@ InModuleScope CosmosDB {
                     maxStalenessPrefix      = 100
                 }
                 ipRangeFilter            = ''
+                cors                     = @(
+                    @{
+                        allowedOrigins = ($script:testCorsAllowedOrigins -join ',')
+                    }
+                )
             }
 
             $setAzResource_parameterFilter = {
@@ -784,7 +887,14 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
@@ -853,6 +963,11 @@ InModuleScope CosmosDB {
                     maxStalenessPrefix      = 100
                 }
                 ipRangeFilter            = ''
+                cors                     = @(
+                    @{
+                        allowedOrigins = ($script:testCorsAllowedOrigins -join ',')
+                    }
+                )
             }
 
             $setAzResource_parameterFilter = {
@@ -861,7 +976,14 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
@@ -922,6 +1044,11 @@ InModuleScope CosmosDB {
                     maxStalenessPrefix      = 100
                 }
                 ipRangeFilter            = ($script:testIpRangeFilter -join ',')
+                cors                     = @(
+                    @{
+                        allowedOrigins = ($script:testCorsAllowedOrigins -join ',')
+                    }
+                )
             }
 
             $setAzResource_parameterFilter = {
@@ -930,7 +1057,14 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
@@ -991,6 +1125,11 @@ InModuleScope CosmosDB {
                     maxStalenessPrefix      = $script:testMaxStalenessPrefix
                 }
                 ipRangeFilter            = ''
+                cors                     = @(
+                    @{
+                        allowedOrigins = ($script:testCorsAllowedOrigins -join ',')
+                    }
+                )
             }
 
             $setAzResource_parameterFilter = {
@@ -999,7 +1138,14 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
@@ -1058,6 +1204,11 @@ InModuleScope CosmosDB {
                     maxStalenessPrefix      = 100
                 }
                 ipRangeFilter            = ''
+                cors                     = @(
+                    @{
+                        allowedOrigins = ($script:testCorsAllowedOrigins -join ',')
+                    }
+                )
             }
 
             $setAzResource_parameterFilter = {
@@ -1066,7 +1217,14 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
@@ -1127,6 +1285,11 @@ InModuleScope CosmosDB {
                     maxStalenessPrefix      = 100
                 }
                 ipRangeFilter            = ''
+                cors                     = @(
+                    @{
+                        allowedOrigins = ($script:testCorsAllowedOrigins -join ',')
+                    }
+                )
             }
 
             $setAzResource_parameterFilter = {
@@ -1135,7 +1298,14 @@ InModuleScope CosmosDB {
                 ($ResourceName -eq $script:testName) -and `
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
             }
 
             Mock `
@@ -1163,6 +1333,87 @@ InModuleScope CosmosDB {
                 }
 
                 { $script:result = Set-CosmosDbAccount @setCosmosDbAccountParameters } | Should -Not -Throw
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Set-AzResource `
+                    -ParameterFilter $setAzResource_parameterFilter `
+                    -Exactly -Times 1
+
+                Assert-MockCalled `
+                    -CommandName Get-CosmosDbAccount `
+                    -ParameterFilter $getCosmosDbAccount_parameterFilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with a Location and AllowedOrigins specified and other parameters default' {
+            $script:result = $null
+            $testCosmosDBProperties = @{
+                databaseAccountOfferType = 'Standard'
+                locations                = @(
+                    @{
+                        locationName     = $script:testLocation
+                        failoverPriority = 0
+                    }
+                )
+                consistencyPolicy        = @{
+                    defaultConsistencyLevel = 'Session'
+                    maxIntervalInSeconds    = 5
+                    maxStalenessPrefix      = 100
+                }
+                ipRangeFilter            = ''
+                cors                     = @(
+                    @{
+                        allowedOrigins = ($script:testCorsAllowedOrigins -join ',')
+                    }
+                )
+            }
+
+            $setAzResource_parameterFilter = {
+                ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
+                ($ApiVersion -eq '2015-04-08') -and `
+                ($ResourceName -eq $script:testName) -and `
+                ($ResourceGroupName -eq $script:testResourceGroupName) -and `
+                ($Force -eq $true) -and `
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.cors.allowedOrigins -eq $testCosmosDBProperties.cors.allowedOrigins)
+            }
+
+            Mock `
+                -CommandName Set-AzResource `
+                -MockWith { 'Account' }
+
+            $getCosmosDbAccount_parameterFilter = {
+                ($Name -eq $script:testName) -and `
+                ($ResourceGroupName -eq $script:testResourceGroupName)
+            }
+
+            Mock `
+                -CommandName Get-CosmosDbAccount `
+                -MockWith { $script:mockGetAzResource }
+
+            It 'Should not throw exception' {
+                $setCosmosDbAccountParameters = @{
+                    Name              = $script:testName
+                    ResourceGroupName = $script:testResourceGroupName
+                    Location          = $script:testLocation
+                    AllowedOrigin     = $script:testCorsAllowedOrigins
+                    Verbose           = $true
+                }
+
+                { $script:result = Set-CosmosDbAccount @setCosmosDbAccountParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -Be 'Account'
             }
 
             It 'Should call expected mocks' {

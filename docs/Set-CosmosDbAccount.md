@@ -16,7 +16,8 @@ Update the properties of an existing Azure Cosmos DB account.
 ```powershell
 Set-CosmosDbAccount [-Name] <String> [-ResourceGroupName] <String> [[-Location] <String>]
  [[-LocationRead] <String[]>] [[-DefaultConsistencyLevel] <String>] [[-MaxIntervalInSeconds] <Int32>]
- [[-MaxStalenessPrefix] <Int32>] [[-IpRangeFilter] <String[]>] [-AsJob] [-WhatIf] [-Confirm]
+ [[-MaxStalenessPrefix] <Int32>] [[-IpRangeFilter] <String[]>]  [[-AllowedOrigin] <String[]>]
+ [-AsJob] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
@@ -48,7 +49,44 @@ Update an existing Cosmos DB account called 'MyCosmosDB' in an existing
 Resource Group caled 'MyData'. The Cosmos DB will only be accessible from
 the IP addresses '103.29.31.78/32' and '103.29.31.79/32'.
 
+### Example 3
+
+```powershell
+PS C:\> Set-CosmosDbAccount -Name 'MyCosmosDB' -ResourceGroup 'MyData' -AllowedOrigin @('https://www.contoso.com','https://www.fabrikam.com')
+```
+
+Update an existing Cosmos DB account called 'MyCosmosDB' in an existing
+Resource Group caled 'MyData'. The Cosmos DB will have the CORS allowed origins
+set to 'https://www.contoso.com' and 'https://www.fabrikam.com'.
+
+### Example 4
+
+```powershell
+PS C:\> Set-CosmosDbAccount -Name 'MyCosmosDB' -ResourceGroup 'MyData' -AllowedOrigin ''
+```
+
+Update an existing Cosmos DB account called 'MyCosmosDB' in an existing
+Resource Group caled 'MyData'. The Cosmos DB will have the CORS allowed
+origins setting removed.
+
 ## PARAMETERS
+
+### -AllowedOrigin
+
+Update Cross-Origin Resource Sharing (CORS) allowed orgin URLs on
+the existing account.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 7
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -AsJob
 

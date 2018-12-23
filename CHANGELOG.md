@@ -23,6 +23,12 @@
 - Updated CONTRIBUTING.MD to more accurately reflect current process of
   contributing to the module.
 - Updated STYLEGUIDELINES.MD to match current standards and best practices.
+- Added support for setting and updating Cross-Origin Resource Sharing (CORS)
+  allowed origins in `New-CosmosDbAccount` and `Set-CosmosDbAccount`
+  respectively - fixes [Issue #249](https://github.com/PlagueHO/CosmosDB/issues/249).
+- Changed `Remove-CosmosDbAccount` to prevent second confirmation prompt
+  when removing account.
+- Enabled `*-CosmosDbAccount` tests to run in AppVeyor.
 
 ## 2.1.15.237
 

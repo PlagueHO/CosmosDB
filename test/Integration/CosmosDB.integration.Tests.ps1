@@ -32,6 +32,7 @@ if (-not $buildSystem)
 $script:testResourceGroupName = ('cdbtestrgp-{0}-{1}-{2}' -f $script:testRandomName,$buildSystem.Replace(' ',''),$ENV:BHBranchName)
 $script:testAccountName = ('cdbtest{0}' -f $script:testRandomName)
 $script:testLocation = 'East US'
+$script:testCorsAllowedOrigins = @('https://www.contoso.com', 'https://www.fabrikam.com')
 $script:testOffer = 'testOffer'
 $script:testDatabase = 'testDatabase'
 $script:testDatabase2 = 'testDatabase2'
@@ -144,24 +145,8 @@ $null = New-AzureTestCosmosDbResourceGroup `
 $currentIpAddress = (Invoke-RestMethod -Uri 'http://ipinfo.io/json').ip
 
 Describe 'Cosmos DB Module' -Tag 'Integration' {
-    if ($ENV:BHBuildSystem -eq 'AppVeyor')
-    {
-        Write-Warning -Message (@(
-            'New-AzResource, Set-AzResource and some Invoke-AzResourceAction calls currently throws the following exception in AppVeyor:'
-            'Method not found: ''Void Newtonsoft.Json.Serialization.JsonDictionaryContract.set_PropertyNameResolver(System.Func`2<System.String,System.String>)'''
-            'due to an older version of Newtonsoft.Json being used.'
-            'Therefore integration tests of New-CosmosDbAccount and Set-CosmosDbAccount are currently skipped when running in AppVeyor environment.'
-        ) -join "`n`r")
-
-        # Create Azure CosmosDB Account to use for testing
-        New-AzureTestCosmosDbAccount `
-            -ResourceGroupName $script:testResourceGroupName `
-            -Name $script:testAccountName `
-            -Verbose
-    }
-
     Context 'When creating a new Azure Cosmos DB Account' {
-        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
+        It 'Should not throw an exception' {
             New-CosmosDbAccount `
                 -Name $script:testAccountName `
                 -ResourceGroupName $script:testResourceGroupName `
@@ -169,6 +154,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -DefaultConsistencyLevel 'BoundedStaleness' `
                 -MaxIntervalInSeconds 50 `
                 -MaxStalenessPrefix 50 `
+                -AllowedOrigin $script:testCorsAllowedOrigins `
                 -Verbose
         }
     }
@@ -190,30 +176,32 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Properties.consistencyPolicy.maxIntervalInSeconds | Should -Be 50
             $script:result.Properties.consistencyPolicy.maxStalenessPrefix | Should -Be 50
             $script:result.Properties.ipRangeFilter | Should -BeNullOrEmpty
+            $script:result.Properties.cors[0].allowedOrigins | Should -Be ($script:testCorsAllowedOrigins -join ',')
         }
     }
 
     Context 'When updating the new Azure Cosmos DB Account' {
-        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
+        It 'Should not throw an exception' {
             $script:result = Set-CosmosDbAccount `
                 -Name $script:testAccountName `
                 -ResourceGroupName $script:testResourceGroupName `
                 -Location $script:testLocation `
                 -DefaultConsistencyLevel 'Session' `
                 -IpRangeFilter "$currentIpAddress/32" `
+                -AllowedOrigin '*' `
                 -Verbose
         }
     }
 
     Context 'When getting the new Azure Cosmos DB Account' {
-        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
+        It 'Should not throw an exception' {
             $script:result = Get-CosmosDbAccount `
                 -Name $script:testAccountName `
                 -ResourceGroupName $script:testResourceGroupName `
                 -Verbose
         }
 
-        It 'Should return expected object' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
+        It 'Should return expected object' {
             $script:result.Name | Should -Be $script:testAccountName
             $script:result.ResourceGroupName | Should -Be $script:testResourceGroupName
             $script:result.Location | Should -Be $script:testLocation
@@ -222,11 +210,12 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Properties.consistencyPolicy.maxIntervalInSeconds | Should -Be 5
             $script:result.Properties.consistencyPolicy.maxStalenessPrefix | Should -Be 100
             $script:result.Properties.ipRangeFilter | Should -Be "$currentIpAddress/32"
+            $script:result.Properties.cors[0].allowedOrigins | Should -Be '*'
         }
     }
 
     Context 'When updating the new Azure Cosmos DB Account to remove IP Range filter' {
-        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
+        It 'Should not throw an exception' {
             $script:result = Set-CosmosDbAccount `
                 -Name $script:testAccountName `
                 -ResourceGroupName $script:testResourceGroupName `
@@ -279,7 +268,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     }
 
     Context 'When regenerating the new Azure Cosmos DB Account Primary Master Key' {
-        It 'Should not throw an exception' -Skip:($ENV:BHBuildSystem -eq 'AppVeyor') {
+        It 'Should not throw an exception' {
             $script:result = New-CosmosDbAccountMasterKey `
                 -Name $script:testAccountName `
                 -ResourceGroupName $script:testResourceGroupName `

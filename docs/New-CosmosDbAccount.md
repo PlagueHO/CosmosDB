@@ -16,7 +16,8 @@ Create a new Cosmos DB account in Azure.
 ```powershell
 New-CosmosDbAccount [-Name] <String> [-ResourceGroupName] <String> [-Location] <String>
  [[-LocationRead] <String[]>] [[-DefaultConsistencyLevel] <String>] [[-MaxIntervalInSeconds] <Int32>]
- [[-MaxStalenessPrefix] <Int32>] [[-IpRangeFilter] <String[]>] [-AsJob] [-WhatIf] [-Confirm]
+ [[-MaxStalenessPrefix] <Int32>] [[-IpRangeFilter] <String[]>] [[-AllowedOrgin] <String[]>]
+[-AsJob] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
@@ -74,7 +75,35 @@ Resource Group caled 'MyData'. The account will be created in the
 'WestUS' Azure region. The Cosmos DB will be configured to use
 a default consistency level of 'Strong'.
 
+### Example 5
+
+```powershell
+PS C:\> New-CosmosDbAccount -Name 'MyCosmosDB' -ResourceGroup 'MyData' -Location 'WestUS' -AllowedOrigin @('https://www.contoso.com','https://www.fabrikam.com')
+```
+
+Create a new Cosmos DB account called 'MyCosmosDB' in an existing
+Resource Group caled 'MyData'. The account will be created in the
+'WestUS' Azure region. The Cosmos DB will have the CORS allowed
+origins set to 'https://www.contoso.com' and 'https://www.fabrikam.com'.
+
 ## PARAMETERS
+
+### -AllowedOrigin
+
+Set Cross-Origin Resource Sharing (CORS) allowed orgin URLs on
+the new account. Defaults to '*'.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 7
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -AsJob
 
