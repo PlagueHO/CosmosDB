@@ -32,6 +32,7 @@ if (-not $buildSystem)
 $script:testResourceGroupName = ('cdbtestrgp-{0}-{1}-{2}' -f $script:testRandomName,$buildSystem.Replace(' ',''),$ENV:BHBranchName)
 $script:testAccountName = ('cdbtest{0}' -f $script:testRandomName)
 $script:testLocation = 'East US'
+$script:testCorsAllowedOrigins = @('https://www.contoso.com', 'https://www.fabrikam.com')
 $script:testOffer = 'testOffer'
 $script:testDatabase = 'testDatabase'
 $script:testDatabase2 = 'testDatabase2'
@@ -169,6 +170,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -DefaultConsistencyLevel 'BoundedStaleness' `
                 -MaxIntervalInSeconds 50 `
                 -MaxStalenessPrefix 50 `
+                -AllowedOrigin $script:testCorsAllowedOrigins `
                 -Verbose
         }
     }
@@ -190,6 +192,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Properties.consistencyPolicy.maxIntervalInSeconds | Should -Be 50
             $script:result.Properties.consistencyPolicy.maxStalenessPrefix | Should -Be 50
             $script:result.Properties.ipRangeFilter | Should -BeNullOrEmpty
+            $script:result.Properties.cors[0].allowedOrigins | Should -Be ($script:testCorsAllowedOrigins -join ',')
         }
     }
 
@@ -201,6 +204,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Location $script:testLocation `
                 -DefaultConsistencyLevel 'Session' `
                 -IpRangeFilter "$currentIpAddress/32" `
+                -AllowedOrigin '*' `
                 -Verbose
         }
     }
@@ -222,6 +226,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Properties.consistencyPolicy.maxIntervalInSeconds | Should -Be 5
             $script:result.Properties.consistencyPolicy.maxStalenessPrefix | Should -Be 100
             $script:result.Properties.ipRangeFilter | Should -Be "$currentIpAddress/32"
+            $script:result.Properties.cors[0].allowedOrigins | Should -Be '*'
         }
     }
 
