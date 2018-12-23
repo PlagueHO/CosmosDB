@@ -1,5 +1,37 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+December 23, 2018
+
+- BREAKING CHANGE: Converted to use `Az` PowerShell Module from
+  `AzureRm` and `AzureRm.NetCore` PowerShell Module - fixes [Issue #190](https://github.com/PlagueHO/CosmosDB/issues/190).
+- Renamed `build.ps1` to `psake.ps1` to indicate that it is used
+  to execute `Psake` tasks.
+- Add Codacy Code Quality badge to `README.MD`.
+- Configure PSScriptAnalyzer to show errors, warnings and informational
+  violations in Visual Studio Code.
+- Fix generic tests to validate PSScriptAnalyzer errors, warnings and
+  informational rules.
+- Converted use of alias `Add-AzAccount` to `Connect-AzAccount`.
+- Updated to use `Az` PowerShell Module 1.0.1.
+- Correct `AliasesToExport` in manifest.
+- Minor corrections to markdown to improve best practice adherence.
+- Minor corrections to CI support files to improve best practice
+  adherence.
+- Added ShouldProcess support to `New-CosmosDbAccountMasterKey` and
+  `New-CosmosDbContext`.
+- Added ShouldProcess support TestHelper functions.
+- Updated CONTRIBUTING.MD to more accurately reflect current process of
+  contributing to the module.
+- Updated STYLEGUIDELINES.MD to match current standards and best practices.
+- Added support for setting and updating Cross-Origin Resource Sharing (CORS)
+  allowed origins in `New-CosmosDbAccount` and `Set-CosmosDbAccount`
+  respectively - fixes [Issue #249](https://github.com/PlagueHO/CosmosDB/issues/249).
+- Changed `Remove-CosmosDbAccount` to prevent second confirmation prompt
+  when removing account.
+- Enabled `*-CosmosDbAccount` tests to run in AppVeyor.
+
 ## What is New in CosmosDB 2.1.15.237
 
 November 17, 2018
