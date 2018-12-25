@@ -80,6 +80,6 @@
         }
         Target         = 'CurrentUser'
         Version        = '1.0.1'
-        Tags           = 'Test'
+        Tags           = 'Test','Deploy'
     }
 }

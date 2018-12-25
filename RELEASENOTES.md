@@ -1,5 +1,18 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+December 26, 2018
+
+- Updated manifest to include required modules `Az.Accounts` 1.0.0
+  and `Az.Resources` 1.0.0.
+- Updated manifest to include `CompatiblePSEditions` of 'Desktop' and
+  'Core'.
+- Updated minimum supported PowerShell version to 5.1.
+- Updated `cosmosdb.depend.psd1` to ensure `Az` modules are installed
+  when running 'Deploy' PSake task.
+- Improve build task code to ensure Git tag is correctly set.
+
 ## What is New in CosmosDB 3.0.0.279
 
 December 23, 2018

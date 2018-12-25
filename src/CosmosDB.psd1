@@ -3,10 +3,10 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '3.0.0.279'
+    ModuleVersion     = '3.1.0.279'
 
     # Supported PSEditions
-    # CompatiblePSEditions = @()
+    CompatiblePSEditions = 'Core', 'Desktop'
 
     # ID used to uniquely identify this module
     GUID              = '7d7aeb42-8ed9-4555-b5fd-020795a5aa01'
@@ -15,7 +15,7 @@
     Author            = 'Daniel Scott-Raynsford'
 
     # Company or vendor of this module
-    CompanyName       = ''
+    CompanyName       = 'None'
 
     # Copyright statement for this module
     Copyright         = '(c) 2018 Daniel Scott-Raynsford. All rights reserved.'
@@ -24,7 +24,7 @@
     Description       = 'This module provides cmdlets for working with Azure Cosmos DB databases, collections, documents, attachments, offers, users, permissions, triggers, stored procedures and user defined functions.'
 
     # Minimum version of the Windows PowerShell engine required by this module
-    # PowerShellVersion = ''
+    PowerShellVersion = '5.1'
 
     # Name of the Windows PowerShell host required by this module
     # PowerShellHostName = ''
@@ -33,7 +33,7 @@
     # PowerShellHostVersion = ''
 
     # Minimum version of Microsoft .NET Framework required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
-    # DotNetFrameworkVersion = ''
+    # DotNetFrameworkVersion = '4.7.2'
 
     # Minimum version of the common language runtime (CLR) required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
     # CLRVersion = ''
@@ -42,7 +42,10 @@
     # ProcessorArchitecture = ''
 
     # Modules that must be imported into the global environment prior to importing this module
-    # RequiredModules = @()
+    RequiredModules = @(
+        @{ ModuleName = 'Az.Accounts'; ModuleVersion = '1.0.0'; Guid = '17a2feff-488b-47f9-8729-e2cec094624c' }
+        @{ ModuleName = 'Az.Resources'; ModuleVersion = '1.0.0'; Guid = '48bb344d-4c24-441e-8ea0-589947784700' }
+    )
 
     # Assemblies that must be loaded prior to importing this module
     # RequiredAssemblies = @()
@@ -186,6 +189,19 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+December 26, 2018
+
+- Updated manifest to include required modules `Az.Accounts` 1.0.0
+  and `Az.Resources` 1.0.0.
+- Updated manifest to include `CompatiblePSEditions` of ''Desktop'' and
+  ''Core''.
+- Updated minimum supported PowerShell version to 5.1.
+- Updated `cosmosdb.depend.psd1` to ensure `Az` modules are installed
+  when running ''Deploy'' PSake task.
+- Improve build task code to ensure Git tag is correctly set.
+
 ## What is New in CosmosDB 3.0.0.279
 
 December 23, 2018
@@ -305,19 +321,6 @@ October 30, 2018
 
 - Added support for setting Collection uniqueKeyPolicy in
   `New-CosmosDbCollection` and `Set-CosmosDbCollection` - fixes [Issue #197](https://github.com/PlagueHO/CosmosDB/issues/197).
-
-## What is New in CosmosDB 2.1.11.130
-
-October 27, 2018
-
-- Renamed `ResourceGroup` parameter to `ResourceGroupName` in
-  `New-CosmosDbContext` function - fixes [Issue #158](https://github.com/PlagueHO/CosmosDB/issues/158).
-- Correct `*-CosmosDbAccount` functions examples in README.MD to show
-  `ResourceGroupName` parameter.
-- Added `Get-CosmosDbAccountMasterKey` function for retrieving the keys
-  of an existing account in Azure - fixes [Issue #162](https://github.com/PlagueHO/CosmosDB/issues/162).
-- Added `New-CosmosDbAccountMasterKey` function for regenerating the keys
-  of an existing account in Azure - fixes [Issue #164](https://github.com/PlagueHO/CosmosDB/issues/164).
 '
         } # End of PSData hashtable
     } # End of PrivateData hashtable
