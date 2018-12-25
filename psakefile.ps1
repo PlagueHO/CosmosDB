@@ -366,20 +366,21 @@ Task Build -Depends Init {
                     -Destination $ProjectRoot `
                     -Force
 
+                'Adding updated module files to commit'
+                Invoke-Git -GitParameters @('add', '.')
+
+                "Adding $newVersion tag to Master"
+                Invoke-Git -GitParameters @('tag', '-a', $newVersion, '-m', $newVersion)
+
+                "Creating new commit for 'Azure DevOps Deploy updating Version Number to $NewVersion'"
+                Invoke-Git -GitParameters @('commit', '-m', "Azure DevOps Deploy updating Version Number to $NewVersion")
+
                 # Update the master branch
                 'Pushing deployment changes to Master'
-                Invoke-Git -GitParameters @('add', '.')
-                Invoke-Git -GitParameters @('commit', '-m', "Azure DevOps Deploy updating Version Number to $NewVersion")
                 Invoke-Git -GitParameters @('status')
                 Invoke-Git -GitParameters @('push')
 
-                # Create the version tag and push it
-                "Pushing $newVersion tag to Master"
-                Invoke-Git -GitParameters @('tag', '-a', $newVersion, '-m', $newVersion)
-                Invoke-Git -GitParameters @('status')
-                Invoke-Git -GitParameters @('push')
-
-                # Merge the changes to the Dev branch as well
+                # Merge the changes to the Master branch into the Dev branch
                 'Pushing deployment changes to Dev'
                 Invoke-Git -GitParameters @('checkout', '-f', 'dev')
                 Invoke-Git -GitParameters @('merge', 'origin/master')

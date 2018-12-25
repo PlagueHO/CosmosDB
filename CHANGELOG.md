@@ -9,6 +9,7 @@
 - Updated minimum supported PowerShell version to 5.1.
 - Updated `cosmosdb.depend.psd1` to ensure `Az` modules are installed
   when running 'Deploy' PSake task.
+- Improve build task code to ensure Git tag is correctly set.
 
 ## 3.0.0.279
 
