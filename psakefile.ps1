@@ -210,7 +210,6 @@ Task Build -Depends Init {
     $null = New-Item -Path $versionFolder -Type directory
 
     # Populate Version Folder
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psd1') -Destination $versionFolder
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psm1') -Destination $versionFolder
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/formats') -Destination $versionFolder -Recurse
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/types') -Destination $versionFolder -Recurse
@@ -277,13 +276,39 @@ Task Build -Depends Init {
         -OutputPath $versionFolder `
         -Force
 
-    # Set the new version number in the staged Module Manifest
+    # Create the module manifest in the staging folder
     'Updating module manifest'
     $stagedManifestPath = Join-Path -Path $versionFolder -ChildPath 'CosmosDB.psd1'
-    $stagedManifestContent = Get-Content -Path $stagedManifestPath -Raw
-    $stagedManifestContent = $stagedManifestContent -replace '(?<=ModuleVersion\s+=\s+'')(?<ModuleVersion>.*)(?='')', $newVersion
-    $stagedManifestContent = $stagedManifestContent -replace '## What is New in CosmosDB Unreleased', "## What is New in CosmosDB $newVersion"
-    Set-Content -Path $stagedManifestPath -Value $stagedManifestContent -NoNewLine -Force
+
+    Import-LocalizedData `
+        -BindingVariable 'stagedManifestContent' `
+        -FileName 'CosmosDB.psd1' `
+        -BaseDirectory (Join-Path -Path $ProjectRoot -ChildPath 'src')
+    $stagedManifestContent.ModuleVersion = $newVersion
+    $stagedManifestContent.Copyright = "(c) $((Get-Date).Year) Daniel Scott-Raynsford. All rights reserved."
+
+    # Extract the PrivateData values and remove it because it can not be splatted
+    'LicenseUri','Tags','ProjectUri','IconUri','ReleaseNotes' | Foreach-Object -Process {
+        $privateDataValue = $stagedManifestContent.PrivateData.PSData.$_
+        if ($privateDataValue)
+        {
+            $null = $stagedManifestContent.Add($_, $privateDataValue)
+        }
+    }
+
+    $stagedManifestContent.ReleaseNotes = $stagedManifestContent.ReleaseNotes -replace '## What is New in CosmosDB Unreleased', "## What is New in CosmosDB $newVersion"
+    $stagedManifestContent.Remove('PrivateData')
+
+    # Create the module manifest file
+    New-ModuleManifest `
+        -Path $stagedManifestPath `
+        @stagedManifestContent
+
+    # Validate the module manifest
+    if (-not (Test-ModuleManifest -Path $stagedManifestPath))
+    {
+        throw "The generated module manifest '$stagedManifestPath' was invalid"
+    }
 
     # Set the new version number in the staged CHANGELOG.md
     'Updating CHANGELOG.MD'

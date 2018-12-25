@@ -3,7 +3,7 @@
     RootModule        = 'CosmosDB.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '3.0.0.279'
+    ModuleVersion     = '3.1.0.279'
 
     # Supported PSEditions
     CompatiblePSEditions = 'Core', 'Desktop'
@@ -15,7 +15,7 @@
     Author            = 'Daniel Scott-Raynsford'
 
     # Company or vendor of this module
-    CompanyName       = ''
+    CompanyName       = 'None'
 
     # Copyright statement for this module
     Copyright         = '(c) 2018 Daniel Scott-Raynsford. All rights reserved.'
@@ -189,6 +189,19 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
+## What is New in CosmosDB Unreleased
+
+December 26, 2018
+
+- Updated manifest to include required modules `Az.Accounts` 1.0.0
+  and `Az.Resources` 1.0.0.
+- Updated manifest to include `CompatiblePSEditions` of ''Desktop'' and
+  ''Core''.
+- Updated minimum supported PowerShell version to 5.1.
+- Updated `cosmosdb.depend.psd1` to ensure `Az` modules are installed
+  when running ''Deploy'' PSake task.
+- Improve build task code to ensure Git tag is correctly set.
+
 ## What is New in CosmosDB 3.0.0.279
 
 December 23, 2018
@@ -308,19 +321,6 @@ October 30, 2018
 
 - Added support for setting Collection uniqueKeyPolicy in
   `New-CosmosDbCollection` and `Set-CosmosDbCollection` - fixes [Issue #197](https://github.com/PlagueHO/CosmosDB/issues/197).
-
-## What is New in CosmosDB 2.1.11.130
-
-October 27, 2018
-
-- Renamed `ResourceGroup` parameter to `ResourceGroupName` in
-  `New-CosmosDbContext` function - fixes [Issue #158](https://github.com/PlagueHO/CosmosDB/issues/158).
-- Correct `*-CosmosDbAccount` functions examples in README.MD to show
-  `ResourceGroupName` parameter.
-- Added `Get-CosmosDbAccountMasterKey` function for retrieving the keys
-  of an existing account in Azure - fixes [Issue #162](https://github.com/PlagueHO/CosmosDB/issues/162).
-- Added `New-CosmosDbAccountMasterKey` function for regenerating the keys
-  of an existing account in Azure - fixes [Issue #164](https://github.com/PlagueHO/CosmosDB/issues/164).
 '
         } # End of PSData hashtable
     } # End of PrivateData hashtable

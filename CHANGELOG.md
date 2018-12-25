@@ -10,6 +10,10 @@
 - Updated `cosmosdb.depend.psd1` to ensure `Az` modules are installed
   when running 'Deploy' PSake task.
 - Improve build task code to ensure Git tag is correctly set.
+- Fix bug in module manifest generation process to ensure module version
+  is set correctly.
+- Refactored module manifest generation process to be more reliable
+  and robust.
 
 ## 3.0.0.279
 
