@@ -1,6 +1,6 @@
 # Release Notes
 
-## What is New in CosmosDB Unreleased
+## What is New in CosmosDB 3.1.0.289
 
 December 26, 2018
 

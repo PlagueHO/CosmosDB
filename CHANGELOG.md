@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 3.1.0.289
 
 - Updated manifest to include required modules `Az.Accounts` 1.0.0
   and `Az.Resources` 1.0.0.
