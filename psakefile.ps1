@@ -279,6 +279,7 @@ Task Build -Depends Init {
     # Create the module manifest in the staging folder
     'Updating module manifest'
     $stagedManifestPath = Join-Path -Path $versionFolder -ChildPath 'CosmosDB.psd1'
+    $tempManifestPath = Join-Path -Path $ENV:Temp -ChildPath 'CosmosDB.psd1'
 
     Import-LocalizedData `
         -BindingVariable 'stagedManifestContent' `
@@ -301,8 +302,17 @@ Task Build -Depends Init {
 
     # Create the module manifest file
     New-ModuleManifest `
-        -Path $stagedManifestPath `
+        -Path $tempManifestPath `
         @stagedManifestContent
+
+    # Make sure the manifest is encoded as UTF8
+    'Convert manifest to UTF8'
+    $temporaryManifestContent = Get-Content -Path $tempManifestPath -Raw
+    $utf8NoBomEncoding = New-Object -TypeName System.Text.UTF8Encoding -ArgumentList ($false)
+    [System.IO.File]::WriteAllLines($stagedManifestPath, $temporaryManifestContent, $utf8NoBomEncoding)
+
+    # Remove the temporary manifest
+    $null = Remove-Item -Path $tempManifestPath -Force
 
     # Validate the module manifest
     if (-not (Test-ModuleManifest -Path $stagedManifestPath))
@@ -394,11 +404,11 @@ Task Build -Depends Init {
                 'Adding updated module files to commit'
                 Invoke-Git -GitParameters @('add', '.')
 
-                "Adding $newVersion tag to Master"
-                Invoke-Git -GitParameters @('tag', '-a', $newVersion, '-m', $newVersion)
-
                 "Creating new commit for 'Azure DevOps Deploy updating Version Number to $NewVersion'"
                 Invoke-Git -GitParameters @('commit', '-m', "Azure DevOps Deploy updating Version Number to $NewVersion")
+
+                "Adding $newVersion tag to Master"
+                Invoke-Git -GitParameters @('tag', '-a', '-m', $newVersion, $newVersion)
 
                 # Update the master branch
                 'Pushing deployment changes to Master'
