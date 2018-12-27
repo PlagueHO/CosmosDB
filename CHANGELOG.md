@@ -1,5 +1,10 @@
 # Change Log
 
+## Unreleased
+
+- Convert module name to be a variable in PSake file to make it more
+  easily portable between projects.
+
 ## 3.1.0.289
 
 - Updated manifest to include required modules `Az.Accounts` 1.0.0
