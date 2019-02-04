@@ -71,7 +71,7 @@
         Tags           = 'Build'
     }
 
-    'Az.Accounts' = @{
+    AzAccounts = @{
         Name           = 'Az.Accounts'
         DependencyType = 'PSGalleryModule'
         Parameters     = @{
@@ -83,7 +83,7 @@
         Tags           = 'Test','Deploy'
     }
 
-    'Az.Resources' = @{
+    AzResources = @{
         Name           = 'Az.Resources'
         DependencyType = 'PSGalleryModule'
         Parameters     = @{
