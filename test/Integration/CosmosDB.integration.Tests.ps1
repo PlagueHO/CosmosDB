@@ -503,11 +503,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Id | Should -Be $script:testCollection
             $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
             $script:result.indexingPolicy.automatic | Should -Be $true
-            Write-Verbose -Message ($script:result.indexingPolicy.includedPaths.Indexes | Out-String ) -Verbose
-            Write-Verbose -Message (@($script:indexNumberRange, $script:indexStringRange, $script:indexSpatialPoint) | Out-String ) -Verbose
-            Compare-Object `
-                -ReferenceObject $script:result.indexingPolicy.includedPaths.Indexes `
-                -DifferenceObject @($script:indexNumberRange, $script:indexStringRange, $script:indexSpatialPoint) | Should -Be $null
             $script:result.indexingPolicy.includedPaths.Indexes[0].DataType | Should -Be 'Number'
             $script:result.indexingPolicy.includedPaths.Indexes[0].Kind | Should -Be 'Range'
             $script:result.indexingPolicy.includedPaths.Indexes[0].Precision | Should -Be -1

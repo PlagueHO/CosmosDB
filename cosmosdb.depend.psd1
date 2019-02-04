@@ -19,7 +19,7 @@
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '4.4.2'
+        Version        = '4.6.0'
         Tags           = 'Test'
     }
 
@@ -43,7 +43,7 @@
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '2.0.0'
+        Version        = '2.0.7'
         Tags           = 'Init'
     }
 
@@ -55,7 +55,7 @@
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '1.0'
+        Version        = '1.0.1'
         Tags           = 'Deploy'
     }
 
@@ -71,7 +71,7 @@
         Tags           = 'Build'
     }
 
-    Az = @{
+    Az                = @{
         Name           = 'Az'
         DependencyType = 'PSGalleryModule'
         Parameters     = @{
