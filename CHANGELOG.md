@@ -5,7 +5,8 @@
 - Convert module name to be a variable in PSake file to make it more
   easily portable between projects.
 - Fix `Notes` display in Readme Markdown - fixes [Issue #269](https://github.com/PlagueHO/CosmosDB/issues/269).
-- Change `cosmosdb.psdepend.psd1` to install modules `Az` 1.2.1.
+- Update `cosmosdb.psdepend.psd1` to install modules `Az` 1.2.1 and
+  `Pester` 4.7.0.
 
 ## 3.1.0.289
 
