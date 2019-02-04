@@ -78,11 +78,11 @@ This module requires the following:
     are required if using `New-CosmosDbContext -ResourceGroupName $resourceGroup`
     or `*-CosmosDbAccount` functions.
 
-| Note: As of 3.0.0.0 of the CosmosDB module, support for **AzureRm** and
-| **AzureRm.NetCore** PowerShell modules has been deprecated due to being
-| superceeded by the **Az** modules. If it is a requirement that **AzureRm**
-| or **AzureRm.NetCore** modules are used then you will need to remain on
-| CosmosDB module 2.x.
+> Note: As of 3.0.0.0 of the CosmosDB module, support for **AzureRm** and
+> **AzureRm.NetCore** PowerShell modules has been deprecated due to being
+> superceeded by the **Az** modules. If it is a requirement that **AzureRm**
+> or **AzureRm.NetCore** modules are used then you will need to remain on
+> CosmosDB module 2.x.
 
 ## Installation
 
@@ -206,8 +206,8 @@ New-CosmosDbAccountMasterKey -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmo
 Get the connection strings used to connect to an existing Cosmos DB
 account in Azure:
 
-| Note: This function is not currently working due to an issue in the Microsoft/DocumentDB
-| Provider. See [this issue](https://github.com/Azure/azure-powershell/issues/3650) for more information.
+> Note: This function is not currently working due to an issue in the Microsoft/DocumentDB
+> Provider. See [this issue](https://github.com/Azure/azure-powershell/issues/3650) for more information.
 
 ```powershell
 Get-CosmosDbAccountConnectionString -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup'

@@ -4,6 +4,7 @@
 
 - Convert module name to be a variable in PSake file to make it more
   easily portable between projects.
+- Fix `Notes` display in Readme Markdown - fixes [Issue #269](https://github.com/PlagueHO/CosmosDB/issues/269).
 
 ## 3.1.0.289
 
