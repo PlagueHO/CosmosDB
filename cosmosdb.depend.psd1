@@ -71,27 +71,15 @@
         Tags           = 'Build'
     }
 
-    AzAccounts = @{
-        Name           = 'Az.Accounts'
+    Az = @{
+        Name           = 'Az'
         DependencyType = 'PSGalleryModule'
         Parameters     = @{
             Repository         = 'PSGallery'
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '1.0.0'
-        Tags           = 'Test','Deploy'
-    }
-
-    AzResources = @{
-        Name           = 'Az.Resources'
-        DependencyType = 'PSGalleryModule'
-        Parameters     = @{
-            Repository         = 'PSGallery'
-            SkipPublisherCheck = $true
-        }
-        Target         = 'CurrentUser'
-        Version        = '1.0.0'
+        Version        = '1.2.1'
         Tags           = 'Test','Deploy'
     }
 }
