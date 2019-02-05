@@ -465,9 +465,9 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     Context 'When creating a new indexing policy' {
         It 'Should not throw an exception' {
             $script:indexNumberRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType Number -Precision -1
-            $script:indexStringRange = New-CosmosDbCollectionIncludedPathIndex -Kind Hash -DataType String -Precision 3
+            $script:indexStringHash = New-CosmosDbCollectionIncludedPathIndex -Kind Hash -DataType String -Precision 3
             $script:indexSpatialPoint = New-CosmosDbCollectionIncludedPathIndex -Kind Spatial -DataType Point
-            $script:indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $script:indexNumberRange, $script:indexStringRange, $script:indexSpatialPoint
+            $script:indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $script:indexNumberRange, $script:indexStringHash, $script:indexSpatialPoint
             $script:indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $script:indexIncludedPath
         }
     }
