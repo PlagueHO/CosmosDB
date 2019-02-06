@@ -52,11 +52,11 @@ namespace CosmosDB {
             }
 
             public class IndexRange : CosmosDB.IndexingPolicy.Path.Index {
-                public System.Int32 precision;
+                public readonly System.Int32 precision = -1;
             }
 
             public class IndexHash : CosmosDB.IndexingPolicy.Path.Index {
-                public System.Int32 precision;
+                public readonly System.Int32 precision = -1;
             }
 
             public class IndexSpatial : CosmosDB.IndexingPolicy.Path.Index {

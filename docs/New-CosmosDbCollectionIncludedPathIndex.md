@@ -63,10 +63,16 @@ Accept wildcard characters: False
 
 ### -Kind
 
-The type of index.
-Hash indexes are useful for equality
-comparisons while Range indexes are useful for equality, range comparisons and sorting.
+The Kind of the index.
+Range indexes are useful for equality, range comparisons and sorting.
 Spatial indexes are useful for spatial queries.
+
+The Hash index Kind is no longer supported by Cosmos DB.
+A warning will be displayed if the Hash index Kind is used.
+The Hash index Kind will be removed in a future BREAKING release of the
+Cosmos DB module.
+See https://docs.microsoft.com/en-us/azure/cosmos-db/index-types#index-kind
+for more information.
 
 ```yaml
 Type: String
@@ -83,10 +89,13 @@ Accept wildcard characters: False
 
 ### -Precision
 
-The precision of the index.
-Can be either set to -1 for maximum precision or between 1-8 for Number, and
-1-100 for String.
-Not applicable for Point, Polygon, and LineString data types.
+The Precision parameter is no longer supported by Cosmos DB and will be
+ignored. The maximum precision of -1 will always be used for Range indexes.
+A warning will be displayed if the Precision parameter is passed.
+The Precision parameter will be removed in a future BREAKING release of the
+Cosmos DB module.
+See https://docs.microsoft.com/en-us/azure/cosmos-db/index-types#index-precision
+for more information.
 
 ```yaml
 Type: Int32

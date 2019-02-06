@@ -19,7 +19,7 @@
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '4.4.2'
+        Version        = '4.6.0'
         Tags           = 'Test'
     }
 
@@ -55,7 +55,7 @@
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '1.0'
+        Version        = '1.0.1'
         Tags           = 'Deploy'
     }
 
@@ -71,15 +71,27 @@
         Tags           = 'Build'
     }
 
-    'Az' = @{
-        Name           = 'Az'
+    AzAccounts        = @{
+        Name           = 'Az.Accounts'
         DependencyType = 'PSGalleryModule'
         Parameters     = @{
             Repository         = 'PSGallery'
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '1.0.1'
+        Version        = '1.2.1'
+        Tags           = 'Test','Deploy'
+    }
+
+    AzResources       = @{
+        Name           = 'Az.Resources'
+        DependencyType = 'PSGalleryModule'
+        Parameters     = @{
+            Repository         = 'PSGallery'
+            SkipPublisherCheck = $true
+        }
+        Target         = 'CurrentUser'
+        Version        = '1.1.1'
         Tags           = 'Test','Deploy'
     }
 }

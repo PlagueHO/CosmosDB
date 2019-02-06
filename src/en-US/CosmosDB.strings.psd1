@@ -27,6 +27,8 @@ ConvertFrom-StringData -StringData @'
     ErrorNewCollectionParitionKeyRequired = A 'PartitionKey' is required when the 'OfferThroughput' is greater than 10000.
     ErrorNewCollectionIncludedPathIndexInvalidDataType = The DataType '{1}' is invalid for the included path index Kind '{0}'. Please use one of: {2}.
     ErrorNewCollectionIncludedPathIndexPrecisionNotSupported = A Precision value should not be provided for the index Kind '{0}'.
+    WarningNewCollectionIncludedPathIndexHashDeprecated = The 'Hash' index Kind has been deprecated. Default String and Number 'Range' index Kinds will be used instead. The 'Hash' index Kind will be removed in a future breaking release. See https://docs.microsoft.com/en-us/azure/cosmos-db/index-types#index-kind.
+    WarningNewCollectionIncludedPathIndexPrecisionDeprecated = The index 'Precision' has been deprecated. The maximum precision of -1 will be used. The 'Precision' parameter will be removed in a future breaking release. See https://docs.microsoft.com/en-us/azure/cosmos-db/index-types#index-precision.
     ErrorNewCollectionIndexingPolicyInvalidMode = Automatic must be set to 'False' if Indexing Mode of 'None' is used.
     ErrorSetCollectionRemoveDefaultTimeToLiveConflict = RemoveDefaultTimeToLive parameter must not be set when DefaultTimeToLive is specified.
     ErrorAccountDoesNotExist = Cosmos DB account '{0}' in resource group '{1}' does not exist.
