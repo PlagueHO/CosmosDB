@@ -145,6 +145,98 @@ $null = New-AzureTestCosmosDbResourceGroup `
 $currentIpAddress = (Invoke-RestMethod -Uri 'http://ipinfo.io/json').ip
 
 Describe 'Cosmos DB Module' -Tag 'Integration' {
+    function Test-GenericResult
+    {
+        [CmdletBinding()]
+        param
+        (
+            [Parameter(Mandatory = $true)]
+            [System.Object]
+            $GenericResult
+        )
+
+        $GenericResult.Timestamp | Should -BeOfType [System.DateTime]
+        $GenericResult.Etag | Should -BeOfType [System.String]
+        $GenericResult.ResourceId | Should -BeOfType [System.String]
+        $GenericResult.Uri | Should -BeOfType [System.String]
+    }
+
+    function Test-CollectionResult
+    {
+        [CmdletBinding()]
+        param
+        (
+            [Parameter(Mandatory = $true)]
+            [System.Object]
+            $CollectionResult
+        )
+
+        Test-GenericResult -GenericResult $CollectionResult
+        $CollectionResult.Conflicts | Should -BeOfType [System.String]
+        $CollectionResult.Documents | Should -BeOfType [System.String]
+        $CollectionResult.StoredProcedures | Should -BeOfType [System.String]
+        $CollectionResult.Triggers | Should -BeOfType [System.String]
+        $CollectionResult.UserDefinedFunctions | Should -BeOfType [System.String]
+    }
+
+    function Test-CollectionDefaultIndexingPolicy
+    {
+        [CmdletBinding()]
+        param
+        (
+            [Parameter(Mandatory = $true)]
+            [System.Object]
+            $CollectionResult
+        )
+
+        Test-CollectionResult -CollectionResult $CollectionResult
+        $CollectionResult.indexingPolicy.indexingMode | Should -Be 'Consistent'
+        $CollectionResult.indexingPolicy.automatic | Should -Be $true
+        $CollectionResult.indexingPolicy.includedPaths[0].path | Should -Be '/*'
+        $CollectionResult.indexingPolicy.includedPaths[0].Indexes.Count | Should -Be 2
+        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[0].DataType | Should -Be 'Number'
+        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[0].Kind | Should -Be 'Range'
+        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[0].Precision | Should -Be -1
+        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[1].DataType | Should -Be 'String'
+        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[1].Kind | Should -Be 'Range'
+        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[1].Precision | Should -Be -1
+    }
+
+    function Test-CollectionResultComplexAutomaticIndexingPolicy
+    {
+        [CmdletBinding()]
+        param
+        (
+            [Parameter(Mandatory = $true)]
+            [System.Object]
+            $CollectionResult
+        )
+
+        Test-CollectionResult -CollectionResult $CollectionResult
+        $CollectionResult.indexingPolicy.indexingMode | Should -Be 'Consistent'
+        $CollectionResult.indexingPolicy.automatic | Should -Be $true
+        $CollectionResult.indexingPolicy.includedPaths[0].path | Should -Be '/*'
+        $CollectionResult.indexingPolicy.includedPaths[0].Indexes.Count | Should -Be 3
+        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[0].DataType | Should -Be 'Number'
+        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[0].Kind | Should -Be 'Range'
+        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[0].Precision | Should -Be -1
+        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[1].DataType | Should -Be 'String'
+        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[1].Kind | Should -Be 'Range'
+        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[1].Precision | Should -Be -1
+        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[2].DataType | Should -Be 'Point'
+        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[2].Kind | Should -Be 'Spatial'
+        $CollectionResult.indexingPolicy.includedPaths[1].path | Should -Be '/Location/*'
+        $CollectionResult.indexingPolicy.includedPaths[1].Indexes.Count | Should -Be 3
+        $CollectionResult.indexingPolicy.includedPaths[1].Indexes[0].DataType | Should -Be 'Point'
+        $CollectionResult.indexingPolicy.includedPaths[1].Indexes[0].Kind | Should -Be 'Spatial'
+        $CollectionResult.indexingPolicy.includedPaths[1].Indexes[1].DataType | Should -Be 'Number'
+        $CollectionResult.indexingPolicy.includedPaths[1].Indexes[1].Kind | Should -Be 'Range'
+        $CollectionResult.indexingPolicy.includedPaths[1].Indexes[1].Precision | Should -Be -1
+        $CollectionResult.indexingPolicy.includedPaths[1].Indexes[2].DataType | Should -Be 'String'
+        $CollectionResult.indexingPolicy.includedPaths[1].Indexes[2].Kind | Should -Be 'Range'
+        $CollectionResult.indexingPolicy.includedPaths[1].Indexes[2].Precision | Should -Be -1
+    }
+
     Context 'When creating a new Azure Cosmos DB Account' {
         It 'Should not throw an exception' {
             New-CosmosDbAccount `
@@ -397,10 +489,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Id | Should -Be $script:testUser
             $script:result.Permissions | Should -Be 'permissions/'
         }
@@ -415,60 +504,69 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Id | Should -Be $script:testUser
             $script:result.Permissions | Should -Be 'permissions/'
         }
     }
 
-    Context 'When creating a new simple indexing policy' {
-        It 'Should not throw an exception' {
-            $script:indexingPolicySimple = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent
-        }
-    }
-
-    Context 'When creating a new collection with a simple IndexingPolicy' {
+    Context 'When creating a new collection with no IndexingPolicy' {
         It 'Should not throw an exception' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
                 -OfferThroughput 400 `
-                -IndexingPolicy $script:indexingPolicySimple `
                 -Verbose
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
-            $script:result.Conflicts | Should -BeOfType [System.String]
-            $script:result.Documents | Should -BeOfType [System.String]
-            $script:result.StoredProcedures | Should -BeOfType [System.String]
-            $script:result.Triggers | Should -BeOfType [System.String]
-            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            Test-CollectionDefaultIndexingPolicy -CollectionResult $script:result
             $script:result.Id | Should -Be $script:testCollection
-            $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
-            $script:result.indexingPolicy.automatic | Should -Be $true
         }
     }
 
-    Context 'When removing existing collection with a simple indexing policy' {
+    Context 'When removing existing collection with no indexing policy' {
         It 'Should not throw an exception' {
             $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
         }
     }
 
-    Context 'When creating a new indexing policy' {
+    Context 'When creating a new simple automatic indexing policy' {
+        It 'Should not throw an exception' {
+            $script:indexingPolicySimpleAutomatic = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent
+        }
+    }
+
+    Context 'When creating a new collection with a simple automatic IndexingPolicy' {
+        It 'Should not throw an exception' {
+            $script:result = New-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id $script:testCollection `
+                -OfferThroughput 400 `
+                -IndexingPolicy $script:indexingPolicySimpleAutomatic `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            Test-CollectionDefaultIndexingPolicy -CollectionResult $script:result
+            $script:result.Id | Should -Be $script:testCollection
+        }
+    }
+
+    Context 'When removing existing collection with a simple automatic indexing policy' {
+        It 'Should not throw an exception' {
+            $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
+        }
+    }
+
+    Context 'When creating a new complex automatic indexing policy' {
         It 'Should not throw an exception' {
             $script:indexNumberRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType Number -Precision -1
-            $script:indexStringRange = New-CosmosDbCollectionIncludedPathIndex -Kind Hash -DataType String -Precision 3
+            $script:indexStringRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType String -Precision -1
             $script:indexSpatialPoint = New-CosmosDbCollectionIncludedPathIndex -Kind Spatial -DataType Point
             $script:indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $script:indexNumberRange, $script:indexStringRange, $script:indexSpatialPoint
-            $script:indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $script:indexIncludedPath
+            $script:indexIncludedPathLocation = New-CosmosDbCollectionIncludedPath -Path '/Location/*' -Index $script:indexSpatialPoint
+            $script:indexingPolicyComplexAutomatic = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $script:indexIncludedPath,$script:indexIncludedPathLocation
         }
     }
 
@@ -479,38 +577,20 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When creating a new collection with an IndexingPolicy and UniqueKeyPolicy' {
+    Context 'When creating a new collection with a complex automatic IndexingPolicy and UniqueKeyPolicy' {
         It 'Should not throw an exception' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
                 -OfferThroughput 400 `
-                -IndexingPolicy $script:indexingPolicy `
+                -IndexingPolicy $script:indexingPolicyComplexAutomatic `
                 -UniqueKeyPolicy $script:uniqueKeyPolicy `
                 -Verbose
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
-            $script:result.Conflicts | Should -BeOfType [System.String]
-            $script:result.Documents | Should -BeOfType [System.String]
-            $script:result.StoredProcedures | Should -BeOfType [System.String]
-            $script:result.Triggers | Should -BeOfType [System.String]
-            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            Test-CollectionResultComplexAutomaticIndexingPolicy -CollectionResult $script:Result
             $script:result.Id | Should -Be $script:testCollection
-            $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
-            $script:result.indexingPolicy.automatic | Should -Be $true
-            $script:result.indexingPolicy.includedPaths.Indexes[0].DataType | Should -Be 'Number'
-            $script:result.indexingPolicy.includedPaths.Indexes[0].Kind | Should -Be 'Range'
-            $script:result.indexingPolicy.includedPaths.Indexes[0].Precision | Should -Be -1
-            $script:result.indexingPolicy.includedPaths.Indexes[1].DataType | Should -Be 'String'
-            $script:result.indexingPolicy.includedPaths.Indexes[1].Kind | Should -Be 'Hash'
-            $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
-            $script:result.indexingPolicy.includedPaths.Indexes[2].DataType | Should -Be 'Point'
-            $script:result.indexingPolicy.includedPaths.Indexes[2].Kind | Should -Be 'Spatial'
             $script:result.uniqueKeyPolicy.uniqueKeys[0].paths[0] | Should -Be '/uniquekey'
         }
     }
@@ -524,61 +604,25 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
-            $script:result.Conflicts | Should -BeOfType [System.String]
-            $script:result.Documents | Should -BeOfType [System.String]
-            $script:result.StoredProcedures | Should -BeOfType [System.String]
-            $script:result.Triggers | Should -BeOfType [System.String]
-            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            Test-CollectionResultComplexAutomaticIndexingPolicy -CollectionResult $script:Result
             $script:result.Id | Should -Be $script:testCollection
-            $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
-            $script:result.indexingPolicy.automatic | Should -Be $true
-            $script:result.indexingPolicy.includedPaths.Indexes[0].DataType | Should -Be 'Number'
-            $script:result.indexingPolicy.includedPaths.Indexes[0].Kind | Should -Be 'Range'
-            $script:result.indexingPolicy.includedPaths.Indexes[0].Precision | Should -Be -1
-            $script:result.indexingPolicy.includedPaths.Indexes[1].DataType | Should -Be 'String'
-            $script:result.indexingPolicy.includedPaths.Indexes[1].Kind | Should -Be 'Hash'
-            $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
-            $script:result.indexingPolicy.includedPaths.Indexes[2].DataType | Should -Be 'Point'
-            $script:result.indexingPolicy.includedPaths.Indexes[2].Kind | Should -Be 'Spatial'
             $script:result.uniqueKeyPolicy.uniqueKeys[0].paths[0] | Should -Be '/uniquekey'
         }
     }
 
-    Context 'When updating an existing collection with an IndexingPolicy and UniqueKeyPolicy' {
+    Context 'When updating an existing collection with a complex IndexingPolicy and UniqueKeyPolicy' {
         It 'Should not throw an exception' {
             $script:result = Set-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
-                -IndexingPolicy $script:indexingPolicy `
+                -IndexingPolicy $script:indexingPolicyComplexAutomatic `
                 -UniqueKeyPolicy $script:uniqueKeyPolicy `
                 -Verbose
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
-            $script:result.Conflicts | Should -BeOfType [System.String]
-            $script:result.Documents | Should -BeOfType [System.String]
-            $script:result.StoredProcedures | Should -BeOfType [System.String]
-            $script:result.Triggers | Should -BeOfType [System.String]
-            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            Test-CollectionResultComplexAutomaticIndexingPolicy -CollectionResult $script:Result
             $script:result.Id | Should -Be $script:testCollection
-            $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
-            $script:result.indexingPolicy.automatic | Should -Be $true
-            $script:result.indexingPolicy.includedPaths.Indexes[0].DataType | Should -Be 'Number'
-            $script:result.indexingPolicy.includedPaths.Indexes[0].Kind | Should -Be 'Range'
-            $script:result.indexingPolicy.includedPaths.Indexes[0].Precision | Should -Be -1
-            $script:result.indexingPolicy.includedPaths.Indexes[1].DataType | Should -Be 'String'
-            $script:result.indexingPolicy.includedPaths.Indexes[1].Kind | Should -Be 'Hash'
-            $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
-            $script:result.indexingPolicy.includedPaths.Indexes[2].DataType | Should -Be 'Point'
-            $script:result.indexingPolicy.includedPaths.Indexes[2].Kind | Should -Be 'Spatial'
             $script:result.uniqueKeyPolicy.uniqueKeys[0].paths[0] | Should -Be '/uniquekey'
         }
     }
@@ -598,10 +642,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Id | Should -Be $script:testCollectionPermission
             $script:result.permissionMode | Should -Be 'Read'
             $script:result.resource | Should -Be $script:collectionResourcePath
@@ -622,10 +663,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Id | Should -Be $script:testCollectionPermission
             $script:result.permissionMode | Should -Be 'Read'
             $script:result.resource | Should -Be $script:collectionResourcePath
@@ -661,26 +699,8 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
-            $script:result.Conflicts | Should -BeOfType [System.String]
-            $script:result.Documents | Should -BeOfType [System.String]
-            $script:result.StoredProcedures | Should -BeOfType [System.String]
-            $script:result.Triggers | Should -BeOfType [System.String]
-            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            Test-CollectionResultComplexAutomaticIndexingPolicy -CollectionResult $script:Result
             $script:result.Id | Should -Be $script:testCollection
-            $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
-            $script:result.indexingPolicy.automatic | Should -Be $true
-            $script:result.indexingPolicy.includedPaths.Indexes[0].DataType | Should -Be 'Number'
-            $script:result.indexingPolicy.includedPaths.Indexes[0].Kind | Should -Be 'Range'
-            $script:result.indexingPolicy.includedPaths.Indexes[0].Precision | Should -Be -1
-            $script:result.indexingPolicy.includedPaths.Indexes[1].DataType | Should -Be 'String'
-            $script:result.indexingPolicy.includedPaths.Indexes[1].Kind | Should -Be 'Hash'
-            $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
-            $script:result.indexingPolicy.includedPaths.Indexes[2].DataType | Should -Be 'Point'
-            $script:result.indexingPolicy.includedPaths.Indexes[2].Kind | Should -Be 'Spatial'
         }
     }
 
@@ -690,10 +710,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.OfferVersion | Should -BeOfType [System.String]
             $script:result.OfferType | Should -BeOfType [System.String]
             $script:result.OfferResourceId | Should -BeOfType [System.String]
@@ -711,10 +728,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.OfferVersion | Should -BeOfType [System.String]
             $script:result.OfferType | Should -BeOfType [System.String]
             $script:result.OfferResourceId | Should -BeOfType [System.String]
@@ -734,10 +748,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentId
             $script:result.Content | Should -Be 'Some string'
@@ -758,10 +769,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Id | Should -Be $script:testAttachmentId
             $script:result.ContentType | Should -Be $script:testAttachmentContentType
             $script:result.Media | Should -Be $script:testAttachmentMedia
@@ -779,10 +787,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Id | Should -Be $script:testAttachmentId
             $script:result.ContentType | Should -Be $script:testAttachmentContentType
             $script:result.Media | Should -Be $script:testAttachmentMedia
@@ -805,10 +810,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Id | Should -Be $script:testDocumentPermission
             $script:result.permissionMode | Should -Be 'Read'
             $script:result.resource | Should -Be $script:documentResourcePath
@@ -830,10 +832,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Id | Should -Be $script:testDocumentPermission
             $script:result.permissionMode | Should -Be 'Read'
             $script:result.resource | Should -Be $script:documentResourcePath
@@ -881,10 +880,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Id | Should -Be $script:testStoredProcedureId
         }
     }
@@ -899,10 +895,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Id | Should -Be $script:testStoredProcedureId
         }
     }
@@ -932,10 +925,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             }
 
             It 'Should return expected object' {
-                $script:result.Timestamp | Should -BeOfType [System.DateTime]
-                $script:result.Etag | Should -BeOfType [System.String]
-                $script:result.ResourceId | Should -BeOfType [System.String]
-                $script:result.Uri | Should -BeOfType [System.String]
+                Test-GenericResult -GenericResult $script:result
                 $script:result.Id | Should -Be $script:testTriggerId
                 $script:result.TriggerOperation | Should -Be $operation
                 $script:result.TriggerType | Should -Be 'Pre'
@@ -952,10 +942,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             }
 
             It 'Should return expected object' {
-                $script:result.Timestamp | Should -BeOfType [System.DateTime]
-                $script:result.Etag | Should -BeOfType [System.String]
-                $script:result.ResourceId | Should -BeOfType [System.String]
-                $script:result.Uri | Should -BeOfType [System.String]
+                Test-GenericResult -GenericResult $script:result
                 $script:result.Id | Should -Be $script:testTriggerId
                 $script:result.TriggerOperation | Should -Be $operation
                 $script:result.TriggerType | Should -Be 'Pre'
@@ -984,10 +971,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Id | Should -Be $script:testUserDefinedFunctionId
         }
     }
@@ -1002,10 +986,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Id | Should -Be $script:testUserDefinedFunctionId
         }
     }
@@ -1062,10 +1043,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentUTF8Id
         }
@@ -1081,10 +1059,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentUTF8Id
         }
@@ -1102,10 +1077,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentUTF8Id
         }
@@ -1121,10 +1093,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentUTF8Id
         }
@@ -1156,15 +1125,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
-            $script:result.Conflicts | Should -BeOfType [System.String]
-            $script:result.Documents | Should -BeOfType [System.String]
-            $script:result.StoredProcedures | Should -BeOfType [System.String]
-            $script:result.Triggers | Should -BeOfType [System.String]
-            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            Test-CollectionResult -CollectionResult $script:result
             $script:result.Id | Should -Be $script:testCollection
             $script:result.partitionKey.kind | Should -Be 'Hash'
             $script:result.partitionKey.paths[0] | Should -Be ('/{0}' -f $script:testPartitionKey)
@@ -1182,10 +1143,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentId
             $script:result.Content | Should -Be 'Some string'
@@ -1204,10 +1162,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentId
             $script:result.Content | Should -Be 'Some string'
@@ -1225,10 +1180,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
+            Test-GenericResult -GenericResult $script:result
             $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentId
             $script:result.Content | Should -Be 'Some string'
@@ -1261,15 +1213,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
-            $script:result.Conflicts | Should -BeOfType [System.String]
-            $script:result.Documents | Should -BeOfType [System.String]
-            $script:result.StoredProcedures | Should -BeOfType [System.String]
-            $script:result.Triggers | Should -BeOfType [System.String]
-            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            Test-CollectionResult -CollectionResult $script:result
             $script:result.Id | Should -Be $script:testCollection
             $script:result.indexingPolicy.indexingMode | Should -Be 'None'
             $script:result.indexingPolicy.automatic | Should -Be $false
@@ -1292,15 +1236,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
-            $script:result.Conflicts | Should -BeOfType [System.String]
-            $script:result.Documents | Should -BeOfType [System.String]
-            $script:result.StoredProcedures | Should -BeOfType [System.String]
-            $script:result.Triggers | Should -BeOfType [System.String]
-            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            Test-CollectionResult -CollectionResult $script:result
             $script:result.Id | Should -Be $script:testCollection
             $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
             $script:result.indexingPolicy.automatic | Should -Be $true
@@ -1318,15 +1254,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
-            $script:result.Conflicts | Should -BeOfType [System.String]
-            $script:result.Documents | Should -BeOfType [System.String]
-            $script:result.StoredProcedures | Should -BeOfType [System.String]
-            $script:result.Triggers | Should -BeOfType [System.String]
-            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            Test-CollectionResult -CollectionResult $script:result
             $script:result.Id | Should -Be $script:testCollection
             $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
             $script:result.indexingPolicy.automatic | Should -Be $true
@@ -1344,15 +1272,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
-            $script:result.Conflicts | Should -BeOfType [System.String]
-            $script:result.Documents | Should -BeOfType [System.String]
-            $script:result.StoredProcedures | Should -BeOfType [System.String]
-            $script:result.Triggers | Should -BeOfType [System.String]
-            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            Test-CollectionResult -CollectionResult $script:result
             $script:result.Id | Should -Be $script:testCollection
             $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
             $script:result.indexingPolicy.automatic | Should -Be $true
@@ -1365,32 +1285,14 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result = Set-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
-                -IndexingPolicy $script:indexingPolicy `
+                -IndexingPolicy $script:indexingPolicyComplexAutomatic `
                 -DefaultTimeToLive ($script:testDefaultTimeToLive + 2) `
                 -Verbose
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
-            $script:result.Conflicts | Should -BeOfType [System.String]
-            $script:result.Documents | Should -BeOfType [System.String]
-            $script:result.StoredProcedures | Should -BeOfType [System.String]
-            $script:result.Triggers | Should -BeOfType [System.String]
-            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            Test-CollectionResultComplexAutomaticIndexingPolicy -CollectionResult $script:Result
             $script:result.Id | Should -Be $script:testCollection
-            $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
-            $script:result.indexingPolicy.automatic | Should -Be $true
-            $script:result.indexingPolicy.includedPaths.Indexes[0].DataType | Should -Be 'Number'
-            $script:result.indexingPolicy.includedPaths.Indexes[0].Kind | Should -Be 'Range'
-            $script:result.indexingPolicy.includedPaths.Indexes[0].Precision | Should -Be -1
-            $script:result.indexingPolicy.includedPaths.Indexes[1].DataType | Should -Be 'String'
-            $script:result.indexingPolicy.includedPaths.Indexes[1].Kind | Should -Be 'Hash'
-            $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
-            $script:result.indexingPolicy.includedPaths.Indexes[2].DataType | Should -Be 'Point'
-            $script:result.indexingPolicy.includedPaths.Indexes[2].Kind | Should -Be 'Spatial'
             $script:result.defaultTtl | Should -Be ($script:testDefaultTimeToLive + 2)
         }
     }
@@ -1404,26 +1306,8 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
-            $script:result.Conflicts | Should -BeOfType [System.String]
-            $script:result.Documents | Should -BeOfType [System.String]
-            $script:result.StoredProcedures | Should -BeOfType [System.String]
-            $script:result.Triggers | Should -BeOfType [System.String]
-            $script:result.UserDefinedFunctions | Should -BeOfType [System.String]
+            Test-CollectionResultComplexAutomaticIndexingPolicy -CollectionResult $script:Result
             $script:result.Id | Should -Be $script:testCollection
-            $script:result.indexingPolicy.indexingMode | Should -Be 'Consistent'
-            $script:result.indexingPolicy.automatic | Should -Be $true
-            $script:result.indexingPolicy.includedPaths.Indexes[0].DataType | Should -Be 'Number'
-            $script:result.indexingPolicy.includedPaths.Indexes[0].Kind | Should -Be 'Range'
-            $script:result.indexingPolicy.includedPaths.Indexes[0].Precision | Should -Be -1
-            $script:result.indexingPolicy.includedPaths.Indexes[1].DataType | Should -Be 'String'
-            $script:result.indexingPolicy.includedPaths.Indexes[1].Kind | Should -Be 'Hash'
-            $script:result.indexingPolicy.includedPaths.Indexes[1].Precision | Should -Be 3
-            $script:result.indexingPolicy.includedPaths.Indexes[2].DataType | Should -Be 'Point'
-            $script:result.indexingPolicy.includedPaths.Indexes[2].Kind | Should -Be 'Spatial'
             $script:result.defaultTtl | Should -Be ($script:testDefaultTimeToLive + 2)
         }
     }
@@ -1471,7 +1355,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         It 'Should have a continuation token in headers' {
             $script:ResponseHeader.'x-ms-continuation' | Should -Not -BeNullOrEmpty
         }
-
     }
 
     Context 'When getting collections using a maximum item count of 1 and a continuation token' {

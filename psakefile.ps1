@@ -8,6 +8,7 @@ Properties {
         $ProjectRoot = $PSScriptRoot
     }
 
+    $ModuleName = 'CosmosDB'
     $Timestamp = Get-Date -uformat "%Y%m%d-%H%M%S"
     $PSVersion = $PSVersionTable.PSVersion.Major
     $separator = '----------------------------------------------------------------------'
@@ -185,7 +186,7 @@ Task Build -Depends Init {
         -Tags 'Build'
 
     # Generate the next version by adding the build system build number to the manifest version
-    $manifestPath = Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psd1'
+    $manifestPath = Join-Path -Path $ProjectRoot -ChildPath "src/$ModuleName.psd1"
     $newVersion = Get-VersionNumber `
         -ManifestPath $manifestPath `
         -Build $ENV:BHBuildNumber
@@ -198,7 +199,7 @@ Task Build -Depends Init {
 
     # Determine the folder names for staging the module
     $StagingFolder = Join-Path -Path $ProjectRoot -ChildPath 'staging'
-    $ModuleFolder = Join-Path -Path $StagingFolder -ChildPath 'CosmosDB'
+    $ModuleFolder = Join-Path -Path $StagingFolder -ChildPath $ModuleName
 
     # Determine the folder names for staging the module
     $versionFolder = Join-Path -Path $ModuleFolder -ChildPath $newVersion
@@ -210,7 +211,7 @@ Task Build -Depends Init {
     $null = New-Item -Path $versionFolder -Type directory
 
     # Populate Version Folder
-    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/CosmosDB.psm1') -Destination $versionFolder
+    $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath "src/$ModuleName.psm1") -Destination $versionFolder
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/formats') -Destination $versionFolder -Recurse
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/types') -Destination $versionFolder -Recurse
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'src/en-US') -Destination $versionFolder -Recurse
@@ -239,7 +240,7 @@ Task Build -Depends Init {
         Region. Then add the content of the $libFilesStringBuilder string builder
         immediately following the end of the region.
     #>
-    $modulePath = Join-Path -Path $versionFolder -ChildPath 'CosmosDB.psm1'
+    $modulePath = Join-Path -Path $versionFolder -ChildPath "$ModuleName.psm1"
     $moduleContent = Get-Content -Path $modulePath
     $moduleStringBuilder = [System.Text.StringBuilder]::new()
     $importFunctionsRegionFound = $false
@@ -278,12 +279,12 @@ Task Build -Depends Init {
 
     # Create the module manifest in the staging folder
     'Updating module manifest'
-    $stagedManifestPath = Join-Path -Path $versionFolder -ChildPath 'CosmosDB.psd1'
-    $tempManifestPath = Join-Path -Path $ENV:Temp -ChildPath 'CosmosDB.psd1'
+    $stagedManifestPath = Join-Path -Path $versionFolder -ChildPath "$ModuleName.psd1"
+    $tempManifestPath = Join-Path -Path $ENV:Temp -ChildPath "$ModuleName.psd1"
 
     Import-LocalizedData `
         -BindingVariable 'stagedManifestContent' `
-        -FileName 'CosmosDB.psd1' `
+        -FileName "$ModuleName.psd1" `
         -BaseDirectory (Join-Path -Path $ProjectRoot -ChildPath 'src')
     $stagedManifestContent.ModuleVersion = $newVersion
     $stagedManifestContent.Copyright = "(c) $((Get-Date).Year) Daniel Scott-Raynsford. All rights reserved."
@@ -297,7 +298,7 @@ Task Build -Depends Init {
         }
     }
 
-    $stagedManifestContent.ReleaseNotes = $stagedManifestContent.ReleaseNotes -replace '## What is New in CosmosDB Unreleased', "## What is New in CosmosDB $newVersion"
+    $stagedManifestContent.ReleaseNotes = $stagedManifestContent.ReleaseNotes -replace "## What is New in $ModuleName Unreleased", "## What is New in $ModuleName $newVersion"
     $stagedManifestContent.Remove('PrivateData')
 
     # Create the module manifest file
@@ -331,7 +332,7 @@ Task Build -Depends Init {
     'Updating RELEASENOTES.MD'
     $stagedReleaseNotesPath = Join-Path -Path $versionFolder -ChildPath 'RELEASENOTES.md'
     $stagedReleaseNotesContent = Get-Content -Path $stagedReleaseNotesPath -Raw
-    $stagedReleaseNotesContent = $stagedReleaseNotesContent -replace '## What is New in CosmosDB Unreleased', "## What is New in CosmosDB $newVersion"
+    $stagedReleaseNotesContent = $stagedReleaseNotesContent -replace "## What is New in $ModuleName Unreleased", "## What is New in $ModuleName $newVersion"
     Set-Content -Path $stagedReleaseNotesPath -Value $stagedReleaseNotesContent -NoNewLine -Force
 
     # Create zip artifact
@@ -438,7 +439,7 @@ Task Deploy {
     $separator
 
     # Determine the folder name for the Module
-    $ModuleFolder = Join-Path -Path $ProjectRoot -ChildPath 'CosmosDB'
+    $ModuleFolder = Join-Path -Path $ProjectRoot -ChildPath $ModuleName
 
     # Install any dependencies required for the Deploy stage
     Invoke-PSDepend `
@@ -450,7 +451,7 @@ Task Deploy {
 
     # Copy the module to the PSModulePath
     $PSModulePath = ($ENV:PSModulePath -split ';')[0]
-    $destinationPath = Join-Path -Path $PSModulePath -ChildPath 'CosmosDB'
+    $destinationPath = Join-Path -Path $PSModulePath -ChildPath $ModuleName
 
     "Copying Module from $ModuleFolder to $destinationPath"
     Copy-Item `
@@ -460,7 +461,7 @@ Task Deploy {
         -Recurse `
         -Force
 
-    $installedModule = Get-Module -Name CosmosDB -ListAvailable
+    $installedModule = Get-Module -Name $ModuleName -ListAvailable
 
     $versionNumber = $installedModule.Version |
         Sort-Object -Descending |
@@ -468,17 +469,17 @@ Task Deploy {
 
     if (-not $versionNumber)
     {
-        Throw "CosmosDB Module could not be found after copying to $PSModulePath"
+        Throw "$ModuleName Module could not be found after copying to $PSModulePath"
     }
 
     # This is a deploy from the staging folder
-    "Publishing CosmosDB Module version '$versionNumber' to PowerShell Gallery"
+    "Publishing $ModuleName Module version '$versionNumber' to PowerShell Gallery"
     $null = Get-PackageProvider `
         -Name NuGet `
         -ForceBootstrap
 
     Publish-Module `
-        -Name 'CosmosDB' `
+        -Name $ModuleName `
         -RequiredVersion $versionNumber `
         -NuGetApiKey $ENV:PowerShellGalleryApiKey `
         -Confirm:$false

@@ -78,11 +78,11 @@ This module requires the following:
     are required if using `New-CosmosDbContext -ResourceGroupName $resourceGroup`
     or `*-CosmosDbAccount` functions.
 
-| Note: As of 3.0.0.0 of the CosmosDB module, support for **AzureRm** and
-| **AzureRm.NetCore** PowerShell modules has been deprecated due to being
-| superceeded by the **Az** modules. If it is a requirement that **AzureRm**
-| or **AzureRm.NetCore** modules are used then you will need to remain on
-| CosmosDB module 2.x.
+> Note: As of 3.0.0.0 of the CosmosDB module, support for **AzureRm** and
+> **AzureRm.NetCore** PowerShell modules has been deprecated due to being
+> superceeded by the **Az** modules. If it is a requirement that **AzureRm**
+> or **AzureRm.NetCore** modules are used then you will need to remain on
+> CosmosDB module 2.x.
 
 ## Installation
 
@@ -206,8 +206,8 @@ New-CosmosDbAccountMasterKey -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmo
 Get the connection strings used to connect to an existing Cosmos DB
 account in Azure:
 
-| Note: This function is not currently working due to an issue in the Microsoft/DocumentDB
-| Provider. See [this issue](https://github.com/Azure/azure-powershell/issues/3650) for more information.
+> Note: This function is not currently working due to an issue in the Microsoft/DocumentDB
+> Provider. See [this issue](https://github.com/Azure/azure-powershell/issues/3650) for more information.
 
 ```powershell
 Get-CosmosDbAccountConnectionString -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup'
@@ -336,13 +336,32 @@ spatial index on the '/*' path using consistent indexing mode with no
 excluded paths:
 
 ```powershell
-$indexStringRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType String -Precision -1
-$indexNumberRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType Number -Precision -1
-$indexNumberSpatial = New-CosmosDbCollectionIncludedPathIndex -Kind Spatial -DataType Point
-$indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $indexStringRange, $indexNumberRange, $indexNumberSpatial
+$indexStringRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType String
+$indexNumberRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType Number
+$indexPointSpatial = New-CosmosDbCollectionIncludedPathIndex -Kind Spatial -DataType Point
+$indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $indexStringRange, $indexNumberRange, $indexPointSpatial
 $indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $indexIncludedPath
 New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'account' -IndexingPolicy $indexingPolicy
 ```
+
+> **Important Index Notes**
+>
+> The _Hash_ index Kind is no longer supported by Cosmos DB.
+> A warning will be displayed if the Hash index Kind is used.
+> The Hash index Kind will be removed in a future BREAKING release of the Cosmos DB module.
+> See [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/index-types#index-kind)
+> for more information.
+>
+> The _Precision_ parameter is no longer supported by Cosmos DB and will be
+> ignored. The maximum precision of -1 will always be used for Range indexes.
+> A warning will be displayed if the Precision parameter is passed.
+> The Precision parameter will be removed in a future BREAKING release of the Cosmos DB module.
+> See [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/index-types#index-precision)
+> for more information.
+>
+> It is recommended to remove the use of the _Hash_ index Kind and any instances of the
+> _Precision_ parameter and any automation or scripts to avoid being affected by
+> future BREAKING CHANGES.
 
 For more information on how Cosmos DB indexes documents, see [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/indexing-policies).
 
@@ -353,7 +372,7 @@ assembling an Indexing Policy using the method in the previous section
 and then applying it using the `Set-CosmosDbCollection` function:
 
 ```powershell
-$indexStringRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType String -Precision -1
+$indexStringRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType String
 $indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $indexStringRange
 $indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $indexIncludedPath
 Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -IndexingPolicy $indexingPolicy
