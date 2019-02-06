@@ -157,6 +157,19 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = '
+  ## What is New in CosmosDB Unreleased
+
+  February 6, 2018
+
+  - Convert module name to be a variable in PSake file to make it more
+    easily portable between projects.
+  - Fix `Notes` display in Readme Markdown - fixes [Issue #269](https://github.com/PlagueHO/CosmosDB/issues/269).
+  - Update `cosmosdb.psdepend.psd1` to install modules `Az` 1.2.1 and
+    `Pester` 4.7.0.
+  - Deprecate `Hash` index policy kind and throw exception when used
+    in `New-CosmosDbCollectionIncludedPathIndex`. See [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/index-types#index-kind)
+    for more information - fixes [Issue #271](https://github.com/PlagueHO/CosmosDB/issues/271).
+
   ## What is New in CosmosDB 3.1.0.293
 
   December 26, 2018
