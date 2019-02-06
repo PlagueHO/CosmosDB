@@ -139,10 +139,6 @@ function New-CosmosDbCollection
 
     $body = ConvertTo-Json -InputObject $bodyObject -Depth 10
 
-    Write-Verbose -Message $body -Verbose
-
-    $global:lastBody = $body
-
     $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'colls' `
@@ -150,8 +146,6 @@ function New-CosmosDbCollection
         -Body $body
 
     $collection = ConvertFrom-Json -InputObject $result.Content
-
-    Write-Verbose -Message (ConvertTo-Json -InputObject $collection -Depth 10) -Verbose
 
     if ($collection)
     {

@@ -60,7 +60,7 @@ InModuleScope CosmosDB {
         -IndexingMode 'Consistent' `
         -IncludedPath (
         New-CosmosDbCollectionIncludedPath -Path '/*' -Index (
-            New-CosmosDbCollectionIncludedPathIndex -Kind 'Hash' -DataType 'String' -Precision -1
+            New-CosmosDbCollectionIncludedPathIndex -Kind 'Range' -DataType 'String'
         )
     ) `
         -ExcludedPath (
@@ -179,7 +179,7 @@ InModuleScope CosmosDB {
             } | Should -Not -Throw
         }
 
-        Context 'When called with valid Hash parameters' {
+        Context 'When called with valid Hash parameters and Precision' {
             $script:result = $null
 
             It 'Should not throw an exception' {
@@ -187,6 +187,27 @@ InModuleScope CosmosDB {
                     Kind      = 'Hash'
                     DataType  = 'String'
                     Precision = -1
+                    Verbose   = $true
+                }
+
+                $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -BeOfType 'CosmosDB.IndexingPolicy.Path.Index'
+                $script:result.Kind | Should -Be 'Hash'
+                $script:result.DataType | Should -Be 'String'
+                $script:result.Precision | Should -Be -1
+            }
+        }
+
+        Context 'When called with valid Hash parameters and Precision not Specified' {
+            $script:result = $null
+
+            It 'Should not throw an exception' {
+                $newCosmosDbCollectionIncludedPathIndexParameters = @{
+                    Kind      = 'Hash'
+                    DataType  = 'String'
                     Verbose   = $true
                 }
 
@@ -221,7 +242,7 @@ InModuleScope CosmosDB {
             }
         }
 
-        Context 'When called with valid Range parameters' {
+        Context 'When called with valid Range parameters and Precision specified' {
             $script:result = $null
 
             It 'Should not throw an exception' {
@@ -239,7 +260,28 @@ InModuleScope CosmosDB {
                 $script:result | Should -BeOfType 'CosmosDB.IndexingPolicy.Path.Index'
                 $script:result.Kind | Should -Be 'Range'
                 $script:result.DataType | Should -Be 'Number'
-                $script:result.Precision | Should -Be 2
+                $script:result.Precision | Should -Be -1
+            }
+        }
+
+        Context 'When called with valid Range parameters and Precision not Specified' {
+            $script:result = $null
+
+            It 'Should not throw an exception' {
+                $newCosmosDbCollectionIncludedPathIndexParameters = @{
+                    Kind      = 'Range'
+                    DataType  = 'Number'
+                    Verbose   = $true
+                }
+
+                $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -BeOfType 'CosmosDB.IndexingPolicy.Path.Index'
+                $script:result.Kind | Should -Be 'Range'
+                $script:result.DataType | Should -Be 'Number'
+                $script:result.Precision | Should -Be -1
             }
         }
 
@@ -337,7 +379,7 @@ InModuleScope CosmosDB {
             It 'Should not throw an exception' {
                 $newCosmosDbCollectionIncludedPathParameters = @{
                     Path    = '/*'
-                    Index   = (New-CosmosDbCollectionIncludedPathIndex -Kind 'Hash' -DataType 'String' -Precision -1)
+                    Index   = (New-CosmosDbCollectionIncludedPathIndex -Kind 'Range' -DataType 'String' -Precision -1)
                     Verbose = $true
                 }
 
@@ -347,7 +389,7 @@ InModuleScope CosmosDB {
             It 'Should return expected result' {
                 $script:result | Should -BeOfType 'CosmosDB.IndexingPolicy.Path.IncludedPath'
                 $script:result.Path | Should -Be '/*'
-                $script:result.Indexes[0].Kind | Should -Be 'Hash'
+                $script:result.Indexes[0].Kind | Should -Be 'Range'
                 $script:result.Indexes[0].DataType | Should -Be 'String'
                 $script:result.Indexes[0].Precision | Should -Be -1
             }
@@ -394,7 +436,7 @@ InModuleScope CosmosDB {
                 $newCosmosDbCollectionIndexingPolicyParameters = @{
                     Automatic    = $true
                     IndexingMode = 'Consistent'
-                    IncludedPath = (New-CosmosDbCollectionIncludedPath -Path '/*' -Index (New-CosmosDbCollectionIncludedPathIndex -Kind 'Hash' -DataType 'String' -Precision -1))
+                    IncludedPath = (New-CosmosDbCollectionIncludedPath -Path '/*' -Index (New-CosmosDbCollectionIncludedPathIndex -Kind 'Range' -DataType 'String' -Precision -1))
                     ExcludedPath = (New-CosmosDbCollectionExcludedPath -Path '/*')
                     Verbose      = $true
                 }
@@ -619,7 +661,7 @@ InModuleScope CosmosDB {
 
         Context 'When called with context parameter and an Id' {
             $invokecosmosdbrequest_parameterfilter = {
-                $BodyObject = $Body | ConvertFrom-Json;
+                $BodyObject = $Body | ConvertFrom-Json
                 $Method -eq 'Post' -and `
                     $ResourceType -eq 'colls' -and `
                     $BodyObject.id -eq $script:testCollection1
@@ -654,7 +696,7 @@ InModuleScope CosmosDB {
 
         Context 'When called with context parameter and an Id and a DefaultTimeToLive' {
             $invokecosmosdbrequest_parameterfilter = {
-                $BodyObject = $Body | ConvertFrom-Json;
+                $BodyObject = $Body | ConvertFrom-Json
                 $Method -eq 'Post' -and `
                     $ResourceType -eq 'colls' -and `
                     $BodyObject.id -eq $script:testCollection1 -and `
@@ -692,7 +734,7 @@ InModuleScope CosmosDB {
         Context 'When called with context parameter and an Id and OfferThroughput parameter' {
             $script:result = $null
             $invokecosmosdbrequest_parameterfilter = {
-                $BodyObject = $Body | ConvertFrom-Json;
+                $BodyObject = $Body | ConvertFrom-Json
                 $Method -eq 'Post' -and `
                     $ResourceType -eq 'colls' -and `
                     $BodyObject.id -eq $script:testCollection1 -and `
@@ -729,7 +771,7 @@ InModuleScope CosmosDB {
         Context 'When called with context parameter and an Id and OfferType parameter' {
             $script:result = $null
             $invokecosmosdbrequest_parameterfilter = {
-                $BodyObject = $Body | ConvertFrom-Json;
+                $BodyObject = $Body | ConvertFrom-Json
                 $Method -eq 'Post' -and `
                     $ResourceType -eq 'colls' -and `
                     $BodyObject.id -eq $script:testCollection1 -and `
@@ -843,7 +885,7 @@ InModuleScope CosmosDB {
         Context 'When called with context parameter and an Id and PartitionKey parameter' {
             $script:result = $null
             $invokecosmosdbrequest_parameterfilter = {
-                $BodyObject = $Body | ConvertFrom-Json;
+                $BodyObject = $Body | ConvertFrom-Json
                 $Method -eq 'Post' -and `
                     $ResourceType -eq 'colls' -and `
                     $BodyObject.id -eq $script:testCollection1 -and `
@@ -881,7 +923,7 @@ InModuleScope CosmosDB {
         Context 'When called with context parameter and an Id parameter and PartitionKey parameter starting with ''/''' {
             $script:result = $null
             $invokecosmosdbrequest_parameterfilter = {
-                $BodyObject = $Body | ConvertFrom-Json;
+                $BodyObject = $Body | ConvertFrom-Json
                 $Method -eq 'Post' -and `
                     $ResourceType -eq 'colls' -and `
                     $BodyObject.id -eq $script:testCollection1 -and `
@@ -996,7 +1038,7 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             $invokecosmosdbrequest_parameterfilter = {
-                $BodyObject = $Body | ConvertFrom-Json;
+                $BodyObject = $Body | ConvertFrom-Json
                 $Method -eq 'Put' -and `
                     $ResourceType -eq 'colls' -and `
                     $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
@@ -1047,7 +1089,7 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             $invokecosmosdbrequest_parameterfilter = {
-                $BodyObject = $Body | ConvertFrom-Json;
+                $BodyObject = $Body | ConvertFrom-Json
                 $Method -eq 'Put' -and `
                     $ResourceType -eq 'colls' -and `
                     $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
@@ -1101,7 +1143,7 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             $invokecosmosdbrequest_parameterfilter = {
-                $BodyObject = $Body | ConvertFrom-Json;
+                $BodyObject = $Body | ConvertFrom-Json
                 $Method -eq 'Put' -and `
                     $ResourceType -eq 'colls' -and `
                     $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
@@ -1156,7 +1198,7 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             $invokecosmosdbrequest_parameterfilter = {
-                $BodyObject = $Body | ConvertFrom-Json;
+                $BodyObject = $Body | ConvertFrom-Json
                 $Method -eq 'Put' -and `
                     $ResourceType -eq 'colls' -and `
                     $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
@@ -1212,7 +1254,7 @@ InModuleScope CosmosDB {
             $script:result = $null
 
             $invokecosmosdbrequest_parameterfilter = {
-                $BodyObject = $Body | ConvertFrom-Json;
+                $BodyObject = $Body | ConvertFrom-Json
                 $Method -eq 'Put' -and `
                     $ResourceType -eq 'colls' -and `
                     $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `

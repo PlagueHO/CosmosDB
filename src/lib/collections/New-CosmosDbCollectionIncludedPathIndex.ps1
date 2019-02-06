@@ -25,6 +25,15 @@ function New-CosmosDbCollectionIncludedPathIndex
     {
         'Hash'
         {
+            <#
+                Index Hask kind has been deprecated and will result in default Range indexes
+                being created instead. Hash indexes will be removed in a future breaking
+                release.
+                See https://docs.microsoft.com/en-us/azure/cosmos-db/index-types#index-kind
+            #>
+            Write-Warning `
+                -Message $($LocalizedData.WarningNewCollectionIncludedPathIndexHashDeprecated)
+
             if ($DataType -notin @('String', 'Number'))
             {
                 New-CosmosDbInvalidArgumentException `
@@ -64,9 +73,16 @@ function New-CosmosDbCollectionIncludedPathIndex
     $index = New-Object -TypeName ('CosmosDB.IndexingPolicy.Path.Index' + $Kind)
     $index.Kind = $Kind
     $index.DataType = $DataType
+
     if ($PSBoundParameters.ContainsKey('Precision'))
     {
-        $index.Precision = $Precision
+        <#
+            Index Precision should always be -1 for Range and must not be passed for Spatial.
+            The Precision parameter will be removed in a future breaking release.
+            See https://docs.microsoft.com/en-us/azure/cosmos-db/index-types#index-precision
+        #>
+        Write-Warning `
+            -Message $($LocalizedData.WarningNewCollectionIncludedPathIndexPrecisionDeprecated)
     }
 
     return $index
