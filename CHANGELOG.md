@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 3.2.0.320
 
 - Convert module name to be a variable in PSake file to make it more
   easily portable between projects.
