@@ -346,8 +346,7 @@ New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -Partitio
 
 > **Important Index Notes**
 >
-> The _Hash_ index Kind is no longer supported by Cosmos DB. An exception will
-> be thrown if an attempt to create one is made.
+> The _Hash_ index Kind is no longer supported by Cosmos DB.
 > A warning will be displayed if the Hash index Kind is used.
 > The Hash index Kind will be removed in a future BREAKING release of the Cosmos DB module.
 > See [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/index-types#index-kind)
