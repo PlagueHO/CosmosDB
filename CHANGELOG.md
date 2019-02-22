@@ -1,11 +1,18 @@
 # Change Log
 
+## Unreleased
+
+- Added Azure Pipelines YAML definition for executing automated
+  testing on a daily schedule - fixes [Issue #272](https://github.com/PlagueHO/CosmosDB/issues/272).
+
 ## 3.2.1.331
 
 - Added support for `PartitionKey` in `*-CosmosDBAttachment`
   functions - fixes [Issue #274](https://github.com/PlagueHO/CosmosDB/issues/274).
 - Update `cosmosdb.psdepend.psd1` to install modules `Az.Resources` 1.1.2 and
   `Az.Accounts` 1.3.0.
+- Suppress verbose output when loading module during automated
+  testing to reduce output.
 
 ## 3.2.0.320
 
