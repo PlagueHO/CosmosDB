@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 3.2.1.331
 
 - Added support for `PartitionKey` in `*-CosmosDBAttachment`
   functions - fixes [Issue #274](https://github.com/PlagueHO/CosmosDB/issues/274).
