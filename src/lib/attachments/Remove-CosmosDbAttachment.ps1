@@ -43,7 +43,12 @@ function Remove-CosmosDbAttachment
         [Parameter(Mandatory = $true)]
         [ValidateScript({ Assert-CosmosDbAttachmentIdValid -Id $_ })]
         [System.String]
-        $Id
+        $Id,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String[]]
+        $PartitionKey
     )
 
     $null = $PSBoundParameters.Remove('CollectionId')
@@ -52,8 +57,19 @@ function Remove-CosmosDbAttachment
 
     $resourcePath = ('colls/{0}/docs/{1}/attachments/{2}' -f $CollectionId, $DocumentId, $Id)
 
+    $headers = @{}
+
+    if ($PSBoundParameters.ContainsKey('PartitionKey'))
+    {
+        $null = $PSBoundParameters.Remove('PartitionKey')
+        $headers += @{
+            'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
+        }
+    }
+
     $null = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Delete' `
         -ResourceType 'attachments' `
-        -ResourcePath $resourcePath
+        -ResourcePath $resourcePath `
+        -Header $headers
 }

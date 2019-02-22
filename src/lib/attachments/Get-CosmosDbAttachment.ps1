@@ -44,11 +44,26 @@ function Get-CosmosDbAttachment
         [Parameter()]
         [ValidateScript({ Assert-CosmosDbAttachmentIdValid -Id $_ })]
         [System.String]
-        $Id
+        $Id,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String[]]
+        $PartitionKey
     )
 
     $null = $PSBoundParameters.Remove('CollectionId')
     $null = $PSBoundParameters.Remove('DocumentId')
+
+    $headers = @{}
+
+    if ($PSBoundParameters.ContainsKey('PartitionKey'))
+    {
+        $null = $PSBoundParameters.Remove('PartitionKey')
+        $headers += @{
+            'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
+        }
+    }
 
     $resourcePath = ('colls/{0}/docs/{1}/attachments' -f $CollectionId, $DocumentId)
 
@@ -59,7 +74,8 @@ function Get-CosmosDbAttachment
         $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'attachments' `
-            -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
+            -ResourcePath ('{0}/{1}' -f $resourcePath, $Id) `
+            -Headers $headers
 
         $attachment = ConvertFrom-Json -InputObject $result.Content
     }
@@ -68,7 +84,8 @@ function Get-CosmosDbAttachment
         $result = Invoke-CosmosDbRequest @PSBoundParameters `
             -Method 'Get' `
             -ResourceType 'attachments' `
-            -ResourcePath $resourcePath
+            -ResourcePath $resourcePath `
+            -Headers $headers
 
         $body = ConvertFrom-Json -InputObject $result.Content
         $attachment = $body.Attachments

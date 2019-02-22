@@ -6,7 +6,7 @@ param (
 $ModuleManifestName = 'CosmosDB.psd1'
 $ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
 
-Import-Module -Name $ModuleManifestPath -Force
+Import-Module -Name $ModuleManifestPath -Force -Verbose:$false
 
 
 InModuleScope CosmosDB {
