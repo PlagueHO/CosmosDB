@@ -4,7 +4,6 @@
 
 - Added Azure Pipelines YAML definition for executing automated
   testing on a daily schedule - fixes [Issue #272](https://github.com/PlagueHO/CosmosDB/issues/272).
-- Enable MacOS builds in Azure DevOps Pipelines.
 
 ## 3.2.1.331
 
