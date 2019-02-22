@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Added support for `PartitionId` in `*-CosmosDBAttachment`
+- Added support for `PartitionKey` in `*-CosmosDBAttachment`
   functions - fixes [Issue #274](https://github.com/PlagueHO/CosmosDB/issues/274).
 
 ## 3.2.0.320
