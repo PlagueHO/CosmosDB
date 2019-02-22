@@ -165,6 +165,8 @@ PrivateData = @{
     functions - fixes [Issue #274](https://github.com/PlagueHO/CosmosDB/issues/274).
   - Update `cosmosdb.psdepend.psd1` to install modules `Az.Resources` 1.1.2 and
     `Az.Accounts` 1.3.0.
+  - Suppress verbose output when loading module during automated
+    testing to reduce output.
 
   ## What is New in CosmosDB 3.2.0.320
 
