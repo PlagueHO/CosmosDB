@@ -6,7 +6,7 @@ param (
 $ModuleManifestName = 'CosmosDB.psd1'
 $ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
 
-Import-Module -Name $ModuleManifestPath -Force
+Import-Module -Name $ModuleManifestPath -Force -Verbose:$false
 
 InModuleScope CosmosDB {
     $TestHelperPath = "$PSScriptRoot\..\TestHelper"
@@ -26,6 +26,7 @@ InModuleScope CosmosDB {
     }
     $script:testCollection = 'testCollection'
     $script:testDocument = 'testDocument'
+    $script:testPartitionKeys = 'testPartitionKey1', 'testPartitionKey2'
     $script:testAttachment1 = 'testAttachment1'
     $script:testAttachment2 = 'testAttachment2'
     $script:testContentType = 'image/jpg'
@@ -207,6 +208,42 @@ InModuleScope CosmosDB {
             }
         }
 
+        Context 'When called with context parameter and no id but with two partition keys' {
+            $script:result = $null
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetAttachmentResultMulti }
+
+            It 'Should not throw exception' {
+                $getCosmosDbAttachmentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    DocumentId   = $script:testDocument
+                    PartitionKey = $script:testPartitionKeys
+                }
+
+                { $script:result = Get-CosmosDbAttachment @getCosmosDbAttachmentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Count | Should -Be 2
+                $script:result[0].id | Should -Be $script:testAttachment1
+                $script:result[1].id | Should -Be $script:testAttachment2
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter {
+                        $Method -eq 'Get' -and `
+                        $ResourceType -eq 'Attachments' -and `
+                        $Headers.'x-ms-documentdb-partitionkey' -eq '["' + ($script:testPartitionKeys -join '","') + '"]'
+                    } `
+                    -Exactly -Times 1
+            }
+        }
+
         Context 'When called with context parameter and an id' {
             $script:result = $null
 
@@ -236,6 +273,42 @@ InModuleScope CosmosDB {
                         $Method -eq 'Get' -and `
                         $ResourceType -eq 'Attachments' -and `
                         $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testAttachment1)
+                    } `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an id and with two partition keys' {
+            $script:result = $null
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetAttachmentResultSingle }
+
+            It 'Should not throw exception' {
+                $getCosmosDbAttachmentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    DocumentId   = $script:testDocument
+                    Id           = $script:testAttachment1
+                    PartitionKey = $script:testPartitionKeys
+                }
+
+                { $script:result = Get-CosmosDbAttachment @getCosmosDbAttachmentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testAttachment1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter {
+                        $Method -eq 'Get' -and `
+                        $ResourceType -eq 'Attachments' -and `
+                        $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testAttachment1) -and `
+                        $Headers.'x-ms-documentdb-partitionkey' -eq '["' + ($script:testPartitionKeys -join '","') + '"]'
                     } `
                     -Exactly -Times 1
             }
@@ -281,6 +354,43 @@ InModuleScope CosmosDB {
                     -Exactly -Times 1
             }
         }
+
+        Context 'When called with context parameter and an id and with two partition keys' {
+            $script:result = $null
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetAttachmentResultSingle }
+
+            It 'Should not throw exception' {
+                $newCosmosDbAttachmentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    DocumentId   = $script:testDocument
+                    Id           = $script:testAttachment1
+                    ContentType  = $script:testContentType
+                    Media        = $script:testMedia
+                    PartitionKey = $script:testPartitionKeys
+                }
+
+                { $script:result = New-CosmosDbAttachment @newCosmosDbAttachmentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testAttachment1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter {
+                        $Method -eq 'Post' -and `
+                        $ResourceType -eq 'Attachments' -and `
+                        $Headers.'x-ms-documentdb-partitionkey' -eq '["' + ($script:testPartitionKeys -join '","') + '"]'
+                    } `
+                    -Exactly -Times 1
+            }
+        }
     }
 
     Describe 'Remove-CosmosDbAttachment' -Tag 'Unit' {
@@ -309,10 +419,41 @@ InModuleScope CosmosDB {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
                     -ParameterFilter {
-                    $Method -eq 'Delete' -and `
+                        $Method -eq 'Delete' -and `
                         $ResourceType -eq 'Attachments' -and `
                         $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testAttachment1)
-                } `
+                    } `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an id and with two partition keys' {
+            $script:result = $null
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest
+
+            It 'Should not throw exception' {
+                $removeCosmosDbAttachmentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    DocumentId   = $script:testDocument
+                    Id           = $script:testAttachment1
+                    PartitionKey = $script:testPartitionKeys
+                }
+
+                { $script:result = Remove-CosmosDbAttachment @removeCosmosDbAttachmentParameters } | Should -Not -Throw
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter {
+                        $Method -eq 'Delete' -and `
+                        $ResourceType -eq 'Attachments' -and `
+                        $ResourcePath -eq ('colls/{0}/docs/{1}/attachments/{2}' -f $script:testCollection, $script:testDocument, $script:testAttachment1) -and `
+                        $Headers.'x-ms-documentdb-partitionkey' -eq '["' + ($script:testPartitionKeys -join '","') + '"]'
+                    } `
                     -Exactly -Times 1
             }
         }
@@ -351,6 +492,43 @@ InModuleScope CosmosDB {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
                     -ParameterFilter { $Method -eq 'Put' -and $ResourceType -eq 'attachments' } `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id and with two partition keys' {
+            $script:result = $null
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetAttachmentResultSingle }
+
+            It 'Should not throw exception' {
+                $setCosmosDbAttachmentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    DocumentId   = $script:testDocument
+                    Id           = $script:testAttachment1
+                    ContentType  = $script:testContentType
+                    Media        = $script:testMedia
+                    PartitionKey = $script:testPartitionKeys
+                }
+
+                { $script:result = Set-CosmosDbAttachment @setCosmosDbAttachmentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testAttachment1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter {
+                        $Method -eq 'Put' -and `
+                        $ResourceType -eq 'attachments' -and `
+                        $Headers.'x-ms-documentdb-partitionkey' -eq '["' + ($script:testPartitionKeys -join '","') + '"]'
+                    } `
                     -Exactly -Times 1
             }
         }

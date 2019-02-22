@@ -17,14 +17,14 @@ Return the attachments for a Cosmos DB document.
 
 ```powershell
 Get-CosmosDbAttachment -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -CollectionId <String> -DocumentId <String> [-Id <String>] [<CommonParameters>]
+ -CollectionId <String> -DocumentId <String> [-Id <String>] [-PartitionKey <String[]>] [<CommonParameters>]
 ```
 
 ### Account
 
 ```powershell
 Get-CosmosDbAttachment -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -CollectionId <String> -DocumentId <String> [-Id <String>] [<CommonParameters>]
+ -CollectionId <String> -DocumentId <String> [-Id <String>] [-PartitionKey <String[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -50,6 +50,24 @@ PS C:\> Get-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCol
 ```
 
 Get an attachment by Id for a document in a collection.
+
+### Example 3
+
+```powershell
+PS C:\> Get-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId 'ac12345' -PartitionKey 'Id'
+```
+
+Get all attachments for a document in a collection that contains a
+partition key.
+
+### Example 4
+
+```powershell
+PS C:\> Get-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId 'ac12345' -Id 'image_1' -PartitionKey 'Id'
+```
+
+Get an attachment by Id for a document in a collection that contains a
+partition key.
 
 ## PARAMETERS
 
@@ -179,6 +197,24 @@ Accepted values: master, resource
 Required: False
 Position: Named
 Default value: Master
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PartitionKey
+
+The partition keys for the collection that the attachment is in.
+Must be included if and only if the collection is created with
+a partitionKey definition.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

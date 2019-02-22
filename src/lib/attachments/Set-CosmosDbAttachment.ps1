@@ -53,6 +53,11 @@ function Set-CosmosDbAttachment
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
+        [System.String[]]
+        $PartitionKey,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String]
         $ContentType,
 
@@ -100,10 +105,18 @@ function Set-CosmosDbAttachment
 
     if ($PSBoundParameters.ContainsKey('Slug'))
     {
+        $null = $PSBoundParameters.Remove('Slug')
         $headers += @{
             'Slug' = $Slug
         }
-        $null = $PSBoundParameters.Remove('Slug')
+    }
+
+    if ($PSBoundParameters.ContainsKey('PartitionKey'))
+    {
+        $null = $PSBoundParameters.Remove('PartitionKey')
+        $headers += @{
+            'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
+        }
     }
 
     $body = ConvertTo-Json -InputObject $bodyObject

@@ -17,16 +17,16 @@ Update am attachment for a Cosmos DB document.
 
 ```powershell
 Set-CosmosDbAttachment -Context <Context> [-Database <String>] [-Key <SecureString>] -CollectionId <String>
- -DocumentId <String> -Id <String> [-NewId <String>] [-ContentType <String>] [-Media <String>] [-Slug <String>]
- [<CommonParameters>]
+ -DocumentId <String> -Id <String> [-NewId <String>] [-PartitionKey <String[]>] [-ContentType <String>]
+ [-Media <String>] [-Slug <String>] [<CommonParameters>]
 ```
 
 ### Account
 
 ```powershell
 Set-CosmosDbAttachment -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -CollectionId <String> -DocumentId <String> -Id <String> [-NewId <String>] [-ContentType <String>]
- [-Media <String>] [-Slug <String>] [<CommonParameters>]
+ -CollectionId <String> -DocumentId <String> -Id <String> [-NewId <String>] [-PartitionKey <String[]>]
+ [-ContentType <String>] [-Media <String>] [-Slug <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -43,6 +43,15 @@ PS C:\> Set-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCol
 ```
 
 Rename the Id of an attachment for a document in a collection.
+
+### Example 2
+
+```powershell
+PS C:\> Set-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId 'ac12345' -Id 'image_1' -NewId 'Image_2' -PartitionKey 'Id'
+```
+
+Rename the Id of an attachment for a document in a collection that
+has a partition key.
 
 ## PARAMETERS
 
@@ -217,6 +226,24 @@ This is the new Id of the attachment if renaming the attachment.
 
 ```yaml
 Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PartitionKey
+
+The partition keys for the collection that the attachment is in.
+Must be included if and only if the collection is created with
+a partitionKey definition.
+
+```yaml
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 

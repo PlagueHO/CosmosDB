@@ -1,5 +1,12 @@
 # Change Log
 
+## Unreleased
+
+- Added support for `PartitionKey` in `*-CosmosDBAttachment`
+  functions - fixes [Issue #274](https://github.com/PlagueHO/CosmosDB/issues/274).
+- Update `cosmosdb.psdepend.psd1` to install modules `Az.Resources` 1.1.2 and
+  `Az.Accounts` 1.3.0.
+
 ## 3.2.0.320
 
 - Convert module name to be a variable in PSake file to make it more
