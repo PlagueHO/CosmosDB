@@ -12,7 +12,7 @@
 RootModule = 'CosmosDB.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.2.0.320'
+ModuleVersion = '3.2.1.320'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core', 'Desktop'
@@ -51,7 +51,7 @@ PowerShellVersion = '5.1'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @(@{ModuleName = 'Az.Accounts'; GUID = '17a2feff-488b-47f9-8729-e2cec094624c'; ModuleVersion = '1.0.0'; }, 
+RequiredModules = @(@{ModuleName = 'Az.Accounts'; GUID = '17a2feff-488b-47f9-8729-e2cec094624c'; ModuleVersion = '1.0.0'; },
                @{ModuleName = 'Az.Resources'; GUID = '48bb344d-4c24-441e-8ea0-589947784700'; ModuleVersion = '1.0.0'; })
 
 # Assemblies that must be loaded prior to importing this module
@@ -61,63 +61,63 @@ RequiredModules = @(@{ModuleName = 'Az.Accounts'; GUID = '17a2feff-488b-47f9-872
 # ScriptsToProcess = @()
 
 # Type files (.ps1xml) to be loaded when importing this module
-TypesToProcess = 'types\attachments.types.ps1xml', 'types\collections.types.ps1xml', 
-               'types\databases.types.ps1xml', 'types\documents.types.ps1xml', 
-               'types\offers.types.ps1xml', 'types\permissions.types.ps1xml', 
-               'types\storedprocedures.types.ps1xml', 
-               'types\triggers.types.ps1xml', 
-               'types\userdefinedfunctions.types.ps1xml', 
+TypesToProcess = 'types\attachments.types.ps1xml', 'types\collections.types.ps1xml',
+               'types\databases.types.ps1xml', 'types\documents.types.ps1xml',
+               'types\offers.types.ps1xml', 'types\permissions.types.ps1xml',
+               'types\storedprocedures.types.ps1xml',
+               'types\triggers.types.ps1xml',
+               'types\userdefinedfunctions.types.ps1xml',
                'types\users.types.ps1xml'
 
 # Format files (.ps1xml) to be loaded when importing this module
-FormatsToProcess = 'formats\attachments.formats.ps1xml', 
-               'formats\collections.formats.ps1xml', 
-               'formats\databases.formats.ps1xml', 
-               'formats\documents.formats.ps1xml', 'formats\offers.formats.ps1xml', 
-               'formats\permissions.formats.ps1xml', 
-               'formats\storedprocedures.formats.ps1xml', 
-               'formats\triggers.formats.ps1xml', 
-               'formats\userdefinedfunctions.formats.ps1xml', 
+FormatsToProcess = 'formats\attachments.formats.ps1xml',
+               'formats\collections.formats.ps1xml',
+               'formats\databases.formats.ps1xml',
+               'formats\documents.formats.ps1xml', 'formats\offers.formats.ps1xml',
+               'formats\permissions.formats.ps1xml',
+               'formats\storedprocedures.formats.ps1xml',
+               'formats\triggers.formats.ps1xml',
+               'formats\userdefinedfunctions.formats.ps1xml',
                'formats\users.formats.ps1xml'
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = 'Get-CosmosDbAccount', 'Get-CosmosDbAccountConnectionString', 
-               'Get-CosmosDbAccountMasterKey', 'Get-CosmosDbAttachment', 
-               'Get-CosmosDbAttachmentResourcePath', 'Get-CosmosDbCollection', 
-               'Get-CosmosDbCollectionResourcePath', 'Get-CosmosDbCollectionSize', 
-               'Get-CosmosDBDatabase', 'Get-CosmosDBDatabaseResourcePath', 
-               'Get-CosmosDBDocument', 'Get-CosmosDBDocumentResourcePath', 
-               'Get-CosmosDBOffer', 'Get-CosmosDBOfferResourcePath', 
-               'Get-CosmosDbPermission', 'Get-CosmosDbPermissionResourcePath', 
-               'Get-CosmosDbStoredProcedure', 
-               'Get-CosmosDbStoredProcedureResourcePath', 'Get-CosmosDbTrigger', 
-               'Get-CosmosDbTriggerResourcePath', 'Get-CosmosDbUser', 
-               'Get-CosmosDbUserResourcePath', 'Get-CosmosDbUserDefinedFunction', 
-               'Get-CosmosDbUserDefinedFunctionResourcePath', 
-               'Invoke-CosmosDbStoredProcedure', 'New-CosmosDbAccount', 
-               'New-CosmosDbAccountMasterKey', 'New-CosmosDbAttachment', 
-               'New-CosmosDbBackoffPolicy', 'New-CosmosDbCollection', 
-               'New-CosmosDbCollectionIncludedPathIndex', 
-               'New-CosmosDbCollectionIncludedPath', 
-               'New-CosmosDbCollectionExcludedPath', 
-               'New-CosmosDbCollectionIndexingPolicy', 
-               'New-CosmosDbCollectionUniqueKey', 
-               'New-CosmosDbCollectionUniqueKeyPolicy', 'New-CosmosDbDatabase', 
-               'New-CosmosDbDocument', 'New-CosmosDbContext', 
-               'New-CosmosDbContextToken', 'New-CosmosDbPermission', 
-               'New-CosmosDbStoredProcedure', 'New-CosmosDbTrigger', 
-               'New-CosmosDbUser', 'New-CosmosDbUserDefinedFunction', 
-               'Remove-CosmosDbAccount', 'Remove-CosmosDbAttachment', 
-               'Remove-CosmosDbCollection', 'Remove-CosmosDbDatabase', 
-               'Remove-CosmosDbDocument', 'Remove-CosmosDbPermission', 
-               'Remove-CosmosDbStoredProcedure', 'Remove-CosmosDbTrigger', 
-               'Remove-CosmosDbUser', 'Remove-CosmosDbUserDefinedFunction', 
-               'Set-CosmosDbAccount', 'Set-CosmosDbAttachment', 
-               'Set-CosmosDbCollection', 'Set-CosmosDbDocument', 'Set-CosmosDbOffer', 
-               'Set-CosmosDbStoredProcedure', 'Set-CosmosDbTrigger', 
+FunctionsToExport = 'Get-CosmosDbAccount', 'Get-CosmosDbAccountConnectionString',
+               'Get-CosmosDbAccountMasterKey', 'Get-CosmosDbAttachment',
+               'Get-CosmosDbAttachmentResourcePath', 'Get-CosmosDbCollection',
+               'Get-CosmosDbCollectionResourcePath', 'Get-CosmosDbCollectionSize',
+               'Get-CosmosDBDatabase', 'Get-CosmosDBDatabaseResourcePath',
+               'Get-CosmosDBDocument', 'Get-CosmosDBDocumentResourcePath',
+               'Get-CosmosDBOffer', 'Get-CosmosDBOfferResourcePath',
+               'Get-CosmosDbPermission', 'Get-CosmosDbPermissionResourcePath',
+               'Get-CosmosDbStoredProcedure',
+               'Get-CosmosDbStoredProcedureResourcePath', 'Get-CosmosDbTrigger',
+               'Get-CosmosDbTriggerResourcePath', 'Get-CosmosDbUser',
+               'Get-CosmosDbUserResourcePath', 'Get-CosmosDbUserDefinedFunction',
+               'Get-CosmosDbUserDefinedFunctionResourcePath',
+               'Invoke-CosmosDbStoredProcedure', 'New-CosmosDbAccount',
+               'New-CosmosDbAccountMasterKey', 'New-CosmosDbAttachment',
+               'New-CosmosDbBackoffPolicy', 'New-CosmosDbCollection',
+               'New-CosmosDbCollectionIncludedPathIndex',
+               'New-CosmosDbCollectionIncludedPath',
+               'New-CosmosDbCollectionExcludedPath',
+               'New-CosmosDbCollectionIndexingPolicy',
+               'New-CosmosDbCollectionUniqueKey',
+               'New-CosmosDbCollectionUniqueKeyPolicy', 'New-CosmosDbDatabase',
+               'New-CosmosDbDocument', 'New-CosmosDbContext',
+               'New-CosmosDbContextToken', 'New-CosmosDbPermission',
+               'New-CosmosDbStoredProcedure', 'New-CosmosDbTrigger',
+               'New-CosmosDbUser', 'New-CosmosDbUserDefinedFunction',
+               'Remove-CosmosDbAccount', 'Remove-CosmosDbAttachment',
+               'Remove-CosmosDbCollection', 'Remove-CosmosDbDatabase',
+               'Remove-CosmosDbDocument', 'Remove-CosmosDbPermission',
+               'Remove-CosmosDbStoredProcedure', 'Remove-CosmosDbTrigger',
+               'Remove-CosmosDbUser', 'Remove-CosmosDbUserDefinedFunction',
+               'Set-CosmosDbAccount', 'Set-CosmosDbAttachment',
+               'Set-CosmosDbCollection', 'Set-CosmosDbDocument', 'Set-CosmosDbOffer',
+               'Set-CosmosDbStoredProcedure', 'Set-CosmosDbTrigger',
                'Set-CosmosDbUser', 'Set-CosmosDbUserDefinedFunction'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -157,6 +157,13 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = '
+  ## What is New in CosmosDB Unreleased
+
+  February 22, 2018
+
+  - Added support for `PartitionId` in `*-CosmosDBAttachment`
+    functions - fixes [Issue #274](https://github.com/PlagueHO/CosmosDB/issues/274).
+
   ## What is New in CosmosDB 3.2.0.320
 
   February 6, 2018
@@ -295,13 +302,6 @@ PrivateData = @{
   - Improved validation on Collection parameter on `*-CosmosDBAttachment*` functions.
   - Improved validation on Document parameter on `*-CosmosDBAttachment*` functions.
   - Added tests to validate module manifest is valud - fixes [Issue #236](https://github.com/PlagueHO/CosmosDB/issues/236).
-
-  ## What is New in CosmosDB 2.1.12.137
-
-  October 30, 2018
-
-  - Added support for setting Collection uniqueKeyPolicy in
-    `New-CosmosDbCollection` and `Set-CosmosDbCollection` - fixes [Issue #197](https://github.com/PlagueHO/CosmosDB/issues/197).
   '
 
     } # End of PSData hashtable

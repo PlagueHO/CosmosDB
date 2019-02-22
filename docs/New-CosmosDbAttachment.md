@@ -25,8 +25,8 @@ New-CosmosDbAttachment -Context <Context> [-KeyType <String>] [-Key <SecureStrin
 
 ```powershell
 New-CosmosDbAttachment -Account <String> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -CollectionId <String> -DocumentId <String> [-Id <String>] [-ContentType <String>] [-Media <String>]
- [-Slug <String>] [<CommonParameters>]
+ -CollectionId <String> -DocumentId <String> [-Id <String>] [-PartitionKey <String[]>]
+ [-ContentType <String>] [-Media <String>] [-Slug <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -42,6 +42,15 @@ PS C:\> New-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCol
 ```
 
 Create an attachment on a document in a collection.
+
+### Example 2
+
+```powershell
+PS C:\> New-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId 'ac12345' -Id 'image_1' -ContentType 'image/jpg' -Media 'www.bing.com' -PartitionKey 'id'
+```
+
+Create an attachment on a document in a collection that is in a collection with
+a partition key.
 
 ## PARAMETERS
 
@@ -213,6 +222,32 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### -PartitionKey
+
+The partition keys for the collection that the attachment should
+be created in.
+Must be included if and only if the collection is created with
+a partitionKey definition.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Upsert
+
+Include adds the document to the index.
+Exclude omits the document from indexing.
+The default for indexing behavior is determined by the automatic
+property's value in the indexing policy for the collection.
 
 ### -Slug
 

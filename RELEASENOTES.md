@@ -1,5 +1,12 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+February 22, 2018
+
+- Added support for `PartitionId` in `*-CosmosDBAttachment`
+  functions - fixes [Issue #274](https://github.com/PlagueHO/CosmosDB/issues/274).
+
 ## What is New in CosmosDB 3.2.0.320
 
 February 6, 2018

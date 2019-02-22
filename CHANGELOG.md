@@ -1,5 +1,10 @@
 # Change Log
 
+## Unreleased
+
+- Added support for `PartitionId` in `*-CosmosDBAttachment`
+  functions - fixes [Issue #274](https://github.com/PlagueHO/CosmosDB/issues/274).
+
 ## 3.2.0.320
 
 - Convert module name to be a variable in PSake file to make it more

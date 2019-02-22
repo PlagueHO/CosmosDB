@@ -17,14 +17,14 @@ Delete an attachment from a Cosmos DB document.
 
 ```powershell
 Remove-CosmosDbAttachment -Context <Context> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -CollectionId <String> -DocumentId <String> -Id <String> [<CommonParameters>]
+ -CollectionId <String> -DocumentId <String> -Id <String> [-PartitionKey <String[]>] [<CommonParameters>]
 ```
 
 ### Account
 
 ```powershell
 Remove-CosmosDbAttachment -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -CollectionId <String> -DocumentId <String> -Id <String> [<CommonParameters>]
+ -CollectionId <String> -DocumentId <String> -Id <String> [-PartitionKey <String[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -40,6 +40,14 @@ PS C:\> Remove-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNew
 ```
 
 Delete an attachment from a document in collection.
+
+### Example 2
+
+```powershell
+PS C:\> Remove-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'ac12345' -Id 'Image_2' -PartitionKey 'Id'
+```
+
+Delete an attachment from a document in collection that has a parttion key.
 
 ## PARAMETERS
 
@@ -169,6 +177,24 @@ Accepted values: master, resource
 Required: False
 Position: Named
 Default value: Master
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PartitionKey
+
+The partition keys for the collection that the attachment is in.
+Must be included if and only if the collection is created with
+a partitionKey definition.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
