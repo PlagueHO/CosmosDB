@@ -1,4 +1,12 @@
 name: $(rev:r)
+trigger:
+  branches:
+    include:
+    - '*'
+pr:
+  branches:
+    include:
+    - dev
 jobs:
   - job: Build_PS_Win2016
     pool:

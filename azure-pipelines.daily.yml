@@ -1,4 +1,6 @@
 name: $(rev:r)
+trigger: none
+pr: none
 jobs:
   - job: Build_PS_Win2016
     pool:
