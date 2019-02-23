@@ -7,5 +7,7 @@ image:
 - Visual Studio 2017
 - Visual Studio 2015
 
+build: false
+
 test_script:
   - ps: . .\psake.ps1 -TaskList Test -Verbose
