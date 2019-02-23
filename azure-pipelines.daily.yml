@@ -1,12 +1,6 @@
 name: $(rev:r)
-trigger:
-  branches:
-    include:
-    - '*'
-pr:
-  branches:
-    include:
-    - dev
+trigger: none
+pr: none
 jobs:
   - job: Build_PS_Win2016
     pool:
@@ -48,46 +42,6 @@ jobs:
         testRunTitle: 'PS_Win2016_Integration'
       displayName: 'Publish Integration Test Results'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
-
-    - powershell: |
-        .\psake.ps1 -TaskList Build -Verbose
-      displayName: 'Build and Stage Module'
-      env:
-        azureApplicationId: $(azureApplicationId)
-        azureApplicationPassword: $(azureApplicationPassword)
-        azureSubscriptionId: $(azureSubscriptionId)
-        azureTenantId: $(azureTenantId)
-        githubRepoToken: $(githubRepoToken)
-
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathtoPublish: 'staging/CosmosDB'
-        artifactName: 'CosmosDB'
-      displayName: 'Publish Module'
-
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathtoPublish: 'staging/zip'
-        artifactName: 'zip'
-      displayName: 'Publish Module Zip'
-
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathtoPublish: 'psakefile.ps1'
-        artifactName: 'scripts'
-      displayName: 'Publish PSake File'
-
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathtoPublish: 'cosmosdb.depend.psd1'
-        artifactName: 'scripts'
-      displayName: 'Publish PSDepend File'
-
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathtoPublish: 'psake.ps1'
-        artifactName: 'scripts'
-      displayName: 'Publish Build File'
 
   - job: Build_PSCore_Ubuntu1604
     pool:
