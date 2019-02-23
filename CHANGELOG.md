@@ -4,6 +4,8 @@
 
 - Added Azure Pipelines YAML definition for executing automated
   testing on a daily schedule - fixes [Issue #272](https://github.com/PlagueHO/CosmosDB/issues/272).
+- Extend AppVeyor test automation to run on Windows Server 2012R2
+  and Windows Server 2016.
 
 ## 3.2.1.331
 
