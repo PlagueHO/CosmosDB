@@ -6,6 +6,8 @@
   testing on a daily schedule - fixes [Issue #272](https://github.com/PlagueHO/CosmosDB/issues/272).
 - Extend AppVeyor test automation to run on Windows Server 2012R2
   and Windows Server 2016.
+- Update `cosmosdb.psdepend.psd1` to install modules `Az.Resources` 1.1.3 and
+  `Az.Accounts` 1.3.1.
 
 ## 3.2.1.331
 
