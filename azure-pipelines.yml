@@ -1,8 +1,8 @@
 name: $(rev:r)
 trigger:
   branches:
-    include:
-    - '*'
+    exclude:
+    - none
 pr:
   branches:
     include:
