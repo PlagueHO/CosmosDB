@@ -8,6 +8,8 @@
   and Windows Server 2016.
 - Update `cosmosdb.psdepend.psd1` to install modules `Az.Resources` 1.2.0 and
   `Az.Accounts` 1.4.0.
+- Added 'Windows', 'Linux' and 'MacOS' tags to module manifest to
+  improve searchability in PowerShell Gallery.
 
 ## 3.2.1.331
 
