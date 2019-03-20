@@ -1,8 +1,21 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+March 19, 2019
+
+- Added Azure Pipelines YAML definition for executing automated
+  testing on a daily schedule - fixes [Issue #272](https://github.com/PlagueHO/CosmosDB/issues/272).
+- Extend AppVeyor test automation to run on Windows Server 2012R2
+  and Windows Server 2016.
+- Update `cosmosdb.psdepend.psd1` to install modules `Az.Resources` 1.2.0 and
+  `Az.Accounts` 1.4.0.
+- Added 'Windows', 'Linux' and 'MacOS' tags to module manifest to
+  improve searchability in PowerShell Gallery.
+
 ## What is New in CosmosDB 3.2.1.331
 
-February 22, 2018
+February 22, 2019
 
 - Added support for `PartitionKey` in `*-CosmosDBAttachment`
   functions - fixes [Issue #274](https://github.com/PlagueHO/CosmosDB/issues/274).
@@ -13,7 +26,7 @@ February 22, 2018
 
 ## What is New in CosmosDB 3.2.0.320
 
-February 6, 2018
+February 6, 2019
 
 - Convert module name to be a variable in PSake file to make it more
   easily portable between projects.

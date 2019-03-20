@@ -20,6 +20,7 @@
 - [Introduction](#introduction)
 - [Requirements](#requirements)
 - [Installation](#installation)
+- [Compatibility and Testing](#compatibility-and-testing)
 - [Getting Started](#getting-started)
   - [Working with Contexts](#working-with-contexts)
     - [Create a Context specifying the Key Manually](#create-a-context-specifying-the-key-manually)
@@ -91,6 +92,26 @@ To install the module from PowerShell Gallery, use the PowerShell Cmdlet:
 ```powershell
 Install-Module -Name CosmosDB
 ```
+
+## Compatibility and Testing
+
+This PowerShell module is automatically tested and validated to run
+on the following systems:
+
+- Windows Server (using Windows PowerShell 5.1):
+  - Windows Server 2012 R2: Using [AppVeyor CI](https://ci.appveyor.com/project/PlagueHO/cosmosdb).
+  - Windows Server 2016: Using [AppVeyor CI](https://ci.appveyor.com/project/PlagueHO/cosmosdb).
+  - Windows Server 2016: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+- Linux (using PowerShell Core 6.x):
+  - Ubuntu Trusty 14.04: Using [Tavis CI](https://travis-ci.org/PlagueHO/CosmosDB).
+- macOS (using PowerShell Core 6.x):
+  - macOS 10.13: Using [Tavis CI](https://travis-ci.org/PlagueHO/CosmosDB).
+  - macOS 10.13: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+    _macOS validation on Azure Pipelines is currently disabled due to an
+    issue in the macOS Azure Pipelines agent with Az PowerShell modules._
+
+This module should function correctly on other systems and configurations
+but is not automatically tested with them in every change.
 
 ## Getting Started
 
