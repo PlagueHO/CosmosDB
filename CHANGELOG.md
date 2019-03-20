@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 3.2.2.348
 
 - Added Azure Pipelines YAML definition for executing automated
   testing on a daily schedule - fixes [Issue #272](https://github.com/PlagueHO/CosmosDB/issues/272).
