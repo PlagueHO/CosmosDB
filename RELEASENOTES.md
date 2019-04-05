@@ -1,5 +1,14 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+April 5, 2019
+
+- Fix incorrectly encoded strings being returned by `Get-CosmosDbDocument`
+  when UTF-8 results are returned - fixes [Issues #282](https://github.com/PlagueHO/CosmosDB/issues/282).
+- Rename `CosmosDb.psdepend.ps1` to `requirements.psd1` to be a more
+  generic name.
+
 ## What is New in CosmosDB 3.2.2.348
 
 March 19, 2019

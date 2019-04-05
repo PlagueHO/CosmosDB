@@ -1149,4 +1149,12 @@ console.log("done");
             }
         }
     }
+
+    Describe 'Repair-CosmosDbDocumentEncoding' -Tag 'Unit' {
+        Context 'When an ASCII string is passed' {
+            It 'Should return the correct string' {
+                Repair-CosmosDbDocumentEncoding -Content 'AsciiString' | Should -Be 'AsciiString'
+            }
+        }
+    }
 }
