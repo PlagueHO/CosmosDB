@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 3.2.3.358
 
 - Fix incorrectly encoded strings being returned by `Get-CosmosDbDocument`
   when UTF-8 results are returned - fixes [Issues #282](https://github.com/PlagueHO/CosmosDB/issues/282).
