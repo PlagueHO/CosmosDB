@@ -130,7 +130,8 @@ function Get-CosmosDbDocument
             -ResourceType 'docs' `
             -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
 
-        $document = ConvertFrom-JSON -InputObject $result.Content
+        $content = Repair-CosmosDbDocumentEncoding -Content $result.Content
+        $document = ConvertFrom-JSON -InputObject $content
     }
     else
     {
@@ -218,7 +219,8 @@ function Get-CosmosDbDocument
             -Headers $headers `
             -Body $body
 
-        $body = ConvertFrom-JSON -InputObject $result.Content
+        $content = Repair-CosmosDbDocumentEncoding -Content $result.Content
+        $body = ConvertFrom-JSON -InputObject $content
         $document = $body.Documents
 
         if ($ResponseHeaderPassed)

@@ -2,6 +2,10 @@
 
 ## 3.2.2.348
 
+- Fix incorrectly encoded strings being returned by `Get-CosmosDbDocument`
+  when UTF-8 results are returned - fixes [Issues #282](https://github.com/PlagueHO/CosmosDB/issues/282).
+- Rename `CosmosDb.psdepend.ps1` to `requirements.psd1` to be a more
+  generic name.
 - Added Azure Pipelines YAML definition for executing automated
   testing on a daily schedule - fixes [Issue #272](https://github.com/PlagueHO/CosmosDB/issues/272).
 - Extend AppVeyor test automation to run on Windows Server 2012R2

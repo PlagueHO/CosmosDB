@@ -58,7 +58,7 @@ $script:testDocumentUTF8Body = @"
     `"content`": `"$script:testDocumentUTF8Content`"
 }
 "@
-$script:testDocumentUTF8UpdateContent = "我能吞下玻璃而不伤身"
+$script:testDocumentUTF8UpdateContent = "sdsføæå"
 $script:testDocumentUTF8UpdateBody = @"
 {
     `"id`": `"$script:testDocumentUTF8Id`",
@@ -1083,10 +1083,11 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             Test-GenericResult -GenericResult $script:result
             $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentUTF8Id
+            $script:result.Content | Should -Be $script:testDocumentUTF8Content
         }
     }
 
-    Context 'When updating an existing UTF-8 document to a collection' {
+    Context 'When updating an existing UTF-8 document in a collection' {
         It 'Should not throw an exception' {
             $script:result = Set-CosmosDbDocument `
                 -Context $script:testContext `
@@ -1117,6 +1118,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             Test-GenericResult -GenericResult $script:result
             $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentUTF8Id
+            $script:result.Content | Should -Be $script:testDocumentUTF8UpdateContent
         }
     }
 
