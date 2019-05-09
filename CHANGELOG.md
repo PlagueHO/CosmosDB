@@ -4,6 +4,8 @@
 
 - Update `requirements.psd1` to install modules `Az.Resources` 1.3.1 and
   `Az.Accounts` 1.5.1.
+- Change `requirements.psd1` to specify `minimumversion` of `Az.Resources`
+  and `Az.Accounts`.
 
 ## 3.2.3.358
 
