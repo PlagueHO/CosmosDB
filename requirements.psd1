@@ -79,7 +79,7 @@
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '1.5.1'
+        MinimumVersion = '1.5.1'
         Tags           = 'Test','Deploy'
     }
 
@@ -91,7 +91,7 @@
             SkipPublisherCheck = $true
         }
         Target         = 'CurrentUser'
-        Version        = '1.3.1'
+        MinimumVersion = '1.3.1'
         Tags           = 'Test','Deploy'
     }
 }
