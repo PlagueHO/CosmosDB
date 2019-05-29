@@ -319,16 +319,18 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When getting the new Azure Cosmos DB Account Connection Strings' {
+    Context 'When getting the new Azure Cosmos DB Account SecondaryReadonlyMasterKey connection string' {
         It 'Should not throw an exception' {
             $script:result = Get-CosmosDbAccountConnectionString `
                 -Name $script:testAccountName `
                 -ResourceGroupName $script:testResourceGroupName `
+                -MasterKeyType 'SecondaryReadonlyMasterKey' `
                 -Verbose
         }
 
-        It 'Should return expected object' {
-            # Currently returns an empty string due to a bug in the Provider
+        It 'Should return connection string' {
+            $global:connstring = $script:result
+            $script:result | Should -BeLike 'AccountEndpoint=*'
         }
     }
 
