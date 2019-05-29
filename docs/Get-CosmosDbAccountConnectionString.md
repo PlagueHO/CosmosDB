@@ -14,7 +14,8 @@ Get the connection strings for a Cosmos DB account in Azure.
 ## SYNTAX
 
 ```powershell
-Get-CosmosDbAccountConnectionString [-Name] <String> [-ResourceGroupName] <String> [<CommonParameters>]
+Get-CosmosDbAccountConnectionString [-Name] <String> [-ResourceGroupName] <String>
+ [-MasterKeyType <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,8 +31,17 @@ Cosmos DB account in Azure.
 PS C:\> Get-CosmosDbAccountConnectionString -Name 'MyCosmosDBAccount' -ResourceGroupName 'MyResourceGroup'
 ```
 
-Return the connection strings for a Cosmos DB account named 'MyCosmosDBAccount' in
+Return the primary SQL connection string for a Cosmos DB account named 'MyCosmosDBAccount' in
 the resource group 'MyResourceGroup'.
+
+### Example 2
+
+```powershell
+PS C:\> Get-CosmosDbAccountConnectionString -Name 'MyCosmosDBAccount' -ResourceGroupName 'MyResourceGroup' -MasterKeyType 'SecondaryReadonlyMasterKey'
+```
+
+Return the secondary read-only SQL connection string connection string for a Cosmos DB account
+named 'MyCosmosDBAccount' in the resource group 'MyResourceGroup'.
 
 ## PARAMETERS
 
@@ -63,6 +73,23 @@ Aliases:
 Required: True
 Position: 1
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -MasterKeyType
+
+The master key type to return in the connection string.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+Accepted values: PrimaryMasterKey, SecondaryMasterKey, PrimaryReadonlyMasterKey, SecondaryReadonlyMasterKey
+
+Required: False
+Position: Named
+Default value: PrimaryMasterKey
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

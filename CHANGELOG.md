@@ -6,11 +6,16 @@
   `Az.Accounts` 1.5.1.
 - Change `requirements.psd1` to specify `minimumversion` of `Az.Resources`
   and `Az.Accounts`.
+- Enabled tests and removed the warning when executing the function
+  `Get-CosmosDbAccountConnectionString` because the underlying REST API
+  has been fixed and now functions correctly - fixes [Issue #291](https://github.com/PlagueHO/CosmosDB/issues/291).
+- Added parameter `MasterKeyType` to function `Get-CosmosDbAccountConnectionString`
+  to only return a specific connection string - fixes [Issue #291](https://github.com/PlagueHO/CosmosDB/issues/291).
 
 ## 3.2.3.358
 
 - Fix incorrectly encoded strings being returned by `Get-CosmosDbDocument`
-  when UTF-8 results are returned - fixes [Issues #282](https://github.com/PlagueHO/CosmosDB/issues/282).
+  when UTF-8 results are returned - fixes [Issue #282](https://github.com/PlagueHO/CosmosDB/issues/282).
 
 ## 3.2.2.348
 

@@ -8,7 +8,7 @@ ConvertFrom-StringData -StringData @'
     NoMatchingUnexpiredResourceTokenInContext = At least one matching context token with resource '{0}' was found, but all are expired.
     CreateAuthorizationToken = Creating authorization token: Method = '{0}', ResourceType = '{1}', ResourceId = '{2}', Date = '{3}'.
     GettingAzureCosmosDBAccount = Getting Azure Cosmos DB account '{0}' in resource group '{1}'.
-    GettingAzureCosmosDBAccountConnectionString = Getting connection string for Azure Cosmos DB account '{0}' in resource group '{1}'.
+    GettingAzureCosmosDBAccountConnectionString = Getting '{2}' connection string for Azure Cosmos DB account '{0}' in resource group '{1}'.
     GettingAzureCosmosDBAccountMasterKey = Getting '{2}' for Azure Cosmos DB account '{0}' in resource group '{1}'.
     RegeneratingAzureCosmosDBAccountMasterKey = Regenerating '{2}' for Azure Cosmos DB account '{0}' in resource group '{1}'.
     CreatingAzureCosmosDBAccount = Creating Azure Cosmos DB account '{0}' in resource group '{1}' located in '{2}'.
@@ -37,7 +37,6 @@ ConvertFrom-StringData -StringData @'
     ShouldUpdateAzureCosmosDBAccount = Update an Azure Cosmos DB account '{0}' in resource group '{1}'
     ShouldRemoveAzureCosmosDBAccount = Remove the Azure Cosmos DB account '{0}' in resource group '{1}'
     ShouldCreateAzureCosmosDBAccountMasterKey = Create a new Azure Cosmos DB account '{0}' '{2}' in resource group '{1}'
-    GettingAzureCosmosDBAccountConnectionStringWarning = The Get-CosmosDbAccountConnectionString function does not currently work due to an issue with the Microsoft/DocumentDB provider. The connection strings will not be returned.
     AccountNameInvalid = The Account Name '{0}' is invalid. The name can contain only lowercase letters, numbers and the '-' character, and must be between 3 and 50 characters.
     ResourceGroupNameInvalid = The Resource Group Name '{0}' is invalid. Resource group names only allow alphanumeric characters, periods, underscores, hyphens and parenthesis, cannot end in a period and must be 90 characters or less.
     AttachmentIdInvalid = The Attachment Id '{0}' is invalid. An Attachment Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
