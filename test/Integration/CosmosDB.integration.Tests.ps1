@@ -329,7 +329,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
 
         It 'Should return connection string' {
-            $global:connstring = $script:result
             $script:result | Should -BeLike 'AccountEndpoint=*'
         }
     }

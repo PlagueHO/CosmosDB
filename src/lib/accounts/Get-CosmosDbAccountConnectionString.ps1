@@ -41,12 +41,7 @@ function Get-CosmosDbAccountConnectionString
         'SecondaryReadonlyMasterKey' = 'Secondary Read-Only SQL Connection String'
     }
 
-    Write-Verbose -Message ($connectionStrings[0] | Out-String)
-    $global:Whatever = $connectionStrings
-    Write-Verbose -Message ($connectionStringMapping[$MasterKeyType] | Out-String)
-
-    $connectionString = $connectionStrings | Where-Object -Property description -Eq $connectionStringMapping[$MasterKeyType]
-    Write-Verbose -Message ($connectionString | Out-String)
+    $connectionString = $connectionStrings.connectionStrings | Where-Object -Property description -Eq $connectionStringMapping[$MasterKeyType]
 
     return $connectionString.connectionString
 }
