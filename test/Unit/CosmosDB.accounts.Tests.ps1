@@ -85,24 +85,26 @@ InModuleScope CosmosDB {
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
     $script:mockInvokeAzResourceActionConnectionString = {
-        @(
-            [PSCustomObject] @{
-                connectionString = 'AccountEndpoint=Primary SQL Connection String'
-                description = 'Primary SQL Connection String'
-            },
-            [PSCustomObject] @{
-                connectionString = 'AccountEndpoint=Secondary SQL Connection String'
-                description = 'Secondary SQL Connection String'
-            },
-            [PSCustomObject] @{
-                connectionString = 'AccountEndpoint=Primary Read-Only SQL Connection String'
-                description = 'Primary Read-Only SQL Connection String'
-            }
-            [PSCustomObject] @{
-                connectionString = 'AccountEndpoint=Secondary Read-Only SQL Connection String'
-                description = 'Secondary Read-Only SQL Connection String'
-            }
-        )
+        @{
+            ConnectionStrings = @(
+                [PSCustomObject] @{
+                    connectionString = 'AccountEndpoint=Primary SQL Connection String'
+                    description = 'Primary SQL Connection String'
+                },
+                [PSCustomObject] @{
+                    connectionString = 'AccountEndpoint=Secondary SQL Connection String'
+                    description = 'Secondary SQL Connection String'
+                },
+                [PSCustomObject] @{
+                    connectionString = 'AccountEndpoint=Primary Read-Only SQL Connection String'
+                    description = 'Primary Read-Only SQL Connection String'
+                }
+                [PSCustomObject] @{
+                    connectionString = 'AccountEndpoint=Secondary Read-Only SQL Connection String'
+                    description = 'Secondary Read-Only SQL Connection String'
+                }
+            )
+        }
     }
 
     Describe 'Assert-CosmosDbAccountNameValid' -Tag 'Unit' {
