@@ -84,6 +84,28 @@ InModuleScope CosmosDB {
     }
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
+    $script:mockInvokeAzResourceActionConnectionString = {
+        @{
+            ConnectionStrings = @(
+                [PSCustomObject] @{
+                    connectionString = 'AccountEndpoint=Primary SQL Connection String'
+                    description = 'Primary SQL Connection String'
+                },
+                [PSCustomObject] @{
+                    connectionString = 'AccountEndpoint=Secondary SQL Connection String'
+                    description = 'Secondary SQL Connection String'
+                },
+                [PSCustomObject] @{
+                    connectionString = 'AccountEndpoint=Primary Read-Only SQL Connection String'
+                    description = 'Primary Read-Only SQL Connection String'
+                }
+                [PSCustomObject] @{
+                    connectionString = 'AccountEndpoint=Secondary Read-Only SQL Connection String'
+                    description = 'Secondary Read-Only SQL Connection String'
+                }
+            )
+        }
+    }
 
     Describe 'Assert-CosmosDbAccountNameValid' -Tag 'Unit' {
         It 'Should exist' {
@@ -1504,12 +1526,50 @@ InModuleScope CosmosDB {
         }
     }
 
+    Context 'When called with a Name and ResourceGroupName and MasterKeyType is default' {
+        $script:result = $null
+
+        $invokeAzResourceAction_parameterFilter = {
+            ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
+            ($ApiVersion -eq '2015-04-08') -and `
+            ($ResourceName -eq $script:testName) -and `
+            ($ResourceGroupName -eq $script:testResourceGroupName) -and `
+            ($Action -eq 'listConnectionStrings') -and `
+            ($Force -eq $true)
+        }
+
+        Mock `
+            -CommandName Invoke-AzResourceAction `
+            -MockWith $script:mockInvokeAzResourceActionConnectionString
+
+        It 'Should not throw exception' {
+            $getCosmosDbAccountConnectionStringParameters = @{
+                Name              = $script:testName
+                ResourceGroupName = $script:testResourceGroupName
+                Verbose           = $true
+            }
+
+            { $script:result = Get-CosmosDbAccountConnectionString @getCosmosDbAccountConnectionStringParameters } | Should -Not -Throw
+        }
+
+        It 'Should return expected result' {
+            $script:result | Should -Be 'AccountEndpoint=Primary SQL Connection String'
+        }
+
+        It 'Should call expected mocks' {
+            Assert-MockCalled `
+                -CommandName Invoke-AzResourceAction `
+                -ParameterFilter $invokeAzResourceAction_parameterFilter `
+                -Exactly -Times 1
+        }
+    }
+
     Describe 'Get-CosmosDbAccountConnectionString' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name Get-CosmosDbAccountConnectionString -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'When called with a Name and ResourceGroupName' {
+        Context 'When called with a Name and ResourceGroupName and MasterKeyType set to SecondaryReadonlyMasterKey' {
             $script:result = $null
 
             $invokeAzResourceAction_parameterFilter = {
@@ -1523,12 +1583,13 @@ InModuleScope CosmosDB {
 
             Mock `
                 -CommandName Invoke-AzResourceAction `
-                -MockWith { 'ConnectionString' }
+                -MockWith $script:mockInvokeAzResourceActionConnectionString
 
             It 'Should not throw exception' {
                 $getCosmosDbAccountConnectionStringParameters = @{
                     Name              = $script:testName
                     ResourceGroupName = $script:testResourceGroupName
+                    MasterKeyType     = 'SecondaryReadonlyMasterKey'
                     Verbose           = $true
                 }
 
@@ -1536,7 +1597,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result | Should -Be 'ConnectionString'
+                $script:result | Should -Be 'AccountEndpoint=Secondary Read-Only SQL Connection String'
             }
 
             It 'Should call expected mocks' {
