@@ -1,6 +1,6 @@
 # Release Notes
 
-## What is New in CosmosDB Unreleased
+## What is New in CosmosDB 3.2.4.375
 
 May 30, 2019
 

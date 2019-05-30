@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 3.2.4.375
 
 - Update `requirements.psd1` to install modules `Az.Resources` 1.3.1 and
   `Az.Accounts` 1.5.1.
