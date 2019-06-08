@@ -11,6 +11,7 @@
   has been fixed and now functions correctly - fixes [Issue #291](https://github.com/PlagueHO/CosmosDB/issues/291).
 - Added parameter `MasterKeyType` to function `Get-CosmosDbAccountConnectionString`
   to only return a specific connection string - fixes [Issue #291](https://github.com/PlagueHO/CosmosDB/issues/291).
+- Updated Style Guidelines.
 
 ## 3.2.3.358
 
