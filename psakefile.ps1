@@ -185,6 +185,11 @@ Task Build -Depends Init {
         -Install `
         -Tags 'Build'
 
+    # Build the Classes
+    $classesProjectFolder = Join-Path -Path $ProjectRoot -ChildPath 'src/classes/CosmosDB'
+    $classesProjectPath = Join-Path -Path $classesProjectFolder -ChildPath 'CosmosDB.csproj'
+    & dotnet @('build',$classesProjectPath,'/p:Configuration=Release')
+
     # Generate the next version by adding the build system build number to the manifest version
     $manifestPath = Join-Path -Path $ProjectRoot -ChildPath "src/$ModuleName.psd1"
     $newVersion = Get-VersionNumber `
@@ -219,6 +224,7 @@ Task Build -Depends Init {
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'README.md') -Destination $versionFolder
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'CHANGELOG.md') -Destination $versionFolder
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'RELEASENOTES.md') -Destination $versionFolder
+    $null = Copy-Item -Path (Join-Path -Path $classesProjectFolder -ChildPath 'bin/release/netstandard2.0/CosmosDB.dll') -Destination $versionFolder
 
     # Load the Libs files into the PSM1
     $libFiles = Get-ChildItem `
