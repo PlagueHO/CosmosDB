@@ -1,15 +1,16 @@
 [System.Diagnostics.CodeAnalysis.SuppressMessage('PSAvoidUsingConvertToSecureStringWithPlainText', '')]
 [System.Diagnostics.CodeAnalysis.SuppressMessage('PSAvoidUsingConvertToSecureStringWithPlainText', '')]
 [CmdletBinding()]
-param (
-)
+param ()
 
-$ModuleManifestName = 'CosmosDB.psd1'
-$ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
-$TestHelperPath = "$PSScriptRoot\..\TestHelper"
+$moduleManifestName = 'CosmosDB.psd1'
+$moduleRootPath = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent | Join-Path -ChildPath 'src'
+$moduleManifestPath = Join-Path -Path $moduleRootPath -ChildPath $moduleManifestName
 
-Import-Module -Name $ModuleManifestPath -Force -Verbose:$false
-Import-Module -Name $TestHelperPath -Force
+Import-Module -Name $moduleManifestPath -Force -Verbose:$false
+
+$testHelperPath = $PSScriptRoot | Split-Path -Parent | Join-Path -ChildPath 'TestHelper'
+Import-Module -Name $testHelperPath -Force
 
 Get-AzureServicePrincipal
 

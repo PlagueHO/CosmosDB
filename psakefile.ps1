@@ -234,6 +234,7 @@ Task Build -Depends Init {
 
     # Assemble all the libs content into a single string
     $libFilesStringBuilder = [System.Text.StringBuilder]::new()
+
     foreach ($libFile in $libFiles)
     {
         $libContent = Get-Content -Path $libFile -Raw
@@ -250,6 +251,7 @@ Task Build -Depends Init {
     $moduleContent = Get-Content -Path $modulePath
     $moduleStringBuilder = [System.Text.StringBuilder]::new()
     $importFunctionsRegionFound = $false
+
     foreach ($moduleLine in $moduleContent)
     {
         if ($importFunctionsRegionFound)
@@ -274,6 +276,7 @@ Task Build -Depends Init {
             }
         }
     }
+
     Set-Content -Path $modulePath -Value $moduleStringBuilder -Force
 
     # Prepare external help
@@ -351,6 +354,7 @@ Task Build -Depends Init {
     $zipFilePath = Join-Path `
         -Path $zipFileFolder `
         -ChildPath "${ENV:BHProjectName}_$newVersion.zip"
+
     if (Test-Path -Path $zipFilePath)
     {
         $null = Remove-Item -Path $zipFilePath

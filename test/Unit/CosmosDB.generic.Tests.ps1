@@ -1,21 +1,18 @@
 [System.Diagnostics.CodeAnalysis.SuppressMessage('PSAvoidUsingConvertToSecureStringWithPlainText', '')]
 [CmdletBinding()]
-param (
-)
+param ()
 
 $moduleManifestName = 'CosmosDB.psd1'
-$moduleRootPath = "$PSScriptRoot\..\..\src\"
+$moduleRootPath = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent | Join-Path -ChildPath 'src'
 $moduleManifestPath = Join-Path -Path $moduleRootPath -ChildPath $moduleManifestName
 
 Describe 'CosmosDB Module'{
     Context 'PSScriptAnalyzer' {
         Import-Module -Name 'PSScriptAnalyzer'
 
-        $modulePath = Join-Path -Path $moduleRootPath -ChildPath 'CosmosDB.psm1'
-
         # Perform PSScriptAnalyzer scan
         $PSScriptAnalyzerResult = Invoke-ScriptAnalyzer `
-            -Path $modulePath `
+            -Path $moduleManifestPath `
             -Settings (Join-Path -Path $moduleRootPath -ChildPath '..\PSScriptAnalyzerSettings.psd1') `
             -ErrorAction SilentlyContinue `
             -Verbose:$false
