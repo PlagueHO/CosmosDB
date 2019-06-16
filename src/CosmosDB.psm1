@@ -50,9 +50,8 @@ if (-not ([System.Management.Automation.PSTypeName]'CosmosDB.Context').Type)
     }
     else
     {
-        $typeDefinitionPath = Join-Path -Path $moduleRoot -ChildPath 'classes\CosmosDB\CosmsosDB.cs'
+        $typeDefinitionPath = Join-Path -Path $moduleRoot -ChildPath 'classes\CosmosDB\CosmosDB.cs'
         Write-Verbose -Message $($LocalizedData.LoadingTypesFromCS -f $typeDefinitionPath)
-        Write-Verbose -Message (Get-ChildItem -Path (Split-Path -Path $typeDefinitionPath -Parent) | Out-String ) -Verbose
         $typeDefinition = Get-Content -Path $typeDefinitionPath -Raw
         Add-Type -TypeDefinition $typeDefinition
     }
