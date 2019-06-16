@@ -1,4 +1,4 @@
-﻿#---------------------------------#
+#---------------------------------#
 #      environment configuration  #
 #---------------------------------#
 version: 1.0.0.{build}
@@ -7,8 +7,5 @@ image:
 - Visual Studio 2017
 - Visual Studio 2015
 
-build_script:
-  - ps: . .\psake.ps1 -TaskList Build -Verbose
-
 test_script:
-  - ps: . .\psake.ps1 -TaskList Test -Verbose
+  - ps: . .\psake.ps1 -TaskList Test

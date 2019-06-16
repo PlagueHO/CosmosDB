@@ -31,8 +31,7 @@ Invoke-PSDepend `
     -Force `
     -Import `
     -Install `
-    -Tags 'Bootstrap' `
-    -Verbose:$false
+    -Tags 'Bootstrap'
 
 # Execute the PSake tasts from the psakefile.ps1
 Invoke-Psake `

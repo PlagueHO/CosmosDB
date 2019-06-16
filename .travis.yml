@@ -4,18 +4,12 @@ matrix:
   include:
     - os: osx
       osx_image: xcode9.1
-      language: csharp
-      mono: none
-      dotnet: 2.1.700
       before_install:
         - brew update
         - brew tap caskroom/cask
         - brew cask install powershell
     - os: linux
       dist: trusty
-      language: csharp
-      mono: none
-      dotnet: 2.1.700
       sudo: required
       addons:
         apt:
@@ -26,4 +20,4 @@ matrix:
             - powershell
 
 script:
-- pwsh -c '.\psake.ps1 -TaskList Test -Verbose'
+- pwsh -c '.\psake.ps1 -TaskList Test'
