@@ -1,5 +1,15 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+June 19, 2019
+
+- Moved CosmosDB namespace class definitions into C# project to be built
+  into a .NET Standard 2.0 DLL that can be loaded instead of a CS file.
+  This is to work around a problem with Azure Functions 2.0 where
+  types can not be compiled in the runtime (see [this issue](https://github.com/Azure/azure-functions-powershell-worker/issues/220)) -
+  fixes [Issue #290](https://github.com/PlagueHO/CosmosDB/issues/290).
+
 ## What is New in CosmosDB 3.2.4.375
 
 May 30, 2019

@@ -12,7 +12,7 @@
 RootModule = 'CosmosDB.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.2.4.375'
+ModuleVersion = '3.3.0.375'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core', 'Desktop'
@@ -157,6 +157,16 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = '
+  ## What is New in CosmosDB Unreleased
+
+  June 19, 2019
+
+  - Moved CosmosDB namespace class definitions into C# project to be built
+    into a .NET Standard 2.0 DLL that can be loaded instead of a CS file.
+    This is to work around a problem with Azure Functions 2.0 where
+    types can not be compiled in the runtime (see [this issue](https://github.com/Azure/azure-functions-powershell-worker/issues/220)) -
+    fixes [Issue #290](https://github.com/PlagueHO/CosmosDB/issues/290).
+
   ## What is New in CosmosDB 3.2.4.375
 
   May 30, 2019
@@ -276,13 +286,6 @@ PrivateData = @{
   - Renamed `ResultHeaders` parameter to `ResponseHeader` in
     `Get-CosmosDbDocuments` function to adhere to PowerShell standards,
     but included alias for `ResultHeaders` to prevent breaking change.
-
-  ## What is New in CosmosDB 2.1.14.220
-
-  November 15, 2018
-
-  - Extended maximum length of Account Name parameter to be 50 characters - fixes
-    [Issue #201](https://github.com/PlagueHO/CosmosDB/issues/201).
   '
 
     } # End of PSData hashtable
@@ -296,5 +299,3 @@ PrivateData = @{
 # DefaultCommandPrefix = ''
 
 }
-
-
