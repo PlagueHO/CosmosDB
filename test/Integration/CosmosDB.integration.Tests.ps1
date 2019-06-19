@@ -1,11 +1,14 @@
 [System.Diagnostics.CodeAnalysis.SuppressMessage('PSAvoidUsingConvertToSecureStringWithPlainText', '')]
-[System.Diagnostics.CodeAnalysis.SuppressMessage('PSAvoidUsingConvertToSecureStringWithPlainText', '')]
 [CmdletBinding()]
-param ()
+param
+(
+    [Parameter()]
+    [System.String]
+    $ModuleRootPath = ($PSScriptRoot | Split-Path -Parent | Split-Path -Parent | Join-Path -ChildPath 'src')
+)
 
 $moduleManifestName = 'CosmosDB.psd1'
-$moduleRootPath = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent | Join-Path -ChildPath 'src'
-$moduleManifestPath = Join-Path -Path $moduleRootPath -ChildPath $moduleManifestName
+$moduleManifestPath = Join-Path -Path $ModuleRootPath -ChildPath $moduleManifestName
 
 Import-Module -Name $moduleManifestPath -Force -Verbose:$false
 
