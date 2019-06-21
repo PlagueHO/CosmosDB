@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 3.3.0.395
 
 - Moved CosmosDB namespace class definitions into C# project to be built
   into a .NET Standard 2.0 DLL that can be loaded instead of a CS file.
