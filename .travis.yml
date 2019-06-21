@@ -20,4 +20,4 @@ matrix:
             - powershell
 
 script:
-- pwsh -c '.\psake.ps1 -TaskList Test -Verbose'
+- pwsh -c '.\psake.ps1 -TaskList Test'

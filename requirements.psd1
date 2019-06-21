@@ -80,7 +80,7 @@
         }
         Target         = 'CurrentUser'
         MinimumVersion = '1.5.1'
-        Tags           = 'Test','Deploy'
+        Tags           = 'Build','Test','Deploy'
     }
 
     AzResources       = @{
@@ -92,6 +92,6 @@
         }
         Target         = 'CurrentUser'
         MinimumVersion = '1.3.1'
-        Tags           = 'Test','Deploy'
+        Tags           = 'Build','Test','Deploy'
     }
 }

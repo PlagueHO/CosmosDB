@@ -1,5 +1,13 @@
 # Change Log
 
+## Unreleased
+
+- Moved CosmosDB namespace class definitions into C# project to be built
+  into a .NET Standard 2.0 DLL that can be loaded instead of a CS file.
+  This is to work around a problem with Azure Functions 2.0 where
+  types can not be compiled in the runtime (see [this issue](https://github.com/Azure/azure-functions-powershell-worker/issues/220)) -
+  fixes [Issue #290](https://github.com/PlagueHO/CosmosDB/issues/290).
+
 ## 3.2.4.375
 
 - Update `requirements.psd1` to install modules `Az.Resources` 1.3.1 and
@@ -11,6 +19,7 @@
   has been fixed and now functions correctly - fixes [Issue #291](https://github.com/PlagueHO/CosmosDB/issues/291).
 - Added parameter `MasterKeyType` to function `Get-CosmosDbAccountConnectionString`
   to only return a specific connection string - fixes [Issue #291](https://github.com/PlagueHO/CosmosDB/issues/291).
+- Updated Style Guidelines.
 
 ## 3.2.3.358
 

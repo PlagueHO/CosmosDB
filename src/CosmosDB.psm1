@@ -13,89 +13,48 @@ $moduleRoot = Split-Path `
 Import-Module -Name Az.Accounts -MinimumVersion 1.0.0 -Scope Global
 Import-Module -Name Az.Resources -MinimumVersion 1.0.0 -Scope Global
 
+#region LocalizedData
+$culture = 'en-us'
+
+if (Test-Path -Path (Join-Path -Path $moduleRoot -ChildPath $PSUICulture))
+{
+    $culture = $PSUICulture
+}
+
+Import-LocalizedData `
+    -BindingVariable LocalizedData `
+    -Filename 'CosmosDB.strings.psd1' `
+    -BaseDirectory $moduleRoot `
+    -UICulture $culture
+#endregion
+
 #region Types
 if (-not ([System.Management.Automation.PSTypeName]'CosmosDB.Context').Type)
 {
-    $typeDefinition = @'
-namespace CosmosDB {
-    public class ContextToken
+    <#
+        Attempt to load the classes from within the CosmosDB.dll in the
+        same folder as the module. If the file doesn't exist then load
+        them from the CosmosDB.cs file.
+
+        Loading the classes from the CosmosDB.cs file requires compilation
+        which currently fails in PowerShell on Azure Functions 2.0.
+
+        See https://github.com/Azure/azure-functions-powershell-worker/issues/220
+    #>
+    $classDllPath = Join-Path -Path $moduleRoot -ChildPath 'CosmosDB.dll'
+
+    if (Test-Path -Path $classDllPath)
     {
-        public System.String Resource;
-        public System.DateTime TimeStamp;
-        public System.DateTime Expires;
-        public System.Security.SecureString Token;
+        Write-Verbose -Message $($LocalizedData.LoadingTypesFromDll -f $classDllPath)
+        Add-Type -Path $classDllPath
     }
-
-    public class BackoffPolicy
+    else
     {
-        public System.Int32 MaxRetries;
-        public System.String Method;
-        public System.Int32 Delay;
+        $typeDefinitionPath = Join-Path -Path $moduleRoot -ChildPath 'classes\CosmosDB\CosmosDB.cs'
+        Write-Verbose -Message $($LocalizedData.LoadingTypesFromCS -f $typeDefinitionPath)
+        $typeDefinition = Get-Content -Path $typeDefinitionPath -Raw
+        Add-Type -TypeDefinition $typeDefinition
     }
-
-    public class Context
-    {
-        public System.String Account;
-        public System.String Database;
-        public System.Security.SecureString Key;
-        public System.String KeyType;
-        public System.String BaseUri;
-        public CosmosDB.ContextToken[] Token;
-        public CosmosDB.BackoffPolicy BackoffPolicy;
-    }
-
-    namespace IndexingPolicy {
-        namespace Path {
-            public class Index {
-                public System.String dataType;
-                public System.String kind;
-            }
-
-            public class IndexRange : CosmosDB.IndexingPolicy.Path.Index {
-                public readonly System.Int32 precision = -1;
-            }
-
-            public class IndexHash : CosmosDB.IndexingPolicy.Path.Index {
-                public readonly System.Int32 precision = -1;
-            }
-
-            public class IndexSpatial : CosmosDB.IndexingPolicy.Path.Index {
-            }
-
-            public class IncludedPath
-            {
-                public System.String path;
-                public CosmosDB.IndexingPolicy.Path.Index[] indexes;
-            }
-
-            public class ExcludedPath
-            {
-                public System.String path;
-            }
-        }
-
-        public class Policy
-        {
-            public System.Boolean automatic;
-            public System.String indexingMode;
-            public CosmosDB.IndexingPolicy.Path.IncludedPath[] includedPaths;
-            public CosmosDB.IndexingPolicy.Path.ExcludedPath[] excludedPaths;
-        }
-    }
-
-    namespace UniqueKeyPolicy {
-        public class UniqueKey {
-            public System.String[] paths;
-        }
-
-        public class Policy
-        {
-            public CosmosDB.UniqueKeyPolicy.UniqueKey[] uniqueKeys;
-        }
-    }
-}
-'@
-    Add-Type -TypeDefinition $typeDefinition
 }
 
 <#
@@ -117,20 +76,6 @@ namespace Microsoft.PowerShell.Commands
 
     Add-Type -TypeDefinition $httpResponseExceptionClassDefinition
 }
-#endregion
-
-#region LocalizedData
-$culture = 'en-us'
-if (Test-Path -Path (Join-Path -Path $moduleRoot -ChildPath $PSUICulture))
-{
-    $culture = $PSUICulture
-}
-
-Import-LocalizedData `
-    -BindingVariable LocalizedData `
-    -Filename 'CosmosDB.strings.psd1' `
-    -BaseDirectory $moduleRoot `
-    -UICulture $culture
 #endregion
 
 #region ImportFunctions

@@ -11,8 +11,18 @@ jobs:
       persistCredentials: true
 
     - powershell: |
-        .\psake.ps1 -TaskList Test -Verbose
-      displayName: 'Execute Tests'
+        .\psake.ps1 -TaskList Build -Verbose
+      displayName: 'Build and Stage Module'
+      env:
+        azureApplicationId: $(azureApplicationId)
+        azureApplicationPassword: $(azureApplicationPassword)
+        azureSubscriptionId: $(azureSubscriptionId)
+        azureTenantId: $(azureTenantId)
+        githubRepoToken: $(githubRepoToken)
+
+    - powershell: |
+        .\psake.ps1 -TaskList UnitTest -Verbose
+      displayName: 'Execute Unit Tests'
       env:
         azureApplicationId: $(azureApplicationId)
         azureApplicationPassword: $(azureApplicationPassword)
@@ -21,26 +31,36 @@ jobs:
         githubRepoToken: $(githubRepoToken)
 
     - task: PublishTestResults@2
+      displayName: 'Publish Unit Test Results'
       inputs:
         testRunner: 'NUnit'
         testResultsFiles: '**/Unit/TestResults.unit.xml'
         testRunTitle: 'PS_Win2016_Unit'
-      displayName: 'Publish Unit Test Results'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
     - task: PublishCodeCoverageResults@1
+      displayName: 'Publish Unit Test Code Coverage'
       inputs:
         summaryFileLocation: '**/Unit/CodeCoverage.xml'
         failIfCoverageEmpty: true
-      displayName: 'Publish Unit Test Code Coverage'
       condition: and(in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed'), eq(variables['System.PullRequest.IsFork'], false))
 
+    - powershell: |
+        .\psake.ps1 -TaskList IntegrationTest -Parameters @{ TestStagedModule = $true } -Verbose
+      displayName: 'Execute Integration Tests'
+      env:
+        azureApplicationId: $(azureApplicationId)
+        azureApplicationPassword: $(azureApplicationPassword)
+        azureSubscriptionId: $(azureSubscriptionId)
+        azureTenantId: $(azureTenantId)
+        githubRepoToken: $(githubRepoToken)
+
     - task: PublishTestResults@2
+      displayName: 'Publish Integration Test Results'
       inputs:
         testRunner: 'NUnit'
         testResultsFiles: '**/Integration/TestResults.integration.xml'
         testRunTitle: 'PS_Win2016_Integration'
-      displayName: 'Publish Integration Test Results'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
   - job: Build_PSCore_Ubuntu1604
@@ -56,8 +76,8 @@ jobs:
       displayName: 'Install PowerShell Core'
 
     - script: |
-        pwsh -c '.\psake.ps1 -TaskList Test -Verbose'
-      displayName: 'Execute Tests'
+        pwsh -c '.\psake.ps1 -TaskList UnitTest -Verbose'
+      displayName: 'Execute Unit Tests'
       env:
         azureApplicationId: $(azureApplicationId)
         azureApplicationPassword: $(azureApplicationPassword)
@@ -65,19 +85,28 @@ jobs:
         azureTenantId: $(azureTenantId)
 
     - task: PublishTestResults@2
+      displayName: 'Publish Unit Test Results'
       inputs:
         testRunner: 'NUnit'
-        testResultsFiles: '**/Unit/TestResults.unit.xml'
-        testRunTitle: 'PSCore_Ubuntu1604_Unit'
-      displayName: 'Publish Unit Test Results'
+        testResultsFiles: '**/TestResults.unit.xml'
+        testRunTitle: 'PSCore_MacOS1013_Unit'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
+    - script: |
+        pwsh -c '.\psake.ps1 -TaskList IntegrationTest -Verbose'
+      displayName: 'Execute Integration Tests'
+      env:
+        azureApplicationId: $(azureApplicationId)
+        azureApplicationPassword: $(azureApplicationPassword)
+        azureSubscriptionId: $(azureSubscriptionId)
+        azureTenantId: $(azureTenantId)
+
     - task: PublishTestResults@2
+      displayName: 'Publish Integration Test Results'
       inputs:
         testRunner: 'NUnit'
-        testResultsFiles: '**/Integration/TestResults.integration.xml'
-        testRunTitle: 'PSCore_Ubuntu1604_Integration'
-      displayName: 'Publish Integration Test Results'
+        testResultsFiles: '**/TestResults.integration.xml'
+        testRunTitle: 'PSCore_MacOS1013_Integration'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
   - job: Build_PSCore_MacOS1013
@@ -93,8 +122,8 @@ jobs:
       displayName: 'Install PowerShell Core'
 
     - script: |
-        pwsh -c '.\psake.ps1 -TaskList Test -Verbose'
-      displayName: 'Execute Tests'
+        pwsh -c '.\psake.ps1 -TaskList UnitTest -Verbose'
+      displayName: 'Execute Unit Tests'
       env:
         azureApplicationId: $(azureApplicationId)
         azureApplicationPassword: $(azureApplicationPassword)
@@ -102,17 +131,26 @@ jobs:
         azureTenantId: $(azureTenantId)
 
     - task: PublishTestResults@2
+      displayName: 'Publish Unit Test Results'
       inputs:
         testRunner: 'NUnit'
         testResultsFiles: '**/TestResults.unit.xml'
         testRunTitle: 'PSCore_MacOS1013_Unit'
-      displayName: 'Publish Unit Test Results'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
+    - script: |
+        pwsh -c '.\psake.ps1 -TaskList IntegrationTest -Parameters @{ TestStagedModule = $true } -Verbose'
+      displayName: 'Execute Integration Tests on Staged Module'
+      env:
+        azureApplicationId: $(azureApplicationId)
+        azureApplicationPassword: $(azureApplicationPassword)
+        azureSubscriptionId: $(azureSubscriptionId)
+        azureTenantId: $(azureTenantId)
+
     - task: PublishTestResults@2
+      displayName: 'Publish Integration Test Results'
       inputs:
         testRunner: 'NUnit'
         testResultsFiles: '**/TestResults.integration.xml'
         testRunTitle: 'PSCore_MacOS1013_Integration'
-      displayName: 'Publish Integration Test Results'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')

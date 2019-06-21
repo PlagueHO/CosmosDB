@@ -1,4 +1,4 @@
-﻿#---------------------------------#
+#---------------------------------#
 #      environment configuration  #
 #---------------------------------#
 version: 1.0.0.{build}
@@ -10,4 +10,4 @@ image:
 build: false
 
 test_script:
-  - ps: . .\psake.ps1 -TaskList Test -Verbose
+  - ps: . .\psake.ps1 -TaskList Test

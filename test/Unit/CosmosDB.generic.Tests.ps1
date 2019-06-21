@@ -1,21 +1,22 @@
 [System.Diagnostics.CodeAnalysis.SuppressMessage('PSAvoidUsingConvertToSecureStringWithPlainText', '')]
 [CmdletBinding()]
-param (
+param
+(
+    [Parameter()]
+    [System.String]
+    $ModuleRootPath = ($PSScriptRoot | Split-Path -Parent | Split-Path -Parent | Join-Path -ChildPath 'src')
 )
 
 $moduleManifestName = 'CosmosDB.psd1'
-$moduleRootPath = "$PSScriptRoot\..\..\src\"
-$moduleManifestPath = Join-Path -Path $moduleRootPath -ChildPath $moduleManifestName
+$moduleManifestPath = Join-Path -Path $ModuleRootPath -ChildPath $moduleManifestName
 
 Describe 'CosmosDB Module'{
     Context 'PSScriptAnalyzer' {
         Import-Module -Name 'PSScriptAnalyzer'
 
-        $modulePath = Join-Path -Path $moduleRootPath -ChildPath 'CosmosDB.psm1'
-
         # Perform PSScriptAnalyzer scan
         $PSScriptAnalyzerResult = Invoke-ScriptAnalyzer `
-            -Path $modulePath `
+            -Path $moduleManifestPath `
             -Settings (Join-Path -Path $moduleRootPath -ChildPath '..\PSScriptAnalyzerSettings.psd1') `
             -ErrorAction SilentlyContinue `
             -Verbose:$false
@@ -42,7 +43,7 @@ Describe 'CosmosDB Module'{
 
                 Write-Warning -Message  'For instructions on how to run PSScriptAnalyzer on your own machine, please go to https://github.com/powershell/psscriptAnalyzer/'
 
-                $PSScriptAnalyzerErrors.Count | Should -Be $null
+                $PSScriptAnalyzerErrors.Count | Should -BeNullOrEmpty
             }
         }
 
