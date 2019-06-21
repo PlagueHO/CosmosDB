@@ -1,16 +1,18 @@
 [System.Diagnostics.CodeAnalysis.SuppressMessage('PSAvoidUsingConvertToSecureStringWithPlainText', '')]
 [CmdletBinding()]
-param (
+param
+(
+    [Parameter()]
+    [System.String]
+    $ModuleRootPath = ($PSScriptRoot | Split-Path -Parent | Split-Path -Parent | Join-Path -ChildPath 'src')
 )
 
-$ModuleManifestName = 'CosmosDB.psd1'
-$ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
-
-Import-Module -Name $ModuleManifestPath -Force -Verbose:$false
+$moduleManifestName = 'CosmosDB.psd1'
+$moduleManifestPath = Join-Path -Path $ModuleRootPath -ChildPath $moduleManifestName
 
 InModuleScope CosmosDB {
-    $TestHelperPath = "$PSScriptRoot\..\TestHelper"
-    Import-Module -Name $TestHelperPath -Force
+    $testHelperPath = $PSScriptRoot | Split-Path -Parent | Join-Path -ChildPath 'TestHelper'
+    Import-Module -Name $testHelperPath -Force
 
     # Variables for use in tests
     $script:testAccount = 'testAccount'

@@ -3,6 +3,7 @@
 Properties {
     # Prepare the folder variables
     $ProjectRoot = $ENV:BHProjectPath
+
     if (-not $ProjectRoot)
     {
         $ProjectRoot = $PSScriptRoot
@@ -139,9 +140,30 @@ Task IntegrationTest -Depends Init, PrepareTest {
 
     # Execute tests
     $testScriptsPath = Join-Path -Path $ProjectRoot -ChildPath 'test\Integration'
+
+    if ($TestStagedModule)
+    {
+        # Get the path to the staged module
+        $stagingFolder = Join-Path -Path $ProjectRoot -ChildPath 'staging'
+        $stagedModulesFolder = Join-Path -Path $stagingFolder -ChildPath $ModuleName
+        $mostRecentStagedModulePath = Get-MostRecentStagedModulePath -StagedModulesFolder $stagedModulesFolder
+        $testScript = @{
+            Path = $testScriptsPath
+            Parameters = @{
+                ModuleRootPath = $mostRecentStagedModulePath
+            }
+        }
+        "Executing integration tests on Staged Module in $mostRecentStagedModulePath"
+    }
+    else
+    {
+        "Executing integration tests on src folder"
+        $testScript = $testScriptsPath
+    }
+
     $testResultsFile = Join-Path -Path $testScriptsPath -ChildPath 'TestResults.integration.xml'
     $testResults = Invoke-Pester `
-        -Script $testScriptsPath `
+        -Script $testScript `
         -OutputFormat NUnitXml `
         -OutputFile $testResultsFile `
         -PassThru `
@@ -185,6 +207,11 @@ Task Build -Depends Init {
         -Install `
         -Tags 'Build'
 
+    # Build the Classes
+    $classesProjectFolder = Join-Path -Path $ProjectRoot -ChildPath 'src/classes/CosmosDB'
+    $classesProjectPath = Join-Path -Path $classesProjectFolder -ChildPath 'CosmosDB.csproj'
+    & dotnet @('build',$classesProjectPath,'/p:Configuration=Release')
+
     # Generate the next version by adding the build system build number to the manifest version
     $manifestPath = Join-Path -Path $ProjectRoot -ChildPath "src/$ModuleName.psd1"
     $newVersion = Get-VersionNumber `
@@ -198,15 +225,15 @@ Task Build -Depends Init {
     }
 
     # Determine the folder names for staging the module
-    $StagingFolder = Join-Path -Path $ProjectRoot -ChildPath 'staging'
-    $ModuleFolder = Join-Path -Path $StagingFolder -ChildPath $ModuleName
+    $stagingFolder = Join-Path -Path $ProjectRoot -ChildPath 'staging'
+    $moduleFolder = Join-Path -Path $stagingFolder -ChildPath $ModuleName
 
     # Determine the folder names for staging the module
-    $versionFolder = Join-Path -Path $ModuleFolder -ChildPath $newVersion
+    $versionFolder = Join-Path -Path $moduleFolder -ChildPath $newVersion
 
     # Stage the module
-    $null = New-Item -Path $StagingFolder -Type directory -ErrorAction SilentlyContinue
-    $null = New-Item -Path $ModuleFolder -Type directory -ErrorAction SilentlyContinue
+    $null = New-Item -Path $stagingFolder -Type directory -ErrorAction SilentlyContinue
+    $null = New-Item -Path $moduleFolder -Type directory -ErrorAction SilentlyContinue
     Remove-Item -Path $versionFolder -Recurse -Force -ErrorAction SilentlyContinue
     $null = New-Item -Path $versionFolder -Type directory
 
@@ -219,6 +246,7 @@ Task Build -Depends Init {
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'README.md') -Destination $versionFolder
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'CHANGELOG.md') -Destination $versionFolder
     $null = Copy-Item -Path (Join-Path -Path $ProjectRoot -ChildPath 'RELEASENOTES.md') -Destination $versionFolder
+    $null = Copy-Item -Path (Join-Path -Path $classesProjectFolder -ChildPath 'bin/release/netstandard2.0/CosmosDB.dll') -Destination $versionFolder
 
     # Load the Libs files into the PSM1
     $libFiles = Get-ChildItem `
@@ -228,6 +256,7 @@ Task Build -Depends Init {
 
     # Assemble all the libs content into a single string
     $libFilesStringBuilder = [System.Text.StringBuilder]::new()
+
     foreach ($libFile in $libFiles)
     {
         $libContent = Get-Content -Path $libFile -Raw
@@ -244,6 +273,7 @@ Task Build -Depends Init {
     $moduleContent = Get-Content -Path $modulePath
     $moduleStringBuilder = [System.Text.StringBuilder]::new()
     $importFunctionsRegionFound = $false
+
     foreach ($moduleLine in $moduleContent)
     {
         if ($importFunctionsRegionFound)
@@ -268,6 +298,7 @@ Task Build -Depends Init {
             }
         }
     }
+
     Set-Content -Path $modulePath -Value $moduleStringBuilder -Force
 
     # Prepare external help
@@ -337,7 +368,7 @@ Task Build -Depends Init {
 
     # Create zip artifact
     $zipFileFolder = Join-Path `
-        -Path $StagingFolder `
+        -Path $stagingFolder `
         -ChildPath 'zip'
 
     $null = New-Item -Path $zipFileFolder -Type directory -ErrorAction SilentlyContinue
@@ -345,12 +376,13 @@ Task Build -Depends Init {
     $zipFilePath = Join-Path `
         -Path $zipFileFolder `
         -ChildPath "${ENV:BHProjectName}_$newVersion.zip"
+
     if (Test-Path -Path $zipFilePath)
     {
         $null = Remove-Item -Path $zipFilePath
     }
     $null = Add-Type -assemblyname System.IO.Compression.FileSystem
-    [System.IO.Compression.ZipFile]::CreateFromDirectory($ModuleFolder, $zipFilePath)
+    [System.IO.Compression.ZipFile]::CreateFromDirectory($moduleFolder, $zipFilePath)
 
     # Update the Git Repo if this is the master branch build in VSTS
     if ($ENV:BHBuildSystem -eq 'VSTS')
@@ -439,7 +471,7 @@ Task Deploy {
     $separator
 
     # Determine the folder name for the Module
-    $ModuleFolder = Join-Path -Path $ProjectRoot -ChildPath $ModuleName
+    $moduleFolder = Join-Path -Path $ProjectRoot -ChildPath $ModuleName
 
     # Install any dependencies required for the Deploy stage
     Invoke-PSDepend `
@@ -453,9 +485,9 @@ Task Deploy {
     $PSModulePath = ($ENV:PSModulePath -split ';')[0]
     $destinationPath = Join-Path -Path $PSModulePath -ChildPath $ModuleName
 
-    "Copying Module from $ModuleFolder to $destinationPath"
+    "Copying Module from $moduleFolder to $destinationPath"
     Copy-Item `
-        -Path $ModuleFolder `
+        -Path $moduleFolder `
         -Destination $destinationPath `
         -Container `
         -Recurse `
@@ -559,4 +591,32 @@ function Invoke-Git
     {
         Write-Warning -Message $_
     }
+}
+
+<#
+    .SYNOPSIS
+        Get path to most recent staged module.
+
+    .PARAMETER StagedModulesFolder
+        Path to folder containing staged modules.
+#>
+function Get-MostRecentStagedModulePath
+{
+    [CmdletBinding()]
+    [OutputType([System.String])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $StagedModulesFolder
+    )
+
+    $stagedModules = Get-ChildItem -Path $StagedModulesFolder
+
+    if ($null -eq $stagedModules)
+    {
+        throw 'There are no currently staged modules in {0}' -f $StagedModulesFolder
+    }
+
+    return ($stagedModules | Sort-Object -Property Name -Descending | Select-Object -First 1).Fullname
 }

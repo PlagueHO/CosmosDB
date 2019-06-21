@@ -1,5 +1,7 @@
 # culture="en-US"
 ConvertFrom-StringData -StringData @'
+    LoadingTypesFromDll = Loading Types from DLL '{0}'.
+    LoadingTypesFromCS = Loading Types from CS file '{0}'.
     ImportingLibFileMessage = Importing function library '{0}'.
     FindResourceTokenInContext = Searching context tokens for resource matching '{0}'.
     FoundResourceTokenInContext = {0} context token(s) with resource '{1}' found.
