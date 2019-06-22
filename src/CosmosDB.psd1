@@ -12,7 +12,7 @@
 RootModule = 'CosmosDB.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.3.0.399'
+ModuleVersion = '3.3.0.404'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core', 'Desktop'
@@ -158,7 +158,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = '
-  ## What is New in CosmosDB Unreleased
+  ## What is New in CosmosDB 3.3.0.404
 
   June 22, 2019
 
@@ -300,5 +300,4 @@ PrivateData = @{
 # DefaultCommandPrefix = ''
 
 }
-
 
