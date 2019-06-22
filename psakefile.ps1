@@ -323,6 +323,7 @@ Task Build -Depends Init {
     # Extract the PrivateData values and remove it because it can not be splatted
     'LicenseUri','Tags','ProjectUri','IconUri','ReleaseNotes' | Foreach-Object -Process {
         $privateDataValue = $stagedManifestContent.PrivateData.PSData.$_
+
         if ($privateDataValue)
         {
             $null = $stagedManifestContent.Add($_, $privateDataValue)
@@ -337,11 +338,12 @@ Task Build -Depends Init {
         -Path $tempManifestPath `
         @stagedManifestContent
 
-    # Make sure the manifest is encoded as UTF8
-    'Convert manifest to UTF8'
-    $temporaryManifestContent = Get-Content -Path $tempManifestPath -Raw
+    # Make sure the manifest is encoded as UTF8 and remove trailing whitespace
+    'Convert manifest to UTF8 and trim trailing whitespace'
+    $temporaryManifestContent = Get-Content -Path $tempManifestPath
+    $trimmedManifestContent = $temporaryManifestContent.TrimEnd()
     $utf8NoBomEncoding = New-Object -TypeName System.Text.UTF8Encoding -ArgumentList ($false)
-    [System.IO.File]::WriteAllLines($stagedManifestPath, $temporaryManifestContent, $utf8NoBomEncoding)
+    [System.IO.File]::WriteAllLines($stagedManifestPath, $trimmedManifestContent, $utf8NoBomEncoding)
 
     # Remove the temporary manifest
     $null = Remove-Item -Path $tempManifestPath -Force

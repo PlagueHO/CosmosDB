@@ -158,9 +158,9 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = '
-  ## What is New in CosmosDB 3.3.0.395
+  ## What is New in CosmosDB Unreleased
 
-  June 19, 2019
+  June 22, 2019
 
   - Moved CosmosDB namespace class definitions into C# project to be built
     into a .NET Standard 2.0 DLL that can be loaded instead of a CS file.
