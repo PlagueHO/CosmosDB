@@ -10,6 +10,8 @@ param
 $moduleManifestName = 'CosmosDB.psd1'
 $moduleManifestPath = Join-Path -Path $ModuleRootPath -ChildPath $moduleManifestName
 
+Import-Module -Name $moduleManifestPath -Force -Verbose:$false
+
 InModuleScope CosmosDB {
     $testHelperPath = $PSScriptRoot | Split-Path -Parent | Join-Path -ChildPath 'TestHelper'
     Import-Module -Name $testHelperPath -Force
@@ -28,6 +30,7 @@ InModuleScope CosmosDB {
     }
     $script:testDatabase1 = 'testDatabase1'
     $script:testDatabase2 = 'testDatabase2'
+    $script:testOfferThroughput = 2000
     $script:testJsonMulti = @'
 {
     "_rid": "",
@@ -192,9 +195,9 @@ InModuleScope CosmosDB {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
                     -ParameterFilter {
-                        $Method -eq 'Get' -and `
+                    $Method -eq 'Get' -and `
                         $ResourceType -eq 'dbs'
-                    } `
+                } `
                     -Exactly -Times 1
             }
         }
@@ -223,10 +226,10 @@ InModuleScope CosmosDB {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
                     -ParameterFilter {
-                        $Method -eq 'Get' -and `
+                    $Method -eq 'Get' -and `
                         $ResourceType -eq 'dbs' -and `
                         $ResourcePath -eq ('dbs/{0}' -f $script:testDatabase)
-                    } `
+                } `
                     -Exactly -Times 1
             }
         }
@@ -260,10 +263,44 @@ InModuleScope CosmosDB {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
                     -ParameterFilter {
-                        $Method -eq 'Post' -and `
+                    $Method -eq 'Post' -and `
                         $ResourceType -eq 'dbs' -and `
                         $Body -eq "{ `"id`": `"$($script:testDatabase)`" }"
-                    } `
+                } `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter, an Id and an OfferThroughput' {
+            $script:result = $null
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $testGetDatabaseResultSingle }
+
+            It 'Should not throw exception' {
+                $newCosmosDbDatabaseParameters = @{
+                    Context         = $script:testContext
+                    Id              = $script:testDatabase
+                    OfferThroughput = $script:testOfferThroughput
+                }
+
+                { $script:result = New-CosmosDbDatabase @newCosmosDbDatabaseParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testDatabase1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter {
+                    $Method -eq 'Post' -and `
+                        $ResourceType -eq 'dbs' -and `
+                        $Headers.'x-ms-offer-throughput' -eq $script:testOfferThroughput -and `
+                        $Body -eq "{ `"id`": `"$($script:testDatabase)`" }"
+                } `
                     -Exactly -Times 1
             }
         }
@@ -293,10 +330,10 @@ InModuleScope CosmosDB {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
                     -ParameterFilter {
-                        $Method -eq 'Delete' -and `
+                    $Method -eq 'Delete' -and `
                         $ResourceType -eq 'dbs' -and `
                         $ResourcePath -eq ('dbs/{0}' -f $script:testDatabase)
-                    } `
+                } `
                     -Exactly -Times 1
             }
         }

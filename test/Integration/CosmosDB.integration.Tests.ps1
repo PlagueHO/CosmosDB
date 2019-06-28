@@ -454,9 +454,9 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When creating second new database' {
+    Context 'When creating second new database with a specified offer throughput' {
         It 'Should not throw an exception' {
-            $script:result = New-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase2 -Verbose
+            $script:result = New-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase2 -OfferThroughput 800 -Verbose
         }
 
         It 'Should return expected object' {
@@ -467,6 +467,22 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Collections | Should -BeOfType [System.String]
             $script:result.Users | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDatabase2
+        }
+    }
+
+    Context 'When checking offer has been created for database' {
+        It 'Should not throw an exception' {
+            $script:result = Get-CosmosDbOffer -Context $script:testContext -Verbose
+        }
+
+        It 'Should return expected object' {
+            Test-GenericResult -GenericResult $script:result
+            $script:result.OfferVersion | Should -BeOfType [System.String]
+            $script:result.OfferType | Should -BeOfType [System.String]
+            $script:result.OfferResourceId | Should -BeOfType [System.String]
+            $script:result.Id | Should -BeOfType [System.String]
+            $script:result.content.offerThroughput | Should -Be 800
+            $script:result.content.offerIsRUPerMinuteThroughputEnabled | Should -Be $false
         }
     }
 
