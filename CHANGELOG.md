@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 3.4.0.410
 
 - Added `OfferThroughput` parameter to `New-CosmosDbDatabase`
   function - fixes [Issue #110](https://github.com/PlagueHO/CosmosDB/issues/110).
