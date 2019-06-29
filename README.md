@@ -254,6 +254,13 @@ Create a new database in the Cosmos DB account:
 New-CosmosDbDatabase -Context $cosmosDbContext -Id 'AnotherDatabase'
 ```
 
+Create a new database in the Cosmos DB account with a
+custom offer throughput of 1200 RU/s:
+
+```powershell
+New-CosmosDbDatabase -Context $cosmosDbContext -Id 'DatabaseWithOffer' -OfferThrougput 1200
+```
+
 Get a list of databases in the Cosmos DB account:
 
 ```powershell
