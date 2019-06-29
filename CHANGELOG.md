@@ -1,5 +1,10 @@
 # Change Log
 
+## Unreleased
+
+- Added `OfferThroughput` parameter to `New-CosmosDbDatabase`
+  function - fixes [Issue #110](https://github.com/PlagueHO/CosmosDB/issues/110).
+
 ## 3.3.0.404
 
 - Moved CosmosDB namespace class definitions into C# project to be built

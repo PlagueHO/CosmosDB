@@ -29,14 +29,30 @@ function New-CosmosDbDatabase
         [Parameter(Mandatory = $true)]
         [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ })]
         [System.String]
-        $Id
+        $Id,
+
+        [Parameter()]
+        [ValidateRange(400, 100000)]
+        [System.Int32]
+        $OfferThroughput
     )
 
     $null = $PSBoundParameters.Remove('Id')
 
+    $headers = @{}
+
+    if ($PSBoundParameters.ContainsKey('OfferThroughput'))
+    {
+        $headers += @{
+            'x-ms-offer-throughput' = $OfferThroughput
+        }
+        $null = $PSBoundParameters.Remove('OfferThroughput')
+    }
+
     $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `
         -ResourceType 'dbs' `
+        -Headers $headers `
         -Body "{ `"id`": `"$id`" }"
 
     $database = ConvertFrom-Json -InputObject $result.Content

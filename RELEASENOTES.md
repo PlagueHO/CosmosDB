@@ -1,5 +1,12 @@
 # Release Notes
 
+## What is New in CosmosDB Unreleased
+
+June 29, 2019
+
+- Added `OfferThroughput` parameter to `New-CosmosDbDatabase`
+  function - fixes [Issue #110](https://github.com/PlagueHO/CosmosDB/issues/110).
+
 ## What is New in CosmosDB 3.3.0.404
 
 June 22, 2019

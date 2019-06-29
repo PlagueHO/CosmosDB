@@ -17,14 +17,14 @@ Create a new database in a Cosmos DB account.
 
 ```powershell
 New-CosmosDbDatabase -Context <Context> [-Key <SecureString>] [-KeyType <String>] -Id <String>
- [<CommonParameters>]
+ [-OfferThroughput <Int32>] [<CommonParameters>]
 ```
 
 ### Account
 
 ```powershell
 New-CosmosDbDatabase -Account <String> [-Key <SecureString>] [-KeyType <String>] -Id <String>
- [<CommonParameters>]
+ [-OfferThroughput <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -40,6 +40,15 @@ PS C:\> New-CosmosDbDatabase -Context $cosmosDbContext -Id 'AnotherDatabase'
 ```
 
 Create a new database in the Cosmos DB account.
+
+### Example 2
+
+```powershell
+New-CosmosDbDatabase -Context $cosmosDbContext -Id 'DatabaseWithOffer' -OfferThrougput 1200
+```
+
+Create a new database in the Cosmos DB account with a
+custom offer throughput of 1200 RU/s.
 
 ## PARAMETERS
 
@@ -121,6 +130,25 @@ Accepted values: master, resource
 Required: False
 Position: Named
 Default value: Master
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -OfferThroughput
+
+The user specified throughput for the database expressed
+in units of 100 request units per second.
+This can be between 400 and 100,000.
+If not specified the offer throughput will be set to 400 RU/s.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
