@@ -1,5 +1,10 @@
 # Change Log
 
+## Unreleased
+
+- Added optional `ETag` parameter to `Set-CosmosDbDocument` to check if
+  the document has been updated since last get.
+
 ## 3.4.0.410
 
 - Added `OfferThroughput` parameter to `New-CosmosDbDatabase`
