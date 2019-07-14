@@ -33,6 +33,7 @@ InModuleScope CosmosDB {
     $script:testDocument2 = 'testDocument2'
     $script:testDocumentBody = 'testDocumentBody'
     $script:testPartitionKey = 'testPartitionKey'
+    $script:testETag = '\"0500d107-0000-0c00-0000-5d2a0a660000\"'
     $script:testHeaders = @{
         'x-ms-continuation' = 'test'
     }
@@ -597,6 +598,80 @@ InModuleScope CosmosDB {
                     Id           = $script:testDocument1
                     DocumentBody = $script:testDocumentBody
                     Encoding     = 'UTF-8'
+                }
+
+                { $script:result = Set-CosmosDbDocument @setCosmosDbDocumentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testDocument1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id and ETag' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Put' -and `
+                $ResourceType -eq 'docs' -and `
+                $Headers['If-Match'] -eq ($script:testETag)
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultSingle }
+
+            It 'Should not throw exception' {
+                $setCosmosDbDocumentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    Id           = $script:testDocument1
+                    DocumentBody = $script:testDocumentBody
+                    ETag         = $script:testETag
+                }
+
+                { $script:result = Set-CosmosDbDocument @setCosmosDbDocumentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testDocument1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id and Partition Id and ETag' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Put' -and `
+                    $ResourceType -eq 'docs' -and `
+                    $Headers['x-ms-documentdb-partitionkey'] -eq ('["{0}"]' -f $script:testPartitionKey) -and `
+                    $Headers['If-Match'] -eq ($script:testETag)
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultSingle }
+
+            It 'Should not throw exception' {
+                $setCosmosDbDocumentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    Id           = $script:testDocument1
+                    DocumentBody = $script:testDocumentBody
+                    PartitionKey = $script:testPartitionKey
+                    ETag         = $script:testETag
                 }
 
                 { $script:result = Set-CosmosDbDocument @setCosmosDbDocumentParameters } | Should -Not -Throw
