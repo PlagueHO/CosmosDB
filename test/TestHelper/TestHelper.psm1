@@ -54,35 +54,36 @@ function Connect-AzureServicePrincipal
         $TenantId
     )
 
+    Write-Verbose -Message "Logging in to Azure using Service Principal $ApplicationId"
+
+    # Build platform (AppVeyor) does not offer solution for passing secure strings
+    $azureCredential = New-Object `
+        -Typename System.Management.Automation.PSCredential `
+        -Argumentlist $ApplicationId, $applicationPassword
+
+    # Suppress request to share usage information
+    $azurePowerShellPath = "$Home\AppData\Roaming\Windows Azure Powershell\"
+
+    if (-not (Test-Path -Path $azurePowerShellPath))
+    {
+        $null = New-Item -Path $azurePowerShellPath -ItemType Directory
+    }
+
+    $azureProfileFilename = Join-Path `
+        -Path $azurePowerShellPath `
+        -ChildPath 'AzureDataCollectionProfile.json'
+    $null = Set-Content `
+        -Value '{"enableAzureDataCollection":true}' `
+        -Path $azureProfileFilename
+
     try
     {
-        Write-Verbose -Message "Logging in to Azure using Service Principal $ApplicationId"
-
-        # Build platform (AppVeyor) does not offer solution for passing secure strings
-        $azureCredential = New-Object `
-            -Typename System.Management.Automation.PSCredential `
-            -Argumentlist $ApplicationId, $applicationPassword
-
-        # Suppress request to share usage information
-        $path = "$Home\AppData\Roaming\Windows Azure Powershell\"
-        if (-not (Test-Path -Path $Path))
-        {
-            $null = New-Item -Path $Path -ItemType Directory
-        }
-        $azureProfileFilename = Join-Path `
-            -Path $Path `
-            -ChildPath 'AzureDataCollectionProfile.json'
-        $null = Set-Content `
-            -Value '{"enableAzureDataCollection":true}' `
-            -Path $azureProfileFilename
-
-        # Handle login
+        # Perform login
         $null = Connect-AzAccount `
             -ServicePrincipal `
             -SubscriptionId $SubscriptionId `
             -TenantId $TenantId `
-            -Credential $azureCredential `
-            -ErrorAction SilentlyContinue
+            -Credential $azureCredential
 
         # Validate login
         $loginSuccessful = Get-AzSubscription `

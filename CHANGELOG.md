@@ -1,5 +1,12 @@
 # Change Log
 
+## Unreleased
+
+- Fix issue with integration test execution error in Azure DevOps
+  when running against a pull request and the contributor has not
+  set build environment variables for connecting to Azure - fixes [Issue #304](https://github.com/PlagueHO/CosmosDB/issues/304).
+
+
 ## 3.4.0.410
 
 - Added `OfferThroughput` parameter to `New-CosmosDbDatabase`
