@@ -5,7 +5,7 @@
 - Fix issue with integration test execution error in Azure DevOps
   when running against a pull request and the contributor has not
   set build environment variables for connecting to Azure - fixes [Issue #304](https://github.com/PlagueHO/CosmosDB/issues/304).
-
+- Added `.markdownlint.json` to enable linting of markdown files.
 
 ## 3.4.0.410
 
