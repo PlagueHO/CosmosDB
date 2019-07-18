@@ -20,21 +20,11 @@ jobs:
         .\psake.ps1 -TaskList Build -Verbose
       displayName: 'Build and Stage Module'
       env:
-        azureApplicationId: $(azureApplicationId)
-        azureApplicationPassword: $(azureApplicationPassword)
-        azureSubscriptionId: $(azureSubscriptionId)
-        azureTenantId: $(azureTenantId)
         githubRepoToken: $(githubRepoToken)
 
     - powershell: |
         .\psake.ps1 -TaskList UnitTest -Verbose
       displayName: 'Execute Unit Tests'
-      env:
-        azureApplicationId: $(azureApplicationId)
-        azureApplicationPassword: $(azureApplicationPassword)
-        azureSubscriptionId: $(azureSubscriptionId)
-        azureTenantId: $(azureTenantId)
-        githubRepoToken: $(githubRepoToken)
 
     - task: PublishTestResults@2
       displayName: 'Publish Unit Test Results'
@@ -59,7 +49,6 @@ jobs:
         azureApplicationPassword: $(azureApplicationPassword)
         azureSubscriptionId: $(azureSubscriptionId)
         azureTenantId: $(azureTenantId)
-        githubRepoToken: $(githubRepoToken)
 
     - task: PublishTestResults@2
       displayName: 'Publish Integration Test Results'
@@ -114,11 +103,6 @@ jobs:
     - script: |
         pwsh -c '.\psake.ps1 -TaskList UnitTest -Verbose'
       displayName: 'Execute Unit Tests'
-      env:
-        azureApplicationId: $(azureApplicationId)
-        azureApplicationPassword: $(azureApplicationPassword)
-        azureSubscriptionId: $(azureSubscriptionId)
-        azureTenantId: $(azureTenantId)
 
     - task: PublishTestResults@2
       displayName: 'Publish Unit Test Results'
@@ -160,11 +144,6 @@ jobs:
     - script: |
         pwsh -c '.\psake.ps1 -TaskList UnitTest -Verbose'
       displayName: 'Execute Unit Tests'
-      env:
-        azureApplicationId: $(azureApplicationId)
-        azureApplicationPassword: $(azureApplicationPassword)
-        azureSubscriptionId: $(azureSubscriptionId)
-        azureTenantId: $(azureTenantId)
 
     - task: PublishTestResults@2
       displayName: 'Publish Unit Test Results'

@@ -15,12 +15,17 @@ Import-Module -Name $moduleManifestPath -Force -Verbose:$false
 $testHelperPath = $PSScriptRoot | Split-Path -Parent | Join-Path -ChildPath 'TestHelper'
 Import-Module -Name $testHelperPath -Force
 
-Get-AzureServicePrincipal
+Get-AzureServicePrincipal -Verbose
 
-if ([String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
-        [String]::IsNullOrEmpty($env:azureApplicationId) -or `
-        [String]::IsNullOrEmpty($env:azureApplicationPassword) -or `
-        [String]::IsNullOrEmpty($env:azureTenantId))
+if ([System.String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
+        [System.String]::IsNullOrEmpty($env:azureApplicationId) -or `
+        [System.String]::IsNullOrEmpty($env:azureApplicationPassword) -or `
+        [System.String]::IsNullOrEmpty($env:azureTenantId) -or `
+        $env:azureSubscriptionId -eq '$(azureSubscriptionId)' -or `
+        $env:azureApplicationId -eq '$(azureApplicationId)' -or `
+        $env:azureApplicationPassword -eq '$(azureApplicationPassword)' -or `
+        $env:azureTenantId -eq '$(azureTenantId)'
+    )
 {
     Write-Warning -Message 'Integration tests can not be run because one or more Azure connection environment variables are not set.'
     return
