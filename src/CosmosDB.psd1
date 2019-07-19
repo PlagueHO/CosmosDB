@@ -158,6 +158,17 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = '
+  ## What is New in CosmosDB Unreleased
+
+  July 19, 2019
+
+  - Fix issue with integration test execution error in Azure DevOps
+    when running against a pull request and the contributor has not
+    set build environment variables for connecting to Azure - fixes [Issue #304](https://github.com/PlagueHO/CosmosDB/issues/304).
+  - Added `.markdownlint.json` to enable linting of markdown files.
+  - Added optional `ETag` parameter to `Set-CosmosDbDocument` to check if
+    the document has been updated since last get.
+
   ## What is New in CosmosDB 3.4.0.410
 
   June 29, 2019
@@ -279,21 +290,6 @@ PrivateData = @{
   - Changed `Remove-CosmosDbAccount` to prevent second confirmation prompt
     when removing account.
   - Enabled `*-CosmosDbAccount` tests to run in AppVeyor.
-
-  ## What is New in CosmosDB 2.1.15.237
-
-  November 17, 2018
-
-  - Added support for Continuation Tokens to `Get-CosmosDbCollection`
-    to support getting more than 100 collections - fixes [Issue #244](https://github.com/PlagueHO/CosmosDB/issues/244).
-  - Updated markdown documentation with PlatyPs 0.11.1.
-  - Corrected markdown documentation for `Get-CosmosDbCollectionSize`.
-  - Corrected continuation token examples for `Get-CosmosDbDocument`.
-  - Updated CI pipeline to use Pester 4.4.2.
-  - Updated CI pipeline to use PlatyPS 0.12.
-  - Renamed `ResultHeaders` parameter to `ResponseHeader` in
-    `Get-CosmosDbDocuments` function to adhere to PowerShell standards,
-    but included alias for `ResultHeaders` to prevent breaking change.
   '
 
     } # End of PSData hashtable

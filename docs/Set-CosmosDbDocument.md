@@ -16,17 +16,18 @@ Update a document from a Cosmos DB collection.
 ### Context (Default)
 
 ```powershell
-Set-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString>] -CollectionId <String>
- -Id <String> -DocumentBody <String> [-IndexingDirective <String>] [-PartitionKey <String>]
- [-Encoding <String>] [-ETag <String>] [<CommonParameters>]
+Set-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString>]
+ -CollectionId <String> -Id <String> -DocumentBody <String> [-IndexingDirective <String>]
+ [-PartitionKey <String>] [-Encoding <String>] [-ETag <String>] [<CommonParameters>]
 ```
 
 ### Account
 
 ```powershell
-Set-CosmosDbDocument -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -CollectionId <String> -Id <String> -DocumentBody <String> [-IndexingDirective <String>]
- [-PartitionKey <String>] [-Encoding <String>] [-ETag <String>] [<CommonParameters>]
+Set-CosmosDbDocument -Account <String> [-Database <String>] [-Key <SecureString>]
+ [-KeyType <String>] -CollectionId <String> -Id <String> -DocumentBody <String>
+ [-IndexingDirective <String>] [-PartitionKey <String>] [-Encoding <String>]
+ [-ETag <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
