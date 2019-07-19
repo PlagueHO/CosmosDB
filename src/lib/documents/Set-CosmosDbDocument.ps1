@@ -57,6 +57,11 @@ function Set-CosmosDbDocument
         $PartitionKey,
 
         [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $ETag,
+
+        [Parameter()]
         [ValidateSet('Default', 'UTF-8')]
         [System.String]
         $Encoding = 'Default'
@@ -84,6 +89,14 @@ function Set-CosmosDbDocument
             'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
         }
         $null = $PSBoundParameters.Remove('PartitionKey')
+    }
+
+    if ($PSBoundParameters.ContainsKey('ETag'))
+    {
+        $headers += @{
+            'If-Match' = $Etag
+        }
+        $null = $PSBoundParameters.Remove('ETag')
     }
 
     $result = Invoke-CosmosDbRequest @PSBoundParameters `

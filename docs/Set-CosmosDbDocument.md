@@ -18,7 +18,7 @@ Update a document from a Cosmos DB collection.
 ```powershell
 Set-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString>] -CollectionId <String>
  -Id <String> -DocumentBody <String> [-IndexingDirective <String>] [-PartitionKey <String>]
- [-Encoding <String>] [<CommonParameters>]
+ [-Encoding <String>] [-ETag <String>] [<CommonParameters>]
 ```
 
 ### Account
@@ -26,7 +26,7 @@ Set-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString
 ```powershell
 Set-CosmosDbDocument -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
  -CollectionId <String> -Id <String> -DocumentBody <String> [-IndexingDirective <String>]
- [-PartitionKey <String>] [-Encoding <String>] [<CommonParameters>]
+ [-PartitionKey <String>] [-Encoding <String>] [-ETag <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -64,6 +64,23 @@ PS C:\> Set-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewColle
 
 Replace the content of a document in a collection in the database with a
 document using UTF-8 encoding.
+
+### Example 3
+
+```powershell
+PS C:\> $document = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'ac12345' -ConsistencyLevel Strong
+PS C:\> $newDocument = @"
+{
+    `"id`": `"$($document.id)`",
+    `"counter`": $($document.counter + 1)
+}
+"@
+PS C:\> Set-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'ac12345' -DocumentBody $newDocument -Encoding 'UTF-8' -ETag $document._etag
+```
+
+Increment the counter of a document. Make sure that the document has not been
+modified between get and set operations by supplying the ETag from the original
+document.
 
 ## PARAMETERS
 
@@ -162,6 +179,24 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 Accepted values: Default, UTF-8
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ETag
+
+This parameter checks if the document has been updated since last get
+operation. The update operation will fail if the ETag is out of date. To set
+this parameter use the *_etag* field from the received document.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named
