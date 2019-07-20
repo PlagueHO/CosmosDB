@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 3.5.0.425
 
 - Fix issue with integration test execution error in Azure DevOps
   when running against a pull request and the contributor has not
