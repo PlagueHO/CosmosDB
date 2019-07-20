@@ -376,20 +376,22 @@ New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -Partitio
 >
 > The _Hash_ index Kind is no longer supported by Cosmos DB.
 > A warning will be displayed if the Hash index Kind is used.
-> The Hash index Kind will be removed in a future BREAKING release of the Cosmos DB module.
+> The Hash index Kind will be removed in a future BREAKING release of the Cosmos
+> DB module.
 > See [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/index-types#index-kind)
 > for more information.
 >
 > The _Precision_ parameter is no longer supported by Cosmos DB and will be
 > ignored. The maximum precision of -1 will always be used for Range indexes.
 > A warning will be displayed if the Precision parameter is passed.
-> The Precision parameter will be removed in a future BREAKING release of the Cosmos DB module.
+> The Precision parameter will be removed in a future BREAKING release of the
+> Cosmos DB module.
 > See [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/index-types#index-precision)
 > for more information.
 >
-> It is recommended to remove the use of the _Hash_ index Kind and any instances of the
-> _Precision_ parameter and any automation or scripts to avoid being affected by
-> future BREAKING CHANGES.
+> It is recommended to remove the use of the _Hash_ index Kind and any instances
+> of the _Precision_ parameter and any automation or scripts to avoid being affected
+> by future BREAKING CHANGES.
 
 For more information on how Cosmos DB indexes documents, see [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/indexing-policies).
 
@@ -925,8 +927,8 @@ $backoffPolicy = New-CosmosDbBackoffPolicy -MaxRetries 10 -Method Default -Delay
 ```
 
 The delay of 100ms will always be used unless it is less than `x-ms-retry-after-ms`.
-The delay can be set to 0 and will cause the  `x-ms-retry-after-ms` to always be used.
-It is the default Back-off Policy behavior.
+The delay can be set to 0 and will cause the  `x-ms-retry-after-ms` to always be
+used. It is the default Back-off Policy behavior.
 
 #### Additive
 
@@ -934,8 +936,8 @@ It is the default Back-off Policy behavior.
 $backoffPolicy = New-CosmosDbBackoffPolicy -MaxRetries 10 -Method Additive -Delay 1000
 ```
 
-This will create a policy that will retry 10 times with a delay equaling the value of
-the returned `x-ms-retry-after-ms` header plus 1000ms.
+This will create a policy that will retry 10 times with a delay equaling the
+value of the returned `x-ms-retry-after-ms` header plus 1000ms.
 
 #### Linear
 
@@ -943,8 +945,8 @@ the returned `x-ms-retry-after-ms` header plus 1000ms.
 $backoffPolicy = New-CosmosDbBackoffPolicy -MaxRetries 3 -Method Linear -Delay 500
 ```
 
-This will create a policy that will wait for 500ms on the first retry, 1000ms on the
-second retry, 1500ms on final retry.
+This will create a policy that will wait for 500ms on the first retry, 1000ms on
+the second retry, 1500ms on final retry.
 
 #### Exponential
 
@@ -952,8 +954,8 @@ second retry, 1500ms on final retry.
 $backoffPolicy = New-CosmosDbBackoffPolicy -MaxRetries 4 -Method Exponential -Delay 1000
 ```
 
-This will create a policy that will wait for 1000ms on the first retry, 4000ms on the
-second retry, 9000ms on the 3rd retry and 16000ms on the final retry.
+This will create a policy that will wait for 1000ms on the first retry, 4000ms on
+the second retry, 9000ms on the 3rd retry and 16000ms on the final retry.
 
 #### Random
 
