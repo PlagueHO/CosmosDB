@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Change `psakefile.ps1` to detect Azure Pipelines correctly.
 - Updated `BuildHelpers` support module for CI pipelines to 2.0.10.
 
 ## 3.5.0.425
