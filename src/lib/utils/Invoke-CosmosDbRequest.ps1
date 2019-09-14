@@ -142,11 +142,11 @@ function Invoke-CosmosDbRequest
     $uri = [uri]::New(('{0}{1}' -f $baseUri, $resourceLink))
 
     # Try to build the authorization headers from the Context
-    $Headers = Get-CosmosDbAuthorizationHeadersFromContext `
+    $authorizationHeaders = Get-CosmosDbAuthorizationHeadersFromContext `
         -Context $Context `
         -ResourceLink $resourceLink
 
-    if ($null -eq $Headers)
+    if ($null -eq $authorizationHeaders)
     {
         <#
             A token in the context that matched the resource link could not
@@ -169,7 +169,7 @@ function Invoke-CosmosDbRequest
         # Generate the date used for the authorization token
         $date = Get-Date
 
-        $Headers = @{
+        $authorizationHeaders = @{
             'authorization' = New-CosmosDbAuthorizationToken `
                 -Key $Key `
                 -KeyType $KeyType `
@@ -181,6 +181,7 @@ function Invoke-CosmosDbRequest
         }
     }
 
+    $Headers += $authorizationHeaders
     $Headers.Add('x-ms-version',$ApiVersion)
 
     $invokeWebRequestParameters = @{
