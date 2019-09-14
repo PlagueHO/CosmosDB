@@ -8,6 +8,7 @@ ConvertFrom-StringData -StringData @'
     FoundUnExpiredResourceTokenInContext = Un-expired context token with resource '{0}' and timestamp '{1}' found.
     NotFoundResourceTokenInContext = Context token with resource '{0}' not found.
     NoMatchingUnexpiredResourceTokenInContext = At least one matching context token with resource '{0}' was found, but all are expired.
+    NoResourceTokensInContext = Context does not contain any resource tokens.
     CreateAuthorizationToken = Creating authorization token: Method = '{0}', ResourceType = '{1}', ResourceId = '{2}', Date = '{3}'.
     GettingAzureCosmosDBAccount = Getting Azure Cosmos DB account '{0}' in resource group '{1}'.
     GettingAzureCosmosDBAccountConnectionString = Getting '{2}' connection string for Azure Cosmos DB account '{0}' in resource group '{1}'.

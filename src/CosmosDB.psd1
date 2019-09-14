@@ -88,6 +88,7 @@ FunctionsToExport = 'Get-CosmosDbAccount', 'Get-CosmosDbAccountConnectionString'
                'Get-CosmosDbAccountMasterKey', 'Get-CosmosDbAttachment',
                'Get-CosmosDbAttachmentResourcePath', 'Get-CosmosDbCollection',
                'Get-CosmosDbCollectionResourcePath', 'Get-CosmosDbCollectionSize',
+               'Get-CosmosDbContextToken',
                'Get-CosmosDBDatabase', 'Get-CosmosDBDatabaseResourcePath',
                'Get-CosmosDBDocument', 'Get-CosmosDBDocumentResourcePath',
                'Get-CosmosDBOffer', 'Get-CosmosDBOfferResourcePath',

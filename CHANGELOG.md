@@ -5,6 +5,10 @@
 - Change `psakefile.ps1` to detect Azure Pipelines correctly.
 - Updated `BuildHelpers` support module for CI pipelines to 2.0.10.
 - Added PowerShell Gallery badge to `README.md`.
+- Refactored `Invoke-CosmosDbRequest` and added `Get-CosmosDbContextToken`
+  to split out function to pull token out of `Context` object. This was
+  done to reduce the size of the `Invoke-CosmosDbRequest` function and
+  to improve testability.
 
 ## 3.5.0.425
 
