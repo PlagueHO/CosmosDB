@@ -3,7 +3,6 @@ function Get-CosmosDbAuthorizationHeadersFromContext
     [CmdletBinding()]
     [OutputType([System.Collections.Hashtable])]
     param (
-        [Alias("Connection")]
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [CosmosDB.Context]
@@ -30,7 +29,7 @@ function Get-CosmosDbAuthorizationHeadersFromContext
             # One or more matching tokens could be found
             Write-Verbose -Message $($LocalizedData.FoundResourceTokenInContext -f $matchToken.Count, $matchToken.Resource)
 
-            $now = (Get-Date)
+            $now = Get-Date
             $validToken = $matchToken |
                 Where-Object -FilterScript { $_.Expires -gt $now } |
                 Sort-Object -Property Expires -Descending |
