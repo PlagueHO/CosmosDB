@@ -1,6 +1,5 @@
 function Invoke-CosmosDbRequest
 {
-
     [CmdletBinding(DefaultParameterSetName = 'Context')]
     [OutputType([System.String])]
     param
@@ -56,7 +55,7 @@ function Invoke-CosmosDbRequest
 
         [Parameter()]
         [Hashtable]
-        $Headers = @{},
+        $Headers = @{ },
 
         [Parameter()]
         [System.String]
@@ -142,57 +141,17 @@ function Invoke-CosmosDbRequest
     $baseUri = $Context.BaseUri.ToString()
     $uri = [uri]::New(('{0}{1}' -f $baseUri, $resourceLink))
 
-    # Determine the token to use to gain access to the resource
-    $token = $null
+    # Try to build the authorization headers from the Context
+    $authorizationHeaders = Get-CosmosDbAuthorizationHeadersFromContext `
+        -Context $Context `
+        -ResourceLink $resourceLink
 
-    if ($null -ne $Context.Token)
-    {
-        Write-Verbose -Message $($LocalizedData.FindResourceTokenInContext -f $resourceLink)
-
-        # Find the most recent token non-expired matching the resource link
-        $matchToken = $context.Token |
-            Where-Object -FilterScript { $_.Resource -eq $resourceLink }
-
-        if ($matchToken)
-        {
-            # One or more matching tokens could be found
-            Write-Verbose -Message $($LocalizedData.FoundResourceTokenInContext -f $matchToken.Count, $matchToken.Resource)
-
-            $now = (Get-Date)
-            $validToken = $matchToken |
-                Where-Object -FilterScript { $_.Expires -gt $now } |
-                Sort-Object -Property Expires -Descending |
-                Select-Object -First 1
-
-            if ($validToken)
-            {
-                # One or more matching tokens could be found
-                Write-Verbose -Message $($LocalizedData.FoundUnExpiredResourceTokenInContext -f $validToken.Resource, $validToken.TimeStamp)
-
-                $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($validToken.Token)
-                $decryptedToken = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
-                $token = [System.Web.HttpUtility]::UrlEncode($decryptedToken)
-                $date = $validToken.TimeStamp
-                $dateString = ConvertTo-CosmosDbTokenDateString -Date $date
-            }
-            else
-            {
-                # No un-expired matching token could be found, so fall back to using a master key if possible
-                Write-Verbose -Message $($LocalizedData.NoMatchingUnexpiredResourceTokenInContext -f $resourceLink)
-            }
-        }
-        else
-        {
-            # No matching token could be found, so fall back to using a master key if possible
-            Write-Verbose -Message $($LocalizedData.NotFoundResourceTokenInContext -f $resourceLink)
-        }
-    }
-
-    if ($null -eq $token)
+    if ($null -eq $authorizationHeaders)
     {
         <#
             A token in the context that matched the resource link could not
-            be found. So use the master key to generate the resource link.
+            be found. So use the master key to generate the authorization headers
+            from the token.
         #>
         if (-not ($PSBoundParameters.ContainsKey('Key')))
         {
@@ -209,22 +168,21 @@ function Invoke-CosmosDbRequest
 
         # Generate the date used for the authorization token
         $date = Get-Date
-        $dateString = ConvertTo-CosmosDbTokenDateString -Date $date
 
-        $token = New-CosmosDbAuthorizationToken `
-            -Key $Key `
-            -KeyType $KeyType `
-            -Method $Method `
-            -ResourceType $ResourceType `
-            -ResourceId $resourceId `
-            -Date $date
+        $authorizationHeaders = @{
+            'authorization' = New-CosmosDbAuthorizationToken `
+                -Key $Key `
+                -KeyType $KeyType `
+                -Method $Method `
+                -ResourceType $ResourceType `
+                -ResourceId $resourceId `
+                -Date $date
+            'x-ms-date'     = ConvertTo-CosmosDbTokenDateString -Date $date
+        }
     }
 
-    $Headers += @{
-        'authorization' = $token
-        'x-ms-date'     = $dateString
-        'x-ms-version'  = $ApiVersion
-    }
+    $Headers += $authorizationHeaders
+    $Headers.Add('x-ms-version', $ApiVersion)
 
     $invokeWebRequestParameters = @{
         Uri             = $uri
@@ -273,11 +231,10 @@ function Invoke-CosmosDbRequest
     {
         try
         {
-
             $requestResult = Invoke-WebRequest @invokeWebRequestParameters
             $requestComplete = $true
         }
-        catch [System.Net.WebException],[Microsoft.PowerShell.Commands.HttpResponseException]
+        catch [System.Net.WebException], [Microsoft.PowerShell.Commands.HttpResponseException]
         {
             if ($_.Exception.Response.StatusCode -eq 429)
             {
@@ -310,7 +267,7 @@ function Invoke-CosmosDbRequest
                     contains this additional information.
                 #>
 
-                if($PSEdition -eq 'Core')
+                if ($PSEdition -eq 'Core')
                 {
                     # https://get-powershellblog.blogspot.com/2017/11/powershell-core-web-cmdlets-in-depth.html#L13
                     $exceptionResponse = $_.ErrorDetails
