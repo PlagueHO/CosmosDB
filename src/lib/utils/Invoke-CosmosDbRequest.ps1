@@ -55,7 +55,7 @@ function Invoke-CosmosDbRequest
 
         [Parameter()]
         [Hashtable]
-        $Headers = @{},
+        $Headers = @{ },
 
         [Parameter()]
         [System.String]
@@ -182,7 +182,7 @@ function Invoke-CosmosDbRequest
     }
 
     $Headers += $authorizationHeaders
-    $Headers.Add('x-ms-version',$ApiVersion)
+    $Headers.Add('x-ms-version', $ApiVersion)
 
     $invokeWebRequestParameters = @{
         Uri             = $uri
@@ -234,7 +234,7 @@ function Invoke-CosmosDbRequest
             $requestResult = Invoke-WebRequest @invokeWebRequestParameters
             $requestComplete = $true
         }
-        catch [System.Net.WebException],[Microsoft.PowerShell.Commands.HttpResponseException]
+        catch [System.Net.WebException], [Microsoft.PowerShell.Commands.HttpResponseException]
         {
             if ($_.Exception.Response.StatusCode -eq 429)
             {
@@ -267,7 +267,7 @@ function Invoke-CosmosDbRequest
                     contains this additional information.
                 #>
 
-                if($PSEdition -eq 'Core')
+                if ($PSEdition -eq 'Core')
                 {
                     # https://get-powershellblog.blogspot.com/2017/11/powershell-core-web-cmdlets-in-depth.html#L13
                     $exceptionResponse = $_.ErrorDetails

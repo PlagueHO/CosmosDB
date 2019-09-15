@@ -164,6 +164,7 @@ InModuleScope CosmosDB {
                     Database     = $script:testDatabase
                     CollectionId = $script:testCollection
                     Id           = $script:testDocument1
+                    Verbose      = $true
                 }
 
                 { $script:result = Get-CosmosDbDocumentResourcePath @getCosmosDbDocumentResourcePathParameters } | Should -Not -Throw
@@ -200,6 +201,7 @@ InModuleScope CosmosDB {
                     ConsistencyLevel    = 'Strong'
                     SessionToken        = 'session'
                     PartitionKeyRangeId = 'partition'
+                    Verbose             = $true
                 }
 
                 { $script:result = Get-CosmosDbDocument @getCosmosDbDocumentParameters } | Should -Not -Throw
@@ -234,9 +236,10 @@ InModuleScope CosmosDB {
                 $script:ResponseHeader = $null
 
                 $getCosmosDbDocumentParameters = @{
-                    Context       = $script:testContext
-                    CollectionId  = $script:testCollection
+                    Context        = $script:testContext
+                    CollectionId   = $script:testCollection
                     ResponseHeader = [ref] $script:ResponseHeader
+                    Verbose        = $true
                 }
 
                 { $script:result = Get-CosmosDbDocument @getCosmosDbDocumentParameters } | Should -Not -Throw
@@ -274,6 +277,7 @@ InModuleScope CosmosDB {
                     Context      = $script:testContext
                     CollectionId = $script:testCollection
                     Id           = $script:testDocument1
+                    Verbose      = $true
                 }
 
                 { $script:result = Get-CosmosDbDocument @getCosmosDbDocumentParameters } | Should -Not -Throw
@@ -311,6 +315,7 @@ InModuleScope CosmosDB {
                     CollectionId = $script:testCollection
                     Id           = $script:testDocument1
                     PartitionKey = $script:testPartitionKey
+                    Verbose      = $true
                 }
 
                 { $script:result = Get-CosmosDbDocument @getCosmosDbDocumentParameters } | Should -Not -Throw
@@ -350,6 +355,7 @@ InModuleScope CosmosDB {
                     Context      = $script:testContext
                     CollectionId = $script:testCollection
                     DocumentBody = $script:testDocumentBody
+                    Verbose      = $true
                 }
 
                 { $script:result = New-CosmosDbDocument @newCosmosDbDocumentParameters } | Should -Not -Throw
@@ -371,8 +377,8 @@ InModuleScope CosmosDB {
             $script:result = $null
             $invokeCosmosDbRequest_parameterfilter = {
                 $Method -eq 'Post' -and `
-                $ResourceType -eq 'docs' -and `
-                $Encoding -eq 'UTF-8'
+                    $ResourceType -eq 'docs' -and `
+                    $Encoding -eq 'UTF-8'
             }
 
             Mock `
@@ -385,6 +391,7 @@ InModuleScope CosmosDB {
                     CollectionId = $script:testCollection
                     DocumentBody = $script:testDocumentBody
                     Encoding     = 'UTF-8'
+                    Verbose      = $true
                 }
 
                 { $script:result = New-CosmosDbDocument @newCosmosDbDocumentParameters } | Should -Not -Throw
@@ -420,6 +427,7 @@ InModuleScope CosmosDB {
                     CollectionId = $script:testCollection
                     DocumentBody = $script:testDocumentBody
                     PartitionKey = $script:testPartitionKey
+                    Verbose      = $true
                 }
 
                 { $script:result = New-CosmosDbDocument @newCosmosDbDocumentParameters } | Should -Not -Throw
@@ -459,6 +467,7 @@ InModuleScope CosmosDB {
                     Context      = $script:testContext
                     CollectionId = $script:testCollection
                     Id           = $script:testDocument1
+                    Verbose      = $true
                 }
 
                 { $script:result = Remove-CosmosDbDocument @removeCosmosDbDocumentParameters } | Should -Not -Throw
@@ -490,6 +499,7 @@ InModuleScope CosmosDB {
                     CollectionId = $script:testCollection
                     Id           = $script:testDocument1
                     PartitionKey = $script:testPartitionKey
+                    Verbose      = $true
                 }
 
                 { $script:result = Remove-CosmosDbDocument @removeCosmosDbDocumentParameters } | Should -Not -Throw
@@ -526,6 +536,7 @@ InModuleScope CosmosDB {
                     CollectionId = $script:testCollection
                     Id           = $script:testDocument1
                     DocumentBody = $script:testDocumentBody
+                    Verbose      = $true
                 }
 
                 { $script:result = Set-CosmosDbDocument @setCosmosDbDocumentParameters } | Should -Not -Throw
@@ -562,6 +573,7 @@ InModuleScope CosmosDB {
                     Id           = $script:testDocument1
                     DocumentBody = $script:testDocumentBody
                     PartitionKey = $script:testPartitionKey
+                    Verbose      = $true
                 }
 
                 { $script:result = Set-CosmosDbDocument @setCosmosDbDocumentParameters } | Should -Not -Throw
@@ -583,8 +595,8 @@ InModuleScope CosmosDB {
             $script:result = $null
             $invokeCosmosDbRequest_parameterfilter = {
                 $Method -eq 'Put' -and `
-                $ResourceType -eq 'docs' -and `
-                $Encoding -eq 'UTF-8'
+                    $ResourceType -eq 'docs' -and `
+                    $Encoding -eq 'UTF-8'
             }
 
             Mock `
@@ -598,6 +610,7 @@ InModuleScope CosmosDB {
                     Id           = $script:testDocument1
                     DocumentBody = $script:testDocumentBody
                     Encoding     = 'UTF-8'
+                    Verbose      = $true
                 }
 
                 { $script:result = Set-CosmosDbDocument @setCosmosDbDocumentParameters } | Should -Not -Throw
@@ -619,8 +632,8 @@ InModuleScope CosmosDB {
             $script:result = $null
             $invokeCosmosDbRequest_parameterfilter = {
                 $Method -eq 'Put' -and `
-                $ResourceType -eq 'docs' -and `
-                $Headers['If-Match'] -eq ($script:testETag)
+                    $ResourceType -eq 'docs' -and `
+                    $Headers['If-Match'] -eq ($script:testETag)
             }
 
             Mock `
@@ -634,6 +647,7 @@ InModuleScope CosmosDB {
                     Id           = $script:testDocument1
                     DocumentBody = $script:testDocumentBody
                     ETag         = $script:testETag
+                    Verbose      = $true
                 }
 
                 { $script:result = Set-CosmosDbDocument @setCosmosDbDocumentParameters } | Should -Not -Throw
@@ -672,6 +686,7 @@ InModuleScope CosmosDB {
                     DocumentBody = $script:testDocumentBody
                     PartitionKey = $script:testPartitionKey
                     ETag         = $script:testETag
+                    Verbose      = $true
                 }
 
                 { $script:result = Set-CosmosDbDocument @setCosmosDbDocumentParameters } | Should -Not -Throw
