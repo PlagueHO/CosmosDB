@@ -9,6 +9,10 @@
   `Get-CosmosDbAuthorizationHeadersFromContext` to split out function to pull
   token out of `Context` object. This was done to reduce the size of the
   `Invoke-CosmosDbRequest` function and to improve testability.
+- Added a `-PopulateQueryMetrics` parameter to `Get-CosmosDbDocument` to return
+  the `x-ms-documentdb-populatequerymetrics` header to the header variable.
+- Fixed issue with MacOS testing by changing the reference to the brew tap `cask`
+  in the Travis and Azure pipeline jobs as the tap has moved.
 
 ## 3.5.0.425
 
