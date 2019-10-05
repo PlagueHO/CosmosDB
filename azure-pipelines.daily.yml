@@ -101,7 +101,7 @@ jobs:
     steps:
     - script: |
         brew update
-        brew tap caskroom/cask
+        brew tap homebrew/cask-cask
         brew cask install powershell
       displayName: 'Install PowerShell Core'
 
