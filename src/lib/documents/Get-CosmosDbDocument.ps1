@@ -86,6 +86,11 @@ function Get-CosmosDbDocument
         [System.Boolean]
         $QueryEnableCrossPartition = $False,
 
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.Boolean]
+        $PopulateQueryMetrics = $False,
+
         [Alias("ResultHeaders")]
         [Parameter()]
         [ref]
@@ -102,6 +107,7 @@ function Get-CosmosDbDocument
     $null = $PSBoundParameters.Remove('Query')
     $null = $PSBoundParameters.Remove('QueryParameters')
     $null = $PSBoundParameters.Remove('QueryEnableCrossPartition')
+    $null = $PSBoundParameters.Remove('PopulateQueryMetrics')
 
     if ($PSBoundParameters.ContainsKey('ResponseHeader'))
     {
@@ -150,6 +156,13 @@ function Get-CosmosDbDocument
             {
                 $headers += @{
                     'x-ms-documentdb-query-enablecrosspartition' = $True
+                }
+            }
+
+            if ($PopulateQueryMetrics -eq $True)
+            {
+                $headers += @{
+                    'x-ms-documentdb-populatequerymetrics' = $True
                 }
             }
 

@@ -20,7 +20,8 @@ Get-CosmosDbDocument -Context <Context> [-Key <SecureString>] [-KeyType <String>
  -CollectionId <String> [-Id <String>] [-PartitionKey <String[]>] [-MaxItemCount <Int32>]
  [-ContinuationToken <String>] [-ConsistencyLevel <String>] [-SessionToken <String>]
  [-PartitionKeyRangeId <String>] [-Query <String>] [-QueryParameters <Hashtable[]>]
- [-QueryEnableCrossPartition <Boolean>] [-ResponseHeader <PSReference>] [<CommonParameters>]
+ [-QueryEnableCrossPartition <Boolean>] [-PopulateQueryMetrics <bool>] [-ResponseHeader <PSReference>]
+ [<CommonParameters>]
 ```
 
 ### Account
@@ -30,7 +31,8 @@ Get-CosmosDbDocument -Account <String> [-Key <SecureString>] [-KeyType <String>]
  -CollectionId <String> [-Id <String>] [-PartitionKey <String[]>] [-MaxItemCount <Int32>]
  [-ContinuationToken <String>] [-ConsistencyLevel <String>] [-SessionToken <String>]
  [-PartitionKeyRangeId <String>] [-Query <String>] [-QueryParameters <Hashtable[]>]
- [-QueryEnableCrossPartition <Boolean>] [-ResponseHeader <PSReference>] [<CommonParameters>]
+ [-QueryEnableCrossPartition <Boolean>] [-PopulateQueryMetrics <bool>] [-ResponseHeader <PSReference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -292,6 +294,23 @@ Should not be set if Id is set.
 Type: String
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PopulateQueryMetrics
+
+Use this to return the x-ms-documentdb-query-metrics
+header to the variable defined for -ResponseHeader.
+This should only be specified if Query is specified.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
 
 Required: False
 Position: Named
