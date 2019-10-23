@@ -1,4 +1,5 @@
-function New-CosmosDbDocument {
+function New-CosmosDbDocument
+{
 
     [CmdletBinding(DefaultParameterSetName = 'Context')]
     [OutputType([Object])]
@@ -11,7 +12,7 @@ function New-CosmosDbDocument {
         $Context,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
-        [ValidateScript( { Assert-CosmosDbAccountNameValid -Name $_ -ArgumentName 'Account' })]
+        [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ -ArgumentName 'Account' })]
         [System.String]
         $Account,
 
@@ -26,12 +27,12 @@ function New-CosmosDbDocument {
         $Key,
 
         [Parameter()]
-        [ValidateScript( { Assert-CosmosDbDatabaseIdValid -Id $_ -ArgumentName 'Database' })]
+        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ -ArgumentName 'Database' })]
         [System.String]
         $Database,
 
         [Parameter(Mandatory = $true)]
-        [ValidateScript( { Assert-CosmosDbCollectionIdValid -Id $_ -ArgumentName 'CollectionId' })]
+        [ValidateScript({ Assert-CosmosDbCollectionIdValid -Id $_ -ArgumentName 'CollectionId' })]
         [System.String]
         $CollectionId,
 
@@ -51,7 +52,7 @@ function New-CosmosDbDocument {
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [System.Object[]]
+        [System.String[]]
         $PartitionKey,
 
         [Parameter()]
@@ -66,23 +67,26 @@ function New-CosmosDbDocument {
 
     $resourcePath = ('colls/{0}/docs' -f $CollectionId)
 
-    $headers = @{ }
+    $headers = @{}
 
-    if ($PSBoundParameters.ContainsKey('Upsert')) {
+    if ($PSBoundParameters.ContainsKey('Upsert'))
+    {
         $headers += @{
             'x-ms-documentdb-is-upsert' = $Upsert
         }
         $null = $PSBoundParameters.Remove('Upsert')
     }
 
-    if ($PSBoundParameters.ContainsKey('IndexingDirective')) {
+    if ($PSBoundParameters.ContainsKey('IndexingDirective'))
+    {
         $headers += @{
             'x-ms-indexing-directive' = $IndexingDirective
         }
         $null = $PSBoundParameters.Remove('IndexingDirective')
     }
 
-    if ($PSBoundParameters.ContainsKey('PartitionKey')) {
+    if ($PSBoundParameters.ContainsKey('PartitionKey'))
+    {
         $partitionKeyValue = ""
 
         $PartitionKey | ForEach-Object {
@@ -109,7 +113,8 @@ function New-CosmosDbDocument {
 
     $document = ConvertFrom-Json -InputObject $result.Content
 
-    if ($document) {
+    if ($document)
+    {
         return (Set-CosmosDbDocumentType -Document $document)
     }
 }
