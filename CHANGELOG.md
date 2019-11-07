@@ -9,6 +9,7 @@
   `Get-CosmosDbAuthorizationHeadersFromContext` to split out function to pull
   token out of `Context` object. This was done to reduce the size of the
   `Invoke-CosmosDbRequest` function and to improve testability.
+- Fix TravisCI MacOS build - fixes [Issue #313](https://github.com/PlagueHO/CosmosDB/issues/313).
 
 ## 3.5.0.425
 
