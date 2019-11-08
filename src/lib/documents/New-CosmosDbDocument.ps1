@@ -87,8 +87,19 @@ function New-CosmosDbDocument
 
     if ($PSBoundParameters.ContainsKey('PartitionKey'))
     {
+        $partitionKeyValue = ""
+
+        $PartitionKey | ForEach-Object {
+            if ($_.GetType().Name -eq "string") {
+                $partitionKeyValue += "`"$_`""
+            }
+            else {
+                $partitionKeyValue += $_
+            }
+        }
+
         $headers += @{
-            'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
+            'x-ms-documentdb-partitionkey' = '[' + $partitionKeyValue + ']'
         }
         $null = $PSBoundParameters.Remove('PartitionKey')
     }
