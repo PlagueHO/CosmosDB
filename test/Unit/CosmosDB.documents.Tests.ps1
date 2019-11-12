@@ -151,6 +151,55 @@ InModuleScope CosmosDB {
         }
     }
 
+
+    Describe 'Format-CosmosDbDocumentPartitionKey' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Format-CosmosDbDocumentPartitionKey -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with a partition key with "abc"' {
+            It 'Should return ["abc"]' {
+                Format-CosmosDbDocumentPartitionKey -PartitionKey 'abc' | Should -Be '["abc"]'
+            }
+        }
+
+        Context 'When called with a partition key with "abc,def"' {
+            It 'Should return ["abc","def"]' {
+                Format-CosmosDbDocumentPartitionKey -PartitionKey 'abc','def' | Should -Be '["abc","def"]'
+            }
+        }
+
+        Context 'When called with a partition key with 123' {
+            It 'Should return [123]' {
+                Format-CosmosDbDocumentPartitionKey -PartitionKey 123 | Should -Be '[123]'
+            }
+        }
+
+        Context 'When called with a partition key with 123,456' {
+            It 'Should return [123,456]' {
+                Format-CosmosDbDocumentPartitionKey -PartitionKey 123,456 | Should -Be '[123,456]'
+            }
+        }
+
+        Context 'When called with a partition key with "abc",456' {
+            It 'Should return ["abc",456]' {
+                Format-CosmosDbDocumentPartitionKey -PartitionKey 'abc',456 | Should -Be '["abc",456]'
+            }
+        }
+
+        Context 'When called with a partition key with an unsupported type' {
+            It 'Should throw expected exception' {
+                $errorRecord = Get-InvalidArgumentRecord `
+                    -Message ($LocalizedData.ErrorPartitionKeyUnsupportedType -f 'True', 'System.Boolean') `
+                    -ArgumentName 'PartitionKey'
+
+                {
+                    Format-CosmosDbDocumentPartitionKey -PartitionKey $true
+                } | Should -Throw $errorRecord
+            }
+        }
+    }
+
     Describe 'Get-CosmosDbDocumentResourcePath' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name Get-CosmosDbDocumentResourcePath -ErrorAction Stop } | Should -Not -Throw

@@ -16,15 +16,17 @@ Delete a document from a Cosmos DB collection.
 ### Context (Default)
 
 ```powershell
-Remove-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -CollectionId <String> [-Id <String>] [-PartitionKey <String>] [<CommonParameters>]
+Remove-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString>]
+ [-KeyType <String>] -CollectionId <String> [-Id <String>] [-PartitionKey <Object[]>]
+ [<CommonParameters>]
 ```
 
 ### Account
 
 ```powershell
-Remove-CosmosDbDocument -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- -CollectionId <String> [-Id <String>] [-PartitionKey <String>] [<CommonParameters>]
+Remove-CosmosDbDocument -Account <String> [-Database <String>] [-Key <SecureString>]
+ [-KeyType <String>] -CollectionId <String> [-Id <String>] [-PartitionKey <Object[]>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -159,7 +161,7 @@ Accept wildcard characters: False
 
 ### -PartitionKey
 
-The partition key value for the document to be deleted.
+The partition key value(s) for the document to be deleted.
 Must be included if and only if the collection is created with a
 partitionKey definition.
 

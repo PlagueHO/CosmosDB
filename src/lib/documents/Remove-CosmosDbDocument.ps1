@@ -42,7 +42,7 @@ function Remove-CosmosDbDocument
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [System.String]
+        [System.Object[]]
         $PartitionKey
     )
 
@@ -56,7 +56,7 @@ function Remove-CosmosDbDocument
     if ($PSBoundParameters.ContainsKey('PartitionKey'))
     {
         $headers += @{
-            'x-ms-documentdb-partitionkey' = '["' + ($PartitionKey -join '","') + '"]'
+            'x-ms-documentdb-partitionkey' = Format-CosmosDbDocumentPartitionKey -PartitionKey $PartitionKey
         }
         $null = $PSBoundParameters.Remove('PartitionKey')
     }
