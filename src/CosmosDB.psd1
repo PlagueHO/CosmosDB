@@ -12,7 +12,7 @@
 RootModule = 'CosmosDB.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.5.0.425'
+ModuleVersion = '3.5.1.425'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core', 'Desktop'
@@ -159,6 +159,25 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = '
+  ## What is New in CosmosDB Unreleased
+
+  November 12, 2019
+
+  - Change `psakefile.ps1` to detect Azure Pipelines correctly.
+  - Updated `BuildHelpers` support module for CI pipelines to 2.0.10.
+  - Added PowerShell Gallery badge to `README.md`.
+  - Refactored `Invoke-CosmosDbRequest` and added
+    `Get-CosmosDbAuthorizationHeadersFromContext` to split out function to pull
+    token out of `Context` object. This was done to reduce the size of the
+    `Invoke-CosmosDbRequest` function and to improve testability.
+  - Fix TravisCI MacOS build - fixes [Issue #313](https://github.com/PlagueHO/CosmosDB/issues/313).
+  - Created helper function `Format-CosmosDbDocumentPartitionKey` to
+    format the partition key string passed to `x-ms-documentdb-partitionkey`
+    in document functions.
+  - Add support for integer partition keys to functions
+    `Get-CosmosDbDocument`, `New-CosmosDbDocument`, `Remove-CosmosDbDocument`
+    and `Set-CosmosDbDocument`.
+
   ## What is New in CosmosDB 3.5.0.425
 
   July 19, 2019

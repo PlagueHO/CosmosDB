@@ -11,7 +11,7 @@
   `Invoke-CosmosDbRequest` function and to improve testability.
 - Fix TravisCI MacOS build - fixes [Issue #313](https://github.com/PlagueHO/CosmosDB/issues/313).
 - Created helper function `Format-CosmosDbDocumentPartitionKey` to
-  format the partition key string passed to 'x-ms-documentdb-partitionkey'
+  format the partition key string passed to `x-ms-documentdb-partitionkey`
   in document functions.
 - Add support for integer partition keys to functions
   `Get-CosmosDbDocument`, `New-CosmosDbDocument`, `Remove-CosmosDbDocument`
