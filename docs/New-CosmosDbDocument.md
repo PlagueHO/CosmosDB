@@ -16,17 +16,19 @@ Create a new document for a collection in a Cosmos DB database.
 ### Context (Default)
 
 ```powershell
-New-CosmosDbDocument -Context <Context> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -CollectionId <String> -DocumentBody <String> [-IndexingDirective <String>] [-Upsert <Boolean>]
- [-PartitionKey <String[]>] [-Encoding <String>] [<CommonParameters>]
+New-CosmosDbDocument -Context <Context> [-KeyType <String>] [-Key <SecureString>]
+ [-Database <String>] -CollectionId <String> -DocumentBody <String>
+ [-IndexingDirective <String>] [-Upsert <Boolean>] [-PartitionKey <Object[]>]
+ [-Encoding <String>] [<CommonParameters>]
 ```
 
 ### Account
 
 ```powershell
-New-CosmosDbDocument -Account <String> [-KeyType <String>] [-Key <SecureString>] [-Database <String>]
- -CollectionId <String> -DocumentBody <String> [-IndexingDirective <String>] [-Upsert <Boolean>]
- [-PartitionKey <String[]>] [-Encoding <String>] [<CommonParameters>]
+New-CosmosDbDocument -Account <String> [-KeyType <String>] [-Key <SecureString>]
+ [-Database <String>] -CollectionId <String> -DocumentBody <String>
+ [-IndexingDirective <String>] [-Upsert <Boolean>] [-PartitionKey <Object[]>]
+ [-Encoding <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -241,7 +243,7 @@ Accept wildcard characters: False
 
 ### -PartitionKey
 
-The partition key value for the document to be created.
+The partition key value(s) for the document to be created.
 Must be included if and only if the collection is created with a partitionKey
 definition.
 

@@ -16,9 +16,10 @@ Return the documents for a Cosmos DB database collection.
 ### Context (Default)
 
 ```powershell
-Get-CosmosDbDocument -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -CollectionId <String> [-Id <String>] [-PartitionKey <String[]>] [-MaxItemCount <Int32>]
- [-ContinuationToken <String>] [-ConsistencyLevel <String>] [-SessionToken <String>]
+Get-CosmosDbDocument -Context <Context> [-Key <SecureString>] [-KeyType <String>]
+ [-Database <String>] -CollectionId <String> [-Id <String>]
+ [-PartitionKey <Object[]>] [-MaxItemCount <Int32>] [-ContinuationToken <String>]
+ [-ConsistencyLevel <String>] [-SessionToken <String>]
  [-PartitionKeyRangeId <String>] [-Query <String>] [-QueryParameters <Hashtable[]>]
  [-QueryEnableCrossPartition <Boolean>] [-ResponseHeader <PSReference>] [<CommonParameters>]
 ```
@@ -26,9 +27,10 @@ Get-CosmosDbDocument -Context <Context> [-Key <SecureString>] [-KeyType <String>
 ### Account
 
 ```powershell
-Get-CosmosDbDocument -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -CollectionId <String> [-Id <String>] [-PartitionKey <String[]>] [-MaxItemCount <Int32>]
- [-ContinuationToken <String>] [-ConsistencyLevel <String>] [-SessionToken <String>]
+Get-CosmosDbDocument -Account <String> [-Key <SecureString>] [-KeyType <String>]
+ [-Database <String>] -CollectionId <String> [-Id <String>]
+ [-PartitionKey <Object[]>] [-MaxItemCount <Int32>] [-ContinuationToken <String>]
+ [-ConsistencyLevel <String>] [-SessionToken <String>]
  [-PartitionKeyRangeId <String>] [-Query <String>] [-QueryParameters <Hashtable[]>]
  [-QueryEnableCrossPartition <Boolean>] [-ResponseHeader <PSReference>] [<CommonParameters>]
 ```
@@ -267,7 +269,7 @@ Accept wildcard characters: False
 
 ### -PartitionKey
 
-The partition key value for the document to be read.
+The partition key value(s) for the document to be read.
 Must be included if and only if the collection is created
 with a partitionKey definition.
 

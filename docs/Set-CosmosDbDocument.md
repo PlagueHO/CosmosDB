@@ -18,7 +18,7 @@ Update a document from a Cosmos DB collection.
 ```powershell
 Set-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString>]
  -CollectionId <String> -Id <String> -DocumentBody <String> [-IndexingDirective <String>]
- [-PartitionKey <String>] [-Encoding <String>] [-ETag <String>] [<CommonParameters>]
+ [-PartitionKey <Object[]>] [-Encoding <String>] [-ETag <String>] [<CommonParameters>]
 ```
 
 ### Account
@@ -26,7 +26,7 @@ Set-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString
 ```powershell
 Set-CosmosDbDocument -Account <String> [-Database <String>] [-Key <SecureString>]
  [-KeyType <String>] -CollectionId <String> -Id <String> -DocumentBody <String>
- [-IndexingDirective <String>] [-PartitionKey <String>] [-Encoding <String>]
+ [-IndexingDirective <String>] [-PartitionKey <Object[]>] [-Encoding <String>]
  [-ETag <String>] [<CommonParameters>]
 ```
 
@@ -275,7 +275,7 @@ Accept wildcard characters: False
 
 ### -PartitionKey
 
-The partition key value for the document to be deleted.
+The partition key value(s) for the document to be deleted.
 Required if and must be specified only if the collection is
 created with a partitionKey definition.
 
