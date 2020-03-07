@@ -20,6 +20,9 @@
 - Update `Psake` to version 4.9.0.
 - Update `Pester` to version 4.10.1.
 - Update `PSScriptAnalyzer` to version 1.18.3.
+- Change Azure Pipeline Linux build to test PowerShell Core 6.2.3-1.
+- Change TravisCI Linux build to test PowerShell Core 6.2.3-1.
+- Change TravisCI MacOS build to test PowerShell Core 6.2.3-1.
 
 ## 3.5.0.425
 

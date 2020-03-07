@@ -88,7 +88,7 @@ jobs:
         pathtoPublish: 'psake.ps1'
         artifactName: 'scripts'
 
-  - job: Build_PSCore_Ubuntu1604
+  - job: Build_PSCore6_Ubuntu1604
     pool:
       vmImage: ubuntu-16.04
 
@@ -97,8 +97,8 @@ jobs:
         curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
         curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
         sudo apt-get update
-        sudo apt-get install -y powershell
-      displayName: 'Install PowerShell Core'
+        sudo apt-get install -y powershell=6.2.3-1.ubuntu.16.04
+      displayName: 'Install PowerShell Core 6'
 
     - script: |
         pwsh -c '.\psake.ps1 -TaskList UnitTest -Verbose'
@@ -129,7 +129,7 @@ jobs:
         testRunTitle: 'PSCore_Ubuntu1604_Integration'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
-  - job: Build_PSCore_MacOS1013
+  - job: Build_PSCore6_MacOS1013
     condition: eq(true, false) # Suppress running on MacOS host on 2018-11-03 because Az Module is installed here. Once moved to Az we can continue to use this.
     pool:
       vmImage: xcode9-macos10.13

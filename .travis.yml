@@ -6,7 +6,7 @@ matrix:
       osx_image: xcode9.1
       before_install:
         - brew update
-        - brew cask install powershell
+        - brew cask install powershell@6.2.3-1
     - os: linux
       dist: trusty
       sudo: required
@@ -16,7 +16,7 @@ matrix:
             - sourceline: deb [arch=amd64] https://packages.microsoft.com/ubuntu/14.04/prod trusty main
               key_url: https://packages.microsoft.com/keys/microsoft.asc
           packages:
-            - powershell
+            - powershell=6.2.3-1.ubuntu.14.04
 
 script:
 - pwsh -c '.\psake.ps1 -TaskList Test'
