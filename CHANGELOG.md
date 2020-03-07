@@ -16,6 +16,10 @@
 - Add support for integer partition keys to functions
   `Get-CosmosDbDocument`, `New-CosmosDbDocument`, `Remove-CosmosDbDocument`
   and `Set-CosmosDbDocument`.
+- Update `BuildHelpers` to version 2.0.11.
+- Update `Psake` to version 4.9.0.
+- Update `Pester` to version 4.10.1.
+- Update `PSScriptAnalyzer` to version 1.18.3.
 
 ## 3.5.0.425
 
