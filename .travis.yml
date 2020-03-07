@@ -8,7 +8,7 @@ matrix:
         - brew update
         - brew cask install powershell@6.2.3-1
     - os: linux
-      dist: trusty
+      dist: xenial
       sudo: required
       addons:
         apt:
