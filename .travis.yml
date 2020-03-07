@@ -6,7 +6,7 @@ matrix:
       osx_image: xcode9.1
       before_install:
         - brew update
-        - brew cask install powershell@6.2.3-1
+        - brew cask install powershell60
     - os: linux
       dist: xenial
       sudo: required
