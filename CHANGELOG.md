@@ -24,6 +24,7 @@
 - Change TravisCI Linux build to test PowerShell Core 6.2.3-1.
 - Change TravisCI MacOS build to test PowerShell Core 6.2.3-1.
 - Add PowerShell 7 test to Azure Pipeline.
+- Fix bug converting Secure String in PowerShell 7 on Linux - fixes [Issue #323](https://github.com/PlagueHO/CosmosDB/issues/323).
 
 ## 3.5.0.425
 

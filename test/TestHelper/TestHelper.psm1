@@ -263,25 +263,6 @@ function Remove-AzureTestCosmosDbResourceGroup
 
 <#
     .SYNOPSIS
-        Decrypt a Secure String back to a string.
-#>
-function Convert-SecureStringToString
-{
-    [CmdletBinding()]
-    [OutputType([System.String])]
-    param
-    (
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [System.Security.SecureString]
-        $SecureString
-    )
-
-    $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecureString)
-    return [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
-}
-
-<#
-    .SYNOPSIS
         Returns an invalid argument exception object
 
     .PARAMETER Message
@@ -371,6 +352,5 @@ Export-ModuleMember -Function `
     Remove-AzureTestCosmosDbAccount, `
     New-AzureTestCosmosDbResourceGroup, `
     Remove-AzureTestCosmosDbResourceGroup,
-    Convert-SecureStringToString,
     Get-InvalidArgumentRecord,
     Get-InvalidOperationRecord
