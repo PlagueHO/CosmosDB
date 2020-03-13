@@ -133,7 +133,7 @@ jobs:
 
 
   - job: Build_PSCore7_Ubuntu1604
-    displayName: 'Test Powershell Core 7 on Ubuntu 16.04'
+    displayName: 'Test Powershell 7 on Ubuntu 16.04'
     pool:
       vmImage: ubuntu-16.04
 
@@ -143,7 +143,7 @@ jobs:
         curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
         sudo apt-get update
         sudo apt-get install -y powershell
-      displayName: 'Install PowerShell Core 7'
+      displayName: 'Install PowerShell 7'
 
     - script: |
         pwsh -c '.\psake.ps1 -TaskList UnitTest -Verbose'

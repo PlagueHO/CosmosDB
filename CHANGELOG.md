@@ -23,7 +23,7 @@
 - Change Azure Pipeline Linux build to test PowerShell Core 6.2.3-1.
 - Change TravisCI Linux build to test PowerShell Core 6.2.3-1.
 - Change TravisCI MacOS build to test PowerShell Core 6.2.3-1.
-- Add PowerShell Core 7 test to Azure Pipeline.
+- Add PowerShell 7 test to Azure Pipeline.
 
 ## 3.5.0.425
 
