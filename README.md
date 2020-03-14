@@ -5,6 +5,7 @@
 [![Minimum Supported Windows PowerShell Version](https://img.shields.io/badge/WindowsPowerShell-5.1-blue.svg)](https://github.com/PlagueHO/CosmosDB)
 [![Minimum Supported PowerShell Core Version](https://img.shields.io/badge/PSCore-6.0-blue.svg)](https://github.com/PlagueHO/CosmosDB)
 [![Minimum Supported PowerShell Version](https://img.shields.io/badge/PS-7.0-blue.svg)](https://github.com/PlagueHO/CosmosDB)
+[![Azure DevOps tests](https://img.shields.io/azure-devops/tests/dscottraynsford/GitHub/4/master)](https://dscottraynsford.visualstudio.com/GitHub/_test/analytics?definitionId=4&contextType=build)
 [![Join the chat at https://gitter.im/PlagueHO/CosmosDB](https://badges.gitter.im/PlagueHO/CosmosDB.svg)](https://gitter.im/PlagueHO/CosmosDB?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ee50b5eb15b47c188b3bdf7a5f8ee1d)](https://www.codacy.com/app/PlagueHO/CosmosDB?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PlagueHO/CosmosDB&amp;utm_campaign=Badge_Grade)
 
@@ -12,10 +13,10 @@
 
 ## Module Build Status
 
-| Branch | AzurePipelines CI | AppVeyor CI | Travis CI | Code Coverage |
+| Branch | AzurePipelines CI | AppVeyor CI | Code Coverage |
 | ------ | -------------------------------------- | -------------------------------------- | -------------------------------------- | -------------------------------------- |
-| dev    | [![ap-image-dev][]][ap-site-dev]       | [![av-image-dev][]][av-site-dev]       | [![tv-image-dev][]][tv-site-dev]       | [![cc-image-dev][]][cc-site-dev]       |
-| master | [![ap-image-master][]][ap-site-master] | [![av-image-master][]][av-site-master] | [![tv-image-master][]][tv-site-master] | [![cc-image-master][]][cc-site-master] |
+| dev    | [![ap-image-dev][]][ap-site-dev]       | [![av-image-dev][]][av-site-dev]       | [![cc-image-dev][]][cc-site-dev]       |
+| master | [![ap-image-master][]][ap-site-master] | [![av-image-master][]][av-site-master] | [![cc-image-master][]][cc-site-master] |
 
 ## Table of Contents
 
@@ -106,14 +107,10 @@ on the following systems:
   - Windows Server 2016: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
 - Linux (using PowerShell Core 6.x):
   - Ubuntu Trusty 16.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
-  - Ubuntu Trusty 16.04: Using [Tavis CI](https://travis-ci.org/PlagueHO/CosmosDB).
 - Linux (using PowerShell 7.x):
   - Ubuntu Trusty 16.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
 - macOS (using PowerShell Core 6.x):
-  - macOS 10.13: Using [Tavis CI](https://travis-ci.org/PlagueHO/CosmosDB).
-  - macOS 10.13: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
-    _macOS validation on Azure Pipelines is currently disabled due to an
-    issue in the macOS Azure Pipelines agent with Az PowerShell modules._
+  - macOS 10.14: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
 
 This module should function correctly on other systems and configurations
 but is not automatically tested with them in every change.
@@ -1009,8 +1006,6 @@ For a list of changes to versions, see the [CHANGELOG.md](CHANGELOG.md) file.
 [ap-site-dev]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4
 [av-image-dev]: https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/dev?svg=true
 [av-site-dev]: https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/dev
-[tv-image-dev]: https://travis-ci.org/PlagueHO/CosmosDB.svg?branch=dev
-[tv-site-dev]: https://travis-ci.org/PlagueHO/CosmosDB/branches
 [cc-image-dev]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev/graph/badge.svg
 [cc-site-dev]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev
 
@@ -1018,7 +1013,5 @@ For a list of changes to versions, see the [CHANGELOG.md](CHANGELOG.md) file.
 [ap-site-master]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4
 [av-image-master]: https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/master?svg=true
 [av-site-master]: https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/master
-[tv-image-master]: https://travis-ci.org/PlagueHO/CosmosDB.svg?branch=master
-[tv-site-master]: https://travis-ci.org/PlagueHO/CosmosDB/branches
 [cc-image-master]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/master/graph/badge.svg
 [cc-site-master]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/master

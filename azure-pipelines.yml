@@ -175,7 +175,6 @@ jobs:
 
   - job: Build_PSCore6_MacOS1014
     displayName: 'Test Powershell Core 6 on MacOS 10.14'
-    # condition: eq(true, false) # Suppress running on MacOS host on 2018-11-03 because Az Module is installed here. Once moved to Az we can continue to use this.
     pool:
       vmImage: macos-10.14
 
