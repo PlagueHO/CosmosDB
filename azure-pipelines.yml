@@ -194,6 +194,7 @@ jobs:
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
     - powershell: |
+        $null = Remove-Item -Path '~/.Azure' -Recurse -Force
         .\psake.ps1 -TaskList IntegrationTest -Verbose
       displayName: 'Execute Integration Tests'
       env:
