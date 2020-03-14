@@ -173,19 +173,13 @@ jobs:
         testRunTitle: 'PSCore7_Ubuntu1604_Integration'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
-  - job: Build_PS7_MacOS1013
-    displayName: 'Test Powershell 7 on MacOS 10.13'
-#    condition: eq(true, false) # Suppress running on MacOS host on 2018-11-03 because Az Module is installed here. Once moved to Az we can continue to use this.
-    pool:
-      vmImage: xcode9-macos10.13
+  - job: Build_PSCore6_MacOS1014
+      displayName: 'Test Powershell Core 6 on MacOS 10.14'
+      # condition: eq(true, false) # Suppress running on MacOS host on 2018-11-03 because Az Module is installed here. Once moved to Az we can continue to use this.
+      pool:
+        vmImage: macos-10.14
 
     steps:
-    - script: |
-        brew update
-        brew tap caskroom/cask
-        brew cask install powershell
-      displayName: 'Install PowerShell Core'
-
     - script: |
         pwsh -c '.\psake.ps1 -TaskList UnitTest -Verbose'
       displayName: 'Execute Unit Tests'

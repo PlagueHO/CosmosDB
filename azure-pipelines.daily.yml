@@ -94,19 +94,12 @@ jobs:
           testRunTitle: 'PSCore6_Ubuntu1604_Integration'
         condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
-  - job: Build_PS7_Ubuntu1604
-    displayName: 'Test Powershell 7 on Ubuntu 16.04'
+  - job: Build_PSCore6_Ubuntu1604
+    displayName: 'Test Powershell Core 6 on Ubuntu 16.04'
     pool:
       vmImage: ubuntu-16.04
 
     steps:
-    - script: |
-        curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-        curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
-        sudo apt-get update
-        sudo apt-get install -y powershell
-      displayName: 'Install PowerShell 7'
-
     - script: |
         pwsh -c '.\psake.ps1 -TaskList UnitTest -Verbose'
       displayName: 'Execute Unit Tests'
@@ -136,11 +129,11 @@ jobs:
         testRunTitle: 'PSCore7_Ubuntu1604_Integration'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
-  - job: Build_PS7_MacOS1013
-    displayName: 'Test Powershell 7 on MacOS 10.13'
-    condition: eq(true, false) # Suppress running on MacOS host on 2018-11-03 because Az Module is installed here. Once moved to Az we can continue to use this.
+  - job: Build_PSCore6_MacOS1014
+    displayName: 'Test Powershell Core 6 on MacOS 10.14'
+    # condition: eq(true, false) # Suppress running on MacOS host on 2018-11-03 because Az Module is installed here. Once moved to Az we can continue to use this.
     pool:
-      vmImage: xcode9-macos10.13
+      vmImage: macos-10.14
 
     steps:
     - script: |
