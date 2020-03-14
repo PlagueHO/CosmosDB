@@ -135,8 +135,10 @@ jobs:
     pool:
       vmImage: macos-10.14
 
-    - script: |
-        pwsh -c '.\psake.ps1 -TaskList UnitTest -Verbose'
+    steps:
+    - powershell: |
+        Uninstall-Module -Name Az -Force
+        .\psake.ps1 -TaskList UnitTest -Verbose
       displayName: 'Execute Unit Tests'
 
     - task: PublishTestResults@2
@@ -147,8 +149,8 @@ jobs:
         testRunTitle: 'PSCore_MacOS1013_Unit'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
-    - script: |
-        pwsh -c '.\psake.ps1 -TaskList IntegrationTest -Verbose'
+    - powershell: |
+        .\psake.ps1 -TaskList IntegrationTest -Verbose
       displayName: 'Execute Integration Tests'
       env:
         azureApplicationId: $(azureApplicationId)
