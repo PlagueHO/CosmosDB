@@ -131,7 +131,7 @@ jobs:
         testRunTitle: 'PSCore6_Ubuntu1604_Integration'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
-  - job: Build_PSCore7_Ubuntu1604
+  - job: Build_PS7_Ubuntu1604
     displayName: 'Test Powershell 7 on Ubuntu 16.04'
     pool:
       vmImage: ubuntu-16.04
@@ -173,8 +173,8 @@ jobs:
         testRunTitle: 'PSCore7_Ubuntu1604_Integration'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
-  - job: Build_PSCore7_MacOS1013
-    displayName: 'Test Powershell Core 7 on MacOS 10.13'
+  - job: Build_PS7_MacOS1013
+    displayName: 'Test Powershell 7 on MacOS 10.13'
     condition: eq(true, false) # Suppress running on MacOS host on 2018-11-03 because Az Module is installed here. Once moved to Az we can continue to use this.
     pool:
       vmImage: xcode9-macos10.13
