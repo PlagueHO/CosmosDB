@@ -135,13 +135,6 @@ jobs:
     pool:
       vmImage: macos-10.14
 
-    steps:
-    - script: |
-        brew update
-        brew tap caskroom/cask
-        brew cask install powershell
-      displayName: 'Install PowerShell Core'
-
     - script: |
         pwsh -c '.\psake.ps1 -TaskList UnitTest -Verbose'
       displayName: 'Execute Unit Tests'

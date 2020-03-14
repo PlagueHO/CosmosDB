@@ -180,8 +180,9 @@ jobs:
       vmImage: macos-10.14
 
     steps:
-    - script: |
-        pwsh -c '.\psake.ps1 -TaskList UnitTest -Verbose'
+    - powershell: |
+        Uninstall-Module -Name Az -Force
+        .\psake.ps1 -TaskList UnitTest -Verbose
       displayName: 'Execute Unit Tests'
 
     - task: PublishTestResults@2
