@@ -9,6 +9,7 @@ pr:
     - dev
 jobs:
   - job: Build_PS_Win2016
+    displayName: 'Test Powershell 5.1 on Windows Server 2016'
     pool:
       vmImage: vs2017-win2016
 
@@ -88,7 +89,8 @@ jobs:
         pathtoPublish: 'psake.ps1'
         artifactName: 'scripts'
 
-  - job: Build_PSCore_Ubuntu1604
+  - job: Build_PSCore6_Ubuntu1604
+    displayName: 'Test Powershell Core 6 on Ubuntu 16.04'
     pool:
       vmImage: ubuntu-16.04
 
@@ -97,8 +99,8 @@ jobs:
         curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
         curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
         sudo apt-get update
-        sudo apt-get install -y powershell
-      displayName: 'Install PowerShell Core'
+        sudo apt-get install -y --allow-downgrades powershell=6.2.3-1.ubuntu.16.04
+      displayName: 'Install PowerShell Core 6'
 
     - script: |
         pwsh -c '.\psake.ps1 -TaskList UnitTest -Verbose'
@@ -109,7 +111,7 @@ jobs:
       inputs:
         testRunner: 'NUnit'
         testResultsFiles: '**/Unit/TestResults.unit.xml'
-        testRunTitle: 'PSCore_Ubuntu1604_Unit'
+        testRunTitle: 'PSCore6_Ubuntu1604_Unit'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
     - script: |
@@ -126,23 +128,60 @@ jobs:
       inputs:
         testRunner: 'NUnit'
         testResultsFiles: '**/Integration/TestResults.integration.xml'
-        testRunTitle: 'PSCore_Ubuntu1604_Integration'
+        testRunTitle: 'PSCore6_Ubuntu1604_Integration'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
-  - job: Build_PSCore_MacOS1013
-    condition: eq(true, false) # Suppress running on MacOS host on 2018-11-03 because Az Module is installed here. Once moved to Az we can continue to use this.
+  - job: Build_PS7_Ubuntu1604
+    displayName: 'Test Powershell 7 on Ubuntu 16.04'
     pool:
-      vmImage: xcode9-macos10.13
+      vmImage: ubuntu-16.04
 
     steps:
     - script: |
-        brew update
-        brew tap caskroom/cask
-        brew cask install powershell
-      displayName: 'Install PowerShell Core'
+        curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+        curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
+        sudo apt-get update
+        sudo apt-get install -y powershell
+      displayName: 'Install PowerShell 7'
 
     - script: |
         pwsh -c '.\psake.ps1 -TaskList UnitTest -Verbose'
+      displayName: 'Execute Unit Tests'
+
+    - task: PublishTestResults@2
+      displayName: 'Publish Unit Test Results'
+      inputs:
+        testRunner: 'NUnit'
+        testResultsFiles: '**/Unit/TestResults.unit.xml'
+        testRunTitle: 'PSCore7_Ubuntu1604_Unit'
+      condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
+
+    - script: |
+        pwsh -c '.\psake.ps1 -TaskList IntegrationTest -Verbose'
+      displayName: 'Execute Integration Tests'
+      env:
+        azureApplicationId: $(azureApplicationId)
+        azureApplicationPassword: $(azureApplicationPassword)
+        azureSubscriptionId: $(azureSubscriptionId)
+        azureTenantId: $(azureTenantId)
+
+    - task: PublishTestResults@2
+      displayName: 'Publish Integration Test Results'
+      inputs:
+        testRunner: 'NUnit'
+        testResultsFiles: '**/Integration/TestResults.integration.xml'
+        testRunTitle: 'PSCore7_Ubuntu1604_Integration'
+      condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
+
+  - job: Build_PSCore6_MacOS1014
+    displayName: 'Test Powershell Core 6 on MacOS 10.14'
+    pool:
+      vmImage: macos-10.14
+
+    steps:
+    - powershell: |
+        Uninstall-Module -Name Az -Force
+        .\psake.ps1 -TaskList UnitTest -Verbose
       displayName: 'Execute Unit Tests'
 
     - task: PublishTestResults@2
@@ -153,8 +192,9 @@ jobs:
         testRunTitle: 'PSCore_MacOS1013_Unit'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
-    - script: |
-        pwsh -c '.\psake.ps1 -TaskList IntegrationTest -Verbose'
+    - powershell: |
+        $null = Remove-Item -Path '~/.Azure' -Recurse -Force
+        .\psake.ps1 -TaskList IntegrationTest -Verbose
       displayName: 'Execute Integration Tests'
       env:
         azureApplicationId: $(azureApplicationId)

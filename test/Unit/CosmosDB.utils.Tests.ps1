@@ -127,6 +127,28 @@ console.log("done");
         }
     }
 
+    Describe 'Convert-CosmosDbSecureStringToString' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Convert-CosmosDbSecureStringToString -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with valid secure string' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $convertCosmosDbSecureStringToStringParameters = @{
+                    SecureString = $script:testKeySecureString
+                }
+
+                { $script:result = Convert-CosmosDbSecureStringToString @convertCosmosDbSecureStringToStringParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result = $script:testKey
+            }
+        }
+    }
+
     Describe 'New-CosmosDbBackoffPolicy' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name New-CosmosDbBackoffPolicy -ErrorAction Stop } | Should -Not -Throw
@@ -269,7 +291,7 @@ console.log("done");
                 $script:result.Account | Should -Be $script:testAccount
                 $script:result.Database | Should -Be $script:testDatabase
                 $script:result.KeyType | Should -Be 'master'
-                $script:result.Key | Convert-SecureStringToString | Should -Be $script:testKey
+                $script:result.Key | Convert-CosmosDbSecureStringToString | Should -Be $script:testKey
                 $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
             }
 
@@ -305,7 +327,7 @@ console.log("done");
                 $script:result.Account | Should -Be $script:testAccount
                 $script:result.Database | Should -Be $script:testDatabase
                 $script:result.KeyType | Should -Be 'master'
-                $script:result.Key | Convert-SecureStringToString | Should -Be $script:testKey
+                $script:result.Key | Convert-CosmosDbSecureStringToString | Should -Be $script:testKey
                 $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
             }
 
@@ -411,9 +433,7 @@ console.log("done");
                 $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
                 $script:result.Token[0].Resource | Should -Be $script:testTokenResource
                 $script:result.Token[0].TimeStamp | Should -Be $script:testDate
-                $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($script:result.Token[0].Token)
-                $decryptedToken = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
-                $decryptedToken | Should -Be $script:testToken
+                $script:result.Token[0].Token | Convert-CosmosDbSecureStringToString | Should -Be $script:testToken
             }
         }
     }

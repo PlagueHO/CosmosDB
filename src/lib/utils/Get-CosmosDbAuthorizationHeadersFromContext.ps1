@@ -40,8 +40,7 @@ function Get-CosmosDbAuthorizationHeadersFromContext
                 # One or more matching tokens could be found
                 Write-Verbose -Message $($LocalizedData.FoundUnExpiredResourceTokenInContext -f $validToken.Resource, $validToken.TimeStamp)
 
-                $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($validToken.Token)
-                $decryptedToken = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+                $decryptedToken = Convert-CosmosDbSecureStringToString -SecureString $validToken.Token
                 $token = [System.Web.HttpUtility]::UrlEncode($decryptedToken)
                 $date = $validToken.TimeStamp
                 $dateString = ConvertTo-CosmosDbTokenDateString -Date $date

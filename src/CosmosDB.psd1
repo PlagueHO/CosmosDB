@@ -12,7 +12,7 @@
 RootModule = 'CosmosDB.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.5.1.425'
+ModuleVersion = '3.5.2.425'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core', 'Desktop'
@@ -161,6 +161,20 @@ PrivateData = @{
         ReleaseNotes = '
   ## What is New in CosmosDB Unreleased
 
+  - Update `BuildHelpers` to version 2.0.11.
+  - Update `Psake` to version 4.9.0.
+  - Update `Pester` to version 4.10.1.
+  - Update `PSScriptAnalyzer` to version 1.18.3.
+  - Change Azure Pipeline Linux build to test PowerShell Core 6.2.3-1.
+  - Change TravisCI Linux build to test PowerShell Core 6.2.3-1.
+  - Change TravisCI MacOS build to test PowerShell Core 6.2.3-1.
+  - Add PowerShell 7 test to Azure Pipeline - fixes [Issue #325](https://github.com/PlagueHO/CosmosDB/issues/325).
+  - Fix bug converting Secure String in PowerShell 7 on Linux - fixes [Issue #323](https://github.com/PlagueHO/CosmosDB/issues/323).
+  - Fix issue in Azure Pipeline in MacOS build job - fixes [Issue #326](https://github.com/PlagueHO/CosmosDB/issues/326).
+  - Remove TravisCI Pipeline - fixes [Issue #327](https://github.com/PlagueHO/CosmosDB/issues/327).
+
+  ## What is New in CosmosDB 3.5.1.458
+
   November 12, 2019
 
   - Change `psakefile.ps1` to detect Azure Pipelines correctly.
@@ -278,38 +292,6 @@ PrivateData = @{
   - Updated `cosmosdb.depend.psd1` to ensure `Az` modules are installed
     when running ''Deploy'' PSake task.
   - Improve build task code to ensure Git tag is correctly set.
-
-  ## What is New in CosmosDB 3.0.0.279
-
-  December 23, 2018
-
-  - BREAKING CHANGE: Converted to use `Az` PowerShell Module from
-    `AzureRm` and `AzureRm.NetCore` PowerShell Module - fixes [Issue #190](https://github.com/PlagueHO/CosmosDB/issues/190).
-  - Renamed `build.ps1` to `psake.ps1` to indicate that it is used
-    to execute `Psake` tasks.
-  - Add Codacy Code Quality badge to `README.MD`.
-  - Configure PSScriptAnalyzer to show errors, warnings and informational
-    violations in Visual Studio Code.
-  - Fix generic tests to validate PSScriptAnalyzer errors, warnings and
-    informational rules.
-  - Converted use of alias `Add-AzAccount` to `Connect-AzAccount`.
-  - Updated to use `Az` PowerShell Module 1.0.1.
-  - Correct `AliasesToExport` in manifest.
-  - Minor corrections to markdown to improve best practice adherence.
-  - Minor corrections to CI support files to improve best practice
-    adherence.
-  - Added ShouldProcess support to `New-CosmosDbAccountMasterKey` and
-    `New-CosmosDbContext`.
-  - Added ShouldProcess support TestHelper functions.
-  - Updated CONTRIBUTING.MD to more accurately reflect current process of
-    contributing to the module.
-  - Updated STYLEGUIDELINES.MD to match current standards and best practices.
-  - Added support for setting and updating Cross-Origin Resource Sharing (CORS)
-    allowed origins in `New-CosmosDbAccount` and `Set-CosmosDbAccount`
-    respectively - fixes [Issue #249](https://github.com/PlagueHO/CosmosDB/issues/249).
-  - Changed `Remove-CosmosDbAccount` to prevent second confirmation prompt
-    when removing account.
-  - Enabled `*-CosmosDbAccount` tests to run in AppVeyor.
   '
 
     } # End of PSData hashtable

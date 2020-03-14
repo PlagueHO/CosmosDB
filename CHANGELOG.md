@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+- Update `BuildHelpers` to version 2.0.11.
+- Update `Psake` to version 4.9.0.
+- Update `Pester` to version 4.10.1.
+- Update `PSScriptAnalyzer` to version 1.18.3.
+- Change Azure Pipeline Linux build to test PowerShell Core 6.2.3-1.
+- Change TravisCI Linux build to test PowerShell Core 6.2.3-1.
+- Change TravisCI MacOS build to test PowerShell Core 6.2.3-1.
+- Add PowerShell 7 test to Azure Pipeline - fixes [Issue #325](https://github.com/PlagueHO/CosmosDB/issues/325).
+- Fix bug converting Secure String in PowerShell 7 on Linux - fixes [Issue #323](https://github.com/PlagueHO/CosmosDB/issues/323).
+- Fix issue in Azure Pipeline in MacOS build job - fixes [Issue #326](https://github.com/PlagueHO/CosmosDB/issues/326).
+- Remove TravisCI Pipeline - fixes [Issue #327](https://github.com/PlagueHO/CosmosDB/issues/327).
+
+## 3.5.1.458
+
 - Change `psakefile.ps1` to detect Azure Pipelines correctly.
 - Updated `BuildHelpers` support module for CI pipelines to 2.0.10.
 - Added PowerShell Gallery badge to `README.md`.
