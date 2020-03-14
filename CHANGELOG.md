@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 3.5.2.487
 
 - Update `BuildHelpers` to version 2.0.11.
 - Update `Psake` to version 4.9.0.

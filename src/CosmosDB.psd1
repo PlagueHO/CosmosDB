@@ -12,7 +12,7 @@
 RootModule = 'CosmosDB.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.5.2.425'
+ModuleVersion = '3.5.2.487'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core', 'Desktop'
@@ -159,7 +159,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = '
-  ## What is New in CosmosDB Unreleased
+  ## What is New in CosmosDB 3.5.2.487
 
   - Update `BuildHelpers` to version 2.0.11.
   - Update `Psake` to version 4.9.0.
