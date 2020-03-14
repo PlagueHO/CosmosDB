@@ -52,54 +52,61 @@ jobs:
         testRunTitle: 'PS_Win2016_Integration'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
-      - job: Build_PSCore6_Ubuntu1604
-      displayName: 'Test Powershell Core 6 on Ubuntu 16.04'
-      pool:
-        vmImage: ubuntu-16.04
-
-      steps:
-      - script: |
-          curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-          curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
-          sudo apt-get update
-          sudo apt-get install -y --allow-downgrades powershell=6.2.3-1.ubuntu.16.04
-        displayName: 'Install PowerShell Core 6'
-
-      - script: |
-          pwsh -c '.\psake.ps1 -TaskList UnitTest -Verbose'
-        displayName: 'Execute Unit Tests'
-
-      - task: PublishTestResults@2
-        displayName: 'Publish Unit Test Results'
-        inputs:
-          testRunner: 'NUnit'
-          testResultsFiles: '**/Unit/TestResults.unit.xml'
-          testRunTitle: 'PSCore6_Ubuntu1604_Unit'
-        condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
-
-      - script: |
-          pwsh -c '.\psake.ps1 -TaskList IntegrationTest -Verbose'
-        displayName: 'Execute Integration Tests'
-        env:
-          azureApplicationId: $(azureApplicationId)
-          azureApplicationPassword: $(azureApplicationPassword)
-          azureSubscriptionId: $(azureSubscriptionId)
-          azureTenantId: $(azureTenantId)
-
-      - task: PublishTestResults@2
-        displayName: 'Publish Integration Test Results'
-        inputs:
-          testRunner: 'NUnit'
-          testResultsFiles: '**/Integration/TestResults.integration.xml'
-          testRunTitle: 'PSCore6_Ubuntu1604_Integration'
-        condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
-
   - job: Build_PSCore6_Ubuntu1604
     displayName: 'Test Powershell Core 6 on Ubuntu 16.04'
     pool:
       vmImage: ubuntu-16.04
 
     steps:
+    - script: |
+        curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+        curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
+        sudo apt-get update
+        sudo apt-get install -y --allow-downgrades powershell=6.2.3-1.ubuntu.16.04
+      displayName: 'Install PowerShell Core 6'
+
+    - script: |
+        pwsh -c '.\psake.ps1 -TaskList UnitTest -Verbose'
+      displayName: 'Execute Unit Tests'
+
+    - task: PublishTestResults@2
+      displayName: 'Publish Unit Test Results'
+      inputs:
+        testRunner: 'NUnit'
+        testResultsFiles: '**/Unit/TestResults.unit.xml'
+        testRunTitle: 'PSCore6_Ubuntu1604_Unit'
+      condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
+
+    - script: |
+        pwsh -c '.\psake.ps1 -TaskList IntegrationTest -Verbose'
+      displayName: 'Execute Integration Tests'
+      env:
+        azureApplicationId: $(azureApplicationId)
+        azureApplicationPassword: $(azureApplicationPassword)
+        azureSubscriptionId: $(azureSubscriptionId)
+        azureTenantId: $(azureTenantId)
+
+    - task: PublishTestResults@2
+      displayName: 'Publish Integration Test Results'
+      inputs:
+        testRunner: 'NUnit'
+        testResultsFiles: '**/Integration/TestResults.integration.xml'
+        testRunTitle: 'PSCore6_Ubuntu1604_Integration'
+      condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
+
+  - job: Build_PS7_Ubuntu1604
+    displayName: 'Test Powershell 7 on Ubuntu 16.04'
+    pool:
+      vmImage: ubuntu-16.04
+
+    steps:
+    - script: |
+        curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+        curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
+        sudo apt-get update
+        sudo apt-get install -y powershell
+      displayName: 'Install PowerShell 7'
+
     - script: |
         pwsh -c '.\psake.ps1 -TaskList UnitTest -Verbose'
       displayName: 'Execute Unit Tests'
