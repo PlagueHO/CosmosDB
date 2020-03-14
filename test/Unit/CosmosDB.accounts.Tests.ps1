@@ -1647,7 +1647,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result | Convert-SecureStringToString | Should -Be $script:testKey
+                $script:result | Convert-CosmosDbSecureStringToString | Should -Be $script:testKey
             }
 
             It 'Should call expected mocks' {
@@ -1688,7 +1688,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result | Convert-SecureStringToString | Should -Be $script:testKey
+                $script:result | Convert-CosmosDbSecureStringToString | Should -Be $script:testKey
             }
 
             It 'Should call expected mocks' {
@@ -1729,7 +1729,7 @@ InModuleScope CosmosDB {
             }
 
             It 'Should return expected result' {
-                $script:result | Convert-SecureStringToString | Should -Be $script:testKey
+                $script:result | Convert-CosmosDbSecureStringToString | Should -Be $script:testKey
             }
 
             It 'Should call expected mocks' {

@@ -40,8 +40,7 @@ function New-CosmosDbAuthorizationToken
 
     Write-Verbose -Message $($LocalizedData.CreateAuthorizationToken -f $Method, $ResourceType, $ResourceId, $Date)
 
-    $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Key)
-    $decryptedKey = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+    $decryptedKey = Convert-CosmosDbSecureStringToString -SecureString $Key
     $base64Key = [System.Convert]::FromBase64String($decryptedKey)
     $hmacSha256 = New-Object -TypeName System.Security.Cryptography.HMACSHA256 -ArgumentList (, $base64Key)
     $dateString = ConvertTo-CosmosDbTokenDateString -Date $Date
