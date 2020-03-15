@@ -324,11 +324,6 @@ function Invoke-UploadCodeCovIoReport
 
     $resolvedResultFile = (Resolve-Path -Path $Path).ProviderPath
 
-    if ($env:APPVEYOR_REPO_BRANCH)
-    {
-        Push-AppveyorArtifact -Path $resolvedResultFile
-    }
-
     <#
         See this link for information around codecov.exe
         https://github.com/codecov/codecov-exe
@@ -336,12 +331,4 @@ function Invoke-UploadCodeCovIoReport
     $uploadResults = & choco install codecov --yes
 
     $uploadResults += codecov -f $resolvedResultFile --required
-
-    if ($env:APPVEYOR_REPO_BRANCH)
-    {
-        $logPath = (Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath 'codeCovUpload.log')
-        $uploadResults | Out-File -Encoding ascii -LiteralPath $logPath -Force
-        $resolvedLogPath = (Resolve-Path -Path $logPath).ProviderPath
-        Push-AppveyorArtifact -Path $resolvedLogPath
-    }
 }
