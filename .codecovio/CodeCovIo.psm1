@@ -150,7 +150,7 @@ function Export-CodeCovIoJson
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [String]
-        $Path = (Join-Path -Path ([IO.Path]::GetTempDirectory()) -ChildPath 'codeCov.json')
+        $Path = (Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath 'codeCov.json')
     )
 
     Write-Verbose -Message "RepoRoot: $RepoRoot"
@@ -339,7 +339,7 @@ function Invoke-UploadCodeCovIoReport
 
     if ($env:APPVEYOR_REPO_BRANCH)
     {
-        $logPath = (Join-Path -Path ([IO.Path]::GetTempDirectory()) -ChildPath 'codeCovUpload.log')
+        $logPath = (Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath 'codeCovUpload.log')
         $uploadResults | Out-File -Encoding ascii -LiteralPath $logPath -Force
         $resolvedLogPath = (Resolve-Path -Path $logPath).ProviderPath
         Push-AppveyorArtifact -Path $resolvedLogPath
