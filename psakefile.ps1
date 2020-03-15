@@ -263,7 +263,7 @@ Task Build -Depends Init {
     # Create the module manifest in the staging folder
     'Updating module manifest'
     $stagedManifestPath = Join-Path -Path $versionFolder -ChildPath "$ModuleName.psd1"
-    $tempManifestPath = Join-Path -Path $ENV:Temp -ChildPath "$ModuleName.psd1"
+    $tempManifestPath = Join-Path -Path ([IO.Path]::GetTempDirectory()) -ChildPath "$ModuleName.psd1"
 
     Import-LocalizedData `
         -BindingVariable 'stagedManifestContent' `
