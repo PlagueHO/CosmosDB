@@ -312,7 +312,7 @@ function Export-CodeCovIoJson
   .PARAMETER Path
   The path to the code coverage report (gcov not supported)
 #>
-function Invoke-UploadCoveCoveIoReport
+function Invoke-UploadCodeCovIoReport
 {
     [CmdletBinding()]
     param
