@@ -7,8 +7,9 @@ pr:
   branches:
     include:
     - dev
+
 jobs:
-  - job: Build_PS_Win2016
+  - job: Test_PS_Win2016
     displayName: 'Test Powershell 5.1 on Windows Server 2016'
     pool:
       vmImage: vs2017-win2016
@@ -59,37 +60,58 @@ jobs:
         testRunTitle: 'PS_Win2016_Integration'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Module'
-      inputs:
-        pathtoPublish: 'staging/CosmosDB'
-        artifactName: 'CosmosDB'
+  - job: Test_PS_Win2019
+    displayName: 'Test Powershell 5.1 on Windows Server 2019'
+    pool:
+      vmImage: windows-2019
 
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Module Zip'
-      inputs:
-        pathtoPublish: 'staging/zip'
-        artifactName: 'zip'
+    steps:
+    - checkout: self
+      persistCredentials: true
 
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish PSake File'
-      inputs:
-        pathtoPublish: 'psakefile.ps1'
-        artifactName: 'scripts'
+    - powershell: |
+        .\psake.ps1 -TaskList Build -Verbose
+      displayName: 'Build and Stage Module'
+      env:
+        githubRepoToken: $(githubRepoToken)
 
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish PSDepend File'
-      inputs:
-        pathtoPublish: 'requirements.psd1'
-        artifactName: 'scripts'
+    - powershell: |
+        .\psake.ps1 -TaskList UnitTest -Verbose
+      displayName: 'Execute Unit Tests'
 
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Build File'
+    - task: PublishTestResults@2
+      displayName: 'Publish Unit Test Results'
       inputs:
-        pathtoPublish: 'psake.ps1'
-        artifactName: 'scripts'
+        testRunner: 'NUnit'
+        testResultsFiles: '**/Unit/TestResults.unit.xml'
+        testRunTitle: 'PS_Win2016_Unit'
+      condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
-  - job: Build_PSCore6_Ubuntu1604
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish Unit Test Code Coverage'
+      inputs:
+        summaryFileLocation: '**/Unit/CodeCoverage.xml'
+        failIfCoverageEmpty: true
+      condition: and(in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed'), eq(variables['System.PullRequest.IsFork'], false))
+
+    - powershell: |
+        .\psake.ps1 -TaskList IntegrationTest -Parameters @{ TestStagedModule = $true } -Verbose
+      displayName: 'Execute Integration Tests on Staged Module'
+      env:
+        azureApplicationId: $(azureApplicationId)
+        azureApplicationPassword: $(azureApplicationPassword)
+        azureSubscriptionId: $(azureSubscriptionId)
+        azureTenantId: $(azureTenantId)
+
+    - task: PublishTestResults@2
+      displayName: 'Publish Integration Test Results'
+      inputs:
+        testRunner: 'NUnit'
+        testResultsFiles: '**/Integration/TestResults.integration.xml'
+        testRunTitle: 'PS_Win2016_Integration'
+      condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
+
+  - job: Test_PSCore6_Ubuntu1604
     displayName: 'Test Powershell Core 6 on Ubuntu 16.04'
     pool:
       vmImage: ubuntu-16.04
@@ -131,7 +153,7 @@ jobs:
         testRunTitle: 'PSCore6_Ubuntu1604_Integration'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
-  - job: Build_PS7_Ubuntu1604
+  - job: Test_PS7_Ubuntu1604
     displayName: 'Test Powershell 7 on Ubuntu 16.04'
     pool:
       vmImage: ubuntu-16.04
@@ -173,7 +195,7 @@ jobs:
         testRunTitle: 'PSCore7_Ubuntu1604_Integration'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
 
-  - job: Build_PSCore6_MacOS1014
+  - job: Test_PSCore6_MacOS1014
     displayName: 'Test Powershell Core 6 on MacOS 10.14'
     pool:
       vmImage: macos-10.14
@@ -209,3 +231,48 @@ jobs:
         testResultsFiles: '**/TestResults.integration.xml'
         testRunTitle: 'PSCore_MacOS1013_Integration'
       condition: in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed')
+
+  - job: Publish_Module
+    displayName: 'Publish Module'
+    pool:
+      vmImage: windows-2019
+
+    steps:
+    - checkout: self
+      persistCredentials: true
+
+    - powershell: |
+        .\psake.ps1 -TaskList Build -Verbose
+      displayName: 'Build and Stage Module'
+      env:
+        githubRepoToken: $(githubRepoToken)
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Module'
+      inputs:
+        pathtoPublish: 'staging/CosmosDB'
+        artifactName: 'CosmosDB'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Module Zip'
+      inputs:
+        pathtoPublish: 'staging/zip'
+        artifactName: 'zip'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish PSake File'
+      inputs:
+        pathtoPublish: 'psakefile.ps1'
+        artifactName: 'scripts'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish PSDepend File'
+      inputs:
+        pathtoPublish: 'requirements.psd1'
+        artifactName: 'scripts'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Build File'
+      inputs:
+        pathtoPublish: 'psake.ps1'
+        artifactName: 'scripts'

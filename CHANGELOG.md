@@ -1,5 +1,11 @@
 # Change Log
 
+## Unreleased
+
+- Remove AppVeyor CI pipeline - fixes [Issue #329](https://github.com/PlagueHO/CosmosDB/issues/329).
+- Restructure Azure Pipeline to add testing on Windows Server 2019
+  and separate module build process.
+
 ## 3.5.2.487
 
 - Update `BuildHelpers` to version 2.0.11.
