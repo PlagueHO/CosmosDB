@@ -39,6 +39,7 @@ jobs:
     - task: PublishCodeCoverageResults@1
       displayName: 'Publish Unit Test Code Coverage'
       inputs:
+        codeCoverageTool: 'JaCoCo'
         summaryFileLocation: '**/Unit/CodeCoverage.xml'
         failIfCoverageEmpty: true
       condition: and(in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed'), eq(variables['System.PullRequest.IsFork'], false))
@@ -90,6 +91,7 @@ jobs:
     - task: PublishCodeCoverageResults@1
       displayName: 'Publish Unit Test Code Coverage'
       inputs:
+        codeCoverageTool: 'JaCoCo'
         summaryFileLocation: '**/Unit/CodeCoverage.xml'
         failIfCoverageEmpty: true
       condition: and(in(variables['Agent.JobStatus'], 'Succeeded', 'SucceededWithIssues', 'Failed'), eq(variables['System.PullRequest.IsFork'], false))
