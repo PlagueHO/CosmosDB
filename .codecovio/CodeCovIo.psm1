@@ -44,7 +44,7 @@ function Add-UniqueFileLineToTable
         Write-Verbose -Message "running git ls-files" -Verbose
 
         # Get the list of files as Git sees them
-        $fileKeys = & git.exe ls-files
+        $fileKeys = & git ls-files
 
         # Populate the sub-table
         foreach ($command in $Command)
@@ -293,7 +293,7 @@ function Export-CodeCovIoJson
         $resultMessages.add($file,$messages)
     }
 
-    $commitOutput = @(&git.exe log -1 --pretty=format:%H)
+    $commitOutput = @(&git log -1 --pretty=format:%H)
     $commit = $commitOutput[0]
 
     Write-Verbose -Message "Branch: $Branch"
