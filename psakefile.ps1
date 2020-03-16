@@ -81,7 +81,7 @@ Task UnitTest -Depends Init, PrepareTest {
     {
         'Preparing CodeCoverage'
         Import-Module `
-            -Name (Join-Path -Path $ProjectRoot -ChildPath '.codecovio\CodeCovio.psm1')
+            -Name (Join-Path -Path $ProjectRoot -ChildPath '.codecovio\CodeCovIo.psm1')
 
         $jsonPath = Export-CodeCovIoJson `
             -CodeCoverage $testResults.CodeCoverage `

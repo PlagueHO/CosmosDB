@@ -3,8 +3,9 @@
 ## Unreleased
 
 - Remove AppVeyor CI pipeline - fixes [Issue #329](https://github.com/PlagueHO/CosmosDB/issues/329).
-- Restructure Azure Pipeline to add testing on Windows Server 2019
-  and separate module build process.
+- Restructure Azure Pipeline:
+  - Add testing on Windows Server 2019 and separate module build process.
+  - Convert to multi stage pipeline.
 
 ## 3.5.2.487
 
