@@ -79,28 +79,24 @@ Task UnitTest -Depends Init, PrepareTest {
     # Prepare and uploade code coverage
     if ($testResults.CodeCoverage)
     {
-        # Only bother generating code coverage in AppVeyor
-        if ($ENV:BHBuildSystem -eq 'AppVeyor')
+        'Preparing CodeCoverage'
+        Import-Module `
+            -Name (Join-Path -Path $ProjectRoot -ChildPath '.codecovio\CodeCovIo.psm1')
+
+        $jsonPath = Export-CodeCovIoJson `
+            -CodeCoverage $testResults.CodeCoverage `
+            -RepoRoot $ProjectRoot
+
+        'Uploading CodeCoverage to CodeCov.io'
+        try
         {
-            'Preparing CodeCoverage'
-            Import-Module `
-                -Name (Join-Path -Path $ProjectRoot -ChildPath '.codecovio\CodeCovio.psm1')
-
-            $jsonPath = Export-CodeCovIoJson `
-                -CodeCoverage $testResults.CodeCoverage `
-                -RepoRoot $ProjectRoot
-
-            'Uploading CodeCoverage to CodeCov.io'
-            try
-            {
-                Invoke-UploadCoveCoveIoReport -Path $jsonPath
-            }
-            catch
-            {
-                # CodeCov currently reports an error when uploading
-                # This is not fatal and can be ignored
-                Write-Warning -Message $_
-            }
+            Invoke-UploadCodeCovIoReport -Path $jsonPath
+        }
+        catch
+        {
+            # CodeCov currently reports an error when uploading
+            # This is not fatal and can be ignored
+            Write-Warning -Message $_
         }
     }
     else
@@ -108,28 +104,9 @@ Task UnitTest -Depends Init, PrepareTest {
         Write-Warning -Message 'Could not create CodeCov.io report because pester results object did not contain a CodeCoverage object'
     }
 
-    # Upload tests
-    if ($ENV:BHBuildSystem -eq 'AppVeyor')
+    if ($testResults.FailedCount -gt 0)
     {
-        'Publishing test results to AppVeyor'
-        (New-Object 'System.Net.WebClient').UploadFile(
-            "https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)",
-            (Resolve-Path $testResultsFile))
-
-        "Publishing test results to AppVeyor as Artifact"
-        Push-AppveyorArtifact $testResultsFile
-
-        if ($testResults.FailedCount -gt 0)
-        {
-            throw "$($testResults.FailedCount) unit tests failed."
-        }
-    }
-    else
-    {
-        if ($testResults.FailedCount -gt 0)
-        {
-            Write-Error -Exception "$($testResults.FailedCount) unit tests failed."
-        }
+        Write-Error -Exception "$($testResults.FailedCount) unit tests failed."
     }
 
     "`n"
@@ -169,28 +146,9 @@ Task IntegrationTest -Depends Init, PrepareTest {
         -PassThru `
         -ExcludeTag Incomplete
 
-    # Upload tests
-    if ($ENV:BHBuildSystem -eq 'AppVeyor')
+    if ($testResults.FailedCount -gt 0)
     {
-        'Publishing test results to AppVeyor'
-        (New-Object 'System.Net.WebClient').UploadFile(
-            "https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)",
-            (Resolve-Path $testResultsFile))
-
-        "Publishing test results to AppVeyor as Artifact"
-        Push-AppveyorArtifact $testResultsFile
-
-        if ($testResults.FailedCount -gt 0)
-        {
-            throw "$($testResults.FailedCount) integration tests failed."
-        }
-    }
-    else
-    {
-        if ($testResults.FailedCount -gt 0)
-        {
-            Write-Error -Exception "$($testResults.FailedCount) integration tests failed."
-        }
+        Write-Error -Exception "$($testResults.FailedCount) integration tests failed."
     }
 
     "`n"
@@ -217,12 +175,6 @@ Task Build -Depends Init {
     $newVersion = Get-VersionNumber `
         -ManifestPath $manifestPath `
         -Build $ENV:BHBuildNumber
-
-    if ($ENV:BHBuildSystem -eq 'AppVeyor')
-    {
-        # Update AppVeyor build version number
-        Update-AppveyorBuild -Version $newVersion
-    }
 
     # Determine the folder names for staging the module
     $stagingFolder = Join-Path -Path $ProjectRoot -ChildPath 'staging'
@@ -311,7 +263,7 @@ Task Build -Depends Init {
     # Create the module manifest in the staging folder
     'Updating module manifest'
     $stagedManifestPath = Join-Path -Path $versionFolder -ChildPath "$ModuleName.psd1"
-    $tempManifestPath = Join-Path -Path $ENV:Temp -ChildPath "$ModuleName.psd1"
+    $tempManifestPath = Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath "$ModuleName.psd1"
 
     Import-LocalizedData `
         -BindingVariable 'stagedManifestContent' `

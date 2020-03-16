@@ -150,7 +150,7 @@ function Export-CodeCovIoJson
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [String]
-        $Path = (Join-Path -Path $env:TEMP -ChildPath 'codeCov.json')
+        $Path = (Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath 'codeCov.json')
     )
 
     Write-Verbose -Message "RepoRoot: $RepoRoot"
@@ -312,7 +312,7 @@ function Export-CodeCovIoJson
   .PARAMETER Path
   The path to the code coverage report (gcov not supported)
 #>
-function Invoke-UploadCoveCoveIoReport
+function Invoke-UploadCodeCovIoReport
 {
     [CmdletBinding()]
     param
@@ -324,11 +324,6 @@ function Invoke-UploadCoveCoveIoReport
 
     $resolvedResultFile = (Resolve-Path -Path $Path).ProviderPath
 
-    if ($env:APPVEYOR_REPO_BRANCH)
-    {
-        Push-AppveyorArtifact -Path $resolvedResultFile
-    }
-
     <#
         See this link for information around codecov.exe
         https://github.com/codecov/codecov-exe
@@ -336,12 +331,4 @@ function Invoke-UploadCoveCoveIoReport
     $uploadResults = & choco install codecov --yes
 
     $uploadResults += codecov -f $resolvedResultFile --required
-
-    if ($env:APPVEYOR_REPO_BRANCH)
-    {
-        $logPath = (Join-Path -Path $env:TEMP -ChildPath 'codeCovUpload.log')
-        $uploadResults | Out-File -Encoding ascii -LiteralPath $logPath -Force
-        $resolvedLogPath = (Resolve-Path -Path $logPath).ProviderPath
-        Push-AppveyorArtifact -Path $resolvedLogPath
-    }
 }

@@ -56,7 +56,7 @@ function Connect-AzureServicePrincipal
 
     Write-Verbose -Message "Logging in to Azure using Service Principal $ApplicationId"
 
-    # Build platform (AppVeyor) does not offer solution for passing secure strings
+    # Build platform does not offer solution for passing secure strings
     $azureCredential = New-Object `
         -Typename System.Management.Automation.PSCredential `
         -Argumentlist $ApplicationId, $applicationPassword

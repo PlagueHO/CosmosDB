@@ -103,34 +103,6 @@ about it.
 
 This is used to test the module on PowerShell on Windows and PowerShell Core on Linux.
 
-### AppVeyor
-
-We use [AppVeyor](http://www.appveyor.com/) as a continuous integration (CI) system.
-
-![AppVeyor-Badge-Green.png](Images/AppVeyor-Badge-Green.png)
-
-This badge is **clickable**, you can open corresponding build page with logs, artifacts
-and tests results.
-From there you can easily navigate to the whole build history.
-
-AppVeyor builds and runs tests on every pull request and provides quick feedback
-about it.
-
-This is used to test the module on PowerShell on Windows.
-
-### TravisCI
-
-We use [TravisCI](http://travis-ci.org/) as a continuous integration (CI) system.
-
-![TravisCI-Badge-Green.png](Images/TravisCI-Badge-Green.png)
-
-This badge is **clickable**, you can open corresponding build page with logs, artifacts
-and tests results.
-From there you can easily navigate to the whole build history.
-
-TravisCI builds and runs tests on every pull request and provides quick feedback
-about it.
-
 ## Testing
 
 - Any changed code should not cause Unit Tests to fail.
