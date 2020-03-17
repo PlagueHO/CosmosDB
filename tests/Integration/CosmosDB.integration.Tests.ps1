@@ -8,7 +8,7 @@ $ProjectName = ((Get-ChildItem -Path $ProjectPath\*\*.psd1).Where{
         $(try { Test-ModuleManifest $_.FullName -ErrorAction Stop } catch { $false } )
     }).BaseName
 
-Import-Module $ProjectName -Force
+Import-Module -Name $ProjectName -Force
 
 $testHelperPath = "$PSScriptRoot\..\TestHelper"
 Import-Module -Name $testHelperPath -Force

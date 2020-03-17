@@ -40,7 +40,7 @@ and success.
   by using the [PlatyPS PowerShell Module](https://github.com/PowerShell/platyPS):
 
   ```powershell
-  Import-Module -Name .\src\CosmosDB.psd1
+  Import-Module -Name .\source\CosmosDB.psd1
   New-MarkdownHelp -Module CosmosDB -OutputFolder .\docs\
   ```
 
