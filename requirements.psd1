@@ -1,16 +1,4 @@
 @{
-    psake             = @{
-        Name           = 'psake'
-        DependencyType = 'PSGalleryModule'
-        Parameters     = @{
-            Repository         = 'PSGallery'
-            SkipPublisherCheck = $true
-        }
-        Target         = 'CurrentUser'
-        Version        = '4.9.0'
-        Tags           = 'Bootstrap'
-    }
-
     Pester            = @{
         Name           = 'Pester'
         DependencyType = 'PSGalleryModule'

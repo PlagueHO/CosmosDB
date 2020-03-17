@@ -2,22 +2,25 @@
 
 If you'd like to contribute to this project, there are several different methods:
 
-- Submit a [Pull Request](https://www.github.com/PlagueHO/CosmosDB/pulls) against the GitHub repository, containing:
+- Submit a [Pull Request](https://www.github.com/PlagueHO/CosmosDB/pulls) against
+  the GitHub repository, containing:
   - Bug fixes
   - Enhancements
   - New sample Labs
-  - DSC library configurations
   - Documentation enhancements
   - Continuous integration & deployment enhancements
   - Unit tests
 - Perform user testing and validation, and report bugs on the [Issue Tracker](https://www.github.com/PlagueHO/CosmosDB/issues)
-- Raise awareness about the project through [Twitter](https://twitter.com/#PowerShell), [Facebook](https://facebook.com), and other social media platforms
+- Raise awareness about the project through [Twitter](https://twitter.com/#PowerShell),
+  [Facebook](https://facebook.com), and other social media platforms
 
-Before working on any enhancement, submit an Issue describing the proposed enhancement. Someone may already be working on the same thing. It also allows other contributors to comment on the proposal.
+Before working on any enhancement, submit an Issue describing the proposed
+enhancement. Someone may already be working on the same thing. It also allows
+other contributors to comment on the proposal.
 
-Alternately, feel free to post on the [CosmosDB PowerShell Module Gitter Chat at https://gitter.im/PlagueHO/CosmosDB](https://gitter.im/PlagueHO/CosmosDB). This is also a great place to just say Hi, ask any questions you might have or get help.
-
-If you're new to Git revision control, and the GitHub service, it's suggested that you learn about some basic Git fundamentals, and take an overview of the GitHub service offerings.
+If you're new to Git revision control, and the GitHub service, it's suggested
+that you learn about some basic Git fundamentals, and take an overview of the
+GitHub service offerings.
 
 ## Style guidelines
 
@@ -51,13 +54,21 @@ For more information, learn about our [branch structure](#branch-structure).
 
 ![Github-PR-dev.png](Images/Github-PR-dev.png)
 
-- Add meaningful title of the PR describing what change you want to check in. Don't simply put: "Fixes issue #5".
+- Add meaningful title of the PR describing what change you want to check in.
+  Don't simply put: "Fixes issue #5".
   Better example is: "Added All parameter to Get-CosmosDbDatabase - Fixes #5".
 
-- When you create a pull request, fill out the description with a summary of what's included in your changes.
-  If the changes are related to an existing GitHub issue, please reference the issue in pull request title or description (e.g. ```Closes #11```). See [this](https://help.github.com/articles/closing-issues-via-commit-messages/) for more details.
+- When you create a pull request, fill out the description with a summary of what's
+  included in your changes.
+  If the changes are related to an existing GitHub issue, please reference the
+  issue in pull request title or description (e.g. ```Closes #11```). See
+  [this](https://help.github.com/articles/closing-issues-via-commit-messages/)
+  for more details.
 
-- Include an update in the [/CHANGELOG.md](/CHANGELOG.md) file in your pull request to reflect changes for future versions changelog. Put them in `Unreleased` section (create one if doesn't exist). This would simplify the release process for Maintainers. Example:
+- Include an update in the [/CHANGELOG.md](/CHANGELOG.md) file in your pull request
+  to reflect changes for future versions changelog. Put them in `Unreleased` section
+  (create one if doesn't exist). This would simplify the release process for
+  Maintainers. Example:
 
 ```text
 ## Unreleased
@@ -67,7 +78,8 @@ For more information, learn about our [branch structure](#branch-structure).
 
 Please use past tense when describing your changes:
 
-- Instead of "Adding support for Windows Server 2012 R2", write "Added support for Windows Server 2012 R2".
+- Instead of "Adding support for Windows Server 2012 R2", write "Added support for
+  Windows Server 2012 R2".
 - Instead of "Fix for server connection issue", write "Fixed server connection issue".
 
 ## Code Review Process
@@ -112,9 +124,10 @@ This is used to test the module on PowerShell on Windows and PowerShell Core on 
 
 ## Branch structure
 
-We are using a [git flow](http://nvie.com/posts/a-successful-git-branching-model/) model
-for development.
-We recommend that you create local working branches that target a specific scope of change.
+We are using a [git flow](http://nvie.com/posts/a-successful-git-branching-model/)
+model for development.
+We recommend that you create local working branches that target a specific scope
+of change.
 Each branch should be limited to a single feature/bugfix both to streamline workflows
 and reduce the possibility of merge conflicts.
 
