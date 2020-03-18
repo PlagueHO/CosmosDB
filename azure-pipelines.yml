@@ -18,7 +18,7 @@ stages:
       - job: Build_Module
         displayName: 'Build Module'
         pool:
-          vmImage: 'ubuntu 16.04'
+          vmImage: windows-2019
         steps:
           - task: GitVersion@5
             name: gitversion
@@ -135,7 +135,7 @@ stages:
     jobs:
       - job: Deploy_Artefact
         pool:
-          vmImage: 'ubuntu 16.04'
+          vmImage: ubuntu-16.04
 
         steps:
           - task: DownloadBuildArtifacts@0
