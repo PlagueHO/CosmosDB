@@ -33,7 +33,7 @@ if ([System.String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
 $script:testRandomName = [System.IO.Path]::GetRandomFileName() -replace '\.', ''
 $script:testBuildBranch = &git branch --show-current
 
-if ([System.String]::IsNullOrEmpty($ENV:Pipeline_Workspace))
+if ([System.String]::IsNullOrEmpty($ENV:pipeline_workspace))
 {
     $script:testbuildSystem = 'local'
 }
