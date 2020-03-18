@@ -31,12 +31,18 @@ if ([System.String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
 
 # Variables for use in tests
 $script:testRandomName = [System.IO.Path]::GetRandomFileName() -replace '\.', ''
-$buildSystem = $ENV:BHBuildSystem
-if (-not $buildSystem)
+$script:testBuildBranch = &git branch --show-current
+
+if ([System.String]::IsNullOrEmpty($ENV:Pipeline_Workspace))
 {
-    $buildSystem = 'local'
+    $script:testbuildSystem = 'local'
 }
-$script:testResourceGroupName = ('cdbtestrgp-{0}-{1}-{2}' -f $script:testRandomName,$buildSystem.Replace(' ',''),$ENV:BHBranchName)
+else
+{
+    $script:testbuildSystem = 'azuredevops'
+}
+
+$script:testResourceGroupName = ('cdbtestrgp-{0}-{1}-{2}' -f $script:testRandomName,$script:testbuildSystem,$script:testBuildBranch)
 $script:testAccountName = ('cdbtest{0}' -f $script:testRandomName)
 $script:testLocation = 'East US'
 $script:testCorsAllowedOrigins = @('https://www.contoso.com', 'https://www.fabrikam.com')
