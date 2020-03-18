@@ -17,6 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Add testing on Windows Server 2019 and separate module build process.
   - Convert to multi stage pipeline.
 
+### Fixed
+
+- Fix default culture case to fix error on module load in PS7
+  on Ubuntu 18.04 - fixes [Issue #332](https://github.com/PlagueHO/CosmosDB/issues/332).
+
 ## [3.5.2.487] - 2020-03-14
 
 ### Changed

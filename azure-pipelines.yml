@@ -526,6 +526,7 @@ stages:
 
           - powershell: |
               Uninstall-Module -Name Az -Force
+              $null = Remove-Item -Path '~/.Azure' -Recurse -Force
             displayName: 'Uninstall Az Module'
 
           - task: PowerShell@2
