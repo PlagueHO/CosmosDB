@@ -14,11 +14,18 @@ Import-Module -Name Az.Accounts -MinimumVersion 1.0.0 -Scope Global
 Import-Module -Name Az.Resources -MinimumVersion 1.0.0 -Scope Global
 
 #region LocalizedData
-$culture = 'en-US'
+$culture = $PSUICulture
 
-if (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath $PSUICulture))
+if ([System.String]::IsNullOrEmpty($culture))
 {
-    $culture = $PSUICulture
+    $culture = 'en-US'
+}
+else
+{
+    if (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath $culture))
+    {
+        $culture = 'en-US'
+    }
 }
 
 Import-LocalizedData `
