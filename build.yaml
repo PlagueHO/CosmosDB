@@ -29,12 +29,14 @@ BuildWorkflow:
 
   Compile_Help: |
     {
-      $docsPath = Join-Path -Path $ProjectPath -ChildPath 'docs'
-      $destinationPath = $BuildModuleOutput | Join-Path -ChildPath $ProjectName | Join-Path -ChildPath ($ModuleVersion -Split '-')[0]
-      New-ExternalHelp `
-          -Path $docsPath `
-          -OutputPath $destinationPath `
-          -Force
+      <#
+        Execute in a separate PWSH session because platyPS tries
+        to load YamlDotNet.dll which conflicts with one loaded by
+        Module-Builder.
+      #>
+      $outputPath = "$BuildModuleOutput\$ProjectName\$(($ModuleVersion -Split '-')[0])"
+      $execute = "New-ExternalHelp -Path '$ProjectPath\docs' -OutputPath '$OutputPath' -Force"
+      pwsh -Command "`"$execute`""
     }
 
   '.':
