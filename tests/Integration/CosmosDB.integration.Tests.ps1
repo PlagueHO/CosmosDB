@@ -31,7 +31,14 @@ if ([System.String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
 
 # Variables for use in tests
 $script:testRandomName = [System.IO.Path]::GetRandomFileName() -replace '\.', ''
-$script:testBuildBranch = &git branch --show-current
+Write-Verbose -Message (Get-ChildItem -Path ENV: | Out-String) -Verbose
+
+$script:testBuildBranch = $ENV:build_sourcebranchname
+
+if ([System.String]::IsNullOrEmpty($ENV:pipeline_workspace))
+{
+    $script:testtestBuildBranch = & git branch --show-current
+}
 
 if ([System.String]::IsNullOrEmpty($ENV:pipeline_workspace))
 {
