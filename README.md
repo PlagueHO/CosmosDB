@@ -15,7 +15,6 @@
 
 | Branch | Azure Pipelines CI | Code Coverage |
 | ------ | --------------------------------------- | -------------------------------------- |
-| dev    | [![ap-image-dev][]][ap-site-dev]        | [![cc-image-dev][]][cc-site-dev]       |
 | master | [![ap-image-master][]][ap-site-master]  | [![cc-image-master][]][cc-site-master] |
 
 ## Table of Contents
@@ -1001,11 +1000,6 @@ For a list of changes to versions, see the [CHANGELOG.md](CHANGELOG.md) file.
 
 - [GitHub Repository](https://github.com/PlagueHO/CosmosDB/)
 - [Blog](https://dscottraynsford.wordpress.com/)
-
-[ap-image-dev]: https://dev.azure.com/dscottraynsford/GitHub/_apis/build/status/PlagueHO.CosmosDB?branchName=dev
-[ap-site-dev]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4
-[cc-image-dev]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev/graph/badge.svg
-[cc-site-dev]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev
 
 [ap-image-master]: https://dev.azure.com/dscottraynsford/GitHub/_apis/build/status/PlagueHO.CosmosDB?branchName=master
 [ap-site-master]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4
