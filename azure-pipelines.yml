@@ -314,12 +314,14 @@ stages:
         contains(variables['System.TeamFoundationCollectionUri'], 'dsccommunity')
       )
     jobs:
-      - job: Deploy_Artefact
+      - job: Deploy_Module
+        displayName: 'Deploy Module'
         pool:
           vmImage: ubuntu-16.04
 
         steps:
           - task: DownloadBuildArtifacts@0
+            displayName: 'Download Build Artifact'
             inputs:
               buildType: 'current'
               downloadType: 'single'
@@ -327,7 +329,8 @@ stages:
               downloadPath: '$(Build.SourcesDirectory)'
 
           - task: PowerShell@2
-            name: publish_prerelease
+            name: publish_release
+            displayName: 'Publish Release'
             inputs:
               filePath: './build.ps1'
               arguments: '-tasks publish'
@@ -338,6 +341,7 @@ stages:
 
           - task: PowerShell@2
             name: send_changelog_PR
+            displayName: 'Send CHANGELOG PR'
             inputs:
               filePath: './build.ps1'
               arguments: '-tasks Create_ChangeLog_GitHub_PR'
