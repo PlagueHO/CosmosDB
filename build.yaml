@@ -23,6 +23,12 @@ BuildWorkflow:
       $classesProjectPath = Join-Path -Path $classesPath -ChildPath 'CosmosDB.csproj'
       & dotnet @('build',$classesProjectPath,'/p:Configuration=Release')
       $compiledDllPath = Join-Path -Path $classesPath -ChildPath 'bin/Release/netstandard2.0/CosmosDB.dll'
+
+      if ([System.String]::IsNullOrEmpty($ModuleVersion))
+      {
+        $ModuleVersion = '0.0.1'
+      }
+
       $destinationPath = $BuildModuleOutput | Join-Path -ChildPath $ProjectName | Join-Path -ChildPath ($ModuleVersion -Split '-')[0]
       $null = Copy-Item -Path $compiledDllPath -Destination $destinationPath
     }
@@ -34,9 +40,24 @@ BuildWorkflow:
         to load YamlDotNet.dll which conflicts with one loaded by
         Module-Builder.
       #>
+      if ([System.String]::IsNullOrEmpty($ModuleVersion))
+      {
+        $ModuleVersion = '0.0.1'
+      }
+
       $outputPath = "$BuildModuleOutput\$ProjectName\$(($ModuleVersion -Split '-')[0])"
       $execute = "New-ExternalHelp -Path '$ProjectPath\docs' -OutputPath '$OutputPath' -Force"
-      pwsh -Command "`"$execute`""
+
+      if ($IsCoreCLR)
+      {
+        $PowerShellExe = 'pwsh'
+      }
+      else
+      {
+        $PowerShellExe = 'powershell'
+      }
+
+      & $PowerShellExe -Command "`"$execute`""
     }
 
   '.':
