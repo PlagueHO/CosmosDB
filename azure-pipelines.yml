@@ -18,7 +18,7 @@ stages:
       - job: Build_Module
         displayName: 'Build Module'
         pool:
-          vmImage: windows-2019
+          vmImage: vs2017-win2016
         steps:
           - task: GitVersion@5
             name: gitversion
