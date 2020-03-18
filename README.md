@@ -13,10 +13,9 @@
 
 ## Module Build Status
 
-| Branch | AzurePipelines CI | AppVeyor CI | Code Coverage |
-| ------ | -------------------------------------- | -------------------------------------- | -------------------------------------- |
-| dev    | [![ap-image-dev][]][ap-site-dev]       | [![av-image-dev][]][av-site-dev]       | [![cc-image-dev][]][cc-site-dev]       |
-| master | [![ap-image-master][]][ap-site-master] | [![av-image-master][]][av-site-master] | [![cc-image-master][]][cc-site-master] |
+| Branch | Azure Pipelines CI | Code Coverage |
+| ------ | --------------------------------------- | -------------------------------------- |
+| master | [![ap-image-master][]][ap-site-master]  | [![cc-image-master][]][cc-site-master] |
 
 ## Table of Contents
 
@@ -102,13 +101,13 @@ This PowerShell module is automatically tested and validated to run
 on the following systems:
 
 - Windows Server (using Windows PowerShell 5.1):
-  - Windows Server 2012 R2: Using [AppVeyor CI](https://ci.appveyor.com/project/PlagueHO/cosmosdb).
-  - Windows Server 2016: Using [AppVeyor CI](https://ci.appveyor.com/project/PlagueHO/cosmosdb).
   - Windows Server 2016: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - Windows Server 2019: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
 - Linux (using PowerShell Core 6.x):
   - Ubuntu Trusty 16.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
 - Linux (using PowerShell 7.x):
   - Ubuntu Trusty 16.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - Ubuntu Xenial 18.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
 - macOS (using PowerShell Core 6.x):
   - macOS 10.14: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
 
@@ -1002,16 +1001,7 @@ For a list of changes to versions, see the [CHANGELOG.md](CHANGELOG.md) file.
 - [GitHub Repository](https://github.com/PlagueHO/CosmosDB/)
 - [Blog](https://dscottraynsford.wordpress.com/)
 
-[ap-image-dev]: https://dev.azure.com/dscottraynsford/GitHub/_apis/build/status/PlagueHO.CosmosDB?branchName=dev
-[ap-site-dev]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4
-[av-image-dev]: https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/dev?svg=true
-[av-site-dev]: https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/dev
-[cc-image-dev]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev/graph/badge.svg
-[cc-site-dev]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/dev
-
 [ap-image-master]: https://dev.azure.com/dscottraynsford/GitHub/_apis/build/status/PlagueHO.CosmosDB?branchName=master
 [ap-site-master]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4
-[av-image-master]: https://ci.appveyor.com/api/projects/status/v5wqtt63nnmkm94j/branch/master?svg=true
-[av-site-master]: https://ci.appveyor.com/project/PlagueHO/cosmosdb/branch/master
 [cc-image-master]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/master/graph/badge.svg
 [cc-site-master]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/master
