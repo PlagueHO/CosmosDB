@@ -208,7 +208,7 @@ stages:
             condition: succeededOrFailed()
 
       - job: Unit_Test_PSCore6_Ubuntu1604
-        displayName: 'Unit Test (Powershell Core 6.x on Ubuntu 16.04)'
+        displayName: 'Unit Test (Powershell Core 6 on Ubuntu 16.04)'
         pool:
           vmImage: ubuntu-16.04
 
@@ -257,9 +257,9 @@ stages:
               summaryFileLocation: 'output/testResults/CodeCov*.xml'
               pathToSources: '$(Build.SourcesDirectory)/output/$(moduleBuildVariable.RepositoryName)'
 
-      - job: Integration_Test_PS_Win2019
-        dependsOn: Unit_Test_PS_Win2019
-        displayName: 'Integration Test (Powershell 5.1 on Windows Server 2019)'
+      - job: Integration_Test_PSCore6_Ubuntu1604
+        dependsOn: Unit_Test_PSCore6_Ubuntu1604
+        displayName: 'Integration Test (Powershell Core 6 on Ubuntu 16.04)'
         pool:
           vmImage: windows-2019
         timeoutInMinutes: 0
@@ -273,7 +273,7 @@ stages:
               artifactName: 'output'
               downloadPath: '$(Build.SourcesDirectory)'
 
-            - script: |
+          - script: |
               curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
               curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
               sudo apt-get update
@@ -298,7 +298,7 @@ stages:
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: 'output/testResults/NUnit*.xml'
-              testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2019)'
+              testRunTitle: 'Integration (Powershell Core 6 on Ubuntu 16.04)'
             condition: succeededOrFailed()
 
   - stage: Deploy

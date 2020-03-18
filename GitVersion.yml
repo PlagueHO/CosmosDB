@@ -24,15 +24,3 @@ branches:
 ignore:
   sha: []
 merge-message-formats: {}
-
-
-# feature:
-#   tag: useBranchName
-#   increment: Minor
-#   regex: f(eature(s)?)?[/-]
-#   source-branches: ['master']
-# hotfix:
-#   tag: fix
-#   increment: Patch
-#   regex: (hot)?fix(es)?[/-]
-#   source-branches: ['master']
