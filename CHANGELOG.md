@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.6.1] - 2020-03-19
+
 ### Removed
 
 - Remove AppVeyor CI pipeline - fixes [Issue #329](https://github.com/PlagueHO/CosmosDB/issues/329).
