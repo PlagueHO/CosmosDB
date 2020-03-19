@@ -5,17 +5,14 @@
 [![Minimum Supported Windows PowerShell Version](https://img.shields.io/badge/WindowsPowerShell-5.1-blue.svg)](https://github.com/PlagueHO/CosmosDB)
 [![Minimum Supported PowerShell Core Version](https://img.shields.io/badge/PSCore-6.0-blue.svg)](https://github.com/PlagueHO/CosmosDB)
 [![Minimum Supported PowerShell Version](https://img.shields.io/badge/PS-7.0-blue.svg)](https://github.com/PlagueHO/CosmosDB)
-[![Azure DevOps tests](https://img.shields.io/azure-devops/tests/dscottraynsford/GitHub/4/master)](https://dscottraynsford.visualstudio.com/GitHub/_test/analytics?definitionId=4&contextType=build)
-[![Join the chat at https://gitter.im/PlagueHO/CosmosDB](https://badges.gitter.im/PlagueHO/CosmosDB.svg)](https://gitter.im/PlagueHO/CosmosDB?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ee50b5eb15b47c188b3bdf7a5f8ee1d)](https://www.codacy.com/app/PlagueHO/CosmosDB?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PlagueHO/CosmosDB&amp;utm_campaign=Badge_Grade)
 
 # CosmosDB PowerShell Module
 
 ## Module Build Status
 
-| Branch | Azure Pipelines CI | Code Coverage |
-| ------ | --------------------------------------- | -------------------------------------- |
-| master | [![ap-image-master][]][ap-site-master]  | [![cc-image-master][]][cc-site-master] |
+| Branch | Azure Pipelines                        | Automated Tests                        | Code Quality |
+| ------ | -------------------------------------- | -------------------------------------- | -------------------------------------- |
+| master | [![ap-image-master][]][ap-site-master] | [![ts-image-master][]][ts-site-master] | [![cq-image-master][]][cq-site-master] |
 
 ## Table of Contents
 
@@ -1003,5 +1000,7 @@ For a list of changes to versions, see the [CHANGELOG.md](CHANGELOG.md) file.
 
 [ap-image-master]: https://dev.azure.com/dscottraynsford/GitHub/_apis/build/status/PlagueHO.CosmosDB?branchName=master
 [ap-site-master]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4
-[cc-image-master]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/master/graph/badge.svg
-[cc-site-master]: https://codecov.io/gh/PlagueHO/CosmosDB/branch/master
+[ts-image-master]: https://img.shields.io/azure-devops/tests/dscottraynsford/GitHub/4/master
+[ts-site-master]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4&branchName=master
+[cq-image-master]: https://api.codacy.com/project/badge/Grade/1ee50b5eb15b47c188b3bdf7a5f8ee1d
+[cq-site-master]: https://www.codacy.com/app/PlagueHO/CosmosDB?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PlagueHO/CosmosDB&amp;utm_campaign=Badge_Grade

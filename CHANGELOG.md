@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.6.1] - 2020-03-19
 
+### Changed
+
+- Improved badge layout in README.MD and removed CodeCov.io badge - [Issue #336](https://github.com/PlagueHO/CosmosDB/issues/336).
+- Removed references to Gitter and Gitter badge - [Issue #337](https://github.com/PlagueHO/CosmosDB/issues/337).
+
 ### Removed
 
 - Remove AppVeyor CI pipeline - fixes [Issue #329](https://github.com/PlagueHO/CosmosDB/issues/329).
