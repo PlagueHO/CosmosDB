@@ -46,6 +46,8 @@ stages:
 
   - stage: Test
     dependsOn: Build
+    variables:
+      - group: CosmosDB.AzureSP
     jobs:
       - job: Unit_Test_PS_Win2016
         displayName: 'Unit Test (Powershell 5.1 on Windows Server 2016)'
