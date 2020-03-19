@@ -561,7 +561,7 @@ stages:
           startsWith(variables['Build.SourceBranch'], 'refs/tags/')
         ),
         eq(variables['System.TeamFoundationCollectionUri'], 'https://dscottraynsford.visualstudio.com/'),
-        eq(endsWith(variables['Build.DefinitionName'],'master'))
+        endsWith(variables['Build.DefinitionName'],'master')
       )
     jobs:
       - job: Deploy_Module
