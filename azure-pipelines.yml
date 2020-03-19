@@ -11,6 +11,7 @@ trigger:
     - "v*"
     exclude:
     - "*-*"
+pr: none
 
 stages:
   - stage: Build
