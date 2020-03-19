@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improved badge layout in README.MD and removed CodeCov.io badge - [Issue #336](https://github.com/PlagueHO/CosmosDB/issues/336).
 - Removed references to Gitter and Gitter badge - [Issue #337](https://github.com/PlagueHO/CosmosDB/issues/337).
+- Removed Azure Pipeline daily build YAML because the main
+  pipeline build YAML will be used instead.
 
 ### Removed
 
