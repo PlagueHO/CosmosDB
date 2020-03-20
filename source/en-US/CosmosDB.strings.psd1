@@ -19,6 +19,7 @@ ConvertFrom-StringData -StringData @'
     RemovingAzureCosmosDBAccount = Removing Azure Cosmos DB account '{0}' in resource group '{1}'.
     StoredProcedureScriptLogResults = Stored Procedure '{0}' script log results:\n{1}
     RequestChargeResults = Request charge for {0} to '{1}' was {2} RUs.
+    NonPartitionedCollectionWarning = It is not recommended to create a collection without a partition key. It may result in reduced performance and increased cost. This functionality is included for backwards compatibility only.
     CollectionProvisionedThroughputExceededWithBackoffPolicy = The collection has exceeded the provisioned throughput limit but a back-off policy is specified.
     CollectionProvisionedThroughputExceededNoBackoffPolicy = The collection has exceeded the provisioned throughput limit but there is no back-off policy.
     CollectionProvisionedThroughputExceededMaxRetriesHit = The maximum back-off policy retries {0} has been exceeded.

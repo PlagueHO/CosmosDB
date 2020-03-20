@@ -112,6 +112,10 @@ function New-CosmosDbCollection
         }
         $null = $PSBoundParameters.Remove('PartitionKey')
     }
+    else
+    {
+        Write-Warning -Message $($LocalizedData.NonPartitionedCollectionWarning)
+    }
 
     if ($PSBoundParameters.ContainsKey('IndexingPolicy'))
     {
