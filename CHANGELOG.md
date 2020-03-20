@@ -11,10 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Improved badge layout in README.MD and removed CodeCov.io badge - [Issue #336](https://github.com/PlagueHO/CosmosDB/issues/336).
-- Removed references to Gitter and Gitter badge - [Issue #337](https://github.com/PlagueHO/CosmosDB/issues/337).
+- Improved badge layout in README.MD and removed CodeCov.io badge - fixes [Issue #336](https://github.com/PlagueHO/CosmosDB/issues/336).
+- Removed references to Gitter and Gitter badge - fixes [Issue #337](https://github.com/PlagueHO/CosmosDB/issues/337).
 - Removed Azure Pipeline daily build YAML because the main
   pipeline build YAML will be used instead.
+- Fix build badges in README.MD by correcting BuildID - [Issue #340](https://github.com/PlagueHO/CosmosDB/issues/340).
 
 ### Removed
 

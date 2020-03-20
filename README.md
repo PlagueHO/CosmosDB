@@ -998,8 +998,8 @@ For a list of changes to versions, see the [CHANGELOG.md](CHANGELOG.md) file.
 - [GitHub Repository](https://github.com/PlagueHO/CosmosDB/)
 - [Blog](https://dscottraynsford.wordpress.com/)
 
-[ap-image-master]: https://dev.azure.com/dscottraynsford/GitHub/_apis/build/status/PlagueHO.CosmosDB?branchName=master
-[ap-site-master]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4
+[ap-image-master]: https://dev.azure.com/dscottraynsford/GitHub/_apis/build/status/PlagueHO.CosmosDB.master?branchName=master
+[ap-site-master]: https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4&_a=summary
 [ts-image-master]: https://img.shields.io/azure-devops/tests/dscottraynsford/GitHub/4/master
 [ts-site-master]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4&branchName=master
 [cq-image-master]: https://api.codacy.com/project/badge/Grade/1ee50b5eb15b47c188b3bdf7a5f8ee1d
