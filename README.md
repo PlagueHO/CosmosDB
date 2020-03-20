@@ -19,7 +19,6 @@
 - [Introduction](#introduction)
 - [Requirements](#requirements)
 - [Installation](#installation)
-- [Compatibility and Testing](#compatibility-and-testing)
 - [Getting Started](#getting-started)
   - [Working with Contexts](#working-with-contexts)
     - [Create a Context specifying the Key Manually](#create-a-context-specifying-the-key-manually)
@@ -43,6 +42,7 @@
   - [Working with Triggers](#working-with-triggers)
   - [Working with User Defined Functions](#working-with-user-defined-functions)
   - [How to Handle Exceeding Provisioned Throughput](#how-to-handle-exceeding-provisioned-throughput)
+- [Compatibility and Testing](#compatibility-and-testing)
 - [Contributing](#contributing)
 - [Cmdlets](#cmdlets)
 - [Change Log](#change-log)
@@ -92,24 +92,18 @@ To install the module from PowerShell Gallery, use the PowerShell Cmdlet:
 Install-Module -Name CosmosDB
 ```
 
-## Compatibility and Testing
+## Important
 
-This PowerShell module is automatically tested and validated to run
-on the following systems:
+It is recommended that before using this module it is important to understand
+the fundamental concepts of Cosmos DB. This will ensure you have an optimal
+experience by adopting design patterns that align to Cosmos DB best practice.
 
-- Windows Server (using Windows PowerShell 5.1):
-  - Windows Server 2016: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
-  - Windows Server 2019: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
-- Linux (using PowerShell Core 6.x):
-  - Ubuntu Trusty 16.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
-- Linux (using PowerShell 7.x):
-  - Ubuntu Trusty 16.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
-  - Ubuntu Xenial 18.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
-- macOS (using PowerShell Core 6.x):
-  - macOS 10.14: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+Users new to Cosmos DB should familiarize themselves with the following
+concepts:
 
-This module should function correctly on other systems and configurations
-but is not automatically tested with them in every change.
+- [Overview of Cosmos DB](https://docs.microsoft.com/bs-cyrl-ba/azure/cosmos-db/introduction)
+- [NoSQL vs. Relational Databases](https://docs.microsoft.com/bs-cyrl-ba/azure/cosmos-db/relational-nosql)
+- [Partitioning](https://docs.microsoft.com/bs-cyrl-ba/azure/cosmos-db/partitioning-overview)
 
 ## Getting Started
 
@@ -246,17 +240,18 @@ Remove-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbRes
 
 ### Working with Databases
 
-Create a new database in the Cosmos DB account:
+Create a new database in the Cosmos DB account with database throughput
+provisioned at 1200 RU/s:
 
 ```powershell
-New-CosmosDbDatabase -Context $cosmosDbContext -Id 'AnotherDatabase'
+New-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase' -OfferThrougput 1200
 ```
 
-Create a new database in the Cosmos DB account with a
-custom offer throughput of 1200 RU/s:
+Create a new database in the Cosmos DB account that will have throughput
+provisioned at the collection rather than the database:
 
 ```powershell
-New-CosmosDbDatabase -Context $cosmosDbContext -Id 'DatabaseWithOffer' -OfferThrougput 1200
+New-CosmosDbDatabase -Context $cosmosDbContext -Id 'DatabaseWithCollectionThroughput'
 ```
 
 Get a list of databases in the Cosmos DB account:
@@ -307,17 +302,11 @@ Get a list of collections in a database:
 Get-CosmosDbCollection -Context $cosmosDbContext
 ```
 
-Create a collection in the database with the offer throughput of 2500 RU/s:
-
-```powershell
-New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -OfferThroughput 2500
-```
-
-Create a collection in the database with the partition key 'account' and
+Create a collection in the database with the partition key 'id' and
 the offer throughput of 50000 RU/s:
 
 ```powershell
-New-CosmosDbCollection -Context $cosmosDbContext -Id 'PartitionedCollection' -PartitionKey 'account' -OfferThroughput 50000
+New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'id' -OfferThroughput 50000
 ```
 
 Get a specified collection from a database:
@@ -367,7 +356,7 @@ $indexNumberRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataTyp
 $indexPointSpatial = New-CosmosDbCollectionIncludedPathIndex -Kind Spatial -DataType Point
 $indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $indexStringRange, $indexNumberRange, $indexPointSpatial
 $indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $indexIncludedPath
-New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'account' -IndexingPolicy $indexingPolicy
+New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'id' -IndexingPolicy $indexingPolicy
 ```
 
 > **Important Index Notes**
@@ -422,7 +411,7 @@ unique key is set to '/email'.
 $uniqueKeyNameAddress = New-CosmosDbCollectionUniqueKey -Path '/name', '/address'
 $uniqueKeyEmail = New-CosmosDbCollectionUniqueKey -Path '/email'
 $uniqueKeyPolicy = New-CosmosDbCollectionUniqueKeyPolicy -UniqueKey $uniqueKeyNameAddress, $uniqueKeyEmail
-New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'account' -UniqueKeyPolicy $uniqueKeyPolicy
+New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'id' -UniqueKeyPolicy $uniqueKeyPolicy
 ```
 
 For more information on how Cosmos DB indexes documents, see [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/unique-keys).
@@ -440,36 +429,64 @@ $uniqueKeyPolicy = New-CosmosDbCollectionUniqueKeyPolicy -UniqueKey $uniqueKeyNa
 Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -IndexingPolicy $indexingPolicy
 ```
 
+#### Create a Collection without a Partition Key
+
+> **Warning:** It is not recommended to create a collection without a partition
+key. It may result in reduced performance and increased cost. This
+functionality is included for backwards compatibility only.
+
+It is only possible to create non-partitioned collection in a database that has
+not got provisioned throughput at the database level enabled.
+
+Create a collection in the database with the offer throughput of 2500 RU/s
+and without a partition key:
+
+```powershell
+New-CosmosDbCollection -Context $cosmosDbContext -Id 'NonPartitionedCollection' -OfferThroughput 2500
+```
+
 ### Working with Documents
 
-Create 10 new documents in a collection in the database:
+Create 10 new documents in a collection in the database using the `id` as
+the partition key:
 
 ```powershell
 0..9 | Foreach-Object {
+    $id = $([Guid]::NewGuid().ToString())
     $document = @"
 {
-    `"id`": `"$([Guid]::NewGuid().ToString())`",
+    `"id`": `"$id`",
     `"content`": `"Some string`",
     `"more`": `"Some other string`"
 }
 "@
-New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentBody $document
+    New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentBody $document -PartitionKey $id
 }
 ```
 
 Create a new document containing non-ASCII characters in a collection in the
-database:
+database using the `id` as the partition key:
 
 ```powershell
+$id = $([Guid]::NewGuid().ToString())
 $document = @"
 {
-    `"id`": `"$([Guid]::NewGuid().ToString())`",
+    `"id`": `"$id`",
     `"content`": `"杉本 司`"
 }
 "@
-New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentBody $document -Encoding 'UTF-8'
-}
+New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentBody $document -Encoding 'UTF-8' -PartitionKey $id
 ```
+
+Return a document with a specific Id from a collection in the database using
+the document ID as the partition key:
+
+```powershell
+Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id $documents[0].id -PartitionKey $documents[0].id
+```
+
+> **Note:** Because this is a partitioned collection, if you don't specify a partition
+key you will receive a `(400) Bad Request` exception.
 
 Get the first 5 documents from the collection in the database:
 
@@ -478,6 +495,10 @@ $ResponseHeader = $null
 $documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -MaxItemCount 5 -ResponseHeader ([ref] $ResponseHeader)
 $continuationToken = [String] $ResponseHeader.'x-ms-continuation'
 ```
+
+> **Note:** You don't need to specify the partition key here because you are just
+getting the first 5 documents in whatever order they are available so going to
+a specific partition is not required.
 
 Get the next 5 documents from a collection in the database using
 the continuation token found in the headers from the previous
@@ -497,14 +518,7 @@ $newDocument = @"
     `"more`": `"Another new string`"
 }
 "@
-Set-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id $documents[0].id -DocumentBody $newDocument
-```
-
-Return a document with a specific Id from a collection in
-the database:
-
-```powershell
-Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id $documents[0].id
+Set-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id $documents[0].id -DocumentBody $newDocument -PartitionKey $documents[0].id
 ```
 
 Querying a collection in a database:
@@ -527,12 +541,19 @@ Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -
 Delete a document from a collection in the database:
 
 ```powershell
-Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id $documents[0].id
+Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id $documents[0].id -PartitionKey $documents[0].id
 ```
 
-#### Working with Documents in a Partitioned Collection
+> **Note:** Because this is a partitioned collection, if you don't specify a partition
+key you will receive a `(400) Bad Request` exception.
 
-Creating a document in a collection that has a Partition Key requires the
+#### Working with Documents in a non-partitioned Collection
+
+> **Warning:** It is not recommended to use a collection without a partition
+key. It may result in reduced performance and increased cost. This
+functionality is included for backwards compatibility only.
+>
+> Creating a document in a collection that has a Partition Key requires the
 `PartitionKey` parameter to be specified for the document:
 
 ```powershell
@@ -542,19 +563,19 @@ $document = @"
     `"locale`": `"English (US)`"
 }
 "@
-New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'PartitionedCollection' -DocumentBody $document -PartitionKey 'en-us'
+New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'NonPartitionedCollection' -DocumentBody $document
 ```
 
 Get a document from a partitioned collection with a specific Id:
 
 ```powershell
-$document = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'PartitionedCollection' -Id 'en-us' -PartitionKey 'en-us'
+Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'NonPartitionedCollection' -Id 'en-us'
 ```
 
 Delete a document from a partitioned collection in the database:
 
 ```powershell
-Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'PartitionedCollection' -Id 'en-us' -PartitionKey 'en-us'
+Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'NonPartitionedCollection' -Id 'en-us'
 ```
 
 ### Working with Attachments
@@ -562,31 +583,31 @@ Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'PartitionedColl
 Create an attachment on a document in a collection:
 
 ```powershell
-New-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId $documents[0].id -Id 'image_1' -ContentType 'image/jpg' -Media 'www.bing.com'
+New-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId $documents[0].id -PartitionKey $documents[0].id -Id 'image_1' -ContentType 'image/jpg' -Media 'www.bing.com'
 ```
 
 Get _all_ attachments for a document in a collection:
 
 ```powershell
-Get-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId $documents[0].id
+Get-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId $documents[0].id -PartitionKey $documents[0].id
 ```
 
 Get an attachment by Id for a document in a collection:
 
 ```powershell
-Get-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId $documents[0].id -Id 'image_1'
+Get-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId $documents[0].id -PartitionKey $documents[0].id -Id 'image_1'
 ```
 
 Rename an attachment for a document in a collection:
 
 ```powershell
-Set-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId $documents[0].id -Id 'image_1' -NewId 'Image_2'
+Set-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId $documents[0].id -PartitionKey $documents[0].id -Id 'image_1' -NewId 'image_2'
 ```
 
 Delete an attachment from a document in collection:
 
 ```powershell
-Remove-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id $documents[0].id -Id 'Image_2'
+Remove-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId $documents[0].id -PartitionKey $documents[0].id -Id 'image_2'
 ```
 
 ### Working with Users
@@ -964,6 +985,25 @@ $backoffPolicy = New-CosmosDbBackoffPolicy -MaxRetries 3 -Method Random -Delay 1
 A policy that adds or subtracts up to 50% of the delay period to the base delay
 each time can also be applied. For example, the first delay might be 850ms, with
 the second delay being 1424ms and final delay being 983ms.
+
+## Compatibility and Testing
+
+This PowerShell module is automatically tested and validated to run
+on the following systems:
+
+- Windows Server (using Windows PowerShell 5.1):
+  - Windows Server 2016: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - Windows Server 2019: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+- Linux (using PowerShell Core 6.x):
+  - Ubuntu Trusty 16.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+- Linux (using PowerShell 7.x):
+  - Ubuntu Trusty 16.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - Ubuntu Xenial 18.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+- macOS (using PowerShell Core 6.x):
+  - macOS 10.14: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+
+This module should function correctly on other systems and configurations
+but is not automatically tested with them in every change.
 
 ## Contributing
 

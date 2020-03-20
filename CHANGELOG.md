@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Add warning to `New-CosmosDbCollection` to show when creating a collection
+  without a partition key.
+- Updated `README.MD` to documentation to reduce focus on collections without
+  partition keys - fixes [Issue #342](https://github.com/PlagueHO/CosmosDB/issues/342).
+
 ## [3.6.1] - 2020-03-19
 
 ### Changed
