@@ -18,6 +18,7 @@
 
 - [Introduction](#introduction)
 - [Requirements](#requirements)
+- [Recommended Knowledge](#recommended-knowledge)
 - [Installation](#installation)
 - [Getting Started](#getting-started)
   - [Working with Contexts](#working-with-contexts)
@@ -33,8 +34,9 @@
     - [Update an existing Collection with a new Indexing Policy](#update-an-existing-collection-with-a-new-indexing-policy)
     - [Creating a Collection with a custom Unique Key Policy](#creating-a-collection-with-a-custom-unique-key-policy)
     - [Update an existing Collection with a new Unique Key Policy](#update-an-existing-collection-with-a-new-unique-key-policy)
+    - [Creating a Collection without a Partition Key](#creating-a-collection-without-a-partition-key)
   - [Working with Documents](#working-with-documents)
-    - [Working with Documents in a Partitioned Collection](#working-with-documents-in-a-partitioned-collection)
+    - [Working with Documents in a non-partitioned Collection](#working-with-documents-in-a-non-partitioned-collection)
   - [Using Resource Authorization Tokens](#using-resource-authorization-tokens)
   - [Working with Attachments](#working-with-attachments)
   - [Working with Users](#working-with-users)
@@ -84,15 +86,7 @@ This module requires the following:
 > or **AzureRm.NetCore** modules are used then you will need to remain on
 > CosmosDB module 2.x.
 
-## Installation
-
-To install the module from PowerShell Gallery, use the PowerShell Cmdlet:
-
-```powershell
-Install-Module -Name CosmosDB
-```
-
-## Important
+## Recommended Knowledge
 
 It is recommended that before using this module it is important to understand
 the fundamental concepts of Cosmos DB. This will ensure you have an optimal
@@ -104,6 +98,17 @@ concepts:
 - [Overview of Cosmos DB](https://docs.microsoft.com/bs-cyrl-ba/azure/cosmos-db/introduction)
 - [NoSQL vs. Relational Databases](https://docs.microsoft.com/bs-cyrl-ba/azure/cosmos-db/relational-nosql)
 - [Partitioning](https://docs.microsoft.com/bs-cyrl-ba/azure/cosmos-db/partitioning-overview)
+
+It is also recommended to watch [this Ignite video](https://myignite.techcommunity.microsoft.com/sessions/79932)
+on data modelling and partitioning in Cosmos DB.
+
+## Installation
+
+To install the module from PowerShell Gallery, use the PowerShell Cmdlet:
+
+```powershell
+Install-Module -Name CosmosDB
+```
 
 ## Getting Started
 
@@ -429,7 +434,7 @@ $uniqueKeyPolicy = New-CosmosDbCollectionUniqueKeyPolicy -UniqueKey $uniqueKeyNa
 Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -IndexingPolicy $indexingPolicy
 ```
 
-#### Create a Collection without a Partition Key
+#### Creating a Collection without a Partition Key
 
 > **Warning:** It is not recommended to create a collection without a partition
 key. It may result in reduced performance and increased cost. This
