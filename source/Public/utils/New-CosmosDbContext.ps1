@@ -63,7 +63,13 @@ function New-CosmosDbContext
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [CosmosDB.BackoffPolicy]
-        $BackoffPolicy
+        $BackoffPolicy,
+
+        [Parameter(ParameterSetName = 'Account')]
+        [Parameter(ParameterSetName = 'Token')]
+        [Parameter(ParameterSetName = 'AzureAccount')]
+        [CosmosDB.Environment]
+        $Environment = [CosmosDB.Environment]::AzureCloud
     )
 
     switch ($PSCmdlet.ParameterSetName)
@@ -92,7 +98,7 @@ function New-CosmosDbContext
             }
             catch
             {
-                $null = Connect-AzAccount
+                $null = Connect-AzAccount -Environment $Environment
             }
 
             $Key = Get-CosmosDbAccountMasterKey `
@@ -100,17 +106,17 @@ function New-CosmosDbContext
                 -Name $Account `
                 -MasterKeyType $MasterKeyType
 
-            $BaseUri = (Get-CosmosDbUri -Account $Account)
+            $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
         }
 
         'Account'
         {
-            $BaseUri = (Get-CosmosDbUri -Account $Account)
+            $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
         }
 
         'Token'
         {
-            $BaseUri = (Get-CosmosDbUri -Account $Account)
+            $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
         }
     }
 
