@@ -15,7 +15,8 @@ be sent to.
 ## SYNTAX
 
 ```powershell
-Get-CosmosDbUri [-Account] <String> [[-BaseUri] <String>] [<CommonParameters>]
+Get-CosmosDbUri [-Account] <String> [[-BaseUri] <String>] [[-Environment] <Environment>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -40,6 +41,15 @@ PS C:\>$uri = Get-CosmosDbUri -Account 'MyAzureCosmosDB' -BaseUri 'localhost'
 
 Generates the URI for accessing a Cosmos DB emulator account
 on the localhost.
+
+### EXAMPLE 3
+
+```powershell
+PS C:\>$uri = Get-CosmosDbUri -Account 'MyAzureCosmosDB' -Environment 'AzureUSGovernment'
+```
+
+Generates the URI for accessing a Cosmos DB account in the
+US Government cloud.
 
 ## PARAMETERS
 
@@ -67,12 +77,33 @@ If not specified it will default to 'documents.azure.com'.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Uri
 Aliases:
 
 Required: False
 Position: 2
 Default value: Documents.azure.com
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Environment
+
+This is the Azure environment hosting the Cosmos DB account.
+
+The supported values are:
+
+- AzureCloud
+- AzureUSGovernment
+
+```yaml
+Type: Environment
+Parameter Sets: Environment
+Aliases:
+
+Required: False
+Position: Named
+Default value: AzureCloud
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

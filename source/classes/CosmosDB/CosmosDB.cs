@@ -1,6 +1,12 @@
 ﻿using System;
 
 namespace CosmosDB {
+    public enum Environment {
+        AzureCloud,
+        AzureUSGovernment
+    }
+
+
     public class ContextToken
     {
         public System.String Resource;
@@ -25,6 +31,7 @@ namespace CosmosDB {
         public System.String BaseUri;
         public CosmosDB.ContextToken[] Token;
         public CosmosDB.BackoffPolicy BackoffPolicy;
+        public CosmosDB.Environment Environment;
     }
 
     namespace IndexingPolicy {

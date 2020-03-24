@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `README.MD` to documentation to reduce focus on collections without
   partition keys - fixes [Issue #342](https://github.com/PlagueHO/CosmosDB/issues/342).
 
+### Added
+
+- Added support for `Environment` parameter in `New-CosmosDbContext` to allow
+  using Azure US Government Cloud - fixes [Issue #322](https://github.com/PlagueHO/CosmosDB/issues/322).
+
 ## [3.6.1] - 2020-03-19
 
 ### Changed

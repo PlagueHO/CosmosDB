@@ -17,29 +17,32 @@ to connect to a Cosmos DB.
 ### Account (Default)
 
 ```powershell
-New-CosmosDbContext -Account <String> [-Database <String>] -Key <SecureString> [-KeyType <String>]
- [-BackoffPolicy <BackoffPolicy>] [<CommonParameters>]
+New-CosmosDbContext -Account <String> [-Database <String>]
+ -Key <SecureString> [-KeyType <String>] [-BackoffPolicy <BackoffPolicy>]
+ [-Environment <Environment>] [<CommonParameters>]
 ```
 
 ### AzureAccount
 
 ```powershell
 New-CosmosDbContext -Account <String> [-Database <String>] -ResourceGroupName <String>
- [-MasterKeyType <String>] [-BackoffPolicy <BackoffPolicy>] [<CommonParameters>]
+ [-MasterKeyType <String>] [-BackoffPolicy <BackoffPolicy>] [-Environment <Environment>]
+ [<CommonParameters>]
 ```
 
 ### Token
 
 ```powershell
 New-CosmosDbContext -Account <String> [-Database <String>] -Token <ContextToken[]>
- [-BackoffPolicy <BackoffPolicy>] [<CommonParameters>]
+ [-BackoffPolicy <BackoffPolicy>] [-Environment <Environment>] [<CommonParameters>]
 ```
 
 ### Emulator
 
 ```powershell
-New-CosmosDbContext [-Database <String>] [-Key <SecureString>] [-Emulator] [-Port <Int16>] [-URI <String>]
- [-Token <ContextToken[]>] [-BackoffPolicy <BackoffPolicy>] [<CommonParameters>]
+New-CosmosDbContext [-Database <String>] [-Key <SecureString>] [-Emulator]
+ [-Port <Int16>] [-URI <String>] [-Token <ContextToken[]>]
+ [-BackoffPolicy <BackoffPolicy>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -106,6 +109,16 @@ PS C:\> $cosmosDbContext = New-CosmosDbContext -Emulator -URI 'mycosmosdb' -Key 
 Creates a Cosmos DB context by using a Cosmos DB Emulator installed onto
 the machine 'mycosmosdb' with a custom key emulator key.
 
+### EXAMPLE 6
+
+```powershell
+PS C:\> $primaryKey = ConvertTo-SecureString -String 'your master key' -AsPlainText -Force
+PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureGovCosmosDB' -Database 'MyDatabase' -Key $primaryKey -Environment 'AzureUSGovernment'
+```
+
+Creates a CosmosDB context specifying the master key manually connecting
+to the Azure US Government cloud.
+
 ## PARAMETERS
 
 ### -Account
@@ -126,7 +139,7 @@ Accept wildcard characters: False
 
 ### -BackoffPolicy
 
-This a Back-off Policy object that controls the retry behaviour for
+This a Back-off Policy object that controls the retry behavior for
 requests using this context.
 
 ```yaml
@@ -170,6 +183,27 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Environment
+
+This is the Azure environment hosting the Cosmos DB account.
+
+The supported values are:
+
+- AzureCloud
+- AzureUSGovernment
+
+```yaml
+Type: Environment
+Parameter Sets: Account, AzureAccount, Token
+Aliases:
+
+Required: False
+Position: Named
+Default value: AzureCloud
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
