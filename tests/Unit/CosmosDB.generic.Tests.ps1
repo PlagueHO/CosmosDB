@@ -14,8 +14,14 @@ $modulePath = (Get-Module -Name $ProjectName).Path
 $moduleManifestPath = Join-Path -Path ((Get-Module -Name $ProjectName).ModuleBase) -ChildPath "$ProjectName.psd1"
 $scriptAnalyzerSettingsPath = "$ProjectPath\PSScriptAnalyzerSettings.psd1"
 
+if ($PSVersionTable.PSVersion.Major -eq 6 -and $PSVersionTable.PSVersion -lt [System.Version] '6.2.3')
+{
+    Write-Warning -Message ('Minimum supported version of PSScriptAnalyzer for PowerShell Core is 6.2.4 but current version is "{0}".' -f $PSVersionTable.PSVersion)
+    return
+}
+
 Context 'PSScriptAnalyzer' {
-    Import-Module -Name 'PSScriptAnalyzer'
+    Import-Module -Name PSScriptAnalyzer
 
     # Perform PSScriptAnalyzer scan
     $PSScriptAnalyzerResult = Invoke-ScriptAnalyzer `
