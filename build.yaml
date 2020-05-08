@@ -19,6 +19,7 @@ VersionedOutputDirectory: true
 BuildWorkflow:
   Compile_Classes: |
     {
+      Write-Verbose -Message (Get-Variable | Out-String) -Verbose
       $classesPath = Join-Path -Path $SourcePath -ChildPath 'classes/CosmosDB'
       $classesProjectPath = Join-Path -Path $classesPath -ChildPath 'CosmosDB.csproj'
       & dotnet @('build',$classesProjectPath,'/p:Configuration=Release')
