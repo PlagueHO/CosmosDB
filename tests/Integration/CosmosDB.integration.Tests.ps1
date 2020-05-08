@@ -1103,6 +1103,61 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    Context 'When getting all newly created UTF-8 documents from a collection by using a query' {
+        It 'Should not throw an exception' {
+            $script:result = Get-CosmosDbDocument `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -Query "SELECT * FROM docs c" `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            Test-GenericResult -GenericResult $script:result
+            $script:result.Attachments | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testDocumentUTF8Id
+            $script:result.Content | Should -Be $script:testDocumentUTF8Content
+        }
+    }
+
+    Context 'When getting newly created UTF-8 document from a collection by using a query' {
+        It 'Should not throw an exception' {
+            $script:result = Get-CosmosDbDocument `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -Query "SELECT * FROM docs c WHERE (c.id = '$testDocumentUTF8Id')" `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            Test-GenericResult -GenericResult $script:result
+            $script:result.Attachments | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testDocumentUTF8Id
+            $script:result.Content | Should -Be $script:testDocumentUTF8Content
+        }
+    }
+
+    Context 'When getting newly created UTF-8 document from a collection by using a query with parameters' {
+        It 'Should not throw an exception' {
+            $script:result = Get-CosmosDbDocument `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -Query 'SELECT * FROM docs c WHERE (c.id = @id)' `
+                -QueryParameters @{
+                    name = '@id'
+                    value = $testDocumentUTF8Id
+                } `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            Test-GenericResult -GenericResult $script:result
+            $script:result.Attachments | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testDocumentUTF8Id
+            $script:result.Content | Should -Be $script:testDocumentUTF8Content
+        }
+    }
+
     Context 'When getting newly created UTF-8 document from a collection by using the Id' {
         It 'Should not throw an exception' {
             $script:result = Get-CosmosDbDocument `

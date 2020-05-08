@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Change Azure DevOps Pipeline definition to include `source/*` - Fixes [Issue #350](https://github.com/PlagueHO/CosmosDB/issues/350).
 - Updated pipeline to use `latest` version of `ModuleBuilder` - Fixes [Issue #350](https://github.com/PlagueHO/CosmosDB/issues/350).
 - Merge `HISTORIC_CHANGELOG.md` into `CHANGELOG.md` - Fixes [Issue #351](https://github.com/PlagueHO/CosmosDB/issues/351).
+- Updated `azure-pipelines.yml` to change Deploy stage to use
+  a native Azure DevOps `deployment`.
+- Added integration tests for executing document queries - Fixes [Issue #356](https://github.com/PlagueHO/CosmosDB/issues/356).
 
 ## [3.7.0] - 2020-03-24
 
