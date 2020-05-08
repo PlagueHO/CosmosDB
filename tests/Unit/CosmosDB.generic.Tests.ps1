@@ -15,7 +15,7 @@ $moduleManifestPath = Join-Path -Path ((Get-Module -Name $ProjectName).ModuleBas
 $scriptAnalyzerSettingsPath = "$ProjectPath\PSScriptAnalyzerSettings.psd1"
 
 Describe 'CosmosDB Module' {
-    if ($PSVersionTable.PSVersion.Major -eq 6 -and $PSVersionTable.PSVersion -lt [System.Version] '6.2.3')
+    if ($PSVersionTable.PSVersion.Major -eq 6 -and $PSVersionTable.PSVersion -lt [System.Version] '6.2.4')
     {
         Write-Warning -Message ('Minimum supported version of PSScriptAnalyzer for PowerShell Core is 6.2.4 but current version is "{0}".' -f $PSVersionTable.PSVersion)
     }
