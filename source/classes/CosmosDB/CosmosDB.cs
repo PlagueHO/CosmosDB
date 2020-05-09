@@ -64,12 +64,22 @@ namespace CosmosDB {
             }
         }
 
+
+        namespace CompositeIndex {
+            public class Element
+            {
+                public System.String path;
+                public System.String order;
+            }
+        }
+
         public class Policy
         {
             public System.Boolean automatic;
             public System.String indexingMode;
             public CosmosDB.IndexingPolicy.Path.IncludedPath[] includedPaths;
             public CosmosDB.IndexingPolicy.Path.ExcludedPath[] excludedPaths;
+            public CosmosDB.IndexingPolicy.CompositeIndex.Element[][] compositeIndexes;
         }
     }
 

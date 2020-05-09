@@ -254,6 +254,30 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         $CollectionResult.indexingPolicy.includedPaths[1].Indexes[2].Precision | Should -Be -1
     }
 
+    function Test-CollectionCompositeIndexingPolicy
+    {
+        [CmdletBinding()]
+        param
+        (
+            [Parameter(Mandatory = $true)]
+            [System.Object]
+            $CollectionResult
+        )
+
+        Test-CollectionResult -CollectionResult $CollectionResult
+        $CollectionResult.indexingPolicy.indexingMode | Should -Be 'Consistent'
+        $CollectionResult.indexingPolicy.automatic | Should -Be $true
+        $CollectionResult.indexingPolicy.includedPaths[0].path | Should -Be '/*'
+        $CollectionResult.indexingPolicy.compositeIndexes[0][0].Path | Should -Be '/name'
+        $CollectionResult.indexingPolicy.compositeIndexes[0][0].Order | Should -Be 'ascending'
+        $CollectionResult.indexingPolicy.compositeIndexes[0][1].Path | Should -Be '/age'
+        $CollectionResult.indexingPolicy.compositeIndexes[0][1].Order | Should -Be 'ascending'
+        $CollectionResult.indexingPolicy.compositeIndexes[1][0].Path | Should -Be '/name'
+        $CollectionResult.indexingPolicy.compositeIndexes[1][0].Order | Should -Be 'ascending'
+        $CollectionResult.indexingPolicy.compositeIndexes[1][1].Path | Should -Be '/age'
+        $CollectionResult.indexingPolicy.compositeIndexes[1][1].Order | Should -Be 'descending'
+    }
+
     Context 'When creating a new Azure Cosmos DB Account' {
         It 'Should not throw an exception' {
             New-CosmosDbAccount `
@@ -544,7 +568,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When creating a new collection with no IndexingPolicy' {
+    Context 'When creating a new collection with no indexing policy' {
         It 'Should not throw an exception' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
@@ -571,7 +595,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When creating a new collection with a simple automatic IndexingPolicy' {
+    Context 'When creating a new collection with a simple automatic indexing policy' {
         It 'Should not throw an exception' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
@@ -588,6 +612,45 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     }
 
     Context 'When removing existing collection with a simple automatic indexing policy' {
+        It 'Should not throw an exception' {
+            $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
+        }
+    }
+
+    Context 'When creating a new composite index indexing policy' {
+        It 'Should not throw an exception' {
+            $script:compositeIndexElements = @(
+                @(
+                    (New-CosmosDbCollectionCompositeIndexElement -Path '/name' -Order 'Ascending'),
+                    (New-CosmosDbCollectionCompositeIndexElement -Path '/age' -Order 'Ascending')
+                ),
+                @(
+                    (New-CosmosDbCollectionCompositeIndexElement -Path '/name' -Order 'Ascending'),
+                    (New-CosmosDbCollectionCompositeIndexElement -Path '/age' -Order 'Descending')
+                )
+            )
+            $script:indexIncludedPathOnly = New-CosmosDbCollectionIncludedPath -Path '/*'
+            $script:indexingPolicyComposite = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $script:indexIncludedPathOnly -CompositeIndex $script:compositeIndexElements
+        }
+    }
+
+    Context 'When creating a new collection with a composite indexing policy' {
+        It 'Should not throw an exception' {
+            $script:result = New-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id $script:testCollection `
+                -OfferThroughput 400 `
+                -IndexingPolicy $script:indexingPolicyComposite `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            Test-CollectionCompositeIndexingPolicy -CollectionResult $script:result
+            $script:result.Id | Should -Be $script:testCollection
+        }
+    }
+
+    Context 'When removing existing collection with a composite indexing policy' {
         It 'Should not throw an exception' {
             $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
         }
@@ -611,7 +674,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When creating a new collection with a complex automatic IndexingPolicy and UniqueKeyPolicy' {
+    Context 'When creating a new collection with a complex automatic indexing policy and unique key policy' {
         It 'Should not throw an exception' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
@@ -629,7 +692,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When getting existing collection with an IndexingPolicy and UniqueKeyPolicy' {
+    Context 'When getting existing collection with an indexing policy and unique key policy' {
         It 'Should not throw an exception' {
             $script:result = Get-CosmosDbCollection `
                 -Context $script:testContext `

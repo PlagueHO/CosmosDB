@@ -20,7 +20,11 @@ function New-CosmosDbCollectionIndexingPolicy
 
         [Parameter()]
         [CosmosDB.IndexingPolicy.Path.ExcludedPath[]]
-        $ExcludedPath = @()
+        $ExcludedPath = @(),
+
+        [Parameter()]
+        [CosmosDB.IndexingPolicy.Composite.IndexItem[][]]
+        $CompositeIndex = @(@())
     )
 
     if ($IndexingMode -eq 'None' -and $Automatic)
@@ -35,6 +39,7 @@ function New-CosmosDbCollectionIndexingPolicy
     $indexingPolicy.IndexingMode = $IndexingMode
     $indexingPolicy.IncludedPaths = $IncludedPath
     $indexingPolicy.ExcludedPaths = $ExcludedPath
+    $indexingPolicy.CompositeIndexes = $CompositeIndex
 
     return $indexingPolicy
 }

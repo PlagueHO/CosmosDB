@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `azure-pipelines.yml` to change Deploy stage to use
   a native Azure DevOps `deployment`.
 - Added integration tests for executing document queries - Fixes [Issue #356](https://github.com/PlagueHO/CosmosDB/issues/356).
+- Added support for composite indexes in indexing policy - Fixes [Issue #357](https://github.com/PlagueHO/CosmosDB/issues/357).
 
 ## [3.7.0] - 2020-03-24
 
