@@ -51,10 +51,19 @@ function New-CosmosDbCollection
         [System.String]
         $PartitionKey,
 
-        [Parameter()]
+        [Parameter(ParameterSetName = 'Context')]
+        [Parameter(ParameterSetName = 'Account')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'IndexingPolicy')]
         [ValidateNotNullOrEmpty()]
         [CosmosDB.IndexingPolicy.Policy]
         $IndexingPolicy,
+
+        [Parameter(ParameterSetName = 'Context')]
+        [Parameter(ParameterSetName = 'Account')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'IndexingPolicyJson')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $IndexingPolicyJson,
 
         [Parameter()]
         [ValidateRange(-1,2147483647)]
@@ -123,6 +132,13 @@ function New-CosmosDbCollection
             indexingPolicy = $IndexingPolicy
         }
         $null = $PSBoundParameters.Remove('IndexingPolicy')
+    }
+    elseif ($PSBoundParameters.ContainsKey('IndexingPolicyJson'))
+    {
+        $bodyObject += @{
+            indexingPolicy = ConvertFrom-Json -InputObject $IndexingPolicyJson
+        }
+        $null = $PSBoundParameters.Remove('IndexingPolicyJson')
     }
 
     if ($PSBoundParameters.ContainsKey('DefaultTimeToLive'))
