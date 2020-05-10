@@ -2,7 +2,7 @@
 ####################################################
 #          ModuleBuilder Configuration             #
 ####################################################
-CopyDirectories:
+CopyPaths:
   - classes
   - formats
   - en-US
