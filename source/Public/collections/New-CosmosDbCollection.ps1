@@ -1,17 +1,19 @@
 function New-CosmosDbCollection
 {
 
-    [CmdletBinding(DefaultParameterSetName = 'Context')]
+    [CmdletBinding(DefaultParameterSetName = 'ContextIndexPolicy')]
     [OutputType([Object])]
     param
     (
         [Alias("Connection")]
-        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'ContextIndexPolicy')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'ContextIndexPolicyJson')]
         [ValidateNotNullOrEmpty()]
         [CosmosDb.Context]
         $Context,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'AccountIndexPolicy')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'AccountIndexPolicyJson')]
         [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ -ArgumentName 'Account' })]
         [System.String]
         $Account,
@@ -51,10 +53,17 @@ function New-CosmosDbCollection
         [System.String]
         $PartitionKey,
 
-        [Parameter()]
+        [Parameter(ParameterSetName = 'ContextIndexPolicy')]
+        [Parameter(ParameterSetName = 'AccountIndexPolicy')]
         [ValidateNotNullOrEmpty()]
         [CosmosDB.IndexingPolicy.Policy]
         $IndexingPolicy,
+
+        [Parameter(ParameterSetName = 'ContextIndexPolicyJson')]
+        [Parameter(ParameterSetName = 'AccountIndexPolicyJson')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $IndexingPolicyJson,
 
         [Parameter()]
         [ValidateRange(-1,2147483647)]
@@ -123,6 +132,13 @@ function New-CosmosDbCollection
             indexingPolicy = $IndexingPolicy
         }
         $null = $PSBoundParameters.Remove('IndexingPolicy')
+    }
+    elseif ($PSBoundParameters.ContainsKey('IndexingPolicyJson'))
+    {
+        $bodyObject += @{
+            indexingPolicy = ConvertFrom-Json -InputObject $IndexingPolicyJson
+        }
+        $null = $PSBoundParameters.Remove('IndexingPolicyJson')
     }
 
     if ($PSBoundParameters.ContainsKey('DefaultTimeToLive'))

@@ -13,20 +13,40 @@ Update an existing collection in a Cosmos DB database.
 
 ## SYNTAX
 
-### Context (Default)
+### ContextIndexPolicy (Default)
 
 ```powershell
-Set-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -Id <String> [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [-RemoveDefaultTimeToLive]
- [-UniqueKeyPolicy <Policy>] [<CommonParameters>]
+Set-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>]
+ [-Database <String>] -Id <String> [-IndexingPolicy <Policy>]
+ [-DefaultTimeToLive <Int32>] [-RemoveDefaultTimeToLive] [-UniqueKeyPolicy <Policy>]
+ [<CommonParameters>]
 ```
 
-### Account
+### ContextIndexPolicyJson
 
 ```powershell
-Set-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -Id <String> [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [-RemoveDefaultTimeToLive]
- [-UniqueKeyPolicy <Policy>] [<CommonParameters>]
+Set-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>]
+ [-Database <String>] -Id <String> [-IndexingPolicyJson <String>]
+ [-DefaultTimeToLive <Int32>] [-RemoveDefaultTimeToLive] [-UniqueKeyPolicy <Policy>]
+ [<CommonParameters>]
+```
+
+### AccountIndexPolicyJson
+
+```powershell
+Set-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>]
+ [-Database <String>] -Id <String> [-IndexingPolicyJson <String>]
+ [-DefaultTimeToLive <Int32>] [-RemoveDefaultTimeToLive] [-UniqueKeyPolicy <Policy>]
+ [<CommonParameters>]
+```
+
+### AccountIndexPolicy
+
+```powershell
+Set-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>]
+ [-Database <String>] -Id <String> [-IndexingPolicy <Policy>]
+ [-DefaultTimeToLive <Int32>] [-RemoveDefaultTimeToLive] [-UniqueKeyPolicy <Policy>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -74,7 +94,7 @@ The account name of the Cosmos DB to access.
 
 ```yaml
 Type: String
-Parameter Sets: Account
+Parameter Sets: AccountIndexPolicyJson, AccountIndexPolicy
 Aliases:
 
 Required: True
@@ -91,7 +111,7 @@ that will be deleted. It should be created by \`New-CosmosDbContext\`.
 
 ```yaml
 Type: Context
-Parameter Sets: Context
+Parameter Sets: ContextIndexPolicy, ContextIndexPolicyJson
 Aliases: Connection
 
 Required: True
@@ -154,11 +174,29 @@ Accept wildcard characters: False
 ### -IndexingPolicy
 
 This is an Indexing Policy object that was created by the
-Set-CosmosDbCollectionIndexingPolicy function.
+Set-CosmosDbCollectionIndexingPolicy function. It should not
+be set if IndexingPolicyJson is set.
 
 ```yaml
 Type: Policy
-Parameter Sets: (All)
+Parameter Sets: ContextIndexPolicy, AccountIndexPolicy
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IndexingPolicyJson
+
+This is a JSON representation of an Indexing Policy. It should not
+be set if IndexingPolicy is set.
+
+```yaml
+Type: String
+Parameter Sets: ContextIndexPolicyJson, AccountIndexPolicyJson
 Aliases:
 
 Required: False
@@ -239,7 +277,7 @@ Accept wildcard characters: False
 
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

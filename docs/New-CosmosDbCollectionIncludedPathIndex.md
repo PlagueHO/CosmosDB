@@ -122,3 +122,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://docs.microsoft.com/en-nz/azure/cosmos-db/index-policy#composite-indexes](https://docs.microsoft.com/en-nz/azure/cosmos-db/index-policy#composite-indexes)

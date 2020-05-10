@@ -599,6 +599,28 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    Context 'When creating a new collection with a simple automatic indexing policy using JSON' {
+        It 'Should not throw an exception' {
+            $script:result = New-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id $script:testCollection `
+                -OfferThroughput 400 `
+                -IndexingPolicyJson (ConvertTo-Json -InputObject $script:indexingPolicySimpleAutomatic -Depth 10) `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            Test-CollectionDefaultIndexingPolicy -CollectionResult $script:result
+            $script:result.Id | Should -Be $script:testCollection
+        }
+    }
+
+    Context 'When removing existing collection with a simple automatic indexing policy' {
+        It 'Should not throw an exception' {
+            $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
+        }
+    }
+
     Context 'When creating a new composite index indexing policy' {
         It 'Should not throw an exception' {
             $script:compositeIndexElements = @(

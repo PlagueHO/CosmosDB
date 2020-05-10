@@ -22,6 +22,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   in behavior of indexing policy are also expected. See
   [this page](https://docs.microsoft.com/en-nz/azure/cosmos-db/index-policy#composite-indexes)
   for more information.
+- Added `IndexingPolicyJson` parameter to `New-CosmosDbCollection`
+  and `Set-CosmosDbCollection` functions to enable setting an index policy
+  using JSON - Fixes [Issue #360](https://github.com/PlagueHO/CosmosDB/issues/360).
+- Fixed build pipeline deployment skip function.
+- Changed Build.yml to support `ModuleBuilder` version to `1.7.0` by changing
+  `CopyDirectories` to `CopyPaths`.
 
 ## [3.7.0] - 2020-03-24
 

@@ -2,7 +2,7 @@ name: $(rev:r)
 trigger:
   branches:
     include:
-    - master
+    - '*'
   paths:
     include:
     - source/*
@@ -562,8 +562,7 @@ stages:
           eq(variables['Build.SourceBranch'], 'refs/heads/master'),
           startsWith(variables['Build.SourceBranch'], 'refs/tags/')
         ),
-        eq(variables['System.TeamFoundationCollectionUri'], 'https://dscottraynsford.visualstudio.com/'),
-        endsWith(variables['Build.DefinitionName'],'master')
+        eq(variables['System.TeamFoundationCollectionUri'], 'https://dscottraynsford.visualstudio.com/')
       )
     jobs:
       - deployment: Deploy_Module

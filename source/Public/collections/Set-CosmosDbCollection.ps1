@@ -1,17 +1,19 @@
 function Set-CosmosDbCollection
 {
 
-    [CmdletBinding(DefaultParameterSetName = 'Context')]
+    [CmdletBinding(DefaultParameterSetName = 'ContextIndexPolicy')]
     [OutputType([Object])]
     param
     (
         [Alias("Connection")]
-        [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'ContextIndexPolicy')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'ContextIndexPolicyJson')]
         [ValidateNotNullOrEmpty()]
         [CosmosDb.Context]
         $Context,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'AccountIndexPolicy')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'AccountIndexPolicyJson')]
         [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ -ArgumentName 'Account' })]
         [System.String]
         $Account,
@@ -36,10 +38,17 @@ function Set-CosmosDbCollection
         [System.String]
         $Id,
 
-        [Parameter()]
+        [Parameter(ParameterSetName = 'ContextIndexPolicy')]
+        [Parameter(ParameterSetName = 'AccountIndexPolicy')]
         [ValidateNotNullOrEmpty()]
         [CosmosDB.IndexingPolicy.Policy]
         $IndexingPolicy,
+
+        [Parameter(ParameterSetName = 'ContextIndexPolicyJson')]
+        [Parameter(ParameterSetName = 'AccountIndexPolicyJson')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $IndexingPolicyJson,
 
         [Parameter()]
         [ValidateRange(-1,2147483647)]
@@ -69,7 +78,21 @@ function Set-CosmosDbCollection
         id = $id
     }
 
-    $indexingPolicyIncluded = $PSBoundParameters.ContainsKey('IndexingPolicy')
+    $indexingPolicyIncluded = $false
+
+    if ($PSBoundParameters.ContainsKey('IndexingPolicy'))
+    {
+        $ActualIndexingPolicy = $IndexingPolicy
+        $indexingPolicyIncluded = $true
+        $null = $PSBoundParameters.Remove('IndexingPolicy')
+    }
+    elseif ($PSBoundParameters.ContainsKey('IndexingPolicyJson'))
+    {
+        $ActualIndexingPolicy = ConvertFrom-Json -InputObject $IndexingPolicyJson
+        $indexingPolicyIncluded = $true
+        $null = $PSBoundParameters.Remove('IndexingPolicyJson')
+    }
+
     $defaultTimeToLiveIncluded = $PSBoundParameters.ContainsKey('DefaultTimeToLive')
     $uniqueKeyPolicyIncluded = $PSBoundParameters.ContainsKey('UniqueKeyPolicy')
 
@@ -90,7 +113,7 @@ function Set-CosmosDbCollection
     if ($indexingPolicyIncluded)
     {
         $bodyObject += @{
-            indexingPolicy = $IndexingPolicy
+            indexingPolicy = $ActualIndexingPolicy
         }
     }
     else

@@ -34,6 +34,7 @@
     - [Creating a Collection with a custom Indexing Policy](#creating-a-collection-with-a-custom-indexing-policy)
     - [Creating a Collection with a custom Indexing Policy including Composite Indexes](#creating-a-collection-with-a-custom-indexing-policy-including-composite-indexes)
     - [Update an existing Collection with a new Indexing Policy](#update-an-existing-collection-with-a-new-indexing-policy)
+    - [Creating a Collection with a custom Indexing Policy using JSON](#creating-a-collection-with-a-custom-indexing-policy-using-JSON)
     - [Creating a Collection with a custom Unique Key Policy](#creating-a-collection-with-a-custom-unique-key-policy)
     - [Update an existing Collection with a new Unique Key Policy](#update-an-existing-collection-with-a-new-unique-key-policy)
     - [Creating a Collection without a Partition Key](#creating-a-collection-without-a-partition-key)
@@ -432,6 +433,40 @@ $indexStringRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataTyp
 $indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $indexStringRange
 $indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $indexIncludedPath
 Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -IndexingPolicy $indexingPolicy
+```
+
+#### Creating a Collection with a custom Indexing Policy using JSON
+
+If the `New-CosmosDbCollection*` functions don't enable you to build
+the index policy to your requirements, you can also pass the raw index
+policy JSON to the function using the `IndexingPolicyJson` parameter:
+
+```powershell
+$indexingPolicyJson = @'
+{
+    "automatic":true,
+    "indexingMode":"Consistent",
+    "includedPaths":[
+        {
+            "path":"/*"
+        }
+    ],
+    "excludedPaths":[],
+    "compositeIndexes":[
+        [
+            {
+                "path":"/name",
+                "order":"ascending"
+            },
+            {
+                "path":"/age",
+                "order":"descending"
+            }
+        ]
+    ]
+}
+'@
+New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'id' -IndexingPolicyJson $indexingPolicyJson
 ```
 
 #### Creating a Collection with a custom Unique Key Policy

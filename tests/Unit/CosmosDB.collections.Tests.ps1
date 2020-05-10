@@ -68,6 +68,7 @@ InModuleScope $ProjectName {
         -ExcludedPath (
         New-CosmosDbCollectionExcludedPath -Path '/exclude/'
     )
+    $script:testIndexingPolicyJson = ConvertTo-Json -InputObject $script:testIndexingPolicy -Depth 10
     $script:testPartitionKey = @{
         paths = @(
             '/partitionkey'
@@ -929,6 +930,44 @@ InModuleScope $ProjectName {
             }
         }
 
+        Context 'When called with context parameter and an Id and an IndexingPolicyJson parameter' {
+            $script:result = $null
+            $invokecosmosdbrequest_parameterfilter = {
+                $BodyObject = $Body | ConvertFrom-Json
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'colls' -and `
+                    $BodyObject.id -eq $script:testCollection1 -and `
+                    $BodyObject.indexingPolicy.automatic -eq $script:testIndexingPolicy.automatic -and `
+                    $BodyObject.indexingPolicy.indexingMode -eq $script:testIndexingPolicy.indexingMode
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetCollectionResultSingle }
+
+            It 'Should not throw an exception' {
+                $newCosmosDbCollectionParameters = @{
+                    Context            = $script:testContext
+                    Id                 = $script:testCollection1
+                    IndexingPolicyJson = $script:testIndexingPolicyJson
+                    Verbose            = $true
+                }
+
+                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testCollection1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
         Context 'When called with context parameter and an Id and a UniqueKeyPolicy parameter' {
             $script:result = $null
             $invokecosmosdbrequest_parameterfilter = {
@@ -1171,6 +1210,58 @@ InModuleScope $ProjectName {
             }
         }
 
+        Context 'When called with context parameter and an Id and IndexingPolicyJson parameter on a collection with no partition key' {
+            $script:result = $null
+
+            $invokecosmosdbrequest_parameterfilter = {
+                $BodyObject = $Body | ConvertFrom-Json
+                $Method -eq 'Put' -and `
+                    $ResourceType -eq 'colls' -and `
+                    $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
+                    $BodyObject.id -eq $script:testCollection1 -and `
+                    $BodyObject.indexingPolicy.automatic -eq $script:testIndexingPolicy.automatic -and `
+                    $BodyObject.indexingPolicy.indexingMode -eq $script:testIndexingPolicy.indexingMode
+            }
+            $getcosmosdbcollection_parameterfilter = {
+                $Id -eq $script:testCollection1
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetCollectionResultSingle }
+
+            Mock `
+                -CommandName Get-CosmosDbCollection
+
+            It 'Should not throw an exception' {
+                $setCosmosDbCollectionParameters = @{
+                    Context            = $script:testContext
+                    Id                 = $script:testCollection1
+                    IndexingPolicyJson = $script:testIndexingPolicyJson
+                    Verbose            = $true
+                }
+
+                $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testCollection1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                    -Exactly -Times 1
+
+                Assert-MockCalled `
+                    -CommandName Get-CosmosDbCollection `
+                    -ParameterFilter $getcosmosdbcollection_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+
         Context 'When called with context parameter and an Id and IndexingPolicy parameter on a collection with a partition key' {
             $script:result = $null
 
@@ -1203,6 +1294,60 @@ InModuleScope $ProjectName {
                     Id             = $script:testCollection1
                     IndexingPolicy = $script:testIndexingPolicy
                     Verbose        = $true
+                }
+
+                $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testCollection1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                    -Exactly -Times 1
+
+                Assert-MockCalled `
+                    -CommandName Get-CosmosDbCollection `
+                    -ParameterFilter $getcosmosdbcollection_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id and IndexingPolicyJson parameter on a collection with a partition key' {
+            $script:result = $null
+
+            $invokecosmosdbrequest_parameterfilter = {
+                $BodyObject = $Body | ConvertFrom-Json
+                $Method -eq 'Put' -and `
+                    $ResourceType -eq 'colls' -and `
+                    $ResourcePath -eq ('colls/{0}' -f $script:testCollection1) -and `
+                    $BodyObject.id -eq $script:testCollection1 -and `
+                    $BodyObject.indexingPolicy.automatic -eq $script:testIndexingPolicy.automatic -and `
+                    $BodyObject.indexingPolicy.indexingMode -eq $script:testIndexingPolicy.indexingMode -and `
+                    $BodyObject.partitionKey.paths[0] -eq $script:testPartitionKey.paths[0] -and `
+                    $BodyObject.partitionKey.kind -eq $script:testPartitionKey.kind
+            }
+            $getcosmosdbcollection_parameterfilter = {
+                $Id -eq $script:testCollection1
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetCollectionResultSingle }
+
+            Mock `
+                -CommandName Get-CosmosDbCollection `
+                -MockWith { @{ partitionKey = $script:testPartitionKey } }
+
+            It 'Should not throw an exception' {
+                $setCosmosDbCollectionParameters = @{
+                    Context            = $script:testContext
+                    Id                 = $script:testCollection1
+                    IndexingPolicyJson = $script:testIndexingPolicyJson
+                    Verbose            = $true
                 }
 
                 $script:result = Set-CosmosDbCollection @setCosmosDbCollectionParameters

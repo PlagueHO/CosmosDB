@@ -13,20 +13,40 @@ Create a new collection in a Cosmos DB database.
 
 ## SYNTAX
 
-### Context (Default)
+### ContextIndexPolicy (Default)
 
 ```powershell
-New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>]
- [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [-UniqueKeyPolicy <Policy>] [<CommonParameters>]
+New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>]
+ [-Database <String>] -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>]
+ [-PartitionKey <String>] [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>]
+ [-UniqueKeyPolicy <Policy>] [<CommonParameters>]
 ```
 
-### Account
+### ContextIndexPolicyJson
 
 ```powershell
-New-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>] [-Database <String>]
- -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>] [-PartitionKey <String>]
- [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>] [-UniqueKeyPolicy <Policy>] [<CommonParameters>]
+New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>]
+ [-Database <String>] -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>]
+ [-PartitionKey <String>] [-IndexingPolicyJson <String>] [-DefaultTimeToLive <Int32>]
+ [-UniqueKeyPolicy <Policy>] [<CommonParameters>]
+```
+
+### AccountIndexPolicyJson
+
+```powershell
+New-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>]
+ [-Database <String>] -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>]
+ [-PartitionKey <String>] [-IndexingPolicyJson <String>] [-DefaultTimeToLive <Int32>]
+ [-UniqueKeyPolicy <Policy>] [<CommonParameters>]
+```
+
+### AccountIndexPolicy
+
+```powershell
+New-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>]
+ [-Database <String>] -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>]
+ [-PartitionKey <String>] [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>]
+ [-UniqueKeyPolicy <Policy>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -69,7 +89,7 @@ The account name of the Cosmos DB to access.
 
 ```yaml
 Type: String
-Parameter Sets: Account
+Parameter Sets: AccountIndexPolicyJson, AccountIndexPolicy
 Aliases:
 
 Required: True
@@ -86,7 +106,7 @@ that will be deleted. It should be created by \`New-CosmosDbContext\`.
 
 ```yaml
 Type: Context
-Parameter Sets: Context
+Parameter Sets: ContextIndexPolicy, ContextIndexPolicyJson
 Aliases: Connection
 
 Required: True
@@ -149,11 +169,29 @@ Accept wildcard characters: False
 ### -IndexingPolicy
 
 This is an Indexing Policy object that was created by the
-New-CosmosDbCollectionIndexingPolicy function.
+New-CosmosDbCollectionIndexingPolicy function. It should not
+be set if IndexingPolicyJson is set.
 
 ```yaml
 Type: Policy
-Parameter Sets: (All)
+Parameter Sets: ContextIndexPolicy, AccountIndexPolicy
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IndexingPolicyJson
+
+This is a JSON representation of an Indexing Policy. It should not
+be set if IndexingPolicy is set.
+
+```yaml
+Type: String
+Parameter Sets: ContextIndexPolicyJson, AccountIndexPolicyJson
 Aliases:
 
 Required: False
@@ -270,7 +308,9 @@ Accept wildcard characters: False
 
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable,
+-Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
