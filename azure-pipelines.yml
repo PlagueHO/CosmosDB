@@ -2,7 +2,7 @@ name: $(rev:r)
 trigger:
   branches:
     include:
-    - master
+    - '*'
   paths:
     include:
     - source/*
