@@ -210,13 +210,8 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         $CollectionResult.indexingPolicy.indexingMode | Should -Be 'Consistent'
         $CollectionResult.indexingPolicy.automatic | Should -Be $true
         $CollectionResult.indexingPolicy.includedPaths[0].path | Should -Be '/*'
-        $CollectionResult.indexingPolicy.includedPaths[0].Indexes.Count | Should -Be 2
-        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[0].DataType | Should -Be 'Number'
-        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[0].Kind | Should -Be 'Range'
-        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[0].Precision | Should -Be -1
-        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[1].DataType | Should -Be 'String'
-        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[1].Kind | Should -Be 'Range'
-        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[1].Precision | Should -Be -1
+        $CollectionResult.indexingPolicy.includedPaths[0].Indexes | Should -BeNullOrEmpty
+        $CollectionResult.indexingPolicy.excludedPaths[0].path | Should -Be '/"_etag"/?'
     }
 
     function Test-CollectionResultComplexAutomaticIndexingPolicy
@@ -232,26 +227,13 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         Test-CollectionResult -CollectionResult $CollectionResult
         $CollectionResult.indexingPolicy.indexingMode | Should -Be 'Consistent'
         $CollectionResult.indexingPolicy.automatic | Should -Be $true
+        $CollectionResult.indexingPolicy.includedPaths.Count | Should -Be 2
         $CollectionResult.indexingPolicy.includedPaths[0].path | Should -Be '/*'
-        $CollectionResult.indexingPolicy.includedPaths[0].Indexes.Count | Should -Be 3
-        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[0].DataType | Should -Be 'Number'
-        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[0].Kind | Should -Be 'Range'
-        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[0].Precision | Should -Be -1
-        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[1].DataType | Should -Be 'String'
-        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[1].Kind | Should -Be 'Range'
-        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[1].Precision | Should -Be -1
-        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[2].DataType | Should -Be 'Point'
-        $CollectionResult.indexingPolicy.includedPaths[0].Indexes[2].Kind | Should -Be 'Spatial'
         $CollectionResult.indexingPolicy.includedPaths[1].path | Should -Be '/Location/*'
-        $CollectionResult.indexingPolicy.includedPaths[1].Indexes.Count | Should -Be 3
-        $CollectionResult.indexingPolicy.includedPaths[1].Indexes[0].DataType | Should -Be 'Point'
-        $CollectionResult.indexingPolicy.includedPaths[1].Indexes[0].Kind | Should -Be 'Spatial'
-        $CollectionResult.indexingPolicy.includedPaths[1].Indexes[1].DataType | Should -Be 'Number'
-        $CollectionResult.indexingPolicy.includedPaths[1].Indexes[1].Kind | Should -Be 'Range'
-        $CollectionResult.indexingPolicy.includedPaths[1].Indexes[1].Precision | Should -Be -1
-        $CollectionResult.indexingPolicy.includedPaths[1].Indexes[2].DataType | Should -Be 'String'
-        $CollectionResult.indexingPolicy.includedPaths[1].Indexes[2].Kind | Should -Be 'Range'
-        $CollectionResult.indexingPolicy.includedPaths[1].Indexes[2].Precision | Should -Be -1
+        $CollectionResult.indexingPolicy.excludedPaths[0].path | Should -Be '/"_etag"/?'
+        $CollectionResult.indexingPolicy.spatialIndexes.Count | Should -Be 2
+        $CollectionResult.indexingPolicy.spatialIndexes[0].path | Should -Be '/*'
+        $CollectionResult.indexingPolicy.spatialIndexes[1].path | Should -Be '/Location/*'
     }
 
     function Test-CollectionCompositeIndexingPolicy

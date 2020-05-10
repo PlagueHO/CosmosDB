@@ -16,7 +16,8 @@ New-CosmosDbCollection function.
 
 ```powershell
 New-CosmosDbCollectionIndexingPolicy [[-Automatic] <Boolean>] [[-IndexingMode] <String>]
- [[-IncludedPath] <IncludedPath[]>] [[-ExcludedPath] <ExcludedPath[]>] [<CommonParameters>]
+ [[-IncludedPath] <IncludedPath[]>] [[-ExcludedPath] <ExcludedPath[]>]
+ [[-CompositeIndex] <Element[][]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -39,6 +40,26 @@ PS C:\> New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -
 ```
 
 Create a new collection with a custom indexing policy.
+
+### Example 2
+
+```powershell
+PS C:\> $indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*'
+PS C:\> $compositeIndexElements = @(
+            @(
+                (New-CosmosDbCollectionCompositeIndexElement -Path '/name' -Order 'Ascending'),
+                (New-CosmosDbCollectionCompositeIndexElement -Path '/age' -Order 'Ascending')
+            ),
+            @(
+                (New-CosmosDbCollectionCompositeIndexElement -Path '/name' -Order 'Ascending'),
+                (New-CosmosDbCollectionCompositeIndexElement -Path '/age' -Order 'Descending')
+            )
+        )
+PS C:\> $indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $indexIncludedPath -CompositeIndex $compositeIndexElements
+PS C:\> New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'account' -IndexingPolicy $indexingPolicy
+```
+
+Create a new collection with a custom indexing policy containing composite indexes.
 
 ## PARAMETERS
 
@@ -72,6 +93,23 @@ Aliases:
 Required: False
 Position: 3
 Default value: @()
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CompositeIndex
+
+An array of arrays containing composite index elements created by
+New-CosmosDbCollectionCompositeIndexElement.
+
+```yaml
+Type: Element[][]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 4
+Default value: @(@())
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

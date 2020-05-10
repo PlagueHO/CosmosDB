@@ -174,6 +174,53 @@ InModuleScope $ProjectName {
         }
     }
 
+    Describe 'New-CosmosDbCollectionCompositeIndexElement' -Tag 'Unit' {
+        It 'Should exist' {
+            {
+                Get-Command -Name New-CosmosDbCollectionCompositeIndexElement -ErrorAction Stop
+            } | Should -Not -Throw
+        }
+
+        Context 'When called with valid path and default order' {
+            $script:result = $null
+
+            It 'Should not throw an exception' {
+                $newCosmosDbCollectionCompositeIndexElementParameters = @{
+                    Path      = '/path'
+                    Verbose   = $true
+                }
+
+                $script:result = New-CosmosDbCollectionCompositeIndexElement @newCosmosDbCollectionCompositeIndexElementParameters
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -BeOfType 'CosmosDB.IndexingPolicy.CompositeIndex.Element'
+                $script:result.Path | Should -Be '/path'
+                $script:result.Order | Should -BeExactly 'ascending'
+            }
+        }
+
+        Context 'When called with valid path and descending order' {
+            $script:result = $null
+
+            It 'Should not throw an exception' {
+                $newCosmosDbCollectionCompositeIndexElementParameters = @{
+                    Path      = '/path'
+                    Order     = 'Descending'
+                    Verbose   = $true
+                }
+
+                $script:result = New-CosmosDbCollectionCompositeIndexElement @newCosmosDbCollectionCompositeIndexElementParameters
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -BeOfType 'CosmosDB.IndexingPolicy.CompositeIndex.Element'
+                $script:result.Path | Should -Be '/path'
+                $script:result.Order | Should -BeExactly 'descending'
+            }
+        }
+    }
+
     Describe 'New-CosmosDbCollectionIncludedPathIndex' -Tag 'Unit' {
         It 'Should exist' {
             {
@@ -389,11 +436,30 @@ InModuleScope $ProjectName {
             }
 
             It 'Should return expected result' {
-                $script:result | Should -BeOfType 'CosmosDB.IndexingPolicy.Path.IncludedPath'
+                $script:result | Should -BeOfType 'CosmosDB.IndexingPolicy.Path.IncludedPathIndex'
                 $script:result.Path | Should -Be '/*'
                 $script:result.Indexes[0].Kind | Should -Be 'Range'
                 $script:result.Indexes[0].DataType | Should -Be 'String'
                 $script:result.Indexes[0].Precision | Should -Be -1
+            }
+        }
+
+        Context 'When called with path parameter only' {
+            $script:result = $null
+
+            It 'Should not throw an exception' {
+                $newCosmosDbCollectionIncludedPathParameters = @{
+                    Path    = '/*'
+                    Verbose = $true
+                }
+
+                $script:result = New-CosmosDbCollectionIncludedPath @newCosmosDbCollectionIncludedPathParameters
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -BeOfType 'CosmosDB.IndexingPolicy.Path.IncludedPath'
+                $script:result.Path | Should -Be '/*'
+                $script:result.Indexes | Should -BeNullOrEmpty
             }
         }
     }
@@ -436,11 +502,21 @@ InModuleScope $ProjectName {
 
             It 'Should not throw an exception' {
                 $newCosmosDbCollectionIndexingPolicyParameters = @{
-                    Automatic    = $true
-                    IndexingMode = 'Consistent'
-                    IncludedPath = (New-CosmosDbCollectionIncludedPath -Path '/*' -Index (New-CosmosDbCollectionIncludedPathIndex -Kind 'Range' -DataType 'String' -Precision -1))
-                    ExcludedPath = (New-CosmosDbCollectionExcludedPath -Path '/*')
-                    Verbose      = $true
+                    Automatic      = $true
+                    IndexingMode   = 'Consistent'
+                    IncludedPath   = (New-CosmosDbCollectionIncludedPath -Path '/*' -Index (New-CosmosDbCollectionIncludedPathIndex -Kind 'Range' -DataType 'String' -Precision -1))
+                    ExcludedPath   = (New-CosmosDbCollectionExcludedPath -Path '/*')
+                    CompositeIndex = @(
+                        @(
+                            (New-CosmosDbCollectionCompositeIndexElement -Path '/name' -Order 'Ascending'),
+                            (New-CosmosDbCollectionCompositeIndexElement -Path '/age' -Order 'Ascending')
+                        ),
+                        @(
+                            (New-CosmosDbCollectionCompositeIndexElement -Path '/name' -Order 'Ascending'),
+                            (New-CosmosDbCollectionCompositeIndexElement -Path '/age' -Order 'Descending')
+                        )
+                    )
+                    Verbose        = $true
                 }
 
                 $script:result = New-CosmosDbCollectionIndexingPolicy @newCosmosDbCollectionIndexingPolicyParameters
@@ -452,6 +528,14 @@ InModuleScope $ProjectName {
                 $script:result.IndexingMode | Should -Be 'Consistent'
                 $script:result.IncludedPaths[0].Path | Should -Be '/*'
                 $script:result.ExcludedPaths[0].Path | Should -Be '/*'
+                $script:result.CompositeIndexes[0][0].Path | Should -Be '/name'
+                $script:result.CompositeIndexes[0][0].Order | Should -Be 'ascending'
+                $script:result.CompositeIndexes[0][1].Path | Should -Be '/age'
+                $script:result.CompositeIndexes[0][1].Order | Should -Be 'ascending'
+                $script:result.CompositeIndexes[1][0].Path | Should -Be '/name'
+                $script:result.CompositeIndexes[1][0].Order | Should -Be 'ascending'
+                $script:result.CompositeIndexes[1][1].Path | Should -Be '/age'
+                $script:result.CompositeIndexes[1][1].Order | Should -Be 'descending'
             }
         }
 

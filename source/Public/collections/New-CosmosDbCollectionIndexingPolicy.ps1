@@ -23,7 +23,7 @@ function New-CosmosDbCollectionIndexingPolicy
         $ExcludedPath = @(),
 
         [Parameter()]
-        [CosmosDB.IndexingPolicy.Composite.IndexItem[][]]
+        [CosmosDB.IndexingPolicy.CompositeIndex.Element[][]]
         $CompositeIndex = @(@())
     )
 

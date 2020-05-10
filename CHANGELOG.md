@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a native Azure DevOps `deployment`.
 - Added integration tests for executing document queries - Fixes [Issue #356](https://github.com/PlagueHO/CosmosDB/issues/356).
 - Added support for composite indexes in indexing policy - Fixes [Issue #357](https://github.com/PlagueHO/CosmosDB/issues/357).
+- BREAKING CHANGE: Updated module to default to Cosmos DB REST
+  API version `2018-09-17`. This results in a change to the default
+  indexes when custom index paths are not specified. Other changes
+  in behavior of indexing policy are also expected. See
+  [this page](https://docs.microsoft.com/en-nz/azure/cosmos-db/index-policy#composite-indexes)
+  for more information.
 
 ## [3.7.0] - 2020-03-24
 

@@ -55,6 +55,10 @@ namespace CosmosDB {
             public class IncludedPath
             {
                 public System.String path;
+            }
+
+            public class IncludedPathIndex : IncludedPath
+            {
                 public CosmosDB.IndexingPolicy.Path.Index[] indexes;
             }
 

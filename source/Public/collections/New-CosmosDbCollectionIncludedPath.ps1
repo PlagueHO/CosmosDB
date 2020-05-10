@@ -14,9 +14,17 @@ function New-CosmosDbCollectionIncludedPath
         $Index
     )
 
-    $includedPath = [CosmosDB.IndexingPolicy.Path.IncludedPath]::new()
-    $includedPath.Path = $Path
-    $includedPath.Indexes = $Index
+    if ($PSBoundParameters.ContainsKey('Index'))
+    {
+        $includedPath = [CosmosDB.IndexingPolicy.Path.IncludedPathIndex]::new()
+        $includedPath.Path = $Path
+        $includedPath.Indexes = $Index
+    }
+    else
+    {
+        $includedPath = [CosmosDB.IndexingPolicy.Path.IncludedPath]::new()
+        $includedPath.Path = $Path
+    }
 
     return $includedPath
 }

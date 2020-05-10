@@ -32,6 +32,7 @@
   - [Working with Offers](#working-with-offers)
   - [Working with Collections](#working-with-collections)
     - [Creating a Collection with a custom Indexing Policy](#creating-a-collection-with-a-custom-indexing-policy)
+    - [Creating a Collection with a custom Indexing Policy including Composite Indexes](#creating-a-collection-with-a-custom-indexing-policy-including-composite-indexes)
     - [Update an existing Collection with a new Indexing Policy](#update-an-existing-collection-with-a-new-indexing-policy)
     - [Creating a Collection with a custom Unique Key Policy](#creating-a-collection-with-a-custom-unique-key-policy)
     - [Update an existing Collection with a new Unique Key Policy](#update-an-existing-collection-with-a-new-unique-key-policy)
@@ -357,6 +358,7 @@ Remove-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection'
 You can create a collection with a custom indexing policy by assembling
 an Indexing Policy object using the functions:
 
+- `New-CosmosDbCollectionCompositeIndexElement`
 - `New-CosmosDbCollectionIncludedPathIndex`
 - `New-CosmosDbCollectionIncludedPath`
 - `New-CosmosDbCollectionExcludedPath`
@@ -397,6 +399,27 @@ New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -Partitio
 > by future BREAKING CHANGES.
 
 For more information on how Cosmos DB indexes documents, see [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/indexing-policies).
+
+#### Creating a Collection with a custom Indexing Policy including Composite Indexes
+
+To create a custom indexing policy that automatically indexes all paths but
+also includes two composite indexes, each consisting of two paths:
+
+```powershell
+$compositeIndex = @(
+    @(
+        (New-CosmosDbCollectionCompositeIndexElement -Path '/name' -Order 'Ascending'),
+        (New-CosmosDbCollectionCompositeIndexElement -Path '/age' -Order 'Ascending')
+    ),
+    @(
+        (New-CosmosDbCollectionCompositeIndexElement -Path '/name' -Order 'Ascending'),
+        (New-CosmosDbCollectionCompositeIndexElement -Path '/age' -Order 'Descending')
+    )
+)
+$indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*'
+$indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $indexIncludedPath -CompositeIndex $compositeIndex
+New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'id' -IndexingPolicy $indexingPolicy
+```
 
 #### Update an existing Collection with a new Indexing Policy
 
