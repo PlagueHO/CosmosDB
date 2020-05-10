@@ -141,7 +141,7 @@ function New-CosmosDbCollection
         $null = $PSBoundParameters.Remove('UniqueKeyPolicy')
     }
 
-    $body = ConvertTo-Json -InputObject $bodyObject -Depth 10
+    $body = ConvertTo-Json -InputObject $bodyObject -Depth 20
 
     $result = Invoke-CosmosDbRequest @PSBoundParameters `
         -Method 'Post' `

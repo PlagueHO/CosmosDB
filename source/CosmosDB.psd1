@@ -102,6 +102,7 @@
         'Invoke-CosmosDbStoredProcedure', 'New-CosmosDbAccount',
         'New-CosmosDbAccountMasterKey', 'New-CosmosDbAttachment',
         'New-CosmosDbBackoffPolicy', 'New-CosmosDbCollection',
+        'New-CosmosDbCollectionCompositeIndexElement',
         'New-CosmosDbCollectionIncludedPathIndex',
         'New-CosmosDbCollectionIncludedPath',
         'New-CosmosDbCollectionExcludedPath',
