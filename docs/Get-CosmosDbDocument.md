@@ -60,7 +60,7 @@ Return a document with a Id 'ac12345' from a collection in the database.
 ```powershell
 PS C:\> $ResponseHeader = $null
 PS C:\> $documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -MaxItemCount 5 -ResponseHeader ([ref] $ResponseHeader)
-PS C:\> $continuationToken = [String] $ResponseHeader.'x-ms-continuation'
+PS C:\> $continuationToken = Get-CosmosDbContinuationToken -ResponseHeader $ResponseHeader
 ```
 
 Get the first 5 documents from the collection in the database

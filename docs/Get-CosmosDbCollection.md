@@ -62,7 +62,7 @@ Get a the MyNewCollection collection from a database.
 ```powershell
 PS C:\> $ResponseHeader = $null
 PS C:\> $collections = Get-CosmosDbCollection -Context $cosmosDbContext -MaxItemCount 5 -ResponseHeader ([ref] $ResponseHeader)
-PS C:\> $continuationToken = [String] $ResponseHeader.'x-ms-continuation'
+PS C:\> $continuationToken = Get-CosmosDbContinuationToken -ResponseHeader $ResponseHeader
 ```
 
 Get the first 5 collection from the the database storing a continuation

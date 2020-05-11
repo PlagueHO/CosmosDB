@@ -1613,7 +1613,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result = Get-CosmosDbCollection `
                 -Context $script:testContext `
                 -MaxItemCount 1 `
-                -ContinuationToken ([String] $script:ResponseHeader.'x-ms-continuation') `
+                -ContinuationToken (Get-CosmosDbContinuationToken -ResponseHeader $script:ResponseHeader) `
                 -Verbose
         }
 

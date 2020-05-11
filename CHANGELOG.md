@@ -26,6 +26,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed build pipeline deployment skip function.
 - Changed Build.yml to support `ModuleBuilder` version to `1.7.0` by changing
   `CopyDirectories` to `CopyPaths`.
+- Added `Get-CosmosDbContinuationToken` helper function to get the continuation
+  token from response headers returned by `Get-CosmosDbCollection` or
+  `Get-CosmosDbDocument` - Fixes [Issue #355](https://github.com/PlagueHO/CosmosDB/issues/355).
+- Added example to `README.md` showing how to loop through a document set
+  to return more than 4MB of documents - Fixes [Issue #354](https://github.com/PlagueHO/CosmosDB/issues/354).
 
 ## [3.7.0] - 2020-03-24
 
