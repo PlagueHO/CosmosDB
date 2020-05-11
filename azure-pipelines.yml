@@ -565,41 +565,37 @@ stages:
         eq(variables['System.TeamFoundationCollectionUri'], 'https://dscottraynsford.visualstudio.com/')
       )
     jobs:
-      - deployment: Deploy_Module
+      - job: Deploy_Module
         displayName: 'Deploy Module'
         pool:
           vmImage: ubuntu-16.04
-        environment: 'PowerShell Gallery'
 
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-              - task: DownloadBuildArtifacts@0
-                displayName: 'Download Build Artifact'
-                inputs:
-                  buildType: 'current'
-                  downloadType: 'single'
-                  artifactName: 'output'
-                  downloadPath: '$(Build.SourcesDirectory)'
+        steps:
+          - task: DownloadBuildArtifacts@0
+            displayName: 'Download Build Artifact'
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'output'
+              downloadPath: '$(Build.SourcesDirectory)'
 
-              - task: PowerShell@2
-                name: publish_release
-                displayName: 'Publish Release'
-                inputs:
-                  filePath: './build.ps1'
-                  arguments: '-tasks publish'
-                  pwsh: true
-                env:
-                  GitHubToken: $(GitHubToken)
-                  GalleryApiToken: $(GalleryApiToken)
+          - task: PowerShell@2
+            name: publish_release
+            displayName: 'Publish Release'
+            inputs:
+              filePath: './build.ps1'
+              arguments: '-tasks publish'
+              pwsh: true
+            env:
+              GitHubToken: $(GitHubToken)
+              GalleryApiToken: $(GalleryApiToken)
 
-              - task: PowerShell@2
-                name: send_changelog_PR
-                displayName: 'Send CHANGELOG PR'
-                inputs:
-                  filePath: './build.ps1'
-                  arguments: '-tasks Create_ChangeLog_GitHub_PR'
-                  pwsh: true
-                env:
-                  GitHubToken: $(GitHubToken)
+          - task: PowerShell@2
+            name: send_changelog_PR
+            displayName: 'Send CHANGELOG PR'
+            inputs:
+              filePath: './build.ps1'
+              arguments: '-tasks Create_ChangeLog_GitHub_PR'
+              pwsh: true
+            env:
+              GitHubToken: $(GitHubToken)
