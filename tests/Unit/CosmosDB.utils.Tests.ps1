@@ -1273,4 +1273,61 @@ console.log("done");
             }
         }
     }
+
+    Describe 'Get-CosmosDbContinuationToken' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Get-CosmosDbContinuationToken -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with a response header that contains an x-ms-continuation attribute with a valid token' {
+            It 'Should not throw exception' {
+                $getCosmosDbContinuationTokenParameters = @{
+                    ResponseHeader = @{
+                        'x-ms-continuation' = 'token'
+                    }
+                    Verbose        = $true
+                }
+
+                { $script:result = Get-CosmosDbContinuationToken @getCosmosDbContinuationTokenParameters } | Should -Not -Throw
+            }
+
+            It 'Should return token' {
+                $script:result | Should -Be 'token'
+            }
+        }
+
+        Context 'When called with a response header that contains an x-ms-continuation attribute with a blank token' {
+            It 'Should not throw exception' {
+                $getCosmosDbContinuationTokenParameters = @{
+                    ResponseHeader = @{
+                        'x-ms-continuation' = ''
+                    }
+                    Verbose        = $true
+                }
+
+                { $script:result = Get-CosmosDbContinuationToken @getCosmosDbContinuationTokenParameters } | Should -Not -Throw
+            }
+
+            It 'Should return null' {
+                $script:result | Should -BeNullOrEmpty
+            }
+        }
+
+        Context 'When called with a response header that does not contain an x-ms-continuation attribute' {
+            It 'Should not throw exception' {
+                $getCosmosDbContinuationTokenParameters = @{
+                    ResponseHeader = @{
+                        'not-continuation' = 'not a token'
+                    }
+                    Verbose      = $true
+                }
+
+                { $script:result = Get-CosmosDbContinuationToken @getCosmosDbContinuationTokenParameters } | Should -Not -Throw
+            }
+
+            It 'Should return null' {
+                $script:result | Should -BeNullOrEmpty
+            }
+        }
+    }
 }

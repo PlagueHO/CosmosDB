@@ -53,4 +53,5 @@ ConvertFrom-StringData -StringData @'
     UserDefinedFunctionIdInvalid = The User Defined Function Id '{0}' is invalid. A User Defined Function Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
     UserIdInvalid = The User Id '{0}' is invalid. A User Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
     ErrorPartitionKeyUnsupportedType = The partition key '{0}' uses an unsupported type '{1}'. Partition keys must be be defined in one of the types: String, Int16, Int32 or Int64.
+    ResponseHeaderContinuationTokenMissingOrEmpty = The Continuation Token ('x-ms-continuation' attribute) is missing or empty in the Response Header.
 '@

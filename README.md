@@ -39,6 +39,7 @@
     - [Update an existing Collection with a new Unique Key Policy](#update-an-existing-collection-with-a-new-unique-key-policy)
     - [Creating a Collection without a Partition Key](#creating-a-collection-without-a-partition-key)
   - [Working with Documents](#working-with-documents)
+    - [Using a While Loop to get all Documents in a Collection](#using-a-while-loop-to-get-all-documents-in-a-collection)
     - [Working with Documents in a non-partitioned Collection](#working-with-documents-in-a-non-partitioned-collection)
   - [Using Resource Authorization Tokens](#using-resource-authorization-tokens)
   - [Working with Attachments](#working-with-attachments)
@@ -339,7 +340,7 @@ allow retrieval of further collections:
 ```powershell
 $ResponseHeader = $null
 $collections = Get-CosmosDbCollection -Context $cosmosDbContext -MaxItemCount 5 -ResponseHeader ([ref] $ResponseHeader)
-$continuationToken = [String] $ResponseHeader.'x-ms-continuation'
+$continuationToken = Get-CosmosDbContinuationToken -ResponseHeader $ResponseHeader
 ```
 
 Get the next 5 collections from a database using a continuation token:
@@ -567,7 +568,7 @@ Get the first 5 documents from the collection in the database:
 ```powershell
 $ResponseHeader = $null
 $documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -MaxItemCount 5 -ResponseHeader ([ref] $ResponseHeader)
-$continuationToken = [String] $ResponseHeader.'x-ms-continuation'
+$continuationToken = Get-CosmosDbContinuationToken -ResponseHeader $ResponseHeader
 ```
 
 > **Note:** You don't need to specify the partition key here because you are just
@@ -620,6 +621,37 @@ Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection
 
 > **Note:** Because this is a partitioned collection, if you don't specify a partition
 key you will receive a `(400) Bad Request` exception.
+
+#### Using a While Loop to get all Documents in a Collection
+
+The Cosmos DB REST APIs have a maximum response size of 4MB. Therefore, to
+get a set of documents from a collection that will be larger than 4MB the
+request will need to be broken down into blocks using continuation tokens.
+
+The following is an example of how that could be implemented.
+
+```powershell
+$documentsPerRequest = 20
+$continuationToken = $null
+$documents = $null
+
+do {
+    $responseHeader = $null
+    $getCosmosDbDocumentParameters = @{
+        Context = $cosmosDbContext
+        CollectionId = 'MyNewCollection'
+        MaxItemCount = $documentsPerRequest
+        ResponseHeader = ([ref] $responseHeader)
+    }
+
+    if ($continuationToken) {
+        $getCosmosDbDocumentParameters.ContinuationToken = $continuationToken
+    }
+
+    $documents += Get-CosmosDbDocument @getCosmosDbDocumentParameters
+    $continuationToken = Get-CosmosDbContinuationToken -ResponseHeader $responseHeader
+} while (-not [System.String]::IsNullOrEmpty($continuationToken))
+```
 
 #### Working with Documents in a non-partitioned Collection
 
