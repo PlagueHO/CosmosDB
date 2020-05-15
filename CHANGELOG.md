@@ -7,7 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
 - Added support for AzureChinaCloud (Mooncake) - Fixes [Issue #365](https://github.com/PlagueHO/CosmosDB/issues/365).
+
+### Changed
+
 - Fix daily build by preventing deployment stage from running on
   anything build not named `*.master` - Fixes [Issue #366](https://github.com/PlagueHO/CosmosDB/issues/366).
 
