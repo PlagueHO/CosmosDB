@@ -28,6 +28,11 @@ function Get-CosmosDbUri
             {
                 $BaseUri = 'documents.azure.us'
             }
+
+            'AzureChinaCloud'
+            {
+                $BaseUri = 'documents.azure.cn'
+            }
         }
     }
 

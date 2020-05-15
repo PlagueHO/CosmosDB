@@ -31,6 +31,7 @@ InModuleScope $ProjectName {
     $script:testBaseUri = 'documents.contoso.com'
     $script:testBaseUriAzureCloud = 'documents.azure.com'
     $script:testBaseUriAzureUsGov = 'documents.azure.us'
+    $script:testBaseUriAzureChinaCloud = 'documents.azure.cn'
     $script:testDate = (Get-Date -Year 2017 -Month 11 -Day 29 -Hour 10 -Minute 45 -Second 10)
     $script:testUniversalDate = 'Tue, 28 Nov 2017 21:45:10 GMT'
     $script:testContext = [CosmosDb.Context] @{
@@ -261,6 +262,30 @@ console.log("done");
             }
         }
 
+        Context 'When called with Account and Environment AzureChinaCloud parameters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Account     = $script:testAccount
+                    Database    = $script:testDatabase
+                    Key         = $script:testKeySecureString
+                    KeyType     = 'master'
+                    Environment = 'AzureChinaCloud'
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be $script:testAccount
+                $script:result.Database | Should -Be $script:testDatabase
+                $script:result.Key | Should -Be $script:testKeySecureString
+                $script:result.KeyType | Should -Be 'master'
+                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseUriAzureChinaCloud)
+            }
+        }
+
         Context 'When called with Account parameters and Back-off Policy' {
             $script:result = $null
 
@@ -368,6 +393,46 @@ console.log("done");
                 Assert-MockCalled -CommandName Get-AzContext -Exactly -Times 1
                 Assert-MockCalled -CommandName Connect-AzAccount `
                     -ParameterFilter { $Environment -eq 'AzureUSGovernment' } `
+                    -Exactly -Times 1
+                Assert-MockCalled -CommandName Get-CosmosDbAccountMasterKey `
+                    -ParameterFilter { $MasterKeyType -eq 'PrimaryMasterKey' } `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with AzureAccount and Environment AzureChinaCloud parameters and not connected to Azure and PrimaryMasterKey requested' {
+            $script:result = $null
+
+            Mock -CommandName Get-AzContext -MockWith { throw }
+            Mock -CommandName Connect-AzAccount
+            Mock `
+                -CommandName Get-CosmosDbAccountMasterKey `
+                -MockWith { $script:testKeySecureString }
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Account           = $script:testAccount
+                    Database          = $script:testDatabase
+                    ResourceGroupName = $script:testResourceGroupName
+                    MasterKeyType     = 'PrimaryMasterKey'
+                    Environment       = 'AzureChinaCloud'
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be $script:testAccount
+                $script:result.Database | Should -Be $script:testDatabase
+                $script:result.KeyType | Should -Be 'master'
+                $script:result.Key | Convert-CosmosDbSecureStringToString | Should -Be $script:testKey
+                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseUriAzureChinaCloud)
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled -CommandName Get-AzContext -Exactly -Times 1
+                Assert-MockCalled -CommandName Connect-AzAccount `
+                    -ParameterFilter { $Environment -eq 'AzureChinaCloud' } `
                     -Exactly -Times 1
                 Assert-MockCalled -CommandName Get-CosmosDbAccountMasterKey `
                     -ParameterFilter { $MasterKeyType -eq 'PrimaryMasterKey' } `
@@ -569,6 +634,25 @@ console.log("done");
             It 'Should return expected result' {
                 $script:result | Should -BeOfType uri
                 $script:result.ToString() | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseUriAzureUsGov)
+            }
+        }
+
+        Context 'When called with Account and AzureChinaCloud Environment parameters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $GetCosmosDbUriParameters = @{
+                    Account     = $script:testAccount
+                    Environment = [CosmosDb.Environment]::AzureChinaCloud
+                    Verbose     = $true
+                }
+
+                { $script:result = Get-CosmosDbUri @GetCosmosDbUriParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -BeOfType uri
+                $script:result.ToString() | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseUriAzureChinaCloud)
             }
         }
     }

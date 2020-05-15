@@ -2,6 +2,7 @@
 
 namespace CosmosDB {
     public enum Environment {
+        AzureChinaCloud,
         AzureCloud,
         AzureUSGovernment
     }

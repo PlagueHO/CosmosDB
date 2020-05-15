@@ -24,6 +24,7 @@
   - [Working with Contexts](#working-with-contexts)
     - [Create a Context specifying the Key Manually](#create-a-context-specifying-the-key-manually)
     - [Create a Context for a Cosmos DB in Azure US Government Cloud](#create-a-context-for-a-cosmos-db-in-azure-us-government-cloud)
+    - [Create a Context for a Cosmos DB in Azure China Cloud (Mooncake)](#create-a-context-for-a-cosmos-db-in-azure-china-cloud-mooncake)
     - [Use CosmosDB Module to Retrieve Key from Azure Management Portal](#use-cosmosdb-module-to-retrieve-key-from-azure-management-portal)
     - [Create a Context for a Cosmos DB Emulator](#create-a-context-for-a-cosmos-db-emulator)
     - [Create a Context from Resource Authorization Tokens](#create-a-context-from-resource-authorization-tokens)
@@ -150,6 +151,16 @@ create a context variable and set the `Environment` parameter to
 
 ```powershell
 $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey -Environment AzureUSGovernment
+```
+
+#### Create a Context for a Cosmos DB in Azure China Cloud (Mooncake)
+
+Use the key secure string, Azure Cosmos DB account name and database to
+create a context variable and set the `Environment` parameter to
+`AzureChinaCloud`:
+
+```powershell
+$cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey -Environment AzureChinaCloud
 ```
 
 #### Use CosmosDB Module to Retrieve Key from Azure Management Portal
