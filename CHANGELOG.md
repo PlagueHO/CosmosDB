@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0] - 2020-05-11
+
 ### Changed
 
 - Change Azure DevOps Pipeline definition to include `source/*` - Fixes [Issue #350](https://github.com/PlagueHO/CosmosDB/issues/350).
