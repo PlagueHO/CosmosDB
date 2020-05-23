@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Changed build jobs `Unit_Test_PSCore6_Ubuntu1604` and
+  `Integration_Test_PSCore6_Ubuntu1604` to install PowerShell Core 6.2.4
+  to support version of Az PowerShell modules that are installed - Fixes [Issue #371](https://github.com/PlagueHO/CosmosDB/issues/371).
+
 ## [4.1.0] - 2020-05-15
 
 ### Added
