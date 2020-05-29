@@ -157,7 +157,7 @@ This is the Id of the collection to create.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: Name
 
 Required: True
 Position: Named

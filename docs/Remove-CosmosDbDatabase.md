@@ -83,7 +83,7 @@ This is the Id of the database to delete.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: Name
 
 Required: True
 Position: Named

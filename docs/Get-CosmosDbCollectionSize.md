@@ -109,7 +109,7 @@ This is the id of the collection to get.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: Name
 
 Required: False
 Position: Named

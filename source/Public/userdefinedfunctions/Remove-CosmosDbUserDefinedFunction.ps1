@@ -4,7 +4,7 @@ function Remove-CosmosDbUserDefinedFunction
     [CmdletBinding(DefaultParameterSetName = 'Context')]
     param
     (
-        [Alias("Connection")]
+        [Alias('Connection')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
         [CosmosDb.Context]

@@ -5,7 +5,7 @@ function Get-CosmosDbDocument
     [OutputType([Object])]
     param
     (
-        [Alias("Connection")]
+        [Alias('Connection')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
         [CosmosDb.Context]

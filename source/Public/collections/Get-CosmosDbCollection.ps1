@@ -5,7 +5,7 @@ function Get-CosmosDbCollection
     [OutputType([Object])]
     param
     (
-        [Alias("Connection")]
+        [Alias('Connection')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
         [CosmosDb.Context]
@@ -31,6 +31,7 @@ function Get-CosmosDbCollection
         [System.String]
         $Database,
 
+        [Alias('Name')]
         [Parameter()]
         [ValidateScript({ Assert-CosmosDbCollectionIdValid -Id $_ })]
         [System.String]
