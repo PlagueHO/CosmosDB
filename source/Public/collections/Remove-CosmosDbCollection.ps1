@@ -4,7 +4,7 @@ function Remove-CosmosDbCollection
     [CmdletBinding(DefaultParameterSetName = 'Context')]
     param
     (
-        [Alias("Connection")]
+        [Alias('Connection')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
         [CosmosDb.Context]
@@ -30,6 +30,7 @@ function Remove-CosmosDbCollection
         [System.String]
         $Database,
 
+        [Alias('Name')]
         [Parameter(Mandatory = $true)]
         [ValidateScript({ Assert-CosmosDbCollectionIdValid -Id $_ })]
         [System.String]

@@ -4,7 +4,7 @@ function Invoke-CosmosDbRequest
     [OutputType([System.String])]
     param
     (
-        [Alias("Connection")]
+        [Alias('Connection')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
         [CosmosDB.Context]

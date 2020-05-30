@@ -155,7 +155,7 @@ all collections in the database will be returned.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: Name
 
 Required: False
 Position: Named

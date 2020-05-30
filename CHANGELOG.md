@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed build jobs `Unit_Test_PSCore6_Ubuntu1604` and
   `Integration_Test_PSCore6_Ubuntu1604` to install PowerShell Core 6.2.4
   to support version of Az PowerShell modules that are installed - Fixes [Issue #371](https://github.com/PlagueHO/CosmosDB/issues/371).
+- Pinned build to Pester v4.10.1 - Fixes [Issue #371](https://github.com/PlagueHO/CosmosDB/issues/378).
+- Added `Name` as an alias for `Id` parameters in
+  `*-CosmosDbCollection` functions - Fixes [Issue #375](https://github.com/PlagueHO/CosmosDB/issues/375).
+- Added `Name` as an alias for `Id` parameters in
+  `*-CosmosDbDatabase` functions - Fixes [Issue #374](https://github.com/PlagueHO/CosmosDB/issues/374).
 
 ## [4.1.0] - 2020-05-15
 

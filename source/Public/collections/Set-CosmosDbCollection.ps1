@@ -5,7 +5,7 @@ function Set-CosmosDbCollection
     [OutputType([Object])]
     param
     (
-        [Alias("Connection")]
+        [Alias('Connection')]
         [Parameter(Mandatory = $true, ParameterSetName = 'ContextIndexPolicy')]
         [Parameter(Mandatory = $true, ParameterSetName = 'ContextIndexPolicyJson')]
         [ValidateNotNullOrEmpty()]
@@ -33,6 +33,7 @@ function Set-CosmosDbCollection
         [System.String]
         $Database,
 
+        [Alias('Name')]
         [Parameter(Mandatory = $true)]
         [ValidateScript({ Assert-CosmosDbCollectionIdValid -Id $_ })]
         [System.String]

@@ -57,7 +57,7 @@ This is the Id of the collection.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: Name
 
 Required: True
 Position: 1

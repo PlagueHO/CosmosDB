@@ -5,7 +5,7 @@ function Get-CosmosDbCollectionSize
     [OutputType([System.Collections.Hashtable])]
     param
     (
-        [Alias("Connection")]
+        [Alias('Connection')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
         [ValidateNotNullOrEmpty()]
         [CosmosDb.Context]
@@ -31,6 +31,7 @@ function Get-CosmosDbCollectionSize
         [System.String]
         $Database,
 
+        [Alias('Name')]
         [Parameter(Mandatory = $true)]
         [ValidateScript({ Assert-CosmosDbCollectionIdValid -Id $_ })]
         [System.String]
