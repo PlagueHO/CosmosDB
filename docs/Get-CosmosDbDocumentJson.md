@@ -5,18 +5,18 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-CosmosDbDocument
+# Get-CosmosDbDocumentJson
 
 ## SYNOPSIS
 
-Return documents from a Cosmos DB database collection.
+Return documents from a Cosmos DB database collection as a JSON string.
 
 ## SYNTAX
 
 ### Context (Default)
 
 ```powershell
-Get-CosmosDbDocument -Context <Context> [-Key <SecureString>] [-KeyType <String>]
+Get-CosmosDbDocumentJson -Context <Context> [-Key <SecureString>] [-KeyType <String>]
  [-Database <String>] -CollectionId <String> [-Id <String>]
  [-PartitionKey <Object[]>] [-MaxItemCount <Int32>] [-ContinuationToken <String>]
  [-ConsistencyLevel <String>] [-SessionToken <String>]
@@ -27,7 +27,7 @@ Get-CosmosDbDocument -Context <Context> [-Key <SecureString>] [-KeyType <String>
 ### Account
 
 ```powershell
-Get-CosmosDbDocument -Account <String> [-Key <SecureString>] [-KeyType <String>]
+Get-CosmosDbDocumentJson -Account <String> [-Key <SecureString>] [-KeyType <String>]
  [-Database <String>] -CollectionId <String> [-Id <String>]
  [-PartitionKey <Object[]>] [-MaxItemCount <Int32>] [-ContinuationToken <String>]
  [-ConsistencyLevel <String>] [-SessionToken <String>]
@@ -50,7 +50,7 @@ token will need to be used.
 ### Example 1
 
 ```powershell
-PS C:\> Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'ac12345'
+PS C:\> Get-CosmosDbDocumentJson -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'ac12345'
 ```
 
 Return a document with a Id 'ac12345' from a collection in the database.
@@ -59,7 +59,7 @@ Return a document with a Id 'ac12345' from a collection in the database.
 
 ```powershell
 PS C:\> $ResponseHeader = $null
-PS C:\> $documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -MaxItemCount 5 -ResponseHeader ([ref] $ResponseHeader)
+PS C:\> $documents = Get-CosmosDbDocumentJson -Context $cosmosDbContext -CollectionId 'MyNewCollection' -MaxItemCount 5 -ResponseHeader ([ref] $ResponseHeader)
 PS C:\> $continuationToken = Get-CosmosDbContinuationToken -ResponseHeader $ResponseHeader
 ```
 
@@ -69,7 +69,7 @@ storing a continuation token.
 ### Example 3
 
 ```powershell
-PS C:\> $documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -MaxItemCount 5 -ContinuationToken $continuationToken
+PS C:\> $documents = Get-CosmosDbDocumentJson -Context $cosmosDbContext -CollectionId 'MyNewCollection' -MaxItemCount 5 -ContinuationToken $continuationToken
 ```
 
 Get the next 5 documents from a collection in the database using the
@@ -79,7 +79,7 @@ continuation token found in the headers from the previous example.
 
 ```powershell
 PS C:\> $query = "SELECT * FROM customers c WHERE (c.id = 'user@contoso.com')"
-PS C:\> Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Query $query
+PS C:\> Get-CosmosDbDocumentJson -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Query $query
 ```
 
 Query the documents in a collection.
@@ -91,7 +91,7 @@ PS C:\> $query = "SELECT * FROM customers c WHERE (c.id = @id)"
 PS C:\> $queryParameters = @(
     @{ name = "@id"; value="user@contoso.com"; }
 )
-PS C:\> Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Query $query -QueryParameters $queryParameters
+PS C:\> Get-CosmosDbDocumentJson -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Query $query -QueryParameters $queryParameters
 ```
 
 Query the documents in a collection using a parameterized query.

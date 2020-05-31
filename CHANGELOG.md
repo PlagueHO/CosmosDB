@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added `Get-CosmosDbDocumentJson` function - Fixes [Issue #370](https://github.com/PlagueHO/CosmosDB/issues/370).
+
 ### Changed
 
 - Changed build jobs `Unit_Test_PSCore6_Ubuntu1604` and
@@ -17,6 +21,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `*-CosmosDbCollection` functions - Fixes [Issue #375](https://github.com/PlagueHO/CosmosDB/issues/375).
 - Added `Name` as an alias for `Id` parameters in
   `*-CosmosDbDatabase` functions - Fixes [Issue #374](https://github.com/PlagueHO/CosmosDB/issues/374).
+- Refactored `Get-CosmosDbDocument` to be a wrapper for
+  new function `Get-CosmosDbDocumentJson`.
+
+### Fixed
+
+- Fixed `Get-CosmosDbDocument` function partition key formatting
+  when an `Id` parameter is passed.
 
 ## [4.1.0] - 2020-05-15
 

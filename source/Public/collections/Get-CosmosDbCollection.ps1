@@ -78,7 +78,7 @@ function Get-CosmosDbCollection
             'x-ms-max-item-count' = $MaxItemCount
         }
 
-        if (-not [String]::IsNullOrEmpty($ContinuationToken))
+        if (-not [System.String]::IsNullOrEmpty($ContinuationToken))
         {
             $headers += @{
                 'x-ms-continuation' = $ContinuationToken
