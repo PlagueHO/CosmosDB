@@ -11,7 +11,7 @@ param
     [string[]]$Tasks = '.',
 
     [Parameter()]
-    [String]
+    [System.String]
     $CodeCoverageThreshold = '',
 
     [Parameter()]

@@ -1136,12 +1136,12 @@ function New-Event
     (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [System.String]
         $Message,
 
         [Parameter()]
         [ValidateSet('operational', 'debug', 'analytic')]
-        [String]
+        [System.String]
         $Channel = 'operational'
     )
     # Implementation...
@@ -1170,12 +1170,12 @@ function New-Event
     (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [System.String]
         $Message,
 
         [Parameter()]
         [ValidateSet('operational', 'debug', 'analytic')]
-        [String]
+        [System.String]
         $Channel = 'operational'
     )
     # Implementation
@@ -1192,7 +1192,7 @@ Functions with no parameters should still display an empty parameter block.
 **Bad:**
 
 ```powershell
-function Write-Text([Parameter(Mandatory = $true)][ValidateNotNullOrEmpty()][String]$Text)
+function Write-Text([Parameter(Mandatory = $true)][ValidateNotNullOrEmpty()][System.String]$Text)
 {
     Write-Verbose -Message $Text
 }
@@ -1216,7 +1216,7 @@ function Write-Text
     (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [System.String]
         $Text
     )
 
@@ -1272,7 +1272,7 @@ function Write-Text
 {
     param([Parameter(Mandatory = $true)]
 [ValidateNotNullOrEmpty()]
-                    [String] $Text )
+                    [System.String] $Text )
 
     Write-Verbose -Message $Text
 }
@@ -1287,12 +1287,12 @@ function Write-Text
     (
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [System.String]
         $Text
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [System.String]
         $PrefixText
 
         [Boolean]
@@ -1330,7 +1330,7 @@ function Write-Text
     (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [System.String]
         $Text
     )
 
@@ -1347,12 +1347,12 @@ function Write-Text
     (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [System.String]
         $Text
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [System.String]
         $PrefixText
 
         [Parameter()]
@@ -1428,10 +1428,10 @@ function New-Event
     (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [System.String]
         $Message,
         [ValidateSet('operational', 'debug', 'analytic')]
-        [String]
+        [System.String]
         $Channel = 'operational'
     )
 }
@@ -1446,12 +1446,12 @@ function New-Event
     (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [System.String]
         $Message,
 
         [Parameter()]
         [ValidateSet('operational', 'debug', 'analytic')]
-        [String]
+        [System.String]
         $Channel = 'operational'
     )
 }
@@ -1471,7 +1471,7 @@ function Get-TargetResource
     [CmdletBinding()]
     param
     (
-        [String] $SourcePath = 'c:\'
+        [System.String] $SourcePath = 'c:\'
     )
 }
 ```
@@ -1485,7 +1485,7 @@ function Get-TargetResource
     param
     (
         [Parameter()]
-        [String]
+        [System.String]
         $SourcePath = 'c:\'
     )
 }
@@ -1516,12 +1516,12 @@ function New-Event
     (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [System.String]
         $Message,
 
         [Parameter()]
         [ValidateSet('operational', 'debug', 'analytic')]
-        [String]
+        [System.String]
         $Channel = 'operational'
     )
 }
@@ -1540,10 +1540,10 @@ function New-Event
 {
     param
     (
-        [Parameter(Mandatory = $true)][ValidateNotNullOrEmpty()][String]
+        [Parameter(Mandatory = $true)][ValidateNotNullOrEmpty()][System.String]
         $Message,
 
-        [ValidateSet('operational', 'debug', 'analytic')][String]
+        [ValidateSet('operational', 'debug', 'analytic')][System.String]
         $Channel = 'operational'
     )
 }
@@ -1558,12 +1558,12 @@ function New-Event
     (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [String]
+        [System.String]
         $Message,
 
         [Parameter()]
         [ValidateSet('operational', 'debug', 'analytic')]
-        [String]
+        [System.String]
         $Channel = 'operational'
     )
 }
@@ -1762,10 +1762,10 @@ function Get-Settings
 {
     param
     (
-        [String]
+        [System.String]
         $Username
 
-        [String]
+        [System.String]
         $Password
     )
     ...
@@ -1819,7 +1819,7 @@ Extra type declarations can clutter the code.
 **Bad:**
 
 ```powershell
-[String] $myString = 'My String'
+[System.String] $myString = 'My String'
 ```
 
 **Bad:**
@@ -1971,7 +1971,7 @@ function Get-Something
     param
     (
         [Parameter(Mandatory = $true)]
-        [String]
+        [System.String]
         $Name = 'My Name'
     )
 
@@ -1987,7 +1987,7 @@ function Get-Something
     param
     (
         [Parameter(Mandatory = $true)]
-        [String]
+        [System.String]
         $Name
     )
 

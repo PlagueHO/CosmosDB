@@ -3,11 +3,11 @@ param
 (
 
     [Parameter()]
-    [String]
+    [System.String]
     $DependencyFile = 'RequiredModules.psd1',
 
     [Parameter()]
-    [String]
+    [System.String]
     # Path for PSDepend to be bootstrapped and save other dependencies.
     # Can also be CurrentUser or AllUsers if you wish to install the modules in such scope
     # Default to $PWD.Path/output/modules
@@ -24,12 +24,12 @@ param
 
     [Parameter()]
     [ValidateSet('CurrentUser', 'AllUsers')]
-    [String]
+    [System.String]
     # Scope to bootstrap the PackageProvider and PSGet if not available
     $Scope = 'CurrentUser',
 
     [Parameter()]
-    [String]
+    [System.String]
     # Gallery to use when bootstrapping PackageProvider, PSGet and when calling PSDepend (can be overridden in Dependency files)
     $Gallery = 'PSGallery',
 
@@ -45,7 +45,7 @@ param
     $AllowOldPowerShellGetModule,
 
     [Parameter()]
-    [String]
+    [System.String]
     # Allow you to specify a minimum version fo PSDepend, if you're after specific features.
     $MinimumPSDependVersion,
 
@@ -77,7 +77,7 @@ try
             try
             {
                 $variableValue = $ResolveDependencyDefaults[$ParamName]
-                if ($variableValue -is [string])
+                if ($variableValue -is [System.String])
                 {
                     $variableValue = $ExecutionContext.InvokeCommand.ExpandString($variableValue)
                 }

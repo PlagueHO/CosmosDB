@@ -50,7 +50,7 @@ function Get-CosmosDbOffer
     }
     else
     {
-        if (-not [String]::IsNullOrEmpty($Query))
+        if (-not [System.String]::IsNullOrEmpty($Query))
         {
             $null = $PSBoundParameters.Remove('Query')
 

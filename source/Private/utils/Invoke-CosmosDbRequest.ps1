@@ -83,7 +83,7 @@ function Invoke-CosmosDbRequest
         'dbs'
         {
             # Request for a database object (not containined in a database)
-            if ([String]::IsNullOrEmpty($ResourcePath))
+            if ([System.String]::IsNullOrEmpty($ResourcePath))
             {
                 $ResourceLink = 'dbs'
             }
@@ -97,7 +97,7 @@ function Invoke-CosmosDbRequest
         'offers'
         {
             # Request for an offer object (not contained in a database)
-            if ([String]::IsNullOrEmpty($ResourcePath))
+            if ([System.String]::IsNullOrEmpty($ResourcePath))
             {
                 $ResourceLink = 'offers'
             }
@@ -301,6 +301,7 @@ function Invoke-CosmosDbRequest
 
     # Display the Request Charge as a verbose message
     $requestCharge = [Uri]::UnescapeDataString($requestResult.Headers.'x-ms-request-charge').Trim()
+
     if ($requestCharge)
     {
         Write-Verbose -Message $($LocalizedData.RequestChargeResults -f $method, $uri, $requestCharge)

@@ -47,6 +47,10 @@ Return the collections in a Cosmos DB database.
 
 Return the resource path for a collection object.
 
+### [Get-CosmosDbContinuationToken](Get-CosmosDbContinuationToken.md)
+
+Return the continuation token from a response header object.
+
 ### [Get-CosmosDbDatabase](Get-CosmosDbDatabase.md)
 
 Return the databases in a Cosmos DB account.
@@ -57,7 +61,11 @@ Return the resource path for a database object.
 
 ### [Get-CosmosDbDocument](Get-CosmosDbDocument.md)
 
-Return the documents for a Cosmos DB database collection.
+Return documents from a Cosmos DB database collection.
+
+### [Get-CosmosDbDocumentJson](Get-CosmosDbDocumentJson.md)
+
+Return documents from a Cosmos DB database collection as a JSON string.
 
 ### [Get-CosmosDbDocumentResourcePath](Get-CosmosDbDocumentResourcePath.md)
 

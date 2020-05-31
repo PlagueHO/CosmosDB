@@ -67,7 +67,7 @@ function Get-CosmosDbAttachment
 
     $resourcePath = ('colls/{0}/docs/{1}/attachments' -f $CollectionId, $DocumentId)
 
-    if (-not [String]::IsNullOrEmpty($Id))
+    if (-not [System.String]::IsNullOrEmpty($Id))
     {
         $null = $PSBoundParameters.Remove('Id')
 

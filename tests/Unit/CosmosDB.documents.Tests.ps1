@@ -381,6 +381,160 @@ InModuleScope $ProjectName {
         }
     }
 
+    Describe 'Get-CosmosDbDocumentJson' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Get-CosmosDbDocumentJson -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with context parameter and no Id but with header parameters' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Get' -and `
+                    $ResourceType -eq 'docs'
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultMulti }
+
+            It 'Should not throw exception' {
+                $getCosmosDbDocumentJsonParameters = @{
+                    Context             = $script:testContext
+                    CollectionId        = $script:testCollection
+                    MaxItemCount        = 5
+                    ContinuationToken   = 'token'
+                    ConsistencyLevel    = 'Strong'
+                    SessionToken        = 'session'
+                    PartitionKeyRangeId = 'partition'
+                    Verbose             = $true
+                }
+
+                { $script:result = Get-CosmosDbDocumentJson @getCosmosDbDocumentJsonParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -Be $script:testJsonMulti
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and no Id with headers returned' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Get' -and `
+                    $ResourceType -eq 'docs'
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultMulti }
+
+            It 'Should not throw exception' {
+                $script:ResponseHeader = $null
+
+                $getCosmosDbDocumentJsonParameters = @{
+                    Context        = $script:testContext
+                    CollectionId   = $script:testCollection
+                    ResponseHeader = [ref] $script:ResponseHeader
+                    Verbose        = $true
+                }
+
+                { $script:result = Get-CosmosDbDocumentJson @getCosmosDbDocumentJsonParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -Be $script:testJsonMulti
+                $script:ResponseHeader.'x-ms-continuation' | Should -Be 'test'
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Get' -and `
+                    $ResourceType -eq 'docs' -and `
+                    $ResourcePath -eq ('colls/{0}/docs/{1}' -f $script:testCollection, $script:testDocument1)
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultSingle }
+
+            It 'Should not throw exception' {
+                $getCosmosDbDocumentJsonParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    Id           = $script:testDocument1
+                    Verbose      = $true
+                }
+
+                { $script:result = Get-CosmosDbDocumentJson @getCosmosDbDocumentJsonParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -Be $script:testJsonSingle
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id and Partition Key' {
+            $script:result = $null
+
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Get' -and `
+                    $ResourceType -eq 'docs' -and `
+                    $ResourcePath -eq ('colls/{0}/docs/{1}' -f $script:testCollection, $script:testDocument1) -and `
+                    $Headers['x-ms-documentdb-partitionkey'] -eq ('["{0}"]' -f $script:testPartitionKey)
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultSingle }
+
+            It 'Should not throw exception' {
+                $getCosmosDbDocumentJsonParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    Id           = $script:testDocument1
+                    PartitionKey = $script:testPartitionKey
+                    Verbose      = $true
+                }
+
+                { $script:result = Get-CosmosDbDocumentJson @getCosmosDbDocumentJsonParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -Be $script:testJsonSingle
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+    }
+
     Describe 'New-CosmosDbDocument' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name New-CosmosDbDocument -ErrorAction Stop } | Should -Not -Throw
