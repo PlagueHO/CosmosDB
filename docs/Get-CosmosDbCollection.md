@@ -65,7 +65,7 @@ PS C:\> $collections = Get-CosmosDbCollection -Context $cosmosDbContext -MaxItem
 PS C:\> $continuationToken = Get-CosmosDbContinuationToken -ResponseHeader $ResponseHeader
 ```
 
-Get the first 5 collection from the the database storing a continuation
+Get the first 5 collections from the the database storing a continuation
 token that can be used to retrieve further blocks of collections.
 
 ### Example 4
@@ -76,6 +76,22 @@ PS C:\> $collections = Get-CosmosDbCollection -Context $cosmosDbContext -MaxItem
 
 Get the next 5 collections in the database using the continuation token found
 in the headers from the previous example.
+
+### Example 5
+
+```powershell
+PS C:\> $ResponseHeader = $null
+PS C:\> $indexStringRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType String -Precision -1
+PS C:\> $indexNumberRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType Number -Precision -1
+PS C:\> $indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $indexStringRange, $indexNumberRange
+PS C:\> $newIndexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $indexIncludedPath
+PS C:\> Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -IndexingPolicy $newIndexingPolicy
+PS C:\> $collections = Get-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -ResponseHeader ([ref] $ResponseHeader)
+PS C:\> $indexUpdateProgress = Get-CosmosDbContinuationToken -ResponseHeader $ResponseHeader -HeaderName 'x-ms-documentdb-collection-index-transformation-progress'
+```
+
+Update a collection with a new indexing policy and retrieve the index transformation
+progress.
 
 ## PARAMETERS
 
@@ -222,7 +238,7 @@ hashtable that contains any headers returned by the request.
 ```yaml
 Type: PSReference
 Parameter Sets: (All)
-Aliases:
+Aliases: ResultHeaders
 
 Required: False
 Position: Named

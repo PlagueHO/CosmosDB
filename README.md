@@ -447,6 +447,17 @@ $indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -Indexin
 Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -IndexingPolicy $indexingPolicy
 ```
 
+After updating a collection with an indexing policy it will take some
+time to transform the index. To retrieve the progress of the index
+transformation, call the `Get-CosmosDbCollection` function and then
+evaluate the value of the
+
+```powershell
+PS C:\> $ResponseHeader = $null
+PS C:\> $collections = Get-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -ResponseHeader ([ref] $ResponseHeader)
+PS C:\> $indexUpdateProgress = Get-CosmosDbResponseHeaderAttribute -ResponseHeader $ResponseHeader -HeaderName 'x-ms-documentdb-collection-index-transformation-progress'
+```
+
 #### Creating a Collection with a custom Indexing Policy using JSON
 
 If the `New-CosmosDbCollection*` functions don't enable you to build

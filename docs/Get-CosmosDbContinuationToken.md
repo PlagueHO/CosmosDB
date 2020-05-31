@@ -39,7 +39,7 @@ PS C:\> $documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionI
 PS C:\> $continuationToken = Get-CosmosDbContinuationToken -ResponseHeader $ResponseHeader
 ```
 
-Return the continuation token from the Get-CosmosDbDocument reponse headers.
+Return the continuation token from the Get-CosmosDbDocument response headers.
 
 ## PARAMETERS
 

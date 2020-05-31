@@ -1358,6 +1358,66 @@ console.log("done");
         }
     }
 
+    Describe 'Get-CosmosDbResponseHeaderAttribute' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Get-CosmosDbResponseHeaderAttribute -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with a response header that contains a header-value attribute with value result' {
+            It 'Should not throw exception' {
+                $getCosmosDbResponseHeaderAttirbuteParameters = @{
+                    ResponseHeader = @{
+                        'header-value' = 'result'
+                    }
+                    HeaderName = 'header-value'
+                    Verbose        = $true
+                }
+
+                { $script:result = Get-CosmosDbResponseHeaderAttribute @getCosmosDbResponseHeaderAttirbuteParameters } | Should -Not -Throw
+            }
+
+            It 'Should return result' {
+                $script:result | Should -Be 'result'
+            }
+        }
+
+        Context 'When called with a response header that contains a header-value attribute with a blank value' {
+            It 'Should not throw exception' {
+                $getCosmosDbResponseHeaderAttirbuteParameters = @{
+                    ResponseHeader = @{
+                        'header-value' = ''
+                    }
+                    HeaderName = 'header-value'
+                    Verbose        = $true
+                }
+
+                { $script:result = Get-CosmosDbResponseHeaderAttribute @getCosmosDbResponseHeaderAttirbuteParameters } | Should -Not -Throw
+            }
+
+            It 'Should return null' {
+                $script:result | Should -BeNullOrEmpty
+            }
+        }
+
+        Context 'When called with a response header that does not contain a header-value attribute' {
+            It 'Should not throw exception' {
+                $getCosmosDbResponseHeaderAttirbuteParameters = @{
+                    ResponseHeader = @{
+                        'not-value' = 'value does not matter'
+                    }
+                    HeaderName = 'header-value'
+                    Verbose      = $true
+                }
+
+                { $script:result = Get-CosmosDbResponseHeaderAttribute @getCosmosDbResponseHeaderAttirbuteParameters } | Should -Not -Throw
+            }
+
+            It 'Should return null' {
+                $script:result | Should -BeNullOrEmpty
+            }
+        }
+    }
+
     Describe 'Get-CosmosDbContinuationToken' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name Get-CosmosDbContinuationToken -ErrorAction Stop } | Should -Not -Throw

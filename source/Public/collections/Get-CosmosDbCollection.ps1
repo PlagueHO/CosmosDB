@@ -47,6 +47,7 @@ function Get-CosmosDbCollection
         [System.String]
         $ContinuationToken,
 
+        [Alias("ResultHeaders")]
         [Parameter()]
         [ref]
         $ResponseHeader

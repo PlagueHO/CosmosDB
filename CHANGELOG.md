@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `Get-CosmosDbDocumentJson` function - Fixes [Issue #370](https://github.com/PlagueHO/CosmosDB/issues/370).
 - Added `IfMatch` alias for `Etag` parameter on `Set-CosmosDbDocument`
   function - Fixes [Issue #376](https://github.com/PlagueHO/CosmosDB/issues/376).
+- Added `Get-CosmosDbCosmosDbResponseHeader` function and refactored
+  `Get-CmosmosDbContinuationToken` to use it.
+- Added documentation and examples showing how to get the progress of an
+  index transformation - Fixes [Issue #369](https://github.com/PlagueHO/CosmosDB/issues/369).
 
 ### Changed
 
