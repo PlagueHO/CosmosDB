@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added `Get-CosmosDbDocumentJson` function - Fixes [Issue #370](https://github.com/PlagueHO/CosmosDB/issues/370).
+- Added `IfMatch` alias for `Etag` parameter on `Set-CosmosDbDocument`
+  function - Fixes [Issue #376](https://github.com/PlagueHO/CosmosDB/issues/376).
 
 ### Changed
 
