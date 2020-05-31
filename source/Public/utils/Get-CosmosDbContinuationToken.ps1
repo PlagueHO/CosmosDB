@@ -11,7 +11,9 @@ function Get-CosmosDbContinuationToken
         $ResponseHeader
     )
 
-    $continuationToken = [System.String] $ResponseHeader.'x-ms-continuation'
+    $continuationToken = Get-CosmosDbResponseHeaderAttribute `
+        -ResponseHeader $ResponseHeader `
+        -HeaderName 'x-ms-continuation'
 
     if ([System.String]::IsNullOrEmpty($continuationToken))
     {

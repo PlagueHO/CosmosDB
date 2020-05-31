@@ -91,6 +91,10 @@ Return the resource path for a permission object.
 
 Return the stored procedures for a Cosmos DB database collection.
 
+### [Get-CosmosDbResponseHeaderAttribute](Get-CosmosDbResponseHeaderAttribute.md)
+
+Return an attribute from a response header object.
+
 ### [Get-CosmosDbStoredProcedureResourcePath](Get-CosmosDbStoredProcedureResourcePath.md)
 
 Execute a new stored procedure for a collection in a Cosmos DB

@@ -94,7 +94,6 @@ function Get-CosmosDbDocument
 
     $documentJson = Get-CosmosDbDocumentJson @PSBoundParameters
 
-    Write-Verbose -Message ($documentJson | Out-String) -Verbose
     $documents = ConvertFrom-Json -InputObject $documentJson
 
     if ([System.String]::IsNullOrEmpty($Id))

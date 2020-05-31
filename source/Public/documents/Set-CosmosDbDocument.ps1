@@ -56,6 +56,7 @@ function Set-CosmosDbDocument
         [System.Object[]]
         $PartitionKey,
 
+        [Alias('IfMatch')]
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String]
