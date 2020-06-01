@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.0] - 2020-06-01
+
 ### Added
 
 - Added `Get-CosmosDbDocumentJson` function - Fixes [Issue #370](https://github.com/PlagueHO/CosmosDB/issues/370).
