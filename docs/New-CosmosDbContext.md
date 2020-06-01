@@ -41,7 +41,7 @@ New-CosmosDbContext -Account <String> [-Database <String>] -Token <ContextToken[
 
 ```powershell
 New-CosmosDbContext [-Database <String>] [-Key <SecureString>] [-Emulator]
- [-Port <Int16>] [-URI <String>] [-Token <ContextToken[]>]
+ [-Port <Int16>] [-Uri <String>] [-Token <ContextToken[]>]
  [-BackoffPolicy <BackoffPolicy>] [<CommonParameters>]
 ```
 
@@ -103,13 +103,23 @@ with a delay of 2 seconds between them.
 
 ```powershell
 PS C:\> $primaryKey = ConvertTo-SecureString -String 'your emulator master key' -AsPlainText -Force
-PS C:\> $cosmosDbContext = New-CosmosDbContext -Emulator -URI 'mycosmosdb' -Key $primaryKey
+PS C:\> $cosmosDbContext = New-CosmosDbContext -Emulator -Uri 'mycosmosdb' -Key $primaryKey
 ```
 
 Creates a Cosmos DB context by using a Cosmos DB Emulator installed onto
 the machine 'mycosmosdb' with a custom key emulator key.
 
 ### EXAMPLE 6
+
+```powershell
+PS C:\> $cosmosDbContext = New-CosmosDbContext -Emulator -Uri 'https://cosmosdbemulator.contoso.com:9091'
+```
+
+Creates a Cosmos DB context by using a Cosmos DB Emulator located at
+'cosmosdbemulator.contoso.com' on port 9091 using HTTPS with the default
+emulator key.
+
+### EXAMPLE 7
 
 ```powershell
 PS C:\> $primaryKey = ConvertTo-SecureString -String 'your master key' -AsPlainText -Force
@@ -281,7 +291,13 @@ Accept wildcard characters: False
 ### -Port
 
 This is the port the Cosmos DB emulator is installed onto.
-If not specified it will use the default port of 8081.
+If the Uri is not specified or does not include a port, then
+the value specified by the Port parameter will be used.
+If the Port parameter is not specified and it is not specified
+in the Uri parameter, then 8081 will be used.
+This parameter will be deprecated at a later date as a breaking
+change. Therefore, it is recommended that the port is specified
+in the Uri parameter.
 
 ```yaml
 Type: Int16
@@ -290,7 +306,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 8081
+Default value:
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -341,7 +357,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -URI
+### -Uri
 
 This is an optional URI to a Cosmos DB emulator.
 
@@ -352,7 +368,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: localhost
+Default value: https://localhost:8081
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

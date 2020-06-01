@@ -48,11 +48,11 @@ function New-CosmosDbContext
 
         [Parameter(ParameterSetName = 'Emulator')]
         [System.Int16]
-        $Port = 8081,
+        $Port,
 
         [Parameter(ParameterSetName = 'Emulator')]
         [System.String]
-        $URI = 'localhost',
+        $Uri = 'https://localhost:8081',
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Token')]
         [Parameter(ParameterSetName = 'Emulator')]
@@ -87,7 +87,26 @@ function New-CosmosDbContext
                     -Force
             }
 
-            $BaseUri = [uri]::new(('https://{0}:{1}' -f $URI, $Port))
+            if ($Uri -notmatch '^https?:\/\/')
+            {
+                $Uri = 'https://{0}' -f $Uri
+            }
+
+            if ($Uri -notmatch ':\d*$')
+            {
+                if ($PSBoundParameters.ContainsKey('Port'))
+                {
+                    Write-Warning -Message $LocalizedData.DeprecateEmulatorPortWarning
+                }
+                else
+                {
+                    $Port = 8081
+                }
+
+                $Uri = '{0}:{1}' -f $Uri, $Port
+            }
+
+            $BaseUri = [uri]::new($Uri)
         }
 
         'AzureAccount'

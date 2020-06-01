@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `*-CosmosDbDatabase` functions - Fixes [Issue #374](https://github.com/PlagueHO/CosmosDB/issues/374).
 - Refactored `Get-CosmosDbDocument` to be a wrapper for
   new function `Get-CosmosDbDocumentJson`.
+- Added support for specifying a protocol and port in the `URI` parameter
+  of the `New-CosmosDbContext` function - Fixes [Issue #381](https://github.com/PlagueHO/CosmosDB/issues/381).
 
 ### Fixed
 
