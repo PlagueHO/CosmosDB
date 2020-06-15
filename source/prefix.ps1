@@ -22,7 +22,7 @@ if ([System.String]::IsNullOrEmpty($culture))
 }
 else
 {
-    if (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath $culture))
+    if (-not (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath $culture)))
     {
         $culture = 'en-US'
     }

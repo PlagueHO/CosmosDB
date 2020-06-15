@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed `Cannot bind argument to parameter 'Message' because it is null.` error
+  message occurring when displaying messages on systems not using `en-US`
+  UI culture - Fixes [Issue #373](https://github.com/PlagueHO/CosmosDB/issues/373).
+
 ## [4.2.0] - 2020-06-01
 
 ### Added
