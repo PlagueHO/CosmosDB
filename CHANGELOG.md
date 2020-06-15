@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.1] - 2020-06-15
+
 ### Fixed
 
 - Fixed `Cannot bind argument to parameter 'Message' because it is null.` error
