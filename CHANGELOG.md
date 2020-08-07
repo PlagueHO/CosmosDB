@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Renamed `master` branch to `main` - Fixes [Issue #393](https://github.com/PlagueHO/CosmosDB/issues/393).
+
 ## [4.2.1] - 2020-06-15
 
 ### Fixed

@@ -12,7 +12,7 @@
 
 | Branch | Azure Pipelines                        | Automated Tests                        | Code Quality |
 | ------ | -------------------------------------- | -------------------------------------- | -------------------------------------- |
-| master | [![ap-image-master][]][ap-site-master] | [![ts-image-master][]][ts-site-master] | [![cq-image-master][]][cq-site-master] |
+| main | [![ap-image-main][]][ap-site-main] | [![ts-image-main][]][ts-site-main] | [![cq-image-main][]][cq-site-main] |
 
 ## Table of Contents
 
@@ -1166,9 +1166,9 @@ For a list of changes to versions, see the [CHANGELOG.md](CHANGELOG.md) file.
 - [GitHub Repository](https://github.com/PlagueHO/CosmosDB/)
 - [Blog](https://dscottraynsford.wordpress.com/)
 
-[ap-image-master]: https://dev.azure.com/dscottraynsford/GitHub/_apis/build/status/PlagueHO.CosmosDB.master?branchName=master
-[ap-site-master]: https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4&_a=summary
-[ts-image-master]: https://img.shields.io/azure-devops/tests/dscottraynsford/GitHub/4/master
-[ts-site-master]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4&branchName=master
-[cq-image-master]: https://api.codacy.com/project/badge/Grade/1ee50b5eb15b47c188b3bdf7a5f8ee1d
-[cq-site-master]: https://www.codacy.com/app/PlagueHO/CosmosDB?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PlagueHO/CosmosDB&amp;utm_campaign=Badge_Grade
+[ap-image-main]: https://dev.azure.com/dscottraynsford/GitHub/_apis/build/status/PlagueHO.CosmosDB.main?branchName=main
+[ap-site-main]: https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4&_a=summary
+[ts-image-main]: https://img.shields.io/azure-devops/tests/dscottraynsford/GitHub/4/main
+[ts-site-main]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4&branchName=main
+[cq-image-main]: https://api.codacy.com/project/badge/Grade/1ee50b5eb15b47c188b3bdf7a5f8ee1d
+[cq-site-main]: https://www.codacy.com/app/PlagueHO/CosmosDB?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PlagueHO/CosmosDB&amp;utm_campaign=Badge_Grade
