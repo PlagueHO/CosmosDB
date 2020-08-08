@@ -115,7 +115,7 @@
             Tags         = @('CosmosDB', 'DocumentDb', 'Azure', 'PSEdition_Core', 'PSEdition_Desktop', 'Windows', 'Linux', 'MacOS')
 
             # A URL to the license for this module.
-            LicenseUri   = 'https://github.com/PlagueHO/CosmosDB/blob/master/LICENSE'
+            LicenseUri   = 'https://github.com/PlagueHO/CosmosDB/blob/main/LICENSE'
 
             # A URL to the main website for this project.
             ProjectUri   = 'https://github.com/PlagueHO/CosmosDB'
