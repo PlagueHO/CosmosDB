@@ -13,7 +13,7 @@ function Get-CosmosDbUri
 
         [Parameter(ParameterSetName = 'Uri')]
         [System.String]
-        $BaseUri = 'documents.azure.com',
+        $BaseHostname = 'documents.azure.com',
 
         [Parameter(ParameterSetName = 'Environment')]
         [CosmosDB.Environment]
@@ -26,15 +26,15 @@ function Get-CosmosDbUri
         {
             'AzureUSGovernment'
             {
-                $BaseUri = 'documents.azure.us'
+                $BaseHostname = 'documents.azure.us'
             }
 
             'AzureChinaCloud'
             {
-                $BaseUri = 'documents.azure.cn'
+                $BaseHostname = 'documents.azure.cn'
             }
         }
     }
 
-    return [System.Uri]::new(('https://{0}.{1}' -f $Account, $BaseUri))
+    return [System.Uri]::new(('https://{0}.{1}' -f $Account, $BaseHostname))
 }

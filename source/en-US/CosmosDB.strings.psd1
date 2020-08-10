@@ -54,5 +54,6 @@ ConvertFrom-StringData -StringData @'
     UserIdInvalid = The User Id '{0}' is invalid. A User Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.
     ErrorPartitionKeyUnsupportedType = The partition key '{0}' uses an unsupported type '{1}'. Partition keys must be be defined in one of the types: String, Int16, Int32 or Int64.
     ResponseHeaderContinuationTokenMissingOrEmpty = The Continuation Token ('x-ms-continuation' attribute) is missing or empty in the Response Header.
-    DeprecateEmulatorPortWarning = The Port parameter may be deprecated at a later date in favor of specifying it in the Uri parameter, e.g. https:\\cosmosdbemulator.local:9081. It is recommended to use that method instead of specifying the port parameter to reduce possible impact when the Port parameter is deprecated.
+    DeprecateContextPortWarning = The Port parameter may be deprecated at a later date in favor of specifying it in the Uri parameter, e.g. https:\\cosmosdbemulator.local:9081. It is recommended to use that method instead of specifying the port parameter to reduce possible impact when the Port parameter is deprecated.
+    NotLoggedInToCustomCloudException = The Azure PowerShell cmdlets are not currently logged into an Azure sovereign cloud. Please authenticate to your Azure sovereign cloud using Connect-AzAccount.
 '@

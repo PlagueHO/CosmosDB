@@ -26,10 +26,11 @@ InModuleScope $ProjectName {
     $script:testKey = 'GFJqJeri2Rq910E0G7PsWoZkzowzbj23Sm9DUWFC0l0P8o16mYyuaZKN00Nbtj9F1QQnumzZKSGZwknXGERrlA=='
     $script:testKeySecureString = ConvertTo-SecureString -String $script:testKey -AsPlainText -Force
     $script:testEmulatorKey = 'C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=='
-    $script:testBaseUri = 'documents.contoso.com'
-    $script:testBaseUriAzureCloud = 'documents.azure.com'
-    $script:testBaseUriAzureUsGov = 'documents.azure.us'
-    $script:testBaseUriAzureChinaCloud = 'documents.azure.cn'
+    $script:testBaseHostname = 'documents.contoso.com'
+    $script:testBaseHostnameAzureCloud = 'documents.azure.com'
+    $script:testBaseHostnameAzureUsGov = 'documents.azure.us'
+    $script:testBaseHostnameAzureChinaCloud = 'documents.azure.cn'
+    $script:testBaseHostnameAzureCustomEndpoint = 'documents.somecloud.zzz'
     $script:testDate = (Get-Date -Year 2017 -Month 11 -Day 29 -Hour 10 -Minute 45 -Second 10)
     $script:testUniversalDate = 'Tue, 28 Nov 2017 21:45:10 GMT'
     $script:testContext = [CosmosDb.Context] @{
@@ -232,7 +233,7 @@ console.log("done");
                 $script:result.Database | Should -Be $script:testDatabase
                 $script:result.Key | Should -Be $script:testKeySecureString
                 $script:result.KeyType | Should -Be 'master'
-                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseUriAzureCloud)
+                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureCloud)
             }
         }
 
@@ -256,7 +257,7 @@ console.log("done");
                 $script:result.Database | Should -Be $script:testDatabase
                 $script:result.Key | Should -Be $script:testKeySecureString
                 $script:result.KeyType | Should -Be 'master'
-                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseUriAzureUsGov)
+                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureUsGov)
             }
         }
 
@@ -280,7 +281,31 @@ console.log("done");
                 $script:result.Database | Should -Be $script:testDatabase
                 $script:result.Key | Should -Be $script:testKeySecureString
                 $script:result.KeyType | Should -Be 'master'
-                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseUriAzureChinaCloud)
+                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureChinaCloud)
+            }
+        }
+
+        Context 'When called with Account and custom endpoint Cloud parameters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Account          = $script:testAccount
+                    Database         = $script:testDatabase
+                    Key              = $script:testKeySecureString
+                    KeyType          = 'master'
+                    EndpointHostname = $script:testBaseHostnameAzureCustomEndpoint
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be $script:testAccount
+                $script:result.Database | Should -Be $script:testDatabase
+                $script:result.Key | Should -Be $script:testKeySecureString
+                $script:result.KeyType | Should -Be 'master'
+                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureCustomEndpoint)
             }
         }
 
@@ -312,7 +337,7 @@ console.log("done");
                 $script:result.Database | Should -Be $script:testDatabase
                 $script:result.Key | Should -Be $script:testKeySecureString
                 $script:result.KeyType | Should -Be 'master'
-                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseUriAzureCloud)
+                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureCloud)
                 $script:result.BackoffPolicy.MaxRetries | Should -Be $script:testMaxRetries
                 $script:result.BackoffPolicy.Method | Should -Be $script:testMethod
                 $script:result.BackoffPolicy.Delay | Should -Be $script:testDelay
@@ -344,7 +369,7 @@ console.log("done");
                 $script:result.Database | Should -Be $script:testDatabase
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.Key | Convert-CosmosDbSecureStringToString | Should -Be $script:testKey
-                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseUriAzureCloud)
+                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureCloud)
             }
 
             It 'Should call expected mocks' {
@@ -355,6 +380,33 @@ console.log("done");
                 Assert-MockCalled -CommandName Get-CosmosDbAccountMasterKey `
                     -ParameterFilter { $MasterKeyType -eq 'PrimaryMasterKey' } `
                     -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with CustomAzureAccount parameters and not connected to Azure and PrimaryMasterKey requested' {
+            $script:result = $null
+
+            Mock -CommandName Get-AzContext -MockWith { throw }
+            Mock -CommandName Connect-AzAccount
+            Mock `
+                -CommandName Get-CosmosDbAccountMasterKey `
+                -MockWith { $script:testKeySecureString }
+
+            It 'Should throw expected exception' {
+                $newCosmosDbContextParameters = @{
+                    Account           = $script:testAccount
+                    Database          = $script:testDatabase
+                    ResourceGroupName = $script:testResourceGroupName
+                    EndpointHostname  = $script:testBaseHostnameAzureCustomEndpoint
+                    MasterKeyType     = 'PrimaryMasterKey'
+                }
+
+                $errorRecord = Get-InvalidOperationRecord `
+                    -Message ($LocalizedData.NotLoggedInToCustomCloudException)
+
+                {
+                    $script:result = New-CosmosDbContext @newCosmosDbContextParameters
+                } | Should -Throw $errorRecord
             }
         }
 
@@ -384,7 +436,7 @@ console.log("done");
                 $script:result.Database | Should -Be $script:testDatabase
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.Key | Convert-CosmosDbSecureStringToString | Should -Be $script:testKey
-                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseUriAzureUsGov)
+                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureUsGov)
             }
 
             It 'Should call expected mocks' {
@@ -424,7 +476,7 @@ console.log("done");
                 $script:result.Database | Should -Be $script:testDatabase
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.Key | Convert-CosmosDbSecureStringToString | Should -Be $script:testKey
-                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseUriAzureChinaCloud)
+                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureChinaCloud)
             }
 
             It 'Should call expected mocks' {
@@ -462,7 +514,44 @@ console.log("done");
                 $script:result.Database | Should -Be $script:testDatabase
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.Key | Convert-CosmosDbSecureStringToString | Should -Be $script:testKey
-                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseUriAzureCloud)
+                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureCloud)
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled -CommandName Get-AzContext -Exactly -Times 1
+                Assert-MockCalled -CommandName Connect-AzAccount -Exactly -Times 0
+                Assert-MockCalled -CommandName Get-CosmosDbAccountMasterKey `
+                    -ParameterFilter { $MasterKeyType -eq 'PrimaryMasterKey' } `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with CustomAzureAccount parameters and connected to Custom Azure' {
+            $script:result = $null
+
+            Mock -CommandName Get-AzContext -MockWith { $true }
+            Mock -CommandName Connect-AzAccount
+            Mock `
+                -CommandName Get-CosmosDbAccountMasterKey `
+                -MockWith { $script:testKeySecureString }
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Account           = $script:testAccount
+                    Database          = $script:testDatabase
+                    ResourceGroupName = $script:testResourceGroupName
+                    EndpointHostname  = $script:testBaseHostnameAzureCustomEndpoint
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be $script:testAccount
+                $script:result.Database | Should -Be $script:testDatabase
+                $script:result.KeyType | Should -Be 'master'
+                $script:result.Key | Convert-CosmosDbSecureStringToString | Should -Be $script:testKey
+                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureCustomEndpoint)
             }
 
             It 'Should call expected mocks' {
@@ -714,7 +803,7 @@ console.log("done");
 
             It 'Should return expected result' {
                 $script:result | Should -BeOfType uri
-                $script:result.ToString() | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseUriAzureCloud)
+                $script:result.ToString() | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureCloud)
             }
         }
 
@@ -724,7 +813,7 @@ console.log("done");
             It 'Should not throw exception' {
                 $GetCosmosDbUriParameters = @{
                     Account = $script:testAccount
-                    BaseUri = $script:testBaseUri
+                    BaseHostname = $script:testBaseHostname
                     Verbose = $true
                 }
 
@@ -733,7 +822,7 @@ console.log("done");
 
             It 'Should return expected result' {
                 $script:result | Should -BeOfType uri
-                $script:result.ToString() | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseUri)
+                $script:result.ToString() | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostname)
             }
         }
 
@@ -752,7 +841,7 @@ console.log("done");
 
             It 'Should return expected result' {
                 $script:result | Should -BeOfType uri
-                $script:result.ToString() | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseUriAzureUsGov)
+                $script:result.ToString() | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureUsGov)
             }
         }
 
@@ -771,7 +860,7 @@ console.log("done");
 
             It 'Should return expected result' {
                 $script:result | Should -BeOfType uri
-                $script:result.ToString() | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseUriAzureChinaCloud)
+                $script:result.ToString() | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureChinaCloud)
             }
         }
     }
@@ -1488,7 +1577,7 @@ console.log("done");
                     ResponseHeader = @{
                         'header-value' = 'result'
                     }
-                    HeaderName = 'header-value'
+                    HeaderName     = 'header-value'
                     Verbose        = $true
                 }
 
@@ -1506,7 +1595,7 @@ console.log("done");
                     ResponseHeader = @{
                         'header-value' = ''
                     }
-                    HeaderName = 'header-value'
+                    HeaderName     = 'header-value'
                     Verbose        = $true
                 }
 
@@ -1524,8 +1613,8 @@ console.log("done");
                     ResponseHeader = @{
                         'not-value' = 'value does not matter'
                     }
-                    HeaderName = 'header-value'
-                    Verbose      = $true
+                    HeaderName     = 'header-value'
+                    Verbose        = $true
                 }
 
                 { $script:result = Get-CosmosDbResponseHeaderAttribute @getCosmosDbResponseHeaderAttirbuteParameters } | Should -Not -Throw
@@ -1582,7 +1671,7 @@ console.log("done");
                     ResponseHeader = @{
                         'not-continuation' = 'not a token'
                     }
-                    Verbose      = $true
+                    Verbose        = $true
                 }
 
                 { $script:result = Get-CosmosDbContinuationToken @getCosmosDbContinuationTokenParameters } | Should -Not -Throw

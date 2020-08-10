@@ -17,9 +17,26 @@ to connect to a Cosmos DB.
 ### Account (Default)
 
 ```powershell
-New-CosmosDbContext -Account <String> [-Database <String>]
- -Key <SecureString> [-KeyType <String>] [-BackoffPolicy <BackoffPolicy>]
- [-Environment <Environment>] [<CommonParameters>]
+New-CosmosDbContext -Account <String> [-Database <String>] -Key <SecureString>
+ [-KeyType <String>] [-BackoffPolicy <BackoffPolicy>] [-Environment <Environment>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### CustomAzureAccount
+
+```powershell
+New-CosmosDbContext -Account <String> [-Database <String>] -ResourceGroupName <String>
+ [-MasterKeyType <String>] [-BackoffPolicy <BackoffPolicy>] -EndpointHostname <Uri>
+ [-WhatIf] [-Confirm]
+ [<CommonParameters>]
+```
+
+### CustomAccount
+
+```powershell
+New-CosmosDbContext -Account <String> [-Database <String>] -Key <SecureString>
+ [-KeyType <String>] [-BackoffPolicy <BackoffPolicy>] -EndpointHostname <Uri>
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### AzureAccount
@@ -27,22 +44,23 @@ New-CosmosDbContext -Account <String> [-Database <String>]
 ```powershell
 New-CosmosDbContext -Account <String> [-Database <String>] -ResourceGroupName <String>
  [-MasterKeyType <String>] [-BackoffPolicy <BackoffPolicy>] [-Environment <Environment>]
- [<CommonParameters>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Token
 
 ```powershell
 New-CosmosDbContext -Account <String> [-Database <String>] -Token <ContextToken[]>
- [-BackoffPolicy <BackoffPolicy>] [-Environment <Environment>] [<CommonParameters>]
+ [-BackoffPolicy <BackoffPolicy>] [-Environment <Environment>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Emulator
 
 ```powershell
 New-CosmosDbContext [-Database <String>] [-Key <SecureString>] [-Emulator]
- [-Port <Int16>] [-Uri <String>] [-Token <ContextToken[]>]
- [-BackoffPolicy <BackoffPolicy>] [<CommonParameters>]
+ [-Port <Int16>] [-Uri <String>] [-Token <ContextToken[]>] [-BackoffPolicy <BackoffPolicy>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -129,6 +147,16 @@ PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureGovCosmosDB' -Da
 Creates a CosmosDB context specifying the master key manually connecting
 to the Azure US Government cloud.
 
+### EXAMPLE 8
+
+```powershell
+PS C:\> $primaryKey = ConvertTo-SecureString -String 'your master key' -AsPlainText -Force
+PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'AlternateCloud' -Database 'MyDatabase' -Key $primaryKey -EndpointHostname 'documents.eassov.com'
+```
+
+Creates a CosmosDB context specifying the master key manually connecting
+to an custom Cosmos DB endpoint.
+
 ## PARAMETERS
 
 ### -Account
@@ -137,7 +165,7 @@ The account name of the Cosmos DB to access.
 
 ```yaml
 Type: String
-Parameter Sets: Account, AzureAccount, Token
+Parameter Sets: Account, CustomAzureAccount, CustomAccount, AzureAccount, Token
 Aliases:
 
 Required: True
@@ -156,6 +184,22 @@ requests using this context.
 Type: BackoffPolicy
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named
@@ -197,6 +241,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -EndpointHostname
+
+A URI containing the
+
+```yaml
+Type: Uri
+Parameter Sets: CustomAzureAccount, CustomAccount
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Environment
 
 This is the Azure environment hosting the Cosmos DB account.
@@ -210,6 +270,7 @@ The supported values are:
 Type: Environment
 Parameter Sets: Account, AzureAccount, Token
 Aliases:
+Accepted values: AzureChinaCloud, AzureCloud, AzureUSGovernment
 
 Required: False
 Position: Named
@@ -228,7 +289,7 @@ https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator#authenticating-r
 
 ```yaml
 Type: SecureString
-Parameter Sets: Account
+Parameter Sets: Account, CustomAccount
 Aliases:
 
 Required: True
@@ -259,7 +320,7 @@ will be deprecated in a future release. Do not use it.
 
 ```yaml
 Type: String
-Parameter Sets: Account
+Parameter Sets: Account, CustomAccount
 Aliases:
 Accepted values: master, resource
 
@@ -277,7 +338,7 @@ the Cosmos DB.
 
 ```yaml
 Type: String
-Parameter Sets: AzureAccount
+Parameter Sets: CustomAzureAccount, AzureAccount
 Aliases:
 Accepted values: PrimaryMasterKey, SecondaryMasterKey, PrimaryReadonlyMasterKey, SecondaryReadonlyMasterKey
 
@@ -306,7 +367,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value:
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -318,7 +379,7 @@ Cosmos DB.
 
 ```yaml
 Type: String
-Parameter Sets: AzureAccount
+Parameter Sets: CustomAzureAccount, AzureAccount
 Aliases: ResourceGroup
 
 Required: True
@@ -373,9 +434,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### CommonParameters
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

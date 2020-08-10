@@ -11,6 +11,8 @@ function New-CosmosDbContext
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Token')]
         [Parameter(Mandatory = $true, ParameterSetName = 'AzureAccount')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'CustomAccount')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'CustomAzureAccount')]
         [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ })]
         [System.String]
         $Account,
@@ -21,23 +23,27 @@ function New-CosmosDbContext
         $Database,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'CustomAccount')]
         [Parameter(ParameterSetName = 'Emulator')]
         [ValidateNotNullOrEmpty()]
         [System.Security.SecureString]
         $Key,
 
         [Parameter(ParameterSetName = 'Account')]
+        [Parameter(ParameterSetName = 'CustomAccount')]
         [ValidateSet('master', 'resource')]
         [System.String]
         $KeyType = 'master',
 
         [Alias("ResourceGroup")]
         [Parameter(Mandatory = $true, ParameterSetName = 'AzureAccount')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'CustomAzureAccount')]
         [ValidateScript({ Assert-CosmosDbResourceGroupNameValid -ResourceGroupName $_ })]
         [System.String]
         $ResourceGroupName,
 
         [Parameter(ParameterSetName = 'AzureAccount')]
+        [Parameter(ParameterSetName = 'CustomAzureAccount')]
         [ValidateSet('PrimaryMasterKey', 'SecondaryMasterKey', 'PrimaryReadonlyMasterKey', 'SecondaryReadonlyMasterKey')]
         [System.String]
         $MasterKeyType = 'PrimaryMasterKey',
@@ -52,7 +58,7 @@ function New-CosmosDbContext
 
         [Parameter(ParameterSetName = 'Emulator')]
         [System.String]
-        $Uri = 'https://localhost:8081',
+        $Uri,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Token')]
         [Parameter(ParameterSetName = 'Emulator')]
@@ -69,7 +75,12 @@ function New-CosmosDbContext
         [Parameter(ParameterSetName = 'Token')]
         [Parameter(ParameterSetName = 'AzureAccount')]
         [CosmosDB.Environment]
-        $Environment = [CosmosDB.Environment]::AzureCloud
+        $Environment = [CosmosDB.Environment]::AzureCloud,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'CustomAccount')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'CustomAzureAccount')]
+        [System.Uri]
+        $EndpointHostname
     )
 
     switch ($PSCmdlet.ParameterSetName)
@@ -87,6 +98,11 @@ function New-CosmosDbContext
                     -Force
             }
 
+            if (-not ($PSBoundParameters.ContainsKey('Uri')))
+            {
+                $Uri = 'https://localhost:8081'
+            }
+
             if ($Uri -notmatch '^https?:\/\/')
             {
                 $Uri = 'https://{0}' -f $Uri
@@ -96,7 +112,7 @@ function New-CosmosDbContext
             {
                 if ($PSBoundParameters.ContainsKey('Port'))
                 {
-                    Write-Warning -Message $LocalizedData.DeprecateEmulatorPortWarning
+                    Write-Warning -Message $LocalizedData.DeprecateContextPortWarning
                 }
                 else
                 {
@@ -106,7 +122,7 @@ function New-CosmosDbContext
                 $Uri = '{0}:{1}' -f $Uri, $Port
             }
 
-            $BaseUri = [uri]::new($Uri)
+            $BaseUri = [System.Uri]::new($Uri)
         }
 
         'AzureAccount'
@@ -128,9 +144,33 @@ function New-CosmosDbContext
             $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
         }
 
+        'CustomAzureAccount'
+        {
+            try
+            {
+                $null = Get-AzContext -ErrorAction SilentlyContinue
+            }
+            catch
+            {
+                New-CosmosDbInvalidOperationException -Message ($LocalizedData.NotLoggedInToCustomCloudException)
+            }
+
+            $Key = Get-CosmosDbAccountMasterKey `
+                -ResourceGroupName $ResourceGroupName `
+                -Name $Account `
+                -MasterKeyType $MasterKeyType
+
+            $BaseUri = Get-CosmosDbUri -Account $Account -BaseHostname $EndpointHostname
+        }
+
         'Account'
         {
             $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
+        }
+
+        'CustomAccount'
+        {
+            $BaseUri = Get-CosmosDbUri -Account $Account -BaseHostname $EndpointHostname
         }
 
         'Token'
