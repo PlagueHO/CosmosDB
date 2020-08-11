@@ -1083,7 +1083,7 @@ InModuleScope $ProjectName {
             }
         }
 
-        Context 'When called with context parameter and an Id and OfferType and OfferThrougput' {
+        Context 'When called with context parameter and an Id and OfferType and OfferThroughput' {
             $script:result = $null
 
             Mock `

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed misspelling of 'Throughput' in `README.md` and tests - Fixes [Issue #396](https://github.com/PlagueHO/CosmosDB/issues/396).
+
 ### Changed
 
 - Renamed `master` branch to `main` - Fixes [Issue #393](https://github.com/PlagueHO/CosmosDB/issues/393).
