@@ -44,7 +44,7 @@ Create a new database in the Cosmos DB account.
 ### Example 2
 
 ```powershell
-New-CosmosDbDatabase -Context $cosmosDbContext -Id 'DatabaseWithOffer' -OfferThrougput 1200
+New-CosmosDbDatabase -Context $cosmosDbContext -Id 'DatabaseWithOffer' -OfferThroughput 1200
 ```
 
 Create a new database in the Cosmos DB account with a

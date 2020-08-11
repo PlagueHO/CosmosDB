@@ -284,7 +284,7 @@ Create a new database in the Cosmos DB account with database throughput
 provisioned at 1200 RU/s:
 
 ```powershell
-New-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase' -OfferThrougput 1200
+New-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase' -OfferThroughput 1200
 ```
 
 Create a new database in the Cosmos DB account that will have throughput
