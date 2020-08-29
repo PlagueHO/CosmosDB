@@ -287,6 +287,13 @@ provisioned at 1200 RU/s:
 New-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase' -OfferThroughput 1200
 ```
 
+Create a new database in the Cosmos DB account with autoscaling throughput
+with a maximum of 40,000 RU/s down to a minimum of 4,000 RU/s:
+
+```powershell
+New-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase' -AutoscaleThroughput 40000
+```
+
 Create a new database in the Cosmos DB account that will have throughput
 provisioned at the collection rather than the database:
 

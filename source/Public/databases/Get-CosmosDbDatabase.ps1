@@ -5,8 +5,8 @@ function Get-CosmosDbDatabase
     [OutputType([Object])]
     param
     (
-        [Alias('Connection')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
+        [Alias('Connection')]
         [ValidateNotNullOrEmpty()]
         [CosmosDb.Context]
         $Context,
@@ -26,8 +26,8 @@ function Get-CosmosDbDatabase
         [System.String]
         $KeyType = 'master',
 
-        [Alias('Name')]
         [Parameter()]
+        [Alias('Name')]
         [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ })]
         [System.String]
         $Id

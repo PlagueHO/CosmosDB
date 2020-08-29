@@ -5,8 +5,8 @@ function New-CosmosDbDatabase
     [OutputType([Object])]
     param
     (
-        [Alias('Connection')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
+        [Alias('Connection')]
         [ValidateNotNullOrEmpty()]
         [CosmosDb.Context]
         $Context,
@@ -26,21 +26,31 @@ function New-CosmosDbDatabase
         [System.String]
         $KeyType = 'master',
 
-        [Alias('Name')]
         [Parameter(Mandatory = $true)]
+        [Alias('Name')]
         [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ })]
         [System.String]
         $Id,
 
-        [Parameter()]
         [ValidateRange(400, 100000)]
         [System.Int32]
-        $OfferThroughput
+        $OfferThroughput,
+
+        [Alias('AutopilotThroughput')]
+        [ValidateRange(4000, 1000000)]
+        [System.Int32]
+        $AutoscaleThroughput
     )
 
     $null = $PSBoundParameters.Remove('Id')
 
     $headers = @{}
+
+    if ($PSBoundParameters.ContainsKey('OfferThroughput') -and `
+        $PSBoundParameters.ContainsKey('AutoscaleThroughput'))
+    {
+        New-CosmosDbInvalidOperationException -Message $($LocalizedData.ErrorNewDatabaseThroughputParameterConflict)
+    }
 
     if ($PSBoundParameters.ContainsKey('OfferThroughput'))
     {
@@ -48,6 +58,16 @@ function New-CosmosDbDatabase
             'x-ms-offer-throughput' = $OfferThroughput
         }
         $null = $PSBoundParameters.Remove('OfferThroughput')
+    }
+
+    if ($PSBoundParameters.ContainsKey('AutoscaleThroughput'))
+    {
+        $headers += @{
+            'x-ms-cosmos-offer-autopilot-settings' = ConvertTo-Json -InputObject @{
+                maxThroughput = $AutoscaleThroughput
+            } -Compress
+        }
+        $null = $PSBoundParameters.Remove('AutoscaleThroughput')
     }
 
     $result = Invoke-CosmosDbRequest @PSBoundParameters `

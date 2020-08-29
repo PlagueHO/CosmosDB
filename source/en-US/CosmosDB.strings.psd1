@@ -56,4 +56,5 @@ ConvertFrom-StringData -StringData @'
     ResponseHeaderContinuationTokenMissingOrEmpty = The Continuation Token ('x-ms-continuation' attribute) is missing or empty in the Response Header.
     DeprecateContextPortWarning = The Port parameter may be deprecated at a later date in favor of specifying it in the Uri parameter, e.g. https:\\cosmosdbemulator.local:9081. It is recommended to use that method instead of specifying the port parameter to reduce possible impact when the Port parameter is deprecated.
     NotLoggedInToCustomCloudException = The Azure PowerShell cmdlets are not currently logged into an Azure sovereign cloud. Please authenticate to your Azure sovereign cloud using Connect-AzAccount.
+    ErrorNewDatabaseThroughputParameterConflict = Both 'OfferThroughput' and 'AutoscaleThroughput' should not be specified when creating a new database.
 '@

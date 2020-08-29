@@ -4,8 +4,8 @@ function Remove-CosmosDbDatabase
     [CmdletBinding(DefaultParameterSetName = 'Context')]
     param
     (
-        [Alias('Connection')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Context')]
+        [Alias('Connection')]
         [ValidateNotNullOrEmpty()]
         [CosmosDb.Context]
         $Context,

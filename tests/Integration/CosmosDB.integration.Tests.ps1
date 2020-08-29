@@ -52,6 +52,7 @@ $script:testCorsAllowedOrigins = @('https://www.contoso.com', 'https://www.fabri
 $script:testOffer = 'testOffer'
 $script:testDatabase = 'testDatabase'
 $script:testDatabase2 = 'testDatabase2'
+$script:testDatabase3 = 'testDatabase3'
 $script:testCollection = 'testCollection'
 $script:testUser = 'testUser'
 $script:testCollectionPermission = 'testCollectionPermission'
@@ -488,7 +489,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When checking offer has been created for database' {
+    Context 'When checking offer has been created for second database' {
         It 'Should not throw an exception' {
             $script:result = Get-CosmosDbOffer -Context $script:testContext -Verbose
         }
@@ -517,6 +518,45 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     Context 'When removing second database' {
         It 'Should not throw an exception' {
             $script:result = Remove-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase2 -Verbose
+        }
+    }
+
+    Context 'When creating third new database with a specified autoscale throughput' {
+        It 'Should not throw an exception' {
+            $script:result = New-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase3 -AutoscaleThroughput 4000 -Verbose
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Collections | Should -BeOfType [System.String]
+            $script:result.Users | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testDatabase3
+        }
+    }
+
+    Context 'When checking offer has been created for third database' {
+        It 'Should not throw an exception' {
+            $script:result = Get-CosmosDbOffer -Context $script:testContext -Verbose
+        }
+
+        It 'Should return expected object' {
+            Test-GenericResult -GenericResult $script:result
+            $script:result.OfferVersion | Should -BeOfType [System.String]
+            $script:result.OfferType | Should -BeOfType [System.String]
+            $script:result.OfferResourceId | Should -BeOfType [System.String]
+            $script:result.Id | Should -BeOfType [System.String]
+            $script:result.content.offerThroughput | Should -BeExactly 400
+            $script:result.content.offerMinimumThroughputParameters.maxThroughputEverProvisioned | Should -BeExactly 4000
+            $script:result.content.offerAutopilotSettings.maxThroughput | Should -BeExactly 4000
+        }
+    }
+
+    Context 'When removing third database' {
+        It 'Should not throw an exception' {
+            $script:result = Remove-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase3 -Verbose
         }
     }
 
