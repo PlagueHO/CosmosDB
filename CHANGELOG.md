@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added support for specifying custom endpoint in `New-CosmosDbContext` to
   support alternative clouds - Fixes [Issue #395](https://github.com/PlagueHO/CosmosDB/issues/395).
+- Added support for autoscaling throughput on database and collection in
+  `New-CosmosDbDatabase` and `New-CosmosDbCollection` - Fixes [Issue #321](https://github.com/PlagueHO/CosmosDB/issues/321).
 
 ## [4.2.1] - 2020-06-15
 

@@ -19,7 +19,7 @@ Create a new collection in a Cosmos DB database.
 New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>]
  [-Database <String>] -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>]
  [-PartitionKey <String>] [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>]
- [-UniqueKeyPolicy <Policy>] [<CommonParameters>]
+ [-UniqueKeyPolicy <Policy>] [-AutoscaleThroughput <Int32>] [<CommonParameters>]
 ```
 
 ### ContextIndexPolicyJson
@@ -28,7 +28,7 @@ New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <Strin
 New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>]
  [-Database <String>] -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>]
  [-PartitionKey <String>] [-IndexingPolicyJson <String>] [-DefaultTimeToLive <Int32>]
- [-UniqueKeyPolicy <Policy>] [<CommonParameters>]
+ [-UniqueKeyPolicy <Policy>] [-AutoscaleThroughput <Int32>] [<CommonParameters>]
 ```
 
 ### AccountIndexPolicyJson
@@ -37,7 +37,7 @@ New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <Strin
 New-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>]
  [-Database <String>] -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>]
  [-PartitionKey <String>] [-IndexingPolicyJson <String>] [-DefaultTimeToLive <Int32>]
- [-UniqueKeyPolicy <Policy>] [<CommonParameters>]
+ [-UniqueKeyPolicy <Policy>] [-AutoscaleThroughput <Int32>] [<CommonParameters>]
 ```
 
 ### AccountIndexPolicy
@@ -46,7 +46,7 @@ New-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String
 New-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>]
  [-Database <String>] -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>]
  [-PartitionKey <String>] [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>]
- [-UniqueKeyPolicy <Policy>] [<CommonParameters>]
+ [-UniqueKeyPolicy <Policy>] [-AutoscaleThroughput <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -70,7 +70,7 @@ PS C:\> New-CosmosDbCollection -Context $cosmosDbContext -Id 'PartitionedCollect
 ```
 
 Create a collection in the database with the partition key 'account' and
-the offer throughput of 50000 RU/s.
+the offer throughput of 50,000 RU/s.
 
 ### Example 3
 
@@ -80,6 +80,16 @@ PS C:\> New-CosmosDbCollection -Context $cosmosDbContext -Id 'PartitionedCollect
 
 Create a collection in the database with the a default time to live of 3600
 seconds.
+
+### Example 4
+
+```powershell
+PS C:\> New-CosmosDbCollection -Context $cosmosDbContext -Id 'PartitionedCollection' -PartitionKey 'account' -AutoscaleThroughput 50000
+```
+
+Create a collection in the database with the partition key 'account' and
+an maximum throughput of 50,000 RU/s, autoscaling down to a minimum of
+5,000 RU/s.
 
 ## PARAMETERS
 
@@ -257,7 +267,10 @@ Accept wildcard characters: False
 
 The user specified performance level for pre-defined performance
 levels S1, S2 and S3.
-If specified OfferThroughput should not be specified.
+This is a legacy parameter and is only supported for backwards compatibility and
+may be removed in future. It is recommended to use 'OfferThroughput' or
+'AutopilotThroughput' instead.
+If specified OfferThroughput or AutoscaleThroughput should not be specified.
 
 ```yaml
 Type: String
@@ -302,6 +315,25 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AutoscaleThroughput
+
+The user specified autoscale throughput for the database expressed in RU/s.
+This can be between 4000 and 1,000,000 and should be specified in increments
+of 100 RU/s.
+This parameter can not be specified in OfferThroughput or OfferType is specified.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases: AutopilotThroughput
+
+Required: False
+Position: Named
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -27,8 +27,10 @@ ConvertFrom-StringData -StringData @'
     BackOffPolicyAppliedRequestedDelay = The requested delay {2}ms will be used because it is longer than the {0} back-off policy delay {1}ms.
     WaitingBackoffPolicyDelay = The collection has exceeded the provisioned throughput limit but retry {0} will be attempted in {1}ms.
     ErrorAuthorizationKeyEmpty = The authorization key is empty. It must be passed in the context or a valid token context for the resource being accessed must be supplied.
-    ErrorNewCollectionOfferParameterConflict = Both 'OfferType' and 'OfferThroughput' should not be specified when creating a new collection.
-    ErrorNewCollectionParitionKeyRequired = A 'PartitionKey' is required when the 'OfferThroughput' is greater than 10000.
+    WarningNewCollectionOfferTypeDeprecated = The 'OfferType' parameter is a legacy parameter and is only supported for backwards compatibility and may be removed in future. It is recommended to use 'OfferThroughput' or 'AutopilotThroughput' instead.
+    ErrorNewCollectionOfferParameterConflict = Only one of 'OfferType', OfferThroughput' or 'AutoscaleThroughput' should be specified when creating a new collection.
+    ErrorNewCollectionParitionKeyOfferRequired = A 'PartitionKey' is required when the 'OfferThroughput' is greater than 10000.
+    ErrorNewCollectionParitionKeyAutoscaleRequired = A 'PartitionKey' is required when the 'AutoscaleThroughput' is used.
     ErrorNewCollectionIncludedPathIndexInvalidDataType = The DataType '{1}' is invalid for the included path index Kind '{0}'. Please use one of: {2}.
     ErrorNewCollectionIncludedPathIndexPrecisionNotSupported = A Precision value should not be provided for the index Kind '{0}'.
     WarningNewCollectionIncludedPathIndexHashDeprecated = The 'Hash' index Kind has been deprecated. Default String and Number 'Range' index Kinds will be used instead. The 'Hash' index Kind will be removed in a future breaking release. See https://docs.microsoft.com/en-us/azure/cosmos-db/index-types#index-kind.
@@ -56,4 +58,5 @@ ConvertFrom-StringData -StringData @'
     ResponseHeaderContinuationTokenMissingOrEmpty = The Continuation Token ('x-ms-continuation' attribute) is missing or empty in the Response Header.
     DeprecateContextPortWarning = The Port parameter may be deprecated at a later date in favor of specifying it in the Uri parameter, e.g. https:\\cosmosdbemulator.local:9081. It is recommended to use that method instead of specifying the port parameter to reduce possible impact when the Port parameter is deprecated.
     NotLoggedInToCustomCloudException = The Azure PowerShell cmdlets are not currently logged into an Azure sovereign cloud. Please authenticate to your Azure sovereign cloud using Connect-AzAccount.
+    ErrorNewDatabaseThroughputParameterConflict = Both 'OfferThroughput' and 'AutoscaleThroughput' should not be specified when creating a new database.
 '@

@@ -14,7 +14,7 @@ function New-CosmosDbCollection
 
         [Parameter(Mandatory = $true, ParameterSetName = 'AccountIndexPolicy')]
         [Parameter(Mandatory = $true, ParameterSetName = 'AccountIndexPolicyJson')]
-        [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ -ArgumentName 'Account' })]
+        [ValidateScript( { Assert-CosmosDbAccountNameValid -Name $_ -ArgumentName 'Account' })]
         [System.String]
         $Account,
 
@@ -29,13 +29,13 @@ function New-CosmosDbCollection
         $KeyType = 'master',
 
         [Parameter()]
-        [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ -ArgumentName 'Database' })]
+        [ValidateScript( { Assert-CosmosDbDatabaseIdValid -Id $_ -ArgumentName 'Database' })]
         [System.String]
         $Database,
 
         [Alias('Name')]
         [Parameter(Mandatory = $true)]
-        [ValidateScript({ Assert-CosmosDbCollectionIdValid -Id $_ })]
+        [ValidateScript( { Assert-CosmosDbCollectionIdValid -Id $_ })]
         [System.String]
         $Id,
 
@@ -67,29 +67,35 @@ function New-CosmosDbCollection
         $IndexingPolicyJson,
 
         [Parameter()]
-        [ValidateRange(-1,2147483647)]
+        [ValidateRange(-1, 2147483647)]
         [System.Int32]
         $DefaultTimeToLive,
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [CosmosDB.UniqueKeyPolicy.Policy]
-        $UniqueKeyPolicy
+        $UniqueKeyPolicy,
+
+        [Alias('AutopilotThroughput')]
+        [ValidateRange(4000, 1000000)]
+        [System.Int32]
+        $AutoscaleThroughput
     )
 
-    $headers = @{}
+    $headers = @{ }
 
-    if ($PSBoundParameters.ContainsKey('OfferThroughput') -and `
-            $PSBoundParameters.ContainsKey('OfferType'))
+    if (($PSBoundParameters.ContainsKey('OfferThroughput') -and $PSBoundParameters.ContainsKey('OfferType')) -or `
+        ($PSBoundParameters.ContainsKey('OfferThroughput') -and $PSBoundParameters.ContainsKey('AutoscaleThroughput')) -or `
+        ($PSBoundParameters.ContainsKey('OfferType') -and $PSBoundParameters.ContainsKey('AutoscaleThroughput')))
     {
         New-CosmosDbInvalidOperationException -Message $($LocalizedData.ErrorNewCollectionOfferParameterConflict)
     }
 
     if ($PSBoundParameters.ContainsKey('OfferThroughput'))
     {
-        if ($OfferThroughput -gt 10000 -and $PartitionKey.Count -eq 0)
+        if ($OfferThroughput -gt 10000 -and -not ($PSBoundParameters.ContainsKey('PartitionKey')))
         {
-            New-CosmosDbInvalidOperationException -Message $($LocalizedData.ErrorNewCollectionParitionKeyRequired)
+            New-CosmosDbInvalidOperationException -Message $($LocalizedData.ErrorNewCollectionParitionKeyOfferRequired)
         }
 
         $headers += @{
@@ -100,10 +106,26 @@ function New-CosmosDbCollection
 
     if ($PSBoundParameters.ContainsKey('OfferType'))
     {
+        Write-Warning -Message $LocalizedData.WarningNewCollectionOfferTypeDeprecated
         $headers += @{
             'x-ms-offer-type' = $OfferType
         }
         $null = $PSBoundParameters.Remove('OfferType')
+    }
+
+    if ($PSBoundParameters.ContainsKey('AutoscaleThroughput'))
+    {
+        if (-not ($PSBoundParameters.ContainsKey('PartitionKey')))
+        {
+            New-CosmosDbInvalidOperationException -Message $($LocalizedData.ErrorNewCollectionParitionKeyAutoscaleRequired)
+        }
+
+        $headers += @{
+            'x-ms-cosmos-offer-autopilot-settings' = ConvertTo-Json -InputObject @{
+                maxThroughput = $AutoscaleThroughput
+            } -Compress
+        }
+        $null = $PSBoundParameters.Remove('AutoscaleThroughput')
     }
 
     $null = $PSBoundParameters.Remove('Id')

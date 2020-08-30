@@ -287,6 +287,13 @@ provisioned at 1200 RU/s:
 New-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase' -OfferThroughput 1200
 ```
 
+Create a new database in the Cosmos DB account with autoscaling throughput
+with a maximum of 40,000 RU/s down to a minimum of 4,000 RU/s:
+
+```powershell
+New-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase' -AutoscaleThroughput 40000
+```
+
 Create a new database in the Cosmos DB account that will have throughput
 provisioned at the collection rather than the database:
 
@@ -343,10 +350,18 @@ Get-CosmosDbCollection -Context $cosmosDbContext
 ```
 
 Create a collection in the database with the partition key 'id' and
-the offer throughput of 50000 RU/s:
+the offer throughput of 50,000 RU/s:
 
 ```powershell
 New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'id' -OfferThroughput 50000
+```
+
+Create a collection in the database with the partition key 'id' using
+autoscaling with the maximum throughput of 40,000 RU/s and a mimimum of
+4,000 RU/s:
+
+```powershell
+New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'id' -AutoscaleThroughput 40000
 ```
 
 Get a specified collection from a database:

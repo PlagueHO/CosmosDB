@@ -5,7 +5,12 @@ param ()
 $ProjectPath = "$PSScriptRoot\..\.." | Convert-Path
 $ProjectName = ((Get-ChildItem -Path $ProjectPath\*\*.psd1).Where{
         ($_.Directory.Name -match 'source|src' -or $_.Directory.Name -eq $_.BaseName) -and
-        $(try { Test-ModuleManifest $_.FullName -ErrorAction Stop } catch { $false } )
+        $(try
+            { Test-ModuleManifest $_.FullName -ErrorAction Stop
+            }
+            catch
+            { $false
+            } )
     }).BaseName
 
 Import-Module -Name $ProjectName -Force
@@ -29,6 +34,7 @@ InModuleScope $ProjectName {
     $script:testDatabase1 = 'testDatabase1'
     $script:testDatabase2 = 'testDatabase2'
     $script:testOfferThroughput = 2000
+    $script:testAutoscaleThroughput = 4000
     $script:testJsonMulti = @'
 {
     "_rid": "",
@@ -294,12 +300,70 @@ InModuleScope $ProjectName {
                 Assert-MockCalled `
                     -CommandName Invoke-CosmosDbRequest `
                     -ParameterFilter {
-                    $Method -eq 'Post' -and `
+                        $Method -eq 'Post' -and `
                         $ResourceType -eq 'dbs' -and `
                         $Headers.'x-ms-offer-throughput' -eq $script:testOfferThroughput -and `
                         $Body -eq "{ `"id`": `"$($script:testDatabase)`" }"
                 } `
                     -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter, an Id and an AutoscaleThroughput' {
+            $script:result = $null
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $testGetDatabaseResultSingle }
+
+            It 'Should not throw exception' {
+                $newCosmosDbDatabaseParameters = @{
+                    Context             = $script:testContext
+                    Id                  = $script:testDatabase
+                    AutoscaleThroughput = $script:testAutoscaleThroughput
+                }
+
+                { $script:result = New-CosmosDbDatabase @newCosmosDbDatabaseParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testDatabase1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter {
+                        $Method -eq 'Post' -and `
+                        $ResourceType -eq 'dbs' -and `
+                        $Headers.'x-ms-cosmos-offer-autopilot-settings' -eq "{`"maxThroughput`":$($script:testAutoscaleThroughput)}" -and `
+                        $Body -eq "{ `"id`": `"$($script:testDatabase)`" }"
+                } `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter, an Id and OfferThroughput and AutoscaleThroughput' {
+            $script:result = $null
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $testGetDatabaseResultSingle }
+
+            It 'Should throw expected exception' {
+                $newCosmosDbDatabaseParameters = @{
+                    Context             = $script:testContext
+                    Id                  = $script:testDatabase
+                    OfferThroughput = $script:testOfferThroughput
+                    AutoscaleThroughput = $script:testAutoscaleThroughput
+                }
+
+                $errorRecord = Get-InvalidOperationRecord `
+                    -Message $LocalizedData.ErrorNewDatabaseThroughputParameterConflict
+
+                {
+                    $script:result = New-CosmosDbDatabase @newCosmosDbDatabaseParameters
+                } | Should -Throw $errorRecord
             }
         }
     }
