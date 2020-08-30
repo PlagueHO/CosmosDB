@@ -145,9 +145,9 @@ Accept wildcard characters: False
 
 ### -OfferThroughput
 
-The user specified throughput for the database expressed
-in units of 100 request units per second.
-This can be between 400 and 100,000.
+The user specified throughput for the database expressed in RU/s.
+This can be between 400 and 100,000 and should be specified in increments
+of 100 RU/s.
 If not specified the offer throughput will be set to 400 RU/s.
 This parameter can not be specified in AutoscaleThroughput is specified.
 
@@ -165,15 +165,15 @@ Accept wildcard characters: False
 
 ### -AutoscaleThroughput
 
-The user specified autoscale throughput for the database expressed
-in units of 100 request units per second.
-This can be between 4000 and 1,000,000.
+The user specified autoscale throughput for the database expressed in RU/s.
+This can be between 4000 and 1,000,000 and should be specified in increments
+of 100 RU/s.
 This parameter can not be specified in OfferThroughput is specified.
 
 ```yaml
 Type: Int32
 Parameter Sets: (All)
-Aliases: AutopilotThroughput
+Aliases: AutopilotThroughput, AutoscaleMaxThroughput, AutopilotMaxThroughput
 
 Required: False
 Position: Named

@@ -350,10 +350,18 @@ Get-CosmosDbCollection -Context $cosmosDbContext
 ```
 
 Create a collection in the database with the partition key 'id' and
-the offer throughput of 50000 RU/s:
+the offer throughput of 50,000 RU/s:
 
 ```powershell
 New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'id' -OfferThroughput 50000
+```
+
+Create a collection in the database with the partition key 'id' using
+autoscaling with the maximum throughput of 40,000 RU/s and a mimimum of
+4,000 RU/s:
+
+```powershell
+New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'id' -AutoscaleThroughput 40000
 ```
 
 Get a specified collection from a database:

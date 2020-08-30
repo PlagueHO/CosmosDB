@@ -5,7 +5,12 @@ param ()
 $ProjectPath = "$PSScriptRoot\..\.." | Convert-Path
 $ProjectName = ((Get-ChildItem -Path $ProjectPath\*\*.psd1).Where{
         ($_.Directory.Name -match 'source|src' -or $_.Directory.Name -eq $_.BaseName) -and
-        $(try { Test-ModuleManifest $_.FullName -ErrorAction Stop } catch { $false } )
+        $(try
+            { Test-ModuleManifest $_.FullName -ErrorAction Stop
+            }
+            catch
+            { $false
+            } )
     }).BaseName
 
 Import-Module -Name $ProjectName -Force
@@ -187,8 +192,8 @@ InModuleScope $ProjectName {
 
             It 'Should not throw an exception' {
                 $newCosmosDbCollectionCompositeIndexElementParameters = @{
-                    Path      = '/path'
-                    Verbose   = $true
+                    Path    = '/path'
+                    Verbose = $true
                 }
 
                 $script:result = New-CosmosDbCollectionCompositeIndexElement @newCosmosDbCollectionCompositeIndexElementParameters
@@ -206,9 +211,9 @@ InModuleScope $ProjectName {
 
             It 'Should not throw an exception' {
                 $newCosmosDbCollectionCompositeIndexElementParameters = @{
-                    Path      = '/path'
-                    Order     = 'Descending'
-                    Verbose   = $true
+                    Path    = '/path'
+                    Order   = 'Descending'
+                    Verbose = $true
                 }
 
                 $script:result = New-CosmosDbCollectionCompositeIndexElement @newCosmosDbCollectionCompositeIndexElementParameters
@@ -256,9 +261,9 @@ InModuleScope $ProjectName {
 
             It 'Should not throw an exception' {
                 $newCosmosDbCollectionIncludedPathIndexParameters = @{
-                    Kind      = 'Hash'
-                    DataType  = 'String'
-                    Verbose   = $true
+                    Kind     = 'Hash'
+                    DataType = 'String'
+                    Verbose  = $true
                 }
 
                 $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
@@ -319,9 +324,9 @@ InModuleScope $ProjectName {
 
             It 'Should not throw an exception' {
                 $newCosmosDbCollectionIncludedPathIndexParameters = @{
-                    Kind      = 'Range'
-                    DataType  = 'Number'
-                    Verbose   = $true
+                    Kind     = 'Range'
+                    DataType = 'Number'
+                    Verbose  = $true
                 }
 
                 $script:result = New-CosmosDbCollectionIncludedPathIndex @newCosmosDbCollectionIncludedPathIndexParameters
@@ -703,7 +708,7 @@ InModuleScope $ProjectName {
                     Context           = $script:testContext
                     MaxItemCount      = 5
                     ContinuationToken = 'token'
-                    ResponseHeader     = [ref] $script:ResponseHeader
+                    ResponseHeader    = [ref] $script:ResponseHeader
                     Verbose           = $true
                 }
 
@@ -766,7 +771,9 @@ InModuleScope $ProjectName {
                     Verbose = $true
                 }
 
-                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -803,7 +810,9 @@ InModuleScope $ProjectName {
                     Verbose           = $true
                 }
 
-                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -840,7 +849,9 @@ InModuleScope $ProjectName {
                     Verbose         = $true
                 }
 
-                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -852,6 +863,26 @@ InModuleScope $ProjectName {
                     -CommandName Invoke-CosmosDbRequest `
                     -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                     -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id parameter and OfferThroughput is greater than 10000 but PartitionKey is not specified' {
+            $script:result = $null
+
+            It 'Should not throw an exception' {
+                $newCosmosDbCollectionParameters = @{
+                    Context         = $script:testContext
+                    Id              = $script:testCollection1
+                    OfferThroughput = 20000
+                    Verbose         = $true
+                }
+
+                $errorRecord = Get-InvalidOperationRecord `
+                    -Message $LocalizedData.ErrorNewCollectionParitionKeyOfferRequired
+
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Throw $errorRecord
             }
         }
 
@@ -877,7 +908,9 @@ InModuleScope $ProjectName {
                     Verbose   = $true
                 }
 
-                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -889,6 +922,129 @@ InModuleScope $ProjectName {
                     -CommandName Invoke-CosmosDbRequest `
                     -ParameterFilter $invokecosmosdbrequest_parameterfilter `
                     -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and Id, AutoscaleThroughput and PartitionKey parameters' {
+            $script:result = $null
+            $invokecosmosdbrequest_parameterfilter = {
+                $BodyObject = $Body | ConvertFrom-Json
+                $Method -eq 'Post' -and `
+                $ResourceType -eq 'colls' -and `
+                $BodyObject.id -eq $script:testCollection1 -and `
+                $Headers.'x-ms-cosmos-offer-autopilot-settings' -eq "{`"maxThroughput`":4000}"
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetCollectionResultSingle }
+
+            It 'Should not throw an exception' {
+                $newCosmosDbCollectionParameters = @{
+                    Context             = $script:testContext
+                    Id                  = $script:testCollection1
+                    AutoscaleThroughput = 4000
+                    PartitionKey        = 'partitionkey'
+                    Verbose             = $true
+                }
+
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testCollection1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokecosmosdbrequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id and AutoscaleThroughput but without a PartitionKey parameter' {
+            $script:result = $null
+
+            It 'Should throw expected exception' {
+                $newCosmosDbCollectionParameters = @{
+                    Context             = $script:testContext
+                    Id                  = $script:testCollection1
+                    AutoscaleThroughput = 4000
+                    Verbose             = $true
+                }
+
+                $errorRecord = Get-InvalidOperationRecord `
+                    -Message $LocalizedData.ErrorNewCollectionParitionKeyAutoscaleRequired
+
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Throw $errorRecord
+            }
+        }
+
+        Context 'When called with context parameter and an Id and AutoscaleThroughput and OfferThroughput parameter' {
+            $script:result = $null
+
+            It 'Should throw expected exception' {
+                $newCosmosDbCollectionParameters = @{
+                    Context             = $script:testContext
+                    Id                  = $script:testCollection1
+                    OfferThroughput     = 400
+                    AutoscaleThroughput = 4000
+                    Verbose             = $true
+                }
+
+                $errorRecord = Get-InvalidOperationRecord `
+                    -Message $LocalizedData.ErrorNewCollectionOfferParameterConflict
+
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Throw $errorRecord
+            }
+        }
+
+        Context 'When called with context parameter and an Id and AutoscaleThroughput and OfferType parameter' {
+            $script:result = $null
+
+            It 'Should throw expected exception' {
+                $newCosmosDbCollectionParameters = @{
+                    Context             = $script:testContext
+                    Id                  = $script:testCollection1
+                    OfferType           = 'S1'
+                    AutoscaleThroughput = 4000
+                    Verbose             = $true
+                }
+
+                $errorRecord = Get-InvalidOperationRecord `
+                    -Message $LocalizedData.ErrorNewCollectionOfferParameterConflict
+
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Throw $errorRecord
+            }
+        }
+
+        Context 'When called with context parameter and an Id and OfferThroughput and OfferType parameter' {
+            $script:result = $null
+
+            It 'Should throw expected exception' {
+                $newCosmosDbCollectionParameters = @{
+                    Context             = $script:testContext
+                    Id                  = $script:testCollection1
+                    OfferType           = 'S1'
+                    OfferThroughput     = 400
+                    Verbose             = $true
+                }
+
+                $errorRecord = Get-InvalidOperationRecord `
+                    -Message $LocalizedData.ErrorNewCollectionOfferParameterConflict
+
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Throw $errorRecord
             }
         }
 
@@ -915,7 +1071,9 @@ InModuleScope $ProjectName {
                     Verbose        = $true
                 }
 
-                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -953,7 +1111,9 @@ InModuleScope $ProjectName {
                     Verbose            = $true
                 }
 
-                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -992,7 +1152,9 @@ InModuleScope $ProjectName {
                     Verbose         = $true
                 }
 
-                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -1030,7 +1192,9 @@ InModuleScope $ProjectName {
                     Verbose      = $true
                 }
 
-                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -1068,7 +1232,9 @@ InModuleScope $ProjectName {
                     Verbose      = $true
                 }
 
-                $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                {
+                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
+                } | Should -Not -Throw
             }
 
             It 'Should return expected result' {

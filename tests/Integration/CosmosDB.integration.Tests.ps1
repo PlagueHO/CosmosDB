@@ -1333,6 +1333,30 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    Context 'When creating a new autoscale throughtput collection with a partition key' {
+        It 'Should not throw an exception' {
+            $script:result = New-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id $script:testCollection `
+                -PartitionKey $script:testPartitionKey `
+                -AutoscaleThroughput 4000 `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            Test-CollectionResult -CollectionResult $script:result
+            $script:result.Id | Should -Be $script:testCollection
+            $script:result.partitionKey.kind | Should -Be 'Hash'
+            $script:result.partitionKey.paths[0] | Should -Be ('/{0}' -f $script:testPartitionKey)
+        }
+    }
+
+    Context 'When removing existing autoscale throughtput collection with a partition key' {
+        It 'Should not throw an exception' {
+            $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
+        }
+    }
+
     Context 'When creating a new collection with a partition key' {
         It 'Should not throw an exception' {
             $script:result = New-CosmosDbCollection `

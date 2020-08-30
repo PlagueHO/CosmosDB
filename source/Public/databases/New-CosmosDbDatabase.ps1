@@ -36,7 +36,7 @@ function New-CosmosDbDatabase
         [System.Int32]
         $OfferThroughput,
 
-        [Alias('AutopilotThroughput')]
+        [Alias('AutopilotThroughput','AutoscaleMaxThroughput','AutopilotMaxThroughput')]
         [ValidateRange(4000, 1000000)]
         [System.Int32]
         $AutoscaleThroughput
