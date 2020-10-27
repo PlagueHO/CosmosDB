@@ -13,7 +13,7 @@ function Convert-CosmosDbRequestBody
 
     <#
         On PowerShell Core 6.0.x, ConvertTo-Json does not correctly escape this
-        string. See https://github.com/PowerShell/PowerShell/issues/7693
+        string. See https://github.com/PowerShell/PowerShell/issues/7693.
 
         This means that on PowerShell Core, certain strings when passed as
         Stored Procedure or Function bodies will not be accepted.

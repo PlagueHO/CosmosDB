@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix missing module help - Fixes [Issue #401](https://github.com/PlagueHO/CosmosDB/issues/401).
+
 ## [4.4.0] - 2020-08-30
 
 ### Fixed
