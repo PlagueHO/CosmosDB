@@ -51,6 +51,8 @@ function Remove-CosmosDbAttachment
         $PartitionKey
     )
 
+    Write-Warning -Message $LocalizedData.DeprecateAttachmentWarning
+
     $null = $PSBoundParameters.Remove('CollectionId')
     $null = $PSBoundParameters.Remove('DocumentId')
     $null = $PSBoundParameters.Remove('Id')

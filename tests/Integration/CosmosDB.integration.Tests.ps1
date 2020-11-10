@@ -82,10 +82,6 @@ $script:testDocumentUTF8UpdateBody = @"
     `"content`": `"$script:testDocumentUTF8UpdateContent`"
 }
 "@
-$script:testAttachmentId = 'testAttachment'
-$script:testAttachmentContentType = 'image/jpg'
-$script:testAttachmentMedia = 'www.bing.com'
-$script:testAttachmentMediaUpdated = 'www.contoso.com'
 $script:testStoredProcedureId = 'testStoredProcedure'
 $script:testStoredProcedureBody = @'
 function () {
@@ -890,68 +886,9 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
         It 'Should return expected object' {
             Test-GenericResult -GenericResult $script:result
-            $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentId
             $script:result.Content | Should -Be 'Some string'
             $script:result.More | Should -Be 'Some other string'
-        }
-    }
-
-    Context 'When adding an attachment to the document in a collection' {
-        It 'Should not throw an exception' {
-            $script:result = New-CosmosDbAttachment `
-                -Context $script:testContext `
-                -CollectionId $script:testCollection `
-                -DocumentId $script:testDocumentId `
-                -Id $script:testAttachmentId `
-                -ContentType $script:testAttachmentContentType `
-                -Media $script:testAttachmentMedia `
-                -Verbose
-        }
-
-        It 'Should return expected object' {
-            Test-GenericResult -GenericResult $script:result
-            $script:result.Id | Should -Be $script:testAttachmentId
-            $script:result.ContentType | Should -Be $script:testAttachmentContentType
-            $script:result.Media | Should -Be $script:testAttachmentMedia
-        }
-    }
-
-    Context 'When getting an attachment from the document in a collection' {
-        It 'Should not throw an exception' {
-            $script:result = Get-CosmosDbAttachment `
-                -Context $script:testContext `
-                -CollectionId $script:testCollection `
-                -DocumentId $script:testDocumentId `
-                -Id $script:testAttachmentId `
-                -Verbose
-        }
-
-        It 'Should return expected object' {
-            Test-GenericResult -GenericResult $script:result
-            $script:result.Id | Should -Be $script:testAttachmentId
-            $script:result.ContentType | Should -Be $script:testAttachmentContentType
-            $script:result.Media | Should -Be $script:testAttachmentMedia
-        }
-    }
-
-    Context 'When updating an attachment from the document in a collection' {
-        It 'Should not throw an exception' {
-            $script:result = Set-CosmosDbAttachment `
-                -Context $script:testContext `
-                -CollectionId $script:testCollection `
-                -DocumentId $script:testDocumentId `
-                -Id $script:testAttachmentId `
-                -ContentType $script:testAttachmentContentType `
-                -Media $script:testAttachmentMediaUpdated `
-                -Verbose
-        }
-
-        It 'Should return expected object' {
-            Test-GenericResult -GenericResult $script:result
-            $script:result.Id | Should -Be $script:testAttachmentId
-            $script:result.ContentType | Should -Be $script:testAttachmentContentType
-            $script:result.Media | Should -Be $script:testAttachmentMediaUpdated
         }
     }
 
@@ -1172,17 +1109,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When removing an attachment from the document in a collection' {
-        It 'Should not throw an exception' {
-            $script:result = Remove-CosmosDbAttachment `
-                -Context $script:testContext `
-                -CollectionId $script:testCollection `
-                -DocumentId $script:testDocumentId `
-                -Id $script:testAttachmentId `
-                -Verbose
-        }
-    }
-
     Context 'When removing a document from a collection' {
         It 'Should not throw an exception' {
             $script:result = Remove-CosmosDbDocument `
@@ -1205,7 +1131,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
         It 'Should return expected object' {
             Test-GenericResult -GenericResult $script:result
-            $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentUTF8Id
         }
     }
@@ -1221,7 +1146,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
         It 'Should return expected object' {
             Test-GenericResult -GenericResult $script:result
-            $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentUTF8Id
             $script:result.Content | Should -Be $script:testDocumentUTF8Content
         }
@@ -1238,7 +1162,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
         It 'Should return expected object' {
             Test-GenericResult -GenericResult $script:result
-            $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentUTF8Id
             $script:result.Content | Should -Be $script:testDocumentUTF8Content
         }
@@ -1259,7 +1182,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
         It 'Should return expected object' {
             Test-GenericResult -GenericResult $script:result
-            $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentUTF8Id
             $script:result.Content | Should -Be $script:testDocumentUTF8Content
         }
@@ -1276,7 +1198,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
         It 'Should return expected object' {
             Test-GenericResult -GenericResult $script:result
-            $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentUTF8Id
             $script:result.Content | Should -Be $script:testDocumentUTF8Content
         }
@@ -1295,7 +1216,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
         It 'Should return expected object' {
             Test-GenericResult -GenericResult $script:result
-            $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentUTF8Id
         }
     }
@@ -1311,7 +1231,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
         It 'Should return expected object' {
             Test-GenericResult -GenericResult $script:result
-            $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentUTF8Id
             $script:result.Content | Should -Be $script:testDocumentUTF8UpdateContent
         }
@@ -1386,7 +1305,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
         It 'Should return expected object' {
             Test-GenericResult -GenericResult $script:result
-            $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentId
             $script:result.Content | Should -Be 'Some string'
             $script:result.More | Should -Be 'Some other string'
@@ -1405,7 +1323,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
         It 'Should return expected object' {
             Test-GenericResult -GenericResult $script:result
-            $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentId
             $script:result.Content | Should -Be 'Some string'
             $script:result.More | Should -Be 'Some other string'
@@ -1423,83 +1340,9 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
         It 'Should return expected object' {
             Test-GenericResult -GenericResult $script:result
-            $script:result.Attachments | Should -BeOfType [System.String]
             $script:result.Id | Should -Be $script:testDocumentId
             $script:result.Content | Should -Be 'Some string'
             $script:result.More | Should -Be 'Some other string'
-        }
-    }
-
-    Context 'When adding an attachment to the document in a collection with a partition key' {
-        It 'Should not throw an exception' {
-            $script:result = New-CosmosDbAttachment `
-                -Context $script:testContext `
-                -CollectionId $script:testCollection `
-                -DocumentId $script:testDocumentId `
-                -Id $script:testAttachmentId `
-                -PartitionKey $script:testDocumentId `
-                -ContentType $script:testAttachmentContentType `
-                -Media $script:testAttachmentMedia `
-                -Verbose
-        }
-
-        It 'Should return expected object' {
-            Test-GenericResult -GenericResult $script:result
-            $script:result.Id | Should -Be $script:testAttachmentId
-            $script:result.ContentType | Should -Be $script:testAttachmentContentType
-            $script:result.Media | Should -Be $script:testAttachmentMedia
-        }
-    }
-
-    Context 'When getting an attachment from the document in a collection with a partition key' {
-        It 'Should not throw an exception' {
-            $script:result = Get-CosmosDbAttachment `
-                -Context $script:testContext `
-                -CollectionId $script:testCollection `
-                -DocumentId $script:testDocumentId `
-                -Id $script:testAttachmentId `
-                -PartitionKey $script:testDocumentId `
-                -Verbose
-        }
-
-        It 'Should return expected object' {
-            Test-GenericResult -GenericResult $script:result
-            $script:result.Id | Should -Be $script:testAttachmentId
-            $script:result.ContentType | Should -Be $script:testAttachmentContentType
-            $script:result.Media | Should -Be $script:testAttachmentMedia
-        }
-    }
-
-    Context 'When updating an attachment from the document in a collection with a partition key' {
-        It 'Should not throw an exception' {
-            $script:result = Set-CosmosDbAttachment `
-                -Context $script:testContext `
-                -CollectionId $script:testCollection `
-                -DocumentId $script:testDocumentId `
-                -Id $script:testAttachmentId `
-                -PartitionKey $script:testDocumentId `
-                -ContentType $script:testAttachmentContentType `
-                -Media $script:testAttachmentMediaUpdated `
-                -Verbose
-        }
-
-        It 'Should return expected object' {
-            Test-GenericResult -GenericResult $script:result
-            $script:result.Id | Should -Be $script:testAttachmentId
-            $script:result.ContentType | Should -Be $script:testAttachmentContentType
-            $script:result.Media | Should -Be $script:testAttachmentMediaUpdated
-        }
-    }
-
-    Context 'When removing an attachment from the document in a collection with a partition key' {
-        It 'Should not throw an exception' {
-            $script:result = Remove-CosmosDbAttachment `
-                -Context $script:testContext `
-                -CollectionId $script:testCollection `
-                -DocumentId $script:testDocumentId `
-                -Id $script:testAttachmentId `
-                -PartitionKey $script:testDocumentId `
-                -Verbose
         }
     }
 
