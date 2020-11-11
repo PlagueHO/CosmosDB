@@ -21,6 +21,7 @@ function Assert-CosmosDbAttachmentIdValid
     )
 
     $matches = [regex]::Match($Id,"[^\\/#?]{1,255}(?<!\s)")
+
     if ($matches.value -ne $Id)
     {
         New-CosmosDbInvalidArgumentException `

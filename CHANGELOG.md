@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix build problems preventing DLL and help from being compiled and added
+  to the module.
+
+### Changed
+
+- Attachments are now a legacy feature and not supported when creating a
+  new account. Remove integration tests for this feature. Add a warning
+  when this feature is used.
+
 ## [4.4.1] - 2020-10-27
 
 ### Fixed
