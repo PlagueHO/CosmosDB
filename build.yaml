@@ -59,7 +59,7 @@ BuildWorkflow:
 
       Write-Host -Object "Compiling help for version $moduleVersion."
 
-      $outputPath = "$BuildModuleOutput\CosmosDB\$moduleVersion
+      $outputPath = "$BuildModuleOutput\CosmosDB\$moduleVersion"
       $execute = "New-ExternalHelp -Path '$BuildRoot\docs' -OutputPath '$outputPath' -Force"
 
       if ($IsCoreCLR)
