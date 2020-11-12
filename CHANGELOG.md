@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix build problems preventing DLL and help from being compiled and added
+  to the module.
+
 ## [4.4.2] - 2020-11-11
 
 ### Fixed

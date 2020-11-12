@@ -24,10 +24,17 @@ BuildWorkflow:
       & dotnet @('build',$classesProjectPath,'/p:Configuration=Release')
       $compiledDllPath = Join-Path -Path $classesPath -ChildPath 'bin/Release/netstandard2.0/CosmosDB.dll'
 
-      if ([System.String]::IsNullOrEmpty($ModuleVersion))
+      if ([System.String]::IsNullOrEmpty($ENV:ModuleVersion))
       {
+        Write-Host -Object 'ModuleVersion environment variable is not defined.'
         $ModuleVersion = ($BuildModuleOutput | Join-Path -ChildPath 'CosmosDB' | Get-ChildItem -Attributes D | Sort-Object -Property Name)[0].Name
       }
+      else
+      {
+        $ModuleVersion = $ENV:ModuleVersion
+      }
+
+      Write-Host -Object "Compiling Classes for version $ModuleVersion."
 
       $destinationPath = $BuildModuleOutput | Join-Path -ChildPath 'CosmosDB' | Join-Path -ChildPath ($ModuleVersion -Split '-')[0]
       $null = Copy-Item -Path $compiledDllPath -Destination $destinationPath
@@ -40,10 +47,17 @@ BuildWorkflow:
         to load YamlDotNet.dll which conflicts with one loaded by
         Module-Builder.
       #>
-      if ([System.String]::IsNullOrEmpty($ModuleVersion))
+      if ([System.String]::IsNullOrEmpty($ENV:ModuleVersion))
       {
+        Write-Host -Object 'ModuleVersion environment variable is not defined.'
         $ModuleVersion = ($BuildModuleOutput | Join-Path -ChildPath 'CosmosDB' | Get-ChildItem -Attributes D | Sort-Object -Property Name)[0].Name
       }
+      else
+      {
+        $ModuleVersion = $ENV:ModuleVersion
+      }
+
+      Write-Host -Object "Compiling help for version $ModuleVersion."
 
       $outputPath = "$BuildModuleOutput\CosmosDB\$(($ModuleVersion -Split '-')[0])"
       $execute = "New-ExternalHelp -Path '$BuildRoot\docs' -OutputPath '$outputPath' -Force"
