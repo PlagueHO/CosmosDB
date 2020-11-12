@@ -27,16 +27,16 @@ BuildWorkflow:
       if ([System.String]::IsNullOrEmpty($ENV:ModuleVersion))
       {
         Write-Host -Object 'ModuleVersion environment variable is not defined.'
-        $ModuleVersion = ($BuildModuleOutput | Join-Path -ChildPath 'CosmosDB' | Get-ChildItem -Attributes D | Sort-Object -Property Name)[0].Name
+        $moduleVersion = ($BuildModuleOutput | Join-Path -ChildPath 'CosmosDB' | Get-ChildItem -Attributes D | Sort-Object -Property Name)[0].Name
       }
       else
       {
-        $ModuleVersion = $ENV:ModuleVersion
+        $moduleVersion = (($ENV:ModuleVersion -Split '-') -Split '\+')[0]
       }
 
-      Write-Host -Object "Compiling Classes for version $ModuleVersion."
+      Write-Host -Object "Compiling Classes for version $moduleVersion."
 
-      $destinationPath = $BuildModuleOutput | Join-Path -ChildPath 'CosmosDB' | Join-Path -ChildPath ($ModuleVersion -Split '-')[0]
+      $destinationPath = $BuildModuleOutput | Join-Path -ChildPath 'CosmosDB' | Join-Path -ChildPath $moduleVersion
       $null = Copy-Item -Path $compiledDllPath -Destination $destinationPath
     }
 
@@ -50,16 +50,16 @@ BuildWorkflow:
       if ([System.String]::IsNullOrEmpty($ENV:ModuleVersion))
       {
         Write-Host -Object 'ModuleVersion environment variable is not defined.'
-        $ModuleVersion = ($BuildModuleOutput | Join-Path -ChildPath 'CosmosDB' | Get-ChildItem -Attributes D | Sort-Object -Property Name)[0].Name
+        $moduleVersion = ($BuildModuleOutput | Join-Path -ChildPath 'CosmosDB' | Get-ChildItem -Attributes D | Sort-Object -Property Name)[0].Name
       }
       else
       {
-        $ModuleVersion = $ENV:ModuleVersion
+        $moduleVersion = (($ENV:ModuleVersion -Split '-') -Split '\+')[0]
       }
 
-      Write-Host -Object "Compiling help for version $ModuleVersion."
+      Write-Host -Object "Compiling help for version $moduleVersion."
 
-      $outputPath = "$BuildModuleOutput\CosmosDB\$(($ModuleVersion -Split '-')[0])"
+      $outputPath = "$BuildModuleOutput\CosmosDB\$moduleVersion
       $execute = "New-ExternalHelp -Path '$BuildRoot\docs' -OutputPath '$outputPath' -Force"
 
       if ($IsCoreCLR)
