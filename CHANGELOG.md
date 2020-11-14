@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Convert build pipeline to use GitTools Azure DevOps extension tasks
+  instead of decprecated GitVersion extension.
+
 ## [4.4.3] - 2020-11-13
 
 ### Fixed
