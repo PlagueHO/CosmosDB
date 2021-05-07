@@ -10,8 +10,13 @@ $script:moduleRoot = Split-Path `
     -Parent
 
 # Import dependent Az modules
-Import-Module -Name Az.Accounts -MinimumVersion 1.0.0 -Scope Global
-Import-Module -Name Az.Resources -MinimumVersion 1.0.0 -Scope Global
+if(!(Get-Module -Name Az.Accounts)) {
+    Import-Module -Name Az.Accounts -MinimumVersion 1.0.0 -Scope Global
+}
+
+if(!(Get-Module -Name Az.Resources)) {
+    Import-Module -Name Az.Resources -MinimumVersion 1.0.0 -Scope Global
+}
 
 #region LocalizedData
 $culture = $PSUICulture
