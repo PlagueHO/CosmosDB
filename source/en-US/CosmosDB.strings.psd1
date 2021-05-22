@@ -60,4 +60,5 @@ ConvertFrom-StringData -StringData @'
     NotLoggedInToCustomCloudException = The Azure PowerShell cmdlets are not currently logged into an Azure sovereign cloud. Please authenticate to your Azure sovereign cloud using Connect-AzAccount.
     ErrorNewDatabaseThroughputParameterConflict = Both 'OfferThroughput' and 'AutoscaleThroughput' should not be specified when creating a new database.
     DeprecateAttachmentWarning = Attachments are a legacy feature. Their support is scoped to offer continued functionality if you are already using this feature. See https://aka.ms/cosmosdb-attachments for more information.
+    ErrorConvertingDocumentJsonToObject = An error occured converting the document information returned from Cosmsos DB into an object. This might be caused by the document including keys with same name but differing in case. Include the -ReturnJson parameter to return these as JSON instead.
 '@
