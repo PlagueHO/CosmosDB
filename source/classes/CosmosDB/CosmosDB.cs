@@ -32,7 +32,7 @@ namespace CosmosDB {
         public System.String BaseUri;
         public CosmosDB.ContextToken[] Token;
         public CosmosDB.BackoffPolicy BackoffPolicy;
-        public CosmosDB.Environment Environment;
+        public CosmosDB.Environment Environment = Environment.AzureCloud;
     }
 
     namespace IndexingPolicy {

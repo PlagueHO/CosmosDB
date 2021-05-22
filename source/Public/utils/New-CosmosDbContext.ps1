@@ -189,6 +189,7 @@ function New-CosmosDbContext
             BaseUri       = $BaseUri
             Token         = $Token
             BackoffPolicy = $BackoffPolicy
+            Environment   = $Environment
         }
 
         return $context

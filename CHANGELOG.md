@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Convert build pipeline to use GitTools Azure DevOps extension tasks
   instead of deprecated GitVersion extension.
+- Correct value of `Environment` parameter in context object returned
+  by `New-CosmosDbContext` - Fixes [Issue #411](https://github.com/PlagueHO/CosmosDB/issues/411).
 
 ### Fixed
 
