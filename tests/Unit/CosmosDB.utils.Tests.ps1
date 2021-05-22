@@ -234,6 +234,7 @@ console.log("done");
                 $script:result.Key | Should -Be $script:testKeySecureString
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureCloud)
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
             }
         }
 
@@ -258,6 +259,7 @@ console.log("done");
                 $script:result.Key | Should -Be $script:testKeySecureString
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureUsGov)
+                $script:result.Environment | Should -BeExactly 'AzureUSGovernment'
             }
         }
 
@@ -282,6 +284,7 @@ console.log("done");
                 $script:result.Key | Should -Be $script:testKeySecureString
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureChinaCloud)
+                $script:result.Environment | Should -BeExactly 'AzureChinaCloud'
             }
         }
 
@@ -306,6 +309,7 @@ console.log("done");
                 $script:result.Key | Should -Be $script:testKeySecureString
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureCustomEndpoint)
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
             }
         }
 
@@ -341,6 +345,7 @@ console.log("done");
                 $script:result.BackoffPolicy.MaxRetries | Should -Be $script:testMaxRetries
                 $script:result.BackoffPolicy.Method | Should -Be $script:testMethod
                 $script:result.BackoffPolicy.Delay | Should -Be $script:testDelay
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
             }
         }
 
@@ -370,6 +375,7 @@ console.log("done");
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.Key | Convert-CosmosDbSecureStringToString | Should -Be $script:testKey
                 $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureCloud)
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
             }
 
             It 'Should call expected mocks' {
@@ -437,6 +443,7 @@ console.log("done");
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.Key | Convert-CosmosDbSecureStringToString | Should -Be $script:testKey
                 $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureUsGov)
+                $script:result.Environment | Should -BeExactly 'AzureUSGovernment'
             }
 
             It 'Should call expected mocks' {
@@ -477,6 +484,7 @@ console.log("done");
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.Key | Convert-CosmosDbSecureStringToString | Should -Be $script:testKey
                 $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureChinaCloud)
+                $script:result.Environment | Should -BeExactly 'AzureChinaCloud'
             }
 
             It 'Should call expected mocks' {
@@ -515,6 +523,7 @@ console.log("done");
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.Key | Convert-CosmosDbSecureStringToString | Should -Be $script:testKey
                 $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureCloud)
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
             }
 
             It 'Should call expected mocks' {
@@ -552,6 +561,7 @@ console.log("done");
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.Key | Convert-CosmosDbSecureStringToString | Should -Be $script:testKey
                 $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureCustomEndpoint)
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
             }
 
             It 'Should call expected mocks' {
@@ -583,6 +593,7 @@ console.log("done");
                 $tempCredential.Password | Should -Be $script:testEmulatorKey
                 $script:result.KeyType | Should -BeExactly 'master'
                 $script:result.BaseUri | Should -BeExactly 'https://localhost:8081/'
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
             }
         }
 
@@ -608,6 +619,7 @@ console.log("done");
                 $tempCredential.Password | Should -Be $script:testEmulatorKey
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.BaseUri | Should -Be 'https://mycosmosdb.contoso.local:9999/'
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
             }
         }
 
@@ -632,6 +644,7 @@ console.log("done");
                 $tempCredential.Password | Should -Be $script:testEmulatorKey
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.BaseUri | Should -Be 'https://mycosmosdb.contoso.local:8081/'
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
             }
         }
 
@@ -656,6 +669,7 @@ console.log("done");
                 $tempCredential.Password | Should -Be $script:testEmulatorKey
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.BaseUri | Should -Be 'http://mycosmosdb.contoso.local:8081/'
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
             }
         }
 
@@ -680,6 +694,7 @@ console.log("done");
                 $tempCredential.Password | Should -Be $script:testEmulatorKey
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.BaseUri | Should -Be 'https://mycosmosdb.contoso.local:9999/'
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
             }
         }
 
@@ -704,6 +719,7 @@ console.log("done");
                 $tempCredential.Password | Should -Be $script:testEmulatorKey
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.BaseUri | Should -Be 'https://mycosmosdb.contoso.local:9999/'
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
             }
         }
 
@@ -729,6 +745,7 @@ console.log("done");
                 $tempCredential.Password | Should -Be $script:testEmulatorKey
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.BaseUri | Should -Be 'https://mycosmosdb.contoso.local:8081/'
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
             }
         }
 
@@ -754,6 +771,7 @@ console.log("done");
                 $tempCredential.Password | Should -Be $script:testKey
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.BaseUri | Should -Be 'https://localhost:8081/'
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
             }
         }
 
@@ -778,10 +796,9 @@ console.log("done");
                 $script:result.Token[0].Resource | Should -Be $script:testTokenResource
                 $script:result.Token[0].TimeStamp | Should -Be $script:testDate
                 $script:result.Token[0].Token | Convert-CosmosDbSecureStringToString | Should -Be $script:testToken
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
             }
         }
-
-
     }
 
     Describe 'Get-CosmosDbUri' -Tag 'Unit' {
