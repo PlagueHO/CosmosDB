@@ -10,36 +10,36 @@ namespace CosmosDB {
 
     public class ContextToken
     {
-        public System.String Resource;
-        public System.DateTime TimeStamp;
-        public System.DateTime Expires;
-        public System.Security.SecureString Token;
+        public System.String Resource { get; set; }
+        public System.DateTime TimeStamp { get; set; }
+        public System.DateTime Expires { get; set; }
+        public System.Security.SecureString Token { get; set; }
     }
 
     public class BackoffPolicy
     {
-        public System.Int32 MaxRetries;
-        public System.String Method;
-        public System.Int32 Delay;
+        public System.Int32 MaxRetries { get; set; }
+        public System.String Method { get; set; }
+        public System.Int32 Delay { get; set; }
     }
 
     public class Context
     {
-        public System.String Account;
-        public System.String Database;
-        public System.Security.SecureString Key;
-        public System.String KeyType;
-        public System.String BaseUri;
-        public CosmosDB.ContextToken[] Token;
-        public CosmosDB.BackoffPolicy BackoffPolicy;
-        public CosmosDB.Environment Environment = Environment.AzureCloud;
+        public System.String Account { get; set; }
+        public System.String Database { get; set; }
+        public System.Security.SecureString Key { get; set; }
+        public System.String KeyType { get; set; }
+        public System.String BaseUri { get; set; }
+        public CosmosDB.ContextToken[] Token { get; set; }
+        public CosmosDB.BackoffPolicy BackoffPolicy { get; set; }
+        public CosmosDB.Environment Environment  { get; set; } = Environment.AzureCloud;
     }
 
     namespace IndexingPolicy {
         namespace Path {
             public class Index {
-                public System.String dataType;
-                public System.String kind;
+                public System.String dataType { get; set; }
+                public System.String kind { get; set; }
             }
 
             public class IndexRange : CosmosDB.IndexingPolicy.Path.Index {
@@ -55,17 +55,17 @@ namespace CosmosDB {
 
             public class IncludedPath
             {
-                public System.String path;
+                public System.String path { get; set; }
             }
 
             public class IncludedPathIndex : IncludedPath
             {
-                public CosmosDB.IndexingPolicy.Path.Index[] indexes;
+                public CosmosDB.IndexingPolicy.Path.Index[] indexes { get; set; }
             }
 
             public class ExcludedPath
             {
-                public System.String path;
+                public System.String path { get; set; }
             }
         }
 
@@ -73,29 +73,29 @@ namespace CosmosDB {
         namespace CompositeIndex {
             public class Element
             {
-                public System.String path;
-                public System.String order;
+                public System.String path { get; set; }
+                public System.String order { get; set; }
             }
         }
 
         public class Policy
         {
-            public System.Boolean automatic;
-            public System.String indexingMode;
-            public CosmosDB.IndexingPolicy.Path.IncludedPath[] includedPaths;
-            public CosmosDB.IndexingPolicy.Path.ExcludedPath[] excludedPaths;
-            public CosmosDB.IndexingPolicy.CompositeIndex.Element[][] compositeIndexes;
+            public System.Boolean automatic { get; set; }
+            public System.String indexingMode { get; set; }
+            public CosmosDB.IndexingPolicy.Path.IncludedPath[] includedPaths { get; set; }
+            public CosmosDB.IndexingPolicy.Path.ExcludedPath[] excludedPaths { get; set; }
+            public CosmosDB.IndexingPolicy.CompositeIndex.Element[][] compositeIndexes { get; set; }
         }
     }
 
     namespace UniqueKeyPolicy {
         public class UniqueKey {
-            public System.String[] paths;
+            public System.String[] paths { get; set; }
         }
 
         public class Policy
         {
-            public CosmosDB.UniqueKeyPolicy.UniqueKey[] uniqueKeys;
+            public CosmosDB.UniqueKeyPolicy.UniqueKey[] uniqueKeys { get; set; }
         }
     }
 }
