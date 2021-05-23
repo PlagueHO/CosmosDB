@@ -21,7 +21,8 @@ Get-CosmosDbDocument -Context <Context> [-Key <SecureString>] [-KeyType <String>
  [-PartitionKey <Object[]>] [-MaxItemCount <Int32>] [-ContinuationToken <String>]
  [-ConsistencyLevel <String>] [-SessionToken <String>]
  [-PartitionKeyRangeId <String>] [-Query <String>] [-QueryParameters <Hashtable[]>]
- [-QueryEnableCrossPartition <Boolean>] [-ResponseHeader <PSReference>] [<CommonParameters>]
+ [-QueryEnableCrossPartition <Boolean>] [-ResponseHeader <PSReference>]
+ [-RetrunJson <switch>] [<CommonParameters>]
 ```
 
 ### Account
@@ -32,7 +33,8 @@ Get-CosmosDbDocument -Account <String> [-Key <SecureString>] [-KeyType <String>]
  [-PartitionKey <Object[]>] [-MaxItemCount <Int32>] [-ContinuationToken <String>]
  [-ConsistencyLevel <String>] [-SessionToken <String>]
  [-PartitionKeyRangeId <String>] [-Query <String>] [-QueryParameters <Hashtable[]>]
- [-QueryEnableCrossPartition <Boolean>] [-ResponseHeader <PSReference>] [<CommonParameters>]
+ [-QueryEnableCrossPartition <Boolean>] [-ResponseHeader <PSReference>]
+ [-RetrunJson <switch>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -95,6 +97,16 @@ PS C:\> Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewColle
 ```
 
 Query the documents in a collection using a parameterized query.
+
+### Example 6
+
+```powershell
+PS C:\> Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'ac12345' -ReturnJson
+```
+
+Return a document with a Id 'ac12345' from a collection in the database as
+JSON string rather than an object. This is useful if the document returned
+contain duplicate keys that differing only in case.
 
 ## PARAMETERS
 
@@ -387,6 +399,24 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ReturnJson
+
+Prevents the information returned by Cosmos DB from the request to be converted
+into an object. This switch is required if the document being added to Cosmos DB
+has key names that are duplicates, differing only in case.
+
+```yaml
+Type: switch
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

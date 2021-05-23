@@ -18,7 +18,8 @@ Update a document from a Cosmos DB collection.
 ```powershell
 Set-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString>]
  -CollectionId <String> -Id <String> -DocumentBody <String> [-IndexingDirective <String>]
- [-PartitionKey <Object[]>] [-Encoding <String>] [-ETag <String>] [<CommonParameters>]
+ [-PartitionKey <Object[]>] [-Encoding <String>] [-ETag <String>]
+ [-RetrunJson <switch>] [<CommonParameters>]
 ```
 
 ### Account
@@ -27,7 +28,7 @@ Set-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString
 Set-CosmosDbDocument -Account <String> [-Database <String>] [-Key <SecureString>]
  [-KeyType <String>] -CollectionId <String> -Id <String> -DocumentBody <String>
  [-IndexingDirective <String>] [-PartitionKey <Object[]>] [-Encoding <String>]
- [-ETag <String>] [<CommonParameters>]
+ [-ETag <String>] [-RetrunJson <switch>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -82,6 +83,25 @@ PS C:\> Set-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewColle
 Increment the counter of a document. Make sure that the document has not been
 modified between get and set operations by supplying the ETag from the original
 document.
+
+### Example 4
+
+```powershell
+PS C:\> $newDocument = @"
+{
+    `"id`": `"ac12345`",
+    `"content`": {
+        `"key`": `"lower case key`",
+        `"KEY`": `"upper case key`"
+    }
+}
+"@
+PS C:\> Set-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'ac12345' -DocumentBody $newDocument
+```
+
+Replace an existing document containing a document with JSON that can not be
+returned as an object due to keys that differ only in case. This will return
+the output as JSON.
 
 ## PARAMETERS
 
@@ -287,6 +307,24 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ReturnJson
+
+Prevents the information returned by Cosmos DB from the request to be converted
+into an object. This switch is required if the document being added to Cosmos DB
+has key names that are duplicates, differing only in case.
+
+```yaml
+Type: switch
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

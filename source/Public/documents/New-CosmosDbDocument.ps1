@@ -58,12 +58,17 @@ function New-CosmosDbDocument
         [Parameter()]
         [ValidateSet('Default', 'UTF-8')]
         [System.String]
-        $Encoding = 'Default'
+        $Encoding = 'Default',
+
+        [Parameter()]
+        [switch]
+        $ReturnJson
     )
 
     $null = $PSBoundParameters.Remove('CollectionId')
     $null = $PSBoundParameters.Remove('Id')
     $null = $PSBoundParameters.Remove('DocumentBody')
+    $null = $PSBoundParameters.Remove('ReturnJson')
 
     $resourcePath = ('colls/{0}/docs' -f $CollectionId)
 
@@ -100,10 +105,24 @@ function New-CosmosDbDocument
         -Body $DocumentBody `
         -Headers $headers
 
-    $document = ConvertFrom-Json -InputObject $result.Content
-
-    if ($document)
+    if ($ReturnJson.IsPresent)
     {
-        return (Set-CosmosDbDocumentType -Document $document)
+        return $result.Content
+    }
+    else
+    {
+        try
+        {
+            $document = ConvertFrom-Json -InputObject $result.Content
+        }
+        catch
+        {
+            New-CosmosDbInvalidOperationException -Message ($LocalizedData.ErrorConvertingDocumentJsonToObject)
+        }
+
+        if ($document)
+        {
+            return (Set-CosmosDbDocumentType -Document $document)
+        }
     }
 }

@@ -18,6 +18,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix CI pipeline deployment stage to ensure correctly detects running
   in Azure DevOps organization.
+- Fix CI pipeline release stage by adding Sampler GitHub tasks which
+  were moved out of the main sampler module into a new module
+  `Sampler.GitHubTasks` - Fixes [Issue #418](https://github.com/PlagueHO/CosmosDB/issues/418).
+
+### Added
+
+- Added `ReturnJson` parameter to `New-CosmosDbDocument`, `Set-CosmosDbDocument`
+  and `Get-CosmosDbDocument` functions to allow return of documents that can
+  not be converted to objects due to duplicate key names that only differ in
+  case - Fixes [Issue #413](https://github.com/PlagueHO/CosmosDB/issues/413).
 
 ## [4.4.3] - 2020-11-13
 

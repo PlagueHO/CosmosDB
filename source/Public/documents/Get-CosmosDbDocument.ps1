@@ -89,20 +89,40 @@ function Get-CosmosDbDocument
         [Alias("ResultHeaders")]
         [Parameter()]
         [ref]
-        $ResponseHeader
+        $ResponseHeader,
+
+        [Parameter()]
+        [switch]
+        $ReturnJson
     )
+
+    $null = $PSBoundParameters.Remove('ReturnJson')
 
     $documentJson = Get-CosmosDbDocumentJson @PSBoundParameters
 
-    $documents = ConvertFrom-Json -InputObject $documentJson
-
-    if ([System.String]::IsNullOrEmpty($Id))
+    if ($ReturnJson.IsPresent)
     {
-        $documents = $documents.Documents
+        return $documentJson
     }
-
-    if ($documents)
+    else
     {
-        return (Set-CosmosDbDocumentType -Document $documents)
+        try
+        {
+            $documents = ConvertFrom-Json -InputObject $documentJson
+
+            if ([System.String]::IsNullOrEmpty($Id))
+            {
+                $documents = $documents.Documents
+            }
+
+            if ($documents)
+            {
+                return (Set-CosmosDbDocumentType -Document $documents)
+            }
+        }
+        catch
+        {
+            New-CosmosDbInvalidOperationException -Message ($LocalizedData.ErrorConvertingDocumentJsonToObject)
+        }
     }
 }
