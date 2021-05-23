@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   instead of deprecated GitVersion extension.
 - Correct value of `Environment` parameter in context object returned
   by `New-CosmosDbContext` - Fixes [Issue #411](https://github.com/PlagueHO/CosmosDB/issues/411).
-- Update `requirements.psd1` to install modules `Az.Accounts` 2.2.8.
+- Update `requirements.psd1` to install modules `Az.Accounts`
+  2.2.8 - Fixes [Issue #415](https://github.com/PlagueHO/CosmosDB/issues/415).
 - Updated `ComsosDB.cs` to add getters and setters to properties - Fixes [Issue #417](https://github.com/PlagueHO/CosmosDB/issues/417).
 
 ### Fixed
