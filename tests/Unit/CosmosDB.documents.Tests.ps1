@@ -81,6 +81,31 @@ InModuleScope $ProjectName {
         Headers = $script:testHeaders
     }
 
+    <#
+        This is for testing when body JSON is valid but would result in
+        an invalid .NET Object (e.g. two keys with the same name, differing
+        only in case)
+    #>
+    $script:testJsonBodyDuplicateKeys = @'
+    {
+      "Id": "testDocument1",
+      "content": {
+          "key": "lowercase key"
+          "KEY": "uppercase key"
+      },
+      "_rId": "d9RzAJRFKgwBAAAAAAAAAA==",
+      "_self": "dbs/d9RzAA==/colls/d9RzAJRFKgw=/docs/d9RzAJRFKgwBAAAAAAAAAA==/",
+      "_etag": "\"0000d986-0000-0000-0000-56f9e25b0000\"",
+      "_ts": 1459216987,
+      "_attachments": "attachments/"
+    }
+'@
+    $script:testGetDocumentResultJsonBodyDuplicateKeys = @{
+        Content = $script:testJsonBodyDuplicateKeys
+        Headers = $script:testHeaders
+    }
+
+
     Describe 'Assert-CosmosDbDocumentIdValid' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name Assert-CosmosDbDocumentIdValid -ErrorAction Stop } | Should -Not -Throw
@@ -342,6 +367,76 @@ InModuleScope $ProjectName {
             }
         }
 
+        Context 'When called with context parameter and an Id but document body with duplicate keys was returned and ReturnJson not specified' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Get' -and `
+                    $ResourceType -eq 'docs' -and `
+                    $ResourcePath -eq ('colls/{0}/docs/{1}' -f $script:testCollection, $script:testDocument1)
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultJsonBodyDuplicateKeys }
+
+            It 'Should throw expected exception' {
+                $getCosmosDbDocumentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    Id           = $script:testDocument1
+                    Verbose      = $true
+                }
+
+                $errorRecord = Get-InvalidOperationRecord `
+                    -Message ($LocalizedData.ErrorConvertingDocumentJsonToObject)
+
+                { $script:result = Get-CosmosDbDocument @getCosmosDbDocumentParameters } | Should -Throw $errorRecord
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id but document body with duplicate keys was returned and ReturnJson is specified' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Get' -and `
+                    $ResourceType -eq 'docs' -and `
+                    $ResourcePath -eq ('colls/{0}/docs/{1}' -f $script:testCollection, $script:testDocument1)
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultJsonBodyDuplicateKeys }
+
+            It 'Should not throw exception' {
+                $getCosmosDbDocumentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    Id           = $script:testDocument1
+                    ReturnJson   = $true
+                    Verbose      = $true
+                }
+
+                { $script:result = Get-CosmosDbDocument @getCosmosDbDocumentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -Be $script:testJsonBodyDuplicateKeys
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
         Context 'When called with context parameter and an Id and Partition Key' {
             $script:result = $null
 
@@ -574,6 +669,74 @@ InModuleScope $ProjectName {
             }
         }
 
+        Context 'When called with context parameter and an Id but document body with duplicate keys was returned and ReturnJson not specified' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'docs'
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultJsonBodyDuplicateKeys }
+
+            It 'Should throw expected exception' {
+                $newCosmosDbDocumentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    DocumentBody = $script:testDocumentBody
+                    Verbose      = $true
+                }
+
+                $errorRecord = Get-InvalidOperationRecord `
+                    -Message ($LocalizedData.ErrorConvertingDocumentJsonToObject)
+
+                { $script:result = New-CosmosDbDocument @newCosmosDbDocumentParameters } | Should -Throw $errorRecord
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id but document body with duplicate keys was returned and ReturnJson is specified' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'docs'
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultJsonBodyDuplicateKeys }
+
+            It 'Should not throw exception' {
+                $newCosmosDbDocumentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    DocumentBody = $script:testDocumentBody
+                    ReturnJson   = $true
+                    Verbose      = $true
+                }
+
+                { $script:result = New-CosmosDbDocument @newCosmosDbDocumentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -Be $script:testJsonBodyDuplicateKeys
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
         Context 'When called with context parameter and an Id and Encoding is UTF-8' {
             $script:result = $null
             $invokeCosmosDbRequest_parameterfilter = {
@@ -745,6 +908,76 @@ InModuleScope $ProjectName {
 
             It 'Should return expected result' {
                 $script:result.id | Should -Be $script:testDocument1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id but document body with duplicate keys was returned and ReturnJson not specified' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Put' -and `
+                    $ResourceType -eq 'docs'
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultJsonBodyDuplicateKeys }
+
+            It 'Should throw expected exception' {
+                $setCosmosDbDocumentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    Id           = $script:testDocument1
+                    DocumentBody = $script:testDocumentBody
+                    Verbose      = $true
+                }
+
+                $errorRecord = Get-InvalidOperationRecord `
+                    -Message ($LocalizedData.ErrorConvertingDocumentJsonToObject)
+
+                { $script:result = Set-CosmosDbDocument @setCosmosDbDocumentParameters } | Should -Throw $errorRecord
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and an Id but document body with duplicate keys was returned and ReturnJson is specified' {
+            $script:result = $null
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Put' -and `
+                    $ResourceType -eq 'docs'
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultJsonBodyDuplicateKeys }
+
+            It 'Should not throw exception' {
+                $setCosmosDbDocumentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    Id           = $script:testDocument1
+                    DocumentBody = $script:testDocumentBody
+                    ReturnJson   = $true
+                    Verbose      = $true
+                }
+
+                { $script:result = Set-CosmosDbDocument @setCosmosDbDocumentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -Be $script:testJsonBodyDuplicateKeys
             }
 
             It 'Should call expected mocks' {

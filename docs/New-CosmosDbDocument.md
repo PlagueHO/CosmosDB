@@ -19,7 +19,7 @@ Create a new document for a collection in a Cosmos DB database.
 New-CosmosDbDocument -Context <Context> [-KeyType <String>] [-Key <SecureString>]
  [-Database <String>] -CollectionId <String> -DocumentBody <String>
  [-IndexingDirective <String>] [-Upsert <Boolean>] [-PartitionKey <Object[]>]
- [-Encoding <String>] [<CommonParameters>]
+ [-Encoding <String>] [-RetrunJson <switch>] [<CommonParameters>]
 ```
 
 ### Account
@@ -28,7 +28,7 @@ New-CosmosDbDocument -Context <Context> [-KeyType <String>] [-Key <SecureString>
 New-CosmosDbDocument -Account <String> [-KeyType <String>] [-Key <SecureString>]
  [-Database <String>] -CollectionId <String> -DocumentBody <String>
  [-IndexingDirective <String>] [-Upsert <Boolean>] [-PartitionKey <Object[]>]
- [-Encoding <String>] [<CommonParameters>]
+ [-Encoding <String>] [-RetrunJson <switch>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -81,6 +81,25 @@ PS C:\> New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'Partitione
 
 Create a new document containing UTF-8 encoded strings in a non-partitioned collection
 in a database.
+
+### Example 4
+
+```powershell
+PS C:\> $document = @"
+{
+    `"id`": `"en-us`",
+    `"content`": {
+        `"key`": `"lower case key`",
+        `"KEY`": `"upper case key`"
+    }
+}
+"@
+PS C:\> New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'PartitionedCollection' -DocumentBody $document -ReturnJson
+```
+
+Create a new document containing a document with JSON that can not be returned as
+an object due to keys that differ only in case. This will return
+the output as JSON.
 
 ## PARAMETERS
 
@@ -268,6 +287,24 @@ property's value in the indexing policy for the collection.
 
 ```yaml
 Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ReturnJson
+
+Prevents the information returned by Cosmos DB from the request to be converted
+into an object. This switch is required if the document being added to Cosmos DB
+has key names that are duplicates, differing only in case.
+
+```yaml
+Type: switch
 Parameter Sets: (All)
 Aliases:
 

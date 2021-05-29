@@ -11,11 +11,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Convert build pipeline to use GitTools Azure DevOps extension tasks
   instead of deprecated GitVersion extension.
+- Correct value of `Environment` parameter in context object returned
+  by `New-CosmosDbContext` - Fixes [Issue #411](https://github.com/PlagueHO/CosmosDB/issues/411).
+- Update `requirements.psd1` to install modules `Az.Accounts`
+  2.2.8 - Fixes [Issue #415](https://github.com/PlagueHO/CosmosDB/issues/415).
+- Updated `ComsosDB.cs` to add getters and setters to properties - Fixes [Issue #417](https://github.com/PlagueHO/CosmosDB/issues/417).
 
 ### Fixed
 
 - Fix CI pipeline deployment stage to ensure correctly detects running
   in Azure DevOps organization.
+- Fix CI pipeline release stage by adding Sampler GitHub tasks which
+  were moved out of the main sampler module into a new module
+  `Sampler.GitHubTasks` - Fixes [Issue #418](https://github.com/PlagueHO/CosmosDB/issues/418).
+
+### Added
+
+- Added `ReturnJson` parameter to `New-CosmosDbDocument`, `Set-CosmosDbDocument`
+  and `Get-CosmosDbDocument` functions to allow return of documents that can
+  not be converted to objects due to duplicate key names that only differ in
+  case - Fixes [Issue #413](https://github.com/PlagueHO/CosmosDB/issues/413).
 
 ## [4.4.3] - 2020-11-13
 
