@@ -242,7 +242,9 @@ function Invoke-CosmosDbRequest
                     The exception was caused by exceeding provisioned throughput
                     so determine is we should delay and try again or exit
                 #>
-                [System.Int32] $retryAfter = ($_.Exception.Response.Headers | Where-Object -Property Key -eq 'x-ms-retry-after-ms').Value[0]
+                #the original processing of server resonse did not work for me and always threw NullReferenceException in PS5.1 (did not test in PS Core)
+                [System.Int32] $retryAfter = $_.Exception.Response.Headers['x-ms-retry-after-ms']
+                #[System.Int32] $retryAfter = ($_.Exception.Response.Headers | Where-Object -Property Key -eq 'x-ms-retry-after-ms').Value[0]
 
                 $delay = Get-CosmosDbBackoffDelay `
                     -BackOffPolicy $Context.BackoffPolicy `
