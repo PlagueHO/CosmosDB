@@ -213,104 +213,10 @@ stages:
               testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2019)'
             condition: succeededOrFailed()
 
-      - job: Unit_Test_PSCore6_Ubuntu1604
-        displayName: 'Unit Test (Powershell Core 6 on Ubuntu 16.04)'
+      - job: Unit_Test_PS_Win2022
+        displayName: 'Unit Test (Powershell 5.1 on Windows Server 2022)'
         pool:
-          vmImage: ubuntu-16.04
-
-        steps:
-          - powershell: |
-              $repositoryOwner,$repositoryName = $env:BUILD_REPOSITORY_NAME -split '/'
-              echo "##vso[task.setvariable variable=RepositoryOwner;isOutput=true]$repositoryOwner"
-              echo "##vso[task.setvariable variable=RepositoryName;isOutput=true]$repositoryName"
-            name: moduleBuildVariable
-            displayName: 'Set Environment Variables'
-
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'output'
-              downloadPath: '$(Build.SourcesDirectory)'
-
-          - script: |
-              curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-              curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
-              sudo apt-get update
-              sudo apt-get install -y --allow-downgrades powershell=6.2.4-1.ubuntu.16.04
-            displayName: 'Install PowerShell Core 6'
-
-          - task: PowerShell@2
-            name: test
-            displayName: 'Run Unit Test'
-            inputs:
-              filePath: './build.ps1'
-              arguments: "-tasks test -PesterScript 'tests/Unit'"
-
-          - task: PublishTestResults@2
-            displayName: 'Publish Test Results'
-            inputs:
-              testResultsFormat: 'NUnit'
-              testResultsFiles: 'output/testResults/NUnit*.xml'
-              testRunTitle: 'Unit (Powershell Core 6 on Ubuntu 16.04)'
-
-          - task: PublishCodeCoverageResults@1
-            displayName: 'Publish Code Coverage'
-            condition: succeededOrFailed()
-            inputs:
-              codeCoverageTool: 'JaCoCo'
-              summaryFileLocation: 'output/testResults/CodeCov*.xml'
-              pathToSources: '$(Build.SourcesDirectory)/output/$(moduleBuildVariable.RepositoryName)'
-
-      - job: Integration_Test_PSCore6_Ubuntu1604
-        dependsOn: Unit_Test_PSCore6_Ubuntu1604
-        displayName: 'Integration Test (Powershell Core 6 on Ubuntu 16.04)'
-        pool:
-          vmImage: ubuntu-16.04
-        timeoutInMinutes: 0
-
-        steps:
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'output'
-              downloadPath: '$(Build.SourcesDirectory)'
-
-          - script: |
-              curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-              curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
-              sudo apt-get update
-              sudo apt-get install -y --allow-downgrades powershell=6.2.4-1.ubuntu.16.04
-            displayName: 'Install PowerShell Core 6'
-
-          - task: PowerShell@2
-            name: test
-            displayName: 'Run Integration Test'
-            env:
-              azureApplicationId: $(azureApplicationId)
-              azureApplicationPassword: $(azureApplicationPassword)
-              azureSubscriptionId: $(azureSubscriptionId)
-              azureTenantId: $(azureTenantId)
-            inputs:
-              filePath: './build.ps1'
-              arguments: "-Tasks test -PesterScript 'tests/Integration' -CodeCoverageThreshold 0"
-              pwsh: false
-
-          - task: PublishTestResults@2
-            displayName: 'Publish Test Results'
-            inputs:
-              testResultsFormat: 'NUnit'
-              testResultsFiles: 'output/testResults/NUnit*.xml'
-              testRunTitle: 'Integration (Powershell Core 6 on Ubuntu 16.04)'
-            condition: succeededOrFailed()
-
-      - job: Unit_Test_PS7_Ubuntu1604
-        displayName: 'Unit Test (Powershell 7 on Ubuntu 16.04)'
-        pool:
-          vmImage: ubuntu-16.04
+          vmImage: windows-2022
 
         steps:
           - powershell: |
@@ -340,7 +246,7 @@ stages:
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: 'output/testResults/NUnit*.xml'
-              testRunTitle: 'Unit (Powershell 7 on Ubuntu 16.04)'
+              testRunTitle: 'Unit (PowerShell 5.1 on Windows Server 2022)'
 
           - task: PublishCodeCoverageResults@1
             displayName: 'Publish Code Coverage'
@@ -350,11 +256,11 @@ stages:
               summaryFileLocation: 'output/testResults/CodeCov*.xml'
               pathToSources: '$(Build.SourcesDirectory)/output/$(moduleBuildVariable.RepositoryName)'
 
-      - job: Integration_Test_PS7_Ubuntu1604
-        dependsOn: Unit_Test_PS7_Ubuntu1604
-        displayName: 'Integration Test (Powershell 7 on Ubuntu 16.04)'
+      - job: Integration_Test_PS_Win2022
+        dependsOn: Unit_Test_PS_Win2022
+        displayName: 'Integration Test (Powershell 5.1 on Windows Server 2022)'
         pool:
-          vmImage: ubuntu-16.04
+          vmImage: windows-2022
         timeoutInMinutes: 0
 
         steps:
@@ -384,7 +290,87 @@ stages:
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: 'output/testResults/NUnit*.xml'
-              testRunTitle: 'Integration (Powershell 7 on Ubuntu 16.04)'
+              testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2022)'
+            condition: succeededOrFailed()
+
+      - job: Unit_Test_PS7_Ubuntu2004
+        displayName: 'Unit Test (Powershell 7 on Ubuntu 20.04)'
+        pool:
+          vmImage: ubuntu-20.04
+
+        steps:
+          - powershell: |
+              $repositoryOwner,$repositoryName = $env:BUILD_REPOSITORY_NAME -split '/'
+              echo "##vso[task.setvariable variable=RepositoryOwner;isOutput=true]$repositoryOwner"
+              echo "##vso[task.setvariable variable=RepositoryName;isOutput=true]$repositoryName"
+            name: moduleBuildVariable
+            displayName: 'Set Environment Variables'
+
+          - task: DownloadBuildArtifacts@0
+            displayName: 'Download Build Artifact'
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'output'
+              downloadPath: '$(Build.SourcesDirectory)'
+
+          - task: PowerShell@2
+            name: test
+            displayName: 'Run Unit Test'
+            inputs:
+              filePath: './build.ps1'
+              arguments: "-tasks test -PesterScript 'tests/Unit'"
+
+          - task: PublishTestResults@2
+            displayName: 'Publish Test Results'
+            inputs:
+              testResultsFormat: 'NUnit'
+              testResultsFiles: 'output/testResults/NUnit*.xml'
+              testRunTitle: 'Unit (Powershell 7 on Ubuntu 20.04)'
+
+          - task: PublishCodeCoverageResults@1
+            displayName: 'Publish Code Coverage'
+            condition: succeededOrFailed()
+            inputs:
+              codeCoverageTool: 'JaCoCo'
+              summaryFileLocation: 'output/testResults/CodeCov*.xml'
+              pathToSources: '$(Build.SourcesDirectory)/output/$(moduleBuildVariable.RepositoryName)'
+
+      - job: Integration_Test_PS7_Ubuntu2004
+        dependsOn: Unit_Test_PS7_Ubuntu2004
+        displayName: 'Integration Test (Powershell 7 on Ubuntu 20.04)'
+        pool:
+          vmImage: ubuntu-20.04
+        timeoutInMinutes: 0
+
+        steps:
+          - task: DownloadBuildArtifacts@0
+            displayName: 'Download Build Artifact'
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'output'
+              downloadPath: '$(Build.SourcesDirectory)'
+
+          - task: PowerShell@2
+            name: test
+            displayName: 'Run Integration Test'
+            env:
+              azureApplicationId: $(azureApplicationId)
+              azureApplicationPassword: $(azureApplicationPassword)
+              azureSubscriptionId: $(azureSubscriptionId)
+              azureTenantId: $(azureTenantId)
+            inputs:
+              filePath: './build.ps1'
+              arguments: "-Tasks test -PesterScript 'tests/Integration' -CodeCoverageThreshold 0"
+              pwsh: false
+
+          - task: PublishTestResults@2
+            displayName: 'Publish Test Results'
+            inputs:
+              testResultsFormat: 'NUnit'
+              testResultsFiles: 'output/testResults/NUnit*.xml'
+              testRunTitle: 'Integration (Powershell 7 on Ubuntu 20.04)'
             condition: succeededOrFailed()
 
       - job: Unit_Test_PS7_Ubuntu1804
@@ -573,7 +559,7 @@ stages:
       - job: Deploy_Module
         displayName: 'Deploy Module'
         pool:
-          vmImage: ubuntu-16.04
+          vmImage: ubuntu-latest
 
         steps:
           - task: DownloadBuildArtifacts@0

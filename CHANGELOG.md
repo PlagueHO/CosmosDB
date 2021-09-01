@@ -14,6 +14,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated PSScriptAnalyzer tests to be skipped when PowerShell Core
   version is less than 7.0.3 - Fixes [Issue #431](https://github.com/PlagueHO/CosmosDB/issues/431).
 
+### Added
+
+- Added tests on PowerShell 7.x on Ubuntu 20.04 - Fixes [Issue #433](https://github.com/PlagueHO/CosmosDB/issues/433).
+- Added tests on Windows 5.1 on Windows Server 2022 - Fixes [Issue #436](https://github.com/PlagueHO/CosmosDB/issues/436).
+
+### Removed
+
+- Removed tests against PowerShell Core 6.x as PowerShell 7.x is recommended - Fixes
+  [Issue #434](https://github.com/PlagueHO/CosmosDB/issues/431).
+- Removed all tests on Ubuntu 16.04 - Fixes [Issue #433](https://github.com/PlagueHO/CosmosDB/issues/433).
+
 ## [4.5.0] - 2021-05-29
 
 ### Changed
