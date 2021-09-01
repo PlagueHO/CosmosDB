@@ -18,7 +18,7 @@ stages:
       - job: Build_Module
         displayName: 'Build Module'
         pool:
-          vmImage: ubuntu-16.04
+          vmImage: ubuntu-latest
         steps:
           - task: gittools.gittools.setup-gitversion-task.gitversion/setup@0
             displayName: 'Setup GitVersion'

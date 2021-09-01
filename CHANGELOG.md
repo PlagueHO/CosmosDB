@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Update Azure DevOps pipeline Linux agent version for build task
+  to be `ubuntu-latest` - Fixes [Issue #422](https://github.com/PlagueHO/CosmosDB/issues/422).
+
 ## [4.5.0] - 2021-05-29
 
 ### Changed
