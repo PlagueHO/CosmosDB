@@ -1149,12 +1149,12 @@ on the following systems:
   - Windows Server 2019: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
   - Windows Server 2022: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
 - Linux (using PowerShell 7.x):
-  - Ubuntu Trusty 20.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
-  - Ubuntu Xenial 18.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - Ubuntu 18.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - Ubuntu 20.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
 - macOS (using PowerShell Core 6.x - to be changed to in future 7.x):
   - macOS 10.14: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
 
-> PowerShell Core 6.x is no longer tested on PowerShell Core 6.x as PowerShell 7.x
+> This module is no longer tested on PowerShell Core 6.x as PowerShell 7.x
 > should be used. It should still work, but will no longer be verified. Issues with
 > this module that only exist on PowerShell Core 6.x but not PowerShell 7.x will
 > not be fixed.
