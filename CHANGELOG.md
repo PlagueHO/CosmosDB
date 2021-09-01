@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update Azure DevOps pipeline Linux agent version for build task
   to be `ubuntu-latest` - Fixes [Issue #422](https://github.com/PlagueHO/CosmosDB/issues/422).
+- Updated PSScriptAnalyzer tests to be skipped when PowerShell Core
+  version is less than 7.0.3 - Fixes [Issue #431](https://github.com/PlagueHO/CosmosDB/issues/431).
 
 ## [4.5.0] - 2021-05-29
 
