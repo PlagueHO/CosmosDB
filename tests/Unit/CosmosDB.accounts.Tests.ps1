@@ -24,6 +24,7 @@ InModuleScope $ProjectName {
     $script:testConsistencyLevel = 'Strong'
     $script:testMaxIntervalInSeconds = 60
     $script:testMaxStalenessPrefix = 900
+    $script:testCapability = 'EnableServerless'
     $script:testCorsAllowedOrigins = @('https://www.contoso.com', 'https://www.fabrikam.com')
     $script:mockGetAzResource = @{
         ResourceId = 'ignore'
@@ -76,7 +77,7 @@ InModuleScope $ProjectName {
                     allowedOrigins = ($script:testCorsAllowedOrigins -join ',')
                 }
             )
-            capabilities                  = @()
+            capabilities                  = @(@{name = $script:testCapability})
             ResourceGroupName             = $script:testResourceGroupName
             ResourceType                  = 'Microsoft.DocumentDB/databaseAccounts'
             Sku                           = $null
@@ -692,6 +693,67 @@ InModuleScope $ProjectName {
                     ResourceGroupName = $script:testResourceGroupName
                     Location          = $script:testLocation
                     AllowedOrigin     = $script:testCorsAllowedOrigins
+                    Verbose           = $true
+                }
+
+                { $script:result = New-CosmosDbAccount @newCosmosDbAccountParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -Be 'Account'
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName New-AzResource `
+                    -ParameterFilter $newAzResource_parameterFilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with a Location specified and the EnableServerless capability' {
+            $script:result = $null
+            $testCosmosDBProperties = @{
+                databaseAccountOfferType = 'Standard'
+                locations                = @(
+                    @{
+                        locationName     = $script:testLocation
+                        failoverPriority = 0
+                    }
+                )
+                consistencyPolicy        = @{
+                    defaultConsistencyLevel = 'Session'
+                    maxIntervalInSeconds    = 5
+                    maxStalenessPrefix      = 100
+                }
+                ipRangeFilter            = ''
+                capabilities             = @(
+                    @{
+                        name = 'EnableServerless'
+                    }
+                )
+            }
+
+            $newAzResource_parameterFilter = {
+                ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
+                ($ApiVersion -eq '2015-04-08') -and `
+                ($ResourceName -eq $script:testName) -and `
+                ($ResourceGroupName -eq $script:testResourceGroupName) -and `
+                ($Location -eq $script:testLocation) -and `
+                ($Force -eq $true) -and `
+                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+            }
+
+            Mock `
+                -CommandName New-AzResource `
+                -MockWith { 'Account' }
+
+            It 'Should not throw exception' {
+                $newCosmosDbAccountParameters = @{
+                    Name              = $script:testName
+                    ResourceGroupName = $script:testResourceGroupName
+                    Location          = $script:testLocation
+                    Capability        = $script:testCapability
                     Verbose           = $true
                 }
 

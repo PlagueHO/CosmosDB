@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   to be `ubuntu-latest` - Fixes [Issue #422](https://github.com/PlagueHO/CosmosDB/issues/422).
 - Updated PSScriptAnalyzer tests to be skipped when PowerShell Core
   version is less than 7.0.3 - Fixes [Issue #431](https://github.com/PlagueHO/CosmosDB/issues/431).
+- Updated the New-CosmosDbAccount command to add a new Capability parameter - Fixes [Issue #439](https://github.com/PlagueHO/CosmosDB/issues/439).
 
 ### Added
 
