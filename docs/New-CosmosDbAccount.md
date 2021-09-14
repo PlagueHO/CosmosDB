@@ -89,13 +89,13 @@ origins set to 'https://www.contoso.com' and 'https://www.fabrikam.com'.
 ### Example 6
 
 ```powershell
-PS C:\> New-CosmosDbAccount -Name 'MyCosmosDB' -ResourceGroup 'MyData' -Location 'WestUS' -Capability 'EnableServerless'
+PS C:\> New-CosmosDbAccount -Name 'MyCosmosDB' -ResourceGroup 'MyData' -Location 'WestUS' -Capability @('EnableCassandra', 'EnableServerless')
 ```
 
 Create a new Cosmos DB account called 'MyCosmosDB' in an existing
 Resource Group caled 'MyData'. The account will be created in the
 'WestUS' Azure region. The Cosmos DB will be provisioned in the
-Serverless capacity mode.
+Serverless capacity mode with the Cassandra API.
 
 ## PARAMETERS
 
@@ -136,11 +136,15 @@ Accept wildcard characters: False
 
 ### -Capability
 
-The capability of the database account.
+The capabilities of the database account. Only one API type should
+be used.
 For more information see https://docs.microsoft.com/en-us/azure/templates/microsoft.documentdb/databaseaccounts?tabs=json#capability.
 
+If one of the API type's is not specified, the Core (SQL) API type
+will be used.
+
 ```yaml
-Type: String
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 Accepted values: EnableCassandra, EnableTable, EnableGremlin, EnableServerless

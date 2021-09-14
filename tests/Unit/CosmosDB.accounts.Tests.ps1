@@ -24,7 +24,7 @@ InModuleScope $ProjectName {
     $script:testConsistencyLevel = 'Strong'
     $script:testMaxIntervalInSeconds = 60
     $script:testMaxStalenessPrefix = 900
-    $script:testCapability = 'EnableServerless'
+    $script:testCapability = @('EnableServerless', 'EnableCassandra')
     $script:testCorsAllowedOrigins = @('https://www.contoso.com', 'https://www.fabrikam.com')
     $script:mockGetAzResource = @{
         ResourceId = 'ignore'
@@ -711,7 +711,7 @@ InModuleScope $ProjectName {
             }
         }
 
-        Context 'When called with a Location specified and the EnableServerless capability' {
+        Context 'When called with a Location specified and the EnableServerless and EnableCassandra capabilities' {
             $script:result = $null
             $testCosmosDBProperties = @{
                 databaseAccountOfferType = 'Standard'
@@ -730,6 +730,9 @@ InModuleScope $ProjectName {
                 capabilities             = @(
                     @{
                         name = 'EnableServerless'
+                    },
+                    @{
+                        name = 'EnableCassandra'
                     }
                 )
             }

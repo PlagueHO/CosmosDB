@@ -49,7 +49,7 @@ function New-CosmosDbAccount
 
         [Parameter()]
         [ValidateSet('EnableCassandra', 'EnableTable', 'EnableGremlin', 'EnableServerless')]
-        [System.String]
+        [System.String[]]
         $Capability,
 
         [Parameter()]
@@ -98,11 +98,12 @@ function New-CosmosDbAccount
 
     if ($PSBoundParameters.ContainsKey('Capability'))
     {
-        $capabilityObject = @(
-            @{
-                name = $Capability
+        $capabilityObject = @()
+        foreach ($param in $Capability) {
+            $capabilityObject += @{
+                name = $param
             }
-        )
+        }
 
         $cosmosDBProperties += @{
             capabilities = $capabilityObject
