@@ -77,7 +77,14 @@ InModuleScope $ProjectName {
                     allowedOrigins = ($script:testCorsAllowedOrigins -join ',')
                 }
             )
-            capabilities                  = @(@{name = $script:testCapability})
+            capabilities                  = @(
+                @{
+                    name = $script:testCapability[0]
+                },
+                @{
+                    name = $script:testCapability[1]
+                }
+            )
             ResourceGroupName             = $script:testResourceGroupName
             ResourceType                  = 'Microsoft.DocumentDB/databaseAccounts'
             Sku                           = $null
@@ -744,7 +751,15 @@ InModuleScope $ProjectName {
                 ($ResourceGroupName -eq $script:testResourceGroupName) -and `
                 ($Location -eq $script:testLocation) -and `
                 ($Force -eq $true) -and `
-                (ConvertTo-Json -InputObject $Properties) -eq (ConvertTo-Json -InputObject $testCosmosDBProperties)
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.capabilities[0].name -eq $testCosmosDBProperties.capabilities[0].name) -and `
+                ($Properties.capabilities[1].name -eq $testCosmosDBProperties.capabilities[1].name)
             }
 
             Mock `
