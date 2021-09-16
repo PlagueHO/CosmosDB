@@ -16,7 +16,7 @@ Create a new Cosmos DB account in Azure.
 ```powershell
 New-CosmosDbAccount [-Name] <String> [-ResourceGroupName] <String> [-Location] <String>
  [[-LocationRead] <String[]>] [[-DefaultConsistencyLevel] <String>] [[-MaxIntervalInSeconds] <Int32>]
- [[-MaxStalenessPrefix] <Int32>] [[-IpRangeFilter] <String[]>] [[-Capability] <String>] [[-AllowedOrgin] <String[]>]
+ [[-MaxStalenessPrefix] <Int32>] [[-IpRangeFilter] <String[]>] [[-Capability] <String[]>] [[-AllowedOrgin] <String[]>]
 [-AsJob] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
