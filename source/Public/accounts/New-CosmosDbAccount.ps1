@@ -48,6 +48,11 @@ function New-CosmosDbAccount
         $IpRangeFilter = @(),
 
         [Parameter()]
+        [ValidateSet('EnableCassandra', 'EnableTable', 'EnableGremlin', 'EnableServerless')]
+        [System.String[]]
+        $Capability,
+
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String[]]
         $AllowedOrigin,
@@ -91,6 +96,20 @@ function New-CosmosDbAccount
         ipRangeFilter            = ($IpRangeFilter -join ',')
     }
 
+    if ($PSBoundParameters.ContainsKey('Capability'))
+    {
+        $capabilityObject = @()
+        foreach ($param in $Capability) {
+            $capabilityObject += @{
+                name = $param
+            }
+        }
+
+        $cosmosDBProperties += @{
+            capabilities = $capabilityObject
+        }
+    }
+
     if ($PSBoundParameters.ContainsKey('AllowedOrigin'))
     {
         $corsObject = @(
@@ -109,6 +128,7 @@ function New-CosmosDbAccount
     $null = $PSBoundParameters.Remove('MaxIntervalInSeconds')
     $null = $PSBoundParameters.Remove('MaxStalenessPrefix')
     $null = $PSBoundParameters.Remove('IpRangeFilter')
+    $null = $PSBoundParameters.Remove('Capability')
     $null = $PSBoundParameters.Remove('AllowedOrigin')
 
     $newAzResource_parameters = $PSBoundParameters + @{

@@ -24,6 +24,7 @@ InModuleScope $ProjectName {
     $script:testConsistencyLevel = 'Strong'
     $script:testMaxIntervalInSeconds = 60
     $script:testMaxStalenessPrefix = 900
+    $script:testCapability = @('EnableServerless', 'EnableCassandra')
     $script:testCorsAllowedOrigins = @('https://www.contoso.com', 'https://www.fabrikam.com')
     $script:mockGetAzResource = @{
         ResourceId = 'ignore'
@@ -76,7 +77,14 @@ InModuleScope $ProjectName {
                     allowedOrigins = ($script:testCorsAllowedOrigins -join ',')
                 }
             )
-            capabilities                  = @()
+            capabilities                  = @(
+                @{
+                    name = $script:testCapability[0]
+                },
+                @{
+                    name = $script:testCapability[1]
+                }
+            )
             ResourceGroupName             = $script:testResourceGroupName
             ResourceType                  = 'Microsoft.DocumentDB/databaseAccounts'
             Sku                           = $null
@@ -692,6 +700,78 @@ InModuleScope $ProjectName {
                     ResourceGroupName = $script:testResourceGroupName
                     Location          = $script:testLocation
                     AllowedOrigin     = $script:testCorsAllowedOrigins
+                    Verbose           = $true
+                }
+
+                { $script:result = New-CosmosDbAccount @newCosmosDbAccountParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -Be 'Account'
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName New-AzResource `
+                    -ParameterFilter $newAzResource_parameterFilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with a Location specified and the EnableServerless and EnableCassandra capabilities' {
+            $script:result = $null
+            $testCosmosDBProperties = @{
+                databaseAccountOfferType = 'Standard'
+                locations                = @(
+                    @{
+                        locationName     = $script:testLocation
+                        failoverPriority = 0
+                    }
+                )
+                consistencyPolicy        = @{
+                    defaultConsistencyLevel = 'Session'
+                    maxIntervalInSeconds    = 5
+                    maxStalenessPrefix      = 100
+                }
+                ipRangeFilter            = ''
+                capabilities             = @(
+                    @{
+                        name = 'EnableServerless'
+                    },
+                    @{
+                        name = 'EnableCassandra'
+                    }
+                )
+            }
+
+            $newAzResource_parameterFilter = {
+                ($ResourceType -eq 'Microsoft.DocumentDb/databaseAccounts') -and `
+                ($ApiVersion -eq '2015-04-08') -and `
+                ($ResourceName -eq $script:testName) -and `
+                ($ResourceGroupName -eq $script:testResourceGroupName) -and `
+                ($Location -eq $script:testLocation) -and `
+                ($Force -eq $true) -and `
+                ($Properties.databaseAccountOfferType -eq $testCosmosDBProperties.databaseAccountOfferType) -and `
+                ($Properties.locations[0].locationName -eq $testCosmosDBProperties.locations[0].locationName) -and `
+                ($Properties.locations[0].failoverPriority -eq $testCosmosDBProperties.locations[0].failoverPriority) -and `
+                ($Properties.consistencyPolicy.defaultConsistencyLevel -eq $testCosmosDBProperties.consistencyPolicy.defaultConsistencyLevel) -and `
+                ($Properties.consistencyPolicy.maxStalenessPrefix -eq $testCosmosDBProperties.consistencyPolicy.maxStalenessPrefix) -and `
+                ($Properties.consistencyPolicy.maxIntervalInSeconds -eq $testCosmosDBProperties.consistencyPolicy.maxIntervalInSeconds) -and `
+                ($Properties.ipRangeFilter -eq $testCosmosDBProperties.ipRangeFilter) -and `
+                ($Properties.capabilities[0].name -eq $testCosmosDBProperties.capabilities[0].name) -and `
+                ($Properties.capabilities[1].name -eq $testCosmosDBProperties.capabilities[1].name)
+            }
+
+            Mock `
+                -CommandName New-AzResource `
+                -MockWith { 'Account' }
+
+            It 'Should not throw exception' {
+                $newCosmosDbAccountParameters = @{
+                    Name              = $script:testName
+                    ResourceGroupName = $script:testResourceGroupName
+                    Location          = $script:testLocation
+                    Capability        = $script:testCapability
                     Verbose           = $true
                 }
 
