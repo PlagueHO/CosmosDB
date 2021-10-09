@@ -46,11 +46,11 @@ function Remove-CosmosDbDocument
         $PartitionKey,
 
         [Parameter()]
-        [int]
+        [System.Int32]
         $MaximumRetryCount,
 
         [Parameter()]
-        [int]
+        [System.Int32]
         $RetryIntervalSec = 5
     )
 
@@ -68,7 +68,7 @@ function Remove-CosmosDbDocument
         }
         $null = $PSBoundParameters.Remove('PartitionKey')
     }
-    $Splat = @{
+    $invokeCosmosDbRequest_parameters = @{
         Method            = 'Delete'
         ResourceType      = 'docs'
         ResourcePath      = $resourcePath
@@ -76,5 +76,5 @@ function Remove-CosmosDbDocument
         MaximumRetryCount = $MaximumRetryCount
         RetryIntervalSec  = $RetryIntervalSec
     }
-    $null = Invoke-CosmosDbRequest @PSBoundParameters @Splat
+    $null = Invoke-CosmosDbRequest @PSBoundParameters @invokeCosmosDbRequest_parameters
 }

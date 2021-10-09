@@ -92,11 +92,11 @@ function Get-CosmosDbDocumentJson
         $ResponseHeader,
 
         [Parameter()]
-        [int]
+        [System.Int32]
         $MaximumRetryCount,
 
         [Parameter()]
-        [int]
+        [System.Int32]
         $RetryIntervalSec = 5
     )
 
@@ -204,7 +204,7 @@ function Get-CosmosDbDocumentJson
             Because the headers of this request will contain important information
             then we need to use a plain web request.
         #>
-        $Splat = @{
+        $invokeCosmosDbRequest_parameters = @{
             Method            = $method
             ResourceType      = 'docs'
             ResourcePath      = $resourcePath
@@ -213,7 +213,7 @@ function Get-CosmosDbDocumentJson
             MaximumRetryCount = $MaximumRetryCount
             RetryIntervalSec  = $RetryIntervalSec
         }
-        $result = Invoke-CosmosDbRequest @PSBoundParameters @Splat
+        $result = Invoke-CosmosDbRequest @PSBoundParameters @invokeCosmosDbRequest_parameters
 
         if ($ResponseHeaderPassed)
         {
@@ -232,7 +232,7 @@ function Get-CosmosDbDocumentJson
             $null = $PSBoundParameters.Remove('PartitionKey')
         }
 
-        $Splat = @{
+        $invokeCosmosDbRequest_parameters = @{
             Method            = $method
             Headers           = $headers
             ResourceType      = 'docs'
@@ -240,7 +240,7 @@ function Get-CosmosDbDocumentJson
             MaximumRetryCount = $MaximumRetryCount
             RetryIntervalSec  = $RetryIntervalSec
         }
-        $result = Invoke-CosmosDbRequest @PSBoundParameters @Splat
+        $result = Invoke-CosmosDbRequest @PSBoundParameters @invokeCosmosDbRequest_parameters
     }
 
     $documents = Repair-CosmosDbDocumentEncoding -Content $result.Content

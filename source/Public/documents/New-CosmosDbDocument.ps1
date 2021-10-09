@@ -65,11 +65,11 @@ function New-CosmosDbDocument
         $ReturnJson,
 
         [Parameter()]
-        [int]
+        [System.Int32]
         $MaximumRetryCount,
 
         [Parameter()]
-        [int]
+        [System.Int32]
         $RetryIntervalSec = 5
     )
 
@@ -106,7 +106,7 @@ function New-CosmosDbDocument
         $null = $PSBoundParameters.Remove('PartitionKey')
     }
 
-    $Splat = @{
+    $invokeCosmosDbRequest_parameters = @{
         Method            = 'Post'
         ResourceType      = 'docs'
         ResourcePath      = $resourcePath
@@ -115,7 +115,7 @@ function New-CosmosDbDocument
         MaximumRetryCount = $MaximumRetryCount
         RetryIntervalSec  = $RetryIntervalSec
     }
-    $result = Invoke-CosmosDbRequest @PSBoundParameters @Splat
+    $result = Invoke-CosmosDbRequest @PSBoundParameters @invokeCosmosDbRequest_parameters
 
     if ($ReturnJson.IsPresent)
     {

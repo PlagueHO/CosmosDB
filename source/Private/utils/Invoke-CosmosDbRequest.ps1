@@ -67,11 +67,11 @@ function Invoke-CosmosDbRequest
         $Encoding = 'Default',
 
         [Parameter()]
-        [int]
+        [System.Int32]
         $MaximumRetryCount,
 
         [Parameter()]
-        [int]
+        [System.Int32]
         $RetryIntervalSec
     )
 
