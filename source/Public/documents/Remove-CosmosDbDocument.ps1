@@ -43,7 +43,15 @@ function Remove-CosmosDbDocument
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.Object[]]
-        $PartitionKey
+        $PartitionKey,
+
+        [Parameter()]
+        [int]
+        $MaximumRetryCount,
+
+        [Parameter()]
+        [int]
+        $RetryIntervalSec = 5
     )
 
     $null = $PSBoundParameters.Remove('CollectionId')
@@ -60,10 +68,13 @@ function Remove-CosmosDbDocument
         }
         $null = $PSBoundParameters.Remove('PartitionKey')
     }
-
-    $null = Invoke-CosmosDbRequest @PSBoundParameters `
-        -Method 'Delete' `
-        -ResourceType 'docs' `
-        -ResourcePath $resourcePath `
-        -Headers $headers
+    $Splat = @{
+        Method            = 'Delete'
+        ResourceType      = 'docs'
+        ResourcePath      = $resourcePath
+        Headers           = $headers
+        MaximumRetryCount = $MaximumRetryCount
+        RetryIntervalSec  = $RetryIntervalSec
+    }
+    $null = Invoke-CosmosDbRequest @PSBoundParameters @Splat
 }

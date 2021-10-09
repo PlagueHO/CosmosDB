@@ -69,7 +69,15 @@ function Set-CosmosDbDocument
 
         [Parameter()]
         [switch]
-        $ReturnJson
+        $ReturnJson,
+
+        [Parameter()]
+        [int]
+        $MaximumRetryCount,
+
+        [Parameter()]
+        [int]
+        $RetryIntervalSec = 5
     )
 
     $null = $PSBoundParameters.Remove('CollectionId')
@@ -105,12 +113,16 @@ function Set-CosmosDbDocument
         $null = $PSBoundParameters.Remove('ETag')
     }
 
-    $result = Invoke-CosmosDbRequest @PSBoundParameters `
-        -Method 'Put' `
-        -ResourceType 'docs' `
-        -ResourcePath $resourcePath `
-        -Body $DocumentBody `
-        -Headers $headers
+    $Splat = @{
+        Method            = 'Put'
+        ResourceType      = 'docs'
+        ResourcePath      = $resourcePath
+        Body              = $DocumentBody
+        Headers           = $headers
+        MaximumRetryCount = $MaximumRetryCount
+        RetryIntervalSec  = $RetryIntervalSec
+    }
+    $result = Invoke-CosmosDbRequest @PSBoundParameters @Splat
 
     if ($ReturnJson.IsPresent)
     {
