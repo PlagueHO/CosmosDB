@@ -13,14 +13,14 @@ function Format-CosmosDbDocumentQueryParameters
         $QueryParameters
     )
 
-    $Output = foreach ($hashtable in $QueryParameters)
+    $output = foreach ($hashtable in $QueryParameters)
     {
         $item_ht = @{}
-        $hashtable.getenumerator() | ForEach-Object {
+        $hashtable.GetEnumerator() | ForEach-Object {
             $item_ht.add($PSItem.Name.ToLower(), $PSItem.Value)
         }
         $item_ht
     }
 
-    return $Output
+    return $output
 }
