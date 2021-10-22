@@ -223,6 +223,35 @@ InModuleScope $ProjectName {
         }
     }
 
+    Describe 'Format-CosmosDbDocumentQueryParameters' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Format-CosmosDbDocumentQueryParameters -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called with a hashtable' {
+            It 'Should convert hashtable keys to lower case' {
+                $Actual = Format-CosmosDbDocumentQueryParameters -QueryParameters @{Name = "One"; Value = "Two" }
+                ($Actual.Keys | Sort-Object ) -join ',' | Should -BeExactly "name,value"
+            }
+
+            It 'Should not change hashtable values' {
+                $Actual = Format-CosmosDbDocumentQueryParameters -QueryParameters @{Name = "1qaz2wsx3edc!QAZ@WSX#EDC"; Value = "/.,?><l;'L:op[OP{" }
+                ($Actual.Values | Sort-Object ) -join ',' | Should -BeExactly "/.,?><l;'L:op[OP{,1qaz2wsx3edc!QAZ@WSX#EDC"
+            }
+        }
+        Context 'When called with a hashtable[]' {
+            It 'Should convert hashtable keys to lower case' {
+                $Actual = Format-CosmosDbDocumentQueryParameters -QueryParameters @(@{Name = "One"; Value = "Two" }, @{Name = "Three"; Value = "Four" })
+                ($Actual.Keys | Sort-Object ) -join ',' | Should -BeExactly "name,name,value,value"
+            }
+
+            It 'Should not change hashtable values' {
+                $Actual = Format-CosmosDbDocumentQueryParameters -QueryParameters @(@{Name = "1qaz2wsx3edc!QAZ@WSX#EDC"; Value = "/.,?><l;'L:op[OP{" }, @{Name = "Two"; Value = "Three" })
+                ($Actual.Values | Sort-Object ) -join ',' | Should -BeExactly "/.,?><l;'L:op[OP{,1qaz2wsx3edc!QAZ@WSX#EDC,Three,Two"
+            }
+        }
+    }
+
     Describe 'Get-CosmosDbDocumentResourcePath' -Tag 'Unit' {
         It 'Should exist' {
             { Get-Command -Name Get-CosmosDbDocumentResourcePath -ErrorAction Stop } | Should -Not -Throw
