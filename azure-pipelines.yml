@@ -453,7 +453,7 @@ stages:
               testRunTitle: 'Integration (Powershell 7 on Ubuntu 18.04)'
             condition: succeededOrFailed()
 
-      - job: Unit_Test_PSCore6_MacOS1014
+      - job: Unit_Test_PSCore6_MacOS1015
         displayName: 'Unit Test (Powershell Core 6 on MacOS 10.15)'
         pool:
           vmImage: macos-10.15
@@ -502,7 +502,7 @@ stages:
 
       - job: Integration_Test_PSCore6_MacOS1015
         dependsOn: Unit_Test_PSCore6_MacOS1015
-        displayName: 'Integration Test (Powershell Core 6 on MacOS 10.14)'
+        displayName: 'Integration Test (Powershell Core 6 on MacOS 10.15)'
         pool:
           vmImage: macos-10.15
         timeoutInMinutes: 0
