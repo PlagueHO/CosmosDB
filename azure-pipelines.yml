@@ -454,9 +454,9 @@ stages:
             condition: succeededOrFailed()
 
       - job: Unit_Test_PSCore6_MacOS1014
-        displayName: 'Unit Test (Powershell Core 6 on MacOS 10.14)'
+        displayName: 'Unit Test (Powershell Core 6 on MacOS 10.15)'
         pool:
-          vmImage: macos-10.14
+          vmImage: macos-10.15
 
         steps:
           - powershell: |
@@ -490,7 +490,7 @@ stages:
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: 'output/testResults/NUnit*.xml'
-              testRunTitle: 'Unit (Powershell Core 6 on MacOS 10.14)'
+              testRunTitle: 'Unit (Powershell Core 6 on MacOS 10.15)'
 
           - task: PublishCodeCoverageResults@1
             displayName: 'Publish Code Coverage'
@@ -500,11 +500,11 @@ stages:
               summaryFileLocation: 'output/testResults/CodeCov*.xml'
               pathToSources: '$(Build.SourcesDirectory)/output/$(moduleBuildVariable.RepositoryName)'
 
-      - job: Integration_Test_PSCore6_MacOS1014
-        dependsOn: Unit_Test_PSCore6_MacOS1014
+      - job: Integration_Test_PSCore6_MacOS1015
+        dependsOn: Unit_Test_PSCore6_MacOS1015
         displayName: 'Integration Test (Powershell Core 6 on MacOS 10.14)'
         pool:
-          vmImage: macos-10.14
+          vmImage: macos-10.15
         timeoutInMinutes: 0
 
         steps:
@@ -539,7 +539,96 @@ stages:
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: 'output/testResults/NUnit*.xml'
-              testRunTitle: 'Integration (Powershell Core 6 on MacOS 10.14)'
+              testRunTitle: 'Integration (Powershell Core 6 on MacOS 10.15)'
+            condition: succeededOrFailed()
+
+      - job: Unit_Test_PSCore6_MacOS11
+        displayName: 'Unit Test (Powershell Core 6 on MacOS 11)'
+        pool:
+          vmImage: macos-11
+
+        steps:
+          - powershell: |
+              $repositoryOwner,$repositoryName = $env:BUILD_REPOSITORY_NAME -split '/'
+              echo "##vso[task.setvariable variable=RepositoryOwner;isOutput=true]$repositoryOwner"
+              echo "##vso[task.setvariable variable=RepositoryName;isOutput=true]$repositoryName"
+            name: moduleBuildVariable
+            displayName: 'Set Environment Variables'
+
+          - powershell: |
+              Uninstall-Module -Name Az -Force
+            displayName: 'Uninstall Az Module'
+
+          - task: DownloadBuildArtifacts@0
+            displayName: 'Download Build Artifact'
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'output'
+              downloadPath: '$(Build.SourcesDirectory)'
+
+          - task: PowerShell@2
+            name: test
+            displayName: 'Run Unit Test'
+            inputs:
+              filePath: './build.ps1'
+              arguments: "-tasks test -PesterScript 'tests/Unit'"
+
+          - task: PublishTestResults@2
+            displayName: 'Publish Test Results'
+            inputs:
+              testResultsFormat: 'NUnit'
+              testResultsFiles: 'output/testResults/NUnit*.xml'
+              testRunTitle: 'Unit (Powershell Core 6 on MacOS 11)'
+
+          - task: PublishCodeCoverageResults@1
+            displayName: 'Publish Code Coverage'
+            condition: succeededOrFailed()
+            inputs:
+              codeCoverageTool: 'JaCoCo'
+              summaryFileLocation: 'output/testResults/CodeCov*.xml'
+              pathToSources: '$(Build.SourcesDirectory)/output/$(moduleBuildVariable.RepositoryName)'
+
+      - job: Integration_Test_PSCore6_MacOS11
+        dependsOn: Unit_Test_PSCore6_MacOS11
+        displayName: 'Integration Test (Powershell Core 6 on MacOS 11)'
+        pool:
+          vmImage: macos-11
+        timeoutInMinutes: 0
+
+        steps:
+          - task: DownloadBuildArtifacts@0
+            displayName: 'Download Build Artifact'
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'output'
+              downloadPath: '$(Build.SourcesDirectory)'
+
+          - powershell: |
+              Uninstall-Module -Name Az -Force
+              $null = Remove-Item -Path '~/.Azure' -Recurse -Force
+            displayName: 'Uninstall Az Module'
+
+          - task: PowerShell@2
+            name: test
+            displayName: 'Run Integration Test'
+            env:
+              azureApplicationId: $(azureApplicationId)
+              azureApplicationPassword: $(azureApplicationPassword)
+              azureSubscriptionId: $(azureSubscriptionId)
+              azureTenantId: $(azureTenantId)
+            inputs:
+              filePath: './build.ps1'
+              arguments: "-Tasks test -PesterScript 'tests/Integration' -CodeCoverageThreshold 0"
+              pwsh: false
+
+          - task: PublishTestResults@2
+            displayName: 'Publish Test Results'
+            inputs:
+              testResultsFormat: 'NUnit'
+              testResultsFiles: 'output/testResults/NUnit*.xml'
+              testRunTitle: 'Integration (Powershell Core 6 on MacOS 11)'
             condition: succeededOrFailed()
 
   - stage: Deploy
