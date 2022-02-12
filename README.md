@@ -105,7 +105,7 @@ concepts:
 - [NoSQL vs. Relational Databases](https://docs.microsoft.com/bs-cyrl-ba/azure/cosmos-db/relational-nosql)
 - [Partitioning](https://docs.microsoft.com/bs-cyrl-ba/azure/cosmos-db/partitioning-overview)
 
-It is also recommended to watch [this Ignite video](https://myignite.techcommunity.microsoft.com/sessions/79932)
+It is also recommended to watch [this Ignite video](https://myignite.microsoft.com/sessions/1410edb6-204d-4c45-adbb-ccb49e8135cf?source=sessions)
 on data modelling and partitioning in Cosmos DB.
 
 ## Installation
