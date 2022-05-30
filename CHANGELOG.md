@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix Azure DevOps build pipeline and update to latest sampler pattern.
+
 ### Changed
 
 - Update Azure DevOps pipeline Linux agent version for build task

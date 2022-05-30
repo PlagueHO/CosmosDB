@@ -12,41 +12,48 @@ trigger:
     exclude:
     - "*-*"
 
+variables:
+  buildFolderName: output
+  buildArtifactName: output
+  testResultFolderName: testResults
+  testArtifactName: testResults
+  sourceFolderName: source
+
 stages:
   - stage: Build
     jobs:
-      - job: Build_Module
-        displayName: 'Build Module'
+      - job: Package_Module
+        displayName: 'Package Module'
         pool:
-          vmImage: ubuntu-latest
+          vmImage: 'ubuntu-latest'
         steps:
-          - task: gittools.gittools.setup-gitversion-task.gitversion/setup@0
-            displayName: 'Setup GitVersion'
-            inputs:
-              versionSpec: 5.x
-
-          - task: gittools.gittools.execute-gitversion-task.gitversion/execute@0
-            displayName: 'Evaluate Next Version'
-            inputs:
-              useConfigFile: true
-              configFilePath: 'GitVersion.yml'
+          - pwsh: |
+              dotnet tool install --global GitVersion.Tool
+              $gitVersionObject = dotnet-gitversion | ConvertFrom-Json
+              $gitVersionObject.PSObject.Properties.ForEach{
+                  Write-Host -Object "Setting Task Variable '$($_.Name)' with value '$($_.Value)'."
+                  Write-Host -Object "##vso[task.setvariable variable=$($_.Name);]$($_.Value)"
+              }
+              Write-Host -Object "##vso[build.updatebuildnumber]$($gitVersionObject.FullSemVer)"
+            displayName: Calculate ModuleVersion (GitVersion)
 
           - task: PowerShell@2
             name: package
             displayName: 'Build & Package Module'
             inputs:
               filePath: './build.ps1'
-              arguments: '-Tasks pack -ResolveDependency'
+              arguments: '-ResolveDependency -tasks pack'
               pwsh: true
             env:
-              ModuleVersion: $(gitVersion.Informationalversion)
+              ModuleVersion: $(NuGetVersionV2)
 
-          - task: PublishBuildArtifacts@1
-            displayName: 'Publish Build Artifact'
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish Pipeline Artifact'
             inputs:
-              PathtoPublish: 'output/'
-              ArtifactName: 'output'
-              publishLocation: 'Container'
+              targetPath: '$(buildFolderName)/'
+              artifact: $(buildArtifactName)
+              publishLocation: 'pipeline'
+              parallel: true
 
   - stage: Test
     dependsOn: Build
@@ -66,13 +73,12 @@ stages:
             name: moduleBuildVariable
             displayName: 'Set Environment Variables'
 
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'output'
-              downloadPath: '$(Build.SourcesDirectory)'
+              artifactName: $(buildArtifactName)
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -83,9 +89,10 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
-              testResultsFiles: 'output/testResults/NUnit*.xml'
+              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Unit (PowerShell 5.1 on Windows Server 2019)'
 
           - task: PublishCodeCoverageResults@1
@@ -93,8 +100,8 @@ stages:
             condition: succeededOrFailed()
             inputs:
               codeCoverageTool: 'JaCoCo'
-              summaryFileLocation: 'output/testResults/CodeCov*.xml'
-              pathToSources: '$(Build.SourcesDirectory)/output/$(moduleBuildVariable.RepositoryName)'
+              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
+              pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
       - job: Integration_Test_PS_Win2019
         dependsOn: Unit_Test_PS_Win2019
@@ -104,13 +111,12 @@ stages:
         timeoutInMinutes: 0
 
         steps:
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'output'
-              downloadPath: '$(Build.SourcesDirectory)'
+              artifactName: $(buildArtifactName)
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -127,11 +133,11 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
-              testResultsFiles: 'output/testResults/NUnit*.xml'
+              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2019)'
-            condition: succeededOrFailed()
 
       - job: Unit_Test_PS_Win2022
         displayName: 'Unit Test (Powershell 5.1 on Windows Server 2022)'
@@ -146,13 +152,12 @@ stages:
             name: moduleBuildVariable
             displayName: 'Set Environment Variables'
 
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'output'
-              downloadPath: '$(Build.SourcesDirectory)'
+              artifactName: $(buildArtifactName)
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -163,9 +168,10 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
-              testResultsFiles: 'output/testResults/NUnit*.xml'
+              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Unit (PowerShell 5.1 on Windows Server 2022)'
 
           - task: PublishCodeCoverageResults@1
@@ -173,8 +179,8 @@ stages:
             condition: succeededOrFailed()
             inputs:
               codeCoverageTool: 'JaCoCo'
-              summaryFileLocation: 'output/testResults/CodeCov*.xml'
-              pathToSources: '$(Build.SourcesDirectory)/output/$(moduleBuildVariable.RepositoryName)'
+              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
+              pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
       - job: Integration_Test_PS_Win2022
         dependsOn: Unit_Test_PS_Win2022
@@ -184,13 +190,12 @@ stages:
         timeoutInMinutes: 0
 
         steps:
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'output'
-              downloadPath: '$(Build.SourcesDirectory)'
+              artifactName: $(buildArtifactName)
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -207,11 +212,11 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
-              testResultsFiles: 'output/testResults/NUnit*.xml'
+              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2022)'
-            condition: succeededOrFailed()
 
       - job: Unit_Test_PS7_Ubuntu2004
         displayName: 'Unit Test (Powershell 7 on Ubuntu 20.04)'
@@ -226,13 +231,12 @@ stages:
             name: moduleBuildVariable
             displayName: 'Set Environment Variables'
 
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'output'
-              downloadPath: '$(Build.SourcesDirectory)'
+              artifactName: $(buildArtifactName)
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -243,9 +247,10 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
-              testResultsFiles: 'output/testResults/NUnit*.xml'
+              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Unit (Powershell 7 on Ubuntu 20.04)'
 
           - task: PublishCodeCoverageResults@1
@@ -253,8 +258,8 @@ stages:
             condition: succeededOrFailed()
             inputs:
               codeCoverageTool: 'JaCoCo'
-              summaryFileLocation: 'output/testResults/CodeCov*.xml'
-              pathToSources: '$(Build.SourcesDirectory)/output/$(moduleBuildVariable.RepositoryName)'
+              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
+              pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
       - job: Integration_Test_PS7_Ubuntu2004
         dependsOn: Unit_Test_PS7_Ubuntu2004
@@ -264,13 +269,12 @@ stages:
         timeoutInMinutes: 0
 
         steps:
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'output'
-              downloadPath: '$(Build.SourcesDirectory)'
+              artifactName: $(buildArtifactName)
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -287,11 +291,11 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
-              testResultsFiles: 'output/testResults/NUnit*.xml'
+              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Integration (Powershell 7 on Ubuntu 20.04)'
-            condition: succeededOrFailed()
 
       - job: Unit_Test_PS7_Ubuntu1804
         displayName: 'Unit Test (Powershell 7 on Ubuntu 18.04)'
@@ -306,13 +310,12 @@ stages:
             name: moduleBuildVariable
             displayName: 'Set Environment Variables'
 
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'output'
-              downloadPath: '$(Build.SourcesDirectory)'
+              artifactName: $(buildArtifactName)
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -323,9 +326,10 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
-              testResultsFiles: 'output/testResults/NUnit*.xml'
+              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Unit (Powershell 7 on Ubuntu 18.04)'
 
           - task: PublishCodeCoverageResults@1
@@ -333,8 +337,8 @@ stages:
             condition: succeededOrFailed()
             inputs:
               codeCoverageTool: 'JaCoCo'
-              summaryFileLocation: 'output/testResults/CodeCov*.xml'
-              pathToSources: '$(Build.SourcesDirectory)/output/$(moduleBuildVariable.RepositoryName)'
+              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
+              pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
       - job: Integration_Test_PS7_Ubuntu1804
         dependsOn: Unit_Test_PS7_Ubuntu1804
@@ -344,13 +348,12 @@ stages:
         timeoutInMinutes: 0
 
         steps:
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'output'
-              downloadPath: '$(Build.SourcesDirectory)'
+              artifactName: $(buildArtifactName)
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -367,11 +370,11 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
-              testResultsFiles: 'output/testResults/NUnit*.xml'
+              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Integration (Powershell 7 on Ubuntu 18.04)'
-            condition: succeededOrFailed()
 
       - job: Unit_Test_PSCore6_MacOS1015
         displayName: 'Unit Test (Powershell Core 6 on MacOS 10.15)'
@@ -390,13 +393,12 @@ stages:
               Uninstall-Module -Name Az -Force
             displayName: 'Uninstall Az Module'
 
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'output'
-              downloadPath: '$(Build.SourcesDirectory)'
+              artifactName: $(buildArtifactName)
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -407,9 +409,10 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
-              testResultsFiles: 'output/testResults/NUnit*.xml'
+              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Unit (Powershell Core 6 on MacOS 10.15)'
 
           - task: PublishCodeCoverageResults@1
@@ -417,8 +420,8 @@ stages:
             condition: succeededOrFailed()
             inputs:
               codeCoverageTool: 'JaCoCo'
-              summaryFileLocation: 'output/testResults/CodeCov*.xml'
-              pathToSources: '$(Build.SourcesDirectory)/output/$(moduleBuildVariable.RepositoryName)'
+              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
+              pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
       - job: Integration_Test_PSCore6_MacOS1015
         dependsOn: Unit_Test_PSCore6_MacOS1015
@@ -428,13 +431,12 @@ stages:
         timeoutInMinutes: 0
 
         steps:
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'output'
-              downloadPath: '$(Build.SourcesDirectory)'
+              artifactName: $(buildArtifactName)
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - powershell: |
               Uninstall-Module -Name Az -Force
@@ -456,11 +458,11 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
-              testResultsFiles: 'output/testResults/NUnit*.xml'
+              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Integration (Powershell Core 6 on MacOS 10.15)'
-            condition: succeededOrFailed()
 
       - job: Unit_Test_PSCore6_MacOS11
         displayName: 'Unit Test (Powershell Core 6 on MacOS 11)'
@@ -475,17 +477,16 @@ stages:
             name: moduleBuildVariable
             displayName: 'Set Environment Variables'
 
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
+            inputs:
+              buildType: 'current'
+              artifactName: $(buildArtifactName)
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
+
           - powershell: |
               Uninstall-Module -Name Az -Force
             displayName: 'Uninstall Az Module'
-
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'output'
-              downloadPath: '$(Build.SourcesDirectory)'
 
           - task: PowerShell@2
             name: test
@@ -496,9 +497,10 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
-              testResultsFiles: 'output/testResults/NUnit*.xml'
+              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Unit (Powershell Core 6 on MacOS 11)'
 
           - task: PublishCodeCoverageResults@1
@@ -506,8 +508,8 @@ stages:
             condition: succeededOrFailed()
             inputs:
               codeCoverageTool: 'JaCoCo'
-              summaryFileLocation: 'output/testResults/CodeCov*.xml'
-              pathToSources: '$(Build.SourcesDirectory)/output/$(moduleBuildVariable.RepositoryName)'
+              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
+              pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
       - job: Integration_Test_PSCore6_MacOS11
         dependsOn: Unit_Test_PSCore6_MacOS11
@@ -517,13 +519,12 @@ stages:
         timeoutInMinutes: 0
 
         steps:
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'output'
-              downloadPath: '$(Build.SourcesDirectory)'
+              artifactName: $(buildArtifactName)
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - powershell: |
               Uninstall-Module -Name Az -Force
@@ -545,11 +546,11 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
-              testResultsFiles: 'output/testResults/NUnit*.xml'
+              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Integration (Powershell Core 6 on MacOS 11)'
-            condition: succeededOrFailed()
 
   - stage: Deploy
     dependsOn: Test
@@ -571,13 +572,12 @@ stages:
           vmImage: ubuntu-latest
 
         steps:
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'output'
-              downloadPath: '$(Build.SourcesDirectory)'
+              artifactName: $(buildArtifactName)
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: publish_release

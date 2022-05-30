@@ -6,6 +6,7 @@
             Repository = ''
         }
     }
+
     invokeBuild           = 'latest'
     PSScriptAnalyzer      = 'latest'
     Pester                = '4.10.1'
