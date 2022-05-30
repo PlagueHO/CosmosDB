@@ -324,9 +324,6 @@ stages:
               filePath: './build.ps1'
               arguments: "-tasks test -PesterScript 'tests/Unit'"
 
-          - powershell: |
-              Get-ChildItem -Recurse
-
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
             condition: succeededOrFailed()
