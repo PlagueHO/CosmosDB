@@ -247,7 +247,7 @@ stages:
             displayName: 'Publish Test Results'
             inputs:
               testResultsFormat: 'NUnit'
-              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
+              testResultsFiles: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Unit (Powershell 7 on Ubuntu 20.04)'
 
           - task: PublishCodeCoverageResults@1
