@@ -89,6 +89,7 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
@@ -132,11 +133,11 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2019)'
-            condition: succeededOrFailed()
 
       - job: Unit_Test_PS_Win2022
         displayName: 'Unit Test (Powershell 5.1 on Windows Server 2022)'
@@ -167,6 +168,7 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
@@ -210,11 +212,11 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2022)'
-            condition: succeededOrFailed()
 
       - job: Unit_Test_PS7_Ubuntu2004
         displayName: 'Unit Test (Powershell 7 on Ubuntu 20.04)'
@@ -245,9 +247,10 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
-              testResultsFiles: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
+              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Unit (Powershell 7 on Ubuntu 20.04)'
 
           - task: PublishCodeCoverageResults@1
@@ -288,11 +291,11 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Integration (Powershell 7 on Ubuntu 20.04)'
-            condition: succeededOrFailed()
 
       - job: Unit_Test_PS7_Ubuntu1804
         displayName: 'Unit Test (Powershell 7 on Ubuntu 18.04)'
@@ -321,8 +324,12 @@ stages:
               filePath: './build.ps1'
               arguments: "-tasks test -PesterScript 'tests/Unit'"
 
+          - powershell: |
+              Get-ChildItem -Recurse
+
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
@@ -366,11 +373,11 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Integration (Powershell 7 on Ubuntu 18.04)'
-            condition: succeededOrFailed()
 
       - job: Unit_Test_PSCore6_MacOS1015
         displayName: 'Unit Test (Powershell Core 6 on MacOS 10.15)'
@@ -405,6 +412,7 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
@@ -453,11 +461,11 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Integration (Powershell Core 6 on MacOS 10.15)'
-            condition: succeededOrFailed()
 
       - job: Unit_Test_PSCore6_MacOS11
         displayName: 'Unit Test (Powershell Core 6 on MacOS 11)'
@@ -492,6 +500,7 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
@@ -540,11 +549,11 @@ stages:
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
+            condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Integration (Powershell Core 6 on MacOS 11)'
-            condition: succeededOrFailed()
 
   - stage: Deploy
     dependsOn: Test
