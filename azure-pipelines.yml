@@ -99,7 +99,7 @@ stages:
             condition: succeededOrFailed()
             inputs:
               codeCoverageTool: 'JaCoCo'
-              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/JaCoCo_coverage.xml'
+              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
               pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
       - job: Integration_Test_PS_Win2019
@@ -177,7 +177,7 @@ stages:
             condition: succeededOrFailed()
             inputs:
               codeCoverageTool: 'JaCoCo'
-              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/JaCoCo_coverage.xml'
+              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
               pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
       - job: Integration_Test_PS_Win2022
@@ -255,7 +255,7 @@ stages:
             condition: succeededOrFailed()
             inputs:
               codeCoverageTool: 'JaCoCo'
-              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/JaCoCo_coverage.xml'
+              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
               pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
       - job: Integration_Test_PS7_Ubuntu2004
@@ -333,7 +333,7 @@ stages:
             condition: succeededOrFailed()
             inputs:
               codeCoverageTool: 'JaCoCo'
-              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/JaCoCo_coverage.xml'
+              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
               pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
       - job: Integration_Test_PS7_Ubuntu1804
@@ -415,7 +415,7 @@ stages:
             condition: succeededOrFailed()
             inputs:
               codeCoverageTool: 'JaCoCo'
-              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/JaCoCo_coverage.xml'
+              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
               pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
       - job: Integration_Test_PSCore6_MacOS1015
@@ -502,7 +502,7 @@ stages:
             condition: succeededOrFailed()
             inputs:
               codeCoverageTool: 'JaCoCo'
-              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/JaCoCo_coverage.xml'
+              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
               pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
       - job: Integration_Test_PSCore6_MacOS11
