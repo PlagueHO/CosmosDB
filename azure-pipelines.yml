@@ -73,13 +73,12 @@ stages:
             name: moduleBuildVariable
             displayName: 'Set Environment Variables'
 
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
               artifactName: $(buildArtifactName)
-              downloadPath: '$(Build.SourcesDirectory)'
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -111,13 +110,12 @@ stages:
         timeoutInMinutes: 0
 
         steps:
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
               artifactName: $(buildArtifactName)
-              downloadPath: '$(Build.SourcesDirectory)'
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -153,13 +151,12 @@ stages:
             name: moduleBuildVariable
             displayName: 'Set Environment Variables'
 
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
               artifactName: $(buildArtifactName)
-              downloadPath: '$(Build.SourcesDirectory)'
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -191,13 +188,12 @@ stages:
         timeoutInMinutes: 0
 
         steps:
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
               artifactName: $(buildArtifactName)
-              downloadPath: '$(Build.SourcesDirectory)'
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -233,13 +229,12 @@ stages:
             name: moduleBuildVariable
             displayName: 'Set Environment Variables'
 
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
               artifactName: $(buildArtifactName)
-              downloadPath: '$(Build.SourcesDirectory)'
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -271,13 +266,12 @@ stages:
         timeoutInMinutes: 0
 
         steps:
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
               artifactName: $(buildArtifactName)
-              downloadPath: '$(Build.SourcesDirectory)'
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -313,13 +307,12 @@ stages:
             name: moduleBuildVariable
             displayName: 'Set Environment Variables'
 
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
               artifactName: $(buildArtifactName)
-              downloadPath: '$(Build.SourcesDirectory)'
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -351,13 +344,12 @@ stages:
         timeoutInMinutes: 0
 
         steps:
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
               artifactName: $(buildArtifactName)
-              downloadPath: '$(Build.SourcesDirectory)'
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -397,13 +389,12 @@ stages:
               Uninstall-Module -Name Az -Force
             displayName: 'Uninstall Az Module'
 
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
               artifactName: $(buildArtifactName)
-              downloadPath: '$(Build.SourcesDirectory)'
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: test
@@ -435,13 +426,12 @@ stages:
         timeoutInMinutes: 0
 
         steps:
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
               artifactName: $(buildArtifactName)
-              downloadPath: '$(Build.SourcesDirectory)'
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - powershell: |
               Uninstall-Module -Name Az -Force
@@ -482,17 +472,16 @@ stages:
             name: moduleBuildVariable
             displayName: 'Set Environment Variables'
 
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
+            inputs:
+              buildType: 'current'
+              artifactName: $(buildArtifactName)
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
+
           - powershell: |
               Uninstall-Module -Name Az -Force
             displayName: 'Uninstall Az Module'
-
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: $(buildArtifactName)
-              downloadPath: '$(Build.SourcesDirectory)'
 
           - task: PowerShell@2
             name: test
@@ -524,13 +513,12 @@ stages:
         timeoutInMinutes: 0
 
         steps:
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
               artifactName: $(buildArtifactName)
-              downloadPath: '$(Build.SourcesDirectory)'
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - powershell: |
               Uninstall-Module -Name Az -Force
@@ -578,13 +566,12 @@ stages:
           vmImage: ubuntu-latest
 
         steps:
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download Build Artifact'
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Pipeline Artifact'
             inputs:
               buildType: 'current'
-              downloadType: 'single'
               artifactName: $(buildArtifactName)
-              downloadPath: '$(Build.SourcesDirectory)'
+              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
 
           - task: PowerShell@2
             name: publish_release
