@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated the New-CosmosDbAccount command to add a new Capability
   parameter - Fixes [Issue #439](https://github.com/PlagueHO/CosmosDB/issues/439).
 - Updated tests on PowerShell 6.x for MacOS 10.14 to 10.15 - Fixes [Issue #450](https://github.com/PlagueHO/CosmosDB/issues/450).
+- Updated README.md to remove markdown issues.
 
 ### Added
 
