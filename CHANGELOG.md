@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix Azure DevOps build pipeline and update to latest sampler pattern.
+- Fix exception being thrown when a 429 is returned by CosmosDB, but the
+  `x-ms-retry-after-ms` header is not returned. This may occur in requests
+  that follow large (> 1MB) insert or updates - Fixes [Issue #439](https://github.com/PlagueHO/CosmosDB/issues/439).
 
 ### Changed
 

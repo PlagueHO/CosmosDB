@@ -61,4 +61,6 @@ ConvertFrom-StringData -StringData @'
     ErrorNewDatabaseThroughputParameterConflict = Both 'OfferThroughput' and 'AutoscaleThroughput' should not be specified when creating a new database.
     DeprecateAttachmentWarning = Attachments are a legacy feature. Their support is scoped to offer continued functionality if you are already using this feature. See https://aka.ms/cosmosdb-attachments for more information.
     ErrorConvertingDocumentJsonToObject = An error occured converting the document information returned from Cosmsos DB into an object. This might be caused by the document including keys with same name but differing in case. Include the -ReturnJson parameter to return these as JSON instead.
+    ErrorTooManyRequests = The server returned a '429 Too Many Requests' error. This is likely due to the client making too many requests to the server. Please retry your request.
+    ErrorTooManyRequestsWithNoRetryAfter = The server returned a '429 Too Many Requests' error, but the did not include an 'x-ms-retry-after-ms' header in the response. A retry delay of 0ms will be used.
 '@
