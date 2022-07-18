@@ -75,7 +75,7 @@ The _CosmosDB PowerShell module_ enables management of:
 
 The module uses the Cosmos DB (DocumentDB) Rest APIs.
 
-For more information on the Cosmos DB Rest APIs, see [this link](https://docs.microsoft.com/en-us/rest/api/documentdb/restful-interactions-with-documentdb-resources).
+For more information on the Cosmos DB Rest APIs, see [this link](https://docs.microsoft.com/rest/api/documentdb/restful-interactions-with-documentdb-resources).
 
 ## Requirements
 
@@ -191,7 +191,7 @@ you will first need to connect to the correct account using the
 
 #### Create a Context for a Cosmos DB Emulator
 
-Microsoft provides a [Cosmos DB emulator](https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator) that
+Microsoft provides a [Cosmos DB emulator](https://docs.microsoft.com/azure/cosmos-db/local-emulator) that
 you can run locally to enable testing and debugging scenarios. To create
 a context for a Cosmos DB emulator installed on the localhost use the
 following command:
@@ -421,7 +421,7 @@ New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -Partitio
 > A warning will be displayed if the Hash index Kind is used.
 > The Hash index Kind will be removed in a future BREAKING release of the Cosmos
 > DB module.
-> See [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/index-types#index-kind)
+> See [this page](https://docs.microsoft.com/azure/cosmos-db/index-types#index-kind)
 > for more information.
 >
 > The _Precision_ parameter is no longer supported by Cosmos DB and will be
@@ -429,14 +429,14 @@ New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -Partitio
 > A warning will be displayed if the Precision parameter is passed.
 > The Precision parameter will be removed in a future BREAKING release of the
 > Cosmos DB module.
-> See [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/index-types#index-precision)
+> See [this page](https://docs.microsoft.com/azure/cosmos-db/index-types#index-precision)
 > for more information.
 >
 > It is recommended to remove the use of the _Hash_ index Kind and any instances
 > of the _Precision_ parameter and any automation or scripts to avoid being affected
 > by future BREAKING CHANGES.
 
-For more information on how Cosmos DB indexes documents, see [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/indexing-policies).
+For more information on how Cosmos DB indexes documents, see [this page](https://docs.microsoft.com/azure/cosmos-db/indexing-policies).
 
 #### Creating a Collection with a custom Indexing Policy including Composite Indexes
 
@@ -536,7 +536,7 @@ $uniqueKeyPolicy = New-CosmosDbCollectionUniqueKeyPolicy -UniqueKey $uniqueKeyNa
 New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'id' -UniqueKeyPolicy $uniqueKeyPolicy
 ```
 
-For more information on how Cosmos DB indexes documents, see [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/unique-keys).
+For more information on how Cosmos DB indexes documents, see [this page](https://docs.microsoft.com/azure/cosmos-db/unique-keys).
 
 #### Update an existing Collection with a new Unique Key Policy
 
@@ -829,7 +829,7 @@ user. This removes the requirement for the user to be given access to
 the **master** key for the Cosmos DB database.
 
 For more information on using _resource authorization tokens_ or the
-**token broker app* pattern, please see [this document](https://docs.microsoft.com/en-us/azure/cosmos-db/secure-access-to-data#resource-tokens).
+**token broker app** pattern, please see [this document](https://docs.microsoft.com/azure/cosmos-db/secure-access-to-data#resource-tokens).
 
 The following is an example showing how to create a resource context object
 that contains a _resource authorization token_ granting access to read
@@ -1049,8 +1049,8 @@ Remove-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNe
 ### How to Handle Exceeding Provisioned Throughput
 
 When using Azure Cosmos DB it is quite common to exceed the throughput
-that has been provisioned against a collection (or accross multiple collections).
-See [this page](https://docs.microsoft.com/en-us/azure/cosmos-db/request-units)
+that has been provisioned against a collection (or across multiple collections).
+See [this page](https://docs.microsoft.com/azure/cosmos-db/request-units)
 for more information on request units and throughput provisioning.
 
 When this happens requests will return a `Too Many Request` (error code 429).
