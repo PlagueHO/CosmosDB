@@ -143,6 +143,11 @@ function Get-CosmosDbDocumentJson
 
             if (-not [System.String]::IsNullOrEmpty($QueryParameters))
             {
+                if ($QueryParameters.keys -cmatch "[A-Z]")
+                {
+                    Write-Warning ($LocalizedData.WarningDocumentQueryParameterKeysNotLowercase)
+                    $QueryParameters = Format-CosmosDbDocumentQueryParameters $QueryParameters
+                }
                 $bodyObject += @{ parameters = $QueryParameters }
             }
 
