@@ -242,7 +242,16 @@ function Invoke-CosmosDbRequest
                     The exception was caused by exceeding provisioned throughput
                     so determine is we should delay and try again or exit
                 #>
-                [System.Int32] $retryAfter = ($_.Exception.Response.Headers | Where-Object -Property Key -eq 'x-ms-retry-after-ms').Value[0]
+                $retryAfterHeader = $_.Exception.Response.Headers | Where-Object -Property Key -eq 'x-ms-retry-after-ms'
+                if ($retryAfterHeader)
+                {
+                    [System.Int32] $retryAfter = $retryAfterHeader.Value[0]
+                }
+                else
+                {
+                    [System.Int32] $retryAfter = 0
+                    Write-Verbose -Message $($LocalizedData.ErrorTooManyRequestsWithNoRetryAfter)
+                }
 
                 $delay = Get-CosmosDbBackoffDelay `
                     -BackOffPolicy $Context.BackoffPolicy `
@@ -256,6 +265,10 @@ function Invoke-CosmosDbRequest
                     Write-Verbose -Message $($LocalizedData.WaitingBackoffPolicyDelay -f $retry, $delay)
                     Start-Sleep -Milliseconds $delay
                     continue
+                }
+                else
+                {
+                    Write-Verbose -Message $($LocalizedData.ErrorTooManyRequests)
                 }
             }
 
