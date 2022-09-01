@@ -19,7 +19,7 @@ Update a document from a Cosmos DB collection.
 Set-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString>]
  -CollectionId <String> -Id <String> -DocumentBody <String> [-IndexingDirective <String>]
  [-PartitionKey <Object[]>] [-Encoding <String>] [-ETag <String>]
- [-RetrunJson <switch>] [<CommonParameters>]
+ [-ReturnJson <switch>] [<CommonParameters>]
 ```
 
 ### Account
@@ -28,7 +28,7 @@ Set-CosmosDbDocument -Context <Context> [-Database <String>] [-Key <SecureString
 Set-CosmosDbDocument -Account <String> [-Database <String>] [-Key <SecureString>]
  [-KeyType <String>] -CollectionId <String> -Id <String> -DocumentBody <String>
  [-IndexingDirective <String>] [-PartitionKey <Object[]>] [-Encoding <String>]
- [-ETag <String>] [-RetrunJson <switch>] [<CommonParameters>]
+ [-ETag <String>] [-ReturnJson <switch>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
