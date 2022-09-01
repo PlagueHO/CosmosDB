@@ -22,7 +22,7 @@ Get-CosmosDbDocument -Context <Context> [-Key <SecureString>] [-KeyType <String>
  [-ConsistencyLevel <String>] [-SessionToken <String>]
  [-PartitionKeyRangeId <String>] [-Query <String>] [-QueryParameters <Hashtable[]>]
  [-QueryEnableCrossPartition <Boolean>] [-ResponseHeader <PSReference>]
- [-RetrunJson <switch>] [<CommonParameters>]
+ [-ReturnJson <switch>] [<CommonParameters>]
 ```
 
 ### Account
@@ -34,7 +34,7 @@ Get-CosmosDbDocument -Account <String> [-Key <SecureString>] [-KeyType <String>]
  [-ConsistencyLevel <String>] [-SessionToken <String>]
  [-PartitionKeyRangeId <String>] [-Query <String>] [-QueryParameters <Hashtable[]>]
  [-QueryEnableCrossPartition <Boolean>] [-ResponseHeader <PSReference>]
- [-RetrunJson <switch>] [<CommonParameters>]
+ [-ReturnJson <switch>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
