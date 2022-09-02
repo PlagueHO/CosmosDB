@@ -31,7 +31,7 @@ in Azure.
 PS C:\> Get-CosmosDbAccountMasterKey -Name 'MyCosmosDBAccount' -ResourceGroupName 'MyResourceGroup'
 ```
 
-Retrun the Primary Master Key for the 'MyCosmosDBAccount' in the resource group
+Return the Primary Master Key for the 'MyCosmosDBAccount' in the resource group
 'MyResourceGroup'.
 
 ### Example 2
@@ -40,7 +40,7 @@ Retrun the Primary Master Key for the 'MyCosmosDBAccount' in the resource group
 PS C:\> Get-CosmosDbAccountMasterKey -Name 'MyCosmosDBAccount' -ResourceGroupName 'MyResourceGroup' -MasterKeyType 'SecondaryReadonlyMasterKey'
 ```
 
-Retrun the Secondary Readonly Master Key for the 'MyCosmosDBAccount' in the resource group
+Return the Secondary Readonly Master Key for the 'MyCosmosDBAccount' in the resource group
 'MyResourceGroup'.
 
 ## PARAMETERS

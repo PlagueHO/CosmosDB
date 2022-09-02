@@ -19,7 +19,7 @@ Create a new document for a collection in a Cosmos DB database.
 New-CosmosDbDocument -Context <Context> [-KeyType <String>] [-Key <SecureString>]
  [-Database <String>] -CollectionId <String> -DocumentBody <String>
  [-IndexingDirective <String>] [-Upsert <Boolean>] [-PartitionKey <Object[]>]
- [-Encoding <String>] [-RetrunJson <switch>] [<CommonParameters>]
+ [-Encoding <String>] [-ReturnJson <switch>] [<CommonParameters>]
 ```
 
 ### Account
@@ -28,7 +28,7 @@ New-CosmosDbDocument -Context <Context> [-KeyType <String>] [-Key <SecureString>
 New-CosmosDbDocument -Account <String> [-KeyType <String>] [-Key <SecureString>]
  [-Database <String>] -CollectionId <String> -DocumentBody <String>
  [-IndexingDirective <String>] [-Upsert <Boolean>] [-PartitionKey <Object[]>]
- [-Encoding <String>] [-RetrunJson <switch>] [<CommonParameters>]
+ [-Encoding <String>] [-ReturnJson <switch>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
