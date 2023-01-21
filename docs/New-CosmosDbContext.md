@@ -170,7 +170,7 @@ to an custom Cosmos DB endpoint.
 
 ```powershell
 PS C:\> $connectionString = Get-CosmosDbAccountConnectionString -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup'
-PS C:\> $cosmosDbContext = New-CosmosDbContext -ConnectionString ($connectionString | ConvertTo-SecureString -AsPlainText) -Database 'MyDatabase' -MasterKeyType 'PrimaryMasterKey'
+PS C:\> $cosmosDbContext = New-CosmosDbContext -ConnectionString ($connectionString | ConvertTo-SecureString -AsPlainText -Force) -Database 'MyDatabase' -MasterKeyType 'PrimaryMasterKey'
 ```
 
 Creates a CosmosDB context specifying the connection string connecting

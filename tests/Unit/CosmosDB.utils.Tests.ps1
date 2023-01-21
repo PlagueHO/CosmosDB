@@ -807,7 +807,7 @@ console.log("done");
 
             It 'Should not throw exception' {
                 $newCosmosDbContextParameters = @{
-                    ConnectionString = ($script:testConnectionString | ConvertTo-SecureString -AsPlainText)
+                    ConnectionString = ($script:testConnectionString | ConvertTo-SecureString -AsPlainText -Force)
                     Database = $script:testDatabase
                 }
 

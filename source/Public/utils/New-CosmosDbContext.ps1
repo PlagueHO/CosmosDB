@@ -191,7 +191,7 @@ function New-CosmosDbContext
             $connectionStringParts = $decryptedConnectionString -replace ';', [System.Environment]::NewLine | ConvertFrom-StringData
             $BaseUri = [System.Uri]::new($connectionStringParts.AccountEndpoint)
             $Account = $BaseUri.Host.Split('.')[0]
-            $Key = $connectionStringParts.AccountKey | ConvertTo-SecureString -AsPlainText
+            $Key = $connectionStringParts.AccountKey | ConvertTo-SecureString -AsPlainText -Force
         }
     }
 

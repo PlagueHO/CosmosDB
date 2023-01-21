@@ -975,7 +975,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Verbose
 
             $connectionStringContext = New-CosmosDbContext `
-                -ConnectionString ($connectionString | ConvertTo-SecureString -AsPlainText) `
+                -ConnectionString ($connectionString | ConvertTo-SecureString -AsPlainText -Force) `
                 -Database $script:testDatabase `
                 -Verbose
 
