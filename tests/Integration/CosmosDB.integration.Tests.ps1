@@ -967,6 +967,26 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    Context 'When getting existing document using connection string as context' {
+        It 'Should not throw an exception' {
+            $connectionString = Get-CosmosDbAccountConnectionString `
+                -Name $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName `
+                -Verbose
+
+            $connectionStringContext = New-CosmosDbContext `
+                -ConnectionString ($connectionString | ConvertTo-SecureString -AsPlainText) `
+                -Database $script:testDatabase `
+                -Verbose
+
+            $script:result = Get-CosmosDbDocument `
+                -Context $connectionStringContext `
+                -CollectionId $script:testCollection `
+                -Id $script:testDocumentId `
+                -Verbose
+        }
+    }
+
     Context 'When adding a stored procedure to the collection' {
         It 'Should not throw an exception' {
             $script:result = New-CosmosDbStoredProcedure `
