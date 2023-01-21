@@ -17,6 +17,10 @@ function New-CosmosDbContext
         [System.String]
         $Account,
 
+        [Parameter(Mandatory = $true, ParameterSetName = 'ConnectionString')]
+        [System.Security.SecureString]
+        $ConnectionString,
+
         [Parameter()]
         [ValidateScript({ Assert-CosmosDbDatabaseIdValid -Id $_ })]
         [System.String]
@@ -31,6 +35,7 @@ function New-CosmosDbContext
 
         [Parameter(ParameterSetName = 'Account')]
         [Parameter(ParameterSetName = 'CustomAccount')]
+        [Parameter(ParameterSetName = 'ConnectionString')]
         [ValidateSet('master', 'resource')]
         [System.String]
         $KeyType = 'master',
@@ -44,6 +49,7 @@ function New-CosmosDbContext
 
         [Parameter(ParameterSetName = 'AzureAccount')]
         [Parameter(ParameterSetName = 'CustomAzureAccount')]
+        [Parameter(ParameterSetName = 'ConnectionString')]
         [ValidateSet('PrimaryMasterKey', 'SecondaryMasterKey', 'PrimaryReadonlyMasterKey', 'SecondaryReadonlyMasterKey')]
         [System.String]
         $MasterKeyType = 'PrimaryMasterKey',
@@ -74,6 +80,7 @@ function New-CosmosDbContext
         [Parameter(ParameterSetName = 'Account')]
         [Parameter(ParameterSetName = 'Token')]
         [Parameter(ParameterSetName = 'AzureAccount')]
+        [Parameter(ParameterSetName = 'ConnectionString')]
         [CosmosDB.Environment]
         $Environment = [CosmosDB.Environment]::AzureCloud,
 
@@ -176,6 +183,15 @@ function New-CosmosDbContext
         'Token'
         {
             $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
+        }
+
+        'ConnectionString'
+        {
+            $decryptedConnectionString = $ConnectionString | Convert-CosmosDbSecureStringToString
+            $connectionStringParts = $decryptedConnectionString -replace ';', [System.Environment]::NewLine | ConvertFrom-StringData
+            $BaseUri = [System.Uri]::new($connectionStringParts.AccountEndpoint)
+            $Account = $BaseUri.Host.Split('.')[0]
+            $Key = $connectionStringParts.AccountKey | ConvertTo-SecureString -AsPlainText
         }
     }
 
