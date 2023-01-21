@@ -88,6 +88,8 @@ console.log("done");
 
     $script:testRequestBodyJson = '{"Tricky Body":"if (entityAlreadyExists)\r\n    throw new Error(`root entity # ${entity.id} already created`);\r\nconsole.log(`new entity \"${entity.id}\" is about to be created...`);\r\nlet a = \u0027some value\u0027;\r\nconsole.log(\"done\");"}'
 
+    $script:testConnectionString = "AccountEndpoint=https://{0}.documents.azure.com:443/;AccountKey={1};" -f $script:testAccount, $script:testKey
+
     Describe 'Custom types' -Tag 'Unit' {
         Context 'CosmosDB.Context' {
             It 'Should exist' {
@@ -797,6 +799,30 @@ console.log("done");
                 $script:result.Token[0].TimeStamp | Should -Be $script:testDate
                 $script:result.Token[0].Token | Convert-CosmosDbSecureStringToString | Should -Be $script:testToken
                 $script:result.Environment | Should -BeExactly 'AzureCloud'
+            }
+        }
+
+        Context 'When called with Connection String parameter' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    ConnectionString = ($script:testConnectionString | ConvertTo-SecureString -AsPlainText -Force)
+                    Database = $script:testDatabase
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be $script:testAccount
+                $script:result.Database | Should -Be $script:testDatabase
+                $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
+                $script:result.Key | Should -BeOfType [System.Security.SecureString]
+                $decryptedConnectionString = $script:result.Key | Convert-CosmosDbSecureStringToString
+                $decryptedConnectionString | Should -BeExactly $script:testKey
+                $script:result.KeyType | Should -BeExactly 'master'
             }
         }
     }

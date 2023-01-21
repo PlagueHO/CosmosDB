@@ -55,6 +55,15 @@ New-CosmosDbContext -Account <String> [-Database <String>] -Token <ContextToken[
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
+### ConnectionString
+
+```powershell
+New-CosmosDbContext -ConnectionString <SecureString> [-Database <String>]
+ [-KeyType <String>] [-MasterKeyType <String>]
+ [-BackoffPolicy <BackoffPolicy>] [-Environment <Environment>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
 ### Emulator
 
 ```powershell
@@ -157,6 +166,16 @@ PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'AlternateCloud' -Databa
 Creates a CosmosDB context specifying the master key manually connecting
 to an custom Cosmos DB endpoint.
 
+### Example 9
+
+```powershell
+PS C:\> $connectionString = Get-CosmosDbAccountConnectionString -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup'
+PS C:\> $cosmosDbContext = New-CosmosDbContext -ConnectionString ($connectionString | ConvertTo-SecureString -AsPlainText -Force) -Database 'MyDatabase' -MasterKeyType 'PrimaryMasterKey'
+```
+
+Creates a CosmosDB context specifying the connection string connecting
+to the Cosmos DB account.
+
 ## PARAMETERS
 
 ### -Account
@@ -202,6 +221,22 @@ Parameter Sets: (All)
 Aliases: cf
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ConnectionString
+
+The connection string used to access the Cosmos DB account.
+
+```yaml
+Type: SecureString
+Parameter Sets: ConnectionString
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -268,7 +303,7 @@ The supported values are:
 
 ```yaml
 Type: Environment
-Parameter Sets: Account, AzureAccount, Token
+Parameter Sets: Account, AzureAccount, Token, ConnectionString
 Aliases:
 Accepted values: AzureChinaCloud, AzureCloud, AzureUSGovernment
 
@@ -320,7 +355,7 @@ will be deprecated in a future release. Do not use it.
 
 ```yaml
 Type: String
-Parameter Sets: Account, CustomAccount
+Parameter Sets: Account, CustomAccount, ConnectionString
 Aliases:
 Accepted values: master, resource
 
@@ -338,7 +373,7 @@ the Cosmos DB.
 
 ```yaml
 Type: String
-Parameter Sets: CustomAzureAccount, AzureAccount
+Parameter Sets: CustomAzureAccount, AzureAccount, ConnectionString
 Aliases:
 Accepted values: PrimaryMasterKey, SecondaryMasterKey, PrimaryReadonlyMasterKey, SecondaryReadonlyMasterKey
 
