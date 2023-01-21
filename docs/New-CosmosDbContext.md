@@ -166,6 +166,16 @@ PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'AlternateCloud' -Databa
 Creates a CosmosDB context specifying the master key manually connecting
 to an custom Cosmos DB endpoint.
 
+### Example 9
+
+```powershell
+PS C:\> $connectionString = Get-CosmosDbAccountConnectionString -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup'
+PS C:\> $cosmosDbContext = New-CosmosDbContext -ConnectionString ($connectionString | ConvertTo-SecureString -AsPlainText) -Database 'MyDatabase' -MasterKeyType 'PrimaryMasterKey'
+```
+
+Creates a CosmosDB context specifying the connection string connecting
+to the Cosmos DB account.
+
 ## PARAMETERS
 
 ### -Account
