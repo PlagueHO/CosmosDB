@@ -55,6 +55,15 @@ New-CosmosDbContext -Account <String> [-Database <String>] -Token <ContextToken[
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
+### ConnectionString
+
+```powershell
+New-CosmosDbContext -ConnectionString <SecureString> [-Database <String>]
+ [-KeyType <String>] [-MasterKeyType <String>]
+ [-BackoffPolicy <BackoffPolicy>] [-Environment <Environment>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
 ### Emulator
 
 ```powershell
@@ -208,6 +217,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ConnectionString
+
+The connection string used to access the Cosmos DB account.
+
+```yaml
+Type: SecureString
+Parameter Sets: ConnectionString
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Database
 
 The name of the database to access in the Cosmos DB account.
@@ -268,7 +293,7 @@ The supported values are:
 
 ```yaml
 Type: Environment
-Parameter Sets: Account, AzureAccount, Token
+Parameter Sets: Account, AzureAccount, Token, ConnectionString
 Aliases:
 Accepted values: AzureChinaCloud, AzureCloud, AzureUSGovernment
 
@@ -320,7 +345,7 @@ will be deprecated in a future release. Do not use it.
 
 ```yaml
 Type: String
-Parameter Sets: Account, CustomAccount
+Parameter Sets: Account, CustomAccount, ConnectionString
 Aliases:
 Accepted values: master, resource
 
@@ -338,7 +363,7 @@ the Cosmos DB.
 
 ```yaml
 Type: String
-Parameter Sets: CustomAzureAccount, AzureAccount
+Parameter Sets: CustomAzureAccount, AzureAccount, ConnectionString
 Aliases:
 Accepted values: PrimaryMasterKey, SecondaryMasterKey, PrimaryReadonlyMasterKey, SecondaryReadonlyMasterKey
 
