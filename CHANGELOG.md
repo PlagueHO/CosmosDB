@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.7.0] - 2023-01-29
+
 - Added `-ConnectionString` parameter to `New-CosmosDbContext` - Fixes [Issue #426](https://github.com/PlagueHO/CosmosDB/issues/426).
 
 ### Fixed
