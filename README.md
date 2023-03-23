@@ -141,7 +141,7 @@ Use the key secure string, Azure Cosmos DB account name and database to
 create a context variable:
 
 ```powershell
-$cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey
+$cosmosDbContext = New-CosmosDbContext -Account MyAzureCosmosDB -Database MyDatabase -Key $primaryKey
 ```
 
 #### Create a Context for a Cosmos DB in Azure US Government Cloud
@@ -151,7 +151,7 @@ create a context variable and set the `Environment` parameter to
 `AzureUSGovernment`:
 
 ```powershell
-$cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey -Environment AzureUSGovernment
+$cosmosDbContext = New-CosmosDbContext -Account MyAzureCosmosDB -Database MyDatabase -Key $primaryKey -Environment AzureUSGovernment
 ```
 
 #### Create a Context for a Cosmos DB in Azure China Cloud (Mooncake)
@@ -161,7 +161,7 @@ create a context variable and set the `Environment` parameter to
 `AzureChinaCloud`:
 
 ```powershell
-$cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey -Environment AzureChinaCloud
+$cosmosDbContext = New-CosmosDbContext -Account MyAzureCosmosDB -Database MyDatabase -Key $primaryKey -Environment AzureChinaCloud
 ```
 
 #### Create a Context for a Cosmos DB with a Custom Endpoint
@@ -170,7 +170,7 @@ Use the key secure string, Azure Cosmos DB account name, database and
 Cosmos DB custom endpoint hostname:
 
 ```powershell
-$cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey -EndpointHostname 'documents.eassov.com'
+$cosmosDbContext = New-CosmosDbContext -Account MyAzureCosmosDB -Database MyDatabase -Key $primaryKey -EndpointHostname documents.eassov.com
 ```
 
 #### Use CosmosDB Module to Retrieve Key from Azure Management Portal
@@ -180,7 +180,7 @@ retrieves the primary or secondary key from the Azure Management
 Portal, use the following command:
 
 ```powershell
-$cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -ResourceGroupName 'MyCosmosDbResourceGroup' -MasterKeyType 'SecondaryMasterKey'
+$cosmosDbContext = New-CosmosDbContext -Account MyAzureCosmosDB -Database MyDatabase -ResourceGroupName MyCosmosDbResourceGroup -MasterKeyType SecondaryMasterKey
 ```
 
 _Note: if PowerShell is not connected to Azure then an interactive
@@ -197,7 +197,7 @@ a context for a Cosmos DB emulator installed on the localhost use the
 following command:
 
 ```powershell
-$cosmosDbContext = New-CosmosDbContext -Emulator -Database 'MyDatabase'
+$cosmosDbContext = New-CosmosDbContext -Emulator -Database MyDatabase
 ```
 
 You can also provide a custom URI if the emulator is hosted on another
@@ -205,7 +205,7 @@ machine or an alternate port as well as specifying an alternate Key to use:
 
 ```powershell
 $primaryKey = ConvertTo-SecureString -String 'GFJqJesi2Rq910E0G7P4WoZkzowzbj23Sm9DUWFX0l0P8o16mYyuaZBN00Nbtj9F1QQnumzZKSGZwknXGERrlA==' -AsPlainText -Force
-$cosmosDbContext = New-CosmosDbContext -Emulator -Database 'MyDatabase' -Uri 'https://cosmosdbemulator.contoso.com:9081' -Key $primaryKey
+$cosmosDbContext = New-CosmosDbContext -Emulator -Database MyDatabase -Uri https://cosmosdbemulator.contoso.com:9081 -Key $primaryKey
 ```
 
 #### Create a Context from Resource Authorization Tokens
@@ -227,33 +227,33 @@ _Note: You must have first logged PowerShell into Azure using the
 Create a new Cosmos DB account in Azure:
 
 ```powershell
-New-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup' -Location 'WestUS'
+New-CosmosDbAccount -Name MyAzureCosmosDB -ResourceGroupName MyCosmosDbResourceGroup -Location WestUS
 ```
 
 Get the properties of an existing Cosmos DB account in Azure:
 
 ```powershell
-Get-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup'
+Get-CosmosDbAccount -Name MyAzureCosmosDB -ResourceGroupName MyCosmosDbResourceGroup
 ```
 
 Get a Secure String containing the Primary Master Key for an
 account in Azure:
 
 ```powershell
-$key = Get-CosmosDbAccountMasterKey -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup'
+$key = Get-CosmosDbAccountMasterKey -Name MyAzureCosmosDB -ResourceGroupName MyCosmosDbResourceGroup
 ```
 
 Get a Secure String containing the Secondary Readonly Master Key for an
 account in Azure:
 
 ```powershell
-$key = Get-CosmosDbAccountMasterKey -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup' -MasterKeyType 'SecondaryReadonlyMasterKey'
+$key = Get-CosmosDbAccountMasterKey -Name MyAzureCosmosDB -ResourceGroupName MyCosmosDbResourceGroup -MasterKeyType SecondaryReadonlyMasterKey
 ```
 
 Regenerate the Primary Readonly Master Key for an account in Azure:
 
 ```powershell
-New-CosmosDbAccountMasterKey -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup' -MasterKeyType 'PrimaryReadonlyMasterKey'
+New-CosmosDbAccountMasterKey -Name MyAzureCosmosDB -ResourceGroupName MyCosmosDbResourceGroup -MasterKeyType PrimaryReadonlyMasterKey
 ```
 
 Get the connection strings used to connect to an existing Cosmos DB
@@ -263,19 +263,19 @@ account in Azure:
 > Provider. See [this issue](https://github.com/Azure/azure-powershell/issues/3650) for more information.
 
 ```powershell
-Get-CosmosDbAccountConnectionString -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup'
+Get-CosmosDbAccountConnectionString -Name MyAzureCosmosDB -ResourceGroupName MyCosmosDbResourceGroup
 ```
 
 Update an existing Cosmos DB account in Azure:
 
 ```powershell
-Set-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup' -Location 'WestUS' -DefaultConsistencyLevel 'Strong'
+Set-CosmosDbAccount -Name MyAzureCosmosDB -ResourceGroupName MyCosmosDbResourceGroup -Location WestUS -DefaultConsistencyLevel Strong
 ```
 
 Delete an existing Cosmos DB account in Azure:
 
 ```powershell
-Remove-CosmosDbAccount -Name 'MyAzureCosmosDB' -ResourceGroupName 'MyCosmosDbResourceGroup'
+Remove-CosmosDbAccount -Name MyAzureCosmosDB -ResourceGroupName MyCosmosDbResourceGroup
 ```
 
 ### Working with Databases
@@ -284,21 +284,21 @@ Create a new database in the Cosmos DB account with database throughput
 provisioned at 1200 RU/s:
 
 ```powershell
-New-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase' -OfferThroughput 1200
+New-CosmosDbDatabase -Context $cosmosDbContext -Id MyDatabase -OfferThroughput 1200
 ```
 
 Create a new database in the Cosmos DB account with autoscaling throughput
 with a maximum of 40,000 RU/s down to a minimum of 4,000 RU/s:
 
 ```powershell
-New-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase' -AutoscaleThroughput 40000
+New-CosmosDbDatabase -Context $cosmosDbContext -Id MyDatabase -AutoscaleThroughput 40000
 ```
 
 Create a new database in the Cosmos DB account that will have throughput
 provisioned at the collection rather than the database:
 
 ```powershell
-New-CosmosDbDatabase -Context $cosmosDbContext -Id 'DatabaseWithCollectionThroughput'
+New-CosmosDbDatabase -Context $cosmosDbContext -Id DatabaseWithCollectionThroughput
 ```
 
 Get a list of databases in the Cosmos DB account:
@@ -310,7 +310,7 @@ Get-CosmosDbDatabase -Context $cosmosDbContext
 Get the specified database from the Cosmos DB account:
 
 ```powershell
-Get-CosmosDbDatabase -Context $cosmosDbContext -Id 'MyDatabase'
+Get-CosmosDbDatabase -Context $cosmosDbContext -Id MyDatabase
 ```
 
 ### Working with Offers
@@ -330,7 +330,7 @@ Get-CosmosDbOffer -Context $cosmosDbContext -Query 'SELECT * FROM root WHERE (ro
 Update an existing V2 offer to set a different throughput:
 
 ```powershell
-Get-CosmosDbOffer -Context $cosmosDbContext -Id 'lyiu' |
+Get-CosmosDbOffer -Context $cosmosDbContext -Id lyiu |
     Set-CosmosDbOffer -Context $cosmosDbContext -OfferThroughput 1000 -OfferIsRUPerMinuteThroughputEnabled $true
 ```
 
@@ -353,7 +353,7 @@ Create a collection in the database with the partition key 'id' and
 the offer throughput of 50,000 RU/s:
 
 ```powershell
-New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'id' -OfferThroughput 50000
+New-CosmosDbCollection -Context $cosmosDbContext -Id MyNewCollection -PartitionKey id -OfferThroughput 50000
 ```
 
 Create a collection in the database with the partition key 'id' using
@@ -361,13 +361,13 @@ autoscaling with the maximum throughput of 40,000 RU/s and a mimimum of
 4,000 RU/s:
 
 ```powershell
-New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'id' -AutoscaleThroughput 40000
+New-CosmosDbCollection -Context $cosmosDbContext -Id MyNewCollection -PartitionKey id -AutoscaleThroughput 40000
 ```
 
 Get a specified collection from a database:
 
 ```powershell
-Get-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection'
+Get-CosmosDbCollection -Context $cosmosDbContext -Id MyNewCollection
 ```
 
 Get the first 5 collections from a database with a continuation token to
@@ -388,7 +388,7 @@ $collections = Get-CosmosDbCollection -Context $cosmosDbContext -MaxItemCount 5 
 Delete a collection from the database:
 
 ```powershell
-Remove-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection'
+Remove-CosmosDbCollection -Context $cosmosDbContext -Id MyNewCollection
 ```
 
 #### Creating a Collection with a custom Indexing Policy
@@ -412,7 +412,7 @@ $indexNumberRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataTyp
 $indexPointSpatial = New-CosmosDbCollectionIncludedPathIndex -Kind Spatial -DataType Point
 $indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $indexStringRange, $indexNumberRange, $indexPointSpatial
 $indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $indexIncludedPath
-New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'id' -IndexingPolicy $indexingPolicy
+New-CosmosDbCollection -Context $cosmosDbContext -Id MyNewCollection -PartitionKey id -IndexingPolicy $indexingPolicy
 ```
 
 > **Important Index Notes**
@@ -446,17 +446,17 @@ also includes two composite indexes, each consisting of two paths:
 ```powershell
 $compositeIndex = @(
     @(
-        (New-CosmosDbCollectionCompositeIndexElement -Path '/name' -Order 'Ascending'),
-        (New-CosmosDbCollectionCompositeIndexElement -Path '/age' -Order 'Ascending')
+        (New-CosmosDbCollectionCompositeIndexElement -Path /name -Order Ascending ),
+        (New-CosmosDbCollectionCompositeIndexElement -Path /age -Order Ascending )
     ),
     @(
-        (New-CosmosDbCollectionCompositeIndexElement -Path '/name' -Order 'Ascending'),
-        (New-CosmosDbCollectionCompositeIndexElement -Path '/age' -Order 'Descending')
+        (New-CosmosDbCollectionCompositeIndexElement -Path /name -Order Ascending ),
+        (New-CosmosDbCollectionCompositeIndexElement -Path /age -Order Descending )
     )
 )
 $indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*'
 $indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $indexIncludedPath -CompositeIndex $compositeIndex
-New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'id' -IndexingPolicy $indexingPolicy
+New-CosmosDbCollection -Context $cosmosDbContext -Id MyNewCollection -PartitionKey id -IndexingPolicy $indexingPolicy
 ```
 
 #### Update an existing Collection with a new Indexing Policy
@@ -469,7 +469,7 @@ and then applying it using the `Set-CosmosDbCollection` function:
 $indexStringRange = New-CosmosDbCollectionIncludedPathIndex -Kind Range -DataType String
 $indexIncludedPath = New-CosmosDbCollectionIncludedPath -Path '/*' -Index $indexStringRange
 $indexingPolicy = New-CosmosDbCollectionIndexingPolicy -Automatic $true -IndexingMode Consistent -IncludedPath $indexIncludedPath
-Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -IndexingPolicy $indexingPolicy
+Set-CosmosDbCollection -Context $cosmosDbContext -Id MyExistingCollection -IndexingPolicy $indexingPolicy
 ```
 
 After updating a collection with an indexing policy it will take some
@@ -479,8 +479,8 @@ evaluate the value of the
 
 ```powershell
 PS C:\> $ResponseHeader = $null
-PS C:\> $collections = Get-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -ResponseHeader ([ref] $ResponseHeader)
-PS C:\> $indexUpdateProgress = Get-CosmosDbResponseHeaderAttribute -ResponseHeader $ResponseHeader -HeaderName 'x-ms-documentdb-collection-index-transformation-progress'
+PS C:\> $collections = Get-CosmosDbCollection -Context $cosmosDbContext -Id MyExistingCollection -ResponseHeader ([ref] $ResponseHeader)
+PS C:\> $indexUpdateProgress = Get-CosmosDbResponseHeaderAttribute -ResponseHeader $ResponseHeader -HeaderName x-ms-documentdb-collection-index-transformation-progress
 ```
 
 #### Creating a Collection with a custom Indexing Policy using JSON
@@ -514,7 +514,7 @@ $indexingPolicyJson = @'
     ]
 }
 '@
-New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'id' -IndexingPolicyJson $indexingPolicyJson
+New-CosmosDbCollection -Context $cosmosDbContext -Id MyNewCollection -PartitionKey id -IndexingPolicyJson $indexingPolicyJson
 ```
 
 #### Creating a Collection with a custom Unique Key Policy
@@ -530,10 +530,10 @@ with the first unique key combining '/name' and '/address' and the second
 unique key is set to '/email'.
 
 ```powershell
-$uniqueKeyNameAddress = New-CosmosDbCollectionUniqueKey -Path '/name', '/address'
-$uniqueKeyEmail = New-CosmosDbCollectionUniqueKey -Path '/email'
+$uniqueKeyNameAddress = New-CosmosDbCollectionUniqueKey -Path /name, /address
+$uniqueKeyEmail = New-CosmosDbCollectionUniqueKey -Path /email
 $uniqueKeyPolicy = New-CosmosDbCollectionUniqueKeyPolicy -UniqueKey $uniqueKeyNameAddress, $uniqueKeyEmail
-New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'id' -UniqueKeyPolicy $uniqueKeyPolicy
+New-CosmosDbCollection -Context $cosmosDbContext -Id MyNewCollection -PartitionKey id -UniqueKeyPolicy $uniqueKeyPolicy
 ```
 
 For more information on how Cosmos DB indexes documents, see [this page](https://docs.microsoft.com/azure/cosmos-db/unique-keys).
@@ -545,10 +545,10 @@ assembling a Unique Key Policy using the method in the previous section
 and then applying it using the `Set-CosmosDbCollection` function:
 
 ```powershell
-$uniqueKeyNameAddress = New-CosmosDbCollectionUniqueKey -Path '/name', '/address'
-$uniqueKeyEmail = New-CosmosDbCollectionUniqueKey -Path '/email'
+$uniqueKeyNameAddress = New-CosmosDbCollectionUniqueKey -Path /name, /address
+$uniqueKeyEmail = New-CosmosDbCollectionUniqueKey -Path /email
 $uniqueKeyPolicy = New-CosmosDbCollectionUniqueKeyPolicy -UniqueKey $uniqueKeyNameAddress, $uniqueKeyEmail
-Set-CosmosDbCollection -Context $cosmosDbContext -Id 'MyExistingCollection' -IndexingPolicy $indexingPolicy
+Set-CosmosDbCollection -Context $cosmosDbContext -Id MyExistingCollection -IndexingPolicy $indexingPolicy
 ```
 
 #### Creating a Collection without a Partition Key
@@ -564,7 +564,7 @@ Create a collection in the database with the offer throughput of 2500 RU/s
 and without a partition key:
 
 ```powershell
-New-CosmosDbCollection -Context $cosmosDbContext -Id 'NonPartitionedCollection' -OfferThroughput 2500
+New-CosmosDbCollection -Context $cosmosDbContext -Id NonPartitionedCollection -OfferThroughput 2500
 ```
 
 ### Working with Documents
@@ -582,7 +582,7 @@ the partition key:
     `"more`": `"Some other string`"
 }
 "@
-    New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentBody $document -PartitionKey $id
+    New-CosmosDbDocument -Context $cosmosDbContext -CollectionId MyNewCollection -DocumentBody $document -PartitionKey $id
 }
 ```
 
@@ -597,14 +597,14 @@ $document = @"
     `"content`": `"杉本 司`"
 }
 "@
-New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentBody $document -Encoding 'UTF-8' -PartitionKey $id
+New-CosmosDbDocument -Context $cosmosDbContext -CollectionId MyNewCollection -DocumentBody $document -Encoding 'UTF-8' -PartitionKey $id
 ```
 
 Return a document with a specific Id from a collection in the database using
 the document ID as the partition key:
 
 ```powershell
-Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id $documents[0].id -PartitionKey $documents[0].id
+Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId MyNewCollection -Id $documents[0].id -PartitionKey $documents[0].id
 ```
 
 > **Note:** Because this is a partitioned collection, if you don't specify a partition
@@ -614,7 +614,7 @@ Get the first 5 documents from the collection in the database:
 
 ```powershell
 $ResponseHeader = $null
-$documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -MaxItemCount 5 -ResponseHeader ([ref] $ResponseHeader)
+$documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId MyNewCollection -MaxItemCount 5 -ResponseHeader ([ref] $ResponseHeader)
 $continuationToken = Get-CosmosDbContinuationToken -ResponseHeader $ResponseHeader
 ```
 
@@ -627,7 +627,7 @@ the continuation token found in the headers from the previous
 request:
 
 ```powershell
-$documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -MaxItemCount 5 -ContinuationToken $continuationToken
+$documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId MyNewCollection -MaxItemCount 5 -ContinuationToken $continuationToken
 ```
 
 Replace the content of a document in a collection in the database:
@@ -640,14 +640,14 @@ $newDocument = @"
     `"more`": `"Another new string`"
 }
 "@
-Set-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id $documents[0].id -DocumentBody $newDocument -PartitionKey $documents[0].id
+Set-CosmosDbDocument -Context $cosmosDbContext -CollectionId MyNewCollection -Id $documents[0].id -DocumentBody $newDocument -PartitionKey $documents[0].id
 ```
 
 Querying a collection in a database:
 
 ```powershell
 $query = "SELECT * FROM customers c WHERE (c.id = 'user@contoso.com')"
-Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Query $query
+Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId MyNewCollection -Query $query
 ```
 
 Querying a collection in a database using a parameterized query:
@@ -657,13 +657,13 @@ $query = "SELECT * FROM customers c WHERE (c.id = @id)"
 $queryParameters = @(
     @{ name = "@id"; value="user@contoso.com"; }
 )
-Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Query $query -QueryParameters $queryParameters
+Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId MyNewCollection -Query $query -QueryParameters $queryParameters
 ```
 
 Delete a document from a collection in the database:
 
 ```powershell
-Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id $documents[0].id -PartitionKey $documents[0].id
+Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId MyNewCollection -Id $documents[0].id -PartitionKey $documents[0].id
 ```
 
 > **Note:** Because this is a partitioned collection, if you don't specify a partition
@@ -716,19 +716,19 @@ $document = @"
     `"locale`": `"English (US)`"
 }
 "@
-New-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'NonPartitionedCollection' -DocumentBody $document
+New-CosmosDbDocument -Context $cosmosDbContext -CollectionId NonPartitionedCollection -DocumentBody $document
 ```
 
 Get a document from a partitioned collection with a specific Id:
 
 ```powershell
-Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'NonPartitionedCollection' -Id 'en-us'
+Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId NonPartitionedCollection -Id 'en-us'
 ```
 
 Delete a document from a partitioned collection in the database:
 
 ```powershell
-Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'NonPartitionedCollection' -Id 'en-us'
+Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId NonPartitionedCollection -Id 'en-us'
 ```
 
 ### Working with Attachments
@@ -736,31 +736,31 @@ Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId 'NonPartitionedC
 Create an attachment on a document in a collection:
 
 ```powershell
-New-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId $documents[0].id -PartitionKey $documents[0].id -Id 'image_1' -ContentType 'image/jpg' -Media 'www.bing.com'
+New-CosmosDbAttachment -Context $cosmosDbContext -CollectionId MyNewCollection -DocumentId $documents[0].id -PartitionKey $documents[0].id -Id image_1 -ContentType 'image/jpg' -Media www.bing.com
 ```
 
 Get _all_ attachments for a document in a collection:
 
 ```powershell
-Get-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId $documents[0].id -PartitionKey $documents[0].id
+Get-CosmosDbAttachment -Context $cosmosDbContext -CollectionId MyNewCollection -DocumentId $documents[0].id -PartitionKey $documents[0].id
 ```
 
 Get an attachment by Id for a document in a collection:
 
 ```powershell
-Get-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId $documents[0].id -PartitionKey $documents[0].id -Id 'image_1'
+Get-CosmosDbAttachment -Context $cosmosDbContext -CollectionId MyNewCollection -DocumentId $documents[0].id -PartitionKey $documents[0].id -Id image_1
 ```
 
 Rename an attachment for a document in a collection:
 
 ```powershell
-Set-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId $documents[0].id -PartitionKey $documents[0].id -Id 'image_1' -NewId 'image_2'
+Set-CosmosDbAttachment -Context $cosmosDbContext -CollectionId MyNewCollection -DocumentId $documents[0].id -PartitionKey $documents[0].id -Id image_1 -NewId image_2
 ```
 
 Delete an attachment from a document in collection:
 
 ```powershell
-Remove-CosmosDbAttachment -Context $cosmosDbContext -CollectionId 'MyNewCollection' -DocumentId $documents[0].id -PartitionKey $documents[0].id -Id 'image_2'
+Remove-CosmosDbAttachment -Context $cosmosDbContext -CollectionId MyNewCollection -DocumentId $documents[0].id -PartitionKey $documents[0].id -Id image_2
 ```
 
 ### Working with Users
@@ -774,13 +774,13 @@ Get-CosmosDbUser -Context $cosmosDbContext
 Create a user in the database:
 
 ```powershell
-New-CosmosDbUser -Context $cosmosDbContext -Id 'dscottraynsford@contoso.com'
+New-CosmosDbUser -Context $cosmosDbContext -Id dscottraynsford@contoso.com
 ```
 
 Delete a user from the database:
 
 ```powershell
-Remove-CosmosDbUser -Context $cosmosDbContext -Id 'dscottraynsford@contoso.com'
+Remove-CosmosDbUser -Context $cosmosDbContext -Id dscottraynsford@contoso.com
 ```
 
 ### Working with Permissions
@@ -788,20 +788,20 @@ Remove-CosmosDbUser -Context $cosmosDbContext -Id 'dscottraynsford@contoso.com'
 Get a list of permissions for a user in the database:
 
 ```powershell
-Get-CosmosDbPermission -Context $cosmosDbContext -UserId 'dscottraynsford@contoso.com'
+Get-CosmosDbPermission -Context $cosmosDbContext -UserId dscottraynsford@contoso.com
 ```
 
 Create a permission for a user in the database with read access to a collection:
 
 ```powershell
-$collectionId = Get-CosmosDbCollectionResourcePath -Database 'MyDatabase' -Id 'MyNewCollection'
-New-CosmosDbPermission -Context $cosmosDbContext -UserId 'dscottraynsford@contoso.com' -Id 'r_mynewcollection' -Resource $collectionId -PermissionMode Read
+$collectionId = Get-CosmosDbCollectionResourcePath -Database MyDatabase -Id MyNewCollection
+New-CosmosDbPermission -Context $cosmosDbContext -UserId dscottraynsford@contoso.com -Id r_mynewcollection -Resource $collectionId -PermissionMode Read
 ```
 
 Remove a permission for a user from the database:
 
 ```powershell
-Remove-CosmosDbPermission -Context $cosmosDbContext -UserId 'dscottraynsford@contoso.com' -Id 'r_mynewcollection'
+Remove-CosmosDbPermission -Context $cosmosDbContext -UserId dscottraynsford@contoso.com -Id r_mynewcollection
 ```
 
 ### Using Resource Authorization Tokens
@@ -844,8 +844,8 @@ the validity of a token can be validated and reported on without making
 a request to the Cosmos DB server.
 
 ```powershell
-$collectionId = Get-CosmosDbCollectionResourcePath -Database 'MyDatabase' -Id 'MyNewCollection'
-$permission = Get-CosmosDbPermission -Context $cosmosDbContext -UserId 'dscottraynsford@contoso.com' -Id 'r_mynewcollection' -Resource $collectionId -TokenExpiry 7200
+$collectionId = Get-CosmosDbCollectionResourcePath -Database MyDatabase -Id MyNewCollection
+$permission = Get-CosmosDbPermission -Context $cosmosDbContext -UserId dscottraynsford@contoso.com -Id r_mynewcollection -Resource $collectionId -TokenExpiry 7200
 # Future features planned to make creation of a resource context token from a permission easier
 $contextToken = New-CosmosDbContextToken `
     -Resource $collectionId `
@@ -854,11 +854,11 @@ $contextToken = New-CosmosDbContextToken `
     -Token (ConvertTo-SecureString -String $permission[0].Token -AsPlainText -Force)
 $resourceContext = New-CosmosDbContext `
     -Account $cosmosDBContext.Account
-    -Database 'MyDatabase' `
+    -Database MyDatabase `
     -Token $contextToken
 Get-CosmosDbCollection `
     -Context $resourceContext `
-    -Id 'MyNewCollection' `
+    -Id MyNewCollection `
 ```
 
 ### Working with Triggers
@@ -866,7 +866,7 @@ Get-CosmosDbCollection `
 Get a list of triggers for a collection in the database:
 
 ```powershell
-Get-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection'
+Get-CosmosDbTrigger -Context $cosmosDbContext -CollectionId MyNewCollection
 ```
 
 Create a trigger for a collection in the database that executes after all operations:
@@ -903,7 +903,7 @@ function updateMetadata() {
     }
 }
 '@
-New-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'MyTrigger' -TriggerBody $body -TriggerOperation All -TriggerType Post
+New-CosmosDbTrigger -Context $cosmosDbContext -CollectionId MyNewCollection -Id MyTrigger -TriggerBody $body -TriggerOperation All -TriggerType Post
 ```
 
 Update an existing trigger for a collection in the database to execute before
@@ -941,13 +941,13 @@ function updateMetadata() {
     }
 }
 '@
-Set-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'MyTrigger' -Body $body -TriggerOperation All -TriggerType Pre
+Set-CosmosDbTrigger -Context $cosmosDbContext -CollectionId MyNewCollection -Id MyTrigger -Body $body -TriggerOperation All -TriggerType Pre
 ```
 
 Remove a trigger for a collection from the database:
 
 ```powershell
-Remove-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'MyTrigger'
+Remove-CosmosDbTrigger -Context $cosmosDbContext -CollectionId MyNewCollection -Id MyTrigger
 ```
 
 ### Working with Stored Procedures
@@ -955,7 +955,7 @@ Remove-CosmosDbTrigger -Context $cosmosDbContext -CollectionId 'MyNewCollection'
 Get a list of stored procedures for a collection in the database:
 
 ```powershell
-Get-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection'
+Get-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId MyNewCollection
 ```
 
 Create a stored procedure for a collection in the database:
@@ -969,7 +969,7 @@ function () {
     response.setBody("Hello, World");
 }
 '@
-New-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureBody $body
+New-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId MyNewCollection -Id spHelloWorld -StoredProcedureBody $body
 ```
 
 Update an existing stored procedure for a collection in the database:
@@ -983,19 +983,19 @@ function (personToGreet) {
     response.setBody("Hello, " + personToGreet);
 }
 '@
-Set-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureBody $body
+Set-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId MyNewCollection -Id spHelloWorld -StoredProcedureBody $body
 ```
 
 Execute a stored procedure for a collection from the database:
 
 ```powershell
-Invoke-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld' -StoredProcedureParameters @('PowerShell')
+Invoke-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId MyNewCollection -Id spHelloWorld -StoredProcedureParameters @('PowerShell')
 ```
 
 Remove a stored procedure for a collection from the database:
 
 ```powershell
-Remove-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'spHelloWorld'
+Remove-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId MyNewCollection -Id spHelloWorld
 ```
 
 ### Working with User Defined Functions
@@ -1003,7 +1003,7 @@ Remove-CosmosDbStoredProcedure -Context $cosmosDbContext -CollectionId 'MyNewCol
 Get a list of user defined functions for a collection in the database:
 
 ```powershell
-Get-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNewCollection'
+Get-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId MyNewCollection
 ```
 
 Create a user defined function for a collection in the database:
@@ -1020,7 +1020,7 @@ function tax(income) {
         return income * 0.4;
 }
 '@
-New-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'udfTax' -UserDefinedFunctionBody $body
+New-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId MyNewCollection -Id udfTax -UserDefinedFunctionBody $body
 ```
 
 Update an existing user defined function for a collection in the database:
@@ -1037,13 +1037,13 @@ function tax(income) {
         return income * 0.4;
 }
 '@
-Set-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'udfTax' -Body $body
+Set-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId MyNewCollection -Id udfTax -Body $body
 ```
 
 Remove a user defined function for a collection from the database:
 
 ```powershell
-Remove-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId 'MyNewCollection' -Id 'udfTax'
+Remove-CosmosDbUserDefinedFunction -Context $cosmosDbContext -CollectionId MyNewCollection -Id udfTax
 ```
 
 ### How to Handle Exceeding Provisioned Throughput
@@ -1065,7 +1065,7 @@ To configure a Back-off Policy, use the `New-CosmosDbBackoffPolicy` function:
 
 ```powershell
 $backoffPolicy = New-CosmosDbBackoffPolicy -MaxRetries 5
-$cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -Database 'MyDatabase' -Key $primaryKey -BackoffPolicy $backoffPolicy
+$cosmosDbContext = New-CosmosDbContext -Account MyAzureCosmosDB -Database MyDatabase -Key $primaryKey -BackoffPolicy $backoffPolicy
 ```
 
 This will cause any functions that use the Context to automatically retry up to
