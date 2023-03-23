@@ -575,13 +575,11 @@ the partition key:
 ```powershell
 0..9 | Foreach-Object {
     $id = $([Guid]::NewGuid().ToString())
-    $document = @"
-{
-    `"id`": `"$id`",
-    `"content`": `"Some string`",
-    `"more`": `"Some other string`"
-}
-"@
+    $document = @{
+        id      = $id
+        content = "Some string"
+        more    = "Some other string"
+    } | ConvertTo-Json
     New-CosmosDbDocument -Context $cosmosDbContext -CollectionId MyNewCollection -DocumentBody $document -PartitionKey $id
 }
 ```
@@ -591,12 +589,10 @@ database using the `id` as the partition key:
 
 ```powershell
 $id = $([Guid]::NewGuid().ToString())
-$document = @"
-{
-    `"id`": `"$id`",
-    `"content`": `"杉本 司`"
-}
-"@
+$document = @{
+    id      = $id
+    content = "杉本 司"
+} | ConvertTo-Json
 New-CosmosDbDocument -Context $cosmosDbContext -CollectionId MyNewCollection -DocumentBody $document -Encoding 'UTF-8' -PartitionKey $id
 ```
 
@@ -633,13 +629,11 @@ $documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId MyNewC
 Replace the content of a document in a collection in the database:
 
 ```powershell
-$newDocument = @"
-{
-    `"id`": `"$($documents[0].id)`",
-    `"content`": `"New string`",
-    `"more`": `"Another new string`"
-}
-"@
+$newDocument = @{
+    id      = $documents[0].id
+    content = "New string"
+    more    = "Another new string"
+} | ConvertTo-Json
 Set-CosmosDbDocument -Context $cosmosDbContext -CollectionId MyNewCollection -Id $documents[0].id -DocumentBody $newDocument -PartitionKey $documents[0].id
 ```
 
@@ -655,7 +649,10 @@ Querying a collection in a database using a parameterized query:
 ```powershell
 $query = "SELECT * FROM customers c WHERE (c.id = @id)"
 $queryParameters = @(
-    @{ name = "@id"; value="user@contoso.com"; }
+    @{
+        name  = "@id"
+        value = "user@contoso.com"
+    }
 )
 Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId MyNewCollection -Query $query -QueryParameters $queryParameters
 ```
@@ -710,12 +707,10 @@ functionality is included for backwards compatibility only.
 `PartitionKey` parameter to be specified for the document:
 
 ```powershell
-$document = @"
-{
-    `"id`": `"en-us`",
-    `"locale`": `"English (US)`"
-}
-"@
+$document = @{
+    id      = "en-us"
+    locale  = "English (US)"
+} | ConvertTo-Json
 New-CosmosDbDocument -Context $cosmosDbContext -CollectionId NonPartitionedCollection -DocumentBody $document
 ```
 
@@ -847,18 +842,20 @@ a request to the Cosmos DB server.
 $collectionId = Get-CosmosDbCollectionResourcePath -Database MyDatabase -Id MyNewCollection
 $permission = Get-CosmosDbPermission -Context $cosmosDbContext -UserId dscottraynsford@contoso.com -Id r_mynewcollection -Resource $collectionId -TokenExpiry 7200
 # Future features planned to make creation of a resource context token from a permission easier
-$contextToken = New-CosmosDbContextToken `
-    -Resource $collectionId `
-    -TimeStamp $permission[0].Timestamp `
-    -TokenExpiry 7200 `
-    -Token (ConvertTo-SecureString -String $permission[0].Token -AsPlainText -Force)
-$resourceContext = New-CosmosDbContext `
-    -Account $cosmosDBContext.Account
-    -Database MyDatabase `
-    -Token $contextToken
-Get-CosmosDbCollection `
-    -Context $resourceContext `
-    -Id MyNewCollection `
+$tokenParams = @{
+    Resource    = $collectionId
+    TimeStamp   = $permission[0].Timestamp
+    TokenExpiry = 7200
+    Token       = (ConvertTo-SecureString -String $permission[0].Token -AsPlainText -Force)
+}
+$contextToken = New-CosmosDbContextToken @tokenParams
+$resourceParams = @{
+    Account     = $cosmosDBContext.Account
+    Database    = MyDatabase
+    Token       = $contextToken
+}
+$resourceContext = New-CosmosDbContext @resourceParams
+Get-CosmosDbCollection -Context $resourceContext -Id MyNewCollection
 ```
 
 ### Working with Triggers
