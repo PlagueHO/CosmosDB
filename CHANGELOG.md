@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Removed unnecessary quotes from README (works without them in PowerShell and is easier to read)
+- Modified README to use splats, which is part of the recommended style guide
+
 ## [4.7.0] - 2023-01-29
 
 - Added `-ConnectionString` parameter to `New-CosmosDbContext` - Fixes [Issue #426](https://github.com/PlagueHO/CosmosDB/issues/426).
