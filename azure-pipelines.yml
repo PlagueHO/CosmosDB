@@ -297,10 +297,10 @@ stages:
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Integration (Powershell 7 on Ubuntu 20.04)'
 
-      - job: Unit_Test_PS7_Ubuntu1804
-        displayName: 'Unit Test (Powershell 7 on Ubuntu 18.04)'
+      - job: Unit_Test_PS7_Ubuntu2204
+        displayName: 'Unit Test (Powershell 7 on Ubuntu 22.04)'
         pool:
-          vmImage: ubuntu-18.04
+          vmImage: ubuntu-22.04
 
         steps:
           - powershell: |
@@ -330,7 +330,7 @@ stages:
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
-              testRunTitle: 'Unit (Powershell 7 on Ubuntu 18.04)'
+              testRunTitle: 'Unit (Powershell 7 on Ubuntu 22.04)'
 
           - task: PublishCodeCoverageResults@1
             displayName: 'Publish Code Coverage'
@@ -340,11 +340,11 @@ stages:
               summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
               pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
-      - job: Integration_Test_PS7_Ubuntu1804
-        dependsOn: Unit_Test_PS7_Ubuntu1804
-        displayName: 'Integration Test (Powershell 7 on Ubuntu 18.04)'
+      - job: Integration_Test_PS7_Ubuntu2204
+        dependsOn: Unit_Test_PS7_Ubuntu2204
+        displayName: 'Integration Test (Powershell 7 on Ubuntu 22.04)'
         pool:
-          vmImage: ubuntu-18.04
+          vmImage: ubuntu-22.04
         timeoutInMinutes: 0
 
         steps:
@@ -374,7 +374,7 @@ stages:
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
-              testRunTitle: 'Integration (Powershell 7 on Ubuntu 18.04)'
+              testRunTitle: 'Integration (Powershell 7 on Ubuntu 22.04)'
 
       - job: Unit_Test_PSCore6_MacOS1015
         displayName: 'Unit Test (Powershell Core 6 on MacOS 10.15)'

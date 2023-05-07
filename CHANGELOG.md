@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed unnecessary quotes from README (works without them in PowerShell and is easier to read)
 - Modified README to use splats, which is part of the recommended style guide
+- Removed Ubuntu-18.04 testing from build pipeline because it is no longer supported by Microsoft
+  managed Azure DevOps images - Fixes [Issue #473](https://github.com/PlagueHO/CosmosDB/issues/473).
+- Added Ubuntu-22.04 testing to build pipeline - Fixes [Issue #474](https://github.com/PlagueHO/CosmosDB/issues/474).
 
 ## [4.7.0] - 2023-01-29
 
