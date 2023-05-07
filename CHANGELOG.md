@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed Ubuntu-18.04 testing from build pipeline because it is no longer supported by Microsoft
   managed Azure DevOps images - Fixes [Issue #473](https://github.com/PlagueHO/CosmosDB/issues/473).
 - Added Ubuntu-22.04 testing to build pipeline - Fixes [Issue #474](https://github.com/PlagueHO/CosmosDB/issues/474).
+- Removed MacOS-10.15 testing from build pipeline because it is no longer supported by Microsoft
+  managed Azure DevOps images - Fixes [Issue #476](https://github.com/PlagueHO/CosmosDB/issues/476).
+- Added macOS-12 testing to build pipeline - Fixes [Issue #477](https://github.com/PlagueHO/CosmosDB/issues/477).
 
 ## [4.7.0] - 2023-01-29
 
