@@ -89,7 +89,15 @@ function Get-CosmosDbDocumentJson
         [Alias("ResultHeaders")]
         [Parameter()]
         [ref]
-        $ResponseHeader
+        $ResponseHeader,
+
+        [Parameter()]
+        [System.Int32]
+        $MaximumRetryCount,
+
+        [Parameter()]
+        [System.Int32]
+        $RetryIntervalSec = 5
     )
 
     $null = $PSBoundParameters.Remove('Id')
@@ -196,12 +204,16 @@ function Get-CosmosDbDocumentJson
             Because the headers of this request will contain important information
             then we need to use a plain web request.
         #>
-        $result = Invoke-CosmosDbRequest @PSBoundParameters `
-            -Method $method `
-            -ResourceType 'docs' `
-            -ResourcePath $resourcePath `
-            -Headers $headers `
-            -Body $body
+        $invokeCosmosDbRequest_parameters = @{
+            Method            = $method
+            ResourceType      = 'docs'
+            ResourcePath      = $resourcePath
+            Headers           = $headers
+            Body              = $body
+            MaximumRetryCount = $MaximumRetryCount
+            RetryIntervalSec  = $RetryIntervalSec
+        }
+        $result = Invoke-CosmosDbRequest @PSBoundParameters @invokeCosmosDbRequest_parameters
 
         if ($ResponseHeaderPassed)
         {
@@ -220,11 +232,15 @@ function Get-CosmosDbDocumentJson
             $null = $PSBoundParameters.Remove('PartitionKey')
         }
 
-        $result = Invoke-CosmosDbRequest @PSBoundParameters `
-            -Method $method `
-            -Headers $headers `
-            -ResourceType 'docs' `
-            -ResourcePath ('{0}/{1}' -f $resourcePath, $Id)
+        $invokeCosmosDbRequest_parameters = @{
+            Method            = $method
+            Headers           = $headers
+            ResourceType      = 'docs'
+            ResourcePath      = ('{0}/{1}' -f $resourcePath, $Id)
+            MaximumRetryCount = $MaximumRetryCount
+            RetryIntervalSec  = $RetryIntervalSec
+        }
+        $result = Invoke-CosmosDbRequest @PSBoundParameters @invokeCosmosDbRequest_parameters
     }
 
     $documents = Repair-CosmosDbDocumentEncoding -Content $result.Content
