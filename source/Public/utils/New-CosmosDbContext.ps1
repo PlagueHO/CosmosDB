@@ -13,6 +13,7 @@ function New-CosmosDbContext
         [Parameter(Mandatory = $true, ParameterSetName = 'CustomAccount')]
         [Parameter(Mandatory = $true, ParameterSetName = 'CustomAzureAccount')]
         [Parameter(Mandatory = $true, ParameterSetName = 'EntraIdToken')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'EntraIdTokenAutogen')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Token')]
         [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ })]
         [System.String]
@@ -78,6 +79,11 @@ function New-CosmosDbContext
         [System.Security.SecureString]
         $EntraIdToken,
 
+        [Parameter(Mandatory = $true, ParameterSetName = 'EntraIdTokenAutogen')]
+        [ValidateNotNullOrEmpty()]
+        [Switch]
+        $AutoGenerateEntraIdToken,
+
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [CosmosDB.BackoffPolicy]
@@ -87,6 +93,7 @@ function New-CosmosDbContext
         [Parameter(ParameterSetName = 'AzureAccount')]
         [Parameter(ParameterSetName = 'ConnectionString')]
         [Parameter(ParameterSetName = 'EntraIdToken')]
+        [Parameter(ParameterSetName = 'EntraIdTokenAutogen')]
         [Parameter(ParameterSetName = 'Token')]
         [CosmosDB.Environment]
         $Environment = [CosmosDB.Environment]::AzureCloud,
@@ -199,6 +206,12 @@ function New-CosmosDbContext
         'EntraIdToken'
         {
             $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
+        }
+
+        'EntraIdTokenAutogen'
+        {
+            $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
+            $EntraIdToken = Get-CosmosDbEntraIdToken -Endpoint $BaseUri
         }
 
         'Token'

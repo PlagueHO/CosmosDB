@@ -455,14 +455,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When creating a new context from Azure using an Entra ID Token for the Service Principal' {
-        It 'Should not throw an exception' {
-            $script:testEntraIdContext = New-CosmosDbContext `
-                -Account $script:testAccountName `
-                -EntraIdToken $script:entraIdTokenForSPSecureString
-        }
-    }
-
     Context 'When creating a new database' {
         It 'Should not throw an exception' {
             $script:result = New-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase -Verbose
@@ -917,30 +909,79 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When adding a document to a collection using an Entra ID Token' {
-        It 'Should not throw an exception' {
-            $script:result = New-CosmosDbDocument `
-                -Context $script:testEntraIdContext `
-                -CollectionId $script:testCollection `
-                -DocumentBody $script:testDocumentBody `
-                -Verbose
+    Context 'When testing RBAC access using an Entra ID token' {
+        # RBAC access testing using a Entra ID token generated via the test harness
+        Context 'When creating a new context from Azure using an Entra ID Token for the Service Principal' {
+            It 'Should not throw an exception' {
+                $script:testEntraIdContext = New-CosmosDbContext `
+                    -Account $script:testAccountName `
+                    -Database $script:testDatabase `
+                    -EntraIdToken $script:entraIdTokenForSPSecureString
+            }
         }
 
-        It 'Should return expected object' {
-            Test-GenericResult -GenericResult $script:result
-            $script:result.Id | Should -Be $script:testDocumentId
-            $script:result.Content | Should -Be 'Some string'
-            $script:result.More | Should -Be 'Some other string'
-        }
-    }
+        Context 'When adding a document to a collection using an Entra ID Token' {
+            It 'Should not throw an exception' {
+                $script:result = New-CosmosDbDocument `
+                    -Context $script:testEntraIdContext `
+                    -CollectionId $script:testCollection `
+                    -DocumentBody $script:testDocumentBody `
+                    -Verbose
+            }
 
-    Context 'When removing a document from a collection using an Entra ID Token' {
-        It 'Should not throw an exception' {
-            $script:result = Remove-CosmosDbDocument `
-                -Context $script:testEntraIdContext `
-                -CollectionId $script:testCollection `
-                -Id $script:testDocumentId `
-                -Verbose
+            It 'Should return expected object' {
+                Test-GenericResult -GenericResult $script:result
+                $script:result.Id | Should -Be $script:testDocumentId
+                $script:result.Content | Should -Be 'Some string'
+                $script:result.More | Should -Be 'Some other string'
+            }
+        }
+
+        Context 'When removing a document from a collection using an Entra ID Token' {
+            It 'Should not throw an exception' {
+                $script:result = Remove-CosmosDbDocument `
+                    -Context $script:testEntraIdContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testDocumentId `
+                    -Verbose
+            }
+        }
+
+        # RBAC access testing using a Entra ID token generated via the test harness
+        Context 'When creating a new context from Azure using an automatically generated Entra ID Token for the Service Principal' {
+            It 'Should not throw an exception' {
+                $script:testEntraIdContext = New-CosmosDbContext `
+                    -Account $script:testAccountName `
+                    -Database $script:testDatabase `
+                    -AutoGenerateEntraIdToken
+            }
+        }
+
+        Context 'When adding a document to a collection using an Entra ID Token' {
+            It 'Should not throw an exception' {
+                $script:result = New-CosmosDbDocument `
+                    -Context $script:testEntraIdContext `
+                    -CollectionId $script:testCollection `
+                    -DocumentBody $script:testDocumentBody `
+                    -Verbose
+            }
+
+            It 'Should return expected object' {
+                Test-GenericResult -GenericResult $script:result
+                $script:result.Id | Should -Be $script:testDocumentId
+                $script:result.Content | Should -Be 'Some string'
+                $script:result.More | Should -Be 'Some other string'
+            }
+        }
+
+        Context 'When removing a document from a collection using an Entra ID Token' {
+            It 'Should not throw an exception' {
+                $script:result = Remove-CosmosDbDocument `
+                    -Context $script:testEntraIdContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testDocumentId `
+                    -Verbose
+            }
         }
     }
 

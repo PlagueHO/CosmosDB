@@ -850,8 +850,49 @@ console.log("done");
             }
         }
 
+        Context 'When called with EntraIdTokenAutoGen parameters' {
+            $script:result = $null
+
+            Mock Get-AzAccessToken -MockWith {
+                return @{
+                    Token = $script:testEntraIdToken
+                }
+            }
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Account  = $script:testAccount
+                    Database = $script:testDatabase
+                    AutoGenerateEntraIdToken = $true
+                    Verbose  = $true
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be $script:testAccount
+                $script:result.Database | Should -Be $script:testDatabase
+                $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
+                $script:result.Token | Should -BeNullOrEmpty
+                $script:result.EntraIdToken | Convert-CosmosDbSecureStringToString | Should -Be $script:testEntraIdToken
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled -CommandName Get-AzAccessToken -Exactly -Times 1 `
+                    -ParameterFilter { $ResourceUrl -eq ('https://{0}.documents.azure.com/' -f $script:testAccount) }
+            }
+        }
+
         Context 'When called with Connection String parameter' {
             $script:result = $null
+
+            Mock Get-AzAccessToken -MockWith {
+                return @{
+                    Token = $script:testEntraIdToken
+                }
+            }
 
             It 'Should not throw exception' {
                 $newCosmosDbContextParameters = @{
@@ -1914,6 +1955,82 @@ console.log("done");
 
             It 'Should return null' {
                 $script:result | Should -BeNullOrEmpty
+            }
+        }
+    }
+
+    Describe 'Get-CosmosDbEntraIdToken' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Get-CosmosDbEntraIdToken -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called without endpoint specified' {
+            $script:result = $null
+
+            Mock Get-AzAccessToken -MockWith {
+                return @{
+                    Token = $script:testEntraIdToken
+                }
+            }
+
+            It 'Should not throw exception' {
+                { $script:result = Get-CosmosDbEntraIdToken } | Should -Not -Throw
+            }
+
+            It 'Should return secure string containing token' {
+                $script:result | Convert-CosmosDbSecureStringToString | Should -Be $script:testEntraIdToken
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled -CommandName Get-AzAccessToken -Exactly -Times 1 `
+                    -ParameterFilter { $ResourceUrl -eq 'https://cosmos.azure.com' }
+            }
+        }
+
+        Context 'When called with endpoint specified' {
+            $script:result = $null
+
+            Mock Get-AzAccessToken -MockWith {
+                return @{
+                    Token = $script:testEntraIdToken
+                }
+            }
+
+            It 'Should not throw exception' {
+                $getCosmosDbEntraIdTokenParameters = @{
+                    Endpoint = 'https://cdbtest1pzqjjk3jfe.documents.azure.com'
+                }
+                { $script:result = Get-CosmosDbEntraIdToken @getCosmosDbEntraIdTokenParameters } | Should -Not -Throw
+            }
+
+            It 'Should return secure string containing token' {
+                $script:result | Convert-CosmosDbSecureStringToString | Should -Be $script:testEntraIdToken
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled -CommandName Get-AzAccessToken -Exactly -Times 1 `
+                    -ParameterFilter { $ResourceUrl -eq 'https://cdbtest1pzqjjk3jfe.documents.azure.com' }
+            }
+        }
+
+        Context 'When called, but an Azure Context is not connected' {
+            $script:result = $null
+
+            Mock Get-AzAccessToken -MockWith {
+                return $null
+            }
+
+            It 'Should throw exception' {
+                { $script:result = Get-CosmosDbEntraIdToken } | Should -Not -Throw
+            }
+
+            It 'Should return null' {
+                $script:result | Should -BeNullOrEmpty
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled -CommandName Get-AzAccessToken -Exactly -Times 1 `
+                    -ParameterFilter { $ResourceUrl -eq 'https://cosmos.azure.com' }
             }
         }
     }

@@ -21,7 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update `requirements.psd1` to install modules `Az.Accounts` 2.19.0 and `Az.Resources` 6.16.2.
 - Renamed `New-CosmosDbAuthorizationToken` to `New-CosmosDbAuthorizationHeader` to better indicate
   actual function return type.
-- Added support for setting an Entra Id OAuth2 Token in the `New-CosmosDbContext` - Fixes [Issue #479](https://github.com/PlagueHO/CosmosDB/issues/479).
 - Refactored `Invoke-CosmosDbRequest` to support getting the EntraIdToken property from the context object
   and using it for authentication if it is provided. If the Key property is provided, the EntraIdToken property
   will take precendence and the key will be ignored.
@@ -40,6 +39,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added new utillity function `Get-CosmosDbAuthorizationHeaderFromContextEntraId` to generate the authorization
   header when an Entra ID Token is provided in the context. This function is used by `Invoke-CosmosDbRequest` to
   generate the authorization header when an Entra ID Token is provided.
+
+### Added
+
+- Added support for setting an Entra Id OAuth2 Token in the `New-CosmosDbContext` - Fixes [Issue #479](https://github.com/PlagueHO/CosmosDB/issues/479).
+- Added new `Get-CosmosDbEntraIdToken` function that uses `Get-AzAccessToken` to get an Entra Id Token
+  for use in Cosmos DB requests. This is used by `New-CosmosDbContext` to set the Entra Id Token in the
+  context object - Fixes [Issue #479](https://github.com/PlagueHO/CosmosDB/issues/479).
 
 ## [4.7.0] - 2023-01-29
 

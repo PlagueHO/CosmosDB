@@ -23,6 +23,8 @@
 - [Getting Started](#getting-started)
   - [Working with Contexts](#working-with-contexts)
     - [Create a Context using an Entra ID Authorization Token](create-a-context-using-an-entra-id-authorization-token)
+      - [Configuring Role-Based Access Control (RBAC) with Entra ID](#configuring-role-based-access-control-rbac-with-entra-id)
+      - [Database Operations allowed by Role-Based Access Control](#database-operations-allowed-by-role-based-access-control)
     - [Create a Context specifying the Key Manually](#create-a-context-specifying-the-key-manually)
     - [Use CosmosDB Module to Retrieve Key from Azure Management Portal](#use-cosmosdb-module-to-retrieve-key-from-azure-management-portal)
     - [Create a Context from Resource Authorization Tokens](#create-a-context-from-resource-authorization-tokens)
@@ -148,7 +150,7 @@ for the identity that you have given appropriate permissions to the `account`,
 # Get an OAuth2 resource token from Entra ID for the Cosmos DB account.
 # This will use the currently logged in user to authenticate to Entra ID to
 # get the token. There are many other ways of doing this.
-$entraIdOAuthToken = (Get-AzAccessToken -ResourceUrl 'https://MyAzureCosmosDB.documents.azure.com').Token
+$entraIdOAuthToken = Get-CosmosDbEntraIdToken -Endpoint 'https://MyAzureCosmosDB.documents.azure.com'
 
 $newCosmosDbContextParams  = @{
     Account      = 'MyAzureCosmosDB'
@@ -158,8 +160,26 @@ $accountContext = New-CosmosDbContext @newCosmosDbContextParams
 Get-CosmosDbCollection -Context $accountContext -Id MyNewCollection
 ```
 
+An alternate method is to allow the New-CosmosDbContext cmdlet to retrieve the
+Entra ID token for you. This will require you to have already logged into Azure
+and will use the base URI detected for the account as the resource URI for the
+token request.
+
+```powershell
+$newCosmosDbContextParams  = @{
+    Account      = 'MyAzureCosmosDB'
+    AutoGenerateEntraIdToken = $true
+}
+$accountContext = New-CosmosDbContext @newCosmosDbContextParams
+Get-CosmosDbCollection -Context $accountContext -Id MyNewCollection
+```
+
 > Important: Using an Entra ID Authorization Token is only supported by setting it
 > in a CosmosDB.Context object and passing that to the commands you want to execute.
+> Not all commands support this method of authentication. If you need to use a command
+> that doesn't support this method of authentication, you will need to use one of the
+> other methods of authentication. See the [Database Operations allowed by Role-Based Access Control](#database-operations-allowed-by-role-based-access-control)
+> section for more information.
 
 ##### Configuring Role-Based Access Control (RBAC) with Entra ID
 
@@ -178,6 +198,21 @@ including:
 For more information on how to configure Role-Based Access Control with Entra ID, see the
 [Configure role-based access control with Microsoft Entra ID for your Azure Cosmos DB account](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac)
 page.
+
+##### Database Operations allowed by Role-Based Access Control
+
+Only a subset of all the operations that can be performed on a Cosmos DB account are
+allowed by Role-Based Access Control. The following operations are allowed:
+This permission model covers only database operations that involve reading and writing data. It does not cover any kind of management operations on management resources, including:
+
+- Create/Replace/Delete Database
+- Create/Replace/Delete Container
+- Read/Replace Container Throughput
+- Create/Replace/Delete/Read Stored Procedures
+- Create/Replace/Delete/Read Triggers
+- Create/Replace/Delete/Read User Defined Functions
+
+For more information on this, please see the [Role-based access control (RBAC) with Azure Cosmos DB](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac#permission-model) page.
 
 #### Create a Context specifying the Key Manually
 
