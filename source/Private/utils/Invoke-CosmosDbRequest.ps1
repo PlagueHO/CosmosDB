@@ -163,8 +163,6 @@ function Invoke-CosmosDbRequest
              A token in the context that matched the resource link could not be found
              So try to use the Entra Id token in the context.
         #>
-        $date = Get-Date
-
         if ([System.String]::IsNullOrEmpty($Context.EntraIdToken))
         {
             <#
@@ -190,13 +188,13 @@ function Invoke-CosmosDbRequest
                 -Method $Method `
                 -ResourceType $ResourceType `
                 -ResourceId $resourceId `
-                -Date $date
+                -Date (Get-Date)
         }
         else
         {
             $authorizationHeaders = Get-CosmosDbAuthorizationHeaderFromContextEntraId `
                 -Context $Context `
-                -Date $date
+                -Date (Get-Date)
         }
     }
 
