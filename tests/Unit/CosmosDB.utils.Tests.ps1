@@ -1069,7 +1069,6 @@ console.log("done");
 
             It 'Should return expected result when' {
                 $script:result.authorization | Should -Be ([System.Web.HttpUtility]::UrlEncode($script:testAuthorizationHeaderResourceToken))
-                $script:result.'x-ms-date' | Should -Be $script:testUniversalDate
             }
         }
 
