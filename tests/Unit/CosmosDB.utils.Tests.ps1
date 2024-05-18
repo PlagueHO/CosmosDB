@@ -2013,6 +2013,32 @@ console.log("done");
             }
         }
 
+        Context 'When called with endpoint specified ending with a /' {
+            $script:result = $null
+
+            Mock Get-AzAccessToken -MockWith {
+                return @{
+                    Token = $script:testEntraIdToken
+                }
+            }
+
+            It 'Should not throw exception' {
+                $getCosmosDbEntraIdTokenParameters = @{
+                    Endpoint = 'https://cdbtest1pzqjjk3jfe.documents.azure.com/'
+                }
+                { $script:result = Get-CosmosDbEntraIdToken @getCosmosDbEntraIdTokenParameters } | Should -Not -Throw
+            }
+
+            It 'Should return secure string containing token' {
+                $script:result | Convert-CosmosDbSecureStringToString | Should -Be $script:testEntraIdToken
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled -CommandName Get-AzAccessToken -Exactly -Times 1 `
+                    -ParameterFilter { $ResourceUrl -eq 'https://cdbtest1pzqjjk3jfe.documents.azure.com' }
+            }
+        }
+
         Context 'When called, but an Azure Context is not connected' {
             $script:result = $null
 
