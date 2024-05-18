@@ -150,7 +150,7 @@ in Azure.
 
 Create a new attachment for a document in a Cosmos DB database.
 
-### [Get-CosmosDbAuthorizationHeader](Get-CosmosDbAuthorizationHeader.md)
+### [Get-CosmosDbAuthorizationHeaderFromContext](Get-CosmosDbAuthorizationHeaderFromContext.md)
 
 Create a new Authorization Token to be used with in a
 Rest API request to Cosmos DB.

@@ -145,12 +145,10 @@ for the identity that you have given appropriate permissions to the `account`,
 `database` and/or `collection`. See [this page](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac#concepts) for more infomration.
 
 ```powershell
-# Get the OAuth2 token from Entra ID for the currently logged in Az PowerShell account.
-# There are other ways to get the Entra ID token.
-$context = Get-AzContext
-$profile = [Microsoft.Azure.Commands.Common.Authentication.Abstractions.AzureRmProfileProvider]::Instance.Profile
-$profileClient = New-Object -TypeName Microsoft.Azure.Commands.ResourceManager.Common.RMProfileClient -ArgumentList ($profile)
-$entraIdOAuthToken = $profileClient.AcquireAccessToken($context.Tenant.TenantId)
+# Get an OAuth2 resource token from Entra ID for the Cosmos DB account.
+# This will use the currently logged in user to authenticate to Entra ID to
+# get the token. There are many other ways of doing this.
+$entraIdOAuthToken = (Get-AzAccessToken -ResourceUrl 'https://MyAzureCosmosDB.documents.azure.com').Token
 
 $newCosmosDbContextParams  = @{
     Account      = 'MyAzureCosmosDB'
@@ -162,6 +160,24 @@ Get-CosmosDbCollection -Context $accountContext -Id MyNewCollection
 
 > Important: Using an Entra ID Authorization Token is only supported by setting it
 > in a CosmosDB.Context object and passing that to the commands you want to execute.
+
+##### Configuring Role-Based Access Control (RBAC) with Entra ID
+
+There are several ways to configure a Cosmos DB Account with Role-Based Access Control,
+including:
+
+ - *Azure Bicep*: An example can be found in the [\tests\TestHelper\AzureDeploy\CosmosDb.bicep](\tests\TestHelper\AzureDeploy\CosmosDb.bicep) file.
+ - *Azure PowerShell*: The integration tests use this method.
+ - *AzCli*.
+
+> Important Note: One thing I found when adding a SQL Role Assignment to the Cosmos DB
+> Account (or Database or Container) is that the principal ID must be the Object ID of
+> the user, group or service principal that you want to assign the role to. You can't use
+> the Application ID for this value.
+
+For more information on how to configure Role-Based Access Control with Entra ID, see the
+[Configure role-based access control with Microsoft Entra ID for your Azure Cosmos DB account](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac)
+page.
 
 #### Create a Context specifying the Key Manually
 

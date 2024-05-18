@@ -109,21 +109,25 @@ function Connect-AzureServicePrincipal
         This is used to test Entra ID authentication when RBAC is enabled as per
         https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac
 
+    .PARAMETER ResourceUrl
+        The resource URL for which the token is requested. Defaults to 'https://cosmos.azure.com'.
+
     .OUTPUTS
         System.String
 #>
 function Get-AzureEntraIdToken
 {
     [CmdletBinding()]
-    param ()
+    param (
+        [Parameter()]
+        [System.String]
+        $ResourceUrl = 'https://cosmos.azure.com'
+    )
 
-    $context = Get-AzContext
-    $instanceProfile = [Microsoft.Azure.Commands.Common.Authentication.Abstractions.AzureRmProfileProvider]::Instance.Profile
-    $profileClient = New-Object -TypeName Microsoft.Azure.Commands.ResourceManager.Common.RMProfileClient -ArgumentList ($instanceProfile)
-    $token = $profileClient.AcquireAccessToken($context.Tenant.TenantId)
+    # Get the access token for the specific audience
+    $entraIdOAuthToken = Get-AzAccessToken -ResourceUrl $ResourceUrl
 
-    # Output the access token
-    return $token.AccessToken
+    return $entraIdOAuthToken.Token
 }
 
 <#
