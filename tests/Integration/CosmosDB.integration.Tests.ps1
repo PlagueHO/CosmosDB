@@ -463,28 +463,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When creating a new database with an Entra ID token' {
-        It 'Should not throw an exception' {
-            $script:result = New-CosmosDbDatabase -Context $script:testEntraIdContext -Id $script:testDatabase -Verbose
-        }
-
-        It 'Should return expected object' {
-            $script:result.Timestamp | Should -BeOfType [System.DateTime]
-            $script:result.Etag | Should -BeOfType [System.String]
-            $script:result.ResourceId | Should -BeOfType [System.String]
-            $script:result.Uri | Should -BeOfType [System.String]
-            $script:result.Collections | Should -BeOfType [System.String]
-            $script:result.Users | Should -BeOfType [System.String]
-            $script:result.Id | Should -Be $script:testDatabase
-        }
-    }
-
-    Context 'When deleting the new database with an Entra ID token' {
-        It 'Should not throw an exception' {
-            $script:result = Remove-CosmosDbDatabase -Context $script:testEntraIdContext -Id $script:testDatabase -Verbose
-        }
-    }
-
     Context 'When creating a new database' {
         It 'Should not throw an exception' {
             $script:result = New-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase -Verbose
@@ -936,6 +914,33 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Id | Should -BeOfType [System.String]
             $script:result.content.offerThroughput | Should -Be 800
             $script:result.content.offerIsRUPerMinuteThroughputEnabled | Should -Be $false
+        }
+    }
+
+    Context 'When adding a document to a collection using an Entra ID Token' {
+        It 'Should not throw an exception' {
+            $script:result = New-CosmosDbDocument `
+                -Context $script:testEntraIdContext `
+                -CollectionId $script:testCollection `
+                -DocumentBody $script:testDocumentBody `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            Test-GenericResult -GenericResult $script:result
+            $script:result.Id | Should -Be $script:testDocumentId
+            $script:result.Content | Should -Be 'Some string'
+            $script:result.More | Should -Be 'Some other string'
+        }
+    }
+
+    Context 'When removing a document from a collection using an Entra ID Token' {
+        It 'Should not throw an exception' {
+            $script:result = Remove-CosmosDbDocument `
+                -Context $script:testEntraIdContext `
+                -CollectionId $script:testCollection `
+                -Id $script:testDocumentId `
+                -Verbose
         }
     }
 
