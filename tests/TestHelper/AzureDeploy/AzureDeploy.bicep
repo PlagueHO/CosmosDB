@@ -1,5 +1,8 @@
-param AccountName string
-param Location string = 'East US'
+targetScope = 'subscription'
+
+param resourceGroupName string
+param accountName string
+param location string = 'East US'
 param principalId string
 @allowed([
   '00000000-0000-0000-0000-000000000001'// Built-in role 'Azure Cosmos DB Built-in Data Reader'
@@ -7,38 +10,22 @@ param principalId string
 ])
 param roleDefinitionId string = '00000000-0000-0000-0000-000000000002'
 
-resource account 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
-  kind: 'GlobalDocumentDB'
-  name: AccountName
-  location: Location
-  tags: {
-    defaultExperience: 'DocumentDB'
-  }
-  properties: {
-    databaseAccountOfferType: 'Standard'
-    consistencyPolicy: {
-      defaultConsistencyLevel: 'BoundedStaleness'
-      maxIntervalInSeconds: 50
-      maxStalenessPrefix: 50
-    }
-    locations: [
-      {
-        locationName: Location
-        failoverPriority: 0
-      }
-    ]
-  }
-  dependsOn: []
+resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+  name: resourceGroupName
+  location: location
 }
 
-var roleAssignmentId = guid(roleDefinitionId, principalId, account.id)
 
-resource sqlRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2023-04-15' = {
-  name: roleAssignmentId
-  parent: account
-  properties: {
+module cosmosDb './CosmosDb.bicep' = {
+  name: '${resourceGroupName}-cosmosDb'
+  scope: rg
+  params: {
+    accountName: accountName
+    location: location
     principalId: principalId
-    roleDefinitionId: reference('/${subscription().id}/resourceGroups/${resourceGroup()}/providers/Microsoft.DocumentDB/databaseAccounts/${AccountName}/sqlRoleDefinitions/${roleDefinitionId}').id
-    scope: account.id
+    roleDefinitionId: roleDefinitionId
   }
 }
+
+output cosmosDbEndpoint string = cosmosDb.outputs.endpoint
+output roleAssignmentId string = cosmosDb.outputs.roleAssignmentId

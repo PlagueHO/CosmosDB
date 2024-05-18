@@ -129,6 +129,7 @@ stages:
               azureApplicationPassword: $(azureApplicationPassword)
               azureSubscriptionId: $(azureSubscriptionId)
               azureTenantId: $(azureTenantId)
+              azureAppicationObjectId: $(azureAppicationObjectId)
             inputs:
               filePath: './build.ps1'
               arguments: "-Tasks test -PesterScript 'tests/Integration' -CodeCoverageThreshold 0"
@@ -208,6 +209,7 @@ stages:
               azureApplicationPassword: $(azureApplicationPassword)
               azureSubscriptionId: $(azureSubscriptionId)
               azureTenantId: $(azureTenantId)
+              azureAppicationObjectId: $(azureAppicationObjectId)
             inputs:
               filePath: './build.ps1'
               arguments: "-Tasks test -PesterScript 'tests/Integration' -CodeCoverageThreshold 0"
@@ -287,6 +289,7 @@ stages:
               azureApplicationPassword: $(azureApplicationPassword)
               azureSubscriptionId: $(azureSubscriptionId)
               azureTenantId: $(azureTenantId)
+              azureAppicationObjectId: $(azureAppicationObjectId)
             inputs:
               filePath: './build.ps1'
               arguments: "-Tasks test -PesterScript 'tests/Integration' -CodeCoverageThreshold 0"
@@ -366,6 +369,7 @@ stages:
               azureApplicationPassword: $(azureApplicationPassword)
               azureSubscriptionId: $(azureSubscriptionId)
               azureTenantId: $(azureTenantId)
+              azureAppicationObjectId: $(azureAppicationObjectId)
             inputs:
               filePath: './build.ps1'
               arguments: "-Tasks test -PesterScript 'tests/Integration' -CodeCoverageThreshold 0"
@@ -454,6 +458,7 @@ stages:
               azureApplicationPassword: $(azureApplicationPassword)
               azureSubscriptionId: $(azureSubscriptionId)
               azureTenantId: $(azureTenantId)
+              azureAppicationObjectId: $(azureAppicationObjectId)
             inputs:
               filePath: './build.ps1'
               arguments: "-Tasks test -PesterScript 'tests/Integration' -CodeCoverageThreshold 0"
@@ -542,6 +547,7 @@ stages:
               azureApplicationPassword: $(azureApplicationPassword)
               azureSubscriptionId: $(azureSubscriptionId)
               azureTenantId: $(azureTenantId)
+              azureAppicationObjectId: $(azureAppicationObjectId)
             inputs:
               filePath: './build.ps1'
               arguments: "-Tasks test -PesterScript 'tests/Integration' -CodeCoverageThreshold 0"

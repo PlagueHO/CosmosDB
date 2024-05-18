@@ -129,6 +129,31 @@ function Get-AzureEntraIdToken
 <#
     .SYNOPSIS
         Create a new Azure Cosmos DB Account for use with testing.
+
+    .DESCRIPTION
+        The New-AzureTestCosmosDbAccount function deploys a new Azure Cosmos DB account using an ARM template.
+        It is primarily intended for use in testing scenarios.
+
+    .PARAMETER ObjectId
+        The Object ID of the Azure AD principal identity that will be assigned the SQL role assigment.
+
+    .PARAMETER AccountName
+        The name of the Azure Cosmos DB account to create.
+
+    .PARAMETER ResourceGroupName
+        The name of the resource group where the Azure Cosmos DB account will be created.
+
+    .PARAMETER Location
+        The Azure region where the Azure Cosmos DB account will be created. Defaults to 'East US'.
+
+    .EXAMPLE
+        New-AzureTestCosmosDbAccount -ObjectId '12345678-1234-1234-1234-123456789012' -AccountName 'testCosmosDb' -ResourceGroupName 'testResourceGroup'
+
+        This will create a new Azure Cosmos DB account named 'testCosmosDb' in the 'testResourceGroup' resource group.
+
+    .NOTES
+        The function uses the New-AzDeployment cmdlet to deploy the ARM template.
+        It requires the Az.Resources module and an authenticated Azure session.
 #>
 function New-AzureTestCosmosDbAccount
 {
@@ -139,15 +164,19 @@ function New-AzureTestCosmosDbAccount
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        $ApplicationId,
+        $ObjectId,
 
         [Parameter(Mandatory = $true)]
         [System.String]
-        $Name,
+        $AccountName,
 
         [Parameter(Mandatory = $true)]
         [System.String]
-        $ResourceGroupName
+        $ResourceGroupName,
+
+        [Parameter()]
+        [System.String]
+        $Location = 'East US'
     )
 
     try
@@ -156,21 +185,23 @@ function New-AzureTestCosmosDbAccount
 
         # Build hashtable of deployment parameters
         $azureDeployFolder = Join-Path -Path $PSScriptRoot -ChildPath 'AzureDeploy'
-        $deployName = ('Deploy_{0}' -f $AccountName)
+        $deployName = ('Deploy_{0}_{1}' -f $AccountName, (Get-Date -Format FileDateTimeUniversal))
         $deploymentParameters = @{
             Name                    = $deployName
-            ResourceGroupName       = $ResourceGroupName
+            Location                = $Location
             TemplateFile            = Join-Path -Path $azureDeployFolder -ChildPath 'AzureDeploy.Bicep'
             TemplateParameterObject = @{
-                AccountName = $Name
-                PrincipalId = $ApplicationId
+                resourceGroupName = $ResourceGroupName
+                accountName = $AccountName
+                principalId = $ObjectId
+                location = $Location
             }
         }
 
         if ($PSCmdlet.ShouldProcess('Azure', ("Create an Azure Cosmos DB test account '{0}' in resource group '{1}'" -f $Name, $ResourceGroupName)))
         {
             # Deploy ARM template
-            New-AzResourceGroupDeployment `
+            New-AzDeployment `
                 @deploymentParameters
         }
     }

@@ -21,10 +21,12 @@ if ([System.String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
         [System.String]::IsNullOrEmpty($env:azureApplicationId) -or `
         [System.String]::IsNullOrEmpty($env:azureApplicationPassword) -or `
         [System.String]::IsNullOrEmpty($env:azureTenantId) -or `
+        [System.String]::IsNullOrEmpty($env:azureAppicationObjectId) -or `
         $env:azureSubscriptionId -eq '$(azureSubscriptionId)' -or `
         $env:azureApplicationId -eq '$(azureApplicationId)' -or `
         $env:azureApplicationPassword -eq '$(azureApplicationPassword)' -or `
-        $env:azureTenantId -eq '$(azureTenantId)'
+        $env:azureTenantId -eq '$(azureTenantId)' -or `
+        $env:azureAppicationObjectId -eq '$(azureAppicationObjectId)')
     )
 {
     Write-Warning -Message 'Integration tests can not be run because one or more Azure connection environment variables are not set.'
@@ -282,7 +284,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -ResourceGroupName $script:testResourceGroupName `
                 -RoleDefinitionId $script:cosmosDbRoleDefinitionIdContributor `
                 -Scope "/" `
-                -PrincipalId $env:azureApplicationId
+                -PrincipalId $env:azureAppicationObjectId
         }
     }
 
@@ -456,6 +458,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Account $script:testAccountName `
                 -EntraIdToken $script:entraIdTokenForSPSecureString
         }
+    }
 
     Context 'When creating a new database with an Entra ID token' {
         It 'Should not throw an exception' {
