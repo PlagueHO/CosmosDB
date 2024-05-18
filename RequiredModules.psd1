@@ -17,6 +17,6 @@
     Sampler               = 'latest'
     'Sampler.GitHubTasks' = 'latest'
     MarkdownLinkCheck     = 'latest'
-    'Az.Accounts'         = '2.9.1'
-    'Az.Resources'        = '1.3.1'
+    'Az.Accounts'         = '2.19.0'
+    'Az.Resources'        = '6.16.2'
 }

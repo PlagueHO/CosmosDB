@@ -6,6 +6,7 @@ trigger:
   paths:
     include:
     - source/*
+    - RequiredModules.psd1
   tags:
     include:
     - "v*"
@@ -42,7 +43,7 @@ stages:
             displayName: 'Build & Package Module'
             inputs:
               filePath: './build.ps1'
-              arguments: '-ResolveDependency -tasks pack'
+              arguments: '-ResolveDependency -Tasks pack -Verbose'
               pwsh: true
             env:
               ModuleVersion: $(NuGetVersionV2)
