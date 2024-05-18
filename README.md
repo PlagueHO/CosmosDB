@@ -82,16 +82,15 @@ For more information on the Cosmos DB Rest APIs, see [this link](https://docs.mi
 
 This module requires the following:
 
-- Windows PowerShell 5.x or PowerShell 6.x:
-  - **Az.Profile** and **Az.Resources** PowerShell modules
-    are required if using `New-CosmosDbContext -ResourceGroupName $resourceGroup`
-    or `*-CosmosDbAccount` functions.
+- Windows PowerShell 5.x, PowerShell Core 6.x or PowerShell 7.x
 
-> Note: As of 3.0.0.0 of the CosmosDB module, support for **AzureRm** and
-> **AzureRm.NetCore** PowerShell modules has been deprecated due to being
-> superceeded by the **Az** modules. If it is a requirement that **AzureRm**
-> or **AzureRm.NetCore** modules are used then you will need to remain on
-> CosmosDB module 2.x.
+### PowerShell Module Dependencies
+
+- **Az.Account**: v2.19.0 or newer.
+- **Az.Resources**: 6.16.2 or newer.
+
+These modules are required if using `New-CosmosDbContext -ResourceGroupName $resourceGroup`
+or `*-CosmosDbAccount` functions.
 
 ## Recommended Knowledge
 
