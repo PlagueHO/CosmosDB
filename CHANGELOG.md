@@ -25,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactored `Invoke-CosmosDbRequest` to support getting the EntraIdToken property from the context object
   and using it for authentication if it is provided. If the Key property is provided, the EntraIdToken property
   will take precendence and the key will be ignored.
+- Updated CI pipeline to use `PublishCodeCoverageResults@2` task rather than `PublishCodeCoverageResults@1`
+  task to support the latest version of the task.
 
 ### Changed
 
