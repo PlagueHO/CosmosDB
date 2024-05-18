@@ -14,8 +14,6 @@ $testHelperPath = "$PSScriptRoot\..\TestHelper"
 Import-Module -Name $testHelperPath -Force
 
 Get-AzureServicePrincipal -Verbose
-$script:entraIdTokenForSP = Get-AzureEntraIdToken -Verbose
-$script:entraIdTokenForSPSecureString = ConvertTo-SecureString -String $script:entraIdTokenForSP -AsPlainText -Force
 
 if ([System.String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
         [System.String]::IsNullOrEmpty($env:azureApplicationId) -or `
@@ -155,6 +153,11 @@ Connect-AzureServicePrincipal `
     -ApplicationPassword $secureStringAzureApplicationPassword `
     -TenantId $env:azureTenantId `
     -Verbose
+
+# Get the Entra ID token for the logged in Service Principal to use
+# for testing Cosmos DB secured with RBAC.
+$script:entraIdTokenForSP = Get-AzureEntraIdToken -Verbose
+$script:entraIdTokenForSPSecureString = ConvertTo-SecureString -String $script:entraIdTokenForSP -AsPlainText -Force
 
 # Create resource group
 $null = New-AzureTestCosmosDbResourceGroup `
