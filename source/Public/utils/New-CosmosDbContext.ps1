@@ -9,10 +9,11 @@ function New-CosmosDbContext
     param
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
-        [Parameter(Mandatory = $true, ParameterSetName = 'Token')]
         [Parameter(Mandatory = $true, ParameterSetName = 'AzureAccount')]
         [Parameter(Mandatory = $true, ParameterSetName = 'CustomAccount')]
         [Parameter(Mandatory = $true, ParameterSetName = 'CustomAzureAccount')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'EntraIdToken')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Token')]
         [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ })]
         [System.String]
         $Account,
@@ -72,15 +73,21 @@ function New-CosmosDbContext
         [CosmosDB.ContextToken[]]
         $Token,
 
+        [Parameter(Mandatory = $true, ParameterSetName = 'EntraIdToken')]
+        [ValidateNotNullOrEmpty()]
+        [System.Security.SecureString]
+        $EntraIdToken,
+
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [CosmosDB.BackoffPolicy]
         $BackoffPolicy,
 
         [Parameter(ParameterSetName = 'Account')]
-        [Parameter(ParameterSetName = 'Token')]
         [Parameter(ParameterSetName = 'AzureAccount')]
         [Parameter(ParameterSetName = 'ConnectionString')]
+        [Parameter(ParameterSetName = 'EntraIdToken')]
+        [Parameter(ParameterSetName = 'Token')]
         [CosmosDB.Environment]
         $Environment = [CosmosDB.Environment]::AzureCloud,
 
@@ -92,44 +99,9 @@ function New-CosmosDbContext
 
     switch ($PSCmdlet.ParameterSetName)
     {
-        'Emulator'
+        'Account'
         {
-            $Account = 'emulator'
-
-            if (-not ($PSBoundParameters.ContainsKey('Key')))
-            {
-                # This is a publically known fixed master key (see https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator#authenticating-requests)
-                $Key = ConvertTo-SecureString `
-                    -String 'C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==' `
-                    -AsPlainText `
-                    -Force
-            }
-
-            if (-not ($PSBoundParameters.ContainsKey('Uri')))
-            {
-                $Uri = 'https://localhost:8081'
-            }
-
-            if ($Uri -notmatch '^https?:\/\/')
-            {
-                $Uri = 'https://{0}' -f $Uri
-            }
-
-            if ($Uri -notmatch ':\d*$')
-            {
-                if ($PSBoundParameters.ContainsKey('Port'))
-                {
-                    Write-Warning -Message $LocalizedData.DeprecateContextPortWarning
-                }
-                else
-                {
-                    $Port = 8081
-                }
-
-                $Uri = '{0}:{1}' -f $Uri, $Port
-            }
-
-            $BaseUri = [System.Uri]::new($Uri)
+            $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
         }
 
         'AzureAccount'
@@ -170,21 +142,6 @@ function New-CosmosDbContext
             $BaseUri = Get-CosmosDbUri -Account $Account -BaseHostname $EndpointHostname
         }
 
-        'Account'
-        {
-            $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
-        }
-
-        'CustomAccount'
-        {
-            $BaseUri = Get-CosmosDbUri -Account $Account -BaseHostname $EndpointHostname
-        }
-
-        'Token'
-        {
-            $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
-        }
-
         'ConnectionString'
         {
             $decryptedConnectionString = $ConnectionString | Convert-CosmosDbSecureStringToString
@@ -192,6 +149,61 @@ function New-CosmosDbContext
             $BaseUri = [System.Uri]::new($connectionStringParts.AccountEndpoint)
             $Account = $BaseUri.Host.Split('.')[0]
             $Key = $connectionStringParts.AccountKey | ConvertTo-SecureString -AsPlainText -Force
+        }
+
+        'CustomAccount'
+        {
+            $BaseUri = Get-CosmosDbUri -Account $Account -BaseHostname $EndpointHostname
+        }
+
+        'Emulator'
+        {
+            $Account = 'emulator'
+
+            if (-not ($PSBoundParameters.ContainsKey('Key')))
+            {
+                # This is a publically known fixed master key (see https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator#authenticating-requests)
+                $Key = ConvertTo-SecureString `
+                    -String 'C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==' `
+                    -AsPlainText `
+                    -Force
+            }
+
+            if (-not ($PSBoundParameters.ContainsKey('Uri')))
+            {
+                $Uri = 'https://localhost:8081'
+            }
+
+            if ($Uri -notmatch '^https?:\/\/')
+            {
+                $Uri = 'https://{0}' -f $Uri
+            }
+
+            if ($Uri -notmatch ':\d*$')
+            {
+                if ($PSBoundParameters.ContainsKey('Port'))
+                {
+                    Write-Warning -Message $LocalizedData.DeprecateContextPortWarning
+                }
+                else
+                {
+                    $Port = 8081
+                }
+
+                $Uri = '{0}:{1}' -f $Uri, $Port
+            }
+
+            $BaseUri = [System.Uri]::new($Uri)
+        }
+
+        'EntraIdToken'
+        {
+            $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
+        }
+
+        'Token'
+        {
+            $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
         }
     }
 
@@ -204,6 +216,7 @@ function New-CosmosDbContext
             KeyType       = $KeyType
             BaseUri       = $BaseUri
             Token         = $Token
+            EntraIdToken  = $EntraIdToken
             BackoffPolicy = $BackoffPolicy
             Environment   = $Environment
         }

@@ -54,7 +54,7 @@ function Invoke-CosmosDbRequest
         $ApiVersion = '2018-09-17',
 
         [Parameter()]
-        [Hashtable]
+        [System.Collections.Hashtable]
         $Headers = @{ },
 
         [Parameter()]
@@ -137,48 +137,57 @@ function Invoke-CosmosDbRequest
         }
     }
 
+    if ([System.String]::IsNullOrEmpty($Context.BaseUri))
+    {
+        New-CosmosDbInvalidOperationException -Message ($LocalizedData.ErrorMalformedContextBaseUriEmpty)
+    }
+
     # Generate the URI from the base connection URI and the resource link
     $baseUri = $Context.BaseUri.ToString()
     $uri = [uri]::New(('{0}{1}' -f $baseUri, $resourceLink))
 
-    # Try to build the authorization headers from the Context
-    $authorizationHeaders = Get-CosmosDbAuthorizationHeadersFromContext `
+    # Try to build the authorization headers from the Context Resource token if there are any
+    $authorizationHeaders = Get-CosmosDbAuthorizationHeaderFromContextResourceToken `
         -Context $Context `
         -ResourceLink $resourceLink
 
     if ($null -eq $authorizationHeaders)
     {
         <#
-            A token in the context that matched the resource link could not
-            be found. So use the master key to generate the authorization headers
-            from the token.
+             A token in the context that matched the resource link could not be found
+             So try to use the Entra Id token in the context.
         #>
-        if (-not ($PSBoundParameters.ContainsKey('Key')))
+        if ([System.String]::IsNullOrEmpty($Context.EntraIdToken))
         {
-            if (-not [System.String]::IsNullOrEmpty($Context.Key))
+            <#
+                Neither a resource token in the context or an EntraIdToken was found
+                So try to use the Key in the context to generate the authorization headers.
+            #>
+            if ([System.String]::IsNullOrEmpty($Context.Key))
             {
-                $Key = $Context.Key
+                New-CosmosDbInvalidOperationException -Message ($LocalizedData.ErrorAuthorizationKeyEmpty)
             }
-        }
 
-        if ([System.String]::IsNullOrEmpty($Key))
-        {
-            New-CosmosDbInvalidOperationException -Message ($LocalizedData.ErrorAuthorizationKeyEmpty)
-        }
-
-        # Generate the date used for the authorization token
-        $date = Get-Date
-
-        $authorizationHeaders = @{
-            'authorization' = New-CosmosDbAuthorizationToken `
-                -Key $Key `
-                -KeyType $KeyType `
+            $authorizationHeaders = Get-CosmosDbAuthorizationHeaderFromContext `
+                -Key $Context.Key `
+                -KeyType $Context.KeyType `
                 -Method $Method `
                 -ResourceType $ResourceType `
                 -ResourceId $resourceId `
-                -Date $date
-            'x-ms-date'     = ConvertTo-CosmosDbTokenDateString -Date $date
+                -Date (Get-Date)
         }
+        else
+        {
+            $authorizationHeaders = Get-CosmosDbAuthorizationHeaderFromContextEntraId `
+                -Context $Context `
+                -Date (Get-Date)
+        }
+    }
+
+    if ($null -eq $authorizationHeaders)
+    {
+        # This generally shouldn't occur, but we need to check just in case
+        New-CosmosDbInvalidOperationException -Message ($LocalizedData.ErrorAuthorizationHeadersEmpty)
     }
 
     $Headers += $authorizationHeaders

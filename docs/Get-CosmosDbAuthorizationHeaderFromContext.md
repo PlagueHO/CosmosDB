@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# New-CosmosDbAuthorizationToken
+# Get-CosmosDbAuthorizationHeaderFromContext
 
 ## SYNOPSIS
 
@@ -15,17 +15,19 @@ Rest API request to Cosmos DB.
 ## SYNTAX
 
 ```powershell
-New-CosmosDbAuthorizationToken [-Key] <SecureString> [[-KeyType] <String>] [[-Method] <String>]
+Get-CosmosDbAuthorizationHeaderFromContext [-Key] <SecureString> [[-KeyType] <String>] [[-Method] <String>]
  [[-ResourceType] <String>] [[-ResourceId] <String>] [-Date] <DateTime> [[-TokenVersion] <String>]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-This cmdlet is used to create an Authorization Token to
-pass in the header of a Rest API request to an Azure Cosmos DB.
-The Authorization token that is generated must match the
-other parameters in the header of the request that is passed.
+This cmdlet is used to create an HTTP request header containing
+a master key Authorization Token and the date of the request
+to pass in a Rest API request to an Azure Cosmos DB.
+The Authorization token that is generated will match the
+other parameters in the header of the request that is passed
+and can not be used with other requests.
 
 ## EXAMPLES
 
@@ -33,11 +35,12 @@ other parameters in the header of the request that is passed.
 
 ```powershell
 PS C:\> $dttoken = ConvertTo-CosmosDbTokenDateString -Date (Get-Date)
-PS C:\> $token = New-CosmosDbAuthorizationToken -Key $Key -KeyType master -Method Get -ResourceType 'dbs' -ResourceId 'dbs/mydatabase' -Date ($dttoken)
+PS C:\> $header = Get-CosmosDbAuthorizationHeaderFromContext -Key $Key -KeyType master -Method Get -ResourceType 'dbs' -ResourceId 'dbs/mydatabase' -Date ($dttoken)
 ```
 
-Generate a Cosmos DB authorization token using a master key $Key
-for issuing a 'Get' request on the dbs (database) 'mydatabase'.
+Generate a collection of headers required for Cosmos DB token authorization
+using a master key $Key for issuing a 'Get' request on the dbs (database)
+'mydatabase'.
 
 ## PARAMETERS
 
@@ -112,7 +115,8 @@ Accept wildcard characters: False
 This is the resource Id of the Cosmos DB being accessed.
 This is in the format 'dbs/{database}' and must match the
 the value in the path of the URI that the request is made
-to.
+to. This value is case sensitive and must match the case
+of the required resource stored in Cosmos DB account.
 
 ```yaml
 Type: String

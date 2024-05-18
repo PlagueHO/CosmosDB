@@ -7,7 +7,6 @@ namespace CosmosDB {
         AzureUSGovernment
     }
 
-
     public class ContextToken
     {
         public System.String Resource { get; set; }
@@ -31,6 +30,7 @@ namespace CosmosDB {
         public System.String KeyType { get; set; }
         public System.String BaseUri { get; set; }
         public CosmosDB.ContextToken[] Token { get; set; }
+        public System.Security.SecureString EntraIdToken { get; set; }
         public CosmosDB.BackoffPolicy BackoffPolicy { get; set; }
         public CosmosDB.Environment Environment  { get; set; } = Environment.AzureCloud;
     }

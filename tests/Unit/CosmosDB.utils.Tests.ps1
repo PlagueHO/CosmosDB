@@ -32,7 +32,7 @@ InModuleScope $ProjectName {
     $script:testBaseHostnameAzureChinaCloud = 'documents.azure.cn'
     $script:testBaseHostnameAzureCustomEndpoint = 'documents.somecloud.zzz'
     $script:testDate = (Get-Date -Year 2017 -Month 11 -Day 29 -Hour 10 -Minute 45 -Second 10)
-    $script:testUniversalDate = 'Tue, 28 Nov 2017 21:45:10 GMT'
+    $script:testUniversalDate = $script:testDate.ToUniversalTime().ToString("r", [System.Globalization.CultureInfo]::InvariantCulture)
     $script:testContext = [CosmosDb.Context] @{
         Account  = $script:testAccount
         Database = $script:testDatabase
@@ -40,15 +40,23 @@ InModuleScope $ProjectName {
         KeyType  = 'master'
         BaseUri  = ('https://{0}.documents.azure.com/' -f $script:testAccount)
     }
-    $script:testToken = 'type-resource&ver=1.0&sig=5mDuQBYA0kb70WDJoTUzSBMTG3owkC0/cEN4fqa18/s='
-    $script:testTokenSecureString = ConvertTo-SecureString -String $script:testToken -AsPlainText -Force
-    $script:testTokenResource = ('dbs/{0}/colls/{1}' -f $script:testDatabase, $script:testCollection)
-    $script:testTokenExpiry = 7200
+    $script:testAuthorizationHeaderResourceToken = 'type=resource&ver=1.0&sig=5mDuQBYA0kb70WDJoTUzSBMTG3owkC0/cEN4fqa18/s='
+    $script:testAuthorizationHeaderResourceTokenSecureString = ConvertTo-SecureString -String $script:testAuthorizationHeaderResourceToken -AsPlainText -Force
+    $script:testAuthorizationContextResource = ('dbs/{0}/colls/{1}' -f $script:testDatabase, $script:testCollection)
+    $script:testAuthorizationContextResourceExpiry = 7200
+    $script:testTokenExpirationDate = (Get-Date).AddSeconds($script:testAuthorizationContextResourceExpiry)
+    $script:testTokenExpirationUniversalDate = $script:testTokenExpirationDate.ToUniversalTime().ToString("r", [System.Globalization.CultureInfo]::InvariantCulture)
     $script:testContextToken = [CosmosDB.ContextToken] @{
-        Resource  = $script:testTokenResource
+        Resource  = $script:testAuthorizationContextResource
         TimeStamp = $script:testDate
-        Expires   = $script:testDate.AddSeconds($script:testTokenExpiry)
-        Token     = $script:testTokenSecureString
+        Expires   = $script:testTokenExpirationDate
+        Token     = $script:testAuthorizationHeaderResourceTokenSecureString
+    }
+    $script:testContextTokenExpired = [CosmosDB.ContextToken] @{
+        Resource  = $script:testAuthorizationContextResource
+        TimeStamp = $script:testDate
+        Expires   = Get-Date
+        Token     = $script:testAuthorizationHeaderResourceTokenSecureString
     }
     $script:testResourceContext = [CosmosDb.Context] @{
         Account  = $script:testAccount
@@ -56,6 +64,22 @@ InModuleScope $ProjectName {
         BaseUri  = ('https://{0}.documents.azure.com/' -f $script:testAccount)
         Token    = $script:testContextToken
     }
+    $script:testResourceContextExpired = [CosmosDb.Context] @{
+        Account  = $script:testAccount
+        Database = $script:testDatabase
+        BaseUri  = ('https://{0}.documents.azure.com/' -f $script:testAccount)
+        Token    = $script:testContextTokenExpired
+    }
+    # Not a real token, just a test token
+    $script:testEntraIdToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ikwx...t7XeB7XeDn1xsdXS3FbgGDPsYeB-0utkCJndu3ixHuDK_gTKWoQ'
+    $script:testEntraIdTokenSecureString = ConvertTo-SecureString -String $script:testEntraIdToken -AsPlainText -Force
+    $script:testAuthorizationHeaderEntraIdToken = "type=aad&ver=1.0&sig=$testEntraIdToken"
+    $script:testEntraIdContext = [CosmosDB.Context] @{
+        Account  = $script:testAccount
+        EntraIdToken = $script:testEntraIdTokenSecureString
+        BaseUri  = ('https://{0}.documents.azure.com/' -f $script:testAccount)
+    }
+
     $script:testJson = @'
 {
     "_rid": "2MFbAA==",
@@ -192,10 +216,10 @@ console.log("done");
 
             It 'Should not throw exception' {
                 $newCosmosDbContextTokenParameters = @{
-                    Resource    = $script:testTokenResource
+                    Resource    = $script:testAuthorizationContextResource
                     TimeStamp   = $script:testDate
-                    TokenExpiry = $script:testTokenExpiry
-                    Token       = $script:testTokenSecureString
+                    TokenExpiry = $script:testAuthorizationContextResourceExpiry
+                    Token       = $script:testAuthorizationHeaderResourceTokenSecureString
                     Verbose     = $true
                 }
 
@@ -203,10 +227,10 @@ console.log("done");
             }
 
             It 'Should return expected result' {
-                $script:result.Resource | Should -Be $script:testTokenResource
+                $script:result.Resource | Should -Be $script:testAuthorizationContextResource
                 $script:result.TimeStamp | Should -Be $script:testDate
-                $script:result.Expires | Should -Be $script:testDate.AddSeconds($script:testTokenExpiry)
-                $script:result.Token | Should -Be $script:testTokenSecureString
+                $script:result.Expires | Should -Be $script:testDate.AddSeconds($script:testAuthorizationContextResourceExpiry)
+                $script:result.Token | Should -Be $script:testAuthorizationHeaderResourceTokenSecureString
             }
         }
     }
@@ -795,9 +819,33 @@ console.log("done");
                 $script:result.Account | Should -Be $script:testAccount
                 $script:result.Database | Should -Be $script:testDatabase
                 $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
-                $script:result.Token[0].Resource | Should -Be $script:testTokenResource
+                $script:result.Token[0].Resource | Should -Be $script:testAuthorizationContextResource
                 $script:result.Token[0].TimeStamp | Should -Be $script:testDate
-                $script:result.Token[0].Token | Convert-CosmosDbSecureStringToString | Should -Be $script:testToken
+                $script:result.Token[0].Token | Convert-CosmosDbSecureStringToString | Should -Be $script:testAuthorizationHeaderResourceToken
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
+            }
+        }
+
+        Context 'When called with EntraIdToken parameters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Account  = $script:testAccount
+                    Database = $script:testDatabase
+                    EntraIdToken = $script:testEntraIdTokenSecureString
+                    Verbose  = $true
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be $script:testAccount
+                $script:result.Database | Should -Be $script:testDatabase
+                $script:result.BaseUri | Should -Be ('https://{0}.documents.azure.com/' -f $script:testAccount)
+                $script:result.Token | Should -BeNullOrEmpty
+                $script:result.EntraIdToken | Convert-CosmosDbSecureStringToString | Should -Be $script:testEntraIdToken
                 $script:result.Environment | Should -BeExactly 'AzureCloud'
             }
         }
@@ -931,16 +979,16 @@ console.log("done");
         }
     }
 
-    Describe 'New-CosmosDbAuthorizationToken' -Tag 'Unit' {
+    Describe 'Get-CosmosDbAuthorizationHeaderFromContext' -Tag 'Unit' {
         It 'Should exist' {
-            { Get-Command -Name New-CosmosDbAuthorizationToken } | Should -Not -Throw
+            { Get-Command -Name Get-CosmosDbAuthorizationHeaderFromContext } | Should -Not -Throw
         }
 
         Context 'When called with all parameters' {
             $script:result = $null
 
             It 'Should not throw exception' {
-                $newCosmosDbAuthorizationTokenParameters = @{
+                $getCosmosDbAuthorizationHeaderFromContextParameters = @{
                     Key          = $script:testKeySecureString
                     KeyType      = 'master'
                     Method       = 'Get'
@@ -950,11 +998,12 @@ console.log("done");
                     Verbose      = $true
                 }
 
-                { $script:result = New-CosmosDbAuthorizationToken @newCosmosDbAuthorizationTokenParameters } | Should -Not -Throw
+                { $script:result = Get-CosmosDbAuthorizationHeaderFromContext @getCosmosDbAuthorizationHeaderFromContextParameters } | Should -Not -Throw
             }
 
             It 'Should return expected result when' {
-                $script:result | Should -Be 'type%3dmaster%26ver%3d1.0%26sig%3dr3RhzxX7rv4ZHqo4aT1jDszfV7svQ7JFXoi7hz1Iwto%3d'
+                $script:result.authorization | Should -Be 'type%3dmaster%26ver%3d1.0%26sig%3dr3RhzxX7rv4ZHqo4aT1jDszfV7svQ7JFXoi7hz1Iwto%3d'
+                $script:result.'x-ms-date' | Should -Be $script:testUniversalDate
             }
         }
 
@@ -962,7 +1011,7 @@ console.log("done");
             $script:result = $null
 
             It 'Should not throw exception' {
-                $newCosmosDbAuthorizationTokenParameters = @{
+                $getCosmosDbAuthorizationHeaderFromContextParameters = @{
                     Key          = $script:testKeySecureString
                     KeyType      = 'master'
                     Method       = 'Get'
@@ -972,11 +1021,116 @@ console.log("done");
                     Verbose      = $true
                 }
 
-                { $script:result = New-CosmosDbAuthorizationToken @newCosmosDbAuthorizationTokenParameters } | Should -Not -Throw
+                { $script:result = Get-CosmosDbAuthorizationHeaderFromContext @getCosmosDbAuthorizationHeaderFromContextParameters } | Should -Not -Throw
             }
 
             It 'Should return expected result when' {
-                $script:result | Should -Be 'type%3dmaster%26ver%3d1.0%26sig%3dncZem2Awq%2b0LkrQ7mlwJePX%2f2qyEPG3bQDrnuedrjZU%3d'
+                $script:result.authorization | Should -Be 'type%3dmaster%26ver%3d1.0%26sig%3dncZem2Awq%2b0LkrQ7mlwJePX%2f2qyEPG3bQDrnuedrjZU%3d'
+                $script:result.'x-ms-date' | Should -Be $script:testUniversalDate
+            }
+        }
+    }
+
+    Describe 'Get-CosmosDbAuthorizationHeaderFromContextResourceToken' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Get-CosmosDbAuthorizationHeaderFromContextResourceToken } | Should -Not -Throw
+        }
+
+        Context 'When called with a context without any resource tokens' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $getCosmosDbAuthorizationHeaderFromContextResourceTokenParameters = @{
+                    Context      = $script:testEntraIdContext
+                    ResourceLink = $script:testAuthorizationContextResource
+                    Verbose      = $true
+                }
+
+                { $script:result = Get-CosmosDbAuthorizationHeaderFromContextResourceToken @getCosmosDbAuthorizationHeaderFromContextResourceTokenParameters } | Should -Not -Throw
+            }
+
+            It 'Should return null' {
+                $script:result | Should -BeNullOrEmpty
+            }
+        }
+
+        Context 'When called with a context that contains a resource token that matches the resource link and is not expired' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $getCosmosDbAuthorizationHeaderFromContextResourceTokenParameters = @{
+                    Context      = $script:testResourceContext
+                    ResourceLink = $script:testAuthorizationContextResource
+                    Verbose      = $true
+                }
+
+                { $script:result = Get-CosmosDbAuthorizationHeaderFromContextResourceToken @getCosmosDbAuthorizationHeaderFromContextResourceTokenParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result when' {
+                $script:result.authorization | Should -Be ([System.Web.HttpUtility]::UrlEncode($script:testAuthorizationHeaderResourceToken))
+                $script:result.'x-ms-date' | Should -Be $script:testUniversalDate
+            }
+        }
+
+        Context 'When called with a context that contains a resource token that matches the resource link but has expired' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $getCosmosDbAuthorizationHeaderFromContextResourceTokenParameters = @{
+                    Context      = $script:testResourceContextExpired
+                    ResourceLink = $script:testAuthorizationContextResource
+                    Verbose      = $true
+                }
+
+                { $script:result = Get-CosmosDbAuthorizationHeaderFromContextResourceToken @getCosmosDbAuthorizationHeaderFromContextResourceTokenParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result when' {
+                $script:result | Should -BeNullOrEmpty
+            }
+        }
+    }
+
+    Describe 'Get-CosmosDbAuthorizationHeaderFromContextEntraId' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Get-CosmosDbAuthorizationHeaderFromContextEntraId } | Should -Not -Throw
+        }
+
+        Context 'When called with a context containing an EntraIdToken' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $getCosmosDbAuthorizationHeaderFromContextEntraIdParameters = @{
+                    Context      = $script:testEntraIdContext
+                    Date         = $script:testUniversalDate
+                    Verbose      = $true
+                }
+
+                { $script:result = Get-CosmosDbAuthorizationHeaderFromContextEntraId @getCosmosDbAuthorizationHeaderFromContextEntraIdParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result when' {
+                $script:result.authorization | Should -Be ([System.Web.HttpUtility]::UrlEncode($script:testAuthorizationHeaderEntraIdToken))
+                $script:result.'x-ms-date' | Should -Be $script:testUniversalDate
+            }
+        }
+
+        Context 'When called with a context that does not contain an EntraIdToken' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $getCosmosDbAuthorizationHeaderFromContextEntraIdParameters = @{
+                    Context      = $script:testResourceContext
+                    Date         = $script:testUniversalDate
+                    Verbose      = $true
+                }
+
+                { $script:result = Get-CosmosDbAuthorizationHeaderFromContextEntraId @getCosmosDbAuthorizationHeaderFromContextEntraIdParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result when' {
+                $script:result | Should -BeNullOrEmpty
             }
         }
     }
@@ -1047,6 +1201,43 @@ console.log("done");
             It 'Should not throw exception' {
                 $invokeCosmosDbRequestparameters = @{
                     Context      = $script:testContext
+                    Method       = 'Get'
+                    ResourceType = 'dbs'
+                    Verbose      = $true
+                }
+
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result._count | Should -Be 1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
+                    -Exactly -Times 1
+                Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter with Entra ID Token and Get method and ResourceType is ''dbs''' {
+            $InvokeWebRequest_parameterfilter = {
+                $Method -eq 'Get' -and `
+                    $ContentType -eq 'application/json' -and `
+                    $Uri -eq ('{0}{1}' -f $script:testContext.BaseUri, 'dbs')
+            }
+
+            Mock `
+                -CommandName Invoke-WebRequest `
+                -MockWith $InvokeWebRequest_mockwith
+
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $invokeCosmosDbRequestparameters = @{
+                    Context      = $script:testEntraIdContext
                     Method       = 'Get'
                     ResourceType = 'dbs'
                     Verbose      = $true

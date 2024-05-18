@@ -10,6 +10,7 @@ ConvertFrom-StringData -StringData @'
     NoMatchingUnexpiredResourceTokenInContext = At least one matching context token with resource '{0}' was found, but all are expired.
     NoResourceTokensInContext = Context does not contain any resource tokens.
     CreateAuthorizationToken = Creating authorization token: Method = '{0}', ResourceType = '{1}', ResourceId = '{2}', Date = '{3}'.
+    CreateAuthorizationTokenEntraId = Creating authorization token using Entra ID token.
     GettingAzureCosmosDBAccount = Getting Azure Cosmos DB account '{0}' in resource group '{1}'.
     GettingAzureCosmosDBAccountConnectionString = Getting '{2}' connection string for Azure Cosmos DB account '{0}' in resource group '{1}'.
     GettingAzureCosmosDBAccountMasterKey = Getting '{2}' for Azure Cosmos DB account '{0}' in resource group '{1}'.
@@ -63,4 +64,6 @@ ConvertFrom-StringData -StringData @'
     ErrorConvertingDocumentJsonToObject = An error occured converting the document information returned from Cosmsos DB into an object. This might be caused by the document including keys with same name but differing in case. Include the -ReturnJson parameter to return these as JSON instead.
     ErrorTooManyRequests = The server returned a '429 Too Many Requests' error. This is likely due to the client making too many requests to the server. Please retry your request.
     ErrorTooManyRequestsWithNoRetryAfter = The server returned a '429 Too Many Requests' error, but the did not include an 'x-ms-retry-after-ms' header in the response. A retry delay of 0ms will be used.
+    ErrorAuthorizationHeadersEmpty = Authorization headers could not be created for the request. This is usually caused by the context not containing the necessary authorization information.
+    ErrorMalformedContextBaseUriEmpty = The context base URI is empty or malformed. Please ensure the context is correctly configured.
 '@

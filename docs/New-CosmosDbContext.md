@@ -47,6 +47,14 @@ New-CosmosDbContext -Account <String> [-Database <String>] -ResourceGroupName <S
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
+### EntraIdToken
+
+```powershell
+New-CosmosDbContext -Account <String> [-Database <String>] -EntraIdToken <SecureString>
+ [-BackoffPolicy <BackoffPolicy>] [-Environment <Environment>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
 ### Token
 
 ```powershell
@@ -175,6 +183,16 @@ PS C:\> $cosmosDbContext = New-CosmosDbContext -ConnectionString ($connectionStr
 
 Creates a CosmosDB context specifying the connection string connecting
 to the Cosmos DB account.
+
+### Example 10
+
+```powershell
+PS C:\> $entraIdToken = ConvertTo-SecureString -String 'your master key' -AsPlainText -Force
+PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -EntraIdToken $entraIdToken
+```
+Creates a CosmosDB context specifying the an Entra ID OAuth2 token generated
+by the Entra ID service. The identity it represents should have the appropriate
+RBAC permissions to access the Cosmos DB account.
 
 ## PARAMETERS
 
@@ -416,6 +434,23 @@ Cosmos DB.
 Type: String
 Parameter Sets: CustomAzureAccount, AzureAccount
 Aliases: ResourceGroup
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EntraIdToken
+
+This contains an Entra ID OAuth2 token that will be used to
+authenticate to the account, database or collection.
+
+```yaml
+Type: SecureString
+Parameter Sets: EntraIdToken
+Aliases:
 
 Required: True
 Position: Named

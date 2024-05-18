@@ -1,4 +1,4 @@
-function Get-CosmosDbAuthorizationHeadersFromContext
+function Get-CosmosDbAuthorizationHeaderFromContextResourceToken
 {
     [CmdletBinding()]
     [OutputType([System.Collections.Hashtable])]

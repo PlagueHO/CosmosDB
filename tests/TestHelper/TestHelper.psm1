@@ -103,6 +103,31 @@ function Connect-AzureServicePrincipal
 
 <#
     .SYNOPSIS
+        Get the Entra ID OAuth2 Token for the account authenticated to Azure.
+
+    .DESCRIPTION
+        This is used to test Entra ID authentication when RBAC is enabled as per
+        https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac
+
+    .OUTPUTS
+        System.String
+#>
+function Get-AzureEntraIdOAuth2Token
+{
+    [CmdletBinding()]
+    param ()
+
+    $context = Get-AzContext
+    $instanceProfile = [Microsoft.Azure.Commands.Common.Authentication.Abstractions.AzureRmProfileProvider]::Instance.Profile
+    $profileClient = New-Object -TypeName Microsoft.Azure.Commands.ResourceManager.Common.RMProfileClient -ArgumentList ($instanceProfile)
+    $token = $profileClient.AcquireAccessToken($context.Tenant.TenantId)
+
+    # Output the access token
+    return $token.AccessToken
+}
+
+<#
+    .SYNOPSIS
         Create a new Azure Cosmos DB Account for use with testing.
 #>
 function New-AzureTestCosmosDbAccount
@@ -112,6 +137,10 @@ function New-AzureTestCosmosDbAccount
     )]
     param
     (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $ApplicationId,
+
         [Parameter(Mandatory = $true)]
         [System.String]
         $Name,
@@ -131,9 +160,10 @@ function New-AzureTestCosmosDbAccount
         $deploymentParameters = @{
             Name                    = $deployName
             ResourceGroupName       = $ResourceGroupName
-            TemplateFile            = Join-Path -Path $azureDeployFolder -ChildPath 'AzureDeploy.json'
+            TemplateFile            = Join-Path -Path $azureDeployFolder -ChildPath 'AzureDeploy.Bicep'
             TemplateParameterObject = @{
                 AccountName = $Name
+                PrincipalId = $ApplicationId
             }
         }
 
