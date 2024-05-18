@@ -98,11 +98,10 @@ stages:
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Unit (PowerShell 5.1 on Windows Server 2019)'
 
-          - task: PublishCodeCoverageResults@1
+          - task: PublishCodeCoverageResults@2
             displayName: 'Publish Code Coverage'
             condition: succeededOrFailed()
             inputs:
-              codeCoverageTool: 'JaCoCo'
               summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
               pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
@@ -178,11 +177,10 @@ stages:
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Unit (PowerShell 5.1 on Windows Server 2022)'
 
-          - task: PublishCodeCoverageResults@1
+          - task: PublishCodeCoverageResults@2
             displayName: 'Publish Code Coverage'
             condition: succeededOrFailed()
             inputs:
-              codeCoverageTool: 'JaCoCo'
               summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
               pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
@@ -258,11 +256,10 @@ stages:
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Unit (Powershell 7 on Ubuntu 20.04)'
 
-          - task: PublishCodeCoverageResults@1
+          - task: PublishCodeCoverageResults@2
             displayName: 'Publish Code Coverage'
             condition: succeededOrFailed()
             inputs:
-              codeCoverageTool: 'JaCoCo'
               summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
               pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
@@ -338,11 +335,10 @@ stages:
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Unit (Powershell 7 on Ubuntu 22.04)'
 
-          - task: PublishCodeCoverageResults@1
+          - task: PublishCodeCoverageResults@2
             displayName: 'Publish Code Coverage'
             condition: succeededOrFailed()
             inputs:
-              codeCoverageTool: 'JaCoCo'
               summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
               pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
@@ -422,11 +418,10 @@ stages:
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Unit (Powershell Core 6 on MacOS 11)'
 
-          - task: PublishCodeCoverageResults@1
+          - task: PublishCodeCoverageResults@2
             displayName: 'Publish Code Coverage'
             condition: succeededOrFailed()
             inputs:
-              codeCoverageTool: 'JaCoCo'
               summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
               pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
@@ -511,11 +506,10 @@ stages:
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Unit (Powershell Core 6 on MacOS 12)'
 
-          - task: PublishCodeCoverageResults@1
+          - task: PublishCodeCoverageResults@2
             displayName: 'Publish Code Coverage'
             condition: succeededOrFailed()
             inputs:
-              codeCoverageTool: 'JaCoCo'
               summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
               pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
