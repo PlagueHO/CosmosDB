@@ -26,7 +26,7 @@ if ([System.String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
         $env:azureApplicationId -eq '$(azureApplicationId)' -or `
         $env:azureApplicationPassword -eq '$(azureApplicationPassword)' -or `
         $env:azureTenantId -eq '$(azureTenantId)' -or `
-        $env:azureAppicationObjectId -eq '$(azureAppicationObjectId)')
+        $env:azureAppicationObjectId -eq '$(azureAppicationObjectId)'
     )
 {
     Write-Warning -Message 'Integration tests can not be run because one or more Azure connection environment variables are not set.'
