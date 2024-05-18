@@ -6,6 +6,8 @@ trigger:
   paths:
     include:
     - source/*
+    - tests/*
+    - docs/*
     - RequiredModules.psd1
   tags:
     include:

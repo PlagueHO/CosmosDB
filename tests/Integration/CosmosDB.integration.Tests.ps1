@@ -14,6 +14,8 @@ $testHelperPath = "$PSScriptRoot\..\TestHelper"
 Import-Module -Name $testHelperPath -Force
 
 Get-AzureServicePrincipal -Verbose
+$script:entraIdTokenForSP = Get-AzureEntraIdToken -Verbose
+$script:entraIdTokenForSPSecureString = ConvertTo-SecureString -String $script:entraIdTokenForSP -AsPlainText -Force
 
 if ([System.String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
         [System.String]::IsNullOrEmpty($env:azureApplicationId) -or `
@@ -136,6 +138,8 @@ function tax(income) {
 }
 '@
 $script:testDefaultTimeToLive = 3600
+$script:cosmosDbRoleDefinitionIdReader = '00000000-0000-0000-0000-000000000001'
+$script:cosmosDbRoleDefinitionIdContributor = '00000000-0000-0000-0000-000000000002'
 
 # Connect to Azure
 $secureStringAzureApplicationPassword = ConvertTo-SecureString `
@@ -268,6 +272,31 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -MaxStalenessPrefix 50 `
                 -AllowedOrigin $script:testCorsAllowedOrigins `
                 -Verbose
+        }
+    }
+
+    Context 'When assigning an RBAC contributor role to the account for the principal' {
+        It 'Should not throw an exception' {
+            New-AzCosmosDBSqlRoleAssignment `
+                -AccountName $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName `
+                -RoleDefinitionId $script:cosmosDbRoleDefinitionIdContributor `
+                -Scope "/" `
+                -PrincipalId $env:azureApplicationId
+        }
+    }
+
+    Context 'When retrieving the RBAC contributor role from the account for the principal' {
+        It 'Should not throw an exception' {
+            $script:Result = Get-AzCosmosDBSqlRoleAssignment `
+                -AccountName $script:testAccountName `
+                -ResourceGroupName $script:testResourceGroupName
+
+            Write-Verbose -Message ($script:Result | Out-String)
+        }
+
+        It 'Should return at least one SQL Role Assignement' {
+            $script:Result | Should -Not -BeNullOrEmpty
         }
     }
 
@@ -418,6 +447,35 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     -Id $script:testDatabase `
                     -Verbose
             } | Should -Throw
+        }
+    }
+
+    Context 'When creating a new context from Azure using an Entra ID Token for the Service Principal' {
+        It 'Should not throw an exception' {
+            $script:testEntraIdContext = New-CosmosDbContext `
+                -Account $script:testAccountName `
+                -EntraIdToken $script:entraIdTokenForSPSecureString
+        }
+
+    Context 'When creating a new database with an Entra ID token' {
+        It 'Should not throw an exception' {
+            $script:result = New-CosmosDbDatabase -Context $script:testEntraIdContext -Id $script:testDatabase -Verbose
+        }
+
+        It 'Should return expected object' {
+            $script:result.Timestamp | Should -BeOfType [System.DateTime]
+            $script:result.Etag | Should -BeOfType [System.String]
+            $script:result.ResourceId | Should -BeOfType [System.String]
+            $script:result.Uri | Should -BeOfType [System.String]
+            $script:result.Collections | Should -BeOfType [System.String]
+            $script:result.Users | Should -BeOfType [System.String]
+            $script:result.Id | Should -Be $script:testDatabase
+        }
+    }
+
+    Context 'When deleting the new database with an Entra ID token' {
+        It 'Should not throw an exception' {
+            $script:result = Remove-CosmosDbDatabase -Context $script:testEntraIdContext -Id $script:testDatabase -Verbose
         }
     }
 

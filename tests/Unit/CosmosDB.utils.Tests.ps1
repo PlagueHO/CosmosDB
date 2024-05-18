@@ -1069,6 +1069,8 @@ console.log("done");
 
             It 'Should return expected result when' {
                 $script:result.authorization | Should -Be ([System.Web.HttpUtility]::UrlEncode($script:testAuthorizationHeaderResourceToken))
+                # The date is not the same as the test date because the date format ends up being different on Azure DevOps pipelines vs. Local
+                # $script:result.'x-ms-date' | Should -Be $script:testUniversalDate
             }
         }
 

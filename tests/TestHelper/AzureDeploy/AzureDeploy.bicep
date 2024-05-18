@@ -1,6 +1,11 @@
-param AccountName string = ''
+param AccountName string
 param Location string = 'East US'
-param principalId string = ''
+param principalId string
+@allowed([
+  '00000000-0000-0000-0000-000000000001'// Built-in role 'Azure Cosmos DB Built-in Data Reader'
+  '00000000-0000-0000-0000-000000000002' // Built-in role 'Azure Cosmos DB Built-in Data Contributor'
+])
+param roleDefinitionId string = '00000000-0000-0000-0000-000000000002'
 
 resource account 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
   kind: 'GlobalDocumentDB'
@@ -26,12 +31,14 @@ resource account 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
   dependsOn: []
 }
 
-resource sqlRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2021-10-15' = {
-  name: guid('00000000-0000-0000-0000-000000000002', principalId, account.id)
+var roleAssignmentId = guid(roleDefinitionId, principalId, account.id)
+
+resource sqlRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2023-04-15' = {
+  name: roleAssignmentId
   parent: account
   properties: {
-    roleDefinitionId: reference(resourceId('Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions', '2021-10-15', '00000000-0000-0000-0000-000000000002')).id
     principalId: principalId
+    roleDefinitionId: reference('/${subscription().id}/resourceGroups/${resourceGroup()}/providers/Microsoft.DocumentDB/databaseAccounts/${AccountName}/sqlRoleDefinitions/${roleDefinitionId}').id
     scope: account.id
   }
 }

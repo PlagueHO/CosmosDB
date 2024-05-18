@@ -112,7 +112,7 @@ function Connect-AzureServicePrincipal
     .OUTPUTS
         System.String
 #>
-function Get-AzureEntraIdOAuth2Token
+function Get-AzureEntraIdToken
 {
     [CmdletBinding()]
     param ()
@@ -379,6 +379,7 @@ Export-ModuleMember -Function `
     Get-AzureServicePrincipal, `
     Connect-AzureServicePrincipal, `
     New-AzureTestCosmosDbAccount, `
+    Get-AzureEntraIdToken, `
     Remove-AzureTestCosmosDbAccount, `
     New-AzureTestCosmosDbResourceGroup, `
     Remove-AzureTestCosmosDbResourceGroup,

@@ -19,4 +19,5 @@
     MarkdownLinkCheck     = 'latest'
     'Az.Accounts'         = '2.19.0'
     'Az.Resources'        = '6.16.2'
+    'Az.CosmosDB'         = '1.14.2' # Required by integration tests
 }
