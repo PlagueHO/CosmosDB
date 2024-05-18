@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- BREAKING CHANGE: Updated module to require `Az.Accounts` v2.19.0 or newer and `Az.Resources`
+  v6.16.2 or newer.
 - Renamed `New-CosmosDbAuthorizationHeader` to `Get-CosmosDbAuthorizationHeaderFromContext` to better indicate
   actual function behaviour.
 - Renamed `Get-CosmosDbAuthorizationHeadersFromContext` to `Get-CosmosDbAuthorizationHeaderFromContextResourceToken` to better

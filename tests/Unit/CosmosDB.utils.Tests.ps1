@@ -32,7 +32,7 @@ InModuleScope $ProjectName {
     $script:testBaseHostnameAzureChinaCloud = 'documents.azure.cn'
     $script:testBaseHostnameAzureCustomEndpoint = 'documents.somecloud.zzz'
     $script:testDate = (Get-Date -Year 2017 -Month 11 -Day 29 -Hour 10 -Minute 45 -Second 10)
-    $script:testUniversalDate = $script:testDate.ToUniversalTime().ToString("r", [System.Globalization.CultureInfo]::InvariantCulture)
+    $script:testUniversalDate = 'Tue, 28 Nov 2017 21:45:10 GMT'
     $script:testContext = [CosmosDb.Context] @{
         Account  = $script:testAccount
         Database = $script:testDatabase
