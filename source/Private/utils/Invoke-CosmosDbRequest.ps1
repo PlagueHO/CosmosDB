@@ -111,7 +111,13 @@ function Invoke-CosmosDbRequest
         default
         {
             # Request for an object that is within a database
+            if ([System.String]::IsNullOrEmpty($Database))
+            {
+                New-CosmosDbInvalidOperationException -Message ($LocalizedData.ErrorMalformedContextDatabaseEmpty)
+            }
+
             $resourceLink = ('dbs/{0}' -f $Database)
+
 
             if ($PSBoundParameters.ContainsKey('ResourcePath'))
             {
@@ -157,12 +163,22 @@ function Invoke-CosmosDbRequest
              A token in the context that matched the resource link could not be found
              So try to use the Entra Id token in the context.
         #>
+        $date = Get-Date
+
         if ([System.String]::IsNullOrEmpty($Context.EntraIdToken))
         {
             <#
                 Neither a resource token in the context or an EntraIdToken was found
                 So try to use the Key in the context to generate the authorization headers.
             #>
+            if (-not ($PSBoundParameters.ContainsKey('Key')))
+            {
+                if (-not [System.String]::IsNullOrEmpty($Context.Key))
+                {
+                    $Key = $Context.Key
+                }
+            }
+
             if ([System.String]::IsNullOrEmpty($Context.Key))
             {
                 New-CosmosDbInvalidOperationException -Message ($LocalizedData.ErrorAuthorizationKeyEmpty)
@@ -174,13 +190,13 @@ function Invoke-CosmosDbRequest
                 -Method $Method `
                 -ResourceType $ResourceType `
                 -ResourceId $resourceId `
-                -Date (Get-Date)
+                -Date $date
         }
         else
         {
             $authorizationHeaders = Get-CosmosDbAuthorizationHeaderFromContextEntraId `
                 -Context $Context `
-                -Date (Get-Date)
+                -Date $date
         }
     }
 
