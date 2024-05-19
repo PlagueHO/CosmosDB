@@ -280,31 +280,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When assigning an RBAC contributor role to the account for the principal' {
-        It 'Should not throw an exception' {
-            New-AzCosmosDBSqlRoleAssignment `
-                -AccountName $script:testAccountName `
-                -ResourceGroupName $script:testResourceGroupName `
-                -RoleDefinitionId $script:cosmosDbRoleDefinitionIdContributor `
-                -Scope "/" `
-                -PrincipalId $env:azureAppicationObjectId
-        }
-    }
-
-    Context 'When retrieving the RBAC contributor role from the account for the principal' {
-        It 'Should not throw an exception' {
-            $script:Result = Get-AzCosmosDBSqlRoleAssignment `
-                -AccountName $script:testAccountName `
-                -ResourceGroupName $script:testResourceGroupName
-
-            Write-Verbose -Message ($script:Result | Out-String)
-        }
-
-        It 'Should return at least one SQL Role Assignement' {
-            $script:Result | Should -Not -BeNullOrEmpty
-        }
-    }
-
     Context 'When getting the new Azure Cosmos DB Account' {
         It 'Should not throw an exception' {
             $script:result = Get-CosmosDbAccount `
@@ -910,6 +885,31 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     }
 
     Context 'When testing RBAC access using an Entra ID token' {
+        Context 'When assigning an RBAC contributor role to the account for the principal' {
+            It 'Should not throw an exception' {
+                New-AzCosmosDBSqlRoleAssignment `
+                    -AccountName $script:testAccountName `
+                    -ResourceGroupName $script:testResourceGroupName `
+                    -RoleDefinitionId $script:cosmosDbRoleDefinitionIdContributor `
+                    -Scope "/" `
+                    -PrincipalId $env:azureAppicationObjectId
+            }
+        }
+
+        Context 'When retrieving the RBAC contributor role from the account for the principal' {
+            It 'Should not throw an exception' {
+                $script:Result = Get-AzCosmosDBSqlRoleAssignment `
+                    -AccountName $script:testAccountName `
+                    -ResourceGroupName $script:testResourceGroupName
+
+                Write-Verbose -Message ($script:Result | Out-String)
+            }
+
+            It 'Should return at least one SQL Role Assignement' {
+                $script:Result | Should -Not -BeNullOrEmpty
+            }
+        }
+
         # RBAC access testing using a Entra ID token generated via the test harness
         Context 'When creating a new context from Azure using an Entra ID Token for the Service Principal' {
             It 'Should not throw an exception' {

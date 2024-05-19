@@ -169,14 +169,6 @@ function Invoke-CosmosDbRequest
                 Neither a resource token in the context or an EntraIdToken was found
                 So try to use the Key in the context to generate the authorization headers.
             #>
-            if (-not ($PSBoundParameters.ContainsKey('Key')))
-            {
-                if (-not [System.String]::IsNullOrEmpty($Context.Key))
-                {
-                    $Key = $Context.Key
-                }
-            }
-
             if ([System.String]::IsNullOrEmpty($Context.Key))
             {
                 New-CosmosDbInvalidOperationException -Message ($LocalizedData.ErrorAuthorizationKeyEmpty)
@@ -194,7 +186,7 @@ function Invoke-CosmosDbRequest
         {
             $authorizationHeaders = Get-CosmosDbAuthorizationHeaderFromContextEntraId `
                 -Context $Context `
-                -Date (Get-Date)
+                -Date(Get-Date)
         }
     }
 
