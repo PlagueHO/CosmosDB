@@ -71,6 +71,11 @@ Return documents from a Cosmos DB database collection as a JSON string.
 
 Return the resource path for a document object.
 
+### [Get-CosmosDbEntraIdToken](Get-CosmosDbEntraIdToken.md)
+
+Generates a secure string token for use with Azure Cosmos DB by
+calling the Entra ID service using the Get-AzAccessToken cmdlet.
+
 ### [Get-CosmosDbOffer](Get-CosmosDbOffer.md)
 
 Return the offers in a Cosmos DB account.
@@ -150,7 +155,7 @@ in Azure.
 
 Create a new attachment for a document in a Cosmos DB database.
 
-### [New-CosmosDbAuthorizationToken](New-CosmosDbAuthorizationToken.md)
+### [Get-CosmosDbAuthorizationHeaderFromContext](Get-CosmosDbAuthorizationHeaderFromContext.md)
 
 Create a new Authorization Token to be used with in a
 Rest API request to Cosmos DB.

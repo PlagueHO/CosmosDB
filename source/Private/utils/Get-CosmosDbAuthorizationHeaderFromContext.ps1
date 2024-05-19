@@ -1,8 +1,8 @@
-function New-CosmosDbAuthorizationToken
+function Get-CosmosDbAuthorizationHeaderFromContext
 {
 
     [CmdletBinding()]
-    [OutputType([System.String])]
+    [OutputType([System.Collections.Hashtable])]
     param
     (
         [Parameter(Mandatory = $true)]
@@ -46,10 +46,10 @@ function New-CosmosDbAuthorizationToken
     $dateString = ConvertTo-CosmosDbTokenDateString -Date $Date
     $payLoad = @(
         $Method.ToLowerInvariant() + "`n" + `
-            $ResourceType.ToLowerInvariant() + "`n" + `
-            $ResourceId + "`n" + `
-            $dateString.ToLowerInvariant() + "`n" + `
-            "" + "`n"
+        $ResourceType.ToLowerInvariant() + "`n" + `
+        $ResourceId + "`n" + `
+        $dateString.ToLowerInvariant() + "`n" + `
+        "" + "`n"
     )
 
     $body = [System.Text.Encoding]::UTF8.GetBytes($payLoad)
@@ -58,5 +58,9 @@ function New-CosmosDbAuthorizationToken
 
     Add-Type -AssemblyName 'System.Web'
     $token = [System.Web.HttpUtility]::UrlEncode(('type={0}&ver={1}&sig={2}' -f $KeyType, $TokenVersion, $signature))
-    return $token
+    $headers = @{
+        'authorization' = $token
+        'x-ms-date'     = $dateString
+    }
+    return $headers
 }

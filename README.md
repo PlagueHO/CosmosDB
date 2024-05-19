@@ -22,13 +22,16 @@
 - [Installation](#installation)
 - [Getting Started](#getting-started)
   - [Working with Contexts](#working-with-contexts)
+    - [Create a Context using an Entra ID Authorization Token](create-a-context-using-an-entra-id-authorization-token)
+      - [Configuring Role-Based Access Control (RBAC) with Entra ID](#configuring-role-based-access-control-rbac-with-entra-id)
+      - [Database Operations allowed by Role-Based Access Control](#database-operations-allowed-by-role-based-access-control)
     - [Create a Context specifying the Key Manually](#create-a-context-specifying-the-key-manually)
+    - [Use CosmosDB Module to Retrieve Key from Azure Management Portal](#use-cosmosdb-module-to-retrieve-key-from-azure-management-portal)
+    - [Create a Context from Resource Authorization Tokens](#create-a-context-from-resource-authorization-tokens)
     - [Create a Context for a Cosmos DB in Azure US Government Cloud](#create-a-context-for-a-cosmos-db-in-azure-us-government-cloud)
     - [Create a Context for a Cosmos DB in Azure China Cloud (Mooncake)](#create-a-context-for-a-cosmos-db-in-azure-china-cloud-mooncake)
     - [Create a Context for a Cosmos DB with a Custom Endpoint](#create-a-context-for-a-cosmos-db-with-a-custom-endpoint)
-    - [Use CosmosDB Module to Retrieve Key from Azure Management Portal](#use-cosmosdb-module-to-retrieve-key-from-azure-management-portal)
     - [Create a Context for a Cosmos DB Emulator](#create-a-context-for-a-cosmos-db-emulator)
-    - [Create a Context from Resource Authorization Tokens](#create-a-context-from-resource-authorization-tokens)
   - [Working with Accounts](#working-with-accounts)
   - [Working with Databases](#working-with-databases)
   - [Working with Offers](#working-with-offers)
@@ -81,16 +84,15 @@ For more information on the Cosmos DB Rest APIs, see [this link](https://docs.mi
 
 This module requires the following:
 
-- Windows PowerShell 5.x or PowerShell 6.x:
-  - **Az.Profile** and **Az.Resources** PowerShell modules
-    are required if using `New-CosmosDbContext -ResourceGroupName $resourceGroup`
-    or `*-CosmosDbAccount` functions.
+- Windows PowerShell 5.x, PowerShell Core 6.x or PowerShell 7.x
 
-> Note: As of 3.0.0.0 of the CosmosDB module, support for **AzureRm** and
-> **AzureRm.NetCore** PowerShell modules has been deprecated due to being
-> superceeded by the **Az** modules. If it is a requirement that **AzureRm**
-> or **AzureRm.NetCore** modules are used then you will need to remain on
-> CosmosDB module 2.x.
+### PowerShell Module Dependencies
+
+- **Az.Account**: v2.19.0 or newer.
+- **Az.Resources**: 6.16.2 or newer.
+
+These modules are required if using `New-CosmosDbContext -ResourceGroupName $resourceGroup`
+or `*-CosmosDbAccount` functions.
 
 ## Recommended Knowledge
 
@@ -129,7 +131,94 @@ the Azure management portal for you.
 
 ### Working with Contexts
 
+#### Create a Context Using an Entra ID Authorization Token
+
+You can create a context object that can include use an _Entra ID Authorization Token_
+that will be used to authenticate requests to Cosmos DB.
+
+> Important: This is a recommended security practice to use when you've
+> [configured role-based access control with Microsoft Entra ID](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac)
+> on your Azure Cosmos DB account. It will help you keep your account secure
+> by not exposing the primary or secondary keys in your code.
+
+To create a context object using an _Entra ID Authorization Token_ you will need
+to set the `EntraIdToken` parameter to the token you have retrieved from Entra ID
+for the identity that you have given appropriate permissions to the `account`,
+`database` and/or `collection`. See [this page](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac#concepts) for more infomration.
+
+```powershell
+# Get an OAuth2 resource token from Entra ID for the Cosmos DB account.
+# This will use the currently logged in user to authenticate to Entra ID to
+# get the token. There are many other ways of doing this.
+$entraIdOAuthToken = Get-CosmosDbEntraIdToken -Endpoint 'https://MyAzureCosmosDB.documents.azure.com'
+
+$newCosmosDbContextParams  = @{
+    Account      = 'MyAzureCosmosDB'
+    EntraIdToken = $entraIdOAuthToken
+}
+$accountContext = New-CosmosDbContext @newCosmosDbContextParams
+Get-CosmosDbCollection -Context $accountContext -Id MyNewCollection
+```
+
+An alternate method is to allow the New-CosmosDbContext cmdlet to retrieve the
+Entra ID token for you. This will require you to have already logged into Azure
+and will use the base URI detected for the account as the resource URI for the
+token request.
+
+```powershell
+$newCosmosDbContextParams  = @{
+    Account      = 'MyAzureCosmosDB'
+    AutoGenerateEntraIdToken = $true
+}
+$accountContext = New-CosmosDbContext @newCosmosDbContextParams
+Get-CosmosDbCollection -Context $accountContext -Id MyNewCollection
+```
+
+> Important: Using an Entra ID Authorization Token is only supported by setting it
+> in a CosmosDB.Context object and passing that to the commands you want to execute.
+> Not all commands support this method of authentication. If you need to use a command
+> that doesn't support this method of authentication, you will need to use one of the
+> other methods of authentication. See the [Database Operations allowed by Role-Based Access Control](#database-operations-allowed-by-role-based-access-control)
+> section for more information.
+
+##### Configuring Role-Based Access Control (RBAC) with Entra ID
+
+There are several ways to configure a Cosmos DB Account with Role-Based Access Control,
+including:
+
+ - *Azure Bicep*: An example can be found in the [\tests\TestHelper\AzureDeploy\CosmosDb.bicep](\tests\TestHelper\AzureDeploy\CosmosDb.bicep) file.
+ - *Azure PowerShell*: The integration tests use this method.
+ - *AzCli*.
+
+> Important Note: One thing I found when adding a SQL Role Assignment to the Cosmos DB
+> Account (or Database or Container) is that the principal ID must be the Object ID of
+> the user, group or service principal that you want to assign the role to. You can't use
+> the Application ID for this value.
+
+For more information on how to configure Role-Based Access Control with Entra ID, see the
+[Configure role-based access control with Microsoft Entra ID for your Azure Cosmos DB account](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac)
+page.
+
+##### Database Operations allowed by Role-Based Access Control
+
+Only a subset of all the operations that can be performed on a Cosmos DB account are
+allowed by Role-Based Access Control. The following operations are allowed:
+This permission model covers only database operations that involve reading and writing data. It does not cover any kind of management operations on management resources, including:
+
+- Create/Replace/Delete Database
+- Create/Replace/Delete Container
+- Read/Replace Container Throughput
+- Create/Replace/Delete/Read Stored Procedures
+- Create/Replace/Delete/Read Triggers
+- Create/Replace/Delete/Read User Defined Functions
+
+For more information on this, please see the [Role-based access control (RBAC) with Azure Cosmos DB](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac#permission-model) page.
+
 #### Create a Context specifying the Key Manually
+
+> Note: This method of authenticating to Cosmos DB is not recommended for
+> production use. It is recommended to use the _Entra ID Authorization Token_
+> method described above.
 
 First convert your key into a secure string:
 
@@ -144,7 +233,42 @@ create a context variable:
 $cosmosDbContext = New-CosmosDbContext -Account MyAzureCosmosDB -Database MyDatabase -Key $primaryKey
 ```
 
+#### Use CosmosDB Module to Retrieve Key from Azure Management Portal
+
+> Note: This method of authenticating to Cosmos DB is not recommended for
+> production use. It is recommended to use the _Entra ID Authorization Token_
+> method described above.
+
+To create a context object so that the _CosmosDB PowerShell module_
+retrieves the primary or secondary key from the Azure Management
+Portal, use the following command:
+
+```powershell
+$cosmosDbContext = New-CosmosDbContext -Account MyAzureCosmosDB -Database MyDatabase -ResourceGroupName MyCosmosDbResourceGroup -MasterKeyType SecondaryMasterKey
+```
+
+_Note: if PowerShell is not connected to Azure then an interactive
+Azure login will be initiated. If PowerShell is already connected to
+an account that doesn't contain the Cosmos DB you wish to connect to then
+you will first need to connect to the correct account using the
+`Connect-AzAccount` cmdlet._
+
+#### Create a Context from Resource Authorization Tokens
+
+> Note: This method of authenticating to Cosmos DB is better than using master key
+> authentication, as it provides the ability to limit access to specific resources.
+> However, it is recommended to use the _Entra ID Authorization Token_ method
+> described above if possible.
+
+See the section [Using Resource Authorization Tokens](#using-resource-authorization-tokens)
+for instructions on how to create a Context object containing one or more _Resource
+Authorization Tokens_.
+
 #### Create a Context for a Cosmos DB in Azure US Government Cloud
+
+> Note: This method of authenticating to Cosmos DB is not recommended for
+> production use. It is recommended to use the _Entra ID Authorization Token_
+> method described above.
 
 Use the key secure string, Azure Cosmos DB account name and database to
 create a context variable and set the `Environment` parameter to
@@ -155,6 +279,10 @@ $cosmosDbContext = New-CosmosDbContext -Account MyAzureCosmosDB -Database MyData
 ```
 
 #### Create a Context for a Cosmos DB in Azure China Cloud (Mooncake)
+
+> Note: This method of authenticating to Cosmos DB is not recommended for
+> production use. It is recommended to use the _Entra ID Authorization Token_
+> method described above.
 
 Use the key secure string, Azure Cosmos DB account name and database to
 create a context variable and set the `Environment` parameter to
@@ -172,22 +300,6 @@ Cosmos DB custom endpoint hostname:
 ```powershell
 $cosmosDbContext = New-CosmosDbContext -Account MyAzureCosmosDB -Database MyDatabase -Key $primaryKey -EndpointHostname documents.eassov.com
 ```
-
-#### Use CosmosDB Module to Retrieve Key from Azure Management Portal
-
-To create a context object so that the _CosmosDB PowerShell module_
-retrieves the primary or secondary key from the Azure Management
-Portal, use the following command:
-
-```powershell
-$cosmosDbContext = New-CosmosDbContext -Account MyAzureCosmosDB -Database MyDatabase -ResourceGroupName MyCosmosDbResourceGroup -MasterKeyType SecondaryMasterKey
-```
-
-_Note: if PowerShell is not connected to Azure then an interactive
-Azure login will be initiated. If PowerShell is already connected to
-an account that doesn't contain the Cosmos DB you wish to connect to then
-you will first need to connect to the correct account using the
-`Connect-AzAccount` cmdlet._
 
 #### Create a Context for a Cosmos DB Emulator
 
@@ -207,12 +319,6 @@ machine or an alternate port as well as specifying an alternate Key to use:
 $primaryKey = ConvertTo-SecureString -String 'GFJqJesi2Rq910E0G7P4WoZkzowzbj23Sm9DUWFX0l0P8o16mYyuaZBN00Nbtj9F1QQnumzZKSGZwknXGERrlA==' -AsPlainText -Force
 $cosmosDbContext = New-CosmosDbContext -Emulator -Database MyDatabase -Uri https://cosmosdbemulator.contoso.com:9081 -Key $primaryKey
 ```
-
-#### Create a Context from Resource Authorization Tokens
-
-See the section [Using Resource Authorization Tokens](#using-resource-authorization-tokens)
-for instructions on how to create a Context object containing one or more _Resource
-Authorization Tokens_.
 
 ### Working with Accounts
 

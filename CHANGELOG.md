@@ -17,6 +17,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed MacOS-10.15 testing from build pipeline because it is no longer supported by Microsoft
   managed Azure DevOps images - Fixes [Issue #476](https://github.com/PlagueHO/CosmosDB/issues/476).
 - Added macOS-12 testing to build pipeline - Fixes [Issue #477](https://github.com/PlagueHO/CosmosDB/issues/477).
+- Changed integration tests to deploy Cosmos DB using Bicep.
+- Update `requirements.psd1` to install modules `Az.Accounts` 2.19.0 and `Az.Resources` 6.16.2.
+- Renamed `New-CosmosDbAuthorizationToken` to `New-CosmosDbAuthorizationHeader` to better indicate
+  actual function return type.
+- Refactored `Invoke-CosmosDbRequest` to support getting the EntraIdToken property from the context object
+  and using it for authentication if it is provided. If the Key property is provided, the EntraIdToken property
+  will take precendence and the key will be ignored.
+- Updated CI pipeline to use `PublishCodeCoverageResults@2` task rather than `PublishCodeCoverageResults@1`
+  task to support the latest version of the task.
+
+### Changed
+
+- BREAKING CHANGE: Updated module to require `Az.Accounts` v2.19.0 or newer and `Az.Resources`
+  v6.16.2 or newer.
+- Renamed `New-CosmosDbAuthorizationHeader` to `Get-CosmosDbAuthorizationHeaderFromContext` to better indicate
+  actual function behaviour.
+- Renamed `Get-CosmosDbAuthorizationHeadersFromContext` to `Get-CosmosDbAuthorizationHeaderFromContextResourceToken` to better
+  indicate actual function behaviour and align naming convention.
+- Refactored `Invoke-CosmosDbRequest` to clean up logic to generate the authorization header.
+- Added new utillity function `Get-CosmosDbAuthorizationHeaderFromContextEntraId` to generate the authorization
+  header when an Entra ID Token is provided in the context. This function is used by `Invoke-CosmosDbRequest` to
+  generate the authorization header when an Entra ID Token is provided.
+
+### Added
+
+- Added support for setting an Entra Id OAuth2 Token in the `New-CosmosDbContext` - Fixes [Issue #479](https://github.com/PlagueHO/CosmosDB/issues/479).
+- Added new `Get-CosmosDbEntraIdToken` function that uses `Get-AzAccessToken` to get an Entra Id Token
+  for use in Cosmos DB requests. This is used by `New-CosmosDbContext` to set the Entra Id Token in the
+  context object - Fixes [Issue #479](https://github.com/PlagueHO/CosmosDB/issues/479).
 
 ## [4.7.0] - 2023-01-29
 
@@ -666,7 +695,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0.8.350] - 2018-04-05
 
-- Fixed `New-CosmosDbAuthorizationToken` function to support
+- Fixed `New-CosmosDbAuthorizationHeader` function to support
   generating authorization tokens for case sensitive resource
   names - See [Issue #76](https://github.com/PlagueHO/CosmosDB/issues/76).
   Thanks [MWL88](https://github.com/MWL88).
@@ -775,7 +804,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed bug in `New-CosmosDbConnection` connecting to Azure and
   improved tests.
-- Changed `New-CosmosDbAuthorizationToken` to replaced `Connection`
+- Changed `New-CosmosDbAuthorizationHeader` to replaced `Connection`
   parameter with `Key` and `KeyType` parameter.
 - Fixed bug in `Invoke-CosmosDbRequest` that can cause connection
   object to be changed.

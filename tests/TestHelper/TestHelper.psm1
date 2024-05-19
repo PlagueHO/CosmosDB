@@ -103,7 +103,61 @@ function Connect-AzureServicePrincipal
 
 <#
     .SYNOPSIS
+        Get the Entra ID OAuth2 Token for the account authenticated to Azure.
+
+    .DESCRIPTION
+        This is used to test Entra ID authentication when RBAC is enabled as per
+        https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac
+
+    .PARAMETER ResourceUrl
+        The resource URL for which the token is requested. Defaults to 'https://cosmos.azure.com'.
+
+    .OUTPUTS
+        System.String
+#>
+function Get-AzureEntraIdToken
+{
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [System.String]
+        $ResourceUrl = 'https://cosmos.azure.com'
+    )
+
+    # Get the access token for the specific audience
+    $entraIdOAuthToken = Get-AzAccessToken -ResourceUrl $ResourceUrl
+
+    return $entraIdOAuthToken.Token
+}
+
+<#
+    .SYNOPSIS
         Create a new Azure Cosmos DB Account for use with testing.
+
+    .DESCRIPTION
+        The New-AzureTestCosmosDbAccount function deploys a new Azure Cosmos DB account using an ARM template.
+        It is primarily intended for use in testing scenarios.
+
+    .PARAMETER ObjectId
+        The Object ID of the Azure AD principal identity that will be assigned the SQL role assigment.
+
+    .PARAMETER AccountName
+        The name of the Azure Cosmos DB account to create.
+
+    .PARAMETER ResourceGroupName
+        The name of the resource group where the Azure Cosmos DB account will be created.
+
+    .PARAMETER Location
+        The Azure region where the Azure Cosmos DB account will be created. Defaults to 'East US'.
+
+    .EXAMPLE
+        New-AzureTestCosmosDbAccount -ObjectId '12345678-1234-1234-1234-123456789012' -AccountName 'testCosmosDb' -ResourceGroupName 'testResourceGroup'
+
+        This will create a new Azure Cosmos DB account named 'testCosmosDb' in the 'testResourceGroup' resource group.
+
+    .NOTES
+        The function uses the New-AzDeployment cmdlet to deploy the ARM template.
+        It requires the Az.Resources module and an authenticated Azure session.
 #>
 function New-AzureTestCosmosDbAccount
 {
@@ -114,11 +168,19 @@ function New-AzureTestCosmosDbAccount
     (
         [Parameter(Mandatory = $true)]
         [System.String]
-        $Name,
+        $ObjectId,
 
         [Parameter(Mandatory = $true)]
         [System.String]
-        $ResourceGroupName
+        $AccountName,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $ResourceGroupName,
+
+        [Parameter()]
+        [System.String]
+        $Location = 'East US'
     )
 
     try
@@ -127,20 +189,23 @@ function New-AzureTestCosmosDbAccount
 
         # Build hashtable of deployment parameters
         $azureDeployFolder = Join-Path -Path $PSScriptRoot -ChildPath 'AzureDeploy'
-        $deployName = ('Deploy_{0}' -f $AccountName)
+        $deployName = ('Deploy_{0}_{1}' -f $AccountName, (Get-Date -Format FileDateTimeUniversal))
         $deploymentParameters = @{
             Name                    = $deployName
-            ResourceGroupName       = $ResourceGroupName
-            TemplateFile            = Join-Path -Path $azureDeployFolder -ChildPath 'AzureDeploy.json'
+            Location                = $Location
+            TemplateFile            = Join-Path -Path $azureDeployFolder -ChildPath 'AzureDeploy.Bicep'
             TemplateParameterObject = @{
-                AccountName = $Name
+                resourceGroupName = $ResourceGroupName
+                accountName = $AccountName
+                principalId = $ObjectId
+                location = $Location
             }
         }
 
         if ($PSCmdlet.ShouldProcess('Azure', ("Create an Azure Cosmos DB test account '{0}' in resource group '{1}'" -f $Name, $ResourceGroupName)))
         {
             # Deploy ARM template
-            New-AzResourceGroupDeployment `
+            New-AzDeployment `
                 @deploymentParameters
         }
     }
@@ -349,6 +414,7 @@ Export-ModuleMember -Function `
     Get-AzureServicePrincipal, `
     Connect-AzureServicePrincipal, `
     New-AzureTestCosmosDbAccount, `
+    Get-AzureEntraIdToken, `
     Remove-AzureTestCosmosDbAccount, `
     New-AzureTestCosmosDbResourceGroup, `
     Remove-AzureTestCosmosDbResourceGroup,

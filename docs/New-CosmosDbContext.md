@@ -47,6 +47,22 @@ New-CosmosDbContext -Account <String> [-Database <String>] -ResourceGroupName <S
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
+### EntraIdToken
+
+```powershell
+New-CosmosDbContext -Account <String> [-Database <String>] -EntraIdToken <SecureString>
+ [-BackoffPolicy <BackoffPolicy>] [-Environment <Environment>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### EntraIdTokenAutogen
+
+```powershell
+New-CosmosDbContext -Account <String> [-Database <String>] -AutoGenerateEntraIdToken
+ [-BackoffPolicy <BackoffPolicy>] [-Environment <Environment>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
 ### Token
 
 ```powershell
@@ -176,6 +192,27 @@ PS C:\> $cosmosDbContext = New-CosmosDbContext -ConnectionString ($connectionStr
 Creates a CosmosDB context specifying the connection string connecting
 to the Cosmos DB account.
 
+### Example 10
+
+```powershell
+PS C:\> $entraIdToken = Get-CosmosDbEntraIdToken -Endpoint 'https://MyAzureCosmosDB.documents.azure.com/'
+PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -EntraIdToken $entraIdToken
+```
+Creates a CosmosDB context specifying the an Entra ID OAuth2 token generated
+by the Entra ID service for the endpoint 'https://MyAzureCosmosDB.documents.azure.com/'. The
+identity it represents should have the appropriate RBAC permissions to access the Cosmos DB
+account.
+
+### Example 11
+
+```powershell
+PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -AutoGenerateEntraIdToken
+```
+Creates a CosmosDB context with an Entra ID OAuth2 token generated automatically. This will use the
+Get-CosmosDbEntraIdToken function to generate the token using the Base URI for the context as the
+resource URL. This function requires that the Az.Account module is installed and that the user or
+principle is logged in and has the appropriate RBAC permissions to access the Cosmos DB account.
+
 ## PARAMETERS
 
 ### -Account
@@ -184,7 +221,7 @@ The account name of the Cosmos DB to access.
 
 ```yaml
 Type: String
-Parameter Sets: Account, CustomAzureAccount, CustomAccount, AzureAccount, Token
+Parameter Sets: Account, CustomAzureAccount, CustomAccount, AzureAccount, EntraIdToken, EntraIdTokenAutogen, Token
 Aliases:
 
 Required: True
@@ -303,7 +340,7 @@ The supported values are:
 
 ```yaml
 Type: Environment
-Parameter Sets: Account, AzureAccount, Token, ConnectionString
+Parameter Sets: Account, AzureAccount, ConnectionString, EntraIdToken, EntraIdTokenAutogen, Token
 Aliases:
 Accepted values: AzureChinaCloud, AzureCloud, AzureUSGovernment
 
@@ -416,6 +453,41 @@ Cosmos DB.
 Type: String
 Parameter Sets: CustomAzureAccount, AzureAccount
 Aliases: ResourceGroup
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EntraIdToken
+
+This contains an Entra ID OAuth2 token that will be used to
+authenticate to the account, database or collection.
+
+```yaml
+Type: SecureString
+Parameter Sets: EntraIdToken
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AutoGenerateEntraIdToken
+
+This switch causes this function to request an OAuth2 token
+using the Base URI for the context as the resource URL from
+Entra ID using the Az.Account Get-AzAccessToken function.
+
+```yaml
+Type: SecureString
+Parameter Sets: EntraIdTokenAutogen
+Aliases:
 
 Required: True
 Position: Named

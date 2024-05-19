@@ -19,10 +19,12 @@ if ([System.String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
         [System.String]::IsNullOrEmpty($env:azureApplicationId) -or `
         [System.String]::IsNullOrEmpty($env:azureApplicationPassword) -or `
         [System.String]::IsNullOrEmpty($env:azureTenantId) -or `
+        [System.String]::IsNullOrEmpty($env:azureAppicationObjectId) -or `
         $env:azureSubscriptionId -eq '$(azureSubscriptionId)' -or `
         $env:azureApplicationId -eq '$(azureApplicationId)' -or `
         $env:azureApplicationPassword -eq '$(azureApplicationPassword)' -or `
-        $env:azureTenantId -eq '$(azureTenantId)'
+        $env:azureTenantId -eq '$(azureTenantId)' -or `
+        $env:azureAppicationObjectId -eq '$(azureAppicationObjectId)'
     )
 {
     Write-Warning -Message 'Integration tests can not be run because one or more Azure connection environment variables are not set.'
@@ -136,6 +138,8 @@ function tax(income) {
 }
 '@
 $script:testDefaultTimeToLive = 3600
+$script:cosmosDbRoleDefinitionIdReader = '00000000-0000-0000-0000-000000000001'
+$script:cosmosDbRoleDefinitionIdContributor = '00000000-0000-0000-0000-000000000002'
 
 # Connect to Azure
 $secureStringAzureApplicationPassword = ConvertTo-SecureString `
@@ -149,6 +153,11 @@ Connect-AzureServicePrincipal `
     -ApplicationPassword $secureStringAzureApplicationPassword `
     -TenantId $env:azureTenantId `
     -Verbose
+
+# Get the Entra ID token for the logged in Service Principal to use
+# for testing Cosmos DB secured with RBAC.
+$script:entraIdTokenForSP = Get-AzureEntraIdToken -Verbose
+$script:entraIdTokenForSPSecureString = ConvertTo-SecureString -String $script:entraIdTokenForSP -AsPlainText -Force
 
 # Create resource group
 $null = New-AzureTestCosmosDbResourceGroup `
@@ -872,6 +881,107 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Id | Should -BeOfType [System.String]
             $script:result.content.offerThroughput | Should -Be 800
             $script:result.content.offerIsRUPerMinuteThroughputEnabled | Should -Be $false
+        }
+    }
+
+    Context 'When testing RBAC access using an Entra ID token' {
+        Context 'When assigning an RBAC contributor role to the account for the principal' {
+            It 'Should not throw an exception' {
+                New-AzCosmosDBSqlRoleAssignment `
+                    -AccountName $script:testAccountName `
+                    -ResourceGroupName $script:testResourceGroupName `
+                    -RoleDefinitionId $script:cosmosDbRoleDefinitionIdContributor `
+                    -Scope "/" `
+                    -PrincipalId $env:azureAppicationObjectId
+            }
+        }
+
+        Context 'When retrieving the RBAC contributor role from the account for the principal' {
+            It 'Should not throw an exception' {
+                $script:Result = Get-AzCosmosDBSqlRoleAssignment `
+                    -AccountName $script:testAccountName `
+                    -ResourceGroupName $script:testResourceGroupName
+
+                Write-Verbose -Message ($script:Result | Out-String)
+            }
+
+            It 'Should return at least one SQL Role Assignement' {
+                $script:Result | Should -Not -BeNullOrEmpty
+            }
+        }
+
+        # RBAC access testing using a Entra ID token generated via the test harness
+        Context 'When creating a new context from Azure using an Entra ID Token for the Service Principal' {
+            It 'Should not throw an exception' {
+                $script:testEntraIdContext = New-CosmosDbContext `
+                    -Account $script:testAccountName `
+                    -Database $script:testDatabase `
+                    -EntraIdToken $script:entraIdTokenForSPSecureString
+            }
+        }
+
+        Context 'When adding a document to a collection using an Entra ID Token' {
+            It 'Should not throw an exception' {
+                $script:result = New-CosmosDbDocument `
+                    -Context $script:testEntraIdContext `
+                    -CollectionId $script:testCollection `
+                    -DocumentBody $script:testDocumentBody `
+                    -Verbose
+            }
+
+            It 'Should return expected object' {
+                Test-GenericResult -GenericResult $script:result
+                $script:result.Id | Should -Be $script:testDocumentId
+                $script:result.Content | Should -Be 'Some string'
+                $script:result.More | Should -Be 'Some other string'
+            }
+        }
+
+        Context 'When removing a document from a collection using an Entra ID Token' {
+            It 'Should not throw an exception' {
+                $script:result = Remove-CosmosDbDocument `
+                    -Context $script:testEntraIdContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testDocumentId `
+                    -Verbose
+            }
+        }
+
+        # RBAC access testing using a Entra ID token generated via the test harness
+        Context 'When creating a new context from Azure using an automatically generated Entra ID Token for the Service Principal' {
+            It 'Should not throw an exception' {
+                $script:testEntraIdContext = New-CosmosDbContext `
+                    -Account $script:testAccountName `
+                    -Database $script:testDatabase `
+                    -AutoGenerateEntraIdToken
+            }
+        }
+
+        Context 'When adding a document to a collection using an Entra ID Token' {
+            It 'Should not throw an exception' {
+                $script:result = New-CosmosDbDocument `
+                    -Context $script:testEntraIdContext `
+                    -CollectionId $script:testCollection `
+                    -DocumentBody $script:testDocumentBody `
+                    -Verbose
+            }
+
+            It 'Should return expected object' {
+                Test-GenericResult -GenericResult $script:result
+                $script:result.Id | Should -Be $script:testDocumentId
+                $script:result.Content | Should -Be 'Some string'
+                $script:result.More | Should -Be 'Some other string'
+            }
+        }
+
+        Context 'When removing a document from a collection using an Entra ID Token' {
+            It 'Should not throw an exception' {
+                $script:result = Remove-CosmosDbDocument `
+                    -Context $script:testEntraIdContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testDocumentId `
+                    -Verbose
+            }
         }
     }
 
