@@ -39,6 +39,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added new utillity function `Get-CosmosDbAuthorizationHeaderFromContextEntraId` to generate the authorization
   header when an Entra ID Token is provided in the context. This function is used by `Invoke-CosmosDbRequest` to
   generate the authorization header when an Entra ID Token is provided.
+- Changed module import process to load the `Az.Accounts` and `Az.Resources` modules
+  only if they haven't already been loaded to support saving the module and storing in
+  folders.
 
 ### Added
 
