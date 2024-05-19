@@ -9,9 +9,16 @@ $script:moduleRoot = Split-Path `
     -Path $MyInvocation.MyCommand.Path `
     -Parent
 
-# Import dependent Az modules
-Import-Module -Name Az.Accounts -MinimumVersion 2.19.0 -Scope Global
-Import-Module -Name Az.Resources -MinimumVersion 6.16.2 -Scope Global
+# Import dependent Az modules ifthey are not already imported
+if (-not (Get-Module -Name Az.Accounts))
+{
+    Import-Module -Name Az.Accounts -MinimumVersion 2.19.0 -Scope Global
+}
+
+if (-not (Get-Module -Name Az.Resources))
+{
+    Import-Module -Name Az.Resources -MinimumVersion 6.16.2 -Scope Global
+}
 
 #region LocalizedData
 $culture = $PSUICulture
