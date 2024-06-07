@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0] - 2024-06-07
+
 ### Fixed
 
 - Removed unnecessary quotes from README (works without them in PowerShell and is easier to read)
