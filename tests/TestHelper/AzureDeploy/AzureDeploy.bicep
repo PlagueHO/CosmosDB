@@ -2,7 +2,7 @@ targetScope = 'subscription'
 
 param resourceGroupName string
 param accountName string
-param location string = 'East US'
+param location string = 'West US 3'
 param principalId string
 @allowed([
   '00000000-0000-0000-0000-000000000001'// Built-in role 'Azure Cosmos DB Built-in Data Reader'

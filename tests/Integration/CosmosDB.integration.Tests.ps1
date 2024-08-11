@@ -49,7 +49,7 @@ if ([System.String]::IsNullOrEmpty($script:testBuildSystem))
 
 $script:testResourceGroupName = ('cdbtestrgp-{0}-{1}-{2}' -f $script:testRandomName,$script:testBuildSystem,$script:testBuildBranch)
 $script:testAccountName = ('cdbtest{0}' -f $script:testRandomName)
-$script:testLocation = 'East US'
+$script:testLocation = 'West US 3'
 $script:testCorsAllowedOrigins = @('https://www.contoso.com', 'https://www.fabrikam.com')
 $script:testOffer = 'testOffer'
 $script:testDatabase = 'testDatabase'

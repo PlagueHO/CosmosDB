@@ -148,7 +148,7 @@ function Get-AzureEntraIdToken
         The name of the resource group where the Azure Cosmos DB account will be created.
 
     .PARAMETER Location
-        The Azure region where the Azure Cosmos DB account will be created. Defaults to 'East US'.
+        The Azure region where the Azure Cosmos DB account will be created. Defaults to 'West US 3'.
 
     .EXAMPLE
         New-AzureTestCosmosDbAccount -ObjectId '12345678-1234-1234-1234-123456789012' -AccountName 'testCosmosDb' -ResourceGroupName 'testResourceGroup'
@@ -180,7 +180,7 @@ function New-AzureTestCosmosDbAccount
 
         [Parameter()]
         [System.String]
-        $Location = 'East US'
+        $Location = 'West US 3'
     )
 
     try
@@ -272,7 +272,7 @@ function New-AzureTestCosmosDbResourceGroup
 
         [Parameter()]
         [System.String]
-        $Location = 'East US'
+        $Location = 'West US 3'
     )
 
     try
