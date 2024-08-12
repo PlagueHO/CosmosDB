@@ -19,7 +19,7 @@ InModuleScope $ProjectName {
     $script:testResourceGroupName = 'testResourceGroupName'
     $script:testLocation = 'North Central US'
     $script:testLocationRead1 = 'South Central US'
-    $script:testLocationRead2 = 'West US 3'
+    $script:testLocationRead2 = 'Australia East'
     $script:testIpRangeFilter = @('10.0.0.1/8', '10.0.0.2/8')
     $script:testConsistencyLevel = 'Strong'
     $script:testMaxIntervalInSeconds = 60
