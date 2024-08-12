@@ -10,8 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed pipeline build step by limiting Gitversion to 5.* version.
-- Change default integration test region from `East US` to `West US 3` due to
-  quota limitations.
+- Change default integration test region from `East US` to `Australia East` due
+  to quota limitations.
+- Removed MacOS-11 testing from build pipeline because it is no longer supported
+  by Microsoft managed Azure DevOps images.
 
 ## [5.0.0] - 2024-06-07
 

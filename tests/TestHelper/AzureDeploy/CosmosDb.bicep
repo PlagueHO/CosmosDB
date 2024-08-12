@@ -1,5 +1,5 @@
 param accountName string
-param location string = 'West US 3'
+param location string = 'Australia East'
 param principalId string
 @allowed([
   '00000000-0000-0000-0000-000000000001'// Built-in role 'Azure Cosmos DB Built-in Data Reader'
