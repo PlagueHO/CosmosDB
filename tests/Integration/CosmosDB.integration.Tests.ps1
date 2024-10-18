@@ -1710,4 +1710,5 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
 # Remove test Resource Group
 Remove-AzureTestCosmosDbResourceGroup `
-    -ResourceGroupName $script:testResourceGroupName
+    -ResourceGroupName $script:testResourceGroupName `
+    -Verbose

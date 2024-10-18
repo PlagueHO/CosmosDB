@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   to quota limitations.
 - Removed MacOS-11 testing from build pipeline because it is no longer supported
   by Microsoft managed Azure DevOps images.
+- Changed integration tests to display the removal of the Cosmos DB account
+  in the teardown phase to ensure the account is removed after the tests are
+  completed.
 
 ## [5.0.0] - 2024-06-07
 
