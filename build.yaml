@@ -92,8 +92,8 @@ CopyPaths:
   - formats
   - en-US
   - types
-prefix: prefix.ps1
-suffix: suffix.ps1
+Prefix: prefix.ps1
+Suffix: suffix.ps1
 Encoding: UTF8
 VersionedOutputDirectory: true
 
