@@ -314,10 +314,21 @@ function Remove-AzureTestCosmosDbResourceGroup
 
         if ($PSCmdlet.ShouldProcess('Azure', ("Remove Azure Cosmos DB resource group '{0}'" -f $ResourceGroupName)))
         {
-            $null = Remove-AzResourceGroup `
+            Remove-AzResourceGroup `
                 -Name $ResourceGroupName `
-                -Force `
-                -AsJob
+                -Force
+
+            # Check if the resource group was removed
+            $resourceGroup = Get-AzResourceGroup `
+                -Name $ResourceGroupName
+
+            if ($null -ne $resourceGroup)
+            {
+                Write-Warning -Message ('Resource group {0} was not removed. Trying again.' -f $ResourceGroupName)
+                Remove-AzResourceGroup `
+                    -Name $ResourceGroupName `
+                    -Force
+            }
         }
     }
     catch [System.Exception]

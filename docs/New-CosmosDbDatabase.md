@@ -166,7 +166,7 @@ Accept wildcard characters: False
 ### -AutoscaleThroughput
 
 The user specified autoscale throughput for the database expressed in RU/s.
-This can be between 4000 and 1,000,000 and should be specified in increments
+This can be between 1000 and 1,000,000 and should be specified in increments
 of 100 RU/s.
 This parameter can not be specified in OfferThroughput is specified.
 

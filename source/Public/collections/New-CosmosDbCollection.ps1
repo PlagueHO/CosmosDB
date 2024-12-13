@@ -77,7 +77,7 @@ function New-CosmosDbCollection
         $UniqueKeyPolicy,
 
         [Alias('AutopilotThroughput')]
-        [ValidateRange(4000, 1000000)]
+        [ValidateRange(1000, 1000000)]
         [System.Int32]
         $AutoscaleThroughput
     )

@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed integration tests to display the removal of the Cosmos DB account
   in the teardown phase to ensure the account is removed after the tests are
   completed.
+- Updated collection and database autoscale minimum from 4000 to
+  1000 - Fixes [Issue #493](https://github.com/PlagueHO/CosmosDB/issues/493).
+- Changed integration tests to attempt to clean up the Cosmos DB resource group
+  if it is not removed by the teardown phase - Fixes [Issue #494](https://github.com/PlagueHO/CosmosDB/issues/494).
 
 ## [5.0.0] - 2024-06-07
 
