@@ -553,7 +553,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.OfferType | Should -BeOfType [System.String]
             $script:result.OfferResourceId | Should -BeOfType [System.String]
             $script:result.Id | Should -BeOfType [System.String]
-            $script:result.content.offerThroughput | Should -BeExactly 400
+            $script:result.content.offerThroughput | Should -BeExactly 100
             $script:result.content.offerMinimumThroughputParameters.maxThroughputEverProvisioned | Should -BeExactly 1000
             $script:result.content.offerAutopilotSettings.maxThroughput | Should -BeExactly 1000
         }
