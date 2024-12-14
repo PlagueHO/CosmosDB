@@ -320,7 +320,8 @@ function Remove-AzureTestCosmosDbResourceGroup
 
             # Check if the resource group was removed
             $resourceGroup = Get-AzResourceGroup `
-                -Name $ResourceGroupName
+                -Name $ResourceGroupName `
+                -ErrorAction SilentlyContinue
 
             if ($null -ne $resourceGroup)
             {
