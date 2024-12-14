@@ -34,7 +34,7 @@ InModuleScope $ProjectName {
     $script:testDatabase1 = 'testDatabase1'
     $script:testDatabase2 = 'testDatabase2'
     $script:testOfferThroughput = 2000
-    $script:testAutoscaleThroughput = 4000
+    $script:testAutoscaleThroughput = 1000
     $script:testJsonMulti = @'
 {
     "_rid": "",

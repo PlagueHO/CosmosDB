@@ -528,7 +528,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
     Context 'When creating third new database with a specified autoscale throughput' {
         It 'Should not throw an exception' {
-            $script:result = New-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase3 -AutoscaleThroughput 4000 -Verbose
+            $script:result = New-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase3 -AutoscaleThroughput 1000 -Verbose
         }
 
         It 'Should return expected object' {
@@ -553,9 +553,9 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.OfferType | Should -BeOfType [System.String]
             $script:result.OfferResourceId | Should -BeOfType [System.String]
             $script:result.Id | Should -BeOfType [System.String]
-            $script:result.content.offerThroughput | Should -BeExactly 400
-            $script:result.content.offerMinimumThroughputParameters.maxThroughputEverProvisioned | Should -BeExactly 4000
-            $script:result.content.offerAutopilotSettings.maxThroughput | Should -BeExactly 4000
+            $script:result.content.offerThroughput | Should -BeExactly 100
+            $script:result.content.offerMinimumThroughputParameters.maxThroughputEverProvisioned | Should -BeExactly 1000
+            $script:result.content.offerAutopilotSettings.maxThroughput | Should -BeExactly 1000
         }
     }
 
@@ -1388,7 +1388,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $script:testContext `
                 -Id $script:testCollection `
                 -PartitionKey $script:testPartitionKey `
-                -AutoscaleThroughput 4000 `
+                -AutoscaleThroughput 1000 `
                 -Verbose
         }
 

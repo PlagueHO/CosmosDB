@@ -124,7 +124,7 @@ InModuleScope $ProjectName {
 
         Context 'When called with a valid name' {
             It 'Should return $true' {
-                Assert-CosmosDbAccountNameValid -Name 'validaccountname' | Should -Be $true
+                Assert-CosmosDbAccountNameValid -Name 'validaccountname' | Should -BeTrue
             }
         }
 
@@ -196,7 +196,7 @@ InModuleScope $ProjectName {
 
         Context 'When called with a valid resource group name' {
             It 'Should return $true' {
-                Assert-CosmosDbResourceGroupNameValid -ResourceGroupName 'valid_resource-group.name123' | Should -Be $true
+                Assert-CosmosDbResourceGroupNameValid -ResourceGroupName 'valid_resource-group.name123' | Should -BeTrue
             }
         }
 

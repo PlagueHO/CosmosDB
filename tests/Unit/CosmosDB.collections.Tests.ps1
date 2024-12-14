@@ -932,7 +932,7 @@ InModuleScope $ProjectName {
                 $Method -eq 'Post' -and `
                 $ResourceType -eq 'colls' -and `
                 $BodyObject.id -eq $script:testCollection1 -and `
-                $Headers.'x-ms-cosmos-offer-autopilot-settings' -eq "{`"maxThroughput`":4000}"
+                $Headers.'x-ms-cosmos-offer-autopilot-settings' -eq "{`"maxThroughput`":1000}"
             }
 
             Mock `
@@ -943,7 +943,7 @@ InModuleScope $ProjectName {
                 $newCosmosDbCollectionParameters = @{
                     Context             = $script:testContext
                     Id                  = $script:testCollection1
-                    AutoscaleThroughput = 4000
+                    AutoscaleThroughput = 1000
                     PartitionKey        = 'partitionkey'
                     Verbose             = $true
                 }
@@ -972,7 +972,7 @@ InModuleScope $ProjectName {
                 $newCosmosDbCollectionParameters = @{
                     Context             = $script:testContext
                     Id                  = $script:testCollection1
-                    AutoscaleThroughput = 4000
+                    AutoscaleThroughput = 1000
                     Verbose             = $true
                 }
 
@@ -993,7 +993,7 @@ InModuleScope $ProjectName {
                     Context             = $script:testContext
                     Id                  = $script:testCollection1
                     OfferThroughput     = 400
-                    AutoscaleThroughput = 4000
+                    AutoscaleThroughput = 1000
                     Verbose             = $true
                 }
 
@@ -1014,7 +1014,7 @@ InModuleScope $ProjectName {
                     Context             = $script:testContext
                     Id                  = $script:testCollection1
                     OfferType           = 'S1'
-                    AutoscaleThroughput = 4000
+                    AutoscaleThroughput = 1000
                     Verbose             = $true
                 }
 
