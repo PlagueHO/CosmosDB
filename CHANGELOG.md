@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.0] - 2024-12-15
+
 ### Fixed
 
 - Fixed pipeline build step by limiting Gitversion to 5.* version.
