@@ -1057,9 +1057,9 @@ console.log("done");
             $script:result = $null
 
             It 'Should not throw exception' {
-                $errorRecord = [pscustomobject]@{
-                    ErrorDetails = 'Core Error Details'
-                }
+                $exception = [System.Exception]::new('Core Exception')
+                $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, 'CoreErrorId', [System.Management.Automation.ErrorCategory]::NotSpecified, $null)
+                $errorRecord.ErrorDetails = [System.Management.Automation.ErrorDetails]::new('Core Error Details')
 
                 { $script:result = Get-CosmosDbRequestExceptionString -ErrorRecord $errorRecord } | Should -Not -Throw
             }
@@ -1080,13 +1080,11 @@ console.log("done");
                 $writer.Flush()
                 $mockStream.Position = 0
 
-                $errorRecord = [pscustomobject]@{
-                    Exception = [pscustomobject]@{
-                        Response = [pscustomobject]@{
-                            GetResponseStream = { $mockStream }
-                        }
-                    }
+                $webException = [System.Net.WebException]::new('Windows Exception')
+                $webException.Response = [pscustomobject]@{
+                    GetResponseStream = { $mockStream }
                 }
+                $errorRecord = [System.Management.Automation.ErrorRecord]::new($webException, 'WindowsErrorId', [System.Management.Automation.ErrorCategory]::NotSpecified, $null)
 
                 { $script:result = Get-CosmosDbRequestExceptionString -ErrorRecord $errorRecord } | Should -Not -Throw
             }
@@ -1101,7 +1099,8 @@ console.log("done");
             $script:result = $null
 
             It 'Should not throw exception' {
-                $errorRecord = [pscustomobject]@{}
+                $exception = [System.Exception]::new('Core Exception')
+                $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, 'CoreErrorId', [System.Management.Automation.ErrorCategory]::NotSpecified, $null)
 
                 { $script:result = Get-CosmosDbRequestExceptionString -ErrorRecord $errorRecord } | Should -Not -Throw
             }
@@ -1116,9 +1115,8 @@ console.log("done");
             $script:result = $null
 
             It 'Should not throw exception' {
-                $errorRecord = [pscustomobject]@{
-                    Exception = [pscustomobject]@{}
-                }
+                $webException = [System.Net.WebException]::new('Windows Exception')
+                $errorRecord = [System.Management.Automation.ErrorRecord]::new($webException, 'WindowsErrorId', [System.Management.Automation.ErrorCategory]::NotSpecified, $null)
 
                 { $script:result = Get-CosmosDbRequestExceptionString -ErrorRecord $errorRecord } | Should -Not -Throw
             }
@@ -1133,7 +1131,7 @@ console.log("done");
             $script:result = $null
 
             It 'Should not throw exception' {
-                $errorRecord = [pscustomobject]@{}
+                $errorRecord = [System.Management.Automation.ErrorRecord]::new($null, 'WindowsErrorId', [System.Management.Automation.ErrorCategory]::NotSpecified, $null)
 
                 { $script:result = Get-CosmosDbRequestExceptionString -ErrorRecord $errorRecord } | Should -Not -Throw
             }
@@ -1682,7 +1680,7 @@ console.log("done");
             $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
                     $ContentType -eq 'application/json' -and `
-                    $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
+                                       $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
             }
 
             Mock `
