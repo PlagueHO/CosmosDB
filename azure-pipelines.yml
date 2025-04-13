@@ -78,6 +78,11 @@ stages:
               pesterScript: 'tests/Unit'
               testRunTitle: 'Unit (PowerShell 5.1 on Windows Server 2022)'
               pwsh: false
+            PS_Win2025:
+              vmImage: windows-2025
+              pesterScript: 'tests/Unit'
+              testRunTitle: 'Unit (PowerShell 5.1 on Windows Server 2025)'
+              pwsh: false
             PS7_Ubuntu2004:
               vmImage: ubuntu-20.04
               pesterScript: 'tests/Unit'
@@ -87,6 +92,11 @@ stages:
               vmImage: ubuntu-22.04
               pesterScript: 'tests/Unit'
               testRunTitle: 'Unit (PowerShell 7 on Ubuntu 22.04)'
+              pwsh: true
+            PS7_Ubuntu2404:
+              vmImage: ubuntu-24.04
+              pesterScript: 'tests/Unit'
+              testRunTitle: 'Unit (PowerShell 7 on Ubuntu 24.04)'
               pwsh: true
             PS7_MacOS13:
               vmImage: macos-13
@@ -149,6 +159,11 @@ stages:
               pesterScript: 'tests/Integration'
               testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2022)'
               pwsh: false
+            PS_Win2025:
+              vmImage: windows-2025
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2025)'
+              pwsh: false
             PS7_Ubuntu2004:
               vmImage: ubuntu-20.04
               pesterScript: 'tests/Integration'
@@ -158,6 +173,11 @@ stages:
               vmImage: ubuntu-22.04
               pesterScript: 'tests/Integration'
               testRunTitle: 'Integration (PowerShell 7 on Ubuntu 22.04)'
+              pwsh: true
+            PS7_Ubuntu2404:
+              vmImage: ubuntu-24.04
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 7 on Ubuntu 24.04)'
               pwsh: true
             PS7_MacOS13:
               vmImage: macos-13
