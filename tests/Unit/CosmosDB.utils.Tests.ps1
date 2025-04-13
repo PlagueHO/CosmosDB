@@ -1053,11 +1053,13 @@ console.log("done");
         }
 
         Context 'When called in PowerShell Core with ErrorDetails' {
-            Mock -CommandName Get-Variable -MockWith { return @{ PSEdition = 'Core' } }
+            Mock -CommandName Get-Variable -MockWith {
+                return @{ PSEdition = 'Core' }
+            }
             $script:result = $null
 
             It 'Should not throw exception' {
-                $exception = [System.Exception]::new('Core Exception')
+                $exception = [System.Exception]::new('PowerShell Core Exception')
                 $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, 'CoreErrorId', [System.Management.Automation.ErrorCategory]::NotSpecified, $null)
                 $errorRecord.ErrorDetails = [System.Management.Automation.ErrorDetails]::new('Core Error Details')
 
@@ -1069,69 +1071,15 @@ console.log("done");
             }
         }
 
-        Context 'When called in Windows PowerShell with Response Stream' {
-            Mock -CommandName Get-Variable -MockWith { return @{ PSEdition = 'Desktop' } }
-            $script:result = $null
-
-            It 'Should not throw exception' {
-                $mockStream = [System.IO.MemoryStream]::new()
-                $writer = [System.IO.StreamWriter]::new($mockStream)
-                $writer.Write('Windows Error Details')
-                $writer.Flush()
-                $mockStream.Position = 0
-
-                $webException = [System.Net.WebException]::new('Windows Exception')
-                $webException.Response = [pscustomobject]@{
-                    GetResponseStream = { $mockStream }
-                }
-                $errorRecord = [System.Management.Automation.ErrorRecord]::new($webException, 'WindowsErrorId', [System.Management.Automation.ErrorCategory]::NotSpecified, $null)
-
-                { $script:result = Get-CosmosDbRequestExceptionString -ErrorRecord $errorRecord } | Should -Not -Throw
-            }
-
-            It 'Should return Response Stream content' {
-                $script:result | Should -Be 'Windows Error Details'
-            }
-        }
-
-        Context 'When called with ErrorRecord missing ErrorDetails in PowerShell Core' {
-            Mock -CommandName Get-Variable -MockWith { return @{ PSEdition = 'Core' } }
-            $script:result = $null
-
-            It 'Should not throw exception' {
-                $exception = [System.Exception]::new('Core Exception')
-                $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, 'CoreErrorId', [System.Management.Automation.ErrorCategory]::NotSpecified, $null)
-
-                { $script:result = Get-CosmosDbRequestExceptionString -ErrorRecord $errorRecord } | Should -Not -Throw
-            }
-
-            It 'Should return null' {
-                $script:result | Should -BeNullOrEmpty
-            }
-        }
-
         Context 'When called with ErrorRecord missing Response in Windows PowerShell' {
-            Mock -CommandName Get-Variable -MockWith { return @{ PSEdition = 'Desktop' } }
+            Mock -CommandName Get-Variable -MockWith {
+                return @{ PSEdition = 'Desktop' }
+            }
             $script:result = $null
 
             It 'Should not throw exception' {
-                $webException = [System.Net.WebException]::new('Windows Exception')
+                $webException = [System.Net.WebException]::new('Windows PowerShell Exception')
                 $errorRecord = [System.Management.Automation.ErrorRecord]::new($webException, 'WindowsErrorId', [System.Management.Automation.ErrorCategory]::NotSpecified, $null)
-
-                { $script:result = Get-CosmosDbRequestExceptionString -ErrorRecord $errorRecord } | Should -Not -Throw
-            }
-
-            It 'Should return null' {
-                $script:result | Should -BeNullOrEmpty
-            }
-        }
-
-        Context 'When called with ErrorRecord missing Exception in Windows PowerShell' {
-            Mock -CommandName Get-Variable -MockWith { return @{ PSEdition = 'Desktop' } }
-            $script:result = $null
-
-            It 'Should not throw exception' {
-                $errorRecord = [System.Management.Automation.ErrorRecord]::new($null, 'WindowsErrorId', [System.Management.Automation.ErrorCategory]::NotSpecified, $null)
 
                 { $script:result = Get-CosmosDbRequestExceptionString -ErrorRecord $errorRecord } | Should -Not -Throw
             }

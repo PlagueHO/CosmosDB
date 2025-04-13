@@ -26,6 +26,7 @@
 function Get-CosmosDbRequestExceptionString
 {
     [CmdletBinding()]
+    [OutputType([System.String])]
     param
     (
         [Parameter(Mandatory = $true)]
@@ -41,8 +42,15 @@ function Get-CosmosDbRequestExceptionString
     else
     {
         # Windows PowerShell: Read the response stream
-        $exceptionStream = $ErrorRecord.Exception.Response.GetResponseStream()
-        $streamReader = New-Object -TypeName System.IO.StreamReader -ArgumentList $exceptionStream
-        return $streamReader.ReadToEnd()
+        if ($null -ne $ErrorRecord.Exception.Response)
+        {
+            $exceptionStream = $ErrorRecord.Exception.Response.GetResponseStream()
+            $streamReader = New-Object -TypeName System.IO.StreamReader -ArgumentList $exceptionStream
+            return $streamReader.ReadToEnd()
+        }
+        else
+        {
+            return 'Exception response is null.'
+        }
     }
 }
