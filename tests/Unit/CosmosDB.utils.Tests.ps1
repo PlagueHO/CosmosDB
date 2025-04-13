@@ -1054,7 +1054,10 @@ console.log("done");
 
         Context 'When called in PowerShell Core with ErrorDetails' {
             Mock -CommandName Get-Variable -MockWith {
-                return @{ PSEdition = 'Core' }
+                return @{
+                    Name = 'PSEdition'
+                    Value = 'Core'
+                }
             }
             $script:result = $null
 
@@ -1063,7 +1066,9 @@ console.log("done");
                 $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, 'CoreErrorId', [System.Management.Automation.ErrorCategory]::NotSpecified, $null)
                 $errorRecord.ErrorDetails = [System.Management.Automation.ErrorDetails]::new('Core Error Details')
 
-                { $script:result = Get-CosmosDbRequestExceptionString -ErrorRecord $errorRecord } | Should -Not -Throw
+                {
+                    $script:result = Get-CosmosDbRequestExceptionString -ErrorRecord $errorRecord
+                } | Should -Not -Throw
             }
 
             It 'Should return ErrorDetails' {
@@ -1073,7 +1078,10 @@ console.log("done");
 
         Context 'When called with ErrorRecord missing Response in Windows PowerShell' {
             Mock -CommandName Get-Variable -MockWith {
-                return @{ PSEdition = 'Desktop' }
+                return @{
+                    Name = 'PSEdition'
+                    Value = 'Core'
+                }
             }
             $script:result = $null
 
@@ -1081,7 +1089,9 @@ console.log("done");
                 $webException = [System.Net.WebException]::new('Windows PowerShell Exception')
                 $errorRecord = [System.Management.Automation.ErrorRecord]::new($webException, 'WindowsErrorId', [System.Management.Automation.ErrorCategory]::NotSpecified, $null)
 
-                { $script:result = Get-CosmosDbRequestExceptionString -ErrorRecord $errorRecord } | Should -Not -Throw
+                {
+                    $script:result = Get-CosmosDbRequestExceptionString -ErrorRecord $errorRecord
+                } | Should -Not -Throw
             }
 
             It 'Should return null' {

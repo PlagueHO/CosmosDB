@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Updated CI pipeline to test on MacOS-13.
+- Converted CI pipeline Test stage to use matrix to reduce duplication of code.
 
 ## [5.1.0] - 2024-12-15
 

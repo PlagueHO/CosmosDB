@@ -34,7 +34,7 @@ function Get-CosmosDbRequestExceptionString
         $ErrorRecord
     )
 
-    if ($PSEdition -eq 'Core')
+    if ((Get-Variable -Name 'PSEdition').Value -eq 'Core')
     {
         # PowerShell Core: Use ErrorDetails
         return $ErrorRecord.ErrorDetails
@@ -42,7 +42,7 @@ function Get-CosmosDbRequestExceptionString
     else
     {
         # Windows PowerShell: Read the response stream
-        if ($null -ne $ErrorRecord.Exception.Response)
+        if ($null -ne $ErrorRecord.Exception)
         {
             $exceptionStream = $ErrorRecord.Exception.Response.GetResponseStream()
             $streamReader = New-Object -TypeName System.IO.StreamReader -ArgumentList $exceptionStream
@@ -50,7 +50,7 @@ function Get-CosmosDbRequestExceptionString
         }
         else
         {
-            return 'Exception response is null.'
+            return 'Exception is null.'
         }
     }
 }
