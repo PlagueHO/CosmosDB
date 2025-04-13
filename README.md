@@ -1251,6 +1251,10 @@ on the following systems:
   - Windows Server 2019: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
   - Windows Server 2022: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
   - Windows Server 2025: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+- Windows Server (using Windows PowerShell 7.x):
+  - Windows Server 2019: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - Windows Server 2022: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - Windows Server 2025: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
 - Linux (using PowerShell 7.x):
   - Ubuntu 20.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
   - Ubuntu 22.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).

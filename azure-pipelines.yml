@@ -67,6 +67,7 @@ stages:
       - job: Unit_Test_Matrix
         displayName: 'Unit Test Matrix'
         strategy:
+          maxParallel: 5
           matrix:
             PS_Win2019:
               vmImage: windows-2019
@@ -83,6 +84,21 @@ stages:
               pesterScript: 'tests/Unit'
               testRunTitle: 'Unit (PowerShell 5.1 on Windows Server 2025)'
               pwsh: false
+            PS7_Win2019:
+              vmImage: windows-2019
+              pesterScript: 'tests/Unit'
+              testRunTitle: 'Unit (PowerShell 7 on Windows Server 2019)'
+              pwsh: true
+            PS7_Win2022:
+              vmImage: windows-2022
+              pesterScript: 'tests/Unit'
+              testRunTitle: 'Unit (PowerShell 7 on Windows Server 2022)'
+              pwsh: true
+            PS7_Win2025:
+              vmImage: windows-2025
+              pesterScript: 'tests/Unit'
+              testRunTitle: 'Unit (PowerShell 7 on Windows Server 2025)'
+              pwsh: true
             PS7_Ubuntu2004:
               vmImage: ubuntu-20.04
               pesterScript: 'tests/Unit'
@@ -159,6 +175,7 @@ stages:
         displayName: 'Integration Test Matrix'
         dependsOn: Unit_Test_Matrix
         strategy:
+          maxParallel: 5
           matrix:
             PS_Win2019:
               vmImage: windows-2019
@@ -175,6 +192,21 @@ stages:
               pesterScript: 'tests/Integration'
               testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2025)'
               pwsh: false
+            PS7_Win2019:
+              vmImage: windows-2019
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 7 on Windows Server 2019)'
+              pwsh: true
+            PS7_Win2022:
+              vmImage: windows-2022
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 7 on Windows Server 2022)'
+              pwsh: true
+            PS7_Win2025:
+              vmImage: windows-2025
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 7 on Windows Server 2025)'
+              pwsh: true
             PS7_Ubuntu2004:
               vmImage: ubuntu-20.04
               pesterScript: 'tests/Integration'
