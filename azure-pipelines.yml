@@ -379,10 +379,10 @@ stages:
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
               testRunTitle: 'Integration (Powershell 7 on Ubuntu 22.04)'
 
-      - job: Unit_Test_PSCore6_MacOS12
-        displayName: 'Unit Test (Powershell Core 6 on MacOS 12)'
+      - job: Unit_Test_PSCore6_MacOS13
+        displayName: 'Unit Test (Powershell Core 6 on MacOS 13)'
         pool:
-          vmImage: macos-12
+          vmImage: macos-13
 
         steps:
           - powershell: |
@@ -416,7 +416,7 @@ stages:
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
-              testRunTitle: 'Unit (Powershell Core 6 on MacOS 12)'
+              testRunTitle: 'Unit (Powershell Core 6 on MacOS 13)'
 
           - task: PublishCodeCoverageResults@2
             displayName: 'Publish Code Coverage'
@@ -425,11 +425,11 @@ stages:
               summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
               pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
 
-      - job: Integration_Test_PSCore6_MacOS12
-        dependsOn: Unit_Test_PSCore6_MacOS12
-        displayName: 'Integration Test (Powershell Core 6 on MacOS 12)'
+      - job: Integration_Test_PSCore6_MacOS13
+        dependsOn: Unit_Test_PSCore6_MacOS13
+        displayName: 'Integration Test (Powershell Core 6 on MacOS 13)'
         pool:
-          vmImage: macos-12
+          vmImage: macos-13
         timeoutInMinutes: 0
 
         steps:
@@ -465,7 +465,7 @@ stages:
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
-              testRunTitle: 'Integration (Powershell Core 6 on MacOS 12)'
+              testRunTitle: 'Integration (Powershell Core 6 on MacOS 13)'
 
   - stage: Deploy
     dependsOn: Test

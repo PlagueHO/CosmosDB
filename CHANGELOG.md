@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added `Get-CosmosDbRequestExceptionString` function to get the exception string
+  from a Cosmos DB response. Refactored `Invoke-CosmosDbRequest` to use this
+  function to get the exception string from the response.
+
+### Fixed
+
+- Updated CI pipeline to test on MacOS-13.
+
 ## [5.1.0] - 2024-12-15
 
 ### Fixed
