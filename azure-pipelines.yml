@@ -72,22 +72,27 @@ stages:
               vmImage: windows-2019
               pesterScript: 'tests/Unit'
               testRunTitle: 'Unit (PowerShell 5.1 on Windows Server 2019)'
+              pwsh: false
             PS_Win2022:
               vmImage: windows-2022
               pesterScript: 'tests/Unit'
               testRunTitle: 'Unit (PowerShell 5.1 on Windows Server 2022)'
+              pwsh: false
             PS7_Ubuntu2004:
               vmImage: ubuntu-20.04
               pesterScript: 'tests/Unit'
               testRunTitle: 'Unit (PowerShell 7 on Ubuntu 20.04)'
+              pwsh: true
             PS7_Ubuntu2204:
               vmImage: ubuntu-22.04
               pesterScript: 'tests/Unit'
               testRunTitle: 'Unit (PowerShell 7 on Ubuntu 22.04)'
+              pwsh: true
             PS7_MacOS13:
               vmImage: macos-13
               pesterScript: 'tests/Unit'
               testRunTitle: 'Unit (PowerShell 7 on MacOS 13)'
+              pwsh: true
         pool:
           vmImage: $(vmImage)
         steps:
@@ -111,6 +116,7 @@ stages:
             inputs:
               filePath: './build.ps1'
               arguments: "-tasks test -PesterScript '$(pesterScript)'"
+              pwsh: $(pwsh)
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
@@ -137,27 +143,27 @@ stages:
               vmImage: windows-2019
               pesterScript: 'tests/Integration'
               testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2019)'
-              dependsOnJob: Unit_Test_Matrix.PS_Win2019
+              pwsh: false
             PS_Win2022:
               vmImage: windows-2022
               pesterScript: 'tests/Integration'
               testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2022)'
-              dependsOnJob: Unit_Test_Matrix.PS_Win2022
+              pwsh: false
             PS7_Ubuntu2004:
               vmImage: ubuntu-20.04
               pesterScript: 'tests/Integration'
               testRunTitle: 'Integration (PowerShell 7 on Ubuntu 20.04)'
-              dependsOnJob: Unit_Test_Matrix.PS7_Ubuntu2004
+              pwsh: true
             PS7_Ubuntu2204:
               vmImage: ubuntu-22.04
               pesterScript: 'tests/Integration'
               testRunTitle: 'Integration (PowerShell 7 on Ubuntu 22.04)'
-              dependsOnJob: Unit_Test_Matrix.PS7_Ubuntu2204
+              pwsh: true
             PS7_MacOS13:
               vmImage: macos-13
               pesterScript: 'tests/Integration'
               testRunTitle: 'Integration (PowerShell 7 on MacOS 13)'
-              dependsOnJob: Unit_Test_Matrix.PS7_MacOS13
+              pwsh: true
         pool:
           vmImage: $(vmImage)
         steps:
@@ -180,7 +186,7 @@ stages:
             inputs:
               filePath: './build.ps1'
               arguments: "-Tasks test -PesterScript '$(pesterScript)' -CodeCoverageThreshold 0"
-              pwsh: false
+              pwsh: $(pwsh)
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
