@@ -1257,6 +1257,8 @@ on the following systems:
   - Ubuntu 24.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
 - macOS (using PowerShell 7.x):
   - macOS 13: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - macOS 14: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - macOS 15: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
 
 > This module is no longer tested on PowerShell Core 6.x as PowerShell 7.x
 > should be used. It should still work, but will no longer be verified. Issues with

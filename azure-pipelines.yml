@@ -103,6 +103,17 @@ stages:
               pesterScript: 'tests/Unit'
               testRunTitle: 'Unit (PowerShell 7 on MacOS 13)'
               pwsh: true
+            PS7_MacOS14:
+              vmImage: macos-14
+              pesterScript: 'tests/Unit'
+              testRunTitle: 'Unit (PowerShell 7 on MacOS 14)'
+              pwsh: true
+            PS7_MacOS15:
+              vmImage: macos-15
+              pesterScript: 'tests/Unit'
+              testRunTitle: 'Unit (PowerShell 7 on MacOS 15)'
+              pwsh: true
+
         pool:
           vmImage: $(vmImage)
         steps:
@@ -184,6 +195,17 @@ stages:
               pesterScript: 'tests/Integration'
               testRunTitle: 'Integration (PowerShell 7 on MacOS 13)'
               pwsh: true
+            PS7_MacOS14:
+              vmImage: macos-14
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 7 on MacOS 14)'
+              pwsh: true
+            PS7_MacOS15:
+              vmImage: macos-15
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 7 on MacOS 15)'
+              pwsh: true
+
         pool:
           vmImage: $(vmImage)
         steps:
