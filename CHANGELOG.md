@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Converted CI pipeline Test stage to use matrix to reduce duplication of code.
+- FIx spelling error of `ApplicationObjectId` variable in CI pipeline.
 
 ## [5.1.0] - 2024-12-15
 

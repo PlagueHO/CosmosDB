@@ -256,7 +256,7 @@ stages:
               azureApplicationPassword: $(azureApplicationPassword)
               azureSubscriptionId: $(azureSubscriptionId)
               azureTenantId: $(azureTenantId)
-              azureAppicationObjectId: $(azureAppicationObjectId)
+              azureApplicationObjectId: $(azureApplicationObjectId)
             inputs:
               filePath: './build.ps1'
               arguments: "-Tasks test -PesterScript '$(pesterScript)' -CodeCoverageThreshold 0"
