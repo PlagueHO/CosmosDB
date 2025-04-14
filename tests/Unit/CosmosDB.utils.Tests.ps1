@@ -724,6 +724,56 @@ console.log("done");
             }
         }
 
+        Context 'When called with Emulator switch and URI with protocol but no port and Port parameter not passed' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Database = $script:testDatabase
+                    Emulator = $true
+                    URI      = 'https://mycosmosdb.contoso.local'
+                    Verbose  = $true
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be 'emulator'
+                $script:result.Database | Should -Be $script:testDatabase
+                $tempCredential = New-Object System.Net.NetworkCredential("TestUsername", $result.Key, "TestDomain")
+                $tempCredential.Password | Should -Be $script:testEmulatorKey
+                $script:result.KeyType | Should -Be 'master'
+                $script:result.BaseUri | Should -Be 'https://mycosmosdb.contoso.local:8081/'
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
+            }
+        }
+
+        Context 'When called with Emulator switch and URI with no protocol with port and Port parameter not passed' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Database = $script:testDatabase
+                    Emulator = $true
+                    URI      = 'mycosmosdb.contoso.local:9999'
+                    Verbose  = $true
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be 'emulator'
+                $script:result.Database | Should -Be $script:testDatabase
+                $tempCredential = New-Object System.Net.NetworkCredential("TestUsername", $result.Key, "TestDomain")
+                $tempCredential.Password | Should -Be $script:testEmulatorKey
+                $script:result.KeyType | Should -Be 'master'
+                $script:result.BaseUri | Should -Be 'https://mycosmosdb.contoso.local:9999/'
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
+            }
+        }
+
         Context 'When called with Emulator switch and URI with protocol and port and Port parameter not passed' {
             $script:result = $null
 
@@ -993,6 +1043,59 @@ console.log("done");
             It 'Should return expected result' {
                 $script:result | Should -BeOfType uri
                 $script:result.ToString() | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureChinaCloud)
+            }
+        }
+    }
+
+    Describe 'Get-CosmosDbRequestExceptionString' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Get-CosmosDbRequestExceptionString -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called in PowerShell Core with ErrorDetails' {
+            Mock -CommandName Get-Variable -MockWith {
+                return @{
+                    Name = 'PSEdition'
+                    Value = 'Core'
+                }
+            }
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $exception = [System.Exception]::new('PowerShell Core Exception')
+                $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, 'CoreErrorId', [System.Management.Automation.ErrorCategory]::NotSpecified, $null)
+                $errorRecord.ErrorDetails = [System.Management.Automation.ErrorDetails]::new('Core Error Details')
+
+                {
+                    $script:result = Get-CosmosDbRequestExceptionString -ErrorRecord $errorRecord
+                } | Should -Not -Throw
+            }
+
+            It 'Should return ErrorDetails' {
+                $script:result | Should -Be 'Core Error Details'
+            }
+        }
+
+        Context 'When called with ErrorRecord missing Response in Windows PowerShell' {
+            Mock -CommandName Get-Variable -MockWith {
+                return @{
+                    Name = 'PSEdition'
+                    Value = 'Core'
+                }
+            }
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $webException = [System.Net.WebException]::new('Windows PowerShell Exception')
+                $errorRecord = [System.Management.Automation.ErrorRecord]::new($webException, 'WindowsErrorId', [System.Management.Automation.ErrorCategory]::NotSpecified, $null)
+
+                {
+                    $script:result = Get-CosmosDbRequestExceptionString -ErrorRecord $errorRecord
+                } | Should -Not -Throw
+            }
+
+            It 'Should return null' {
+                $script:result | Should -BeNullOrEmpty
             }
         }
     }
@@ -1535,7 +1638,7 @@ console.log("done");
             $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
                     $ContentType -eq 'application/json' -and `
-                    $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
+                                       $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
             }
 
             Mock `

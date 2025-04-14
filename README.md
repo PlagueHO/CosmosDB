@@ -125,7 +125,7 @@ object using the `New-CosmosDbContext` cmdlet which you can then
 use to pass to the other Cosmos DB cmdlets in the module.
 
 To create the context object you will either need access to the
-primary primary or secondary keys from your Cosmos DB account or allow
+primary or secondary keys from your Cosmos DB account or allow
 the _CosmosDB Powershell module_ to retrieve the keys directly from
 the Azure management portal for you.
 
@@ -144,7 +144,7 @@ that will be used to authenticate requests to Cosmos DB.
 To create a context object using an _Entra ID Authorization Token_ you will need
 to set the `EntraIdToken` parameter to the token you have retrieved from Entra ID
 for the identity that you have given appropriate permissions to the `account`,
-`database` and/or `collection`. See [this page](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac#concepts) for more infomration.
+`database` and/or `collection`. See [this page](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac#concepts) for more information.
 
 ```powershell
 # Get an OAuth2 resource token from Entra ID for the Cosmos DB account.
@@ -463,7 +463,7 @@ New-CosmosDbCollection -Context $cosmosDbContext -Id MyNewCollection -PartitionK
 ```
 
 Create a collection in the database with the partition key 'id' using
-autoscaling with the maximum throughput of 40,000 RU/s and a mimimum of
+autoscaling with the maximum throughput of 40,000 RU/s and a minimum of
 4,000 RU/s:
 
 ```powershell
@@ -1250,12 +1250,19 @@ on the following systems:
 - Windows Server (using Windows PowerShell 5.1):
   - Windows Server 2019: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
   - Windows Server 2022: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - Windows Server 2025: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+- Windows Server (using Windows PowerShell 7.x):
+  - Windows Server 2019: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - Windows Server 2022: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - Windows Server 2025: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
 - Linux (using PowerShell 7.x):
   - Ubuntu 20.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
   - Ubuntu 22.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
-- macOS (using PowerShell Core 6.x - to be changed to in future 7.x):
-  - macOS 11: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
-  - macOS 12: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - Ubuntu 24.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+- macOS (using PowerShell 7.x):
+  - macOS 13: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - macOS 14: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - macOS 15: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
 
 > This module is no longer tested on PowerShell Core 6.x as PowerShell 7.x
 > should be used. It should still work, but will no longer be verified. Issues with

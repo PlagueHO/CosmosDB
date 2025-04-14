@@ -294,18 +294,7 @@ function Invoke-CosmosDbRequest
                     In a future version a custom exception type for CosmosDB that
                     contains this additional information.
                 #>
-
-                if ($PSEdition -eq 'Core')
-                {
-                    # https://get-powershellblog.blogspot.com/2017/11/powershell-core-web-cmdlets-in-depth.html#L13
-                    $exceptionResponse = $_.ErrorDetails
-                }
-                else
-                {
-                    $exceptionStream = $_.Exception.Response.GetResponseStream()
-                    $streamReader = New-Object -TypeName System.IO.StreamReader -ArgumentList $exceptionStream
-                    $exceptionResponse = $streamReader.ReadToEnd()
-                }
+                $exceptionResponse = Get-CosmosDbRequestExceptionString -ErrorRecord $_
 
                 if ($exceptionResponse)
                 {

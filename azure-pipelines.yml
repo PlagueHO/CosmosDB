@@ -63,135 +63,83 @@ stages:
     variables:
       - group: CosmosDB.AzureSP
     jobs:
-      - job: Unit_Test_PS_Win2019
-        displayName: 'Unit Test (Powershell 5.1 on Windows Server 2019)'
-        pool:
-          vmImage: windows-2019
-
-        steps:
-          - powershell: |
-              $repositoryOwner,$repositoryName = $env:BUILD_REPOSITORY_NAME -split '/'
-              echo "##vso[task.setvariable variable=RepositoryOwner;isOutput=true]$repositoryOwner"
-              echo "##vso[task.setvariable variable=RepositoryName;isOutput=true]$repositoryName"
-            name: moduleBuildVariable
-            displayName: 'Set Environment Variables'
-
-          - task: DownloadPipelineArtifact@2
-            displayName: 'Download Pipeline Artifact'
-            inputs:
-              buildType: 'current'
-              artifactName: $(buildArtifactName)
-              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
-
-          - task: PowerShell@2
-            name: test
-            displayName: 'Run Unit Test'
-            inputs:
-              filePath: './build.ps1'
-              arguments: "-tasks test -PesterScript 'tests/Unit'"
-
-          - task: PublishTestResults@2
-            displayName: 'Publish Test Results'
-            condition: succeededOrFailed()
-            inputs:
-              testResultsFormat: 'NUnit'
-              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
+      # Unit Test Matrix
+      - job: Unit_Test_Matrix
+        displayName: 'Unit Test Matrix'
+        strategy:
+          maxParallel: 5
+          matrix:
+            PS_Win2019:
+              vmImage: windows-2019
+              pesterScript: 'tests/Unit'
               testRunTitle: 'Unit (PowerShell 5.1 on Windows Server 2019)'
-
-          - task: PublishCodeCoverageResults@2
-            displayName: 'Publish Code Coverage'
-            condition: succeededOrFailed()
-            inputs:
-              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
-              pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
-
-      - job: Integration_Test_PS_Win2019
-        dependsOn: Unit_Test_PS_Win2019
-        displayName: 'Integration Test (Powershell 5.1 on Windows Server 2019)'
-        pool:
-          vmImage: windows-2019
-        timeoutInMinutes: 0
-
-        steps:
-          - task: DownloadPipelineArtifact@2
-            displayName: 'Download Pipeline Artifact'
-            inputs:
-              buildType: 'current'
-              artifactName: $(buildArtifactName)
-              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
-
-          - task: PowerShell@2
-            name: test
-            displayName: 'Run Integration Test'
-            env:
-              azureApplicationId: $(azureApplicationId)
-              azureApplicationPassword: $(azureApplicationPassword)
-              azureSubscriptionId: $(azureSubscriptionId)
-              azureTenantId: $(azureTenantId)
-              azureAppicationObjectId: $(azureAppicationObjectId)
-            inputs:
-              filePath: './build.ps1'
-              arguments: "-Tasks test -PesterScript 'tests/Integration' -CodeCoverageThreshold 0"
               pwsh: false
-
-          - task: PublishTestResults@2
-            displayName: 'Publish Test Results'
-            condition: succeededOrFailed()
-            inputs:
-              testResultsFormat: 'NUnit'
-              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
-              testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2019)'
-
-      - job: Unit_Test_PS_Win2022
-        displayName: 'Unit Test (Powershell 5.1 on Windows Server 2022)'
-        pool:
-          vmImage: windows-2022
-
-        steps:
-          - powershell: |
-              $repositoryOwner,$repositoryName = $env:BUILD_REPOSITORY_NAME -split '/'
-              echo "##vso[task.setvariable variable=RepositoryOwner;isOutput=true]$repositoryOwner"
-              echo "##vso[task.setvariable variable=RepositoryName;isOutput=true]$repositoryName"
-            name: moduleBuildVariable
-            displayName: 'Set Environment Variables'
-
-          - task: DownloadPipelineArtifact@2
-            displayName: 'Download Pipeline Artifact'
-            inputs:
-              buildType: 'current'
-              artifactName: $(buildArtifactName)
-              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
-
-          - task: PowerShell@2
-            name: test
-            displayName: 'Run Unit Test'
-            inputs:
-              filePath: './build.ps1'
-              arguments: "-tasks test -PesterScript 'tests/Unit'"
-
-          - task: PublishTestResults@2
-            displayName: 'Publish Test Results'
-            condition: succeededOrFailed()
-            inputs:
-              testResultsFormat: 'NUnit'
-              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
+            PS_Win2022:
+              vmImage: windows-2022
+              pesterScript: 'tests/Unit'
               testRunTitle: 'Unit (PowerShell 5.1 on Windows Server 2022)'
+              pwsh: false
+            PS_Win2025:
+              vmImage: windows-2025
+              pesterScript: 'tests/Unit'
+              testRunTitle: 'Unit (PowerShell 5.1 on Windows Server 2025)'
+              pwsh: false
+            PS7_Win2019:
+              vmImage: windows-2019
+              pesterScript: 'tests/Unit'
+              testRunTitle: 'Unit (PowerShell 7 on Windows Server 2019)'
+              pwsh: true
+            PS7_Win2022:
+              vmImage: windows-2022
+              pesterScript: 'tests/Unit'
+              testRunTitle: 'Unit (PowerShell 7 on Windows Server 2022)'
+              pwsh: true
+            PS7_Win2025:
+              vmImage: windows-2025
+              pesterScript: 'tests/Unit'
+              testRunTitle: 'Unit (PowerShell 7 on Windows Server 2025)'
+              pwsh: true
+            PS7_Ubuntu2004:
+              vmImage: ubuntu-20.04
+              pesterScript: 'tests/Unit'
+              testRunTitle: 'Unit (PowerShell 7 on Ubuntu 20.04)'
+              pwsh: true
+            PS7_Ubuntu2204:
+              vmImage: ubuntu-22.04
+              pesterScript: 'tests/Unit'
+              testRunTitle: 'Unit (PowerShell 7 on Ubuntu 22.04)'
+              pwsh: true
+            PS7_Ubuntu2404:
+              vmImage: ubuntu-24.04
+              pesterScript: 'tests/Unit'
+              testRunTitle: 'Unit (PowerShell 7 on Ubuntu 24.04)'
+              pwsh: true
+            PS7_MacOS13:
+              vmImage: macos-13
+              pesterScript: 'tests/Unit'
+              testRunTitle: 'Unit (PowerShell 7 on MacOS 13)'
+              pwsh: true
+            PS7_MacOS14:
+              vmImage: macos-14
+              pesterScript: 'tests/Unit'
+              testRunTitle: 'Unit (PowerShell 7 on MacOS 14)'
+              pwsh: true
+            PS7_MacOS15:
+              vmImage: macos-15
+              pesterScript: 'tests/Unit'
+              testRunTitle: 'Unit (PowerShell 7 on MacOS 15)'
+              pwsh: true
 
-          - task: PublishCodeCoverageResults@2
-            displayName: 'Publish Code Coverage'
-            condition: succeededOrFailed()
-            inputs:
-              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
-              pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
-
-      - job: Integration_Test_PS_Win2022
-        dependsOn: Unit_Test_PS_Win2022
-        displayName: 'Integration Test (Powershell 5.1 on Windows Server 2022)'
         pool:
-          vmImage: windows-2022
-        timeoutInMinutes: 0
-
+          vmImage: $(vmImage)
         steps:
+          - powershell: |
+              $repositoryOwner,$repositoryName = $env:BUILD_REPOSITORY_NAME -split '/'
+              echo "##vso[task.setvariable variable=RepositoryOwner;isOutput=true]$repositoryOwner"
+              echo "##vso[task.setvariable variable=RepositoryName;isOutput=true]$repositoryName"
+            name: moduleBuildVariable
+            displayName: 'Set Environment Variables'
+
           - task: DownloadPipelineArtifact@2
             displayName: 'Download Pipeline Artifact'
             inputs:
@@ -201,17 +149,11 @@ stages:
 
           - task: PowerShell@2
             name: test
-            displayName: 'Run Integration Test'
-            env:
-              azureApplicationId: $(azureApplicationId)
-              azureApplicationPassword: $(azureApplicationPassword)
-              azureSubscriptionId: $(azureSubscriptionId)
-              azureTenantId: $(azureTenantId)
-              azureAppicationObjectId: $(azureAppicationObjectId)
+            displayName: 'Run Unit Test'
             inputs:
               filePath: './build.ps1'
-              arguments: "-Tasks test -PesterScript 'tests/Integration' -CodeCoverageThreshold 0"
-              pwsh: false
+              arguments: "-tasks test -PesterScript '$(pesterScript)'"
+              pwsh: $(pwsh)
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
@@ -219,57 +161,85 @@ stages:
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
+              testRunTitle: '$(testRunTitle)'
+
+          - task: PublishCodeCoverageResults@2
+            displayName: 'Publish Code Coverage'
+            condition: succeededOrFailed()
+            inputs:
+              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
+              pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
+
+      # Integration Test Matrix
+      - job: Integration_Test_Matrix
+        displayName: 'Integration Test Matrix'
+        dependsOn: Unit_Test_Matrix
+        strategy:
+          maxParallel: 5
+          matrix:
+            PS_Win2019:
+              vmImage: windows-2019
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2019)'
+              pwsh: false
+            PS_Win2022:
+              vmImage: windows-2022
+              pesterScript: 'tests/Integration'
               testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2022)'
+              pwsh: false
+            PS_Win2025:
+              vmImage: windows-2025
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2025)'
+              pwsh: false
+            PS7_Win2019:
+              vmImage: windows-2019
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 7 on Windows Server 2019)'
+              pwsh: true
+            PS7_Win2022:
+              vmImage: windows-2022
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 7 on Windows Server 2022)'
+              pwsh: true
+            PS7_Win2025:
+              vmImage: windows-2025
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 7 on Windows Server 2025)'
+              pwsh: true
+            PS7_Ubuntu2004:
+              vmImage: ubuntu-20.04
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 7 on Ubuntu 20.04)'
+              pwsh: true
+            PS7_Ubuntu2204:
+              vmImage: ubuntu-22.04
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 7 on Ubuntu 22.04)'
+              pwsh: true
+            PS7_Ubuntu2404:
+              vmImage: ubuntu-24.04
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 7 on Ubuntu 24.04)'
+              pwsh: true
+            PS7_MacOS13:
+              vmImage: macos-13
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 7 on MacOS 13)'
+              pwsh: true
+            PS7_MacOS14:
+              vmImage: macos-14
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 7 on MacOS 14)'
+              pwsh: true
+            PS7_MacOS15:
+              vmImage: macos-15
+              pesterScript: 'tests/Integration'
+              testRunTitle: 'Integration (PowerShell 7 on MacOS 15)'
+              pwsh: true
 
-      - job: Unit_Test_PS7_Ubuntu2004
-        displayName: 'Unit Test (Powershell 7 on Ubuntu 20.04)'
         pool:
-          vmImage: ubuntu-20.04
-
-        steps:
-          - powershell: |
-              $repositoryOwner,$repositoryName = $env:BUILD_REPOSITORY_NAME -split '/'
-              echo "##vso[task.setvariable variable=RepositoryOwner;isOutput=true]$repositoryOwner"
-              echo "##vso[task.setvariable variable=RepositoryName;isOutput=true]$repositoryName"
-            name: moduleBuildVariable
-            displayName: 'Set Environment Variables'
-
-          - task: DownloadPipelineArtifact@2
-            displayName: 'Download Pipeline Artifact'
-            inputs:
-              buildType: 'current'
-              artifactName: $(buildArtifactName)
-              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
-
-          - task: PowerShell@2
-            name: test
-            displayName: 'Run Unit Test'
-            inputs:
-              filePath: './build.ps1'
-              arguments: "-tasks test -PesterScript 'tests/Unit'"
-
-          - task: PublishTestResults@2
-            displayName: 'Publish Test Results'
-            condition: succeededOrFailed()
-            inputs:
-              testResultsFormat: 'NUnit'
-              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
-              testRunTitle: 'Unit (Powershell 7 on Ubuntu 20.04)'
-
-          - task: PublishCodeCoverageResults@2
-            displayName: 'Publish Code Coverage'
-            condition: succeededOrFailed()
-            inputs:
-              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
-              pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
-
-      - job: Integration_Test_PS7_Ubuntu2004
-        dependsOn: Unit_Test_PS7_Ubuntu2004
-        displayName: 'Integration Test (Powershell 7 on Ubuntu 20.04)'
-        pool:
-          vmImage: ubuntu-20.04
-        timeoutInMinutes: 0
-
+          vmImage: $(vmImage)
         steps:
           - task: DownloadPipelineArtifact@2
             displayName: 'Download Pipeline Artifact'
@@ -286,11 +256,11 @@ stages:
               azureApplicationPassword: $(azureApplicationPassword)
               azureSubscriptionId: $(azureSubscriptionId)
               azureTenantId: $(azureTenantId)
-              azureAppicationObjectId: $(azureAppicationObjectId)
+              azureApplicationObjectId: $(azureApplicationObjectId)
             inputs:
               filePath: './build.ps1'
-              arguments: "-Tasks test -PesterScript 'tests/Integration' -CodeCoverageThreshold 0"
-              pwsh: false
+              arguments: "-Tasks test -PesterScript '$(pesterScript)' -CodeCoverageThreshold 0"
+              pwsh: $(pwsh)
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
@@ -298,174 +268,7 @@ stages:
             inputs:
               testResultsFormat: 'NUnit'
               testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
-              testRunTitle: 'Integration (Powershell 7 on Ubuntu 20.04)'
-
-      - job: Unit_Test_PS7_Ubuntu2204
-        displayName: 'Unit Test (Powershell 7 on Ubuntu 22.04)'
-        pool:
-          vmImage: ubuntu-22.04
-
-        steps:
-          - powershell: |
-              $repositoryOwner,$repositoryName = $env:BUILD_REPOSITORY_NAME -split '/'
-              echo "##vso[task.setvariable variable=RepositoryOwner;isOutput=true]$repositoryOwner"
-              echo "##vso[task.setvariable variable=RepositoryName;isOutput=true]$repositoryName"
-            name: moduleBuildVariable
-            displayName: 'Set Environment Variables'
-
-          - task: DownloadPipelineArtifact@2
-            displayName: 'Download Pipeline Artifact'
-            inputs:
-              buildType: 'current'
-              artifactName: $(buildArtifactName)
-              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
-
-          - task: PowerShell@2
-            name: test
-            displayName: 'Run Unit Test'
-            inputs:
-              filePath: './build.ps1'
-              arguments: "-tasks test -PesterScript 'tests/Unit'"
-
-          - task: PublishTestResults@2
-            displayName: 'Publish Test Results'
-            condition: succeededOrFailed()
-            inputs:
-              testResultsFormat: 'NUnit'
-              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
-              testRunTitle: 'Unit (Powershell 7 on Ubuntu 22.04)'
-
-          - task: PublishCodeCoverageResults@2
-            displayName: 'Publish Code Coverage'
-            condition: succeededOrFailed()
-            inputs:
-              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
-              pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
-
-      - job: Integration_Test_PS7_Ubuntu2204
-        dependsOn: Unit_Test_PS7_Ubuntu2204
-        displayName: 'Integration Test (Powershell 7 on Ubuntu 22.04)'
-        pool:
-          vmImage: ubuntu-22.04
-        timeoutInMinutes: 0
-
-        steps:
-          - task: DownloadPipelineArtifact@2
-            displayName: 'Download Pipeline Artifact'
-            inputs:
-              buildType: 'current'
-              artifactName: $(buildArtifactName)
-              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
-
-          - task: PowerShell@2
-            name: test
-            displayName: 'Run Integration Test'
-            env:
-              azureApplicationId: $(azureApplicationId)
-              azureApplicationPassword: $(azureApplicationPassword)
-              azureSubscriptionId: $(azureSubscriptionId)
-              azureTenantId: $(azureTenantId)
-              azureAppicationObjectId: $(azureAppicationObjectId)
-            inputs:
-              filePath: './build.ps1'
-              arguments: "-Tasks test -PesterScript 'tests/Integration' -CodeCoverageThreshold 0"
-              pwsh: false
-
-          - task: PublishTestResults@2
-            displayName: 'Publish Test Results'
-            condition: succeededOrFailed()
-            inputs:
-              testResultsFormat: 'NUnit'
-              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
-              testRunTitle: 'Integration (Powershell 7 on Ubuntu 22.04)'
-
-      - job: Unit_Test_PSCore6_MacOS12
-        displayName: 'Unit Test (Powershell Core 6 on MacOS 12)'
-        pool:
-          vmImage: macos-12
-
-        steps:
-          - powershell: |
-              $repositoryOwner,$repositoryName = $env:BUILD_REPOSITORY_NAME -split '/'
-              echo "##vso[task.setvariable variable=RepositoryOwner;isOutput=true]$repositoryOwner"
-              echo "##vso[task.setvariable variable=RepositoryName;isOutput=true]$repositoryName"
-            name: moduleBuildVariable
-            displayName: 'Set Environment Variables'
-
-          - task: DownloadPipelineArtifact@2
-            displayName: 'Download Pipeline Artifact'
-            inputs:
-              buildType: 'current'
-              artifactName: $(buildArtifactName)
-              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
-
-          - powershell: |
-              Uninstall-Module -Name Az -Force
-            displayName: 'Uninstall Az Module'
-
-          - task: PowerShell@2
-            name: test
-            displayName: 'Run Unit Test'
-            inputs:
-              filePath: './build.ps1'
-              arguments: "-tasks test -PesterScript 'tests/Unit'"
-
-          - task: PublishTestResults@2
-            displayName: 'Publish Test Results'
-            condition: succeededOrFailed()
-            inputs:
-              testResultsFormat: 'NUnit'
-              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
-              testRunTitle: 'Unit (Powershell Core 6 on MacOS 12)'
-
-          - task: PublishCodeCoverageResults@2
-            displayName: 'Publish Code Coverage'
-            condition: succeededOrFailed()
-            inputs:
-              summaryFileLocation: '$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)/CodeCov*.xml'
-              pathToSources: '$(Build.SourcesDirectory)/$(sourceFolderName)/'
-
-      - job: Integration_Test_PSCore6_MacOS12
-        dependsOn: Unit_Test_PSCore6_MacOS12
-        displayName: 'Integration Test (Powershell Core 6 on MacOS 12)'
-        pool:
-          vmImage: macos-12
-        timeoutInMinutes: 0
-
-        steps:
-          - task: DownloadPipelineArtifact@2
-            displayName: 'Download Pipeline Artifact'
-            inputs:
-              buildType: 'current'
-              artifactName: $(buildArtifactName)
-              targetPath: '$(Build.SourcesDirectory)/$(buildArtifactName)'
-
-          - powershell: |
-              Uninstall-Module -Name Az -Force
-              $null = Remove-Item -Path '~/.Azure' -Recurse -Force
-            displayName: 'Uninstall Az Module'
-
-          - task: PowerShell@2
-            name: test
-            displayName: 'Run Integration Test'
-            env:
-              azureApplicationId: $(azureApplicationId)
-              azureApplicationPassword: $(azureApplicationPassword)
-              azureSubscriptionId: $(azureSubscriptionId)
-              azureTenantId: $(azureTenantId)
-              azureAppicationObjectId: $(azureAppicationObjectId)
-            inputs:
-              filePath: './build.ps1'
-              arguments: "-Tasks test -PesterScript 'tests/Integration' -CodeCoverageThreshold 0"
-              pwsh: false
-
-          - task: PublishTestResults@2
-            displayName: 'Publish Test Results'
-            condition: succeededOrFailed()
-            inputs:
-              testResultsFormat: 'NUnit'
-              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
-              testRunTitle: 'Integration (Powershell Core 6 on MacOS 12)'
+              testRunTitle: '$(testRunTitle)'
 
   - stage: Deploy
     dependsOn: Test
