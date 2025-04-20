@@ -111,8 +111,8 @@ console.log("done");
     }
 
     $script:testRequestBodyJson = '{"Tricky Body":"if (entityAlreadyExists)\r\n    throw new Error(`root entity # ${entity.id} already created`);\r\nconsole.log(`new entity \"${entity.id}\" is about to be created...`);\r\nlet a = \u0027some value\u0027;\r\nconsole.log(\"done\");"}'
-
     $script:testConnectionString = "AccountEndpoint=https://{0}.documents.azure.com:443/;AccountKey={1};" -f $script:testAccount, $script:testKey
+
 
     Describe 'Custom types' -Tag 'Unit' {
         Context 'CosmosDB.Context' {
@@ -770,6 +770,81 @@ console.log("done");
                 $tempCredential.Password | Should -Be $script:testEmulatorKey
                 $script:result.KeyType | Should -Be 'master'
                 $script:result.BaseUri | Should -Be 'https://mycosmosdb.contoso.local:9999/'
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
+            }
+        }
+
+        Context 'When called with Emulator switch and URI with protocol but no port and Port parameter not passed' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Database = $script:testDatabase
+                    Emulator = $true
+                    URI      = 'https://mycosmosdb.contoso.local'
+                    Verbose  = $true
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be 'emulator'
+                $script:result.Database | Should -Be $script:testDatabase
+                $tempCredential = New-Object System.Net.NetworkCredential("TestUsername", $result.Key, "TestDomain")
+                $tempCredential.Password | Should -Be $script:testEmulatorKey
+                $script:result.KeyType | Should -Be 'master'
+                $script:result.BaseUri | Should -Be 'https://mycosmosdb.contoso.local:8081/'
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
+            }
+        }
+
+        Context 'When called with Emulator switch and URI with no protocol with port and Port parameter not passed' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Database = $script:testDatabase
+                    Emulator = $true
+                    URI      = 'mycosmosdb.contoso.local:9999'
+                    Verbose  = $true
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be 'emulator'
+                $script:result.Database | Should -Be $script:testDatabase
+                $tempCredential = New-Object System.Net.NetworkCredential("TestUsername", $result.Key, "TestDomain")
+                $tempCredential.Password | Should -Be $script:testEmulatorKey
+                $script:result.KeyType | Should -Be 'master'
+                $script:result.BaseUri | Should -Be 'https://mycosmosdb.contoso.local:9999/'
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
+            }
+        }
+
+        Context 'When called with Emulator switch and URI with protocol but no port and Port parameter not passed' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Database = $script:testDatabase
+                    Emulator = $true
+                    URI      = 'https://mycosmosdb.contoso.local:8081'
+                    Verbose  = $true
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be 'emulator'
+                $script:result.Database | Should -Be $script:testDatabase
+                $tempCredential = New-Object System.Net.NetworkCredential("TestUsername", $result.Key, "TestDomain")
+                $tempCredential.Password | Should -Be $script:testEmulatorKey
+                $script:result.KeyType | Should -Be 'master'
+                $script:result.BaseUri | Should -Be 'https://mycosmosdb.contoso.local:8081/'
                 $script:result.Environment | Should -BeExactly 'AzureCloud'
             }
         }
@@ -2160,6 +2235,56 @@ console.log("done");
             It 'Should call expected mocks' {
                 Assert-MockCalled -CommandName Get-AzAccessToken -Exactly -Times 1 `
                     -ParameterFilter { $ResourceUrl -eq 'https://cosmos.azure.com' }
+            }
+        }
+    }
+
+    Describe 'New-CosmosDbResponseException' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name New-CosmosDbResponseException -ErrorAction Stop } | Should -Not -Throw
+        }
+
+                # -------------------------------------------------------------
+        # Core‑only test – Microsoft.PowerShell.Commands.HttpResponseException
+        # -------------------------------------------------------------
+        $doesNotHaveHttpResponseException = -not [bool]([System.Management.Automation.PSTypeName]'Microsoft.PowerShell.Commands.HttpResponseException').Type
+
+        Context 'When called with HttpResponseException' {
+            $script:result = $null
+
+            It 'Should not throw exception' -Skip:$doesNotHaveHttpResponseException {
+                $httpResponseMessage = [System.Net.Http.HttpResponseMessage]::new([System.Net.HttpStatusCode]::BadRequest)
+                $httpResponseException = [Microsoft.PowerShell.Commands.HttpResponseException]::new('Bad Request', $httpResponseMessage)
+
+                { $script:result = New-CosmosDbResponseException -InputObject $httpResponseException } | Should -Not -Throw
+            }
+
+            It 'Should return expected CosmosDB.ResponseException' -Skip:   $doesNotHaveHttpResponseException {
+                $script:result | Should -BeOfType 'CosmosDB.ResponseException'
+                $script:result.StatusCode | Should -Be ([System.Net.HttpStatusCode]::BadRequest)
+                $script:result.Message | Should -Be $httpResponseException.Message
+            }
+        }
+
+        # -------------------------------------------------------------
+        # WebException branch (works both on Windows PowerShell & Core)
+        # -------------------------------------------------------------
+        Context 'When called with WebException containing HttpWebResponse' {
+            <#
+                It isn't possible to create a WebException mock, so unit testing
+                is not possible. Therefore, rely on Integration tests to verify this.
+            #>
+        }
+
+        # -------------------------------------------------------------
+        # Unsupported exception type
+        # -------------------------------------------------------------
+        Context 'When called with unsupported exception type' {
+            It 'Should throw Unsupported exception type message' {
+                $argException = [System.ArgumentException]::new('Bad input')
+                {
+                    New-CosmosDbResponseException -InputObject $argException
+                } | Should -Throw "Unsupported exception type: $([System.ArgumentException].FullName)"
             }
         }
     }

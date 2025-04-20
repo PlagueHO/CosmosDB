@@ -251,6 +251,11 @@ function Invoke-CosmosDbRequest
         }
         catch [System.Net.WebException], [Microsoft.PowerShell.Commands.HttpResponseException]
         {
+            <#
+                When a response exception is thrown by Invoke-WebRequest:
+                PowerShell 5.x throws System.Net.WebException
+                PowerShell 7.x throws Microsoft.PowerShell.Commands.HttpResponseException
+            #>
             if ($_.Exception.Response.StatusCode -eq 429)
             {
                 <#

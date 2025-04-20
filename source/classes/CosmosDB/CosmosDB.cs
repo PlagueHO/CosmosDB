@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 
 namespace CosmosDB
 {
@@ -114,8 +115,8 @@ namespace CosmosDB
     public class ResponseException : System.Exception
     {
         public ResponseException(System.String message) : base(message) { }
-        public ResponseException(System.String message, System.Exception innerException) : base(message, innerException) { }
-        public ResponseException(System.String message, System.Int32 statusCode) : base(message) { StatusCode = statusCode; }
-        public System.Int32 StatusCode { get; set; } = 0;
+        public System.Net.HttpStatusCode? StatusCode { get; set; } = null;
+        public System.String Response { get; set; } = "";
+
     }
 }
