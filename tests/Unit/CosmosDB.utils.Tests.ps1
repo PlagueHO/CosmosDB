@@ -2245,15 +2245,16 @@ console.log("done");
         }
 
         # PowerShell 7 test – Microsoft.PowerShell.Commands.HttpResponseException
-        Context 'When called with HttpResponseException' {
-            $script:doesNotHaveHttpResponseException = -not [bool]([System.Management.Automation.PSTypeName]'Microsoft.PowerShell.Commands.HttpResponseException').Type
-            if ($script:doesNotHaveHttpResponseException) {
-                Write-Verbose -Message 'Skipping HttpResponseException test as it is not available in this environment.'
+        Context 'When called with HttpResponseException on PowerShell 7.x' {
+            $script:skipHttpResponseException = -not ((Get-Variable -Name 'PSEdition').Value -eq 'Core')
+            if ($script:skipHttpResponseException)
+            {
+                Write-Verbose -Message 'Skipping HttpResponseException test on PowerShell 5.x'
             }
 
             $script:result = $null
 
-            It 'Should not throw exception' -Skip:$script:doesNotHaveHttpResponseException {
+            It 'Should not throw exception' -Skip:$script:skipHttpResponseException {
                 {
                     $script:httpResponseMessage = [System.Net.Http.HttpResponseMessage]::new([System.Net.HttpStatusCode]::BadRequest)
                     $script:httpResponseException = [Microsoft.PowerShell.Commands.HttpResponseException]::new('Bad Request', $script:httpResponseMessage)
@@ -2262,7 +2263,7 @@ console.log("done");
                 } | Should -Not -Throw
             }
 
-            It 'Should return expected CosmosDB.ResponseException' -Skip:$script:doesNotHaveHttpResponseException {
+            It 'Should return expected CosmosDB.ResponseException' -Skip:$script:skipHttpResponseException {
                 $script:result | Should -BeOfType 'CosmosDB.ResponseException'
                 $script:result.StatusCode | Should -Be ([System.Net.HttpStatusCode]::BadRequest)
                 $script:result.Message | Should -Be $script:httpResponseException.Message
