@@ -2244,36 +2244,36 @@ console.log("done");
             { Get-Command -Name New-CosmosDbResponseException -ErrorAction Stop } | Should -Not -Throw
         }
 
-                # -------------------------------------------------------------
-        # Core‑only test – Microsoft.PowerShell.Commands.HttpResponseException
-        # -------------------------------------------------------------
-        $doesNotHaveHttpResponseException = -not [bool]([System.Management.Automation.PSTypeName]'Microsoft.PowerShell.Commands.HttpResponseException').Type
-
+        # PowerShell 7 test – Microsoft.PowerShell.Commands.HttpResponseException
         Context 'When called with HttpResponseException' {
+            $doesNotHaveHttpResponseException = -not [bool]([System.Management.Automation.PSTypeName]'Microsoft.PowerShell.Commands.HttpResponseException').Type
+            if ($doesNotHaveHttpResponseException) {
+                Write-Verbose -Message 'Skipping HttpResponseException test as it is not available in this environment.'
+            }
+
             $script:result = $null
-            $script:httpResponseMessage = [System.Net.Http.HttpResponseMessage]::new([System.Net.HttpStatusCode]::BadRequest)
-            $script:httpResponseException = [Microsoft.PowerShell.Commands.HttpResponseException]::new('Bad Request', $script:httpResponseMessage)
 
             It 'Should not throw exception' -Skip:$doesNotHaveHttpResponseException {
                 {
+                    $script:httpResponseMessage = [System.Net.Http.HttpResponseMessage]::new([System.Net.HttpStatusCode]::BadRequest)
+                    $script:httpResponseException = [Microsoft.PowerShell.Commands.HttpResponseException]::new('Bad Request', $script:httpResponseMessage)
+
                     $script:result = New-CosmosDbResponseException -InputObject $script:httpResponseException
                 } | Should -Not -Throw
             }
 
-            It 'Should return expected CosmosDB.ResponseException' -Skip:   $doesNotHaveHttpResponseException {
+            It 'Should return expected CosmosDB.ResponseException' -Skip:$doesNotHaveHttpResponseException {
                 $script:result | Should -BeOfType 'CosmosDB.ResponseException'
                 $script:result.StatusCode | Should -Be ([System.Net.HttpStatusCode]::BadRequest)
                 $script:result.Message | Should -Be $script:httpResponseException.Message
             }
         }
 
-        # -------------------------------------------------------------
-        # WebException branch (works both on Windows PowerShell & Core)
-        # -------------------------------------------------------------
+        # PowerShell 5.x - test System.Net.WebException
         Context 'When called with WebException containing HttpWebResponse' {
             <#
                 It isn't possible to create a WebException mock, so unit testing
-                is not possible. Therefore, rely on Integration tests to verify this.
+                is difficult. Rely on Integration tests to verify this scenario.
             #>
         }
 
