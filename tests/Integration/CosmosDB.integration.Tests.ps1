@@ -1008,9 +1008,11 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             the authorizationHeader.
         #>
         Context 'When getting a document that does not exist in a collection using an Entra ID Token' {
-            $exception = New-Object -Name CosmosDB.OperationException -Auguments @{ 'The specified resource does not exist.', 404 }
+            $exception = New-Object `
+                -Name CosmosDB.OperationException `
+                -Auguments @( 'The specified resource does not exist.', 404 )
 
-            It 'Should throw an CosmosDb.OperationException' {
+            It 'Should throw an CosmosDb.ResponseExeption' {
                 {
                     $script:result = Get-CosmosDbDocument `
                         -Context $script:testEntraIdContext `
@@ -1020,7 +1022,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 } | Should -Throw $exception
             }
         }
-
     }
 
     Context 'When adding a document to a collection' {
