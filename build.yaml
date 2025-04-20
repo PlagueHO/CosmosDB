@@ -80,6 +80,9 @@ BuildWorkflow:
     - Pester_Tests_Stop_On_Fail
     - Pester_if_Code_Coverage_Under_Threshold
 
+  merge:
+    - Merge_CodeCoverage_Files
+
   publish:
     - Publish_Release_To_GitHub
     - Publish_Module_To_gallery
@@ -115,7 +118,18 @@ TaskHeader: |
   ""
 
 ####################################################
-#       PESTER  Configuration                      #
+#           Code Coverage Configuration            #
+####################################################
+
+CodeCoverage:
+  # Filename of the file that will be outputted by the task Merge_CodeCoverage_Files.
+  CodeCoverageMergedOutputFile: JaCoCo_coverage.xml
+  # File pattern used to search for files under the ./output/testResults folder
+  # by task Merge_CodeCoverage_Files.
+  CodeCoverageFilePattern: Codecov*.xml
+
+####################################################
+#       Pester  Configuration                      #
 ####################################################
 Pester:
   OutputFormat: NUnitXML
