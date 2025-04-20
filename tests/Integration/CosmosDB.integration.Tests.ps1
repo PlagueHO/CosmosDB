@@ -974,6 +974,23 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             }
         }
 
+        Context 'When getting a document in a collection using an Entra ID Token' {
+            It 'Should not throw an exception' {
+                $script:result = Get-CosmosDbDocument `
+                    -Context $script:testEntraIdContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testDocumentId `
+                    -Verbose
+            }
+
+            It 'Should return expected object' {
+                Test-GenericResult -GenericResult $script:result
+                $script:result.Id | Should -Be $script:testDocumentId
+                $script:result.Content | Should -Be 'Some string'
+                $script:result.More | Should -Be 'Some other string'
+            }
+        }
+
         Context 'When removing a document from a collection using an Entra ID Token' {
             It 'Should not throw an exception' {
                 $script:result = Remove-CosmosDbDocument `
@@ -983,6 +1000,27 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     -Verbose
             }
         }
+
+        <#
+            When a rquest to the CosmosDB is made, but it fails with an HttpResponseException
+            the exception should be rethrown as a CosmosDb.OperationException, otherwise the
+            HttpResponseException will contain the Response.requestMessage which will contain
+            the authorizationHeader.
+        #>
+        Context 'When getting a document that does not exist in a collection using an Entra ID Token' {
+            $exception = New-Object -Name CosmosDB.OperationException -Auguments @{ 'The specified resource does not exist.', 404 }
+
+            It 'Should throw an CosmosDb.OperationException' {
+                {
+                    $script:result = Get-CosmosDbDocument `
+                        -Context $script:testEntraIdContext `
+                        -CollectionId $script:testCollection `
+                        -Id $script:testDocumentId `
+                        -Verbose
+                } | Should -Throw $exception
+            }
+        }
+
     }
 
     Context 'When adding a document to a collection' {
