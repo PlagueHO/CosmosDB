@@ -2246,14 +2246,14 @@ console.log("done");
 
         # PowerShell 7 test – Microsoft.PowerShell.Commands.HttpResponseException
         Context 'When called with HttpResponseException' {
-            $doesNotHaveHttpResponseException = -not [bool]([System.Management.Automation.PSTypeName]'Microsoft.PowerShell.Commands.HttpResponseException').Type
-            if ($doesNotHaveHttpResponseException) {
+            $script:doesNotHaveHttpResponseException = -not [bool]([System.Management.Automation.PSTypeName]'Microsoft.PowerShell.Commands.HttpResponseException').Type
+            if ($script:doesNotHaveHttpResponseException) {
                 Write-Verbose -Message 'Skipping HttpResponseException test as it is not available in this environment.'
             }
 
             $script:result = $null
 
-            It 'Should not throw exception' -Skip:$doesNotHaveHttpResponseException {
+            It 'Should not throw exception' -Skip $script:doesNotHaveHttpResponseException {
                 {
                     $script:httpResponseMessage = [System.Net.Http.HttpResponseMessage]::new([System.Net.HttpStatusCode]::BadRequest)
                     $script:httpResponseException = [Microsoft.PowerShell.Commands.HttpResponseException]::new('Bad Request', $script:httpResponseMessage)
@@ -2262,7 +2262,7 @@ console.log("done");
                 } | Should -Not -Throw
             }
 
-            It 'Should return expected CosmosDB.ResponseException' -Skip:$doesNotHaveHttpResponseException {
+            It 'Should return expected CosmosDB.ResponseException' -Skip $script:doesNotHaveHttpResponseException {
                 $script:result | Should -BeOfType 'CosmosDB.ResponseException'
                 $script:result.StatusCode | Should -Be ([System.Net.HttpStatusCode]::BadRequest)
                 $script:result.Message | Should -Be $script:httpResponseException.Message
@@ -2272,9 +2272,16 @@ console.log("done");
         # PowerShell 5.x - test System.Net.WebException
         Context 'When called with WebException containing HttpWebResponse' {
             <#
-                It isn't possible to create a WebException mock, so unit testing
-                is difficult. Rely on Integration tests to verify this scenario.
+                It is difficult to create a HttpWebResponse mock, so unit testing
+                isn't possible. Rely on Integration tests to verify this scenario.
             #>
+            Write-Verbose -Message 'Skipping WebException test as it is not possible to mock HttpWebResponse.'
+
+            It 'Should not throw exception' -Skip $true {
+            }
+
+            It 'Should return expected CosmosDB.ResponseException' -Skip $true {
+            }
         }
 
         # -------------------------------------------------------------
