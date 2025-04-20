@@ -2251,18 +2251,19 @@ console.log("done");
 
         Context 'When called with HttpResponseException' {
             $script:result = $null
+            $script:httpResponseMessage = [System.Net.Http.HttpResponseMessage]::new([System.Net.HttpStatusCode]::BadRequest)
+            $script:httpResponseException = [Microsoft.PowerShell.Commands.HttpResponseException]::new('Bad Request', $script:httpResponseMessage)
 
             It 'Should not throw exception' -Skip:$doesNotHaveHttpResponseException {
-                $httpResponseMessage = [System.Net.Http.HttpResponseMessage]::new([System.Net.HttpStatusCode]::BadRequest)
-                $httpResponseException = [Microsoft.PowerShell.Commands.HttpResponseException]::new('Bad Request', $httpResponseMessage)
-
-                { $script:result = New-CosmosDbResponseException -InputObject $httpResponseException } | Should -Not -Throw
+                {
+                    $script:result = New-CosmosDbResponseException -InputObject $script:httpResponseException
+                } | Should -Not -Throw
             }
 
             It 'Should return expected CosmosDB.ResponseException' -Skip:   $doesNotHaveHttpResponseException {
                 $script:result | Should -BeOfType 'CosmosDB.ResponseException'
                 $script:result.StatusCode | Should -Be ([System.Net.HttpStatusCode]::BadRequest)
-                $script:result.Message | Should -Be $httpResponseException.Message
+                $script:result.Message | Should -Be $script:httpResponseException.Message
             }
         }
 
