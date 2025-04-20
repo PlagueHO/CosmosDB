@@ -110,12 +110,12 @@ namespace CosmosDB
         }
     }
 
-    // ResponseExeption is used to handle exceptions that occur during the invocation of CosmosDB operations.
-    public class ResponseExeption : System.Exception
+    // ResponseException is used to handle exceptions that occur during the invocation of CosmosDB operations.
+    public class ResponseException : System.Exception
     {
-        public ResponseExeption(System.String message) : base(message) { }
-        public ResponseExeption(System.String message, System.Exception innerException) : base(message, innerException) { }
-        public ResponseExeption(System.String message, System.Int32 statusCode) : base(message) { StatusCode = statusCode; }
+        public ResponseException(System.String message) : base(message) { }
+        public ResponseException(System.String message, System.Exception innerException) : base(message, innerException) { }
+        public ResponseException(System.String message, System.Int32 statusCode) : base(message) { StatusCode = statusCode; }
         public System.Int32 StatusCode { get; set; } = 0;
     }
 }

@@ -1012,7 +1012,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Name CosmosDB.OperationException `
                 -Auguments @( 'The specified resource does not exist.', 404 )
 
-            It 'Should throw an CosmosDb.ResponseExeption' {
+            It 'Should throw an CosmosDb.ResponseException' {
                 {
                     $script:result = Get-CosmosDbDocument `
                         -Context $script:testEntraIdContext `
