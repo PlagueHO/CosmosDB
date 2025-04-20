@@ -2253,7 +2253,7 @@ console.log("done");
 
             $script:result = $null
 
-            It 'Should not throw exception' -Skip $script:doesNotHaveHttpResponseException {
+            It 'Should not throw exception' -Skip:$script:doesNotHaveHttpResponseException {
                 {
                     $script:httpResponseMessage = [System.Net.Http.HttpResponseMessage]::new([System.Net.HttpStatusCode]::BadRequest)
                     $script:httpResponseException = [Microsoft.PowerShell.Commands.HttpResponseException]::new('Bad Request', $script:httpResponseMessage)
@@ -2262,7 +2262,7 @@ console.log("done");
                 } | Should -Not -Throw
             }
 
-            It 'Should return expected CosmosDB.ResponseException' -Skip $script:doesNotHaveHttpResponseException {
+            It 'Should return expected CosmosDB.ResponseException' -Skip:$script:doesNotHaveHttpResponseException {
                 $script:result | Should -BeOfType 'CosmosDB.ResponseException'
                 $script:result.StatusCode | Should -Be ([System.Net.HttpStatusCode]::BadRequest)
                 $script:result.Message | Should -Be $script:httpResponseException.Message
@@ -2277,10 +2277,10 @@ console.log("done");
             #>
             Write-Verbose -Message 'Skipping WebException test as it is not possible to mock HttpWebResponse.'
 
-            It 'Should not throw exception' -Skip $true {
+            It 'Should not throw exception' -Skip:$true {
             }
 
-            It 'Should return expected CosmosDB.ResponseException' -Skip $true {
+            It 'Should return expected CosmosDB.ResponseException' -Skip:$true {
             }
         }
 
