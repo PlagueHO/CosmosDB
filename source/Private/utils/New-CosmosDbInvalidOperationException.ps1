@@ -22,13 +22,13 @@ function New-CosmosDbInvalidOperationException
     elseif ($null -eq $ErrorRecord)
     {
         $invalidOperationException =
-        New-Object -TypeName 'InvalidOperationException' -ArgumentList @( $Message )
+            New-Object -TypeName 'InvalidOperationException' -ArgumentList @( $Message )
     }
     else
     {
         $invalidOperationException =
-        New-Object -TypeName 'InvalidOperationException' -ArgumentList @( $Message,
-            $ErrorRecord.Exception )
+            New-Object -TypeName 'InvalidOperationException' -ArgumentList @( $Message,
+                $ErrorRecord.Exception )
     }
 
     $newObjectParams = @{

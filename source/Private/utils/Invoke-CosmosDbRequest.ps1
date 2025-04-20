@@ -305,14 +305,14 @@ function Invoke-CosmosDbRequest
             # A non-recoverable exception occurred
             $fatal = $true
 
-            Throw $_
+            throw $_
         }
         catch
         {
             # A non-recoverable exception occurred
             $fatal = $true
 
-            Throw $_
+            throw $_
         }
     } while ($requestComplete -eq $false -and -not $fatal)
 

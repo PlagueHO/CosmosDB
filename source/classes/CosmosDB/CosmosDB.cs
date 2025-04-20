@@ -1,7 +1,9 @@
 ﻿using System;
 
-namespace CosmosDB {
-    public enum Environment {
+namespace CosmosDB
+{
+    public enum Environment
+    {
         AzureChinaCloud,
         AzureCloud,
         AzureUSGovernment
@@ -32,25 +34,31 @@ namespace CosmosDB {
         public CosmosDB.ContextToken[] Token { get; set; }
         public System.Security.SecureString EntraIdToken { get; set; }
         public CosmosDB.BackoffPolicy BackoffPolicy { get; set; }
-        public CosmosDB.Environment Environment  { get; set; } = Environment.AzureCloud;
+        public CosmosDB.Environment Environment { get; set; } = Environment.AzureCloud;
     }
 
-    namespace IndexingPolicy {
-        namespace Path {
-            public class Index {
+    namespace IndexingPolicy
+    {
+        namespace Path
+        {
+            public class Index
+            {
                 public System.String dataType { get; set; }
                 public System.String kind { get; set; }
             }
 
-            public class IndexRange : CosmosDB.IndexingPolicy.Path.Index {
+            public class IndexRange : CosmosDB.IndexingPolicy.Path.Index
+            {
                 public readonly System.Int32 precision = -1;
             }
 
-            public class IndexHash : CosmosDB.IndexingPolicy.Path.Index {
+            public class IndexHash : CosmosDB.IndexingPolicy.Path.Index
+            {
                 public readonly System.Int32 precision = -1;
             }
 
-            public class IndexSpatial : CosmosDB.IndexingPolicy.Path.Index {
+            public class IndexSpatial : CosmosDB.IndexingPolicy.Path.Index
+            {
             }
 
             public class IncludedPath
@@ -70,7 +78,8 @@ namespace CosmosDB {
         }
 
 
-        namespace CompositeIndex {
+        namespace CompositeIndex
+        {
             public class Element
             {
                 public System.String path { get; set; }
@@ -88,8 +97,10 @@ namespace CosmosDB {
         }
     }
 
-    namespace UniqueKeyPolicy {
-        public class UniqueKey {
+    namespace UniqueKeyPolicy
+    {
+        public class UniqueKey
+        {
             public System.String[] paths { get; set; }
         }
 
@@ -97,5 +108,14 @@ namespace CosmosDB {
         {
             public CosmosDB.UniqueKeyPolicy.UniqueKey[] uniqueKeys { get; set; }
         }
+    }
+
+    // ResponseExeption is used to handle exceptions that occur during the invocation of CosmosDB operations.
+    public class ResponseExeption : System.Exception
+    {
+        public ResponseExeption(System.String message) : base(message) { }
+        public ResponseExeption(System.String message, System.Exception innerException) : base(message, innerException) { }
+        public ResponseExeption(System.String message, System.Int32 statusCode) : base(message) { StatusCode = statusCode; }
+        public System.Int32 StatusCode { get; set; } = 0;
     }
 }
