@@ -15,8 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Updated CI pipeline to test on MacOS-13.
+- Added testing for MacOS-13, MacOS-14, MacOS-15, Windows Server 2025, Ubuntu-24.04
+  and PowerShell 7.x on Windows Server 2019, 2022 and 2025 to the CI pipeline.
 - Converted CI pipeline Test stage to use matrix to reduce duplication of code.
+- FIx spelling error of `ApplicationObjectId` variable in CI pipeline.
 
 ## [5.1.0] - 2024-12-15
 

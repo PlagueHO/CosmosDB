@@ -125,7 +125,7 @@ object using the `New-CosmosDbContext` cmdlet which you can then
 use to pass to the other Cosmos DB cmdlets in the module.
 
 To create the context object you will either need access to the
-primary primary or secondary keys from your Cosmos DB account or allow
+primary or secondary keys from your Cosmos DB account or allow
 the _CosmosDB Powershell module_ to retrieve the keys directly from
 the Azure management portal for you.
 
@@ -144,7 +144,7 @@ that will be used to authenticate requests to Cosmos DB.
 To create a context object using an _Entra ID Authorization Token_ you will need
 to set the `EntraIdToken` parameter to the token you have retrieved from Entra ID
 for the identity that you have given appropriate permissions to the `account`,
-`database` and/or `collection`. See [this page](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac#concepts) for more infomration.
+`database` and/or `collection`. See [this page](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac#concepts) for more information.
 
 ```powershell
 # Get an OAuth2 resource token from Entra ID for the Cosmos DB account.
@@ -463,7 +463,7 @@ New-CosmosDbCollection -Context $cosmosDbContext -Id MyNewCollection -PartitionK
 ```
 
 Create a collection in the database with the partition key 'id' using
-autoscaling with the maximum throughput of 40,000 RU/s and a mimimum of
+autoscaling with the maximum throughput of 40,000 RU/s and a minimum of
 4,000 RU/s:
 
 ```powershell
