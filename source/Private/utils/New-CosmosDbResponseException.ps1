@@ -4,7 +4,7 @@ function New-CosmosDbResponseException
     [OutputType([CosmosDB.ResponseException])]
     param
     (
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateNotNull()]
         [Alias('Exception')]
         [System.Exception]
@@ -36,7 +36,7 @@ function New-CosmosDbResponseException
             }
 
             default {
-                throw "Unsupported exception type: $($InputObject.GetType().FullName)"
+                # Other exception types don't set any other properties
             }
         }
 

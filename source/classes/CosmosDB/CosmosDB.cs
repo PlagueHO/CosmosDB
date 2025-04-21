@@ -115,8 +115,15 @@ namespace CosmosDB
     public class ResponseException : System.Exception
     {
         public ResponseException(System.String message) : base(message) { }
+        public ResponseException(System.String message, System.Net.HttpStatusCode statusCode) : base(message)
+        {
+            this.StatusCode = statusCode;
+        }
         public System.Net.HttpStatusCode? StatusCode { get; set; } = null;
         public System.String Response { get; set; } = "";
-
+        public override System.String ToString()
+        {
+            return this.Message;
+        }
     }
 }

@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- BREAKING CHANGE: Exceptions returned by `Invoke-CosmosDbRequest` are now
+  `CosmosDb.ResponseException` objects instead of either
+  `Microsoft.PowerShell.Commands.HttpResponseException` (PowerShell 7.x) or
+  `System.Net.HttpWebResponse` (PowerShell 5.x) objects. This is to prevent
+  authorization Headers from being returned in the exception object. In future
+  the filtered headers may be returned in the `CosmosDb.ResponseException` object.
+
 ### Added
 
 - Added `Get-CosmosDbRequestExceptionString` function to get the exception string

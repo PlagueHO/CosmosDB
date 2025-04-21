@@ -559,6 +559,31 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    Context 'When getting a collection that does not exist from a database' {
+        It 'Should throw expected CosmosDb.ResponseException' {
+            $script:cosmosDbResponseException = $null
+
+            {
+                try
+                {
+                    $script:result = New-CosmosDbCollection `
+                        -Context $script:testContext `
+                        -Database $script:testDatabase3 `
+                        -Id 'doesnotexist' `
+                        -Verbose
+                }
+                catch [CosmosDb.ResponseException]
+                {
+                    $script:cosmosDbResponseException = $_.Exception
+                }
+            } | Should -Not -Throw
+
+            $script:cosmosDbResponseException | Should -BeOfType [CosmosDb.ResponseException]
+            $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 400 (Bad Request).'
+            $script:cosmosDbResponseException.StatusCode | Should -Be 400
+        }
+    }
+
     Context 'When removing third database' {
         It 'Should not throw an exception' {
             $script:result = Remove-CosmosDbDatabase -Context $script:testContext -Id $script:testDatabase3 -Verbose
@@ -1003,23 +1028,32 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
 
         <#
             When a rquest to the CosmosDB is made, but it fails with an HttpResponseException
-            the exception should be rethrown as a CosmosDb.OperationException, otherwise the
+            the exception should be rethrown as a CosmosDb.ResponseException, otherwise the
             HttpResponseException will contain the Response.requestMessage which will contain
             the authorizationHeader.
         #>
         Context 'When getting a document that does not exist in a collection using an Entra ID Token' {
-            $exception = New-Object `
-                -Name CosmosDB.OperationException `
-                -Auguments @( 'The specified resource does not exist.', 404 )
+            It 'Should throw expected CosmosDb.ResponseException' {
+                $script:cosmosDbResponseException = $null
 
-            It 'Should throw an CosmosDb.ResponseException' {
                 {
-                    $script:result = Get-CosmosDbDocument `
-                        -Context $script:testEntraIdContext `
-                        -CollectionId $script:testCollection `
-                        -Id $script:testDocumentId `
-                        -Verbose
-                } | Should -Throw $exception
+                    try
+                    {
+                        $script:result = Get-CosmosDbDocument `
+                            -Context $script:testEntraIdContext `
+                            -CollectionId $script:testCollection `
+                            -Id 'doesnotexist' `
+                            -Verbose
+                    }
+                    catch [CosmosDb.ResponseException]
+                    {
+                        $script:cosmosDbResponseException = $_.Exception
+                    }
+                } | Should -Not -Throw
+
+                $script:cosmosDbResponseException | Should -BeOfType [CosmosDb.ResponseException]
+                $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 404 (Not Found).'
+                $script:cosmosDbResponseException.StatusCode | Should -Be 404
             }
         }
     }
@@ -1518,6 +1552,37 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
     Context 'When removing existing collection with a partition key' {
         It 'Should not throw an exception' {
             $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
+        }
+    }
+
+    <#
+        When a rquest to the CosmosDB is made, but it fails with an HttpResponseException
+        the exception should be rethrown as a CosmosDb.ResponseException, otherwise the
+        HttpResponseException will contain the Response.requestMessage which will contain
+        the authorizationHeader.
+    #>
+    Context 'When getting a document that does not exist in a collection' {
+        It 'Should throw expected CosmosDb.ResponseException' {
+            $script:cosmosDbResponseException = $null
+
+            {
+                try
+                {
+                    $script:result = Get-CosmosDbDocument `
+                        -Context $script:testContext `
+                        -CollectionId $script:testCollection `
+                        -Id 'doesnotexist' `
+                        -Verbose
+                }
+                catch [CosmosDb.ResponseException]
+                {
+                    $script:cosmosDbResponseException = $_.Exception
+                }
+            } | Should -Not -Throw
+
+            $script:cosmosDbResponseException | Should -BeOfType [CosmosDb.ResponseException]
+            $script:cosmosDbResponseException.Message | Should -Be 'The specified resource does not exist.'
+            $script:cosmosDbResponseException.StatusCode | Should -Be 404
         }
     }
 

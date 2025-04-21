@@ -294,11 +294,6 @@ function Invoke-CosmosDbRequest
 
             if ($_.Exception.Response)
             {
-                <#
-                    Write out additional exception information into the verbose stream
-                    In a future version a custom exception type for CosmosDB that
-                    contains this additional information.
-                #>
                 $exceptionResponse = Get-CosmosDbRequestExceptionString -ErrorRecord $_
 
                 if ($exceptionResponse)
@@ -310,14 +305,15 @@ function Invoke-CosmosDbRequest
             # A non-recoverable exception occurred
             $fatal = $true
 
-            throw $_
+            throw (New-CosmosDbResponseException -InputObject $_.Exception)
         }
+
         catch
         {
             # A non-recoverable exception occurred
             $fatal = $true
 
-            throw $_
+            throw (New-CosmosDbResponseException -InputObject $_.Exception)
         }
     } while ($requestComplete -eq $false -and -not $fatal)
 

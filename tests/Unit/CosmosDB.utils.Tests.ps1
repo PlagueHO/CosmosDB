@@ -2285,15 +2285,19 @@ console.log("done");
             }
         }
 
-        # -------------------------------------------------------------
-        # Unsupported exception type
-        # -------------------------------------------------------------
-        Context 'When called with unsupported exception type' {
-            It 'Should throw Unsupported exception type message' {
-                $argException = [System.ArgumentException]::new('Bad input')
+        # Other exception type
+        Context 'When called with non web exception type' {
+            It 'Should not throw exception' {
                 {
-                    New-CosmosDbResponseException -InputObject $argException
-                } | Should -Throw "Unsupported exception type: $([System.ArgumentException].FullName)"
+                    $script:testException = [System.Exception]::new('Test Exception')
+
+                    $script:result = New-CosmosDbResponseException -InputObject $script:testException
+                } | Should -Not -Throw
+            }
+
+            It 'Should return expected CosmosDB.ResponseException' {
+                $script:result | Should -BeOfType 'CosmosDB.ResponseException'
+                $script:result.Message | Should -Be $script:testException.Message
             }
         }
     }
