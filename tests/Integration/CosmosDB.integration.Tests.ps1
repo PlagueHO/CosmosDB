@@ -566,7 +566,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             {
                 try
                 {
-                    $script:result = New-CosmosDbCollection `
+                    $script:result = Get-CosmosDbCollection `
                         -Context $script:testContext `
                         -Database $script:testDatabase3 `
                         -Id 'doesnotexist' `
@@ -575,12 +575,14 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 catch [CosmosDb.ResponseException]
                 {
                     $script:cosmosDbResponseException = $_.Exception
+                    Write-Verbose -Message "Message: $($script:cosmosDbResponseException.Message)" -Verbose
+                    Write-Verbose -Message "StatusCode: $($script:cosmosDbResponseException.StatusCode)" -Verbose
                 }
             } | Should -Not -Throw
 
             $script:cosmosDbResponseException | Should -BeOfType [CosmosDb.ResponseException]
             $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 400 (Bad Request).'
-            $script:cosmosDbResponseException.StatusCode | Should -Be 400
+            $script:cosmosDbResponseException.StatusCode | Should -Be 404
         }
     }
 
@@ -1042,12 +1044,14 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                         $script:result = Get-CosmosDbDocument `
                             -Context $script:testEntraIdContext `
                             -CollectionId $script:testCollection `
-                            -Id 'doesnotexist' `
+                            -Id $script:testDocumentId `
                             -Verbose
                     }
                     catch [CosmosDb.ResponseException]
                     {
                         $script:cosmosDbResponseException = $_.Exception
+                        Write-Verbose -Message "Message: $($script:cosmosDbResponseException.Message)" -Verbose
+                        Write-Verbose -Message "StatusCode: $($script:cosmosDbResponseException.StatusCode)" -Verbose
                     }
                 } | Should -Not -Throw
 
@@ -1549,12 +1553,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When removing existing collection with a partition key' {
-        It 'Should not throw an exception' {
-            $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
-        }
-    }
-
     <#
         When a rquest to the CosmosDB is made, but it fails with an HttpResponseException
         the exception should be rethrown as a CosmosDb.ResponseException, otherwise the
@@ -1572,17 +1570,28 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                         -Context $script:testContext `
                         -CollectionId $script:testCollection `
                         -Id 'doesnotexist' `
+                        -PartitionKey 'doesnotexist' `
                         -Verbose
                 }
                 catch [CosmosDb.ResponseException]
                 {
                     $script:cosmosDbResponseException = $_.Exception
+                    Write-Verbose -Message "Message: $($script:cosmosDbResponseException.Message)" -Verbose
+                    Write-Verbose -Message "StatusCode: $($script:cosmosDbResponseException.StatusCode)" -Verbose
                 }
             } | Should -Not -Throw
 
             $script:cosmosDbResponseException | Should -BeOfType [CosmosDb.ResponseException]
             $script:cosmosDbResponseException.Message | Should -Be 'The specified resource does not exist.'
             $script:cosmosDbResponseException.StatusCode | Should -Be 404
+        }
+    }
+
+    Context 'When removing existing collection with a partition key' {
+        It 'Should not throw an exception' {
+            $script:result = Remove-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id $script:testCollection -Verbose
         }
     }
 
