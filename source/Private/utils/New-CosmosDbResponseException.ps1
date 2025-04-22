@@ -13,27 +13,22 @@ function New-CosmosDbResponseException
 
     process
     {
-        $statusCode = $null
+        $message = $InputObject.Message
 
         switch ($InputObject)
         {
             { $_ -is [Microsoft.PowerShell.Commands.HttpResponseException] }
             {
-                # PowerShell 7.0+
-                $httpResponse = $InputObject.Response
-                $message = $httpResponse.Message
-                $statusCode = $httpResponse.StatusCode
+                # PowerShell 7.0+ - just use the message
             }
 
             { $_ -is [System.Net.WebException] }
             {
-                # PowerShell 5.1
-                $message = $InputObject.Message
+                # PowerShell 5.1 - attempt to use the message in the Response
                 $webResponse = $InputObject.Response
                 if ($webResponse -is [System.Net.HttpWebResponse])
                 {
                     $message = $webResponse.Message
-                    $statusCode = $webResponse.StatusCode
                 }
             }
 
@@ -42,7 +37,7 @@ function New-CosmosDbResponseException
             }
         }
 
-        $responseException = [CosmosDB.ResponseException]::new($message, $statusCode)
+        $responseException = [CosmosDB.ResponseException]::new($message)
         return $responseException
     }
 }

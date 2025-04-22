@@ -2265,7 +2265,6 @@ console.log("done");
 
             It 'Should return expected CosmosDB.ResponseException' -Skip:$script:skipHttpResponseException {
                 $script:result | Should -BeOfType 'CosmosDB.ResponseException'
-                $script:result.StatusCode | Should -Be ([System.Net.HttpStatusCode]::BadRequest)
                 $script:result.Message | Should -Be $script:httpResponseException.Message
             }
         }

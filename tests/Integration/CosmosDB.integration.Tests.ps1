@@ -165,7 +165,18 @@ $null = New-AzureTestCosmosDbResourceGroup `
     -Location $script:testLocation `
     -Verbose
 
-$currentIpAddress = (Invoke-RestMethod -Uri 'http://ipinfo.io/json').ip
+# Get the external IP address of this node to enable access to CosmosDB.
+if ($null -eq $env:currentIpAddress)
+{
+    try
+    {
+        $env:currentIpAddress = Invoke-RestMethod -Uri 'https://api.ipify.org/'
+    }
+    catch
+    {
+        throw 'Unable to get current IP address. Please set the variable $env:currentIpAddress manually.'
+    }
+}
 
 Describe 'Cosmos DB Module' -Tag 'Integration' {
     function Test-GenericResult
@@ -308,7 +319,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -ResourceGroupName $script:testResourceGroupName `
                 -Location $script:testLocation `
                 -DefaultConsistencyLevel 'Session' `
-                -IpRangeFilter "$currentIpAddress/32" `
+                -IpRangeFilter "$env:currentIpAddress/32" `
                 -AllowedOrigin '*' `
                 -Verbose
         }
@@ -330,7 +341,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Properties.consistencyPolicy.defaultConsistencyLevel | Should -Be 'Session'
             $script:result.Properties.consistencyPolicy.maxIntervalInSeconds | Should -Be 5
             $script:result.Properties.consistencyPolicy.maxStalenessPrefix | Should -Be 100
-            $script:result.Properties.ipRangeFilter | Should -Be "$currentIpAddress/32"
+            $script:result.Properties.ipRangeFilter | Should -Be "$env:currentIpAddress/32"
             $script:result.Properties.cors[0].allowedOrigins | Should -Be '*'
         }
     }
@@ -576,13 +587,11 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 {
                     $script:cosmosDbResponseException = $_.Exception
                     Write-Verbose -Message "Message: $($script:cosmosDbResponseException.Message)" -Verbose
-                    Write-Verbose -Message "StatusCode: $($script:cosmosDbResponseException.StatusCode)" -Verbose
                 }
             } | Should -Not -Throw
 
             $script:cosmosDbResponseException | Should -BeOfType [CosmosDb.ResponseException]
-            $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 400 (Bad Request).'
-            $script:cosmosDbResponseException.StatusCode | Should -Be 404
+            $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 404 (Not Found).'
         }
     }
 
@@ -1051,13 +1060,11 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     {
                         $script:cosmosDbResponseException = $_.Exception
                         Write-Verbose -Message "Message: $($script:cosmosDbResponseException.Message)" -Verbose
-                        Write-Verbose -Message "StatusCode: $($script:cosmosDbResponseException.StatusCode)" -Verbose
                     }
                 } | Should -Not -Throw
 
                 $script:cosmosDbResponseException | Should -BeOfType [CosmosDb.ResponseException]
                 $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 404 (Not Found).'
-                $script:cosmosDbResponseException.StatusCode | Should -Be 404
             }
         }
     }
@@ -1577,13 +1584,11 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 {
                     $script:cosmosDbResponseException = $_.Exception
                     Write-Verbose -Message "Message: $($script:cosmosDbResponseException.Message)" -Verbose
-                    Write-Verbose -Message "StatusCode: $($script:cosmosDbResponseException.StatusCode)" -Verbose
                 }
             } | Should -Not -Throw
 
             $script:cosmosDbResponseException | Should -BeOfType [CosmosDb.ResponseException]
-            $script:cosmosDbResponseException.Message | Should -Be 'The specified resource does not exist.'
-            $script:cosmosDbResponseException.StatusCode | Should -Be 404
+            $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 404 (Not Found).'
         }
     }
 

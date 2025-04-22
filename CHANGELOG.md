@@ -14,7 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `Microsoft.PowerShell.Commands.HttpResponseException` (PowerShell 7.x) or
   `System.Net.HttpWebResponse` (PowerShell 5.x) objects. This is to prevent
   authorization Headers from being returned in the exception object. In future
-  the filtered headers may be returned in the `CosmosDb.ResponseException` object.
+  the filtered headers and other response information may be included in the
+  `CosmosDb.ResponseException` object.
 
 ### Added
 

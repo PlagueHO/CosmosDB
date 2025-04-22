@@ -112,6 +112,9 @@ namespace CosmosDB
     }
 
     // ResponseException is used to handle exceptions that occur during the invocation of CosmosDB operations.
+    // Todo: Change to be based on Microsoft.PowerShell.Commands.HttpResponseException in 7.0.0.
+    // This will prevent this module from working in Windows PowerShell 5.1 because this class doesn't exist.
+    // Proposal is to drop support for Windows PowerShell 5.1 in 7.0.0.
     public class ResponseException : System.Exception
     {
         public ResponseException(System.String message) : base(message) { }
