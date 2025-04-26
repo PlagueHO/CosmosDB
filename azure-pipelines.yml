@@ -67,7 +67,6 @@ stages:
       - job: Unit_Test_Matrix
         displayName: 'Unit Test Matrix'
         strategy:
-          maxParallel: 5
           matrix:
             PS_Win2019:
               vmImage: windows-2019
@@ -163,7 +162,6 @@ stages:
         displayName: 'Integration Test Matrix'
         dependsOn: Unit_Test_Matrix
         strategy:
-          maxParallel: 5
           matrix:
             PS_Win2019:
               vmImage: windows-2019
