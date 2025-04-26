@@ -585,6 +585,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 }
                 catch [CosmosDb.ResponseException]
                 {
+                    Write-Verbose -Message "Exception: $($_.Exception | fl *)" -Verbose
                     $script:cosmosDbResponseException = $_.Exception
                     Write-Verbose -Message "Message: $($script:cosmosDbResponseException.Message)" -Verbose
                 }
