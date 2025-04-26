@@ -30,7 +30,10 @@ function New-CosmosDbResponseException
                 $webResponse = $InputObject.Response
                 if ($webResponse -is [System.Net.HttpWebResponse])
                 {
-                    $message = $webResponse.Message
+                    if ($null -ne $WebRespons.Message)
+                    {
+                        $message = $webResponse.Message
+                    }
                 }
             }
 
