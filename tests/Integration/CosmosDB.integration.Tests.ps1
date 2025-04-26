@@ -586,16 +586,21 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 catch [CosmosDb.ResponseException]
                 {
 
-                    Write-Verbose -Message "Complete: $($_)" -Verbose
-                    Write-Verbose -Message "Type: $($_.Exception.GetType())" -Verbose
-                    Write-Verbose -Message "Exception: $($_.Exception)" -Verbose
                     $script:cosmosDbResponseException = $_.Exception
-                    Write-Verbose -Message "Message: $($script:cosmosDbResponseException.Message)" -Verbose
                 }
             } | Should -Not -Throw
 
             $script:cosmosDbResponseException | Should -BeOfType [CosmosDb.ResponseException]
-            $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 404 (Not Found).'
+            # If PS 7.0+ then the message will be 'Response status code does not indicate success: 404 (Not Found).'
+            # If PS 5.1 then the message will be 'The remote server returned an error: (404) Not Found.'
+            if ($PSEdition -eq 'Core')
+            {
+                $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 404 (Not Found).'
+            }
+            else
+            {
+                $script:cosmosDbResponseException.Message | Should -Be 'The remote server returned an error: (404) Not Found.'
+            }
         }
     }
 
@@ -1067,8 +1072,16 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     }
                 } | Should -Not -Throw
 
-                $script:cosmosDbResponseException | Should -BeOfType [CosmosDb.ResponseException]
-                $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 404 (Not Found).'
+                # If PS 7.0+ then the message will be 'Response status code does not indicate success: 404 (Not Found).'
+                # If PS 5.1 then the message will be 'The remote server returned an error: (404) Not Found.'
+                if ($PSEdition -eq 'Core')
+                {
+                    $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 404 (Not Found).'
+                }
+                else
+                {
+                    $script:cosmosDbResponseException.Message | Should -Be 'The remote server returned an error: (404) Not Found.'
+                }
             }
         }
     }
@@ -1591,8 +1604,16 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 }
             } | Should -Not -Throw
 
-            $script:cosmosDbResponseException | Should -BeOfType [CosmosDb.ResponseException]
-            $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 404 (Not Found).'
+            # If PS 7.0+ then the message will be 'Response status code does not indicate success: 404 (Not Found).'
+            # If PS 5.1 then the message will be 'The remote server returned an error: (404) Not Found.'
+            if ($PSEdition -eq 'Core')
+            {
+                $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 404 (Not Found).'
+            }
+            else
+            {
+                $script:cosmosDbResponseException.Message | Should -Be 'The remote server returned an error: (404) Not Found.'
+            }
         }
     }
 
