@@ -251,6 +251,11 @@ function Invoke-CosmosDbRequest
         }
         catch [System.Net.WebException], [Microsoft.PowerShell.Commands.HttpResponseException]
         {
+            <#
+                When a response exception is thrown by Invoke-WebRequest:
+                PowerShell 5.x throws System.Net.WebException
+                PowerShell 7.x throws Microsoft.PowerShell.Commands.HttpResponseException
+            #>
             if ($_.Exception.Response.StatusCode -eq 429)
             {
                 <#
@@ -289,11 +294,6 @@ function Invoke-CosmosDbRequest
 
             if ($_.Exception.Response)
             {
-                <#
-                    Write out additional exception information into the verbose stream
-                    In a future version a custom exception type for CosmosDB that
-                    contains this additional information.
-                #>
                 $exceptionResponse = Get-CosmosDbRequestExceptionString -ErrorRecord $_
 
                 if ($exceptionResponse)
@@ -305,14 +305,15 @@ function Invoke-CosmosDbRequest
             # A non-recoverable exception occurred
             $fatal = $true
 
-            Throw $_
+            throw (New-CosmosDbResponseException -InputObject $_.Exception)
         }
+
         catch
         {
             # A non-recoverable exception occurred
             $fatal = $true
 
-            Throw $_
+            throw (New-CosmosDbResponseException -InputObject $_.Exception)
         }
     } while ($requestComplete -eq $false -and -not $fatal)
 

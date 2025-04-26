@@ -7,16 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- BREAKING CHANGE: Exceptions returned by `Invoke-CosmosDbRequest` are now
+  `CosmosDb.ResponseException` objects instead of either
+  `Microsoft.PowerShell.Commands.HttpResponseException` (PowerShell 7.x) or
+  `System.Net.HttpWebResponse` (PowerShell 5.x) objects. This is to prevent
+  authorization Headers from being returned in the exception object. In future
+  the filtered headers and other response information may be included in the
+  `CosmosDb.ResponseException` object.
+
 ### Added
 
 - Added `Get-CosmosDbRequestExceptionString` function to get the exception string
   from a Cosmos DB response. Refactored `Invoke-CosmosDbRequest` to use this
   function to get the exception string from the response.
-- Added testing for MacOS-13, MacOS-14, MacOS-15, Windows Server 2025, Ubuntu-24.04
-  and PowerShell 7.x on Windows Server 2019, 2022 and 2025 to the CI pipeline.
 
 ### Fixed
 
+- Added testing for MacOS-13, MacOS-14, MacOS-15, Windows Server 2025, Ubuntu-24.04
+  and PowerShell 7.x on Windows Server 2019, 2022 and 2025 to the CI pipeline.
 - Converted CI pipeline Test stage to use matrix to reduce duplication of code.
 - FIx spelling error of `ApplicationObjectId` variable in CI pipeline.
 

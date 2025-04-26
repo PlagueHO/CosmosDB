@@ -19,12 +19,12 @@ if ([System.String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
         [System.String]::IsNullOrEmpty($env:azureApplicationId) -or `
         [System.String]::IsNullOrEmpty($env:azureApplicationPassword) -or `
         [System.String]::IsNullOrEmpty($env:azureTenantId) -or `
-        [System.String]::IsNullOrEmpty($env:azureAppicationObjectId) -or `
+        [System.String]::IsNullOrEmpty($env:azureApplicationObjectId) -or `
         $env:azureSubscriptionId -eq '$(azureSubscriptionId)' -or `
         $env:azureApplicationId -eq '$(azureApplicationId)' -or `
         $env:azureApplicationPassword -eq '$(azureApplicationPassword)' -or `
         $env:azureTenantId -eq '$(azureTenantId)' -or `
-        $env:azureAppicationObjectId -eq '$(azureAppicationObjectId)'
+        $env:azureApplicationObjectId -eq '$(azureApplicationObjectId)'
     )
 {
     Write-Warning -Message 'Integration tests can not be run because one or more Azure connection environment variables are not set.'
@@ -165,7 +165,18 @@ $null = New-AzureTestCosmosDbResourceGroup `
     -Location $script:testLocation `
     -Verbose
 
-$currentIpAddress = (Invoke-RestMethod -Uri 'http://ipinfo.io/json').ip
+# Get the external IP address of this node to enable access to CosmosDB.
+if ($null -eq $env:currentIpAddress)
+{
+    try
+    {
+        $env:currentIpAddress = Invoke-RestMethod -Uri 'https://api.ipify.org/'
+    }
+    catch
+    {
+        throw 'Unable to get current IP address. Please set the variable $env:currentIpAddress manually.'
+    }
+}
 
 Describe 'Cosmos DB Module' -Tag 'Integration' {
     function Test-GenericResult
@@ -308,7 +319,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -ResourceGroupName $script:testResourceGroupName `
                 -Location $script:testLocation `
                 -DefaultConsistencyLevel 'Session' `
-                -IpRangeFilter "$currentIpAddress/32" `
+                -IpRangeFilter "$env:currentIpAddress/32" `
                 -AllowedOrigin '*' `
                 -Verbose
         }
@@ -330,7 +341,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.Properties.consistencyPolicy.defaultConsistencyLevel | Should -Be 'Session'
             $script:result.Properties.consistencyPolicy.maxIntervalInSeconds | Should -Be 5
             $script:result.Properties.consistencyPolicy.maxStalenessPrefix | Should -Be 100
-            $script:result.Properties.ipRangeFilter | Should -Be "$currentIpAddress/32"
+            $script:result.Properties.ipRangeFilter | Should -Be "$env:currentIpAddress/32"
             $script:result.Properties.cors[0].allowedOrigins | Should -Be '*'
         }
     }
@@ -556,6 +567,40 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result.content.offerThroughput | Should -BeExactly 100
             $script:result.content.offerMinimumThroughputParameters.maxThroughputEverProvisioned | Should -BeExactly 1000
             $script:result.content.offerAutopilotSettings.maxThroughput | Should -BeExactly 1000
+        }
+    }
+
+    Context 'When getting a collection that does not exist from a database' {
+        It 'Should throw expected CosmosDb.ResponseException' {
+            $script:cosmosDbResponseException = $null
+
+            {
+                try
+                {
+                    $script:result = Get-CosmosDbCollection `
+                        -Context $script:testContext `
+                        -Database $script:testDatabase3 `
+                        -Id 'doesnotexist' `
+                        -Verbose
+                }
+                catch [CosmosDb.ResponseException]
+                {
+
+                    $script:cosmosDbResponseException = $_.Exception
+                }
+            } | Should -Not -Throw
+
+            $script:cosmosDbResponseException | Should -BeOfType [CosmosDb.ResponseException]
+            # If PS 7.0+ then the message will be 'Response status code does not indicate success: 404 (Not Found).'
+            # If PS 5.1 then the message will be 'The remote server returned an error: (404) Not Found.'
+            if ($PSEdition -eq 'Core')
+            {
+                $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 404 (Not Found).'
+            }
+            else
+            {
+                $script:cosmosDbResponseException.Message | Should -Be 'The remote server returned an error: (404) Not Found.'
+            }
         }
     }
 
@@ -892,7 +937,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     -ResourceGroupName $script:testResourceGroupName `
                     -RoleDefinitionId $script:cosmosDbRoleDefinitionIdContributor `
                     -Scope "/" `
-                    -PrincipalId $env:azureAppicationObjectId
+                    -PrincipalId $env:azureApplicationObjectId
             }
         }
 
@@ -974,6 +1019,23 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             }
         }
 
+        Context 'When getting a document in a collection using an Entra ID Token' {
+            It 'Should not throw an exception' {
+                $script:result = Get-CosmosDbDocument `
+                    -Context $script:testEntraIdContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testDocumentId `
+                    -Verbose
+            }
+
+            It 'Should return expected object' {
+                Test-GenericResult -GenericResult $script:result
+                $script:result.Id | Should -Be $script:testDocumentId
+                $script:result.Content | Should -Be 'Some string'
+                $script:result.More | Should -Be 'Some other string'
+            }
+        }
+
         Context 'When removing a document from a collection using an Entra ID Token' {
             It 'Should not throw an exception' {
                 $script:result = Remove-CosmosDbDocument `
@@ -981,6 +1043,45 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     -CollectionId $script:testCollection `
                     -Id $script:testDocumentId `
                     -Verbose
+            }
+        }
+
+        <#
+            When a rquest to the CosmosDB is made, but it fails with an HttpResponseException
+            the exception should be rethrown as a CosmosDb.ResponseException, otherwise the
+            HttpResponseException will contain the Response.requestMessage which will contain
+            the authorizationHeader.
+        #>
+        Context 'When getting a document that does not exist in a collection using an Entra ID Token' {
+            It 'Should throw expected CosmosDb.ResponseException' {
+                $script:cosmosDbResponseException = $null
+
+                {
+                    try
+                    {
+                        $script:result = Get-CosmosDbDocument `
+                            -Context $script:testEntraIdContext `
+                            -CollectionId $script:testCollection `
+                            -Id $script:testDocumentId `
+                            -Verbose
+                    }
+                    catch [CosmosDb.ResponseException]
+                    {
+                        $script:cosmosDbResponseException = $_.Exception
+                        Write-Verbose -Message "Message: $($script:cosmosDbResponseException.Message)" -Verbose
+                    }
+                } | Should -Not -Throw
+
+                # If PS 7.0+ then the message will be 'Response status code does not indicate success: 404 (Not Found).'
+                # If PS 5.1 then the message will be 'The remote server returned an error: (404) Not Found.'
+                if ($PSEdition -eq 'Core')
+                {
+                    $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 404 (Not Found).'
+                }
+                else
+                {
+                    $script:cosmosDbResponseException.Message | Should -Be 'The remote server returned an error: (404) Not Found.'
+                }
             }
         }
     }
@@ -1476,9 +1577,51 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    <#
+        When a rquest to the CosmosDB is made, but it fails with an HttpResponseException
+        the exception should be rethrown as a CosmosDb.ResponseException, otherwise the
+        HttpResponseException will contain the Response.requestMessage which will contain
+        the authorizationHeader.
+    #>
+    Context 'When getting a document that does not exist in a collection' {
+        It 'Should throw expected CosmosDb.ResponseException' {
+            $script:cosmosDbResponseException = $null
+
+            {
+                try
+                {
+                    $script:result = Get-CosmosDbDocument `
+                        -Context $script:testContext `
+                        -CollectionId $script:testCollection `
+                        -Id 'doesnotexist' `
+                        -PartitionKey 'doesnotexist' `
+                        -Verbose
+                }
+                catch [CosmosDb.ResponseException]
+                {
+                    $script:cosmosDbResponseException = $_.Exception
+                    Write-Verbose -Message "Message: $($script:cosmosDbResponseException.Message)" -Verbose
+                }
+            } | Should -Not -Throw
+
+            # If PS 7.0+ then the message will be 'Response status code does not indicate success: 404 (Not Found).'
+            # If PS 5.1 then the message will be 'The remote server returned an error: (404) Not Found.'
+            if ($PSEdition -eq 'Core')
+            {
+                $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 404 (Not Found).'
+            }
+            else
+            {
+                $script:cosmosDbResponseException.Message | Should -Be 'The remote server returned an error: (404) Not Found.'
+            }
+        }
+    }
+
     Context 'When removing existing collection with a partition key' {
         It 'Should not throw an exception' {
-            $script:result = Remove-CosmosDbCollection -Context $script:testContext -Id $script:testCollection -Verbose
+            $script:result = Remove-CosmosDbCollection `
+                -Context $script:testContext `
+                -Id $script:testCollection -Verbose
         }
     }
 

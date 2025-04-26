@@ -67,4 +67,7 @@ ConvertFrom-StringData -StringData @'
     ErrorAuthorizationHeadersEmpty = Authorization headers could not be created for the request. This is usually caused by the context not containing the necessary authorization information.
     ErrorMalformedContextBaseUriEmpty = The context base URI is empty or malformed. Please ensure the context is correctly configured.
     ErrorMalformedContextDatabaseEmpty = The context database is empty or malformed or not passed in to the function. Please ensure the context is correctly configured or a database is specified.
+    NewCosmosDbResponseExceptionHttpResponseExceptionMessage = 'Creating CosmosDb.ResponseException from Microsoft.PowerShell.Commands.HttpResponseException exception: {0}'
+    NewCosmosDbResponseExceptionWebException = 'Creating CosmosDb.ResponseException from System.Net.WebException exception: {0}'
+    NewCosmosDbResponseExceptionDefaultException = 'Creating CosmosDb.ResponseException from System.Exception exception: {0}'
 '@
