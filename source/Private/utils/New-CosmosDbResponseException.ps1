@@ -19,11 +19,13 @@ function New-CosmosDbResponseException
         {
             { $_ -is [Microsoft.PowerShell.Commands.HttpResponseException] }
             {
+                Write-Verbose -Message $($LocalizedData.NewCosmosDbResponseExceptionHttpResponseExceptionMessage -f $message)
                 # PowerShell 7.0+ - just use the message
             }
 
             { $_ -is [System.Net.WebException] }
             {
+                Write-Verbose -Message $($LocalizedData.NewCosmosDbResponseExceptionWebException -f $message)
                 # PowerShell 5.1 - attempt to use the message in the Response
                 $webResponse = $InputObject.Response
                 if ($webResponse -is [System.Net.HttpWebResponse])
@@ -33,6 +35,7 @@ function New-CosmosDbResponseException
             }
 
             default {
+                Write-Verbose -Message $($LocalizedData.NewCosmosDbResponseExceptionDefaultException -f $message)
                 # Other exception types don't set any other properties
             }
         }
