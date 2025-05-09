@@ -958,7 +958,7 @@ console.log("done");
                 $newCosmosDbContextParameters = @{
                     Account  = $script:testAccount
                     Database = $script:testDatabase
-                    Token    = $script:testCustomToken
+                    Token    = $script:testContextToken
                     EndpointHostname = $script:testBaseHostnameAzureCustomEndpoint
                     Verbose  = $true
                 }
