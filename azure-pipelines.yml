@@ -61,7 +61,7 @@ stages:
   - stage: Test
     dependsOn: Build
     variables:
-      - group: CosmosDB.AzureSP
+      - group: CosmosDB.AzureSP.MCAPS # CosmosDB.AzureSP (MSDN)
     jobs:
       # Unit Test Matrix
       - job: Unit_Test_Matrix
