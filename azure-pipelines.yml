@@ -9,6 +9,8 @@ trigger:
     - tests/*
     - docs/*
     - RequiredModules.psd1
+    - README.md
+    - CHANGELOG.md
   tags:
     include:
     - "v*"
