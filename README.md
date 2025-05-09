@@ -396,7 +396,8 @@ account in Azure:
 
 > [!NOTE]
 > This function is not currently working due to an issue in the Microsoft/DocumentDB
-> Provider. See [this issue](https://github.com/Azure/azure-powershell/issues/3650) for more information.
+> Provider. See [this issue](https://github.com/Azure/azure-powershell/issues/3650)
+> for more information.
 
 ```powershell
 Get-CosmosDbAccountConnectionString -Name MyAzureCosmosDB -ResourceGroupName MyCosmosDbResourceGroup

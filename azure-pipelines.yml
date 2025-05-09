@@ -9,6 +9,8 @@ trigger:
     - tests/*
     - docs/*
     - RequiredModules.psd1
+    - README.md
+    - CHANGELOG.md
   tags:
     include:
     - "v*"
@@ -61,7 +63,8 @@ stages:
   - stage: Test
     dependsOn: Build
     variables:
-      - group: CosmosDB.AzureSP
+      - group: CosmosDB.AzureSP.MCAPS # Variable group for CosmosDB Azure Service Principal (MCAPS environment)
+      # - group: CosmosDB.AzureSP.MSDN # Variable group for CosmosDB Azure Service Principal (MSDN environment)
     jobs:
       # Unit Test Matrix
       - job: Unit_Test_Matrix
