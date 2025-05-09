@@ -39,7 +39,7 @@
     - [Creating a Collection with a custom Indexing Policy](#creating-a-collection-with-a-custom-indexing-policy)
     - [Creating a Collection with a custom Indexing Policy including Composite Indexes](#creating-a-collection-with-a-custom-indexing-policy-including-composite-indexes)
     - [Update an existing Collection with a new Indexing Policy](#update-an-existing-collection-with-a-new-indexing-policy)
-    - [Creating a Collection with a custom Indexing Policy using JSON](#creating-a-collection-with-a-custom-indexing-policy-using-JSON)
+    - [Creating a Collection with a custom Indexing Policy using JSON](#creating-a-collection-with-a-custom-indexing-policy-using-json)
     - [Creating a Collection with a custom Unique Key Policy](#creating-a-collection-with-a-custom-unique-key-policy)
     - [Update an existing Collection with a new Unique Key Policy](#update-an-existing-collection-with-a-new-unique-key-policy)
     - [Creating a Collection without a Partition Key](#creating-a-collection-without-a-partition-key)
@@ -136,7 +136,8 @@ the Azure management portal for you.
 You can create a context object that can include use an _Entra ID Authorization Token_
 that will be used to authenticate requests to Cosmos DB.
 
-> Important: This is a recommended security practice to use when you've
+> [!IMPORTANT]
+> This is a recommended security practice to use when you've
 > [configured role-based access control with Microsoft Entra ID](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac)
 > on your Azure Cosmos DB account. It will help you keep your account secure
 > by not exposing the primary or secondary keys in your code.
@@ -174,23 +175,44 @@ $accountContext = New-CosmosDbContext @newCosmosDbContextParams
 Get-CosmosDbCollection -Context $accountContext -Id MyNewCollection
 ```
 
-> Important: Using an Entra ID Authorization Token is only supported by setting it
+> [!IMPORTANT]
+> Using an Entra ID Authorization Token is only supported by setting it
 > in a CosmosDB.Context object and passing that to the commands you want to execute.
 > Not all commands support this method of authentication. If you need to use a command
-> that doesn't support this method of authentication, you will need to use one of the
-> other methods of authentication. See the [Database Operations allowed by Role-Based Access Control](#database-operations-allowed-by-role-based-access-control)
+> that doesn't support this method of authentication, you will need to use one
+> of the other methods of authentication. See the
+> [Database Operations allowed by Role-Based Access Control](#database-operations-allowed-by-role-based-access-control)
 > section for more information.
+
+##### Using Entra ID Authorization Token for a custom cloud environment
+
+You can create a context with Entra ID Authorization Token for an Azure cloud
+environment other than the ones listed in the `Environment` parameter.
+
+To do this, you can use the `EndpointHostname` parameter to specify the custom
+endpoint for the Cosmos DB account.
+
+```powershell
+$newCosmosDbContextParams  = @{
+    Account      = 'MyAzureCosmosDB'
+    AutoGenerateEntraIdToken = $true
+    EndpointHostname = 'documents.azurecustomcloud.com'
+}
+$accountContext = New-CosmosDbContext @newCosmosDbContextParams
+Get-CosmosDbCollection -Context $accountContext -Id MyNewCollection
+```
 
 ##### Configuring Role-Based Access Control (RBAC) with Entra ID
 
 There are several ways to configure a Cosmos DB Account with Role-Based Access Control,
 including:
 
- - *Azure Bicep*: An example can be found in the [\tests\TestHelper\AzureDeploy\CosmosDb.bicep](\tests\TestHelper\AzureDeploy\CosmosDb.bicep) file.
- - *Azure PowerShell*: The integration tests use this method.
- - *AzCli*.
+- _Azure Bicep_: An example can be found in the [\tests\TestHelper\AzureDeploy\CosmosDb.bicep](\tests\TestHelper\AzureDeploy\CosmosDb.bicep) file.
+- _Azure PowerShell_: The integration tests use this method.
+- _AzCli_.
 
-> Important Note: One thing I found when adding a SQL Role Assignment to the Cosmos DB
+> [!IMPORTANT]
+> One thing I found when adding a SQL Role Assignment to the Cosmos DB
 > Account (or Database or Container) is that the principal ID must be the Object ID of
 > the user, group or service principal that you want to assign the role to. You can't use
 > the Application ID for this value.
@@ -216,7 +238,8 @@ For more information on this, please see the [Role-based access control (RBAC) w
 
 #### Create a Context specifying the Key Manually
 
-> Note: This method of authenticating to Cosmos DB is not recommended for
+> [!NOTE]
+> This method of authenticating to Cosmos DB is not recommended for
 > production use. It is recommended to use the _Entra ID Authorization Token_
 > method described above.
 
@@ -235,7 +258,8 @@ $cosmosDbContext = New-CosmosDbContext -Account MyAzureCosmosDB -Database MyData
 
 #### Use CosmosDB Module to Retrieve Key from Azure Management Portal
 
-> Note: This method of authenticating to Cosmos DB is not recommended for
+> [!NOTE]
+> This method of authenticating to Cosmos DB is not recommended for
 > production use. It is recommended to use the _Entra ID Authorization Token_
 > method described above.
 
@@ -247,15 +271,17 @@ Portal, use the following command:
 $cosmosDbContext = New-CosmosDbContext -Account MyAzureCosmosDB -Database MyDatabase -ResourceGroupName MyCosmosDbResourceGroup -MasterKeyType SecondaryMasterKey
 ```
 
-_Note: if PowerShell is not connected to Azure then an interactive
-Azure login will be initiated. If PowerShell is already connected to
-an account that doesn't contain the Cosmos DB you wish to connect to then
-you will first need to connect to the correct account using the
-`Connect-AzAccount` cmdlet._
+> [!NOTE]
+> If PowerShell is not connected to Azure then an interactive
+> Azure login will be initiated. If PowerShell is already connected to
+> an account that doesn't contain the Cosmos DB you wish to connect to then
+> you will first need to connect to the correct account using the
+> `Connect-AzAccount` cmdlet.
 
 #### Create a Context from Resource Authorization Tokens
 
-> Note: This method of authenticating to Cosmos DB is better than using master key
+> [!NOTE]
+> This method of authenticating to Cosmos DB is better than using master key
 > authentication, as it provides the ability to limit access to specific resources.
 > However, it is recommended to use the _Entra ID Authorization Token_ method
 > described above if possible.
@@ -266,7 +292,8 @@ Authorization Tokens_.
 
 #### Create a Context for a Cosmos DB in Azure US Government Cloud
 
-> Note: This method of authenticating to Cosmos DB is not recommended for
+> [!NOTE]
+> This method of authenticating to Cosmos DB is not recommended for
 > production use. It is recommended to use the _Entra ID Authorization Token_
 > method described above.
 
@@ -280,7 +307,8 @@ $cosmosDbContext = New-CosmosDbContext -Account MyAzureCosmosDB -Database MyData
 
 #### Create a Context for a Cosmos DB in Azure China Cloud (Mooncake)
 
-> Note: This method of authenticating to Cosmos DB is not recommended for
+> [!NOTE]
+> This method of authenticating to Cosmos DB is not recommended for
 > production use. It is recommended to use the _Entra ID Authorization Token_
 > method described above.
 
@@ -327,8 +355,9 @@ this module. To use these features you will need to ensure the **Az.Profile**
 and **Az.Resources** modules installed - See [Requirements](#requirements)
 above.
 
-_Note: You must have first logged PowerShell into Azure using the
-`Connect-AzAccount` function before you can use these functions._
+> [!NOTE]
+> You must have first logged PowerShell into Azure using the
+> `Connect-AzAccount` function before you can use these functions.
 
 Create a new Cosmos DB account in Azure:
 
@@ -365,7 +394,8 @@ New-CosmosDbAccountMasterKey -Name MyAzureCosmosDB -ResourceGroupName MyCosmosDb
 Get the connection strings used to connect to an existing Cosmos DB
 account in Azure:
 
-> Note: This function is not currently working due to an issue in the Microsoft/DocumentDB
+> [!NOTE]
+> This function is not currently working due to an issue in the Microsoft/DocumentDB
 > Provider. See [this issue](https://github.com/Azure/azure-powershell/issues/3650) for more information.
 
 ```powershell
@@ -709,8 +739,9 @@ the document ID as the partition key:
 Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId MyNewCollection -Id $documents[0].id -PartitionKey $documents[0].id
 ```
 
-> **Note:** Because this is a partitioned collection, if you don't specify a partition
-key you will receive a `(400) Bad Request` exception.
+> [!NOTE]
+> Because this is a partitioned collection, if you don't specify a partition
+> key you will receive a `(400) Bad Request` exception.
 
 Get the first 5 documents from the collection in the database:
 
@@ -720,9 +751,10 @@ $documents = Get-CosmosDbDocument -Context $cosmosDbContext -CollectionId MyNewC
 $continuationToken = Get-CosmosDbContinuationToken -ResponseHeader $ResponseHeader
 ```
 
-> **Note:** You don't need to specify the partition key here because you are just
-getting the first 5 documents in whatever order they are available so going to
-a specific partition is not required.
+> [!NOTE]
+> You don't need to specify the partition key here because you are just
+> getting the first 5 documents in whatever order they are available so going to
+> a specific partition is not required.
 
 Get the next 5 documents from a collection in the database using
 the continuation token found in the headers from the previous
@@ -769,8 +801,9 @@ Delete a document from a collection in the database:
 Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId MyNewCollection -Id $documents[0].id -PartitionKey $documents[0].id
 ```
 
-> **Note:** Because this is a partitioned collection, if you don't specify a partition
-key you will receive a `(400) Bad Request` exception.
+> [!NOTE]
+> Because this is a partitioned collection, if you don't specify a partition
+> key you will receive a `(400) Bad Request` exception.
 
 #### Using a While Loop to get all Documents in a Collection
 
@@ -918,10 +951,11 @@ To use a resource authorization token, first a permission must be assigned
 to the user for the resource using the `New-CosmosDbPermission`. A user
 can be created using the `New-CosmosDbUser` function.
 
-**Note: By default, Resource Authorization Tokens expire after an hour.
-This can be extended to a maximum of 5 hours or reduced to minimum of 10
-minutes. Use the `TokenExpiry` parameter to control the length of time
-that the resource authorization tokens will be valid for.**
+> [!NOTE]
+> By default, Resource Authorization Tokens expire after an hour.
+> This can be extended to a maximum of 5 hours or reduced to minimum of 10
+> minutes. Use the `TokenExpiry` parameter to control the length of time
+> that the resource authorization tokens will be valid for.
 
 The typical pattern for using _resource authorization tokens_ is to
 have a **token broker app** that provides some form of user authentication
@@ -1180,9 +1214,10 @@ Cosmos DB.
 Additional Back-off Policy options can be set to override or extend the value
 returned in the `x-ms-retry-after-ms` header.
 
-**Note: if the delay calculated by the policy is less than the value returned in
-the `x-ms-retry-after-ms` header, then the `x-ms-retry-after-ms` value will always
-be used.**
+> [!NOTE]
+> If the delay calculated by the policy is less than the value returned in
+> the `x-ms-retry-after-ms` header, then the `x-ms-retry-after-ms` value will always
+> be used.
 
 The available Back-off Methods are:
 
