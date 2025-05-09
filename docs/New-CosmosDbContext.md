@@ -22,15 +22,6 @@ New-CosmosDbContext -Account <String> [-Database <String>] -Key <SecureString>
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
-### CustomAzureAccount
-
-```powershell
-New-CosmosDbContext -Account <String> [-Database <String>] -ResourceGroupName <String>
- [-MasterKeyType <String>] [-BackoffPolicy <BackoffPolicy>] -EndpointHostname <Uri>
- [-WhatIf] [-Confirm]
- [<CommonParameters>]
-```
-
 ### CustomAccount
 
 ```powershell
@@ -47,11 +38,28 @@ New-CosmosDbContext -Account <String> [-Database <String>] -ResourceGroupName <S
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
+### CustomAzureAccount
+
+```powershell
+New-CosmosDbContext -Account <String> [-Database <String>] -ResourceGroupName <String>
+ [-MasterKeyType <String>] [-BackoffPolicy <BackoffPolicy>] -EndpointHostname <Uri>
+ [-WhatIf] [-Confirm]
+ [<CommonParameters>]
+```
+
 ### EntraIdToken
 
 ```powershell
 New-CosmosDbContext -Account <String> [-Database <String>] -EntraIdToken <SecureString>
  [-BackoffPolicy <BackoffPolicy>] [-Environment <Environment>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### CustomEntraIdToken
+
+```powershell
+New-CosmosDbContext -Account <String> [-Database <String>] -EntraIdToken <SecureString>
+ [-BackoffPolicy <BackoffPolicy>] -EndpointHostname <Uri>
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -63,11 +71,27 @@ New-CosmosDbContext -Account <String> [-Database <String>] -AutoGenerateEntraIdT
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
+### CustomEntraIdTokenAutogen
+
+```powershell
+New-CosmosDbContext -Account <String> [-Database <String>] -AutoGenerateEntraIdToken
+ [-BackoffPolicy <BackoffPolicy>] -EndpointHostname <Uri>
+ [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
 ### Token
 
 ```powershell
 New-CosmosDbContext -Account <String> [-Database <String>] -Token <ContextToken[]>
  [-BackoffPolicy <BackoffPolicy>] [-Environment <Environment>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### CustomToken
+
+```powershell
+New-CosmosDbContext -Account <String> [-Database <String>] -Token <ContextToken[]>
+ [-BackoffPolicy <BackoffPolicy>] -EndpointHostname <Uri>
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -212,6 +236,30 @@ Creates a CosmosDB context with an Entra ID OAuth2 token generated automatically
 Get-CosmosDbEntraIdToken function to generate the token using the Base URI for the context as the
 resource URL. This function requires that the Az.Account module is installed and that the user or
 principle is logged in and has the appropriate RBAC permissions to access the Cosmos DB account.
+
+### Example 12
+
+```powershell
+PS C:\> $entraIdToken = Get-CosmosDbEntraIdToken -Endpoint 'https://MyAzureCosmosDB.documents.eassov.com/'
+PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -EntraIdToken $entraIdToken -EndpointHostname 'documents.eassov.com'
+```
+Creates a CosmosDB context specifying the an Entra ID OAuth2 token generated
+by the Entra ID service for the endpoint 'https://MyAzureCosmosDB.documents.eassov.com/'. The
+identity it represents should have the appropriate RBAC permissions to access the Cosmos DB
+account. It will use the alternative Azure cloud endpoint 'documents.eassov.com' to access the
+Cosmos DB account.
+
+### Example 13
+
+```powershell
+PS C:\> $cosmosDbContext = New-CosmosDbContext -Account 'MyAzureCosmosDB' -AutoGenerateEntraIdToken -EndpointHostname 'documents.eassov.com'
+```
+Creates a CosmosDB context with an Entra ID OAuth2 token generated automatically. This will use the
+Get-CosmosDbEntraIdToken function to generate the token using the Base URI for the context as the
+resource URL. This function requires that the Az.Account module is installed and that the user or
+principle is logged in and has the appropriate RBAC permissions to access the Cosmos DB account.
+It will use the alternative Azure cloud endpoint 'documents.eassov.com' to access the
+Cosmos DB account.
 
 ## PARAMETERS
 

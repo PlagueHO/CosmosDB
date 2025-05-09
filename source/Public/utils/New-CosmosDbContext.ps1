@@ -9,12 +9,15 @@ function New-CosmosDbContext
     param
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'Account')]
-        [Parameter(Mandatory = $true, ParameterSetName = 'AzureAccount')]
         [Parameter(Mandatory = $true, ParameterSetName = 'CustomAccount')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'AzureAccount')]
         [Parameter(Mandatory = $true, ParameterSetName = 'CustomAzureAccount')]
         [Parameter(Mandatory = $true, ParameterSetName = 'EntraIdToken')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'CustomEntraIdToken')]
         [Parameter(Mandatory = $true, ParameterSetName = 'EntraIdTokenAutogen')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'CustomEntraIdTokenAutogen')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Token')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'CustomToken')]
         [ValidateScript({ Assert-CosmosDbAccountNameValid -Name $_ })]
         [System.String]
         $Account,
@@ -69,17 +72,20 @@ function New-CosmosDbContext
         $Uri,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Token')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'CustomToken')]
         [Parameter(ParameterSetName = 'Emulator')]
         [ValidateNotNullOrEmpty()]
         [CosmosDB.ContextToken[]]
         $Token,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'EntraIdToken')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'CustomEntraIdToken')]
         [ValidateNotNullOrEmpty()]
         [System.Security.SecureString]
         $EntraIdToken,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'EntraIdTokenAutogen')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'CustomEntraIdTokenAutogen')]
         [ValidateNotNullOrEmpty()]
         [Switch]
         $AutoGenerateEntraIdToken,
@@ -98,8 +104,12 @@ function New-CosmosDbContext
         [CosmosDB.Environment]
         $Environment = [CosmosDB.Environment]::AzureCloud,
 
+        [Alias("BaseUri")]
         [Parameter(Mandatory = $true, ParameterSetName = 'CustomAccount')]
         [Parameter(Mandatory = $true, ParameterSetName = 'CustomAzureAccount')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'CustomEntraIdToken')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'CustomEntraIdTokenAutogen')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'CustomToken')]
         [System.Uri]
         $EndpointHostname
     )
@@ -109,6 +119,11 @@ function New-CosmosDbContext
         'Account'
         {
             $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
+        }
+
+        'CustomAccount'
+        {
+            $BaseUri = Get-CosmosDbUri -Account $Account -BaseHostname $EndpointHostname
         }
 
         'AzureAccount'
@@ -149,6 +164,38 @@ function New-CosmosDbContext
             $BaseUri = Get-CosmosDbUri -Account $Account -BaseHostname $EndpointHostname
         }
 
+        'EntraIdToken'
+        {
+            $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
+        }
+
+        'CustomEntraIdToken'
+        {
+            $BaseUri = Get-CosmosDbUri -Account $Account -BaseHostname $EndpointHostname
+        }
+
+        'EntraIdTokenAutogen'
+        {
+            $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
+            $EntraIdToken = Get-CosmosDbEntraIdToken -Endpoint $BaseUri
+        }
+
+        'CustomEntraIdTokenAutogen'
+        {
+            $BaseUri = Get-CosmosDbUri -Account $Account -BaseHostname $EndpointHostname
+            $EntraIdToken = Get-CosmosDbEntraIdToken -Endpoint $BaseUri
+        }
+
+        'Token'
+        {
+            $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
+        }
+
+        'CustomToken'
+        {
+            $BaseUri = Get-CosmosDbUri -Account $Account -BaseHostname $EndpointHostname
+        }
+
         'ConnectionString'
         {
             $decryptedConnectionString = $ConnectionString | Convert-CosmosDbSecureStringToString
@@ -156,11 +203,6 @@ function New-CosmosDbContext
             $BaseUri = [System.Uri]::new($connectionStringParts.AccountEndpoint)
             $Account = $BaseUri.Host.Split('.')[0]
             $Key = $connectionStringParts.AccountKey | ConvertTo-SecureString -AsPlainText -Force
-        }
-
-        'CustomAccount'
-        {
-            $BaseUri = Get-CosmosDbUri -Account $Account -BaseHostname $EndpointHostname
         }
 
         'Emulator'
@@ -201,22 +243,6 @@ function New-CosmosDbContext
             }
 
             $BaseUri = [System.Uri]::new($Uri)
-        }
-
-        'EntraIdToken'
-        {
-            $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
-        }
-
-        'EntraIdTokenAutogen'
-        {
-            $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
-            $EntraIdToken = Get-CosmosDbEntraIdToken -Endpoint $BaseUri
-        }
-
-        'Token'
-        {
-            $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
         }
     }
 

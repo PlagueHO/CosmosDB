@@ -951,6 +951,32 @@ console.log("done");
             }
         }
 
+        Context 'When called with CustomToken parameters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Account  = $script:testAccount
+                    Database = $script:testDatabase
+                    Token    = $script:testCustomToken
+                    EndpointHostname = $script:testBaseHostnameAzureCustomEndpoint
+                    Verbose  = $true
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be $script:testAccount
+                $script:result.Database | Should -Be $script:testDatabase
+                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureCustomEndpoint)
+                $script:result.Token[0].Resource | Should -Be $script:testAuthorizationContextResource
+                $script:result.Token[0].TimeStamp | Should -Be $script:testDate
+                $script:result.Token[0].Token | Convert-CosmosDbSecureStringToString | Should -Be $script:testAuthorizationHeaderResourceToken
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
+            }
+        }
+
         Context 'When called with EntraIdToken parameters' {
             $script:result = $null
 
@@ -975,7 +1001,68 @@ console.log("done");
             }
         }
 
+        Context 'When called with CustomEntraIdToken parameters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Account  = $script:testAccount
+                    Database = $script:testDatabase
+                    EndpointHostname = $script:testBaseHostnameAzureCustomEndpoint
+                    EntraIdToken = $script:testEntraIdTokenSecureString
+                    Verbose  = $true
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be $script:testAccount
+                $script:result.Database | Should -Be $script:testDatabase
+                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureCustomEndpoint)
+                $script:result.Token | Should -BeNullOrEmpty
+                $script:result.EntraIdToken | Convert-CosmosDbSecureStringToString | Should -Be $script:testEntraIdToken
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
+            }
+        }
+
         Context 'When called with EntraIdTokenAutoGen parameters' {
+            $script:result = $null
+
+            Mock Get-AzAccessToken -MockWith {
+                return @{
+                    Token = $script:testEntraIdToken
+                }
+            }
+
+            It 'Should not throw exception' {
+                $newCosmosDbContextParameters = @{
+                    Account  = $script:testAccount
+                    Database = $script:testDatabase
+                    EndpointHostname = $script:testBaseHostnameAzureCustomEndpoint
+                    AutoGenerateEntraIdToken = $true
+                    Verbose  = $true
+                }
+
+                { $script:result = New-CosmosDbContext @newCosmosDbContextParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Account | Should -Be $script:testAccount
+                $script:result.Database | Should -Be $script:testDatabase
+                $script:result.BaseUri | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureCustomEndpoint)
+                $script:result.Token | Should -BeNullOrEmpty
+                $script:result.EntraIdToken | Convert-CosmosDbSecureStringToString | Should -Be $script:testEntraIdToken
+                $script:result.Environment | Should -BeExactly 'AzureCloud'
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled -CommandName Get-AzAccessToken -Exactly -Times 1 `
+                    -ParameterFilter { $ResourceUrl -eq ('https://{0}.{1}' -f $script:testAccount, $script:testBaseHostnameAzureCustomEndpoint) }
+            }
+        }
+
+        Context 'When called with CustomEntraIdTokenAutoGen parameters' {
             $script:result = $null
 
             Mock Get-AzAccessToken -MockWith {

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added support for setting `EndpointHostname` in `New-CosmosDbContext` to allow
+  setting the base URI for the Cosmos DB account when using Entra ID authentication
+  or token based authentication. This allows the use of future Azure Clouds that
+  may not be supported by this module.
+- Added alias `BaseUri` for`EndpointHostname` in `New-CosmosDbContext` function.
+
 ## [6.0.0] - 2025-04-26
 
 ### Changed
