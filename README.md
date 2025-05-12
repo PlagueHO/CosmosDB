@@ -8,11 +8,33 @@
 
 # CosmosDB PowerShell Module
 
-## Module Build Status
+## Introduction
 
-| Branch | Azure Pipelines                    | Automated Tests                    | Code Quality                       |
-| ------ | ---------------------------------- | -----------------------------------| ---------------------------------- |
-| main   | [![ap-image-main][]][ap-site-main] | [![ts-image-main][]][ts-site-main] | [![cq-image-main][]][cq-site-main] |
+This PowerShell module provides cmdlets for accessing Cosmos DB collections via the
+[Azure Cosmos DB REST API](https://learn.microsoft.com/rest/api/cosmos-db/).
+It makes it easy to perform CRUD operations on Cosmos DB collections and documents
+and related entities while also implementing role-based access control or token-based
+authentication.
+
+The _CosmosDB PowerShell module_ is not intended to be a replacement for the
+[Az.CosmosDB](https://www.powershellgallery.com/packages/Az.CosmosDB), rather it
+complements it by providing functionality to access the documents within collections.
+
+The _CosmosDB PowerShell module_ enables management of:
+
+- [Attachments](#working-with-attachments)
+- [Collections](#working-with-collections)
+- [Databases](#working-with-databases)
+- [Documents](#working-with-documents)
+- [Offers](#working-with-offers)
+- [Permissions](#working-with-permissions)
+- [Stored Procedures](#working-with-stored-procedures)
+- [Triggers](#working-with-triggers)
+- [User Defined Functions](#working-with-user-defined-functions)
+- [Users](#working-with-users)
+
+The module uses the Cosmos DB (DocumentDB) Rest APIs. For more information on
+the Cosmos DB Rest APIs, see [this link](https://learn.microsoft.comrest/api/cosmos-db/restful-interactions-with-cosmosdb-resources).
 
 ## Table of Contents
 
@@ -59,27 +81,6 @@
 - [Change Log](#change-log)
 - [Links](#links)
 
-## Introduction
-
-This PowerShell module provides cmdlets for working with Azure Cosmos DB.
-
-The _CosmosDB PowerShell module_ enables management of:
-
-- [Attachments](#working-with-attachments)
-- [Collections](#working-with-collections)
-- [Databases](#working-with-databases)
-- [Documents](#working-with-documents)
-- [Offers](#working-with-offers)
-- [Permissions](#working-with-permissions)
-- [Stored Procedures](#working-with-stored-procedures)
-- [Triggers](#working-with-triggers)
-- [User Defined Functions](#working-with-user-defined-functions)
-- [Users](#working-with-users)
-
-The module uses the Cosmos DB (DocumentDB) Rest APIs.
-
-For more information on the Cosmos DB Rest APIs, see [this link](https://docs.microsoft.com/rest/api/documentdb/restful-interactions-with-documentdb-resources).
-
 ## Requirements
 
 This module requires the following:
@@ -94,11 +95,17 @@ This module requires the following:
 These modules are required if using `New-CosmosDbContext -ResourceGroupName $resourceGroup`
 or `*-CosmosDbAccount` functions.
 
+## Module Build Status
+
+| Branch | Azure Pipelines                    | Automated Tests                    | Code Quality                       |
+| ------ | ---------------------------------- | -----------------------------------| ---------------------------------- |
+| main   | [![ap-image-main][]][ap-site-main] | [![ts-image-main][]][ts-site-main] | [![cq-image-main][]][cq-site-main] |
+
 ## Recommended Knowledge
 
 It is recommended that before using this module it is important to understand
 the fundamental concepts of Cosmos DB. This will ensure you have an optimal
-experience by adopting design patterns that align to Cosmos DB best practice.
+experience by adopting design patterns that align to Cosmos DB best practices.
 
 Users new to Cosmos DB should familiarize themselves with the following
 concepts:
