@@ -8,6 +8,12 @@
 
 # CosmosDB PowerShell Module
 
+## Module Build Status
+
+| Branch | Azure Pipelines                    | Automated Tests                    | Code Quality                       |
+| ------ | ---------------------------------- | -----------------------------------| ---------------------------------- |
+| main   | [![ap-image-main][]][ap-site-main] | [![ts-image-main][]][ts-site-main] | [![cq-image-main][]][cq-site-main] |
+
 ## Introduction
 
 This PowerShell module provides cmdlets for accessing Cosmos DB collections via the
@@ -16,9 +22,15 @@ It makes it easy to perform CRUD operations on Cosmos DB collections and documen
 and related entities while also implementing role-based access control or token-based
 authentication.
 
-The _CosmosDB PowerShell module_ is not intended to be a replacement for the
-[Az.CosmosDB](https://www.powershellgallery.com/packages/Az.CosmosDB), rather it
-complements it by providing functionality to access the documents within collections.
+> [!IMPORTANT]
+> The _CosmosDB PowerShell module_ is **not** intended to be a replacement for the
+> [Az.CosmosDB](https://www.powershellgallery.com/packages/Az.CosmosDB), rather it
+> **complements** it by providing functionality to access the documents within
+> collections.
+>
+> There is some cross-over between the two modules, but the _CosmosDB PowerShell
+> module_ is primarily intended to be used for accessing the documents within
+> collections.
 
 The _CosmosDB PowerShell module_ enables management of:
 
@@ -94,12 +106,6 @@ This module requires the following:
 
 These modules are required if using `New-CosmosDbContext -ResourceGroupName $resourceGroup`
 or `*-CosmosDbAccount` functions.
-
-## Module Build Status
-
-| Branch | Azure Pipelines                    | Automated Tests                    | Code Quality                       |
-| ------ | ---------------------------------- | -----------------------------------| ---------------------------------- |
-| main   | [![ap-image-main][]][ap-site-main] | [![ts-image-main][]][ts-site-main] | [![cq-image-main][]][cq-site-main] |
 
 ## Recommended Knowledge
 
