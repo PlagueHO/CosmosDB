@@ -24,13 +24,11 @@ authentication.
 
 > [!IMPORTANT]
 > The _CosmosDB PowerShell module_ is **not** intended to be a replacement for the
-> [Az.CosmosDB](https://www.powershellgallery.com/packages/Az.CosmosDB), rather it
-> **complements** it by providing functionality to access the documents within
-> collections.
->
-> There is some cross-over between the two modules, but the _CosmosDB PowerShell
+> [Az.CosmosDB](https://www.powershellgallery.com/packages/Az.CosmosDB). Although
+> there is some cross-over between the two modules, the _CosmosDB PowerShell
 > module_ is primarily intended to be used for accessing the documents within
-> collections.
+> collections using RBAC and token-based authentication. This is functionality that
+> the _Az.CosmosDB_ module does not _currently_ provide.
 
 The _CosmosDB PowerShell module_ enables management of:
 
