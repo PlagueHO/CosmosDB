@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- CHORE: Added .Devcontainer and Dependabot configuration files to the repository
+  to support development in Visual Studio Code with a Docker container.
+- CHORE: Updated Pull Request and Issue templates to use YAML forms in the
+  `.github/ISSUE_TEMPLATE` folder.
+
 ## [6.0.1] - 2025-05-09
 
 ### Added

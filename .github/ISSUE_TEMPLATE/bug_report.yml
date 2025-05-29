@@ -1,0 +1,76 @@
+name: "🐞 Bug Report"
+description: Report a reproducible bug or regression in the CosmosDB PowerShell module.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a bug! Please fill out the form below.
+  - type: input
+    id: powershell_version
+    attributes:
+      label: PowerShell Version
+      description: What version of PowerShell are you using?
+      placeholder: e.g. 7.3.0
+    validations:
+      required: true
+  - type: input
+    id: host
+    attributes:
+      label: PowerShell Host
+      description: What host are you using? (e.g. Console Host, ISE, Visual Studio)
+      placeholder: e.g. Console Host
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating System
+      description: What operating system are you running?
+      placeholder: e.g. Windows 11, Ubuntu 22.04
+    validations:
+      required: true
+  - type: input
+    id: module_version
+    attributes:
+      label: CosmosDB PowerShell Module Version
+      description: What version of the CosmosDB PowerShell module are you using? (use `Get-Module -Name CosmosDB`)
+      placeholder: e.g. 4.0.0
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the Bug
+      description: Please provide a clear and concise description of the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Please provide steps to reproduce the issue.
+      placeholder: |
+        1. Run command '...'
+        2. See error '...'
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+    validations:
+      required: true
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add any other context or screenshots about the problem here.

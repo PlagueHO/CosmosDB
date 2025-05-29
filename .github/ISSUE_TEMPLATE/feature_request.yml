@@ -1,0 +1,42 @@
+name: "✨ Feature Request"
+description: Suggest a new feature or enhancement for the CosmosDB PowerShell module.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting a feature! Please fill out the form below.
+  - type: input
+    id: module_version
+    attributes:
+      label: CosmosDB PowerShell Module Version
+      description: What version of the CosmosDB PowerShell module are you using? (use `Get-Module -Name CosmosDB`)
+      placeholder: e.g. 4.0.0
+    validations:
+      required: false
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature Description
+      description: Please describe the feature or enhancement you would like to see.
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation and Use Case
+      description: Why is this feature important? What problem does it solve?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Have you considered any alternative solutions or features?
+    validations:
+      required: false
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add any other context or screenshots about the feature request here.
