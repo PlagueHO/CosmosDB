@@ -23,7 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CHORE: Added `prompts\create-spec.prompt.md` to provide a prompt for creating
   new specifications for the module.
 - CHORE: Added `prompts\update-llms.yaml` to provide a prompt for updating the
-- `llms.txt` file for the repo.
+  `llms.txt` file for the repo.
+- Removed testing on `Ubuntu-20.04` from the CI pipeline because it is no longer
+  supported by Microsoft managed Azure DevOps images.
 
 ## [6.0.1] - 2025-05-09
 
