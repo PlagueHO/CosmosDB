@@ -1,0 +1,47 @@
+# Solution: CosmosDB PowerShell Module
+
+**Version:** 6.0.1
+**Last Updated:** 2025-05-31
+**Owner:** PlagueHO
+**GitHub Repository:** https://github.com/PlagueHO/CosmosDB
+
+## 1. Purpose & Scope
+
+This repository contains a cross-platform PowerShell module for managing and interacting with Azure Cosmos DB accounts, databases, collections, documents, and related resources via the Cosmos DB REST API. It supports both RBAC (Azure AD) and token-based authentication, enabling fine-grained access control. The intended audience includes PowerShell developers and DevOps engineers automating Cosmos DB operations in Windows, macOS, and Linux environments.
+
+## 2. Folder Structure
+
+```
+/ (root)
+  .devcontainer/                 # Development container configuration
+  .github/                       # GitHub workflows, issue/pr templates, LLM prompts
+  docs/                          # Markdown-based user and developer documentation
+  spec/                          # Machine-readable specifications and design docs
+  source/                        # PowerShell cmdlet implementations and C# type definitions
+  tests/                         # Pester unit and integration tests
+  .vscode/                       # Editor settings and launch configurations
+  azure-pipelines.yml            # CI/CD pipeline definition
+  build.ps1 / build.yaml         # Build automation scripts
+  CHANGELOG.md                   # Release history and version notes
+  CODE_OF_CONDUCT.md             # Community guidelines
+  LICENSE                        # Licensing information
+  PSScriptAnalyzerSettings.psd1  # Static analysis rules
+  README.md                      # Module overview and quick-start instructions
+  STYLEGUIDELINES.md             # Coding Standards and best practices
+  RequiredModules.psd1           # Module dependency manifest
+  Resolve-Dependency.ps1/.psd1   # Dependency resolution scripts
+```
+
+## 3. Important Files
+
+- README.md: Introduction, installation, and usage examples.
+- CHANGELOG.md: Version history following Keep a Changelog.
+- CODE_OF_CONDUCT.md: Community participation guidelines.
+- LICENSE: MIT license text.
+- docs/*.md: Cmdlet-specific documentation with Comment-Based Help examples.
+- spec/*.md: High-level specifications and design documents for features and behaviors.
+- source/: Implementation of PowerShell functions and C# types.
+- tests/: Pester 4.x test scripts for validating functionality and integration.
+- PSScriptAnalyzerSettings.psd1: Linting and style rules.
+- STYLEGUIDELINES.md: Naming, formatting, and best practices for contributions.
+- .github/prompts/: LLM guidance prompts (e.g., update-llms, create-spec).

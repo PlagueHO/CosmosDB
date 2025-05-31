@@ -13,6 +13,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   to support development in Visual Studio Code with a Docker container.
 - CHORE: Updated Pull Request and Issue templates to use YAML forms in the
   `.github/ISSUE_TEMPLATE` folder.
+- CHORE: Updated `Az.Accounts` to `4.2.0` only in `requirements.psd1` and
+  `CosmosDB.psd1` - fixes [Issue #509](https://github.com/PlagueHO/CosmosDB/issues/509)
+- CHORE: Updated `Az.Resources` to `8.0.0` and above in `requirements.psd1` and
+  `CosmosDB.psd1` - fixes [Issue #509](https://github.com/PlagueHO/CosmosDB/issues/509)
+- CHORE: Added `copilot-instructions.md` to control Copilot suggestions in the
+  repository. This file is used to provide instructions to Copilot on how to
+  generate code for the module.
+- CHORE: Added `prompts\create-spec.prompt.md` to provide a prompt for creating
+  new specifications for the module.
+- CHORE: Added `prompts\update-llms.yaml` to provide a prompt for updating the
+- `llms.txt` file for the repo.
 
 ## [6.0.1] - 2025-05-09
 
