@@ -47,7 +47,7 @@ Assumptions:
 
 ## 4. Interfaces & Data Contracts
 
-Exampless of cmdlets and their parameters:
+Examples of cmdlets and their parameters:
 
 | Cmdlet                                | Parameters                              | Returns                   |
 |---------------------------------------|-----------------------------------------|---------------------------|

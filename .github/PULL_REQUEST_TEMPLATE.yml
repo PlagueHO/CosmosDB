@@ -1,4 +1,4 @@
-name: "Pull Request"
+# …file has been renamed to PULL_REQUEST_TEMPLATE.md; remove this YAML.
 description: Submit a pull request to the CosmosDB project.
 body:
   - type: markdown
