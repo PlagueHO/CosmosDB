@@ -99,8 +99,14 @@ This module requires the following:
 
 ### PowerShell Module Dependencies
 
-- **Az.Account**: v2.19.0 or newer.
-- **Az.Resources**: 6.16.2 or newer.
+- **Az.Accounts**: 4.2.0 only.
+- **Az.Resources**: 7.1.0 only.
+
+> [!NOTE]
+> Due to a recent change in the Az.Accounts module, 5.0.0 or newer is not currently
+> supported. Az.Resources can't be used yet as it depends on Az.Accounts 5.0.0, so
+> Az.Resources will need to remain on 7.1.0. This is being worked on and will be
+> updated in a future release. See [#508](https://github.com/PlagueHO/CosmosDB/issues/508)
 
 These modules are required if using `New-CosmosDbContext -ResourceGroupName $resourceGroup`
 or `*-CosmosDbAccount` functions.
@@ -218,25 +224,30 @@ Get-CosmosDbCollection -Context $accountContext -Id MyNewCollection
 There are several ways to configure a Cosmos DB Account with Role-Based Access Control,
 including:
 
-- _Azure Bicep_: An example can be found in the [\tests\TestHelper\AzureDeploy\CosmosDb.bicep](\tests\TestHelper\AzureDeploy\CosmosDb.bicep) file.
+- _Azure Bicep_: An example can be found in the
+    [\tests\TestHelper\AzureDeploy\CosmosDb.bicep](\tests\TestHelper\AzureDeploy\CosmosDb.bicep)
+    file.
 - _Azure PowerShell_: The integration tests use this method.
-- _AzCli_.
+- _Azure CLI_: This method is supported, but not tested.
 
 > [!IMPORTANT]
 > One thing I found when adding a SQL Role Assignment to the Cosmos DB
-> Account (or Database or Container) is that the principal ID must be the Object ID of
-> the user, group or service principal that you want to assign the role to. You can't use
-> the Application ID for this value.
+> Account (or Database or Container) is that the principal ID must be the Object
+> ID of the user, group or service principal that you want to assign the role to.
+> You can't use the Application ID for this value.
 
-For more information on how to configure Role-Based Access Control with Entra ID, see the
-[Configure role-based access control with Microsoft Entra ID for your Azure Cosmos DB account](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac)
+For more information on how to configure Role-Based Access Control with Entra ID,
+see the [Configure role-based access control with Microsoft Entra ID for your
+Azure Cosmos DB account](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac)
 page.
 
 ##### Database Operations allowed by Role-Based Access Control
 
-Only a subset of all the operations that can be performed on a Cosmos DB account are
-allowed by Role-Based Access Control. The following operations are allowed:
-This permission model covers only database operations that involve reading and writing data. It does not cover any kind of management operations on management resources, including:
+Only a subset of all the operations that can be performed on a Cosmos DB account
+are allowed by Role-Based Access Control. The following operations are allowed:
+This permission model covers only database operations that involve reading and
+writing data. It does not cover any kind of management operations on management
+resources, including:
 
 - Create/Replace/Delete Database
 - Create/Replace/Delete Container
@@ -245,7 +256,9 @@ This permission model covers only database operations that involve reading and w
 - Create/Replace/Delete/Read Triggers
 - Create/Replace/Delete/Read User Defined Functions
 
-For more information on this, please see the [Role-based access control (RBAC) with Azure Cosmos DB](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac#permission-model) page.
+For more information on this, please see the [Role-based access control (RBAC)
+with Azure Cosmos DB](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac#permission-model)
+page.
 
 #### Create a Context specifying the Key Manually
 
@@ -1303,7 +1316,6 @@ on the following systems:
   - Windows Server 2022: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
   - Windows Server 2025: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
 - Linux (using PowerShell 7.x):
-  - Ubuntu 20.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
   - Ubuntu 22.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
   - Ubuntu 24.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
 - macOS (using PowerShell 7.x):

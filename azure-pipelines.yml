@@ -63,8 +63,8 @@ stages:
   - stage: Test
     dependsOn: Build
     variables:
-      - group: CosmosDB.AzureSP.MCAPS # Variable group for CosmosDB Azure Service Principal (MCAPS environment)
-      # - group: CosmosDB.AzureSP.MSDN # Variable group for CosmosDB Azure Service Principal (MSDN environment)
+      # - group: CosmosDB.AzureSP.MCAPS # Variable group for CosmosDB Azure Service Principal (MCAPS environment)
+      - group: CosmosDB.AzureSP.MSDN # Variable group for CosmosDB Azure Service Principal (MSDN environment)
     jobs:
       # Unit Test Matrix
       - job: Unit_Test_Matrix
@@ -94,10 +94,6 @@ stages:
             PS7_Win2025:
               vmImage: windows-2025
               testRunTitle: 'Unit (PowerShell 7 on Windows Server 2025)'
-              pwsh: true
-            PS7_Ubuntu2004:
-              vmImage: ubuntu-20.04
-              testRunTitle: 'Unit (PowerShell 7 on Ubuntu 20.04)'
               pwsh: true
             PS7_Ubuntu2204:
               vmImage: ubuntu-22.04
@@ -189,10 +185,6 @@ stages:
             PS7_Win2025:
               vmImage: windows-2025
               testRunTitle: 'Integration (PowerShell 7 on Windows Server 2025)'
-              pwsh: true
-            PS7_Ubuntu2004:
-              vmImage: ubuntu-20.04
-              testRunTitle: 'Integration (PowerShell 7 on Ubuntu 20.04)'
               pwsh: true
             PS7_Ubuntu2204:
               vmImage: ubuntu-22.04
