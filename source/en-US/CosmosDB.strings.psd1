@@ -27,6 +27,7 @@ ConvertFrom-StringData -StringData @'
     BackOffPolicyAppliedPolicyDelay = The {0} back-off policy delay {1}ms will be used because it is longer than the requested delay {2}ms.
     BackOffPolicyAppliedRequestedDelay = The requested delay {2}ms will be used because it is longer than the {0} back-off policy delay {1}ms.
     WaitingBackoffPolicyDelay = The collection has exceeded the provisioned throughput limit but retry {0} will be attempted in {1}ms.
+    WebRequestErrorDelay = The request failed but will be retried up to {0} times in {1}s.
     ErrorAuthorizationKeyEmpty = The authorization key is empty. It must be passed in the context or a valid token context for the resource being accessed must be supplied.
     WarningNewCollectionOfferTypeDeprecated = The 'OfferType' parameter is a legacy parameter and is only supported for backwards compatibility and may be removed in future. It is recommended to use 'OfferThroughput' or 'AutopilotThroughput' instead.
     ErrorNewCollectionOfferParameterConflict = Only one of 'OfferType', OfferThroughput' or 'AutoscaleThroughput' should be specified when creating a new collection.
