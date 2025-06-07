@@ -28,8 +28,8 @@
 
     # Modules that must be imported into the global environment prior to importing this module
     RequiredModules      = @(
-        @{ ModuleName = 'Az.Accounts'; GUID = '17a2feff-488b-47f9-8729-e2cec094624c'; ModuleVersion = '4.2.0'; MaximumVersion = '4.2.0';},
-        @{ ModuleName = 'Az.Resources'; GUID = '48bb344d-4c24-441e-8ea0-589947784700'; ModuleVersion = '7.1.0'; MaximumVersion = '7.1.0';}
+        @{ ModuleName = 'Az.Accounts'; GUID = '17a2feff-488b-47f9-8729-e2cec094624c'; ModuleVersion = '4.2.0'; },
+        @{ ModuleName = 'Az.Resources'; GUID = '48bb344d-4c24-441e-8ea0-589947784700'; ModuleVersion = '7.1.0'; }
     )
 
     # Type files (.ps1xml) to be loaded when importing this module

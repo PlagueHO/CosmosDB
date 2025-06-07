@@ -1031,7 +1031,7 @@ console.log("done");
 
             Mock Get-AzAccessToken -MockWith {
                 return @{
-                    Token = $script:testEntraIdToken
+                    Token = $script:testEntraIdTokenSecureString
                 }
             }
 
@@ -1067,7 +1067,7 @@ console.log("done");
 
             Mock Get-AzAccessToken -MockWith {
                 return @{
-                    Token = $script:testEntraIdToken
+                    Token = $script:testEntraIdTokenSecureString
                 }
             }
 
@@ -1102,7 +1102,7 @@ console.log("done");
 
             Mock Get-AzAccessToken -MockWith {
                 return @{
-                    Token = $script:testEntraIdToken
+                    Token = $script:testEntraIdTokenSecureString
                 }
             }
 
@@ -2234,7 +2234,7 @@ console.log("done");
 
             Mock Get-AzAccessToken -MockWith {
                 return @{
-                    Token = $script:testEntraIdToken
+                    Token = $script:testEntraIdTokenSecureString
                 }
             }
 
@@ -2257,7 +2257,7 @@ console.log("done");
 
             Mock Get-AzAccessToken -MockWith {
                 return @{
-                    Token = $script:testEntraIdToken
+                    Token = $script:testEntraIdTokenSecureString
                 }
             }
 
@@ -2283,7 +2283,7 @@ console.log("done");
 
             Mock Get-AzAccessToken -MockWith {
                 return @{
-                    Token = $script:testEntraIdToken
+                    Token = $script:testEntraIdTokenSecureString
                 }
             }
 
