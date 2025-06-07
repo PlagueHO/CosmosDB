@@ -1058,7 +1058,10 @@ console.log("done");
 
             It 'Should call expected mocks' {
                 Assert-MockCalled -CommandName Get-AzAccessToken -Exactly -Times 1 `
-                    -ParameterFilter { $ResourceUrl -eq ('https://{0}.{1}' -f $script:testAccount, $script:testBaseHostnameAzureCustomEndpoint) }
+                    -ParameterFilter {
+                        $AsSecureString -and `
+                        $ResourceUrl -eq ('https://{0}.{1}' -f $script:testAccount, $script:testBaseHostnameAzureCustomEndpoint)
+                    }
             }
         }
 
@@ -1093,7 +1096,10 @@ console.log("done");
 
             It 'Should call expected mocks' {
                 Assert-MockCalled -CommandName Get-AzAccessToken -Exactly -Times 1 `
-                    -ParameterFilter { $ResourceUrl -eq ('https://{0}.documents.azure.com' -f $script:testAccount) }
+                    -ParameterFilter {
+                        $AsSecureString -and `
+                        $ResourceUrl -eq ('https://{0}.documents.azure.com' -f $script:testAccount)
+                    }
             }
         }
 

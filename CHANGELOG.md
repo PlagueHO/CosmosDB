@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   from the `token` property. This was resulting in a `401 Unauthorized error`
   when calling any of the dataplane functions that used the Entra ID token -
   fixes [Issue #511](https://github.com/PlagueHO/CosmosDB/issues/511)
+- Fixed `Convert-CosmosDbSecureStringToString` to include process block so
+  that pipelining works correctly.
 
 ### Changed
 
