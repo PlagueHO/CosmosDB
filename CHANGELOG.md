@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Changed `Get-CosmosDbEntraIdToken` so that if `Get-AzAccessToken` returns a
+  `null` or empty token, it will throw an exception rather than returning a
+  `null` or empty string.
 - CHORE: Added .Devcontainer and Dependabot configuration files to the repository
   to support development in Visual Studio Code with a Docker container.
 - CHORE: Updated Pull Request and Issue templates to use YAML forms in the

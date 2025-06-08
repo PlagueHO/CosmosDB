@@ -19,7 +19,7 @@ function Convert-CosmosDbSecureStringToString
     [OutputType([System.String])]
     param
     (
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [System.Security.SecureString]
         $SecureString
     )

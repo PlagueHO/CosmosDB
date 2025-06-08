@@ -68,6 +68,7 @@ ConvertFrom-StringData -StringData @'
     ErrorMalformedContextBaseUriEmpty = The context base URI is empty or malformed. Please ensure the context is correctly configured.
     ErrorMalformedContextDatabaseEmpty = The context database is empty or malformed or not passed in to the function. Please ensure the context is correctly configured or a database is specified.
     NewCosmosDbResponseExceptionHttpResponseExceptionMessage = 'Creating CosmosDb.ResponseException from Microsoft.PowerShell.Commands.HttpResponseException exception: {0}'
-    NewCosmosDbResponseExceptionWebException = 'Creating CosmosDb.ResponseException from System.Net.WebException exception: {0}'
-    NewCosmosDbResponseExceptionDefaultException = 'Creating CosmosDb.ResponseException from System.Exception exception: {0}'
+    NewCosmosDbResponseExceptionWebException = Creating CosmosDb.ResponseException from System.Net.WebException exception: {0}
+    NewCosmosDbResponseExceptionDefaultException = Creating CosmosDb.ResponseException from System.Exception exception: {0}
+    ErrorGettingEntraIdToken = Failed to retrieve the Entra ID token for endpoint '{0}'. Ensure you are logged in to Azure and have the necessary permissions.
 '@

@@ -13,10 +13,14 @@ function Get-CosmosDbEntraIdToken {
     # Remove any trailing slash as Cosmos DB RBAC does not expect the resource URL to have a trailing slash
     $Endpoint = $Endpoint.TrimEnd('/')
 
-    # Technically `-AsSecureString` is not required here because as of Az.Accounts 5.0.0+
-    # the `Get-AzAccessToken` cmdlet returns a secure string by default.
-    $token = (Get-AzAccessToken -ResourceUrl $Endpoint -AsSecureString).Token
-    if ([System.String]::IsNullOrEmpty($token)) {
+    <#
+        `-AsSecureString` is not required here because the `Get-AzAccessToken` cmdlet always
+        returns a SecureString as of Az.Accounts 5.0.0 and newer.
+    #>
+    $token = Get-AzAccessToken -ResourceUrl $Endpoint -AsSecureString
+    if ($null -eq $token) {
+        New-CosmosDbInvalidOperationException -Message ($LocalizedData.ErrorGettingEntraIdToken -f $Endpoint)
         return $null
     }
+    return $token.Token
 }
