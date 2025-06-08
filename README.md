@@ -99,14 +99,8 @@ This module requires the following:
 
 ### PowerShell Module Dependencies
 
-- **Az.Accounts**: 4.2.0 only.
-- **Az.Resources**: 7.1.0 only.
-
-> [!NOTE]
-> Due to a recent change in the Az.Accounts module, 5.0.0 or newer is not currently
-> supported. Az.Resources can't be used yet as it depends on Az.Accounts 5.0.0, so
-> Az.Resources will need to remain on 7.1.0. This is being worked on and will be
-> updated in a future release. See [#508](https://github.com/PlagueHO/CosmosDB/issues/508)
+- **Az.Accounts**: 5.0.0 and newer.
+- **Az.Resources**: 8.0.0 and newer.
 
 These modules are required if using `New-CosmosDbContext -ResourceGroupName $resourceGroup`
 or `*-CosmosDbAccount` functions.
