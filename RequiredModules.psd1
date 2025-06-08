@@ -17,7 +17,7 @@
     Sampler               = 'latest'
     'Sampler.GitHubTasks' = 'latest'
     MarkdownLinkCheck     = 'latest'
-    'Az.Accounts'         = '5.0.0' # Will work on earlier versions
+    'Az.Accounts'         = '5.1.0' # Will work on earlier versions
     'Az.Resources'        = '8.0.0' # Will work on earlier versions
     'Az.CosmosDB'         = '1.18.0' # Required by integration tests
 }
