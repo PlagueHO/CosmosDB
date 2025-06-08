@@ -7,15 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed `Get-CosmosDbEntraIdToken` to return the `SecureString` from
+  the `Get-AzAccessToken` call rather than generating a new `SecureString`
+  from the `token` property. This was resulting in a `401 Unauthorized error`
+  when calling any of the dataplane functions that used the Entra ID token -
+  fixes [Issue #511](https://github.com/PlagueHO/CosmosDB/issues/511)
+- Fixed `Convert-CosmosDbSecureStringToString` to include process block so
+  that pipelining works correctly.
+
 ### Changed
 
+- Changed `Get-CosmosDbEntraIdToken` so that if `Get-AzAccessToken` returns a
+  `null` or empty token, it will throw an exception rather than returning a
+  `null` or empty string.
 - CHORE: Added .Devcontainer and Dependabot configuration files to the repository
   to support development in Visual Studio Code with a Docker container.
 - CHORE: Updated Pull Request and Issue templates to use YAML forms in the
   `.github/ISSUE_TEMPLATE` folder.
-- CHORE: Updated `Az.Accounts` to `4.2.0` only in `requirements.psd1` and
+- CHORE: Updated `Az.Accounts` to `5.0.0` or above `requirements.psd1` and
   `CosmosDB.psd1` - fixes [Issue #509](https://github.com/PlagueHO/CosmosDB/issues/509)
-- CHORE: Updated `Az.Resources` to `7.1.0` and above in `requirements.psd1` and
+- CHORE: Updated `Az.Resources` to `8.0.0` or above in `requirements.psd1` and
   `CosmosDB.psd1` - fixes [Issue #509](https://github.com/PlagueHO/CosmosDB/issues/509)
 - CHORE: Added `copilot-instructions.md` to control Copilot suggestions in the
   repository. This file is used to provide instructions to Copilot on how to
@@ -83,20 +96,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Removed unnecessary quotes from README (works without them in PowerShell and is easier to read)
+- Removed unnecessary quotes from README (works without them in PowerShell and
+  is easier to read)
 - Modified README to use splats, which is part of the recommended style guide
-- Removed Ubuntu-18.04 testing from build pipeline because it is no longer supported by Microsoft
+- Removed Ubuntu-18.04 testing from build pipeline because it is no longer
+  supported by Microsoft
   managed Azure DevOps images - Fixes [Issue #473](https://github.com/PlagueHO/CosmosDB/issues/473).
 - Added Ubuntu-22.04 testing to build pipeline - Fixes [Issue #474](https://github.com/PlagueHO/CosmosDB/issues/474).
-- Removed MacOS-10.15 testing from build pipeline because it is no longer supported by Microsoft
+- Removed MacOS-10.15 testing from build pipeline because it is no longer
+  supported by Microsoft
   managed Azure DevOps images - Fixes [Issue #476](https://github.com/PlagueHO/CosmosDB/issues/476).
 - Added macOS-12 testing to build pipeline - Fixes [Issue #477](https://github.com/PlagueHO/CosmosDB/issues/477).
 - Changed integration tests to deploy Cosmos DB using Bicep.
-- Update `requirements.psd1` to install modules `Az.Accounts` 2.19.0 and `Az.Resources` 6.16.2.
-- Renamed `New-CosmosDbAuthorizationToken` to `New-CosmosDbAuthorizationHeader` to better indicate
+- Update `requirements.psd1` to install modules `Az.Accounts` 2.19.0 and
+  `Az.Resources` 6.16.2.
+- Renamed `New-CosmosDbAuthorizationToken` to `New-CosmosDbAuthorizationHeader`
+  to better indicate
   actual function return type.
-- Refactored `Invoke-CosmosDbRequest` to support getting the EntraIdToken property from the context object
-  and using it for authentication if it is provided. If the Key property is provided, the EntraIdToken property
+- Refactored `Invoke-CosmosDbRequest` to support getting the EntraIdToken property
+  from the context object and using it for authentication if it is provided. If
+  the Key property is provided, the EntraIdToken property
   will take precendence and the key will be ignored.
 - Updated CI pipeline to use `PublishCodeCoverageResults@2` task rather than `PublishCodeCoverageResults@1`
   task to support the latest version of the task.
@@ -105,24 +124,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - BREAKING CHANGE: Updated module to require `Az.Accounts` v2.19.0 or newer and `Az.Resources`
   v6.16.2 or newer.
-- Renamed `New-CosmosDbAuthorizationHeader` to `Get-CosmosDbAuthorizationHeaderFromContext` to better indicate
-  actual function behaviour.
-- Renamed `Get-CosmosDbAuthorizationHeadersFromContext` to `Get-CosmosDbAuthorizationHeaderFromContextResourceToken` to better
-  indicate actual function behaviour and align naming convention.
-- Refactored `Invoke-CosmosDbRequest` to clean up logic to generate the authorization header.
-- Added new utillity function `Get-CosmosDbAuthorizationHeaderFromContextEntraId` to generate the authorization
-  header when an Entra ID Token is provided in the context. This function is used by `Invoke-CosmosDbRequest` to
-  generate the authorization header when an Entra ID Token is provided.
+- Renamed `New-CosmosDbAuthorizationHeader` to `Get-CosmosDbAuthorizationHeaderFromContext`
+  to better indicate actual function behaviour.
+- Renamed `Get-CosmosDbAuthorizationHeadersFromContext` to `Get-CosmosDbAuthorizationHeaderFromContextResourceToken`
+  to better indicate actual function behaviour and align naming convention.
+- Refactored `Invoke-CosmosDbRequest` to clean up logic to generate the authorization
+  header.
+- Added new utillity function `Get-CosmosDbAuthorizationHeaderFromContextEntraId`
+  to generate the authorization header when an Entra ID Token is provided in the
+  context. This function is used by `Invoke-CosmosDbRequest` to generate the
+  authorization header when an Entra ID Token is provided.
 - Changed module import process to load the `Az.Accounts` and `Az.Resources` modules
-  only if they haven't already been loaded to support saving the module and storing in
-  folders.
+  only if they haven't already been loaded to support saving the module and storing
+  in folders.
 
 ### Added
 
-- Added support for setting an Entra Id OAuth2 Token in the `New-CosmosDbContext` - Fixes [Issue #479](https://github.com/PlagueHO/CosmosDB/issues/479).
-- Added new `Get-CosmosDbEntraIdToken` function that uses `Get-AzAccessToken` to get an Entra Id Token
-  for use in Cosmos DB requests. This is used by `New-CosmosDbContext` to set the Entra Id Token in the
-  context object - Fixes [Issue #479](https://github.com/PlagueHO/CosmosDB/issues/479).
+- Added support for setting an Entra Id OAuth2 Token in the
+  `New-CosmosDbContext` - Fixes [Issue #479](https://github.com/PlagueHO/CosmosDB/issues/479).
+- Added new `Get-CosmosDbEntraIdToken` function that uses `Get-AzAccessToken` to
+  get an Entra Id Token
+  for use in Cosmos DB requests. This is used by `New-CosmosDbContext` to set the
+  Entra Id Token in the context object - Fixes [Issue #479](https://github.com/PlagueHO/CosmosDB/issues/479).
 
 ## [4.7.0] - 2023-01-29
 
@@ -332,7 +355,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Improved badge layout in README.MD and removed CodeCov.io badge - fixes [Issue #336](https://github.com/PlagueHO/CosmosDB/issues/336).
+- Improved badge layout in README.MD and removed CodeCov.io
+  badge - fixes [Issue #336](https://github.com/PlagueHO/CosmosDB/issues/336).
 - Removed references to Gitter and Gitter badge - fixes [Issue #337](https://github.com/PlagueHO/CosmosDB/issues/337).
 - Removed Azure Pipeline daily build YAML because the main
   pipeline build YAML will be used instead.
@@ -405,7 +429,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved CosmosDB namespace class definitions into C# project to be built
   into a .NET Standard 2.0 DLL that can be loaded instead of a CS file.
   This is to work around a problem with Azure Functions 2.0 where
-  types can not be compiled in the runtime (see [this issue](https://github.com/Azure/azure-functions-powershell-worker/issues/220)) -
+  types can not be compiled in the runtime.
+  See [this issue](https://github.com/Azure/azure-functions-powershell-worker/issues/220) -
   fixes [Issue #290](https://github.com/PlagueHO/CosmosDB/issues/290).
 
 ## [3.2.4.376] - 2019-05-30
@@ -554,7 +579,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `*-CosmosDBUserDefinedFunction*` functions - fixes [Issue #216](https://github.com/PlagueHO/CosmosDB/issues/216).
 - Improved validation on Account parameter on `*-CosmosDBUserDefinedFunction*` functions.
 - Improved validation on Database parameter on `*-CosmosDBUserDefinedFunction*` functions.
-- Improved validation on Collection parameter on `*-CosmosDBUserDefinedFunction*` functions.
+- Improved validation on Collection parameter on `*-CosmosDBUserDefinedFunction*`
+  functions.
 - Improved validation on User Id parameter on
   `*-CosmosDBUser*` functions - fixes [Issue #217](https://github.com/PlagueHO/CosmosDB/issues/217).
 - Improved validation on Account parameter on `*-CosmosDBUser*` functions.
@@ -603,16 +629,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.1.9.95] - 2018-10-21
 
 - Improved unit test reliability on MacOS and Linux.
-- Improved unit tests for account functions to include parameter filters on mock assertions.
-- Added `Get-CosmosDbAccountConnectionString` function for retrieving the connection strings
-  of an existing account in Azure - fixes [Issue #163](https://github.com/PlagueHO/CosmosDB/issues/163).
-  This function is not currently working due to an issue with the Microsoft\DocumentDB provider
-  in Azure - see [this issue](https://github.com/Azure/azure-powershell/issues/3650) for more information.
-- Fixed 'Unable to find type \[Microsoft.PowerShell.Commands.HttpResponseException\]' exception
-  being thrown in `Invoke-CosmosDbRequest` when error is returned by Cosmos DB in PowerShell 5.x
-  or earlier - fixes [Issue #186](https://github.com/PlagueHO/CosmosDB/issues/186).
-- Split unit and integration test execution in CI process so that integration tests do
-  not run when unit tests fail - fixes [Issue #184](https://github.com/PlagueHO/CosmosDB/issues/184).
+- Improved unit tests for account functions to include parameter filters on mock
+  assertions.
+- Added `Get-CosmosDbAccountConnectionString` function for retrieving the connection
+  strings of an existing account in Azure - fixes [Issue #163](https://github.com/PlagueHO/CosmosDB/issues/163).
+  This function is not currently working due to an issue with the Microsoft\DocumentDB
+  provider in Azure - see [this issue](https://github.com/Azure/azure-powershell/issues/3650)
+  for more information.
+- Fixed 'Unable to find type \[Microsoft.PowerShell.Commands.HttpResponseException\]'
+  exception being thrown in `Invoke-CosmosDbRequest` when error is returned by CosmosDB
+  in PowerShell 5.x or earlier - fixes [Issue #186](https://github.com/PlagueHO/CosmosDB/issues/186).
+- Split unit and integration test execution in CI process so that integration tests
+  do not run when unit tests fail - fixes [Issue #184](https://github.com/PlagueHO/CosmosDB/issues/184).
 
 ## [2.1.8.59] - 2018-10-03
 
@@ -623,7 +651,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rework CI process to simplify code.
 - Enabled integration test execution in Azure DevOps Pipelines - fixes [Issue #179](https://github.com/PlagueHO/CosmosDB/issues/179)
 - Added artifact publish tasks for Azure Pipeline.
-- Refactored module deployment process to occur in Azure DevOps pipeline - fixes [Issue #181](https://github.com/PlagueHO/CosmosDB/issues/181)
+- Refactored module deployment process to occur in Azure DevOps pipeline -
+  fixes [Issue #181](https://github.com/PlagueHO/CosmosDB/issues/181)
 
 ## [2.1.7.675] - 2018-09-11
 
@@ -659,12 +688,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.1.5.548] - 2018-08-04
 
-- Changed references to `CosmosDB` to `Cosmos DB` in documentation - fixes [Issue #147](https://github.com/PlagueHO/CosmosDB/issues/147)
+- Changed references to `CosmosDB` to `Cosmos DB` in documentation -
+  fixes [Issue #147](https://github.com/PlagueHO/CosmosDB/issues/147)
 
 ## [2.1.4.536] - 2018-07-25
 
 - Added `RemoveDefaultTimeToLive` switch parameter to `Set-CosmosDbCollection`
-  to allow removal of a default time to live setting on a collection - fixes [Issue #144](https://github.com/PlagueHO/CosmosDB/issues/144)
+  to allow removal of a default time to live setting on a collection -
+  fixes [Issue #144](https://github.com/PlagueHO/CosmosDB/issues/144)
 
 ## [2.1.3.528] - 2018-07-12
 
@@ -714,9 +745,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix creation of spatial index by `New-CosmosDbCollectionIncludedPathIndex`
   so that precision is not used when passing to `New-CosmosDbCollection`.
-- Added support for `-PartitionKey` in `Invoke-CosmosDbStoredProcedure` - See [Issue #116](https://github.com/PlagueHO/CosmosDB/issues/116)
-- Changed -StoredProcedureParameter from string[] to object[] in `Invoke-CosmosDbStoredProcedure` - See [Issue #116](https://github.com/PlagueHO/CosmosDB/issues/116)
-- Updated `Invoke-CosmosDbStoredProcedure` to set `x-ms-documentdb-script-enable-logging: true` header and write stored procedure logs to the Verbose Stream when `-Debug` is set - See [Issue #116](https://github.com/PlagueHO/CosmosDB/issues/116)
+- Added support for `-PartitionKey` in `Invoke-CosmosDbStoredProcedure` -
+  See [Issue #116](https://github.com/PlagueHO/CosmosDB/issues/116)
+- Changed -StoredProcedureParameter from string[] to object[] in
+  `Invoke-CosmosDbStoredProcedure` - See [Issue #116](https://github.com/PlagueHO/CosmosDB/issues/116)
+- Updated `Invoke-CosmosDbStoredProcedure` to set
+  `x-ms-documentdb-script-enable-logging: true` header and write stored procedure
+  logs to the Verbose Stream when `-Debug` is set - See [Issue #116](https://github.com/PlagueHO/CosmosDB/issues/116)
 
 ## [2.0.14.439] - 2018-06-12
 

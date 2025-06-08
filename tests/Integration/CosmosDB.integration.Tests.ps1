@@ -157,7 +157,6 @@ Connect-AzureServicePrincipal `
 # Get the Entra ID token for the logged in Service Principal to use
 # for testing Cosmos DB secured with RBAC.
 $script:entraIdTokenForSP = Get-AzureEntraIdToken -Verbose
-$script:entraIdTokenForSPSecureString = ConvertTo-SecureString -String $script:entraIdTokenForSP -AsPlainText -Force
 
 # Create resource group
 $null = New-AzureTestCosmosDbResourceGroup `
@@ -937,7 +936,8 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     -ResourceGroupName $script:testResourceGroupName `
                     -RoleDefinitionId $script:cosmosDbRoleDefinitionIdContributor `
                     -Scope "/" `
-                    -PrincipalId $env:azureApplicationObjectId
+                    -PrincipalId $env:azureApplicationObjectId `
+                    -Verbose
             }
         }
 
@@ -945,9 +945,10 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             It 'Should not throw an exception' {
                 $script:Result = Get-AzCosmosDBSqlRoleAssignment `
                     -AccountName $script:testAccountName `
-                    -ResourceGroupName $script:testResourceGroupName
+                    -ResourceGroupName $script:testResourceGroupName `
+                    -Verbose
 
-                Write-Verbose -Message ($script:Result | Out-String)
+                Write-Verbose -Message "Data Plane Role Assignments: $($script:Result | Out-String)" -Verbose
             }
 
             It 'Should return at least one SQL Role Assignement' {
@@ -961,7 +962,8 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 $script:testEntraIdContext = New-CosmosDbContext `
                     -Account $script:testAccountName `
                     -Database $script:testDatabase `
-                    -EntraIdToken $script:entraIdTokenForSPSecureString
+                    -EntraIdToken $script:entraIdTokenForSP `
+                    -Verbose
             }
         }
 

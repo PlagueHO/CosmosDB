@@ -163,7 +163,7 @@ console.log("done");
             { Get-Command -Name Convert-CosmosDbSecureStringToString -ErrorAction Stop } | Should -Not -Throw
         }
 
-        Context 'When called with valid secure string' {
+        Context 'When called with valid SecureString' {
             $script:result = $null
 
             It 'Should not throw exception' {
@@ -172,6 +172,22 @@ console.log("done");
                 }
 
                 { $script:result = Convert-CosmosDbSecureStringToString @convertCosmosDbSecureStringToStringParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result = $script:testKey
+            }
+        }
+
+        Context 'When called with a valid SecureString via pipeline variable' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $convertCosmosDbSecureStringToStringParameters = @{
+                    SecureString = $script:testKeySecureString
+                }
+                Write-Verbose -Message "Type: $($script:testKeySecureString.GetType().FullName)" -Verbose
+                { $script:result = $convertCosmosDbSecureStringToStringParameters.SecureString | Convert-CosmosDbSecureStringToString } | Should -Not -Throw
             }
 
             It 'Should return expected result' {
@@ -1031,7 +1047,7 @@ console.log("done");
 
             Mock Get-AzAccessToken -MockWith {
                 return @{
-                    Token = $script:testEntraIdToken
+                    Token = $script:testEntraIdTokenSecureString
                 }
             }
 
@@ -1058,7 +1074,10 @@ console.log("done");
 
             It 'Should call expected mocks' {
                 Assert-MockCalled -CommandName Get-AzAccessToken -Exactly -Times 1 `
-                    -ParameterFilter { $ResourceUrl -eq ('https://{0}.{1}' -f $script:testAccount, $script:testBaseHostnameAzureCustomEndpoint) }
+                    -ParameterFilter {
+                        $AsSecureString -and `
+                        $ResourceUrl -eq ('https://{0}.{1}' -f $script:testAccount, $script:testBaseHostnameAzureCustomEndpoint)
+                    }
             }
         }
 
@@ -1067,7 +1086,7 @@ console.log("done");
 
             Mock Get-AzAccessToken -MockWith {
                 return @{
-                    Token = $script:testEntraIdToken
+                    Token = $script:testEntraIdTokenSecureString
                 }
             }
 
@@ -1093,7 +1112,10 @@ console.log("done");
 
             It 'Should call expected mocks' {
                 Assert-MockCalled -CommandName Get-AzAccessToken -Exactly -Times 1 `
-                    -ParameterFilter { $ResourceUrl -eq ('https://{0}.documents.azure.com' -f $script:testAccount) }
+                    -ParameterFilter {
+                        $AsSecureString -and `
+                        $ResourceUrl -eq ('https://{0}.documents.azure.com' -f $script:testAccount)
+                    }
             }
         }
 
@@ -1102,7 +1124,7 @@ console.log("done");
 
             Mock Get-AzAccessToken -MockWith {
                 return @{
-                    Token = $script:testEntraIdToken
+                    Token = $script:testEntraIdTokenSecureString
                 }
             }
 
@@ -2234,7 +2256,7 @@ console.log("done");
 
             Mock Get-AzAccessToken -MockWith {
                 return @{
-                    Token = $script:testEntraIdToken
+                    Token = $script:testEntraIdTokenSecureString
                 }
             }
 
@@ -2242,13 +2264,20 @@ console.log("done");
                 { $script:result = Get-CosmosDbEntraIdToken } | Should -Not -Throw
             }
 
-            It 'Should return secure string containing token' {
+            It 'Should return a secure string' {
+                $script:result | Should -BeOfType [System.Security.SecureString]
+            }
+
+            It 'Should return secure string containing the expected token' {
                 $script:result | Convert-CosmosDbSecureStringToString | Should -Be $script:testEntraIdToken
             }
 
             It 'Should call expected mocks' {
                 Assert-MockCalled -CommandName Get-AzAccessToken -Exactly -Times 1 `
-                    -ParameterFilter { $ResourceUrl -eq 'https://cosmos.azure.com' }
+                    -ParameterFilter {
+                        $AsSecureString -and
+                        $ResourceUrl -eq 'https://cosmos.azure.com'
+                    }
             }
         }
 
@@ -2257,7 +2286,7 @@ console.log("done");
 
             Mock Get-AzAccessToken -MockWith {
                 return @{
-                    Token = $script:testEntraIdToken
+                    Token = $script:testEntraIdTokenSecureString
                 }
             }
 
@@ -2268,7 +2297,11 @@ console.log("done");
                 { $script:result = Get-CosmosDbEntraIdToken @getCosmosDbEntraIdTokenParameters } | Should -Not -Throw
             }
 
-            It 'Should return secure string containing token' {
+            It 'Should return a secure string' {
+                $script:result | Should -BeOfType [System.Security.SecureString]
+            }
+
+            It 'Should return secure string containing the expected token' {
                 $script:result | Convert-CosmosDbSecureStringToString | Should -Be $script:testEntraIdToken
             }
 
@@ -2283,7 +2316,7 @@ console.log("done");
 
             Mock Get-AzAccessToken -MockWith {
                 return @{
-                    Token = $script:testEntraIdToken
+                    Token = $script:testEntraIdTokenSecureString
                 }
             }
 
@@ -2294,7 +2327,11 @@ console.log("done");
                 { $script:result = Get-CosmosDbEntraIdToken @getCosmosDbEntraIdTokenParameters } | Should -Not -Throw
             }
 
-            It 'Should return secure string containing token' {
+            It 'Should return a secure string' {
+                $script:result | Should -BeOfType [System.Security.SecureString]
+            }
+
+            It 'Should return secure string containing the expected token' {
                 $script:result | Convert-CosmosDbSecureStringToString | Should -Be $script:testEntraIdToken
             }
 
@@ -2311,8 +2348,13 @@ console.log("done");
                 return $null
             }
 
-            It 'Should throw exception' {
-                { $script:result = Get-CosmosDbEntraIdToken } | Should -Not -Throw
+            $errorRecord = Get-InvalidOperationRecord `
+                -Message ($LocalizedData.ErrorGettingEntraIdToken -f 'https://cosmos.azure.com')
+
+            It 'Should throw expected exception' {
+                {
+                    $script:result = Get-CosmosDbEntraIdToken
+                } | Should -Throw $errorRecord
             }
 
             It 'Should return null' {

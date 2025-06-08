@@ -19,7 +19,7 @@ Example structure for `llms.txt`:
 **Version:** [Optional: e.g., 1.0, Date]
 **Last Updated:** [Optional: YYYY-MM-DD]
 **Owner:** [Optional: Team/Individual responsible for this solution]
-**GitHub Repository:** https://github.com/PlagueHO/azure-ai-foundry-jumpstart
+**GitHub Repository:** https://github.com/PlagueHO/CosmosDB
 
 ## 1. Purpose & Scope
 

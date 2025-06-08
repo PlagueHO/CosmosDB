@@ -19,20 +19,23 @@ function Convert-CosmosDbSecureStringToString
     [OutputType([System.String])]
     param
     (
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [System.Security.SecureString]
         $SecureString
     )
 
-    if ($PSVersionTable.PSVersion.Major -ge 7)
+    process
     {
-        $decryptedString = ConvertFrom-SecureString -SecureString $SecureString -AsPlainText
-    }
-    else
-    {
-        $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecureString)
-        $decryptedString = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
-    }
+        if ($PSVersionTable.PSVersion.Major -ge 7)
+        {
+            $decryptedString = ConvertFrom-SecureString -SecureString $SecureString -AsPlainText
+        }
+        else
+        {
+            $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecureString)
+            $decryptedString = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
+        }
 
-    return $decryptedString
+        return $decryptedString
+    }
 }
