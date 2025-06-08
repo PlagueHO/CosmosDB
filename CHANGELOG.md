@@ -26,9 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   to support development in Visual Studio Code with a Docker container.
 - CHORE: Updated Pull Request and Issue templates to use YAML forms in the
   `.github/ISSUE_TEMPLATE` folder.
-- CHORE: Updated `Az.Accounts` to `4.2.0` or above `requirements.psd1` and
+- CHORE: Updated `Az.Accounts` to `5.1.0` or above `requirements.psd1` and
   `CosmosDB.psd1` - fixes [Issue #509](https://github.com/PlagueHO/CosmosDB/issues/509)
-- CHORE: Updated `Az.Resources` to `7.1.0` or above in `requirements.psd1` and
+- CHORE: Updated `Az.Resources` to `8.0.0` or above in `requirements.psd1` and
   `CosmosDB.psd1` - fixes [Issue #509](https://github.com/PlagueHO/CosmosDB/issues/509)
 - CHORE: Added `copilot-instructions.md` to control Copilot suggestions in the
   repository. This file is used to provide instructions to Copilot on how to

@@ -19,7 +19,7 @@ function Get-CosmosDbAuthorizationHeaderFromContextEntraId
 
     if (-not [System.String]::IsNullOrEmpty($Context.EntraIdToken))
     {
-        $decryptedEntraIdToken = Convert-CosmosDbSecureStringToString -SecureString $Context.EntraIdToken
+        $decryptedEntraIdToken = $Context.EntraIdToken | Convert-CosmosDbSecureStringToString
         $token = [System.Web.HttpUtility]::UrlEncode(('type=aad&ver=1.0&sig={0}' -f $decryptedEntraIdToken))
         $headers = @{
             'authorization' = $token

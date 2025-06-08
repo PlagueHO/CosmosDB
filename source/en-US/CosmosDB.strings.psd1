@@ -70,5 +70,6 @@ ConvertFrom-StringData -StringData @'
     NewCosmosDbResponseExceptionHttpResponseExceptionMessage = 'Creating CosmosDb.ResponseException from Microsoft.PowerShell.Commands.HttpResponseException exception: {0}'
     NewCosmosDbResponseExceptionWebException = Creating CosmosDb.ResponseException from System.Net.WebException exception: {0}
     NewCosmosDbResponseExceptionDefaultException = Creating CosmosDb.ResponseException from System.Exception exception: {0}
+    GettingEntraIdToken = Getting Entra ID token for endpoint '{0}'.
     ErrorGettingEntraIdToken = Failed to retrieve the Entra ID token for endpoint '{0}'. Ensure you are logged in to Azure and have the necessary permissions.
 '@
