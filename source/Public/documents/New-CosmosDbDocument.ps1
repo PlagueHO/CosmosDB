@@ -62,7 +62,15 @@ function New-CosmosDbDocument
 
         [Parameter()]
         [switch]
-        $ReturnJson
+        $ReturnJson,
+
+        [Parameter()]
+        [System.Int32]
+        $MaximumRetryCount,
+
+        [Parameter()]
+        [System.Int32]
+        $RetryIntervalSec = 5
     )
 
     $null = $PSBoundParameters.Remove('CollectionId')
@@ -98,12 +106,16 @@ function New-CosmosDbDocument
         $null = $PSBoundParameters.Remove('PartitionKey')
     }
 
-    $result = Invoke-CosmosDbRequest @PSBoundParameters `
-        -Method 'Post' `
-        -ResourceType 'docs' `
-        -ResourcePath $resourcePath `
-        -Body $DocumentBody `
-        -Headers $headers
+    $invokeCosmosDbRequest_parameters = @{
+        Method            = 'Post'
+        ResourceType      = 'docs'
+        ResourcePath      = $resourcePath
+        Body              = $DocumentBody
+        Headers           = $headers
+        MaximumRetryCount = $MaximumRetryCount
+        RetryIntervalSec  = $RetryIntervalSec
+    }
+    $result = Invoke-CosmosDbRequest @PSBoundParameters @invokeCosmosDbRequest_parameters
 
     if ($ReturnJson.IsPresent)
     {

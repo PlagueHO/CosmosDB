@@ -64,7 +64,15 @@ function Invoke-CosmosDbRequest
         [Parameter()]
         [ValidateSet('Default', 'UTF-8')]
         [System.String]
-        $Encoding = 'Default'
+        $Encoding = 'Default',
+
+        [Parameter()]
+        [System.Int32]
+        $MaximumRetryCount,
+
+        [Parameter()]
+        [System.Int32]
+        $RetryIntervalSec
     )
 
     if ($PSCmdlet.ParameterSetName -eq 'Account')
@@ -290,6 +298,21 @@ function Invoke-CosmosDbRequest
                 {
                     Write-Verbose -Message $($LocalizedData.ErrorTooManyRequests)
                 }
+            }
+            elseif (
+                $_.Exception.Response.StatusCode -ge 400 -and
+                $_.Exception.Response.StatusCode -le 599 -and
+                $MaximumRetryCount -gt $retry
+            )
+            {
+                <#
+                    The exception was caused by an error either in the client request or on the server
+                    If additional retries are specified, retry after RetryIntervalSec until Max count is reached
+                #>
+                $retry++
+                Write-Verbose -Message $($LocalizedData.WebRequestErrorDelay -f $MaximumRetryCount, $RetryIntervalSec)
+                Start-Sleep $RetryIntervalSec
+                continue
             }
 
             if ($_.Exception.Response)
