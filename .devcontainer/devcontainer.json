@@ -12,7 +12,7 @@
 			"nonFreePackages": "true"
 		},
 		"ghcr.io/devcontainers/features/azure-cli:1": {},
-		"ghcr.io/devcontainers/features/powershell:1": {}
+		"ghcr.io/devcontainers/features/powershell:2": {}
 	},
 
 	"postCreateCommand": "sudo chsh vscode -s \"$(which pwsh)\"",
