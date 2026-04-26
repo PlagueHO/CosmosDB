@@ -17,9 +17,3 @@ updates:
     directory: "/source/classes/CosmosDB"
     schedule:
       interval: weekly
-
-  # Azure Pipelines GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: weekly
