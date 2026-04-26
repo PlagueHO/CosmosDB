@@ -71,10 +71,6 @@ stages:
         displayName: 'Unit Test Matrix'
         strategy:
           matrix:
-            PS_Win2019:
-              vmImage: windows-2019
-              testRunTitle: 'Unit (PowerShell 5.1 on Windows Server 2019)'
-              pwsh: false
             PS_Win2022:
               vmImage: windows-2022
               testRunTitle: 'Unit (PowerShell 5.1 on Windows Server 2022)'
@@ -83,10 +79,6 @@ stages:
               vmImage: windows-2025
               testRunTitle: 'Unit (PowerShell 5.1 on Windows Server 2025)'
               pwsh: false
-            PS7_Win2019:
-              vmImage: windows-2019
-              testRunTitle: 'Unit (PowerShell 7 on Windows Server 2019)'
-              pwsh: true
             PS7_Win2022:
               vmImage: windows-2022
               testRunTitle: 'Unit (PowerShell 7 on Windows Server 2022)'
@@ -102,10 +94,6 @@ stages:
             PS7_Ubuntu2404:
               vmImage: ubuntu-24.04
               testRunTitle: 'Unit (PowerShell 7 on Ubuntu 24.04)'
-              pwsh: true
-            PS7_MacOS13:
-              vmImage: macos-13
-              testRunTitle: 'Unit (PowerShell 7 on MacOS 13)'
               pwsh: true
             PS7_MacOS14:
               vmImage: macos-14
@@ -162,10 +150,6 @@ stages:
         dependsOn: Unit_Test_Matrix
         strategy:
           matrix:
-            PS_Win2019:
-              vmImage: windows-2019
-              testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2019)'
-              pwsh: false
             PS_Win2022:
               vmImage: windows-2022
               testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2022)'
@@ -174,10 +158,6 @@ stages:
               vmImage: windows-2025
               testRunTitle: 'Integration (PowerShell 5.1 on Windows Server 2025)'
               pwsh: false
-            PS7_Win2019:
-              vmImage: windows-2019
-              testRunTitle: 'Integration (PowerShell 7 on Windows Server 2019)'
-              pwsh: true
             PS7_Win2022:
               vmImage: windows-2022
               testRunTitle: 'Integration (PowerShell 7 on Windows Server 2022)'
@@ -193,10 +173,6 @@ stages:
             PS7_Ubuntu2404:
               vmImage: ubuntu-24.04
               testRunTitle: 'Integration (PowerShell 7 on Ubuntu 24.04)'
-              pwsh: true
-            PS7_MacOS13:
-              vmImage: macos-13
-              testRunTitle: 'Integration (PowerShell 7 on MacOS 13)'
               pwsh: true
             PS7_MacOS14:
               vmImage: macos-14
