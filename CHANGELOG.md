@@ -2,18 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
 ### Operational Changes
 
+- Added `AGENTS.md` and `copilot-instructions.md` to optimize the
+  repository for Agentic development.
+- Removed testing on Windows Server 2019 and MacOS 13.
 - Added [Spec-Kit](github.com/GitHub/spec-kit) support.
 - Added `specify/memory/constitution.md` to define the module's
   governing principles and development standards.
-- Renamed `.github\copilot-instructions.md` to `\AGENTS.md` to align to industry
-  standards for AI-assisted development.
 
 ## [6.1.0] - 2025-06-08
 
