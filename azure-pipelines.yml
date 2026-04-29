@@ -5,9 +5,9 @@ trigger:
     - '*'
   paths:
     include:
-    - source/*
-    - tests/*
-    - docs/*
+    - source/**
+    - tests/**
+    - docs/**
     - RequiredModules.psd1
     - README.md
     - CHANGELOG.md
@@ -16,6 +16,19 @@ trigger:
     - "v*"
     exclude:
     - "*-*"
+
+pr:
+  branches:
+    include:
+    - '*'
+  paths:
+    include:
+    - source/**
+    - tests/**
+    - docs/**
+    - RequiredModules.psd1
+    - README.md
+    - CHANGELOG.md
 
 variables:
   buildFolderName: output
