@@ -64,7 +64,8 @@ function New-CosmosDbContext
         $Emulator,
 
         [Parameter(ParameterSetName = 'Emulator')]
-        [System.Int16]
+        [ValidateRange(1, 65535)]
+        [System.Int32]
         $Port,
 
         [Parameter(ParameterSetName = 'Emulator')]

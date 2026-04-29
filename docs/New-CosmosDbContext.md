@@ -108,7 +108,7 @@ New-CosmosDbContext -ConnectionString <SecureString> [-Database <String>]
 
 ```powershell
 New-CosmosDbContext [-Database <String>] [-Key <SecureString>] [-Emulator]
- [-Port <Int16>] [-Uri <String>] [-Token <ContextToken[]>] [-BackoffPolicy <BackoffPolicy>]
+ [-Port <Int32>] [-Uri <String>] [-Token <ContextToken[]>] [-BackoffPolicy <BackoffPolicy>]
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -481,7 +481,7 @@ change. Therefore, it is recommended that the port is specified
 in the Uri parameter.
 
 ```yaml
-Type: Int16
+Type: Int32
 Parameter Sets: Emulator
 Aliases:
 
