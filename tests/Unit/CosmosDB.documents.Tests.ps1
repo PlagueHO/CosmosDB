@@ -31,6 +31,7 @@ InModuleScope $ProjectName {
     $script:testDocument2 = 'testDocument2'
     $script:testDocumentBody = 'testDocumentBody'
     $script:testPartitionKey = 'testPartitionKey'
+    $script:testQuery = 'SELECT * FROM c'
     $script:testETag = '\"0500d107-0000-0c00-0000-5d2a0a660000\"'
     $script:testHeaders = @{
         'x-ms-continuation' = 'test'
@@ -332,6 +333,136 @@ InModuleScope $ProjectName {
             }
         }
 
+        Context 'When called with context parameter and no Id and a Query and hierarchical Partition Key' {
+            $script:result = $null
+            $script:testHierarchicalPartitionKey = @('accountId', 'solutionId', 'userId')
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'docs' -and `
+                    $ResourcePath -eq ('colls/{0}/docs' -f $script:testCollection) -and `
+                    $Headers['x-ms-documentdb-isquery'] -eq $True -and `
+                    $Headers['x-ms-documentdb-partitionkey'] -eq '["accountId","solutionId","userId"]' -and `
+                    $Body -eq (ConvertTo-Json -InputObject @{ query = $script:testQuery }) -and `
+                    $ContentType -eq 'application/query+json'
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultMulti }
+
+            It 'Should not throw exception' {
+                $getCosmosDbDocumentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    PartitionKey = $script:testHierarchicalPartitionKey
+                    Query        = $script:testQuery
+                    Verbose      = $true
+                }
+
+                { $script:result = Get-CosmosDbDocument @getCosmosDbDocumentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Count | Should -Be 2
+                $script:result[0].id | Should -Be $script:testDocument1
+                $script:result[1].id | Should -Be $script:testDocument2
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and no Id and a Query with cross partition enabled' {
+            $script:result = $null
+            $script:testHierarchicalPartitionKey = @('accountId', 'solutionId', 'userId')
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'docs' -and `
+                    $Headers['x-ms-documentdb-isquery'] -eq $True -and `
+                    $Headers['x-ms-documentdb-query-enablecrosspartition'] -eq $True -and `
+                    $Headers['x-ms-documentdb-partitionkey'] -eq '["accountId","solutionId","userId"]' -and `
+                    $Body -eq (ConvertTo-Json -InputObject @{ query = $script:testQuery }) -and `
+                    $ContentType -eq 'application/query+json'
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultMulti }
+
+            It 'Should not throw exception' {
+                $getCosmosDbDocumentParameters = @{
+                    Context                   = $script:testContext
+                    CollectionId              = $script:testCollection
+                    PartitionKey              = $script:testHierarchicalPartitionKey
+                    Query                     = $script:testQuery
+                    QueryEnableCrossPartition = $true
+                    Verbose                   = $true
+                }
+
+                { $script:result = Get-CosmosDbDocument @getCosmosDbDocumentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Count | Should -Be 2
+                $script:result[0].id | Should -Be $script:testDocument1
+                $script:result[1].id | Should -Be $script:testDocument2
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and no Id and a Query with cross partition not enabled' {
+            $script:result = $null
+            $script:testHierarchicalPartitionKey = @('accountId', 'solutionId', 'userId')
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'docs' -and `
+                    $Headers['x-ms-documentdb-isquery'] -eq $True -and `
+                    (-not $Headers.ContainsKey('x-ms-documentdb-query-enablecrosspartition')) -and `
+                    $Headers['x-ms-documentdb-partitionkey'] -eq '["accountId","solutionId","userId"]' -and `
+                    $Body -eq (ConvertTo-Json -InputObject @{ query = $script:testQuery }) -and `
+                    $ContentType -eq 'application/query+json'
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultMulti }
+
+            It 'Should not throw exception' {
+                $getCosmosDbDocumentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    PartitionKey = $script:testHierarchicalPartitionKey
+                    Query        = $script:testQuery
+                    Verbose      = $true
+                }
+
+                { $script:result = Get-CosmosDbDocument @getCosmosDbDocumentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.Count | Should -Be 2
+                $script:result[0].id | Should -Be $script:testDocument1
+                $script:result[1].id | Should -Be $script:testDocument2
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
         Context 'When called with context parameter and an Id' {
             $script:result = $null
             $invokeCosmosDbRequest_parameterfilter = {
@@ -474,6 +605,44 @@ InModuleScope $ProjectName {
                     -Exactly -Times 1
             }
         }
+
+        Context 'When called with context parameter and an Id and mixed type hierarchical Partition Key' {
+            $script:result = $null
+
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Get' -and `
+                    $ResourceType -eq 'docs' -and `
+                    $ResourcePath -eq ('colls/{0}/docs/{1}' -f $script:testCollection, $script:testDocument1) -and `
+                    $Headers['x-ms-documentdb-partitionkey'] -eq '["accountId",123,"userId"]'
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultSingle }
+
+            It 'Should not throw exception' {
+                $getCosmosDbDocumentParameters = @{
+                    Context      = $script:testContext
+                    CollectionId = $script:testCollection
+                    Id           = $script:testDocument1
+                    PartitionKey = @('accountId', 123, 'userId')
+                    Verbose      = $true
+                }
+
+                { $script:result = Get-CosmosDbDocument @getCosmosDbDocumentParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result.id | Should -Be $script:testDocument1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
     }
 
     Describe 'Get-CosmosDbDocumentJson' -Tag 'Unit' {
@@ -546,6 +715,48 @@ InModuleScope $ProjectName {
             It 'Should return expected result' {
                 $script:result | Should -Be $script:testJsonMulti
                 $script:ResponseHeader.'x-ms-continuation' | Should -Be 'test'
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-CosmosDbRequest `
+                    -ParameterFilter $invokeCosmosDbRequest_parameterfilter `
+                    -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and no Id and a Query and hierarchical Partition Key with cross partition enabled' {
+            $script:result = $null
+            $script:testHierarchicalPartitionKey = @('accountId', 'solutionId', 'userId')
+            $invokeCosmosDbRequest_parameterfilter = {
+                $Method -eq 'Post' -and `
+                    $ResourceType -eq 'docs' -and `
+                    $Headers['x-ms-documentdb-isquery'] -eq $True -and `
+                    $Headers['x-ms-documentdb-query-enablecrosspartition'] -eq $True -and `
+                    $Headers['x-ms-documentdb-partitionkey'] -eq '["accountId","solutionId","userId"]' -and `
+                    $Body -eq (ConvertTo-Json -InputObject @{ query = $script:testQuery }) -and `
+                    $ContentType -eq 'application/query+json'
+            }
+
+            Mock `
+                -CommandName Invoke-CosmosDbRequest `
+                -MockWith { $script:testGetDocumentResultMulti }
+
+            It 'Should not throw exception' {
+                $getCosmosDbDocumentJsonParameters = @{
+                    Context                   = $script:testContext
+                    CollectionId              = $script:testCollection
+                    PartitionKey              = $script:testHierarchicalPartitionKey
+                    Query                     = $script:testQuery
+                    QueryEnableCrossPartition = $true
+                    Verbose                   = $true
+                }
+
+                { $script:result = Get-CosmosDbDocumentJson @getCosmosDbDocumentJsonParameters } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result | Should -Be $script:testJsonMulti
             }
 
             It 'Should call expected mocks' {

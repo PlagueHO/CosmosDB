@@ -1818,6 +1818,83 @@ console.log("done");
             }
         }
 
+        Context 'When called with context parameter and no ApiVersion specified' {
+            $InvokeWebRequest_parameterfilter = {
+                $Method -eq 'Get' -and `
+                    $ContentType -eq 'application/json' -and `
+                    $Headers['x-ms-version'] -eq '2020-07-15' -and `
+                    $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
+            }
+
+            Mock `
+                -CommandName Invoke-WebRequest `
+                -MockWith $InvokeWebRequest_mockwith
+
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $invokeCosmosDbRequestparameters = @{
+                    Context      = $script:testContext
+                    Method       = 'Get'
+                    ResourceType = 'users'
+                    Verbose      = $true
+                }
+
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result._count | Should -Be 1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
+                    -Exactly -Times 1
+                Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
+            }
+        }
+
+        Context 'When called with context parameter and ApiVersion is overridden' {
+            $InvokeWebRequest_parameterfilter = {
+                $Method -eq 'Get' -and `
+                    $ContentType -eq 'application/json' -and `
+                    $Headers['x-ms-version'] -eq '2018-12-31' -and `
+                    $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
+            }
+
+            Mock `
+                -CommandName Invoke-WebRequest `
+                -MockWith $InvokeWebRequest_mockwith
+
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                $invokeCosmosDbRequestparameters = @{
+                    Context      = $script:testContext
+                    Method       = 'Get'
+                    ResourceType = 'users'
+                    ApiVersion   = '2018-12-31'
+                    Verbose      = $true
+                }
+
+                { $script:result = (Invoke-CosmosDbRequest @invokeCosmosDbRequestparameters).Content | ConvertFrom-Json } | Should -Not -Throw
+            }
+
+            It 'Should return expected result' {
+                $script:result._count | Should -Be 1
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled `
+                    -CommandName Invoke-WebRequest `
+                    -ParameterFilter $InvokeWebRequest_parameterfilter `
+                    -Exactly -Times 1
+                Assert-MockCalled -CommandName Get-Date -Exactly -Times 1
+            }
+        }
+
         Context 'When called with context parameter and Get method but System.Net.WebException exception is thrown' {
             $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
