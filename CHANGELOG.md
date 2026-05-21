@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Allow high ports over 32767 for `New-CosmosDbContext`
+- Add support for hierarchical partition keys
 
 ## [6.1.0] - 2025-06-08
 
