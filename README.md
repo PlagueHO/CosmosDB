@@ -920,7 +920,9 @@ Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId NonPartitionedCo
 
 ### Working with Documents with a hierarchical partition key
 
-Consider the standard example of a hierarchical partition key comprised of `TenantId`, `UserId` and `SessionId`. When querying for the full or prefix subpartitioned partition key, pass it as an array.
+Consider the standard example of a hierarchical partition key 
+comprised of `TenantId`, `UserId` and `SessionId`. When querying
+using the partition key, pass it as an array.
 
 ```powershell
 $TenantId = 'a0ba0e9b-5c40-4af7-8168-6d91310479e6'
@@ -935,6 +937,11 @@ $GetCosmosDbDocumentParameters = @{
 }
 Get-CosmosDbDocument @GetCosmosDbDocumentParameters
 ```
+
+> [!IMPORTANT]
+> Passing only part of a hierarchical partition key is not supported by
+> the REST API. The full partition key must be passed or else you will
+> get a `(400) Bad Request` exception.
 
 ### Working with Attachments
 
