@@ -382,6 +382,7 @@ InModuleScope $ProjectName {
             $invokeCosmosDbRequest_parameterfilter = {
                 $Method -eq 'Post' -and `
                     $ResourceType -eq 'docs' -and `
+                    $ResourcePath -eq ('colls/{0}/docs' -f $script:testCollection) -and `
                     $Headers['x-ms-documentdb-isquery'] -eq $True -and `
                     $Headers['x-ms-documentdb-query-enablecrosspartition'] -eq $True -and `
                     $Headers['x-ms-documentdb-partitionkey'] -eq '["accountId","solutionId","userId"]' -and `
@@ -426,6 +427,7 @@ InModuleScope $ProjectName {
             $invokeCosmosDbRequest_parameterfilter = {
                 $Method -eq 'Post' -and `
                     $ResourceType -eq 'docs' -and `
+                    $ResourcePath -eq ('colls/{0}/docs' -f $script:testCollection) -and `
                     $Headers['x-ms-documentdb-isquery'] -eq $True -and `
                     (-not $Headers.ContainsKey('x-ms-documentdb-query-enablecrosspartition')) -and `
                     $Headers['x-ms-documentdb-partitionkey'] -eq '["accountId","solutionId","userId"]' -and `
@@ -731,6 +733,7 @@ InModuleScope $ProjectName {
             $invokeCosmosDbRequest_parameterfilter = {
                 $Method -eq 'Post' -and `
                     $ResourceType -eq 'docs' -and `
+                    $ResourcePath -eq ('colls/{0}/docs' -f $script:testCollection) -and `
                     $Headers['x-ms-documentdb-isquery'] -eq $True -and `
                     $Headers['x-ms-documentdb-query-enablecrosspartition'] -eq $True -and `
                     $Headers['x-ms-documentdb-partitionkey'] -eq '["accountId","solutionId","userId"]' -and `
