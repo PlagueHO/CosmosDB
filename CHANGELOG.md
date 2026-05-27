@@ -11,10 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added `AGENTS.md` and `copilot-instructions.md` to optimize the
   repository for Agentic development.
+- Added `.github/ISSUE_TEMPLATE/operations_task.yml` issue template for
+  repository operations work such as CI/CD, docs publishing, and
+  GitHub Pages tasks.
 - Removed testing on Windows Server 2019 and MacOS 13.
 - Added [Spec-Kit](github.com/GitHub/spec-kit) support.
 - Added `specify/memory/constitution.md` to define the module's
   governing principles and development standards.
+- Added `Configuration` to `RequiredModules.psd1` to satisfy
+  `ModuleBuilder` required module loading in newer releases.
 
 ### Changes
 
