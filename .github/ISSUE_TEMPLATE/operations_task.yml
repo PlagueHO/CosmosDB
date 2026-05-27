@@ -1,0 +1,73 @@
+name: '🛠️ Operations Task'
+description: Track repository and platform work not related to module functionality (CI/CD, docs publishing, GitHub Pages, automation).
+labels: [chore]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for operational or repository tasks, such as CI/CD maintenance, documentation publishing, GitHub Pages, and workflow automation.
+        Do not use this template for CosmosDB module behavior or API functionality changes.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Operational Area
+      description: Which area does this task belong to?
+      options:
+        - CI/CD pipeline
+        - GitHub Actions workflows
+        - Release process
+        - Documentation publishing
+        - GitHub Pages/site
+        - Repository automation/tooling
+        - Dependency management
+        - Security/compliance
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Task Summary
+      description: Describe the operational task to be completed.
+      placeholder: e.g. Add docs publishing workflow for tagged releases.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired Outcome
+      description: What should be true when this task is done?
+      placeholder: e.g. Docs are automatically published to GitHub Pages on release.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and Boundaries
+      description: What is in scope and out of scope for this task?
+      placeholder: |
+        In scope:
+        -
+        Out of scope:
+        -
+    validations:
+      required: false
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies / Prerequisites
+      description: List related issues, PRs, secrets, environments, or approvals needed.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: This issue is for repository and operations work and not for module functionality changes.
+          required: true
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add any extra details, links, or screenshots.
