@@ -1,6 +1,6 @@
 name: "🛠️ Operations Task"
 description: Track repository and platform work not related to module functionality (CI/CD, docs publishing, GitHub Pages, automation).
-labels: ["chore"]
+labels: [chore]
 body:
   - type: markdown
     attributes:
