@@ -16,6 +16,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `specify/memory/constitution.md` to define the module's
   governing principles and development standards.
 
+### Changes
+
+- Updated module to default to Cosmos DB REST API version `2020-07-15`.
+
+### Added
+
+- Add support for hierarchical partition keys
+
 ### Fixed
 
 - Allow high ports over 32767 for `New-CosmosDbContext`

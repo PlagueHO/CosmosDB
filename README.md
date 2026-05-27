@@ -78,6 +78,7 @@ the Cosmos DB Rest APIs, see [this link](https://learn.microsoft.comrest/api/cos
   - [Working with Documents](#working-with-documents)
     - [Using a While Loop to get all Documents in a Collection](#using-a-while-loop-to-get-all-documents-in-a-collection)
     - [Working with Documents in a non-partitioned Collection](#working-with-documents-in-a-non-partitioned-collection)
+    - [Working with Documents with a hierarchical partition key](#working-with-documents-with-a-hierarchical-partition-key)
   - [Using Resource Authorization Tokens](#using-resource-authorization-tokens)
   - [Working with Attachments](#working-with-attachments)
   - [Working with Users](#working-with-users)
@@ -916,6 +917,31 @@ Delete a document from a partitioned collection in the database:
 ```powershell
 Remove-CosmosDbDocument -Context $cosmosDbContext -CollectionId NonPartitionedCollection -Id 'en-us'
 ```
+
+### Working with Documents with a hierarchical partition key
+
+Consider the standard example of a hierarchical partition key 
+comprised of `TenantId`, `UserId` and `SessionId`. When querying
+using the partition key, pass it as an array.
+
+```powershell
+$TenantId = 'a0ba0e9b-5c40-4af7-8168-6d91310479e6'
+$UserId = 'c734c71f-2914-4411-a95c-6e3d9cb273b1'
+$SessionId = '18bfc3cf-e894-4be7-a03a-d984fca0d8c5'
+$PartitionKey = @($TenantId, $UserId, $SessionId)
+
+$GetCosmosDbDocumentParameters = @{
+    Context                   = $CosmosContext
+    CollectionId              = 'MyContainerName'
+    PartitionKey              = $PartitionKey
+}
+Get-CosmosDbDocument @GetCosmosDbDocumentParameters
+```
+
+> [!IMPORTANT]
+> Passing only part of a hierarchical partition key is not supported by
+> the REST API. The full partition key must be passed or else you will
+> get a `(400) Bad Request` exception.
 
 ### Working with Attachments
 
