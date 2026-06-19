@@ -81,5 +81,5 @@ dotnet build source/classes/CosmosDB/CosmosDB.csproj /p:Configuration=Release
 ## Permission Boundaries
 
 - **Do without asking**: edit source/test/doc files, run build and unit tests
-- **Ask first**: modify `build.yaml`, `azure-pipelines.yml`, `RequiredModules.psd1`, or any CI config
+- **Ask first**: modify `build.yaml`, `.github/workflows/ci.yml`, `.github/workflows/release.yml`, `RequiredModules.psd1`, or any CI config
 - **Never**: commit secrets, push to `main`, run integration tests against live Azure

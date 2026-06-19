@@ -10,9 +10,9 @@
 
 ## Module Build Status
 
-| Branch | Azure Pipelines | Automated Tests | Code Quality |
-| ------ | --------------- | ----------------| ------------ |
-| main   | [![ap-image-main][]][ap-site-main] | [![ts-image-main][]][ts-site-main] | [![cq-image-main][]][cq-site-main] |
+| Branch | GitHub Actions | Automated Tests | Code Quality |
+| ------ | -------------- | ----------------| ------------ |
+| main   | [![ga-image-main][]][ga-site-main] | [![ts-image-main][]][ts-site-main] | [![cq-image-main][]][cq-site-main] |
 
 ## Introduction
 
@@ -1361,17 +1361,17 @@ This PowerShell module is automatically tested and validated to run
 on the following systems:
 
 - Windows Server (using Windows PowerShell 5.1):
-  - Windows Server 2022: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
-  - Windows Server 2025: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - Windows Server 2022: Using [GitHub Actions](https://github.com/PlagueHO/CosmosDB/actions/workflows/ci.yml).
+  - Windows Server 2025: Using [GitHub Actions](https://github.com/PlagueHO/CosmosDB/actions/workflows/ci.yml).
 - Windows Server (using Windows PowerShell 7.x):
-  - Windows Server 2022: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
-  - Windows Server 2025: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - Windows Server 2022: Using [GitHub Actions](https://github.com/PlagueHO/CosmosDB/actions/workflows/ci.yml).
+  - Windows Server 2025: Using [GitHub Actions](https://github.com/PlagueHO/CosmosDB/actions/workflows/ci.yml).
 - Linux (using PowerShell 7.x):
-  - Ubuntu 22.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
-  - Ubuntu 24.04: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - Ubuntu 22.04: Using [GitHub Actions](https://github.com/PlagueHO/CosmosDB/actions/workflows/ci.yml).
+  - Ubuntu 24.04: Using [GitHub Actions](https://github.com/PlagueHO/CosmosDB/actions/workflows/ci.yml).
 - macOS (using PowerShell 7.x):
-  - macOS 14: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
-  - macOS 15: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+  - macOS 14: Using [GitHub Actions](https://github.com/PlagueHO/CosmosDB/actions/workflows/ci.yml).
+  - macOS 15: Using [GitHub Actions](https://github.com/PlagueHO/CosmosDB/actions/workflows/ci.yml).
 
 > This module is no longer tested on PowerShell Core 6.x as PowerShell 7.x
 > should be used. It should still work, but will no longer be verified. Issues with
@@ -1414,8 +1414,8 @@ For a list of changes to versions, see the [CHANGELOG.md](CHANGELOG.md) file.
 - [GitHub Repository](https://github.com/PlagueHO/CosmosDB/)
 - [Blog](https://dscottraynsford.wordpress.com/)
 
-[ap-image-main]: https://dev.azure.com/dscottraynsford/GitHub/_apis/build/status/PlagueHO.CosmosDB.main?branchName=main
-[ap-site-main]: https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4&_a=summary
+[ga-image-main]: https://github.com/PlagueHO/CosmosDB/actions/workflows/ci.yml/badge.svg?branch=main
+[ga-site-main]: https://github.com/PlagueHO/CosmosDB/actions/workflows/ci.yml
 [ts-image-main]: https://img.shields.io/azure-devops/tests/dscottraynsford/GitHub/4/main
 [ts-site-main]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4&branchName=main
 [cq-image-main]: https://api.codacy.com/project/badge/Grade/1ee50b5eb15b47c188b3bdf7a5f8ee1d

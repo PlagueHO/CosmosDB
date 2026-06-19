@@ -15,25 +15,32 @@ Import-Module -Name $testHelperPath -Force
 
 Get-AzureServicePrincipal -Verbose
 
-if ([System.String]::IsNullOrEmpty($env:azureSubscriptionId) -or `
-        [System.String]::IsNullOrEmpty($env:azureApplicationId) -or `
-        [System.String]::IsNullOrEmpty($env:azureApplicationPassword) -or `
-        [System.String]::IsNullOrEmpty($env:azureTenantId) -or `
-        [System.String]::IsNullOrEmpty($env:azureApplicationObjectId) -or `
-        $env:azureSubscriptionId -eq '$(azureSubscriptionId)' -or `
-        $env:azureApplicationId -eq '$(azureApplicationId)' -or `
-        $env:azureApplicationPassword -eq '$(azureApplicationPassword)' -or `
-        $env:azureTenantId -eq '$(azureTenantId)' -or `
-        $env:azureApplicationObjectId -eq '$(azureApplicationObjectId)'
-    )
+$hasAzureSubscriptionId = -not [System.String]::IsNullOrEmpty($env:azureSubscriptionId) -and $env:azureSubscriptionId -ne '$(azureSubscriptionId)'
+$hasAzureApplicationId = -not [System.String]::IsNullOrEmpty($env:azureApplicationId) -and $env:azureApplicationId -ne '$(azureApplicationId)'
+$hasAzureTenantId = -not [System.String]::IsNullOrEmpty($env:azureTenantId) -and $env:azureTenantId -ne '$(azureTenantId)'
+$hasAzureApplicationPassword = -not [System.String]::IsNullOrEmpty($env:azureApplicationPassword) -and $env:azureApplicationPassword -ne '$(azureApplicationPassword)'
+$isGithubActions = $env:GITHUB_ACTIONS -eq 'true'
+
+if (-not $hasAzureSubscriptionId -or -not $hasAzureApplicationId -or -not $hasAzureTenantId)
 {
     Write-Warning -Message 'Integration tests can not be run because one or more Azure connection environment variables are not set.'
+    return
+}
+
+if (-not $hasAzureApplicationPassword -and -not $isGithubActions)
+{
+    Write-Warning -Message 'Integration tests can not be run without an Azure application password unless the tests are running in GitHub Actions with an existing Azure login context.'
     return
 }
 
 # Variables for use in tests
 $script:testRandomName = [System.IO.Path]::GetRandomFileName() -replace '\.', ''
 $script:testBuildBranch = $ENV:BUILD_SOURCEBRANCHNAME
+
+if ([System.String]::IsNullOrEmpty($script:testBuildBranch))
+{
+    $script:testBuildBranch = $ENV:GITHUB_REF_NAME
+}
 
 if ([System.String]::IsNullOrEmpty($script:testBuildBranch))
 {
@@ -44,7 +51,14 @@ $script:testBuildSystem = $ENV:SYSTEM
 
 if ([System.String]::IsNullOrEmpty($script:testBuildSystem))
 {
-    $script:testBuildSystem = 'local'
+    if ($isGithubActions)
+    {
+        $script:testBuildSystem = 'github'
+    }
+    else
+    {
+        $script:testBuildSystem = 'local'
+    }
 }
 
 $script:testResourceGroupName = ('cdbtestrgp-{0}-{1}-{2}' -f $script:testRandomName,$script:testBuildSystem,$script:testBuildBranch)
@@ -142,10 +156,14 @@ $script:cosmosDbRoleDefinitionIdReader = '00000000-0000-0000-0000-000000000001'
 $script:cosmosDbRoleDefinitionIdContributor = '00000000-0000-0000-0000-000000000002'
 
 # Connect to Azure
-$secureStringAzureApplicationPassword = ConvertTo-SecureString `
-    -String $env:azureApplicationPassword `
-    -AsPlainText `
-    -Force
+$secureStringAzureApplicationPassword = $null
+if ($hasAzureApplicationPassword)
+{
+    $secureStringAzureApplicationPassword = ConvertTo-SecureString `
+        -String $env:azureApplicationPassword `
+        -AsPlainText `
+        -Force
+}
 
 Connect-AzureServicePrincipal `
     -SubscriptionId $env:azureSubscriptionId `
@@ -153,6 +171,14 @@ Connect-AzureServicePrincipal `
     -ApplicationPassword $secureStringAzureApplicationPassword `
     -TenantId $env:azureTenantId `
     -Verbose
+
+# Derive the object ID of the authenticated service principal from its application ID
+# so that it does not need to be passed as a separate secret or environment variable.
+if ([System.String]::IsNullOrEmpty($env:azureApplicationObjectId))
+{
+    Write-Verbose -Message 'Deriving azureApplicationObjectId from azureApplicationId.' -Verbose
+    $env:azureApplicationObjectId = (Get-AzADServicePrincipal -ApplicationId $env:azureApplicationId).Id
+}
 
 # Get the Entra ID token for the logged in Service Principal to use
 # for testing Cosmos DB secured with RBAC.

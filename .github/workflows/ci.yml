@@ -1,0 +1,196 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '**'
+    paths:
+      - source/**
+      - tests/**
+      - docs/**
+      - RequiredModules.psd1
+      - README.md
+      - CHANGELOG.md
+  pull_request:
+    branches:
+      - '**'
+    paths:
+      - source/**
+      - tests/**
+      - docs/**
+      - RequiredModules.psd1
+      - README.md
+      - CHANGELOG.md
+  schedule:
+    - cron: '0 2 * * *'
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install GitVersion
+        shell: pwsh
+        run: |
+          dotnet tool install --global GitVersion.Tool --version 5.*
+
+      - name: Calculate module version
+        shell: pwsh
+        run: |
+          $gitVersionObject = dotnet-gitversion | ConvertFrom-Json
+          $moduleVersion = $gitVersionObject.NuGetVersionV2
+          "ModuleVersion=$moduleVersion" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Build and package module
+        shell: pwsh
+        env:
+          ModuleVersion: ${{ env.ModuleVersion }}
+        run: ./build.ps1 -ResolveDependency -Tasks pack -Verbose
+
+      - name: Upload module artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: module-output
+          path: output/
+          if-no-files-found: error
+
+  unit:
+    name: Unit (${{ matrix.name }})
+    needs: build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: PowerShell 5.1 on Windows Server 2022
+            os: windows-2022
+            shell: powershell
+          - name: PowerShell 5.1 on Windows Server 2025
+            os: windows-2025
+            shell: powershell
+          - name: PowerShell 7 on Windows Server 2022
+            os: windows-2022
+            shell: pwsh
+          - name: PowerShell 7 on Windows Server 2025
+            os: windows-2025
+            shell: pwsh
+          - name: PowerShell 7 on Ubuntu 22.04
+            os: ubuntu-22.04
+            shell: pwsh
+          - name: PowerShell 7 on Ubuntu 24.04
+            os: ubuntu-24.04
+            shell: pwsh
+          - name: PowerShell 7 on macOS 14
+            os: macos-14
+            shell: pwsh
+          - name: PowerShell 7 on macOS 15
+            os: macos-15
+            shell: pwsh
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download module artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: module-output
+          path: output
+
+      - name: Run unit tests
+        shell: ${{ matrix.shell }}
+        run: ./build.ps1 -ResolveDependency -Tasks test -PesterScript 'tests/Unit'
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-results-${{ matrix.name }}
+          path: output/testResults/
+          if-no-files-found: ignore
+
+
+  integration:
+    name: Integration (${{ matrix.name }})
+    needs:
+      - build
+      - unit
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false }}
+    runs-on: ${{ matrix.os }}
+    environment: test
+    permissions:
+      contents: read
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: PowerShell 5.1 on Windows Server 2022
+            os: windows-2022
+            shell: powershell
+          - name: PowerShell 5.1 on Windows Server 2025
+            os: windows-2025
+            shell: powershell
+          - name: PowerShell 7 on Windows Server 2022
+            os: windows-2022
+            shell: pwsh
+          - name: PowerShell 7 on Windows Server 2025
+            os: windows-2025
+            shell: pwsh
+          - name: PowerShell 7 on Ubuntu 22.04
+            os: ubuntu-22.04
+            shell: pwsh
+          - name: PowerShell 7 on Ubuntu 24.04
+            os: ubuntu-24.04
+            shell: pwsh
+          - name: PowerShell 7 on macOS 14
+            os: macos-14
+            shell: pwsh
+          - name: PowerShell 7 on macOS 15
+            os: macos-15
+            shell: pwsh
+    env:
+      azureSubscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      azureApplicationId: ${{ secrets.AZURE_CLIENT_ID }}
+      azureTenantId: ${{ secrets.AZURE_TENANT_ID }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download module artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: module-output
+          path: output
+
+      - name: Sign in to Azure with OIDC
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
+
+      - name: Run integration tests
+        shell: ${{ matrix.shell }}
+        run: ./build.ps1 -ResolveDependency -Tasks test -PesterScript 'tests/Integration' -CodeCoverageThreshold 0

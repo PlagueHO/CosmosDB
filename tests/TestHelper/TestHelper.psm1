@@ -41,18 +41,36 @@ function Connect-AzureServicePrincipal
         [System.String]
         $SubscriptionId,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [System.String]
         $ApplicationId,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [System.Security.SecureString]
         $ApplicationPassword,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [System.String]
         $TenantId
     )
+
+    $existingContext = Get-AzContext -ErrorAction SilentlyContinue
+    if ($null -ne $existingContext)
+    {
+        Write-Verbose -Message ('Using the existing Azure context for subscription ''{0}''.' -f $existingContext.Subscription.Id)
+
+        if ($SubscriptionId -and $existingContext.Subscription.Id -ne $SubscriptionId)
+        {
+            $null = Set-AzContext -SubscriptionId $SubscriptionId -Tenant $TenantId -ErrorAction Stop
+        }
+
+        return
+    }
+
+    if ($null -eq $ApplicationPassword -or $ApplicationPassword.Length -eq 0)
+    {
+        throw 'No existing Azure context was found. Configure Azure login first or provide an application password for service principal authentication.'
+    }
 
     Write-Verbose -Message "Logging in to Azure using Service Principal $ApplicationId"
 
