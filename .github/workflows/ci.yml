@@ -103,6 +103,9 @@ jobs:
           - name: PowerShell 7 on macOS 15
             os: macos-15
             shell: pwsh
+    defaults:
+      run:
+        shell: ${{ matrix.shell }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -116,7 +119,6 @@ jobs:
           path: output
 
       - name: Run unit tests
-        shell: ${{ matrix.shell }}
         run: ./build.ps1 -ResolveDependency -Tasks test -PesterScript 'tests/Unit'
 
       - name: Upload test results
@@ -167,6 +169,9 @@ jobs:
           - name: PowerShell 7 on macOS 15
             os: macos-15
             shell: pwsh
+    defaults:
+      run:
+        shell: ${{ matrix.shell }}
     env:
       azureSubscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       azureApplicationId: ${{ secrets.AZURE_CLIENT_ID }}
@@ -192,5 +197,4 @@ jobs:
           enable-AzPSSession: true
 
       - name: Run integration tests
-        shell: ${{ matrix.shell }}
         run: ./build.ps1 -ResolveDependency -Tasks test -PesterScript 'tests/Integration' -CodeCoverageThreshold 0
