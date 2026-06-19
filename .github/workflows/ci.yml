@@ -21,6 +21,7 @@ on:
       - RequiredModules.psd1
       - README.md
       - CHANGELOG.md
+  workflow_dispatch:
   schedule:
     - cron: '0 2 * * *'
 
