@@ -1495,6 +1495,132 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
+    Context 'When creating multiple documents using transactional batch with Create operation' {
+        It 'Should not throw an exception' {
+            $batchDocument1 = @{
+                id      = [Guid]::NewGuid().ToString()
+                content = "Batch document 1"
+                type    = "batchTest"
+            }
+            $batchDocument2 = @{
+                id      = [Guid]::NewGuid().ToString()
+                content = "Batch document 2" 
+                type    = "batchTest"
+            }
+            $script:testBatchDocuments = @($batchDocument1, $batchDocument2)
+            
+            $script:result = New-CosmosDbTransactionalBatch `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -PartitionKey $script:testDocumentId `
+                -Documents $script:testBatchDocuments `
+                -OperationType 'Create' `
+                -Verbose
+        }
+
+        It 'Should return expected batch operation results' {
+            $script:result | Should -HaveCount 2
+            $script:result[0].statusCode | Should -Be 201
+            $script:result[1].statusCode | Should -Be 201
+            $script:result[0].resourceBody.id | Should -Be $script:testBatchDocuments[0].id
+            $script:result[1].resourceBody.id | Should -Be $script:testBatchDocuments[1].id
+        }
+    }
+
+    Context 'When creating multiple documents using transactional batch with Upsert operation' {
+        It 'Should not throw an exception' {
+            $upsertDocument1 = @{
+                id      = [Guid]::NewGuid().ToString()
+                content = "Upsert document 1"
+                type    = "upsertTest"
+            }
+            $upsertDocument2 = @{
+                id      = [Guid]::NewGuid().ToString()
+                content = "Upsert document 2"
+                type    = "upsertTest"
+            }
+            $script:testUpsertDocuments = @($upsertDocument1, $upsertDocument2)
+            
+            $script:result = New-CosmosDbTransactionalBatch `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -PartitionKey $script:testDocumentId `
+                -Documents $script:testUpsertDocuments `
+                -OperationType 'Upsert' `
+                -Verbose
+        }
+
+        It 'Should return expected batch operation results' {
+            $script:result | Should -HaveCount 2
+            $script:result[0].statusCode | Should -Be 201
+            $script:result[1].statusCode | Should -Be 201
+            $script:result[0].resourceBody.id | Should -Be $script:testUpsertDocuments[0].id
+            $script:result[1].resourceBody.id | Should -Be $script:testUpsertDocuments[1].id
+        }
+    }
+
+    Context 'When creating documents using non-atomic transactional batch' {
+        It 'Should not throw an exception' {
+            $nonAtomicDocument1 = @{
+                id      = [Guid]::NewGuid().ToString()
+                content = "Non-atomic document 1"
+                type    = "nonAtomicTest"
+            }
+            $nonAtomicDocument2 = @{
+                id      = [Guid]::NewGuid().ToString()
+                content = "Non-atomic document 2"
+                type    = "nonAtomicTest"
+            }
+            $script:testNonAtomicDocuments = @($nonAtomicDocument1, $nonAtomicDocument2)
+            
+            $script:result = New-CosmosDbTransactionalBatch `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -PartitionKey $script:testDocumentId `
+                -Documents $script:testNonAtomicDocuments `
+                -OperationType 'Create' `
+                -NoAtomic `
+                -Verbose
+        }
+
+        It 'Should return expected batch operation results' {
+            $script:result | Should -HaveCount 2
+            $script:result[0].statusCode | Should -Be 201
+            $script:result[1].statusCode | Should -Be 201
+            $script:result[0].resourceBody.id | Should -Be $script:testNonAtomicDocuments[0].id
+            $script:result[1].resourceBody.id | Should -Be $script:testNonAtomicDocuments[1].id
+        }
+    }
+
+    Context 'When using transactional batch with ReturnJson parameter' {
+        It 'Should not throw an exception' {
+            $jsonDocument1 = @{
+                id      = [Guid]::NewGuid().ToString()
+                content = "JSON return document"
+                type    = "jsonTest"
+            }
+            $script:testJsonDocuments = @($jsonDocument1)
+            
+            $script:result = New-CosmosDbTransactionalBatch `
+                -Context $script:testContext `
+                -CollectionId $script:testCollection `
+                -PartitionKey $script:testDocumentId `
+                -Documents $script:testJsonDocuments `
+                -OperationType 'Create' `
+                -ReturnJson `
+                -Verbose
+        }
+
+        It 'Should return raw JSON string' {
+            $script:result | Should -BeOfType [System.String]
+            $script:result | Test-Json | Should -Be $true
+            $parsedResult = $script:result | ConvertFrom-Json
+            $parsedResult[0].statusCode | Should -Be 201
+            $parsedResult[0].resourceBody.id | Should -Be $script:testJsonDocuments[0].id
+            $parsedResult[0].resourceBody.content | Should -Be $script:testJsonDocuments[0].content
+        }
+    }
+
     Context 'When removing a existing UTF-8 document from a collection' {
         It 'Should not throw an exception' {
             $script:result = Remove-CosmosDbDocument `

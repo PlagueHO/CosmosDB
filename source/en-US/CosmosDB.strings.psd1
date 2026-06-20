@@ -44,6 +44,7 @@ ConvertFrom-StringData -StringData @'
     ShouldUpdateAzureCosmosDBAccount = Update an Azure Cosmos DB account '{0}' in resource group '{1}'
     ShouldRemoveAzureCosmosDBAccount = Remove the Azure Cosmos DB account '{0}' in resource group '{1}'
     ShouldCreateAzureCosmosDBAccountMasterKey = Create a new Azure Cosmos DB account '{0}' '{2}' in resource group '{1}'
+    ShouldExecuteTransactionalBatch = Execute transactional batch with {0} {1} operation(s) on collection '{2}' with partition key '{3}'
     AccountNameInvalid = The Account Name '{0}' is invalid. The name can contain only lowercase letters, numbers and the '-' character, and must be between 3 and 50 characters.
     ResourceGroupNameInvalid = The Resource Group Name '{0}' is invalid. Resource group names only allow alphanumeric characters, periods, underscores, hyphens and parenthesis, cannot end in a period and must be 90 characters or less.
     AttachmentIdInvalid = The Attachment Id '{0}' is invalid. An Attachment Id must not contain characters '\','/','#' or '?', end with a space or be longer than 255 characters.

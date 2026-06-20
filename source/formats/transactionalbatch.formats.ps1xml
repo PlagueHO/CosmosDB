@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- *******************************************************************
+These sample files contain formatting information used by the Windows
+PowerShell engine. Do not edit or change the contents of this file
+directly. Please see the Windows PowerShell documentation or type
+Get-Help Update-FormatData for more information.
+Copyright (c) Microsoft Corporation.  All rights reserved.
+THIS SAMPLE CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY
+OF ANY KIND,WHETHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
+PURPOSE. IF THIS CODE AND INFORMATION IS MODIFIED, THE ENTIRE RISK OF USE
+OR RESULTS IN CONNECTION WITH THE USE OF THIS CODE AND INFORMATION
+REMAINS WITH THE USER.
+******************************************************************** -->
+<Configuration>
+    <ViewDefinitions>
+        <!--CosmosDB.TransactionalBatchOperation.TableView-->
+        <View>
+            <Name>CosmosDB.TransactionalBatchOperation.TableView</Name>
+            <ViewSelectedBy>
+                <TypeName>CosmosDB.TransactionalBatchOperation</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Label>StatusCode</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>RequestCharge</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Id</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Etag</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>ResourceId</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Timestamp</Label>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>statusCode</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>requestCharge</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>id</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Etag</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>ResourceId</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Timestamp</PropertyName>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+        <!--CosmosDB.TransactionalBatchOperation.WideView -->
+        <View>
+            <Name>CosmosDB.TransactionalBatchOperation.WideView</Name>
+            <ViewSelectedBy>
+                <TypeName>CosmosDB.TransactionalBatchOperation</TypeName>
+            </ViewSelectedBy>
+            <WideControl>
+                <WideEntries>
+                    <WideEntry>
+                        <WideItem>
+                            <PropertyName>statusCode</PropertyName>
+                        </WideItem>
+                    </WideEntry>
+                </WideEntries>
+            </WideControl>
+        </View>
+        <!--CosmosDB.TransactionalBatchOperation.ListView-->
+        <View>
+            <Name>CosmosDB.TransactionalBatchOperation.ListView</Name>
+            <ViewSelectedBy>
+                <TypeName>CosmosDB.TransactionalBatchOperation</TypeName>
+            </ViewSelectedBy>
+            <ListControl>
+                <ListEntries>
+                    <ListEntry>
+                        <ListItems>
+                            <ListItem>
+                                <Label>StatusCode</Label>
+                                <PropertyName>statusCode</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>RequestCharge</Label>
+                                <PropertyName>requestCharge</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Id</Label>
+                                <PropertyName>id</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Etag</Label>
+                                <PropertyName>Etag</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Timestamp</Label>
+                                <PropertyName>Timestamp</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>ResourceId</Label>
+                                <PropertyName>ResourceId</PropertyName>
+                            </ListItem>
+                        </ListItems>
+                    </ListEntry>
+                </ListEntries>
+            </ListControl>
+        </View>
+    </ViewDefinitions>
+</Configuration>

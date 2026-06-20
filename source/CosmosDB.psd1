@@ -43,7 +43,8 @@
         'types\storedprocedures.types.ps1xml',
         'types\triggers.types.ps1xml',
         'types\userdefinedfunctions.types.ps1xml',
-        'types\users.types.ps1xml'
+        'types\users.types.ps1xml',
+        'types\transactionalbatch.types.ps1xml'
     )
 
     # Format files (.ps1xml) to be loaded when importing this module
@@ -57,7 +58,8 @@
         'formats\storedprocedures.formats.ps1xml',
         'formats\triggers.formats.ps1xml',
         'formats\userdefinedfunctions.formats.ps1xml',
-        'formats\users.formats.ps1xml'
+        'formats\users.formats.ps1xml',
+        'formats\transactionalbatch.formats.ps1xml'
     )
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
@@ -97,7 +99,8 @@
         'Set-CosmosDbAccount', 'Set-CosmosDbAttachment',
         'Set-CosmosDbCollection', 'Set-CosmosDbDocument', 'Set-CosmosDbOffer',
         'Set-CosmosDbStoredProcedure', 'Set-CosmosDbTrigger',
-        'Set-CosmosDbUser', 'Set-CosmosDbUserDefinedFunction')
+        'Set-CosmosDbUser', 'Set-CosmosDbUserDefinedFunction',
+        'New-CosmosDbTransactionalBatch')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport      = @()
