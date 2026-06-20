@@ -49,11 +49,6 @@ function Invoke-CosmosDbRequest
         $Body = '',
 
         [Parameter()]
-        [ValidateSet('2014-08-21', '2015-04-08', '2015-06-03', '2015-08-06', '2015-12-16', '2016-07-11', '2017-01-19', '2017-02-22', '2017-05-03', '2017-11-15', '2018-06-18', '2018-08-31', '2018-09-17', '2018-12-31', '2020-07-15')]
-        [System.String]
-        $ApiVersion = '2020-07-15',
-
-        [Parameter()]
         [System.Collections.Hashtable]
         $Headers = @{ },
 
@@ -197,7 +192,7 @@ function Invoke-CosmosDbRequest
     }
 
     $Headers += $authorizationHeaders
-    $Headers.Add('x-ms-version', $ApiVersion)
+    $Headers.Add('x-ms-version', '2020-07-15')
 
     $invokeWebRequestParameters = @{
         Uri             = $uri

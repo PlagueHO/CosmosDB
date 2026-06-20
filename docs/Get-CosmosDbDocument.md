@@ -20,7 +20,7 @@ Get-CosmosDbDocument -Context <Context> [-Key <SecureString>] [-KeyType <String>
  [-Database <String>] -CollectionId <String> [-Id <String>]
  [-PartitionKey <Object[]>] [-MaxItemCount <Int32>] [-ContinuationToken <String>]
  [-ConsistencyLevel <String>] [-SessionToken <String>]
- [-PartitionKeyRangeId <String>] [-Query <String>] [-QueryParameters <Hashtable[]>]
+ [-Query <String>] [-QueryParameters <Hashtable[]>]
  [-QueryEnableCrossPartition <Boolean>] [-ResponseHeader <PSReference>]
  [-ReturnJson <switch>] [<CommonParameters>]
 ```
@@ -32,7 +32,7 @@ Get-CosmosDbDocument -Account <String> [-Key <SecureString>] [-KeyType <String>]
  [-Database <String>] -CollectionId <String> [-Id <String>]
  [-PartitionKey <Object[]>] [-MaxItemCount <Int32>] [-ContinuationToken <String>]
  [-ConsistencyLevel <String>] [-SessionToken <String>]
- [-PartitionKeyRangeId <String>] [-Query <String>] [-QueryParameters <Hashtable[]>]
+ [-Query <String>] [-QueryParameters <Hashtable[]>]
  [-QueryEnableCrossPartition <Boolean>] [-ResponseHeader <PSReference>]
  [-ReturnJson <switch>] [<CommonParameters>]
 ```
@@ -287,23 +287,6 @@ with a partitionKey definition.
 
 ```yaml
 Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PartitionKeyRangeId
-
-The partition key range Id for reading data.
-Should not be set if Id is set.
-
-```yaml
-Type: String
 Parameter Sets: (All)
 Aliases:
 

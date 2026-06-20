@@ -17,7 +17,7 @@ Execute a new request to a Cosmos DB REST endpoint.
 
 ```powershell
 Invoke-CosmosDbRequest -Context <Context> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
+ [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>]
  [-Headers <Hashtable>] [-ContentType <String>] [-Encoding <String>] [<CommonParameters>]
 ```
 
@@ -25,7 +25,7 @@ Invoke-CosmosDbRequest -Context <Context> [-Database <String>] [-Key <SecureStri
 
 ```powershell
 Invoke-CosmosDbRequest -Account <String> [-Database <String>] [-Key <SecureString>] [-KeyType <String>]
- [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>] [-ApiVersion <String>]
+ [-Method <String>] -ResourceType <String> [-ResourcePath <String>] [-Body <String>]
  [-Headers <Hashtable>] [-ContentType <String>] [-Encoding <String>] [<CommonParameters>]
 ```
 
@@ -206,22 +206,6 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ApiVersion
-
-This is the version of the Rest API that will be called.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: 2020-07-15
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

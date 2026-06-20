@@ -57,6 +57,7 @@ Built with Sampler/ModuleBuilder; C# types in `source/classes/CosmosDB/`.
 - Mock `Invoke-CosmosDbRequest` to isolate from REST calls
 - Use `$script:` variables for shared test fixtures (accounts, keys, contexts)
 - `ConvertTo-SecureString -AsPlainText -Force` is acceptable **only** in test files
+- Use `.build-local.ps1` for all local builds and test runs (see `AGENTS.md`)
 
 ## Security
 

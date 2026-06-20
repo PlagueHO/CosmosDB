@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- BREAKING CHANGE: Removed support for creating collections without a
+  partition key. `New-CosmosDbCollection` now requires the `-PartitionKey`
+  parameter. Collections created without a partition key (legacy
+  non-partitioned collections) are no longer supported by this module.
+  Pin to the previous major version if you still require non-partitioned
+  collection support.
+- BREAKING CHANGE: Removed the `-PartitionKeyRangeId` parameter from
+  `Get-CosmosDbDocument` and `Get-CosmosDbDocumentJson`. This parameter
+  only applied to legacy non-partitioned collection scenarios.
+- BREAKING CHANGE: Removed the `-ApiVersion` parameter from
+  `Invoke-CosmosDbRequest`. The Cosmos DB REST API version is now
+  pinned internally to `2020-07-15` and cannot be overridden.
+- Updated module to default to Cosmos DB REST API version `2020-07-15`.
+
+
 ### Operational Changes
 
 - Added `AGENTS.md` and `copilot-instructions.md` to optimize the
@@ -20,10 +37,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   governing principles and development standards.
 - Added `Configuration` to `RequiredModules.psd1` to satisfy
   `ModuleBuilder` required module loading in newer releases.
-
-### Changes
-
-- Updated module to default to Cosmos DB REST API version `2020-07-15`.
 
 ### Added
 

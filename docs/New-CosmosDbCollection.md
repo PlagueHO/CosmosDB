@@ -18,7 +18,7 @@ Create a new collection in a Cosmos DB database.
 ```powershell
 New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>]
  [-Database <String>] -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>]
- [-PartitionKey <String>] [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>]
+ -PartitionKey <String> [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>]
  [-UniqueKeyPolicy <Policy>] [-AutoscaleThroughput <Int32>] [<CommonParameters>]
 ```
 
@@ -27,7 +27,7 @@ New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <Strin
 ```powershell
 New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <String>]
  [-Database <String>] -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>]
- [-PartitionKey <String>] [-IndexingPolicyJson <String>] [-DefaultTimeToLive <Int32>]
+ -PartitionKey <String> [-IndexingPolicyJson <String>] [-DefaultTimeToLive <Int32>]
  [-UniqueKeyPolicy <Policy>] [-AutoscaleThroughput <Int32>] [<CommonParameters>]
 ```
 
@@ -36,7 +36,7 @@ New-CosmosDbCollection -Context <Context> [-Key <SecureString>] [-KeyType <Strin
 ```powershell
 New-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>]
  [-Database <String>] -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>]
- [-PartitionKey <String>] [-IndexingPolicyJson <String>] [-DefaultTimeToLive <Int32>]
+ -PartitionKey <String> [-IndexingPolicyJson <String>] [-DefaultTimeToLive <Int32>]
  [-UniqueKeyPolicy <Policy>] [-AutoscaleThroughput <Int32>] [<CommonParameters>]
 ```
 
@@ -45,7 +45,7 @@ New-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String
 ```powershell
 New-CosmosDbCollection -Account <String> [-Key <SecureString>] [-KeyType <String>]
  [-Database <String>] -Id <String> [-OfferThroughput <Int32>] [-OfferType <String>]
- [-PartitionKey <String>] [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>]
+ -PartitionKey <String> [-IndexingPolicy <Policy>] [-DefaultTimeToLive <Int32>]
  [-UniqueKeyPolicy <Policy>] [-AutoscaleThroughput <Int32>] [<CommonParameters>]
 ```
 
@@ -58,10 +58,11 @@ This cmdlet will create a collection in a Cosmos DB.
 ### Example 1
 
 ```powershell
-PS C:\> New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -OfferThroughput 2500
+PS C:\> New-CosmosDbCollection -Context $cosmosDbContext -Id 'MyNewCollection' -PartitionKey 'id' -OfferThroughput 2500
 ```
 
-Create a collection in the database with the offer throughput of 2500 RU/s.
+Create a collection in the database with the partition key 'id' and
+the offer throughput of 2500 RU/s.
 
 ### Example 2
 
@@ -75,11 +76,11 @@ the offer throughput of 50,000 RU/s.
 ### Example 3
 
 ```powershell
-PS C:\> New-CosmosDbCollection -Context $cosmosDbContext -Id 'PartitionedCollection' -DefaultTimeToLive 3600
+PS C:\> New-CosmosDbCollection -Context $cosmosDbContext -Id 'PartitionedCollection' -PartitionKey 'id' -DefaultTimeToLive 3600
 ```
 
-Create a collection in the database with the a default time to live of 3600
-seconds.
+Create a collection in the database with the partition key 'id' and
+a default time to live of 3600 seconds.
 
 ### Example 4
 
@@ -287,15 +288,16 @@ Accept wildcard characters: False
 
 ### -PartitionKey
 
-This value is used to configure the partition keys to be used
+This value is used to configure the partition key to be used
 for partitioning data into multiple partitions.
+All collections must define a partition key.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

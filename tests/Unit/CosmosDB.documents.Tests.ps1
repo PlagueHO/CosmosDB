@@ -267,14 +267,13 @@ InModuleScope $ProjectName {
 
             It 'Should not throw exception' {
                 $getCosmosDbDocumentParameters = @{
-                    Context             = $script:testContext
-                    CollectionId        = $script:testCollection
-                    MaxItemCount        = 5
-                    ContinuationToken   = 'token'
-                    ConsistencyLevel    = 'Strong'
-                    SessionToken        = 'session'
-                    PartitionKeyRangeId = 'partition'
-                    Verbose             = $true
+                    Context           = $script:testContext
+                    CollectionId      = $script:testCollection
+                    MaxItemCount      = 5
+                    ContinuationToken = 'token'
+                    ConsistencyLevel  = 'Strong'
+                    SessionToken      = 'session'
+                    Verbose           = $true
                 }
 
                 { $script:result = Get-CosmosDbDocument @getCosmosDbDocumentParameters } | Should -Not -Throw
@@ -665,14 +664,13 @@ InModuleScope $ProjectName {
 
             It 'Should not throw exception' {
                 $getCosmosDbDocumentJsonParameters = @{
-                    Context             = $script:testContext
-                    CollectionId        = $script:testCollection
-                    MaxItemCount        = 5
-                    ContinuationToken   = 'token'
-                    ConsistencyLevel    = 'Strong'
-                    SessionToken        = 'session'
-                    PartitionKeyRangeId = 'partition'
-                    Verbose             = $true
+                    Context           = $script:testContext
+                    CollectionId      = $script:testCollection
+                    MaxItemCount      = 5
+                    ContinuationToken = 'token'
+                    ConsistencyLevel  = 'Strong'
+                    SessionToken      = 'session'
+                    Verbose           = $true
                 }
 
                 { $script:result = Get-CosmosDbDocumentJson @getCosmosDbDocumentJsonParameters } | Should -Not -Throw
