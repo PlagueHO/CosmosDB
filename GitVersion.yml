@@ -1,5 +1,5 @@
 mode: ContinuousDelivery
-verbosity: None
+verbosity: Quiet
 next-version: 3.0.0
 major-version-bump-message: '\s?(breaking|major|breaking\schange)'
 minor-version-bump-message: '\s?(add|feature|minor)'

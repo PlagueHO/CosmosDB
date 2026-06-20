@@ -50,13 +50,15 @@ jobs:
       - name: Install GitVersion
         shell: pwsh
         run: |
-          dotnet tool install --global GitVersion.Tool --version 5.*
+          dotnet tool install --global GitVersion.Tool --version 6.*
 
       - name: Calculate module version
         shell: pwsh
         run: |
-          $gitVersionObject = dotnet-gitversion | ConvertFrom-Json
-          $moduleVersion = $gitVersionObject.NuGetVersionV2
+          $rawOutput = dotnet-gitversion
+          $filteredOutput = $rawOutput | Where-Object { $_ -notmatch '^\s*(INFO|WARN|VERBOSE|DEBUG) \[' }
+          $gitVersionObject = ($filteredOutput -join "`n") | ConvertFrom-Json
+          $moduleVersion = if (-not [string]::IsNullOrEmpty($gitVersionObject.NuGetVersionV2)) { $gitVersionObject.NuGetVersionV2 } else { $gitVersionObject.SemVer }
           "ModuleVersion=$moduleVersion" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Build and package module
