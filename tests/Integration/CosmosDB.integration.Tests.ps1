@@ -61,6 +61,9 @@ if ([System.String]::IsNullOrEmpty($script:testBuildSystem))
     }
 }
 
+# Sanitize branch name: Azure resource group names only allow [-\w\._\(\)]
+$script:testBuildBranch = $script:testBuildBranch -replace '[^\w\-\._\(\)]', '-'
+
 $script:testResourceGroupName = ('cdbtestrgp-{0}-{1}-{2}' -f $script:testRandomName,$script:testBuildSystem,$script:testBuildBranch)
 $script:testAccountName = ('cdbtest{0}' -f $script:testRandomName)
 $script:testLocation = 'Australia East'
