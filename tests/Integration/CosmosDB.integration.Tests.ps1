@@ -1692,6 +1692,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
+                -PartitionKey $script:testPartitionKey `
                 -OfferThroughput 400 `
                 -IndexingPolicy $script:indexingPolicyNone `
                 -Verbose
@@ -1716,6 +1717,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
+                -PartitionKey $script:testPartitionKey `
                 -DefaultTimeToLive $script:testDefaultTimeToLive `
                 -Verbose
         }
@@ -1809,11 +1811,13 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $null = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id "$($script:testCollection)1" `
+                -PartitionKey $script:testPartitionKey `
                 -Verbose
 
             $null = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id "$($script:testCollection)2" `
+                -PartitionKey $script:testPartitionKey `
                 -Verbose
         }
     }
