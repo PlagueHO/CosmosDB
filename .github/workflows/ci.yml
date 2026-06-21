@@ -58,7 +58,16 @@ jobs:
           $rawOutput = dotnet-gitversion
           $filteredOutput = $rawOutput | Where-Object { $_ -notmatch '^\s*(INFO|WARN|VERBOSE|DEBUG) \[' }
           $gitVersionObject = ($filteredOutput -join "`n") | ConvertFrom-Json
-          $moduleVersion = if (-not [string]::IsNullOrEmpty($gitVersionObject.NuGetVersionV2)) { $gitVersionObject.NuGetVersionV2 } else { $gitVersionObject.SemVer }
+          # GitVersion 6.x removed NuGetVersionV2; construct a NuGet-compatible version
+          # from SemVer by replacing dots in the pre-release segment with hyphens.
+          # NuGet only allows [A-Za-z0-9-] in pre-release identifiers.
+          $semVer = $gitVersionObject.SemVer -replace '\+.*$', ''
+          $versionParts = $semVer -split '-', 2
+          $moduleVersion = if ($versionParts.Length -eq 2) {
+              "$($versionParts[0])-$($versionParts[1] -replace '\.', '-')"
+          } else {
+              $semVer
+          }
           "ModuleVersion=$moduleVersion" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Build and package module
