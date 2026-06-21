@@ -670,6 +670,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
+                -PartitionKey $script:testPartitionKey `
                 -OfferThroughput 400 `
                 -Verbose
         }
@@ -697,6 +698,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
+                -PartitionKey $script:testPartitionKey `
                 -OfferThroughput 400 `
                 -IndexingPolicy $script:indexingPolicySimpleAutomatic `
                 -Verbose
@@ -719,6 +721,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
+                -PartitionKey $script:testPartitionKey `
                 -OfferThroughput 400 `
                 -IndexingPolicyJson (ConvertTo-Json -InputObject $script:indexingPolicySimpleAutomatic -Depth 10) `
                 -Verbose
@@ -758,6 +761,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
+                -PartitionKey $script:testPartitionKey `
                 -OfferThroughput 400 `
                 -IndexingPolicy $script:indexingPolicyComposite `
                 -Verbose
@@ -798,6 +802,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
+                -PartitionKey $script:testPartitionKey `
                 -OfferThroughput 400 `
                 -IndexingPolicy $script:indexingPolicyComplexAutomatic `
                 -UniqueKeyPolicy $script:uniqueKeyPolicy `
