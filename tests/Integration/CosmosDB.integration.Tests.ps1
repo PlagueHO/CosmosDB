@@ -1004,6 +1004,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     -Context $script:testEntraIdContext `
                     -CollectionId $script:testCollection `
                     -DocumentBody $script:testDocumentBody `
+                    -PartitionKey $script:testDocumentId `
                     -Verbose
             }
 
@@ -1021,6 +1022,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     -Context $script:testEntraIdContext `
                     -CollectionId $script:testCollection `
                     -Id $script:testDocumentId `
+                    -PartitionKey $script:testDocumentId `
                     -Verbose
             }
         }
@@ -1041,6 +1043,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     -Context $script:testEntraIdContext `
                     -CollectionId $script:testCollection `
                     -DocumentBody $script:testDocumentBody `
+                    -PartitionKey $script:testDocumentId `
                     -Verbose
             }
 
@@ -1058,6 +1061,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     -Context $script:testEntraIdContext `
                     -CollectionId $script:testCollection `
                     -Id $script:testDocumentId `
+                    -PartitionKey $script:testDocumentId `
                     -Verbose
             }
 
@@ -1075,6 +1079,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     -Context $script:testEntraIdContext `
                     -CollectionId $script:testCollection `
                     -Id $script:testDocumentId `
+                    -PartitionKey $script:testDocumentId `
                     -Verbose
             }
         }
@@ -1096,6 +1101,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                             -Context $script:testEntraIdContext `
                             -CollectionId $script:testCollection `
                             -Id $script:testDocumentId `
+                            -PartitionKey $script:testDocumentId `
                             -Verbose
                     }
                     catch [CosmosDb.ResponseException]
@@ -1125,6 +1131,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
                 -DocumentBody $script:testDocumentBody `
+                -PartitionKey $script:testDocumentId `
                 -Verbose
         }
 
@@ -1207,6 +1214,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $resourceContext `
                 -CollectionId $script:testCollection `
                 -Id $script:testDocumentId `
+                -PartitionKey $script:testDocumentId `
                 -Verbose
         }
     }
@@ -1227,6 +1235,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $connectionStringContext `
                 -CollectionId $script:testCollection `
                 -Id $script:testDocumentId `
+                -PartitionKey $script:testDocumentId `
                 -Verbose
         }
     }
@@ -1379,6 +1388,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
                 -Id $script:testDocumentId `
+                -PartitionKey $script:testDocumentId `
                 -Verbose
         }
     }
@@ -1390,6 +1400,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -CollectionId $script:testCollection `
                 -DocumentBody $script:testDocumentUTF8Body `
                 -Encoding 'UTF-8' `
+                -PartitionKey $script:testDocumentUTF8Id `
                 -Verbose
         }
 
@@ -1457,6 +1468,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
                 -Id $script:testDocumentUTF8Id `
+                -PartitionKey $script:testDocumentUTF8Id `
                 -Verbose
         }
 
@@ -1475,6 +1487,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Id $script:testDocumentUTF8Id `
                 -DocumentBody $script:testDocumentUTF8UpdateBody `
                 -Encoding 'UTF-8' `
+                -PartitionKey $script:testDocumentUTF8Id `
                 -Verbose
         }
 
@@ -1490,6 +1503,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
                 -Id $script:testDocumentUTF8Id `
+                -PartitionKey $script:testDocumentUTF8Id `
                 -Verbose
         }
 
@@ -1506,6 +1520,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
                 -Id $script:testDocumentUTF8Id `
+                -PartitionKey $script:testDocumentUTF8Id `
                 -Verbose
         }
     }
