@@ -848,117 +848,6 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When adding a read collection permission for a user' {
-        It 'Should not throw an exception' {
-            $script:collectionResourcePath = Get-CosmosDbCollectionResourcePath `
-                -Database $script:testDatabase `
-                -Id $script:testCollection
-            $script:result = New-CosmosDbPermission `
-                -Context $script:testContext `
-                -UserId $script:testUser `
-                -Id $script:testCollectionPermission `
-                -Resource $script:collectionResourcePath `
-                -PermissionMode Read `
-                -Verbose
-        }
-
-        It 'Should return expected object' {
-            Test-GenericResult -GenericResult $script:result
-            $script:result.Id | Should -Be $script:testCollectionPermission
-            $script:result.permissionMode | Should -Be 'Read'
-            $script:result.resource | Should -Be $script:collectionResourcePath
-            $script:result.Token | Should -BeOfType [System.String]
-        }
-    }
-
-    Context 'When getting the read collection permission for the user' {
-        It 'Should not throw an exception' {
-            $script:collectionResourcePath = Get-CosmosDbCollectionResourcePath `
-                -Database $script:testDatabase `
-                -Id $script:testCollection
-            $script:result = Get-CosmosDbPermission `
-                -Context $script:testContext `
-                -UserId $script:testUser `
-                -Id $script:testCollectionPermission `
-                -Verbose
-        }
-
-        It 'Should return expected object' {
-            Test-GenericResult -GenericResult $script:result
-            $script:result.Id | Should -Be $script:testCollectionPermission
-            $script:result.permissionMode | Should -Be 'Read'
-            $script:result.resource | Should -Be $script:collectionResourcePath
-            $script:result.Token | Should -BeOfType [System.String]
-        }
-    }
-
-    Context 'When getting existing collection using resource token for user permission as context' {
-        It 'Should not throw an exception' {
-            $script:collectionResourcePath = Get-CosmosDbCollectionResourcePath `
-                -Database $script:testDatabase `
-                -Id $script:testCollection `
-                -Verbose
-            $permission = Get-CosmosDbPermission `
-                -Context $script:testContext `
-                -UserId $script:testUser `
-                -Id $script:testCollectionPermission `
-                -Verbose
-            $contextToken = New-CosmosDbContextToken `
-                -Resource $script:collectionResourcePath `
-                -TimeStamp $permission[0].Timestamp `
-                -Token (ConvertTo-SecureString -String $permission[0].Token -AsPlainText -Force) `
-                -Verbose
-            $resourceContext = New-CosmosDbContext `
-                -Account $script:testAccountName `
-                -Database $script:testDatabase `
-                -Token $contextToken `
-                -Verbose
-            $script:result = Get-CosmosDbCollection `
-                -Context $resourceContext `
-                -Id $script:testCollection `
-                -Verbose
-        }
-
-        It 'Should return expected object' {
-            Test-CollectionResultComplexAutomaticIndexingPolicy -CollectionResult $script:Result
-            $script:result.Id | Should -Be $script:testCollection
-        }
-    }
-
-    Context 'When getting existing offers' {
-        It 'Should not throw an exception' {
-            $script:result = Get-CosmosDbOffer -Context $script:testContext -Verbose
-        }
-
-        It 'Should return expected object' {
-            Test-GenericResult -GenericResult $script:result
-            $script:result.OfferVersion | Should -BeOfType [System.String]
-            $script:result.OfferType | Should -BeOfType [System.String]
-            $script:result.OfferResourceId | Should -BeOfType [System.String]
-            $script:result.Id | Should -BeOfType [System.String]
-            $script:result.content.offerThroughput | Should -Be 400
-            $script:result.content.offerIsRUPerMinuteThroughputEnabled | Should -Be $false
-        }
-    }
-
-    Context 'When updating existing offer throughput' {
-        It 'Should not throw an exception' {
-            $script:result = `
-                Get-CosmosDbOffer -Context $script:testContext -Verbose |
-                Set-CosmosDbOffer -Context $script:testContext -OfferThroughput 800 -Verbose
-        }
-
-        It 'Should return expected object' {
-            Test-GenericResult -GenericResult $script:result
-            $script:result.OfferVersion | Should -BeOfType [System.String]
-            $script:result.OfferType | Should -BeOfType [System.String]
-            $script:result.OfferResourceId | Should -BeOfType [System.String]
-            $script:result.Id | Should -BeOfType [System.String]
-            $script:result.content.offerThroughput | Should -Be 800
-            $script:result.content.offerIsRUPerMinuteThroughputEnabled | Should -Be $false
-        }
-    }
-
     Context 'When testing RBAC access using an Entra ID token' {
         Context 'When assigning an RBAC contributor role to the account for the principal' {
             It 'Should not throw an exception' {
@@ -1122,6 +1011,117 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                     $script:cosmosDbResponseException.Message | Should -Be 'The remote server returned an error: (404) Not Found.'
                 }
             }
+        }
+    }
+
+    Context 'When adding a read collection permission for a user' {
+        It 'Should not throw an exception' {
+            $script:collectionResourcePath = Get-CosmosDbCollectionResourcePath `
+                -Database $script:testDatabase `
+                -Id $script:testCollection
+            $script:result = New-CosmosDbPermission `
+                -Context $script:testContext `
+                -UserId $script:testUser `
+                -Id $script:testCollectionPermission `
+                -Resource $script:collectionResourcePath `
+                -PermissionMode Read `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            Test-GenericResult -GenericResult $script:result
+            $script:result.Id | Should -Be $script:testCollectionPermission
+            $script:result.permissionMode | Should -Be 'Read'
+            $script:result.resource | Should -Be $script:collectionResourcePath
+            $script:result.Token | Should -BeOfType [System.String]
+        }
+    }
+
+    Context 'When getting the read collection permission for the user' {
+        It 'Should not throw an exception' {
+            $script:collectionResourcePath = Get-CosmosDbCollectionResourcePath `
+                -Database $script:testDatabase `
+                -Id $script:testCollection
+            $script:result = Get-CosmosDbPermission `
+                -Context $script:testContext `
+                -UserId $script:testUser `
+                -Id $script:testCollectionPermission `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            Test-GenericResult -GenericResult $script:result
+            $script:result.Id | Should -Be $script:testCollectionPermission
+            $script:result.permissionMode | Should -Be 'Read'
+            $script:result.resource | Should -Be $script:collectionResourcePath
+            $script:result.Token | Should -BeOfType [System.String]
+        }
+    }
+
+    Context 'When getting existing collection using resource token for user permission as context' {
+        It 'Should not throw an exception' {
+            $script:collectionResourcePath = Get-CosmosDbCollectionResourcePath `
+                -Database $script:testDatabase `
+                -Id $script:testCollection `
+                -Verbose
+            $permission = Get-CosmosDbPermission `
+                -Context $script:testContext `
+                -UserId $script:testUser `
+                -Id $script:testCollectionPermission `
+                -Verbose
+            $contextToken = New-CosmosDbContextToken `
+                -Resource $script:collectionResourcePath `
+                -TimeStamp $permission[0].Timestamp `
+                -Token (ConvertTo-SecureString -String $permission[0].Token -AsPlainText -Force) `
+                -Verbose
+            $resourceContext = New-CosmosDbContext `
+                -Account $script:testAccountName `
+                -Database $script:testDatabase `
+                -Token $contextToken `
+                -Verbose
+            $script:result = Get-CosmosDbCollection `
+                -Context $resourceContext `
+                -Id $script:testCollection `
+                -Verbose
+        }
+
+        It 'Should return expected object' {
+            Test-CollectionResultComplexAutomaticIndexingPolicy -CollectionResult $script:Result
+            $script:result.Id | Should -Be $script:testCollection
+        }
+    }
+
+    Context 'When getting existing offers' {
+        It 'Should not throw an exception' {
+            $script:result = Get-CosmosDbOffer -Context $script:testContext -Verbose
+        }
+
+        It 'Should return expected object' {
+            Test-GenericResult -GenericResult $script:result
+            $script:result.OfferVersion | Should -BeOfType [System.String]
+            $script:result.OfferType | Should -BeOfType [System.String]
+            $script:result.OfferResourceId | Should -BeOfType [System.String]
+            $script:result.Id | Should -BeOfType [System.String]
+            $script:result.content.offerThroughput | Should -Be 400
+            $script:result.content.offerIsRUPerMinuteThroughputEnabled | Should -Be $false
+        }
+    }
+
+    Context 'When updating existing offer throughput' {
+        It 'Should not throw an exception' {
+            $script:result = `
+                Get-CosmosDbOffer -Context $script:testContext -Verbose |
+                Set-CosmosDbOffer -Context $script:testContext -OfferThroughput 800 -Verbose
+        }
+
+        It 'Should return expected object' {
+            Test-GenericResult -GenericResult $script:result
+            $script:result.OfferVersion | Should -BeOfType [System.String]
+            $script:result.OfferType | Should -BeOfType [System.String]
+            $script:result.OfferResourceId | Should -BeOfType [System.String]
+            $script:result.Id | Should -BeOfType [System.String]
+            $script:result.content.offerThroughput | Should -Be 800
+            $script:result.content.offerIsRUPerMinuteThroughputEnabled | Should -Be $false
         }
     }
 
