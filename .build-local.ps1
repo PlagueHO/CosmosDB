@@ -4,8 +4,13 @@ Set-Location $PSScriptRoot
 
 function global:gitversion
 {
-    $exe = (Get-Command gitversion -CommandType Application).Source
-    $raw = & $exe @args | Where-Object { $_ -notmatch '^\s*(INFO|WARN|VERBOSE|DEBUG) \[' }
+    $cmd = Get-Command -Name dotnet-gitversion -CommandType Application -ErrorAction SilentlyContinue
+    if (-not $cmd)
+    {
+        $cmd = Get-Command -Name gitversion -CommandType Application -ErrorAction Stop
+    }
+
+    $raw = & $cmd.Source @args | Where-Object { $_ -notmatch '^\s*(INFO|WARN|VERBOSE|DEBUG) \[' }
 
     try
     {

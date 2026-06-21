@@ -1419,7 +1419,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
                 -Query "SELECT * FROM docs c" `
-                -QueryEnableCrossPartition $True `
+                -QueryEnableCrossPartition $true `
                 -Verbose
         }
 
@@ -1436,7 +1436,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
                 -Query "SELECT * FROM docs c WHERE (c.id = '$testDocumentUTF8Id')" `
-                -QueryEnableCrossPartition $True `
+                -QueryEnableCrossPartition $true `
                 -Verbose
         }
 
@@ -1453,7 +1453,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
                 -Query 'SELECT * FROM docs c WHERE (c.id = @id)' `
-                -QueryEnableCrossPartition $True `
+                -QueryEnableCrossPartition $true `
                 -QueryParameters @{
                     name = '@id'
                     value = $testDocumentUTF8Id

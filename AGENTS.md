@@ -27,7 +27,7 @@ output/CosmosDB/<version>/     # Build output (versioned)
 > default `build.ps1` invocation. Use `.build-local.ps1` instead — it wraps
 > `gitversion` to strip log noise and remap `NuGetVersionV2` for Sampler compatibility.
 > After running unit tests, `CosmosDB.dll` is locked in the current session; subsequent
-> builds must use a new process (`.build-local.ps1` spawns `pwsh -NoProfile -File`).
+> builds should be run in a new PowerShell process (for example, restart your `pwsh` session) to avoid file locking.
 
 ```powershell
 # Bootstrap (first time or after clean)
