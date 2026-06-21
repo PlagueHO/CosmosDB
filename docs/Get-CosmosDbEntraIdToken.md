@@ -15,7 +15,8 @@ calling the Entra ID service using the Get-AzAccessToken cmdlet.
 ## SYNTAX
 
 ```powershell
-Get-CosmosDbEntraIdToken [[-Endpoint] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-CosmosDbEntraIdToken [[-Environment] <Environment>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-CosmosDbEntraIdToken [-Endpoint <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,6 +27,10 @@ This requires that a user or service principal has been authenticated
 using the Connect-AzAccount cmdlet. If the user is not authenticated,
 the cmdlet will return null but display an error message.
 
+The `Environment` parameter set resolves the correct Azure AD resource URL
+for the specified cloud environment. The `Endpoint` parameter set allows an
+explicit resource URL to be provided for custom or non-standard scenarios.
+
 ## EXAMPLES
 
 ### Example 1
@@ -33,23 +38,62 @@ the cmdlet will return null but display an error message.
 PS C:\> Get-CosmosDbEntraIdToken
 ```
 
-This will return a secure string token that can be used with Azure Cosmos DB.
-The token will use the default resource URI of https://cosmos.azure.com.
+This will return a secure string token using the default AzureCloud environment
+resource URI of https://cosmos.azure.com.
+
+### Example 2
+```powershell
+PS C:\> Get-CosmosDbEntraIdToken -Environment AzureUSGovernment
+```
+
+This will return a secure string token using the Azure US Government resource
+URI of https://cosmos.azure.us.
+
+### Example 3
+```powershell
+PS C:\> Get-CosmosDbEntraIdToken -Endpoint 'https://cosmos.azure.com'
+```
+
+This will return a secure string token using the explicitly specified resource URI.
 
 ## PARAMETERS
 
-### -Endpoint
+### -Environment
 
-This parameter allows the resource URI of the token to be specified. The default
-value is https://cosmos.azure.com.
+Specifies the Azure cloud environment. The cmdlet resolves the correct Azure AD
+resource URL for the environment:
+- AzureCloud: https://cosmos.azure.com
+- AzureUSGovernment: https://cosmos.azure.us
+- AzureChinaCloud: https://cosmos.azure.cn
+
+This parameter cannot be used together with `-Endpoint`.
 
 ```yaml
-Type: String
-Parameter Sets: (All)
+Type: CosmosDB.Environment
+Parameter Sets: Environment
 Aliases:
 
 Required: False
 Position: 0
+Default value: AzureCloud
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Endpoint
+
+This parameter allows the Azure AD resource URI of the token to be specified
+explicitly. Use this for custom or non-standard cloud deployments.
+
+This parameter cannot be used together with `-Environment`.
+
+```yaml
+Type: String
+Parameter Sets: Endpoint
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

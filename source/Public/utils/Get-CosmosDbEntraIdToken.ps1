@@ -1,17 +1,28 @@
 function Get-CosmosDbEntraIdToken {
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSAvoidUsingConvertToSecureStringWithPlainText', '')]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Environment')]
     [OutputType([System.Security.SecureString])]
     param
     (
-        [Parameter()]
+        [Parameter(ParameterSetName = 'Environment')]
+        [CosmosDB.Environment]
+        $Environment = [CosmosDB.Environment]::AzureCloud,
+
+        [Parameter(ParameterSetName = 'Endpoint')]
         [ValidateNotNullOrEmpty()]
         [System.String]
-        $Endpoint = 'https://cosmos.azure.com'
+        $Endpoint
     )
 
-    # Remove any trailing slash as Cosmos DB RBAC does not expect the resource URL to have a trailing slash
-    $Endpoint = $Endpoint.TrimEnd('/')
+    if ($PSCmdlet.ParameterSetName -eq 'Endpoint')
+    {
+        # Remove any trailing slash as Cosmos DB RBAC does not expect the resource URL to have a trailing slash
+        $Endpoint = $Endpoint.TrimEnd('/')
+    }
+    else
+    {
+        $Endpoint = Get-CosmosDbEntraIdEndpoint -Environment $Environment
+    }
 
     <#
         `-AsSecureString` is not required here because the `Get-AzAccessToken` cmdlet always
