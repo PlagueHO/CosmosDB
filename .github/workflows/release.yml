@@ -32,7 +32,7 @@ jobs:
       - name: Install GitVersion
         shell: pwsh
         run: |
-          dotnet tool install --global GitVersion.Tool --version 5.*
+          dotnet tool install --global GitVersion.Tool --version 6.*
 
       - name: Build and package module
         shell: pwsh
