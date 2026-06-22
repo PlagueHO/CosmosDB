@@ -192,7 +192,7 @@ function Invoke-CosmosDbRequest
     }
 
     $Headers += $authorizationHeaders
-    $Headers.Add('x-ms-version', '2020-07-15')
+    $Headers['x-ms-version'] = '2020-07-15'
 
     $invokeWebRequestParameters = @{
         Uri             = $uri
