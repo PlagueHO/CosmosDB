@@ -1076,7 +1076,7 @@ console.log("done");
                 Assert-MockCalled -CommandName Get-AzAccessToken -Exactly -Times 1 `
                     -ParameterFilter {
                         $AsSecureString -and `
-                        $ResourceUrl -eq ('https://{0}.{1}' -f $script:testAccount, $script:testBaseHostnameAzureCustomEndpoint)
+                        $ResourceUrl -eq 'https://cosmos.azure.com'
                     }
             }
         }
@@ -1114,7 +1114,7 @@ console.log("done");
                 Assert-MockCalled -CommandName Get-AzAccessToken -Exactly -Times 1 `
                     -ParameterFilter {
                         $AsSecureString -and `
-                        $ResourceUrl -eq ('https://{0}.documents.azure.com' -f $script:testAccount)
+                        $ResourceUrl -eq 'https://cosmos.azure.com'
                     }
             }
         }
@@ -1227,6 +1227,108 @@ console.log("done");
             It 'Should return expected result' {
                 $script:result | Should -BeOfType uri
                 $script:result.ToString() | Should -Be ('https://{0}.{1}/' -f $script:testAccount, $script:testBaseHostnameAzureChinaCloud)
+            }
+        }
+    }
+
+    Describe 'Get-CosmosDbEntraIdEndpoint' -Tag 'Unit' {
+        It 'Should exist' {
+            { Get-Command -Name Get-CosmosDbEntraIdEndpoint -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When called without parameters' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                { $script:result = Get-CosmosDbEntraIdEndpoint } | Should -Not -Throw
+            }
+
+            It 'Should return the AzureCloud endpoint' {
+                $script:result | Should -Be 'https://cosmos.azure.com'
+            }
+        }
+
+        Context 'When called with Environment set to AzureCloud' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                { $script:result = Get-CosmosDbEntraIdEndpoint -Environment 'AzureCloud' } | Should -Not -Throw
+            }
+
+            It 'Should return the AzureCloud endpoint' {
+                $script:result | Should -Be 'https://cosmos.azure.com'
+            }
+        }
+
+        Context 'When called with Environment set to AzureUSGovernment' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                { $script:result = Get-CosmosDbEntraIdEndpoint -Environment 'AzureUSGovernment' } | Should -Not -Throw
+            }
+
+            It 'Should return the AzureUSGovernment endpoint' {
+                $script:result | Should -Be 'https://cosmos.azure.us'
+            }
+        }
+
+        Context 'When called with Environment set to AzureChinaCloud' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                { $script:result = Get-CosmosDbEntraIdEndpoint -Environment 'AzureChinaCloud' } | Should -Not -Throw
+            }
+
+            It 'Should return the AzureChinaCloud endpoint' {
+                $script:result | Should -Be 'https://cosmos.azure.cn'
+            }
+        }
+
+        Context 'When called with BaseHostname matching AzureCloud pattern' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                { $script:result = Get-CosmosDbEntraIdEndpoint -BaseHostname 'documents.azure.com' } | Should -Not -Throw
+            }
+
+            It 'Should return the AzureCloud endpoint' {
+                $script:result | Should -Be 'https://cosmos.azure.com'
+            }
+        }
+
+        Context 'When called with BaseHostname matching AzureUSGovernment pattern' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                { $script:result = Get-CosmosDbEntraIdEndpoint -BaseHostname 'documents.azure.us' } | Should -Not -Throw
+            }
+
+            It 'Should return the AzureUSGovernment endpoint' {
+                $script:result | Should -Be 'https://cosmos.azure.us'
+            }
+        }
+
+        Context 'When called with BaseHostname matching AzureChinaCloud pattern' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                { $script:result = Get-CosmosDbEntraIdEndpoint -BaseHostname 'documents.azure.cn' } | Should -Not -Throw
+            }
+
+            It 'Should return the AzureChinaCloud endpoint' {
+                $script:result | Should -Be 'https://cosmos.azure.cn'
+            }
+        }
+
+        Context 'When called with an unrecognised BaseHostname' {
+            $script:result = $null
+
+            It 'Should not throw exception' {
+                { $script:result = Get-CosmosDbEntraIdEndpoint -BaseHostname 'documents.somecloud.zzz' } | Should -Not -Throw
+            }
+
+            It 'Should return the AzureCloud endpoint as the default' {
+                $script:result | Should -Be 'https://cosmos.azure.com'
             }
         }
     }
@@ -1856,11 +1958,12 @@ console.log("done");
             }
         }
 
-        Context 'When called with context parameter and ApiVersion is overridden' {
+        Context 'When called with context parameter and Headers includes x-ms-version' {
             $InvokeWebRequest_parameterfilter = {
                 $Method -eq 'Get' -and `
                     $ContentType -eq 'application/json' -and `
-                    $Headers['x-ms-version'] -eq '2018-12-31' -and `
+                    $Headers['x-ms-version'] -eq '2020-07-15' -and `
+                    $Headers['x-ms-documentdb-query-enablecrosspartition'] -eq 'true' -and `
                     $Uri -eq ('{0}dbs/{1}/{2}' -f $script:testContext.BaseUri, $script:testContext.Database, 'users')
             }
 
@@ -1875,7 +1978,10 @@ console.log("done");
                     Context      = $script:testContext
                     Method       = 'Get'
                     ResourceType = 'users'
-                    ApiVersion   = '2018-12-31'
+                    Headers      = @{
+                        'x-ms-version'                            = '2018-12-31'
+                        'x-ms-documentdb-query-enablecrosspartition' = 'true'
+                    }
                     Verbose      = $true
                 }
 
@@ -2441,6 +2547,72 @@ console.log("done");
             It 'Should call expected mocks' {
                 Assert-MockCalled -CommandName Get-AzAccessToken -Exactly -Times 1 `
                     -ParameterFilter { $ResourceUrl -eq 'https://cosmos.azure.com' }
+            }
+        }
+
+        Context 'When called with Environment set to AzureUSGovernment' {
+            $script:result = $null
+
+            Mock Get-AzAccessToken -MockWith {
+                return @{
+                    Token = $script:testEntraIdTokenSecureString
+                }
+            }
+
+            It 'Should not throw exception' {
+                $getCosmosDbEntraIdTokenParameters = @{
+                    Environment = 'AzureUSGovernment'
+                }
+                { $script:result = Get-CosmosDbEntraIdToken @getCosmosDbEntraIdTokenParameters } | Should -Not -Throw
+            }
+
+            It 'Should return a secure string' {
+                $script:result | Should -BeOfType [System.Security.SecureString]
+            }
+
+            It 'Should return secure string containing the expected token' {
+                $script:result | Convert-CosmosDbSecureStringToString | Should -Be $script:testEntraIdToken
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled -CommandName Get-AzAccessToken -Exactly -Times 1 `
+                    -ParameterFilter {
+                        $AsSecureString -and
+                        $ResourceUrl -eq 'https://cosmos.azure.us'
+                    }
+            }
+        }
+
+        Context 'When called with Environment set to AzureChinaCloud' {
+            $script:result = $null
+
+            Mock Get-AzAccessToken -MockWith {
+                return @{
+                    Token = $script:testEntraIdTokenSecureString
+                }
+            }
+
+            It 'Should not throw exception' {
+                $getCosmosDbEntraIdTokenParameters = @{
+                    Environment = 'AzureChinaCloud'
+                }
+                { $script:result = Get-CosmosDbEntraIdToken @getCosmosDbEntraIdTokenParameters } | Should -Not -Throw
+            }
+
+            It 'Should return a secure string' {
+                $script:result | Should -BeOfType [System.Security.SecureString]
+            }
+
+            It 'Should return secure string containing the expected token' {
+                $script:result | Convert-CosmosDbSecureStringToString | Should -Be $script:testEntraIdToken
+            }
+
+            It 'Should call expected mocks' {
+                Assert-MockCalled -CommandName Get-AzAccessToken -Exactly -Times 1 `
+                    -ParameterFilter {
+                        $AsSecureString -and
+                        $ResourceUrl -eq 'https://cosmos.azure.cn'
+                    }
             }
         }
     }

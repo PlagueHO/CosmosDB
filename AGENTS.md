@@ -23,21 +23,27 @@ output/CosmosDB/<version>/     # Build output (versioned)
 
 ## Commands
 
+> **Local builds:** GitVersion 6.x outputs INFO lines to stdout, which breaks the
+> default `build.ps1` invocation. Use `.build-local.ps1` instead — it wraps
+> `gitversion` to strip log noise and remap `NuGetVersionV2` for Sampler compatibility.
+> After running unit tests, `CosmosDB.dll` is locked in the current session; subsequent
+> builds should be run in a new PowerShell process (for example, restart your `pwsh` session) to avoid file locking.
+
 ```powershell
 # Bootstrap (first time or after clean)
 ./build.ps1 -ResolveDependency -Tasks noop
 
 # Build (compile C#, assemble module, generate help)
-./build.ps1 -Tasks build
+./.build-local.ps1 -Tasks build
 
 # Unit tests only (no Azure required)
-./build.ps1 -Tasks test -PesterScript tests/Unit
+./.build-local.ps1 -Tasks test -PesterScript tests/Unit
 
 # All tests (unit + integration — requires Azure credentials)
-./build.ps1 -Tasks test
+./.build-local.ps1 -Tasks test
 
 # Package for publishing
-./build.ps1 -Tasks pack
+./.build-local.ps1 -Tasks pack
 ```
 
 **C# classes only:**
@@ -53,8 +59,8 @@ dotnet build source/classes/CosmosDB/CosmosDB.csproj /p:Configuration=Release
 1. Add unit test in `tests/Unit/CosmosDB.<resource-type>.Tests.ps1`
 1. Add integration test if the cmdlet hits the live API
 1. Create/update `docs/Verb-CosmosDb<Noun>.md` (PlatyPS format)
-1. Run `./build.ps1 -Tasks build` — must succeed
-1. Run `./build.ps1 -Tasks test -PesterScript tests/Unit` — must pass
+1. Run `./.build-local.ps1 -Tasks build` — must succeed
+1. Run `./.build-local.ps1 -Tasks test -PesterScript tests/Unit` — must pass
 
 ## CI Pipeline (Azure Pipelines)
 

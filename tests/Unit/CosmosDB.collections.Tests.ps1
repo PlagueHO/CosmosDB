@@ -766,9 +766,10 @@ InModuleScope $ProjectName {
 
             It 'Should not throw an exception' {
                 $newCosmosDbCollectionParameters = @{
-                    Context = $script:testContext
-                    Id      = $script:testCollection1
-                    Verbose = $true
+                    Context      = $script:testContext
+                    Id           = $script:testCollection1
+                    PartitionKey = 'partitionkey'
+                    Verbose      = $true
                 }
 
                 {
@@ -807,6 +808,7 @@ InModuleScope $ProjectName {
                     Context           = $script:testContext
                     Id                = $script:testCollection1
                     DefaultTimeToLive = $script:testDefaultTimeToLive
+                    PartitionKey      = 'partitionkey'
                     Verbose           = $true
                 }
 
@@ -846,6 +848,7 @@ InModuleScope $ProjectName {
                     Context         = $script:testContext
                     Id              = $script:testCollection1
                     OfferThroughput = 400
+                    PartitionKey    = 'partitionkey'
                     Verbose         = $true
                 }
 
@@ -866,26 +869,6 @@ InModuleScope $ProjectName {
             }
         }
 
-        Context 'When called with context parameter and an Id parameter and OfferThroughput is greater than 10000 but PartitionKey is not specified' {
-            $script:result = $null
-
-            It 'Should not throw an exception' {
-                $newCosmosDbCollectionParameters = @{
-                    Context         = $script:testContext
-                    Id              = $script:testCollection1
-                    OfferThroughput = 20000
-                    Verbose         = $true
-                }
-
-                $errorRecord = Get-InvalidOperationRecord `
-                    -Message $LocalizedData.ErrorNewCollectionParitionKeyOfferRequired
-
-                {
-                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
-                } | Should -Throw $errorRecord
-            }
-        }
-
         Context 'When called with context parameter and an Id and OfferType parameter' {
             $script:result = $null
             $invokecosmosdbrequest_parameterfilter = {
@@ -902,10 +885,11 @@ InModuleScope $ProjectName {
 
             It 'Should not throw an exception' {
                 $newCosmosDbCollectionParameters = @{
-                    Context   = $script:testContext
-                    Id        = $script:testCollection1
-                    OfferType = 'S2'
-                    Verbose   = $true
+                    Context      = $script:testContext
+                    Id           = $script:testCollection1
+                    OfferType    = 'S2'
+                    PartitionKey = 'partitionkey'
+                    Verbose      = $true
                 }
 
                 {
@@ -965,26 +949,6 @@ InModuleScope $ProjectName {
             }
         }
 
-        Context 'When called with context parameter and an Id and AutoscaleThroughput but without a PartitionKey parameter' {
-            $script:result = $null
-
-            It 'Should throw expected exception' {
-                $newCosmosDbCollectionParameters = @{
-                    Context             = $script:testContext
-                    Id                  = $script:testCollection1
-                    AutoscaleThroughput = 1000
-                    Verbose             = $true
-                }
-
-                $errorRecord = Get-InvalidOperationRecord `
-                    -Message $LocalizedData.ErrorNewCollectionParitionKeyAutoscaleRequired
-
-                {
-                    $script:result = New-CosmosDbCollection @newCosmosDbCollectionParameters
-                } | Should -Throw $errorRecord
-            }
-        }
-
         Context 'When called with context parameter and an Id and AutoscaleThroughput and OfferThroughput parameter' {
             $script:result = $null
 
@@ -994,6 +958,7 @@ InModuleScope $ProjectName {
                     Id                  = $script:testCollection1
                     OfferThroughput     = 400
                     AutoscaleThroughput = 1000
+                    PartitionKey        = 'partitionkey'
                     Verbose             = $true
                 }
 
@@ -1015,6 +980,7 @@ InModuleScope $ProjectName {
                     Id                  = $script:testCollection1
                     OfferType           = 'S1'
                     AutoscaleThroughput = 1000
+                    PartitionKey        = 'partitionkey'
                     Verbose             = $true
                 }
 
@@ -1036,6 +1002,7 @@ InModuleScope $ProjectName {
                     Id                  = $script:testCollection1
                     OfferType           = 'S1'
                     OfferThroughput     = 400
+                    PartitionKey        = 'partitionkey'
                     Verbose             = $true
                 }
 
@@ -1068,6 +1035,7 @@ InModuleScope $ProjectName {
                     Context        = $script:testContext
                     Id             = $script:testCollection1
                     IndexingPolicy = $script:testIndexingPolicy
+                    PartitionKey   = 'partitionkey'
                     Verbose        = $true
                 }
 
@@ -1108,6 +1076,7 @@ InModuleScope $ProjectName {
                     Context            = $script:testContext
                     Id                 = $script:testCollection1
                     IndexingPolicyJson = $script:testIndexingPolicyJson
+                    PartitionKey       = 'partitionkey'
                     Verbose            = $true
                 }
 
@@ -1149,6 +1118,7 @@ InModuleScope $ProjectName {
                     Context         = $script:testContext
                     Id              = $script:testCollection1
                     UniqueKeyPolicy = $script:testUniqueKeyPolicy
+                    PartitionKey    = 'partitionkey'
                     Verbose         = $true
                 }
 
@@ -1262,6 +1232,7 @@ InModuleScope $ProjectName {
                     Id              = $script:testCollection1
                     OfferThroughput = 400
                     OfferType       = 'S1'
+                    PartitionKey    = 'partitionkey'
                     Verbose         = $true
                 }
 

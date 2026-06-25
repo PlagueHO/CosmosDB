@@ -38,25 +38,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Set up .NET SDK
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 8.0.x
 
       - name: Install GitVersion
         shell: pwsh
         run: |
-          dotnet tool install --global GitVersion.Tool --version 5.*
+          dotnet tool install --global GitVersion.Tool --version 6.*
 
       - name: Calculate module version
         shell: pwsh
         run: |
-          $gitVersionObject = dotnet-gitversion | ConvertFrom-Json
-          $moduleVersion = $gitVersionObject.NuGetVersionV2
+          $rawOutput = dotnet-gitversion
+          $filteredOutput = $rawOutput | Where-Object { $_ -notmatch '^\s*(INFO|WARN|VERBOSE|DEBUG) \[' }
+          $gitVersionObject = ($filteredOutput -join "`n") | ConvertFrom-Json
+          # GitVersion 6.x removed NuGetVersionV2; construct a NuGet-compatible version
+          # from SemVer by replacing dots in the pre-release segment with hyphens.
+          # NuGet only allows [A-Za-z0-9-] in pre-release identifiers.
+          $semVer = $gitVersionObject.SemVer -replace '\+.*$', ''
+          $versionParts = $semVer -split '-', 2
+          $moduleVersion = if ($versionParts.Length -eq 2) {
+              "$($versionParts[0])-$($versionParts[1] -replace '\.', '-')"
+          } else {
+              $semVer
+          }
           "ModuleVersion=$moduleVersion" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Build and package module
@@ -66,7 +77,7 @@ jobs:
         run: ./build.ps1 -ResolveDependency -Tasks pack -Verbose
 
       - name: Upload module artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: module-output
           path: output/
@@ -109,12 +120,12 @@ jobs:
         shell: ${{ matrix.shell }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Download module artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: module-output
           path: output
@@ -124,7 +135,7 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: unit-test-results-${{ matrix.name }}
           path: output/testResults/
@@ -179,18 +190,18 @@ jobs:
       azureTenantId: ${{ secrets.AZURE_TENANT_ID }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Download module artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: module-output
           path: output
 
       - name: Sign in to Azure with OIDC
-        uses: azure/login@v2
+        uses: azure/login@v3
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}

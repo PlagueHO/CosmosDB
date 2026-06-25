@@ -20,7 +20,6 @@ ConvertFrom-StringData -StringData @'
     RemovingAzureCosmosDBAccount = Removing Azure Cosmos DB account '{0}' in resource group '{1}'.
     StoredProcedureScriptLogResults = Stored Procedure '{0}' script log results:\n{1}
     RequestChargeResults = Request charge for {0} to '{1}' was {2} RUs.
-    NonPartitionedCollectionWarning = It is not recommended to create a collection without a partition key. It may result in reduced performance and increased cost. This functionality is included for backwards compatibility only and will be removed in a future version.
     CollectionProvisionedThroughputExceededWithBackoffPolicy = The collection has exceeded the provisioned throughput limit but a back-off policy is specified.
     CollectionProvisionedThroughputExceededNoBackoffPolicy = The collection has exceeded the provisioned throughput limit but there is no back-off policy.
     CollectionProvisionedThroughputExceededMaxRetriesHit = The maximum back-off policy retries {0} has been exceeded.
@@ -30,8 +29,6 @@ ConvertFrom-StringData -StringData @'
     ErrorAuthorizationKeyEmpty = The authorization key is empty. It must be passed in the context or a valid token context for the resource being accessed must be supplied.
     WarningNewCollectionOfferTypeDeprecated = The 'OfferType' parameter is a legacy parameter and is only supported for backwards compatibility and may be removed in future. It is recommended to use 'OfferThroughput' or 'AutopilotThroughput' instead.
     ErrorNewCollectionOfferParameterConflict = Only one of 'OfferType', OfferThroughput' or 'AutoscaleThroughput' should be specified when creating a new collection.
-    ErrorNewCollectionParitionKeyOfferRequired = A 'PartitionKey' is required when the 'OfferThroughput' is greater than 10000.
-    ErrorNewCollectionParitionKeyAutoscaleRequired = A 'PartitionKey' is required when the 'AutoscaleThroughput' is used.
     ErrorNewCollectionIncludedPathIndexInvalidDataType = The DataType '{1}' is invalid for the included path index Kind '{0}'. Please use one of: {2}.
     ErrorNewCollectionIncludedPathIndexPrecisionNotSupported = A Precision value should not be provided for the index Kind '{0}'.
     WarningNewCollectionIncludedPathIndexHashDeprecated = The 'Hash' index Kind has been deprecated. Default String and Number 'Range' index Kinds will be used instead. The 'Hash' index Kind will be removed in a future breaking release. See https://docs.microsoft.com/en-us/azure/cosmos-db/index-types#index-kind.

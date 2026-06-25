@@ -61,6 +61,9 @@ if ([System.String]::IsNullOrEmpty($script:testBuildSystem))
     }
 }
 
+# Sanitize branch name: Azure resource group names only allow [-\w\._\(\)]
+$script:testBuildBranch = $script:testBuildBranch -replace '[^\w\-\._\(\)]', '-'
+
 $script:testResourceGroupName = ('cdbtestrgp-{0}-{1}-{2}' -f $script:testRandomName,$script:testBuildSystem,$script:testBuildBranch)
 $script:testAccountName = ('cdbtest{0}' -f $script:testRandomName)
 $script:testLocation = 'Australia East'
@@ -670,6 +673,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
+                -PartitionKey $script:testPartitionKey `
                 -OfferThroughput 400 `
                 -Verbose
         }
@@ -697,6 +701,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
+                -PartitionKey $script:testPartitionKey `
                 -OfferThroughput 400 `
                 -IndexingPolicy $script:indexingPolicySimpleAutomatic `
                 -Verbose
@@ -719,6 +724,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
+                -PartitionKey $script:testPartitionKey `
                 -OfferThroughput 400 `
                 -IndexingPolicyJson (ConvertTo-Json -InputObject $script:indexingPolicySimpleAutomatic -Depth 10) `
                 -Verbose
@@ -758,6 +764,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
+                -PartitionKey $script:testPartitionKey `
                 -OfferThroughput 400 `
                 -IndexingPolicy $script:indexingPolicyComposite `
                 -Verbose
@@ -798,6 +805,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
+                -PartitionKey $script:testPartitionKey `
                 -OfferThroughput 400 `
                 -IndexingPolicy $script:indexingPolicyComplexAutomatic `
                 -UniqueKeyPolicy $script:uniqueKeyPolicy `
@@ -840,6 +848,172 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             Test-CollectionResultComplexAutomaticIndexingPolicy -CollectionResult $script:Result
             $script:result.Id | Should -Be $script:testCollection
             $script:result.uniqueKeyPolicy.uniqueKeys[0].paths[0] | Should -Be '/uniquekey'
+        }
+    }
+
+    Context 'When testing RBAC access using an Entra ID token' {
+        Context 'When assigning an RBAC contributor role to the account for the principal' {
+            It 'Should not throw an exception' {
+                New-AzCosmosDBSqlRoleAssignment `
+                    -AccountName $script:testAccountName `
+                    -ResourceGroupName $script:testResourceGroupName `
+                    -RoleDefinitionId $script:cosmosDbRoleDefinitionIdContributor `
+                    -Scope "/" `
+                    -PrincipalId $env:azureApplicationObjectId `
+                    -Verbose
+            }
+        }
+
+        Context 'When retrieving the RBAC contributor role from the account for the principal' {
+            It 'Should not throw an exception' {
+                $script:Result = Get-AzCosmosDBSqlRoleAssignment `
+                    -AccountName $script:testAccountName `
+                    -ResourceGroupName $script:testResourceGroupName `
+                    -Verbose
+
+                Write-Verbose -Message "Data Plane Role Assignments: $($script:Result | Out-String)" -Verbose
+            }
+
+            It 'Should return at least one SQL Role Assignement' {
+                $script:Result | Should -Not -BeNullOrEmpty
+            }
+        }
+
+        # RBAC access testing using a Entra ID token generated via the test harness
+        Context 'When creating a new context from Azure using an Entra ID Token for the Service Principal' {
+            It 'Should not throw an exception' {
+                $script:testEntraIdContext = New-CosmosDbContext `
+                    -Account $script:testAccountName `
+                    -Database $script:testDatabase `
+                    -EntraIdToken $script:entraIdTokenForSP `
+                    -Verbose
+            }
+        }
+
+        Context 'When adding a document to a collection using an Entra ID Token' {
+            It 'Should not throw an exception' {
+                $script:result = New-CosmosDbDocument `
+                    -Context $script:testEntraIdContext `
+                    -CollectionId $script:testCollection `
+                    -DocumentBody $script:testDocumentBody `
+                    -PartitionKey $script:testDocumentId `
+                    -Verbose
+            }
+
+            It 'Should return expected object' {
+                Test-GenericResult -GenericResult $script:result
+                $script:result.Id | Should -Be $script:testDocumentId
+                $script:result.Content | Should -Be 'Some string'
+                $script:result.More | Should -Be 'Some other string'
+            }
+        }
+
+        Context 'When removing a document from a collection using an Entra ID Token' {
+            It 'Should not throw an exception' {
+                $script:result = Remove-CosmosDbDocument `
+                    -Context $script:testEntraIdContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testDocumentId `
+                    -PartitionKey $script:testDocumentId `
+                    -Verbose
+            }
+        }
+
+        # RBAC access testing using a Entra ID token generated via the test harness
+        Context 'When creating a new context from Azure using an automatically generated Entra ID Token for the Service Principal' {
+            It 'Should not throw an exception' {
+                $script:testEntraIdContext = New-CosmosDbContext `
+                    -Account $script:testAccountName `
+                    -Database $script:testDatabase `
+                    -AutoGenerateEntraIdToken
+            }
+        }
+
+        Context 'When adding a document to a collection using an Entra ID Token' {
+            It 'Should not throw an exception' {
+                $script:result = New-CosmosDbDocument `
+                    -Context $script:testEntraIdContext `
+                    -CollectionId $script:testCollection `
+                    -DocumentBody $script:testDocumentBody `
+                    -PartitionKey $script:testDocumentId `
+                    -Verbose
+            }
+
+            It 'Should return expected object' {
+                Test-GenericResult -GenericResult $script:result
+                $script:result.Id | Should -Be $script:testDocumentId
+                $script:result.Content | Should -Be 'Some string'
+                $script:result.More | Should -Be 'Some other string'
+            }
+        }
+
+        Context 'When getting a document in a collection using an Entra ID Token' {
+            It 'Should not throw an exception' {
+                $script:result = Get-CosmosDbDocument `
+                    -Context $script:testEntraIdContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testDocumentId `
+                    -PartitionKey $script:testDocumentId `
+                    -Verbose
+            }
+
+            It 'Should return expected object' {
+                Test-GenericResult -GenericResult $script:result
+                $script:result.Id | Should -Be $script:testDocumentId
+                $script:result.Content | Should -Be 'Some string'
+                $script:result.More | Should -Be 'Some other string'
+            }
+        }
+
+        Context 'When removing a document from a collection using an Entra ID Token' {
+            It 'Should not throw an exception' {
+                $script:result = Remove-CosmosDbDocument `
+                    -Context $script:testEntraIdContext `
+                    -CollectionId $script:testCollection `
+                    -Id $script:testDocumentId `
+                    -PartitionKey $script:testDocumentId `
+                    -Verbose
+            }
+        }
+
+        <#
+            When a rquest to the CosmosDB is made, but it fails with an HttpResponseException
+            the exception should be rethrown as a CosmosDb.ResponseException, otherwise the
+            HttpResponseException will contain the Response.requestMessage which will contain
+            the authorizationHeader.
+        #>
+        Context 'When getting a document that does not exist in a collection using an Entra ID Token' {
+            It 'Should throw expected CosmosDb.ResponseException' {
+                $script:cosmosDbResponseException = $null
+
+                {
+                    try
+                    {
+                        $script:result = Get-CosmosDbDocument `
+                            -Context $script:testEntraIdContext `
+                            -CollectionId $script:testCollection `
+                            -Id $script:testDocumentId `
+                            -PartitionKey $script:testDocumentId `
+                            -Verbose
+                    }
+                    catch [CosmosDb.ResponseException]
+                    {
+                        $script:cosmosDbResponseException = $_.Exception
+                        Write-Verbose -Message "Message: $($script:cosmosDbResponseException.Message)" -Verbose
+                    }
+                } | Should -Not -Throw
+
+                # If PS 7.0+ then the message will be 'Response status code does not indicate success: 404 (Not Found).'
+                # If PS 5.1 then the message will be 'The remote server returned an error: (404) Not Found.'
+                if ($PSEdition -eq 'Core')
+                {
+                    $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 404 (Not Found).'
+                }
+                else
+                {
+                    $script:cosmosDbResponseException.Message | Should -Be 'The remote server returned an error: (404) Not Found.'
+                }
+            }
         }
     }
 
@@ -954,172 +1128,13 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
         }
     }
 
-    Context 'When testing RBAC access using an Entra ID token' {
-        Context 'When assigning an RBAC contributor role to the account for the principal' {
-            It 'Should not throw an exception' {
-                New-AzCosmosDBSqlRoleAssignment `
-                    -AccountName $script:testAccountName `
-                    -ResourceGroupName $script:testResourceGroupName `
-                    -RoleDefinitionId $script:cosmosDbRoleDefinitionIdContributor `
-                    -Scope "/" `
-                    -PrincipalId $env:azureApplicationObjectId `
-                    -Verbose
-            }
-        }
-
-        Context 'When retrieving the RBAC contributor role from the account for the principal' {
-            It 'Should not throw an exception' {
-                $script:Result = Get-AzCosmosDBSqlRoleAssignment `
-                    -AccountName $script:testAccountName `
-                    -ResourceGroupName $script:testResourceGroupName `
-                    -Verbose
-
-                Write-Verbose -Message "Data Plane Role Assignments: $($script:Result | Out-String)" -Verbose
-            }
-
-            It 'Should return at least one SQL Role Assignement' {
-                $script:Result | Should -Not -BeNullOrEmpty
-            }
-        }
-
-        # RBAC access testing using a Entra ID token generated via the test harness
-        Context 'When creating a new context from Azure using an Entra ID Token for the Service Principal' {
-            It 'Should not throw an exception' {
-                $script:testEntraIdContext = New-CosmosDbContext `
-                    -Account $script:testAccountName `
-                    -Database $script:testDatabase `
-                    -EntraIdToken $script:entraIdTokenForSP `
-                    -Verbose
-            }
-        }
-
-        Context 'When adding a document to a collection using an Entra ID Token' {
-            It 'Should not throw an exception' {
-                $script:result = New-CosmosDbDocument `
-                    -Context $script:testEntraIdContext `
-                    -CollectionId $script:testCollection `
-                    -DocumentBody $script:testDocumentBody `
-                    -Verbose
-            }
-
-            It 'Should return expected object' {
-                Test-GenericResult -GenericResult $script:result
-                $script:result.Id | Should -Be $script:testDocumentId
-                $script:result.Content | Should -Be 'Some string'
-                $script:result.More | Should -Be 'Some other string'
-            }
-        }
-
-        Context 'When removing a document from a collection using an Entra ID Token' {
-            It 'Should not throw an exception' {
-                $script:result = Remove-CosmosDbDocument `
-                    -Context $script:testEntraIdContext `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testDocumentId `
-                    -Verbose
-            }
-        }
-
-        # RBAC access testing using a Entra ID token generated via the test harness
-        Context 'When creating a new context from Azure using an automatically generated Entra ID Token for the Service Principal' {
-            It 'Should not throw an exception' {
-                $script:testEntraIdContext = New-CosmosDbContext `
-                    -Account $script:testAccountName `
-                    -Database $script:testDatabase `
-                    -AutoGenerateEntraIdToken
-            }
-        }
-
-        Context 'When adding a document to a collection using an Entra ID Token' {
-            It 'Should not throw an exception' {
-                $script:result = New-CosmosDbDocument `
-                    -Context $script:testEntraIdContext `
-                    -CollectionId $script:testCollection `
-                    -DocumentBody $script:testDocumentBody `
-                    -Verbose
-            }
-
-            It 'Should return expected object' {
-                Test-GenericResult -GenericResult $script:result
-                $script:result.Id | Should -Be $script:testDocumentId
-                $script:result.Content | Should -Be 'Some string'
-                $script:result.More | Should -Be 'Some other string'
-            }
-        }
-
-        Context 'When getting a document in a collection using an Entra ID Token' {
-            It 'Should not throw an exception' {
-                $script:result = Get-CosmosDbDocument `
-                    -Context $script:testEntraIdContext `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testDocumentId `
-                    -Verbose
-            }
-
-            It 'Should return expected object' {
-                Test-GenericResult -GenericResult $script:result
-                $script:result.Id | Should -Be $script:testDocumentId
-                $script:result.Content | Should -Be 'Some string'
-                $script:result.More | Should -Be 'Some other string'
-            }
-        }
-
-        Context 'When removing a document from a collection using an Entra ID Token' {
-            It 'Should not throw an exception' {
-                $script:result = Remove-CosmosDbDocument `
-                    -Context $script:testEntraIdContext `
-                    -CollectionId $script:testCollection `
-                    -Id $script:testDocumentId `
-                    -Verbose
-            }
-        }
-
-        <#
-            When a rquest to the CosmosDB is made, but it fails with an HttpResponseException
-            the exception should be rethrown as a CosmosDb.ResponseException, otherwise the
-            HttpResponseException will contain the Response.requestMessage which will contain
-            the authorizationHeader.
-        #>
-        Context 'When getting a document that does not exist in a collection using an Entra ID Token' {
-            It 'Should throw expected CosmosDb.ResponseException' {
-                $script:cosmosDbResponseException = $null
-
-                {
-                    try
-                    {
-                        $script:result = Get-CosmosDbDocument `
-                            -Context $script:testEntraIdContext `
-                            -CollectionId $script:testCollection `
-                            -Id $script:testDocumentId `
-                            -Verbose
-                    }
-                    catch [CosmosDb.ResponseException]
-                    {
-                        $script:cosmosDbResponseException = $_.Exception
-                        Write-Verbose -Message "Message: $($script:cosmosDbResponseException.Message)" -Verbose
-                    }
-                } | Should -Not -Throw
-
-                # If PS 7.0+ then the message will be 'Response status code does not indicate success: 404 (Not Found).'
-                # If PS 5.1 then the message will be 'The remote server returned an error: (404) Not Found.'
-                if ($PSEdition -eq 'Core')
-                {
-                    $script:cosmosDbResponseException.Message | Should -Be 'Response status code does not indicate success: 404 (Not Found).'
-                }
-                else
-                {
-                    $script:cosmosDbResponseException.Message | Should -Be 'The remote server returned an error: (404) Not Found.'
-                }
-            }
-        }
-    }
-
     Context 'When adding a document to a collection' {
         It 'Should not throw an exception' {
             $script:result = New-CosmosDbDocument `
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
                 -DocumentBody $script:testDocumentBody `
+                -PartitionKey $script:testDocumentId `
                 -Verbose
         }
 
@@ -1202,6 +1217,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $resourceContext `
                 -CollectionId $script:testCollection `
                 -Id $script:testDocumentId `
+                -PartitionKey $script:testDocumentId `
                 -Verbose
         }
     }
@@ -1222,6 +1238,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $connectionStringContext `
                 -CollectionId $script:testCollection `
                 -Id $script:testDocumentId `
+                -PartitionKey $script:testDocumentId `
                 -Verbose
         }
     }
@@ -1374,6 +1391,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
                 -Id $script:testDocumentId `
+                -PartitionKey $script:testDocumentId `
                 -Verbose
         }
     }
@@ -1385,6 +1403,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -CollectionId $script:testCollection `
                 -DocumentBody $script:testDocumentUTF8Body `
                 -Encoding 'UTF-8' `
+                -PartitionKey $script:testDocumentUTF8Id `
                 -Verbose
         }
 
@@ -1400,6 +1419,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
                 -Query "SELECT * FROM docs c" `
+                -QueryEnableCrossPartition $true `
                 -Verbose
         }
 
@@ -1416,6 +1436,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
                 -Query "SELECT * FROM docs c WHERE (c.id = '$testDocumentUTF8Id')" `
+                -QueryEnableCrossPartition $true `
                 -Verbose
         }
 
@@ -1432,6 +1453,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
                 -Query 'SELECT * FROM docs c WHERE (c.id = @id)' `
+                -QueryEnableCrossPartition $true `
                 -QueryParameters @{
                     name = '@id'
                     value = $testDocumentUTF8Id
@@ -1452,6 +1474,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
                 -Id $script:testDocumentUTF8Id `
+                -PartitionKey $script:testDocumentUTF8Id `
                 -Verbose
         }
 
@@ -1470,6 +1493,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Id $script:testDocumentUTF8Id `
                 -DocumentBody $script:testDocumentUTF8UpdateBody `
                 -Encoding 'UTF-8' `
+                -PartitionKey $script:testDocumentUTF8Id `
                 -Verbose
         }
 
@@ -1485,6 +1509,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
                 -Id $script:testDocumentUTF8Id `
+                -PartitionKey $script:testDocumentUTF8Id `
                 -Verbose
         }
 
@@ -1501,6 +1526,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
                 -Context $script:testContext `
                 -CollectionId $script:testCollection `
                 -Id $script:testDocumentUTF8Id `
+                -PartitionKey $script:testDocumentUTF8Id `
                 -Verbose
         }
     }
@@ -1666,6 +1692,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
+                -PartitionKey $script:testPartitionKey `
                 -OfferThroughput 400 `
                 -IndexingPolicy $script:indexingPolicyNone `
                 -Verbose
@@ -1690,6 +1717,7 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $script:result = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id $script:testCollection `
+                -PartitionKey $script:testPartitionKey `
                 -DefaultTimeToLive $script:testDefaultTimeToLive `
                 -Verbose
         }
@@ -1783,11 +1811,13 @@ Describe 'Cosmos DB Module' -Tag 'Integration' {
             $null = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id "$($script:testCollection)1" `
+                -PartitionKey $script:testPartitionKey `
                 -Verbose
 
             $null = New-CosmosDbCollection `
                 -Context $script:testContext `
                 -Id "$($script:testCollection)2" `
+                -PartitionKey $script:testPartitionKey `
                 -Verbose
         }
     }

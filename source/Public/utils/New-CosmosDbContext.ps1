@@ -178,13 +178,13 @@ function New-CosmosDbContext
         'EntraIdTokenAutogen'
         {
             $BaseUri = Get-CosmosDbUri -Account $Account -Environment $Environment
-            $EntraIdToken = Get-CosmosDbEntraIdToken -Endpoint $BaseUri
+            $EntraIdToken = Get-CosmosDbEntraIdToken -Environment $Environment
         }
 
         'CustomEntraIdTokenAutogen'
         {
             $BaseUri = Get-CosmosDbUri -Account $Account -BaseHostname $EndpointHostname
-            $EntraIdToken = Get-CosmosDbEntraIdToken -Endpoint $BaseUri
+            $EntraIdToken = Get-CosmosDbEntraIdToken -Endpoint (Get-CosmosDbEntraIdEndpoint -BaseHostname $EndpointHostname)
         }
 
         'Token'

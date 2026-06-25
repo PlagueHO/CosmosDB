@@ -73,5 +73,5 @@ function Remove-CosmosDbAttachment
         -Method 'Delete' `
         -ResourceType 'attachments' `
         -ResourcePath $resourcePath `
-        -Header $headers
+        -Headers $headers
 }

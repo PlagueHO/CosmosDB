@@ -49,7 +49,7 @@ function New-CosmosDbCollection
         [System.String]
         $OfferType,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [System.String]
         $PartitionKey,
@@ -93,11 +93,6 @@ function New-CosmosDbCollection
 
     if ($PSBoundParameters.ContainsKey('OfferThroughput'))
     {
-        if ($OfferThroughput -gt 10000 -and -not ($PSBoundParameters.ContainsKey('PartitionKey')))
-        {
-            New-CosmosDbInvalidOperationException -Message $($LocalizedData.ErrorNewCollectionParitionKeyOfferRequired)
-        }
-
         $headers += @{
             'x-ms-offer-throughput' = $OfferThroughput
         }
@@ -115,11 +110,6 @@ function New-CosmosDbCollection
 
     if ($PSBoundParameters.ContainsKey('AutoscaleThroughput'))
     {
-        if (-not ($PSBoundParameters.ContainsKey('PartitionKey')))
-        {
-            New-CosmosDbInvalidOperationException -Message $($LocalizedData.ErrorNewCollectionParitionKeyAutoscaleRequired)
-        }
-
         $headers += @{
             'x-ms-cosmos-offer-autopilot-settings' = ConvertTo-Json -InputObject @{
                 maxThroughput = $AutoscaleThroughput
@@ -134,20 +124,13 @@ function New-CosmosDbCollection
         id = $id
     }
 
-    if ($PSBoundParameters.ContainsKey('PartitionKey'))
-    {
-        $bodyObject += @{
-            partitionKey = @{
-                paths = @('/{0}' -f $PartitionKey.TrimStart('/'))
-                kind  = 'Hash'
-            }
+    $bodyObject += @{
+        partitionKey = @{
+            paths = @('/{0}' -f $PartitionKey.TrimStart('/'))
+            kind  = 'Hash'
         }
-        $null = $PSBoundParameters.Remove('PartitionKey')
     }
-    else
-    {
-        Write-Warning -Message $($LocalizedData.NonPartitionedCollectionWarning)
-    }
+    $null = $PSBoundParameters.Remove('PartitionKey')
 
     if ($PSBoundParameters.ContainsKey('IndexingPolicy'))
     {

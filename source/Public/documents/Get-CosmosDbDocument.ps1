@@ -69,11 +69,6 @@ function Get-CosmosDbDocument
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String]
-        $PartitionKeyRangeId,
-
-        [Parameter()]
-        [ValidateNotNullOrEmpty()]
-        [System.String]
         $Query,
 
         [Parameter()]

@@ -69,11 +69,6 @@ function Get-CosmosDbDocumentJson
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String]
-        $PartitionKeyRangeId,
-
-        [Parameter()]
-        [ValidateNotNullOrEmpty()]
-        [System.String]
         $Query,
 
         [Parameter()]
@@ -98,7 +93,6 @@ function Get-CosmosDbDocumentJson
     $null = $PSBoundParameters.Remove('ContinuationToken')
     $null = $PSBoundParameters.Remove('ConsistencyLevel')
     $null = $PSBoundParameters.Remove('SessionToken')
-    $null = $PSBoundParameters.Remove('PartitionKeyRangeId')
     $null = $PSBoundParameters.Remove('Query')
     $null = $PSBoundParameters.Remove('QueryParameters')
     $null = $PSBoundParameters.Remove('QueryEnableCrossPartition')
@@ -147,15 +141,6 @@ function Get-CosmosDbDocumentJson
             }
 
             $body = ConvertTo-Json -InputObject $bodyObject
-        }
-        else
-        {
-            if (-not [System.String]::IsNullOrEmpty($PartitionKeyRangeId))
-            {
-                $headers += @{
-                    'x-ms-documentdb-partitionkeyrangeid' = $PartitionKeyRangeId
-                }
-            }
         }
 
         # The following headers apply when querying documents or just getting a list
