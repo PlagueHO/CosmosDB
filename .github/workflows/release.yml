@@ -74,6 +74,7 @@ jobs:
           PSGALLERY_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}
           NUGET_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}
           NuGetApiKey: ${{ secrets.PSGALLERY_API_KEY }}
+          GalleryApiToken: ${{ secrets.PSGALLERY_API_KEY }}
           ModuleVersion: ${{ env.ModuleVersion }}
           BranchName: ${{ env.BranchName }}
         run: |
