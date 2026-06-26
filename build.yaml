@@ -84,7 +84,6 @@ BuildWorkflow:
     - Merge_CodeCoverage_Files
 
   publish:
-    - Publish_Release_To_GitHub
     - Publish_Module_To_gallery
 
 ####################################################
